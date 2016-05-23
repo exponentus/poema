@@ -3,6 +3,12 @@ import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { User } from '../models/user';
+import { parseResponseObjects } from '../utils/obj-utils';
+
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
 
 @Injectable()
 export class AppService {
@@ -14,10 +20,12 @@ export class AppService {
     ) { }
 
     getUserProfile() {
-        let header = { headers: new Headers({ 'Accept': 'application/json' }) };
+        let headers = { headers: HEADERS };
         let url = 'p?id=userprofile';
 
-        return this.http.get(url, header).map(response => response.json().objects[0]);
+        return this.http.get(url, headers).map(response => {
+            return parseResponseObjects(response.json().objects)
+        });
     }
 
     getTranslations() {
@@ -25,27 +33,27 @@ export class AppService {
             return Observable.of(this.translations);
         }
 
-        let header = { headers: new Headers({ 'Accept': 'application/json' }) };
+        let headers = { headers: HEADERS };
         let url = 'p?id=common-captions';
 
-        return this.http.get(url, header).map(response => {
+        return this.http.get(url, headers).map(response => {
             this.translations = response.json().captions;
             return this.translations;
         });
     }
 
     getNav() {
-        let header = { headers: new Headers({ 'Accept': 'application/json' }) };
+        let headers = { headers: HEADERS };
         let url = 'p?id=outline';
 
-        return this.http.get(url, header).map(response => response.json().objects[0]);
+        return this.http.get(url, headers).map(response => response.json().objects[0]);
     }
 
     getUsers() {
-        let header = { headers: new Headers({ 'Accept': 'application/json' }) };
+        let headers = { headers: HEADERS };
         let url = 'p?id=users';
 
-        return this.http.get(url, header)
+        return this.http.get(url, headers)
             .map(response => <User[]>response.json().objects[0].list);
     }
 

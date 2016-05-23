@@ -103,6 +103,11 @@ export class TaskComponent {
                     let tts = this.task.tags.map(it => it.id);
                     this.task.tags = this.tags.filter(it => tts.indexOf(it.id) != -1);
                 }
+                this.users.forEach(it => {
+                    if (it.id === this.task.assignee.id) {
+                        this.task.assignee = it;
+                    }
+                });
 
                 console.log(this);
             },

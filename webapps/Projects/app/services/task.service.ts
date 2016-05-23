@@ -10,12 +10,10 @@ import { serializeObj } from '../utils/obj-utils';
 
 const VIEW_URL = 'p?id=task-view';
 const FORM_URL = 'p?id=task-form';
-const HEADER = {
-    headers: new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'Accept': 'application/json'
-    })
-};
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
 
 @Injectable()
 export class TaskService {
@@ -54,7 +52,7 @@ export class TaskService {
 
     getTasks(params = {}) {
         return this.http.get(VIEW_URL, {
-            headers: HEADER.headers,
+            headers: HEADERS,
             search: this.createURLSearchParams(params)
         })
             .map(response => response.json().objects[0])
@@ -71,13 +69,13 @@ export class TaskService {
             return Observable.of(<Task>this.makeTask({}));
         }
 
-        return this.http.get(FORM_URL + '&docid=' + taskId, HEADER)
+        return this.http.get(FORM_URL + '&docid=' + taskId, { headers: HEADERS })
             .map(response => <Task>this.makeTask(response.json().objects[1]));
     }
 
     saveTask(task: Task) {
         let url = FORM_URL + (task.id ? '&docid=' + task.id : '');
-        return this.http.post(url, this.serializeTask(task), HEADER)
+        return this.http.post(url, this.serializeTask(task), { headers: HEADERS })
             .map(response => this.transformPostResponse(response))
             .catch(error => Observable.throw(this.transformPostResponse(error)));
     }

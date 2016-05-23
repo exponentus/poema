@@ -96,6 +96,10 @@ project {
     width: 18%;
 }
 
+.vw-project-status {
+    width: 100px;
+}
+
 .vw-project-customer {
     width: 15%;
 }

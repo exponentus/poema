@@ -68,12 +68,12 @@
                     <div class="span8">
                         <div dropdown class="select">
                             <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.manager">{{project.manager.userName || project.manager.userID}}</span>
+                                <span *ngIf="project.manager">{{project.manager.userName || project.manager.login}}</span>
                             </div>
                             <div class="dropdown-menu select-dropdown">
                                 <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'manager')">
                                     <li class="select-option" [class.selected]="project.manager?.id == m.id" *ngFor="let m of users" (click)="selectManager(m)">
-                                        {{m.name || m.userID}}
+                                        {{m.name || m.login}}
                                     </li>
                                 </ul>
                             </div>
@@ -92,12 +92,12 @@
                     <div class="span8">
                         <div dropdown class="select">
                             <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.programmer">{{project.programmer.userName || project.programmer.userID}}</span>
+                                <span *ngIf="project.programmer">{{project.programmer.userName || project.programmer.login}}</span>
                             </div>
                             <div class="dropdown-menu select-dropdown">
                                 <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'programmer')">
                                     <li class="select-option" [class.selected]="project.programmer?.id == m.id" *ngFor="let m of users" (click)="selectProgrammer(m)">
-                                        {{m.name || m.userID}}
+                                        {{m.name || m.login}}
                                     </li>
                                 </ul>
                             </div>
@@ -116,12 +116,12 @@
                     <div class="span8">
                         <div dropdown class="select">
                             <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.tester">{{project.tester.userName || project.tester.userID}}</span>
+                                <span *ngIf="project.tester">{{project.tester.userName || project.tester.login}}</span>
                             </div>
                             <div class="dropdown-menu select-dropdown">
                                 <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'tester')">
                                     <li class="select-option" [class.selected]="project.tester?.id == m.id" *ngFor="let m of users" (click)="selectTester(m)">
-                                        {{m.name || m.userID}}
+                                        {{m.name || m.login}}
                                     </li>
                                 </ul>
                             </div>
@@ -140,12 +140,12 @@
                     <div class="span8">
                         <div dropdown class="select">
                             <div dropdown-toggle class="select-selection input">
-                                <span class="tag" *ngFor="let m of project.observers" (click)="removeObserver(m, $event)">{{m.userName || m.userID}}</span>
+                                <span class="tag" *ngFor="let m of project.observers" (click)="removeObserver(m, $event)">{{m.userName || m.login}}</span>
                             </div>
                             <div class="dropdown-menu select-dropdown">
                                 <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'observers')">
                                     <li class="select-option" *ngFor="let m of users" (click)="selectObserver(m)">
-                                        {{m.userName || m.userID}}
+                                        {{m.userName || m.login}}
                                     </li>
                                 </ul>
                             </div>

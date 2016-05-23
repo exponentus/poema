@@ -9,12 +9,10 @@ import { serializeObj } from '../utils/obj-utils';
 
 const VIEW_URL = 'p?id=project-view';
 const FORM_URL = 'p?id=project-form';
-const HEADER = {
-    headers: new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-        'Accept': 'application/json'
-    })
-};
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
 
 @Injectable()
 export class ProjectService {
@@ -42,7 +40,7 @@ export class ProjectService {
 
     getProjects(params = {}) {
         return this.http.get(VIEW_URL, {
-            headers: HEADER.headers,
+            headers: HEADERS,
             search: this.createURLSearchParams(params)
         })
             .map(response => response.json().objects[0])
@@ -59,13 +57,13 @@ export class ProjectService {
             return Observable.of(<Project>this.makeProject({}));
         }
 
-        return this.http.get(FORM_URL + '&docid=' + projectId, HEADER)
+        return this.http.get(FORM_URL + '&docid=' + projectId, { headers: HEADERS })
             .map(response => <Project>this.makeProject(response.json().objects[1]));
     }
 
     saveProject(project: Project) {
         let url = FORM_URL + (project.id ? '&docid=' + project.id : '');
-        return this.http.post(url, this.serializeProject(project), HEADER)
+        return this.http.post(url, this.serializeProject(project), { headers: HEADERS })
             .map(response => this.transformPostResponse(response))
             .catch(error => Observable.throw(this.transformPostResponse(error)));
     }
@@ -112,7 +110,15 @@ export class ProjectService {
             project.tester = new User();
             project.tester.id = json.testerUserId;
         }
-        //project.observers = User[];
+        if (json.observerUserIds) {
+            project.observers = [];
+            for (let obsId of json.observerUserIds) {
+                let obsUser = new User();
+                obsUser.id = obsId;
+                project.observers.push(obsUser);
+            }
+        }
+
         project.comment = json.comment;
         project.finishDate = json.finishDate;
         //project.attachments = Attachment[];

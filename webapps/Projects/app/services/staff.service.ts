@@ -3,6 +3,11 @@ import { Http, Headers, URLSearchParams } from '@angular/http';
 
 import { Organization } from '../models/organization';
 
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
+
 @Injectable()
 export class StaffService {
 
@@ -19,14 +24,10 @@ export class StaffService {
     }
 
     getOrganizations(params?) {
-        let headers = new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-            'Accept': 'application/json'
-        });
         let url = '/Staff/p?id=get-organizations';
 
         return this.http.get(url, {
-            headers: headers,
+            headers: HEADERS,
             search: this.createURLSearchParams(params)
         })
             .map(response => response.json().objects[0])

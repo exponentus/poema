@@ -40,6 +40,7 @@ import { User } from '../models/user';
 export class App {
     isReady: boolean = false;
     loggedUser: User;
+    language: any;
     HEADER_TITLE: string = 'Projects';
     isNavCollapsed: Boolean;
     isSearchOpen: Boolean;
@@ -75,9 +76,10 @@ export class App {
 
         this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
 
-        this.appService.getUserProfile().subscribe(resp => {
+        this.appService.getUserProfile().subscribe((resp: any) => {
             console.log(resp);
-            this.loggedUser = resp;
+            this.loggedUser = resp.employee;
+            this.language = resp.language
             this.isReady = true;
         });
     }

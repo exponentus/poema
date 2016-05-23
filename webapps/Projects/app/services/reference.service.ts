@@ -4,6 +4,11 @@ import { Observable } from 'rxjs/Observable';
 
 import { Tag, TaskType } from '../models';
 
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
+
 @Injectable()
 export class ReferenceService {
 
@@ -20,13 +25,9 @@ export class ReferenceService {
     }
 
     getTags() {
-        let headers = new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-            'Accept': 'application/json'
-        });
-        let url = '/Reference/p?id=tags&as=json';
+        let url = '/Reference/p?id=tags';
 
-        return this.http.get(url, headers)
+        return this.http.get(url, { headers: HEADERS })
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
@@ -37,13 +38,9 @@ export class ReferenceService {
     }
 
     getTaskTypes() {
-        let headers = new Headers({
-            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-            'Accept': 'application/json'
-        });
-        let url = '/Reference/p?id=tasktypes&as=json';
+        let url = '/Reference/p?id=tasktypes';
 
-        return this.http.get(url, headers)
+        return this.http.get(url, { headers: HEADERS })
             .map(response => response.json().objects[0])
             .map(data => {
                 return {

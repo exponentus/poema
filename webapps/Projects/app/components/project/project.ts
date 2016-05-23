@@ -83,6 +83,27 @@ export class ProjectComponent {
                     });
                 }
 
+                this.users.forEach(it => {
+                    if (it.id === this.project.manager.id) {
+                        this.project.manager = it;
+                    }
+                    if (it.id === this.project.programmer.id) {
+                        this.project.programmer = it;
+                    }
+                    if (it.id === this.project.tester.id) {
+                        this.project.tester = it;
+                    }
+                });
+                if (this.project.observers) {
+                    for (let obs of this.project.observers) {
+                        let obsU: any = this.users.filter(it => it.id == obs.id);
+                        if (obsU.length) {
+                            obs.userName = obsU[0].userName;
+                            obs.login = obsU[0].login;
+                        }
+                    }
+                }
+
                 console.log(this);
             },
             error => {
