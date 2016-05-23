@@ -20,6 +20,8 @@ export class UserProfileComponent {
     user: User = new User();
     form: ControlGroup;
 
+    changePassword: boolean = false;
+
     constructor(
         private router: Router,
         private formBuilder: FormBuilder,
@@ -31,6 +33,10 @@ export class UserProfileComponent {
             pwd_confirm: [],
             email: []
         });
+    }
+
+    toggleChangePassword() {
+        this.changePassword = !this.changePassword;
     }
 
     updateUserProfile() {

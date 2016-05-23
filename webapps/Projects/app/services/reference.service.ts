@@ -1,13 +1,11 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Headers, URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import { Tag, TaskType } from '../models';
 
 @Injectable()
 export class ReferenceService {
-
-    private tags: Tag[];
-    private taskTypes: TaskType[];
 
     constructor(
         private http: Http

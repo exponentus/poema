@@ -1,5 +1,5 @@
 <notification></notification>
-<div class="layout">
+<div class="layout" [class.hidden]="!isReady">
     <div class="content-overlay" (mousedown)="hideNav($event)" (touchstart)="hideNav($event)"></div>
     <header class="header navbar navbar-fixed-top">
         <div class="container">
@@ -19,7 +19,7 @@
                         <ul class="dropdown-menu right">
                             <li>
                                 <a class="user-profile" [routerLink]="['/user-profile']">
-                                    {{loggedUser.userName}}
+                                    {{loggedUser.name}}
                                 </a>
                             </li>
                             <li class="divider"></li>

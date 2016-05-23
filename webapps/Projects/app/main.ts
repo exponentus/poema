@@ -10,7 +10,7 @@ import 'rxjs/Rx';
 
 import { App } from './components/app';
 import { NotificationService } from './shared/notification';
-import { AppService, TaskService, ProjectService, ReferenceService, StaffService  } from './services';
+import { AppService, TaskService, ProjectService, ReferenceService, StaffService } from './services';
 
 // enableProdMode();
 
@@ -19,7 +19,7 @@ bootstrap(App, [
     ROUTER_DIRECTIVES,
     ROUTER_PROVIDERS,
     provide(PLATFORM_DIRECTIVES, { useValue: ROUTER_DIRECTIVES, multi: true }),
-    provide(LocationStrategy, { useClass: HashLocationStrategy }),
+    provide(LocationStrategy, { useClass: HashLocationStrategy, useValue: location.href }),
     TRANSLATE_PROVIDERS,
     provide(TranslateLoader, {
         useFactory: (appService: AppService) => new CustomTranslateLoader(appService),

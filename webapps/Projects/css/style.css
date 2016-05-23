@@ -79,6 +79,17 @@ project {
 }
 
 
+/* .vw- */
+
+.vw-icon {
+    width: 22px;
+}
+
+.vw-date {
+    width: 105px;
+}
+
+
 /* .vw-project */
 
 .vw-project-name {
@@ -90,11 +101,7 @@ project {
 }
 
 .vw-project-comment {
-    width: 25%;
-}
-
-.vw-date {
-    width: 105px;
+    width: 20%;
 }
 
 
@@ -109,7 +116,7 @@ project {
 }
 
 .vw-task-body {
-    width: 25%;
+    width: 20%;
 }
 
 .vw-task-assignee {
@@ -117,5 +124,17 @@ project {
 }
 
 .vw-tags {
+    width: 10%;
+}
+
+.vw-user-manager {
+    width: 10%;
+}
+
+.vw-user-programmer {
+    width: 10%;
+}
+
+.vw-user-tester {
     width: 10%;
 }

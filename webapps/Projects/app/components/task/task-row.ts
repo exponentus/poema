@@ -1,9 +1,9 @@
 import { Component, Inject, Input } from '@angular/core';
 
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 
 import { NotificationService } from '../../shared/notification';
+import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 

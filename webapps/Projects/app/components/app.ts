@@ -37,9 +37,10 @@ import { User } from '../models/user';
     { path: '/**', component: HomeComponent }
 ])
 
-export class App implements OnInit {
+export class App {
+    isReady: boolean = false;
     loggedUser: User;
-    HEADER_TITLE: any = "Projects";
+    HEADER_TITLE: string = 'Projects';
     isNavCollapsed: Boolean;
     isSearchOpen: Boolean;
     isMobileDevice: Boolean;
@@ -73,6 +74,12 @@ export class App implements OnInit {
         this.translate.use(userLang);
 
         this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
+
+        this.appService.getUserProfile().subscribe(resp => {
+            console.log(resp);
+            this.loggedUser = resp;
+            this.isReady = true;
+        });
     }
 
     toggleNav() {

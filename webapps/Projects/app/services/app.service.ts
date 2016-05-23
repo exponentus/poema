@@ -13,6 +13,13 @@ export class AppService {
         private http: Http
     ) { }
 
+    getUserProfile() {
+        let header = { headers: new Headers({ 'Accept': 'application/json' }) };
+        let url = 'p?id=userprofile';
+
+        return this.http.get(url, header).map(response => response.json().objects[0]);
+    }
+
     getTranslations() {
         if (this.translations) {
             return Observable.of(this.translations);

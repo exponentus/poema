@@ -6,7 +6,14 @@
         <a class="entry-link" [routerLink]="['./', project.id]">
             <div class="entry-fields">
                 <span class="vw-project-name">{{project.name}}</span>
+                <span class="vw-project-status">{{project.status | text:'L' | translate}}</span>
+                <span class="vw-icon">
+                    <i class="fa fa-file" *ngIf="project.attachments?.length"></i>
+                </span>
                 <span class="vw-project-customer">{{project.customer?.name}}</span>
+                <span class="vw-user-manager">{{project.manager?.userName}}</span>
+                <span class="vw-user-programmer">{{project.programmer?.userName}}</span>
+                <span class="vw-user-tester">{{project.tester?.userName}}</span>
                 <span class="vw-project-comment">{{project.comment}}</span>
                 <span class="vw-date">{{project.finishDate | dateFmt}}</span>
             </div>

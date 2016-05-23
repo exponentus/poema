@@ -5,8 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { NotificationService } from '../../shared/notification';
+import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';

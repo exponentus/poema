@@ -94,7 +94,7 @@ export class ProjectService {
         project.wasRead = json.wasRead;
 
         project.name = json.name;
-        project.status = json.status;
+        project.status = json.status || 'DRAFT';
 
         if (json.customerId) {
             project.customer = new Organization();

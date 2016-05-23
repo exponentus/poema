@@ -2,9 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { Router, Routes, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 
 import { NotificationService } from '../../shared/notification';
+import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
