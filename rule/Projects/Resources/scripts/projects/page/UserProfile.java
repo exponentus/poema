@@ -13,7 +13,6 @@ import staff.model.Employee;
 
 import java.util.Date;
 
-
 public class UserProfile extends _DoPage {
 
     @Override
@@ -58,8 +57,6 @@ public class UserProfile extends _DoPage {
                 entity.setPwd(formData.getValue("pwd"));
             }
             dao.update(entity);
-
-            setRedirect("_back");
         } catch (_Exception e) {
             error(e);
         }
