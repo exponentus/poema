@@ -30,7 +30,7 @@
                             <div dropdown-toggle class="select-selection input">
                                 <div *ngIf="task.project">
                                     <span>{{task.project.name}}</span>
-                                    <div class="text-muted pull-right">{{task.project.status}}</div>
+                                    <div class="text-muted pull-right">{{task.project.status | text:'L' | translate}}</div>
                                     <span class="text-muted">{{task.project.comment}}</span>
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                                 <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'project')">
                                     <li class="select-option" [class.selected]="task.project?.id == m.id" *ngFor="let m of projects" (click)="selectProject(m)">
                                         {{m.name}}
-                                        <div class="text-muted pull-right">{{m.status}}</div>
+                                        <div class="text-muted pull-right">{{m.status | text:'L' | translate}}</div>
                                         <span class="text-muted" *ngIf="m.comment">{{m.comment}}</span>
                                     </li>
                                 </ul>
