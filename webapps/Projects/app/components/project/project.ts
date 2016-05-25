@@ -84,14 +84,20 @@ export class ProjectComponent {
                 }
 
                 this.users.forEach(it => {
-                    if (it.id === this.project.manager.id) {
-                        this.project.manager = it;
+                    if (this.project.manager) {
+                        if (it.id === this.project.manager.id) {
+                            this.project.manager = it;
+                        }
                     }
-                    if (it.id === this.project.programmer.id) {
-                        this.project.programmer = it;
+                    if (this.project.programmer) {
+                        if (it.id === this.project.programmer.id) {
+                            this.project.programmer = it;
+                        }
                     }
-                    if (it.id === this.project.tester.id) {
-                        this.project.tester = it;
+                    if (this.project.tester) {
+                        if (it.id === this.project.tester.id) {
+                            this.project.tester = it;
+                        }
                     }
                 });
                 if (this.project.observers) {
