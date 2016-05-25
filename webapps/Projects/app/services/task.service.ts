@@ -33,8 +33,8 @@ export class TaskService {
     }
 
     getTaskPriorityType() {
-        return this.translate.get(['heighest', 'height', 'medium', 'normal']).map(t => [
-            { value: 'HEIGHEST', text: t.heighest },
+        return this.translate.get(['highest', 'height', 'medium', 'normal']).map(t => [
+            { value: 'HIGHEST', text: t.highest },
             { value: 'HEIGHT', text: t.height },
             { value: 'MEDIUM', text: t.medium },
             { value: 'NORMAL', text: t.normal, default: true }
