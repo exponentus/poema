@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="poema">
+    <property environment="env"/>
+    <property name="scripts.link" value="../nb/rule/Administrator/Resources/scripts"/>
+    <property name="scripts_ref.link" value="../Officeframe/rule/Reference/Resources/scripts"/>
+    <property name="scripts_staff.link" value="../Officeframe/rule/Staff/Resources/scripts"/>
+    <property name="scripts_ws.link" value="../Officeframe/rule/Workspace/Resources/scripts"/>
+    <property name="ECLIPSE_HOME" value="../../eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="NB3Libs.userclasspath">
+        <pathelement location="../../nb/libs/extension/eds/crypto-common.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/crypto.gammaprov.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/crypto.tsp.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/iolajcp2.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/sign-applet.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/softkey_jce_applet-1.2.jar"/>
+        <pathelement location="../../nb/libs/extension/eds/xmlsec-1.4.4.jar"/>
+        <pathelement location="../../nb/libs/jackson/jackson-annotations-2.7.1.jar"/>
+        <pathelement location="../../nb/libs/jackson/jackson-core-2.7.1.jar"/>
+        <pathelement location="../../nb/libs/jackson/jackson-databind-2.7.1-1.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/iText-2.1.7.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/itextpdf-5.5.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jasperreports-6.0.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jasperreports-fonts-6.0.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jasperreports-functions-6.0.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jasperreports-javaflow-6.0.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jcommon-1.0.17.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jfreechart-1.0.14.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jsqlparser-0.7.0.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/jxl-2.6.10.jar"/>
+        <pathelement location="../../nb/libs/jasperreports/poi-3.12-20150511.jar"/>
+        <pathelement location="../../nb/libs/jdbc/jtds-1.3.0.jar"/>
+        <pathelement location="../../nb/libs/jdbc/log4jdbc4-1.2.jar"/>
+        <pathelement location="../../nb/libs/jdbc/ojdbc7.jar"/>
+        <pathelement location="../../nb/libs/jdbc/postgresql-9.2-1004.jdbc4.jar"/>
+        <pathelement location="../../nb/libs/jdbc/slf4j-api-1.7.6.jar"/>
+        <pathelement location="../../nb/libs/jdbc/sqljdbc4.jar"/>
+        <pathelement location="../../nb/libs/jpa/eclipselink.jar"/>
+        <pathelement location="../../nb/libs/jpa/hibernate-core-5.0.5.Final.jar"/>
+        <pathelement location="../../nb/libs/jpa/javax.persistence_2.1.0.v201304241213.jar"/>
+        <pathelement location="../../nb/libs/pdf/itext-pdfa-5.4.5.jar"/>
+        <pathelement location="../../nb/libs/pdf/itext-xtra-5.4.5.jar"/>
+        <pathelement location="../../nb/libs/pdf/itextpdf-5.4.5.jar"/>
+        <pathelement location="../../nb/libs/quartz/jta-1.1.jar"/>
+        <pathelement location="../../nb/libs/quartz/quartz-all-2.1.7.jar"/>
+        <pathelement location="../../nb/libs/quartz/slf4j-api-1.6.1.jar"/>
+        <pathelement location="../../nb/libs/quartz/slf4j-log4j12-1.6.1.jar"/>
+        <pathelement location="../../nb/libs/tomcat/ecj-4.4.2.jar"/>
+        <pathelement location="../../nb/libs/tomcat/tomcat-dbcp.jar"/>
+        <pathelement location="../../nb/libs/tomcat/tomcat-embed-core.jar"/>
+        <pathelement location="../../nb/libs/tomcat/tomcat-embed-jasper.jar"/>
+        <pathelement location="../../nb/libs/tomcat/tomcat-embed-logging-juli.jar"/>
+        <pathelement location="../../nb/libs/tomcat/tomcat-embed-logging-log4j.jar"/>
+        <pathelement location="../../nb/libs/annotations-api.jar"/>
+        <pathelement location="../../nb/libs/asm-3.2.jar"/>
+        <pathelement location="../../nb/libs/commons-beanutils-1.9.0.jar"/>
+        <pathelement location="../../nb/libs/commons-codec-1.6.jar"/>
+        <pathelement location="../../nb/libs/commons-collections-3.2.2.jar"/>
+        <pathelement location="../../nb/libs/commons-dbcp-1.4.jar"/>
+        <pathelement location="../../nb/libs/commons-digester-1.7.jar"/>
+        <pathelement location="../../nb/libs/commons-discovery-0.2.jar"/>
+        <pathelement location="../../nb/libs/commons-fileupload-1.3.1.jar"/>
+        <pathelement location="../../nb/libs/commons-io-1.4.jar"/>
+        <pathelement location="../../nb/libs/commons-lang3-3.3.2.jar"/>
+        <pathelement location="../../nb/libs/commons-logging-1.1.1.jar"/>
+        <pathelement location="../../nb/libs/commons-pool-1.6.jar"/>
+        <pathelement location="../../nb/libs/cstat.jar"/>
+        <pathelement location="../../nb/libs/ftindex.jar"/>
+        <pathelement location="../../nb/libs/geronimo-validation_1.0_spec-1.0-CR5.jar"/>
+        <pathelement location="../../nb/libs/groovy-all-2.0.5.jar"/>
+        <pathelement location="../../nb/libs/h2-1.3.170.jar"/>
+        <pathelement location="../../nb/libs/httpcore-4.2.jar"/>
+        <pathelement location="../../nb/libs/jasper.jar"/>
+        <pathelement location="../../nb/libs/javax.servlet-api-3.1.0.jar"/>
+        <pathelement location="../../nb/libs/jcfinder.jar"/>
+        <pathelement location="../../nb/libs/jdom-1.1.3.jar"/>
+        <pathelement location="../../nb/libs/jsp-api.jar"/>
+        <pathelement location="../../nb/libs/log4j-1.2.15.jar"/>
+        <pathelement location="../../nb/libs/lucene-core-3.0.3.jar"/>
+        <pathelement location="../../nb/libs/mail.jar"/>
+        <pathelement location="../../nb/libs/saxon9he.jar"/>
+        <pathelement location="../../nb/libs/tomcat-juli.jar"/>
+        <pathelement location="../../nb/libs/xercesImpl.jar"/>
+        <pathelement location="../../nb/libs/yajsw.zip"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-server.jar"/>
+        <pathelement location="../../nb/libs/rest/javax.ws.rs-api-2.0.1.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-container-servlet-core.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-common.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-guava-2.17.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/hk2-api-2.4.0-b10.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/javax.inject-2.4.0-b10.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/hk2-locator-2.4.0-b10.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/hk2-utils-2.4.0-b10.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-client.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/aopalliance-repackaged-2.4.0-b10.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/asm-debug-all-5.0.2.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-annotations-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-core-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-core-asl-1.9.12.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-databind-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-jaxrs-1.9.12.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-jaxrs-base-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-jaxrs-json-provider-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-mapper-asl-1.9.12.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-module-jaxb-annotations-2.5.3.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jackson-xc-1.9.12.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/javassist-3.18.1-GA.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/javax.annotation-api-1.2.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jaxb-api-2.2.7.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-container-servlet.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-entity-filtering-2.17.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-media-jaxb.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-media-json-jackson-2.17.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/jersey-media-multipart-2.17.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/mimepull-1.9.6.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/org.osgi.core-4.2.0.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/osgi-resource-locator-1.0.1.jar"/>
+        <pathelement location="../../nb/libs/rest/jersey/validation-api-1.1.0.Final.jar"/>
+        <pathelement location="../../nb/libs/joda-time-2.1.jar"/>
+    </path>
+    <path id="poema.classpath">
+        <pathelement location="bin"/>
+        <path refid="NB3Libs.userclasspath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="rule/Projects/Resources/scripts">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="${scripts.link}">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="${scripts_ref.link}">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="${scripts_staff.link}">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="${scripts_ws.link}">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="rule/Projects/Resources/scripts"/>
+            <src path="${scripts.link}"/>
+            <src path="src"/>
+            <src path="${scripts_ref.link}"/>
+            <src path="${scripts_staff.link}"/>
+            <src path="${scripts_ws.link}"/>
+            <classpath refid="poema.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="poema">
+        <java classname="com.exponentus.server.Server" failonerror="true" fork="yes">
+            <arg line="developing"/>
+            <classpath refid="poema.classpath"/>
+        </java>
+    </target>
+</project>
