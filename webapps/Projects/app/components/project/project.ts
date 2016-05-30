@@ -122,13 +122,18 @@ export class ProjectComponent {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.projectService.saveProject(this.project).subscribe(
             response => {
+                console.log(response);
                 noty.set({ type: 'success', message: response.message }).remove(1500);
                 this.close();
+                return response;
             },
             error => {
+                console.log(error);
                 noty.set({ type: 'error', message: error.message }).remove(1500);
                 this.errorSaveProject(error);
-            }
+                return error;
+            },
+            () => noty.remove(1500)
         );
     }
 
