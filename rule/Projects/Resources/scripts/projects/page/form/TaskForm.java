@@ -18,6 +18,7 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
@@ -39,6 +40,7 @@ import reference.model.Tag;
 
 public class TaskForm extends _DoPage {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 
@@ -64,7 +66,8 @@ public class TaskForm extends _DoPage {
 			entity.setAuthor(user);
 			entity.setRegDate(new Date());
 			TaskTypeDAO tDao = new TaskTypeDAO(session);
-			entity.setTaskType(tDao.findByName("Программированние"));
+			entity.setTaskType(tDao.findByName("Programming"));
+			entity.setStartDate(new Date());
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 			addValue("formsesid", fsId);
 			List<String> formFiles = null;
@@ -75,7 +78,7 @@ public class TaskForm extends _DoPage {
 				formFiles = (List<String>) obj;
 			}
 
-			List<UploadedFile> filesToPublish = new ArrayList<UploadedFile>();
+			List<IPOJOObject> filesToPublish = new ArrayList<IPOJOObject>();
 
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
@@ -86,7 +89,7 @@ public class TaskForm extends _DoPage {
 				}
 				filesToPublish.add(uf);
 			}
-			addContent(new _POJOListWrapper(filesToPublish, session));
+			addContent(new _POJOListWrapper<IPOJOObject>(filesToPublish, session));
 		}
 
 		addContent(entity);
