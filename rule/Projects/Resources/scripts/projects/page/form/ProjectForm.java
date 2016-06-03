@@ -26,6 +26,7 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import com.exponentus.util.Util;
 import com.exponentus.webserver.servlet.UploadedFile;
 
@@ -127,7 +128,7 @@ public class ProjectForm extends _DoPage {
 			        Arrays.stream(formData.getListOfNumberValues("observerUserIds", 0)).map(Integer::longValue).collect(Collectors.toList()));
 			entity.setComment(formData.getValue("comment"));
 			entity.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
-			entity.setFinishDate(Util.convertStringToDate(formData.getValueSilently("finishDate")));
+			entity.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
 
 			String[] fileNames = formData.getListOfValuesSilently("fileid");
 			if (fileNames.length > 0) {
@@ -183,8 +184,12 @@ public class ProjectForm extends _DoPage {
 		if (formData.getValueSilently("status").isEmpty()) {
 			ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
 		}
-		if (formData.getValueSilently("finishDate").isEmpty()) {
+
+		String fDate = formData.getValueSilently("finishDate");
+		if (fDate.isEmpty()) {
 			ve.addError("finishDate", "required", getLocalizedWord("field_is_empty", lang));
+		} else if (TimeUtil.convertStringToDate(fDate) == null) {
+			ve.addError("finishDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
 
 		return ve;

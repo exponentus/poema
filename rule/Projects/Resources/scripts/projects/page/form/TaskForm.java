@@ -26,6 +26,7 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import com.exponentus.util.Util;
 import com.exponentus.webserver.servlet.UploadedFile;
 
@@ -198,12 +199,20 @@ public class TaskForm extends _DoPage {
 		if (formData.getValueSilently("priority").isEmpty()) {
 			ve.addError("priority", "required", getLocalizedWord("field_is_empty", lang));
 		}
-		if (formData.getValueSilently("startDate").isEmpty()) {
+		String sDate = formData.getValueSilently("startDate");
+		if (sDate.isEmpty()) {
 			ve.addError("startDate", "required", getLocalizedWord("field_is_empty", lang));
+		} else if (TimeUtil.convertStringToDate(sDate) == null) {
+			ve.addError("startDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
-		if (formData.getValueSilently("dueDate").isEmpty()) {
+
+		String dDate = formData.getValueSilently("startDate");
+		if (dDate.isEmpty()) {
 			ve.addError("dueDate", "required", getLocalizedWord("field_is_empty", lang));
+		} else if (TimeUtil.convertStringToDate(dDate) == null) {
+			ve.addError("dueDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
+
 		if (formData.getNumberValueSilently("assigneeUserId", 0) == 0) {
 			ve.addError("assigneeUserId", "required", getLocalizedWord("field_is_empty", lang));
 		}
