@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,6 +18,7 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
@@ -40,8 +40,6 @@ public class ProjectForm extends _DoPage {
 
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
-
-		IUser<Long> user = session.getUser();
 		Project entity;
 		String id = formData.getValueSilently("docid");
 		if (!id.isEmpty()) {
@@ -60,8 +58,7 @@ public class ProjectForm extends _DoPage {
 			}
 		} else {
 			entity = new Project();
-			entity.setAuthor(user);
-			entity.setRegDate(new Date());
+			entity.setComment("");
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 			addValue("formsesid", fsId);
 			List<String> formFiles = null;
@@ -72,7 +69,7 @@ public class ProjectForm extends _DoPage {
 				formFiles = (List<String>) obj;
 			}
 
-			List<UploadedFile> filesToPublish = new ArrayList<UploadedFile>();
+			List<IPOJOObject> filesToPublish = new ArrayList<IPOJOObject>();
 
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
@@ -83,7 +80,7 @@ public class ProjectForm extends _DoPage {
 				}
 				filesToPublish.add(uf);
 			}
-			addContent(new _POJOListWrapper(filesToPublish, session));
+			addContent(new _POJOListWrapper<IPOJOObject>(filesToPublish, session));
 		}
 
 		addContent(entity);

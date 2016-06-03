@@ -44,8 +44,6 @@ public class TaskForm extends _DoPage {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
-
-		IUser<Long> user = session.getUser();
 		Task entity;
 		String id = formData.getValueSilently("docid");
 		if (!id.isEmpty()) {
@@ -64,8 +62,8 @@ public class TaskForm extends _DoPage {
 			}
 		} else {
 			entity = new Task();
-			entity.setAuthor(user);
-			entity.setRegDate(new Date());
+			// entity.setAuthor(user);
+			// entity.setRegDate(new Date());
 			TaskTypeDAO tDao = new TaskTypeDAO(session);
 			entity.setTaskType(tDao.findByName("Programming"));
 			entity.setStartDate(new Date());
@@ -129,8 +127,8 @@ public class TaskForm extends _DoPage {
 			entity.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
 			entity.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
 			entity.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
-			entity.setStartDate(Util.convertStringToDate(formData.getValueSilently("startDate")));
-			entity.setDueDate(Util.convertStringToDate(formData.getValueSilently("dueDate")));
+			entity.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
+			entity.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
 			entity.setBody(formData.getValue("body"));
 			entity.setAssignee((long) formData.getNumberValueSilently("assigneeUserId", 0));
 
