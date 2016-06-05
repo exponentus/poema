@@ -137,13 +137,13 @@
         <entry lang="ENG">Finished</entry>
     </sentence>
 
-    <sentence mode="on" keyword="highest">
+    <sentence mode="on" keyword="urgent">
         <entry lang="RUS">Наивысший</entry>
-        <entry lang="ENG">Highest</entry>
+        <entry lang="ENG">Urgent</entry>
     </sentence>
-    <sentence mode="on" keyword="height">
+    <sentence mode="on" keyword="high">
         <entry lang="RUS">Высокий</entry>
-        <entry lang="ENG">Height</entry>
+        <entry lang="ENG">High</entry>
     </sentence>
     <sentence mode="on" keyword="medium">
         <entry lang="RUS">Средний</entry>
