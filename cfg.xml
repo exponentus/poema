@@ -1,42 +1,44 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <nextbase>
-    <hostname>localhost</hostname>
-    <port></port>  
-    <orgname>Avanti's projects</orgname>
-    <applications>
-       <app>
-            <name mode="on">Administrator</name>
-        </app>
-         <app>
-            <name mode="on">Staff</name>
-        </app>
-         <app>
-            <name mode="on">Reference</name>
-        </app>       
-        <app>
-            <name mode="on">Workspace</name>
-        </app>
-         <app>
-            <name mode="on">Projects</name>
-        </app>        
-    </applications>
-    <langs>
-    	<!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes  -->
+	<hostname>localhost</hostname>
+	<port></port>
+	<orgname>Avanti's projects</orgname>
+	<applications>
+		<app>
+			<name mode="on">Administrator</name>
+		</app>
+		<app>
+			<name mode="on">Staff</name>
+		</app>
+		<app>
+			<name mode="on">Reference</name>
+		</app>
+		<app>
+			<name mode="on">Workspace</name>
+		</app>
+		<app>
+			<name mode="on">Projects</name>
+		</app>
+	</applications>
+	<langs>
+		<!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
 		<entry>RUS</entry>
 		<entry>KAZ</entry>
 		<entry>ENG</entry>
 	</langs>
-    <mailagent mode="ON">
-    	<smtphost>smtp.mail.ru</smtphost>
-		<defaultsender>mynameis.m@mail.ru</defaultsender>
+	<mail mode="ON">
+		<smtphost>dev.exponentus.com </smtphost>
 		<auth>true</auth>
-		<smtpport>465</smtpport>
-		<smtpuser>mynameis.m@mail.ru</smtpuser>
-		<smtppassword>mynameis.mmynameis.m</smtppassword>     
-    </mailagent>
-  <tls mode="OFF">
-        <port>38700</port>
-    	<certfile>server.crt</certfile>
-    	<certkeyfile>server.key</certkeyfile>    	
-    </tls>
+		<smtpport>2525</smtpport>
+		<smtpuser>test@exponentus.com</smtpuser>
+		<smtppassword>test22</smtppassword>
+	</mail>
+	<slack mode="ON">
+		<token>xoxp-23444271154-23444271170-48496699479-c9ae12e7b4</token>
+	</slack>
+	<tls mode="OFF">
+		<port>38700</port>
+		<certfile>server.crt</certfile>
+		<certkeyfile>server.key</certkeyfile>
+	</tls>
 </nextbase>

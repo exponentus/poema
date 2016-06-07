@@ -44,6 +44,7 @@ public class TaskForm extends _DoPage {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
+		IUser<Long> user = session.getUser();
 		Task entity;
 		String id = formData.getValueSilently("docid");
 		if (!id.isEmpty()) {
@@ -62,8 +63,8 @@ public class TaskForm extends _DoPage {
 			}
 		} else {
 			entity = new Task();
-			// entity.setAuthor(user);
-			// entity.setRegDate(new Date());
+			entity.setAuthor(user);
+			entity.setRegDate(new Date());
 			TaskTypeDAO tDao = new TaskTypeDAO(session);
 			entity.setTaskType(tDao.findByName("Programming"));
 			entity.setStartDate(new Date());

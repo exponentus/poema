@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._POJOListWrapper;
@@ -40,6 +42,7 @@ public class ProjectForm extends _DoPage {
 
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
+		IUser<Long> user = session.getUser();
 		Project entity;
 		String id = formData.getValueSilently("docid");
 		if (!id.isEmpty()) {
@@ -58,6 +61,8 @@ public class ProjectForm extends _DoPage {
 			}
 		} else {
 			entity = new Project();
+			entity.setAuthor(user);
+			entity.setRegDate(new Date());
 			entity.setComment("");
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 			addValue("formsesid", fsId);
@@ -144,6 +149,16 @@ public class ProjectForm extends _DoPage {
 				IUser<Long> user = session.getUser();
 				entity.addReaderEditor(user);
 				entity = dao.add(entity);
+				LanguageCode lang = session.getLang();
+				List<String> recipients = new ArrayList<String>();
+				recipients.add(userDAO.findById(entity.getManager()).getEmail());
+				recipients.add(userDAO.findById(entity.getProgrammer()).getEmail());
+				recipients.add(userDAO.findById(entity.getTester()).getEmail());
+				MailAgent ma = new MailAgent();
+				if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_project_short", lang),
+				        getLocalizedWord("notify_about_new_project", lang))) {
+
+				}
 			} else {
 				entity = dao.update(entity);
 			}
