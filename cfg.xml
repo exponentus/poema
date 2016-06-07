@@ -34,7 +34,7 @@
 		<smtppassword>test22</smtppassword>
 	</mail>
 	<slack mode="ON">
-		<token>xoxp-23444271154-23444271170-48496699479-c9ae12e7b4</token>
+		<token></token>
 	</slack>
 	<tls mode="OFF">
 		<port>38700</port>

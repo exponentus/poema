@@ -124,7 +124,7 @@
 		<!-- Projects module entities -->
 		<class>projects.model.Project</class>	
 		<class>projects.model.Task</class>	
-		<class>projects.model.Implementation</class>
+		<class>projects.model.Request</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 	</persistence-unit>	
 	
