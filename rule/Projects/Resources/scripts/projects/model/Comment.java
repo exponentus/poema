@@ -36,7 +36,7 @@ public class Comment extends AppEntity<UUID> {
 	private Comment parent;
 
 	@OneToMany(mappedBy = "parent")
-	private List<Task> children;
+	private List<Comment> children;
 
 	@Column(nullable = false, length = 512)
 	private String comment;

@@ -121,10 +121,12 @@
 		<class>reference.model.OrgCategory</class>
 		<class>reference.model.TaskType</class>
 		<class>reference.model.Tag</class>	
+		<class>reference.model.RequestType</class>    
 		<!-- Projects module entities -->
 		<class>projects.model.Project</class>	
 		<class>projects.model.Task</class>	
 		<class>projects.model.Request</class>
+		<class>projects.model.Comment</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 	</persistence-unit>	
 	
