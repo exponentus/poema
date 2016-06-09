@@ -51,7 +51,7 @@ public class Request extends SecureAppEntity<UUID> {
 	private String comment;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "request_attachments", joinColumns = { @JoinColumn(name = "parent_id", referencedColumnName = "id") }, inverseJoinColumns = {
+	@JoinTable(joinColumns = { @JoinColumn(name = "parent_id", referencedColumnName = "id") }, inverseJoinColumns = {
 	        @JoinColumn(name = "attachment_id", referencedColumnName = "id") })
 	private List<Attachment> attachments;
 

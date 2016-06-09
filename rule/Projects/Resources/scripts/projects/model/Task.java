@@ -82,7 +82,7 @@ public class Task extends SecureAppEntity<UUID> {
 	private List<Tag> tags;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "task_attachments", joinColumns = { @JoinColumn(name = "parent_id", referencedColumnName = "id") }, inverseJoinColumns = {
+	@JoinTable(joinColumns = { @JoinColumn(name = "parent_id", referencedColumnName = "id") }, inverseJoinColumns = {
 	        @JoinColumn(name = "attachment_id", referencedColumnName = "id") })
 	private List<Attachment> attachments;
 

@@ -42,7 +42,7 @@ public class Comment extends AppEntity<UUID> {
 	private String comment;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "comment_attachments", joinColumns = { @JoinColumn(name = "comment_id", referencedColumnName = "id") }, inverseJoinColumns = {
+	@JoinTable(joinColumns = { @JoinColumn(name = "comment_id", referencedColumnName = "id") }, inverseJoinColumns = {
 	        @JoinColumn(name = "attachment_id", referencedColumnName = "id") })
 	private List<Attachment> attachments;
 
