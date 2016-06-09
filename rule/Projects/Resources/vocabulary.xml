@@ -74,7 +74,7 @@
     </sentence>
     <sentence mode="on" keyword="finish_date">
         <entry lang="RUS">Дата завершения</entry>
-        <entry lang="ENG">Finish date</entry>
+        <entry lang="ENG">Completion date</entry>
     </sentence>
     <sentence mode="on" keyword="body">
         <entry lang="RUS">Содержимое</entry>
