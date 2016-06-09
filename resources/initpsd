@@ -8,14 +8,14 @@ stini reference.init.FillRegions
 stini reference.init.FillDistricts
 stini reference.init.FillLocalities
 stini reference.init.FillCityDistricts
-#stini reference.init.FillStreets
 stini reference.init.FillDepartmentType
-#stini reference.init.FillPositions
-stini reference.init.FillTags
+
 stini reference.init.FillOrgCategories
 stini staff.init.FillDefaultLabels
 stini staff.init.FillDefaultRoles
 #stini staff.init.FillTestOrgs
 #stini staff.init.FillTestUsers
 #SPECIFIC
-stini reference.init.FillTaskTypesSofwareDev
+stini projects.init.FillTags
+stini projects.init.FillPositions
+stini projects.init.FillTaskTypesSofwareDev
