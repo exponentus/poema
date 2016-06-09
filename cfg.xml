@@ -27,11 +27,7 @@
 		<entry>ENG</entry>
 	</langs>
 	<mail mode="ON">
-		<smtphost>dev.exponentus.com </smtphost>
-		<auth>true</auth>
-		<smtpport>2525</smtpport>
-		<smtpuser>test@exponentus.com</smtpuser>
-		<smtppassword>test22</smtppassword>
+		
 	</mail>
 	<slack mode="ON">
 		<token></token>
