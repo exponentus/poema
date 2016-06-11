@@ -19,3 +19,4 @@ stini staff.init.FillDefaultRoles
 stini projects.init.FillTags
 stini projects.init.FillPositions
 stini projects.init.FillTaskTypesSofwareDev
+stini projects.init.FillRequestTypes

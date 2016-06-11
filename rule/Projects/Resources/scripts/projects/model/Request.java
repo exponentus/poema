@@ -23,7 +23,6 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import projects.model.constants.ResolutionType;
-import reference.model.RequestType;
 
 @Entity
 @Table(name = "requests")
@@ -38,7 +37,7 @@ public class Request extends SecureAppEntity<UUID> {
 	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(nullable = false)
-	private RequestType requestType;
+	private reference.model.RequestType requestType;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = true, length = 7, unique = true)
