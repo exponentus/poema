@@ -30,14 +30,6 @@ public class Comment extends AppEntity<UUID> {
 	@JoinColumn
 	private Task parentTask;
 
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn
-	private Comment parent;
-
-	@OneToMany(mappedBy = "parent")
-	private List<Comment> children;
-
 	@Column(nullable = false, length = 512)
 	private String comment;
 
