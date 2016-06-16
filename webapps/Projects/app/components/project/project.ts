@@ -56,32 +56,41 @@ export class ProjectComponent {
     }
 
     routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
-        this.projectService.getProjectById(this.routeSegment.getParam('id')).subscribe(
-            project => this.project = project,
+        this.projectService.getProjectById(this.routeSegment.getParam('projectId')).subscribe(
+            project => {
+                this.project = project;
+                this.loadData();
+            },
             error => this.handleXhrError(error)
         );
 
-        this.loadData();
+        // this.loadData();
     }
 
     loadData() {
         Observable.forkJoin(
             this.staffService.getOrganizations(),
             this.appService.getUsers(),
-            this.projectService.getProjectStatusTypes()
+            this.projectService.getProjectStatusTypes(),
+            this.staffService.getOrganizationById(this.project.customer ? this.project.customer.id : '')
         ).subscribe(
             data => {
                 this.customers = data[0].organizations;
                 this.users = data[1];
                 this.projectStatusTypes = data[2];
+                let org = data[3];
 
-                if (this.project.customer) {
-                    this.customers.forEach(it => {
-                        if (it.id === this.project.customer.id) {
-                            this.project.customer = it;
-                        }
-                    });
-                }
+                // if (this.project.customer) {
+                    // this.customers.forEach(it => {
+                    //     if (it.id === this.project.customer.id) {
+                    //         this.project.customer = it;
+                    //     }
+                    // });
+                    console.log(org);
+                    if (this.project.customer && org && org.organizations) {
+                        this.project.customer = org.organizations[0];
+                    }
+                // }
 
                 this.users.forEach(it => {
                     if (this.project.manager) {

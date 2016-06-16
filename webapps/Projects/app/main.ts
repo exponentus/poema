@@ -12,7 +12,9 @@ import { App } from './components/app';
 import { NotificationService } from './shared/notification';
 import { AppService, TaskService, ProjectService, ReferenceService, StaffService } from './services';
 
-// enableProdMode();
+// if (process.env.ENV === 'production') {
+//     enableProdMode();
+// }
 
 bootstrap(App, [
     HTTP_PROVIDERS,

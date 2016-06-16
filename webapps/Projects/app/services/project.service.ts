@@ -7,8 +7,8 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
 import { serializeObj } from '../utils/obj-utils';
 
-const VIEW_URL = 'p?id=project-view';
-const FORM_URL = 'p?id=project-form';
+const PROJECT_VIEW = 'p?id=project-view';
+const PROJECT_FORM = 'p?id=project-form';
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
     'Accept': 'application/json'
@@ -25,7 +25,9 @@ export class ProjectService {
     createURLSearchParams(_params): URLSearchParams {
         let params: URLSearchParams = new URLSearchParams();
         for (let p in _params) {
-            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            if (_params[p]) {
+                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            }
         }
         return params;
     }
@@ -39,7 +41,7 @@ export class ProjectService {
     }
 
     getProjects(params = {}) {
-        return this.http.get(VIEW_URL, {
+        return this.http.get(PROJECT_VIEW, {
             headers: HEADERS,
             search: this.createURLSearchParams(params)
         })
@@ -57,19 +59,19 @@ export class ProjectService {
             return Observable.of(<Project>this.makeProject({}));
         }
 
-        return this.http.get(FORM_URL + '&docid=' + projectId, { headers: HEADERS })
+        return this.http.get(PROJECT_FORM + '&projectId=' + projectId, { headers: HEADERS })
             .map(response => <Project>this.makeProject(response.json().objects[1]));
     }
 
     saveProject(project: Project) {
-        let url = FORM_URL + (project.id ? '&docid=' + project.id : '');
+        let url = PROJECT_FORM + (project.id ? '&projectId=' + project.id : '');
         return this.http.post(url, this.serializeProject(project), { headers: HEADERS })
             .map(response => this.transformPostResponse(response))
             .catch(error => Observable.throw(this.transformPostResponse(error)));
     }
 
     deleteProject(projects: Project[]) {
-        return this.http.delete(VIEW_URL);
+        return this.http.delete(PROJECT_VIEW);
     }
 
     private transformPostResponse(response: Response) {

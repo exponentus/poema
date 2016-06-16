@@ -49,10 +49,11 @@
     <caption name="inbox"/>
     <caption name="today"/>
     <caption name="week"/>
-    <caption name="all"/>
     <caption name="completed"/>
     <caption name="tasks"/>
+
     <caption name="my_tasks"/>
+    <caption name="tasks_assigned_to_me"/>
     <caption name="projects"/>
 
     <caption name="new_project"/>
@@ -95,8 +96,8 @@
     <caption name="processed"/>
     <caption name="finished"/>
 
-    <caption name="highest"/>
-    <caption name="height"/>
+    <caption name="urgent"/>
+    <caption name="high"/>
     <caption name="medium"/>
     <caption name="normal"/>
 </rule>

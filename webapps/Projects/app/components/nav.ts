@@ -3,7 +3,8 @@ import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { AppService } from '../services/app.service';
+import { AppService, ProjectService } from '../services';
+import { Project } from '../models/project';
 
 @Component({
     selector: '[nav]',
@@ -14,13 +15,20 @@ import { AppService } from '../services/app.service';
 
 export class NavComponent {
     private navs: any = {};
+    projects: Project[];
 
     constructor(
         private router: Router,
-        private appService: AppService
+        private appService: AppService,
+        private projectService: ProjectService
     ) { }
 
     ngOnInit() {
         this.appService.getNav().subscribe(navs => this.navs = navs);
+        this.projectService.getProjects({}).subscribe(
+            data => {
+                this.projects = data.projects;
+            }
+        );
     }
 }

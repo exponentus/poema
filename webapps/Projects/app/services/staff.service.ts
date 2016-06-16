@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Http, Headers, URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import { Organization } from '../models/organization';
 
@@ -37,5 +38,13 @@ export class StaffService {
                     meta: data.meta
                 }
             });
+    }
+
+    getOrganizationById(id: string) {
+        if (id) {
+            return this.getOrganizations({ ids: id });
+        } else {
+            return this.getOrganizations();
+        }
     }
 }

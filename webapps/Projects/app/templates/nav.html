@@ -1,38 +1,20 @@
 <ul>
     <li>
+        <a [routerLink]="['/tasks', 'my']" class="nav-link">
+            <i class="fa fa-pencil"></i>
+            <span>{{'my_tasks' | translate}}</span>
+        </a>
+    </li>
+    <li>
         <a [routerLink]="['/tasks', 'inbox']" class="nav-link">
             <i class="fa fa-inbox"></i>
-            <span>{{'inbox' | translate}}</span>
+            <span>{{'tasks_assigned_to_me' | translate}}</span>
         </a>
     </li>
     <li>
-        <a [routerLink]="['/tasks', 'today']" class="nav-link">
-            <i class="fa fa-calendar-o"></i>
-            <span>{{'today' | translate}}</span>
-        </a>
-    </li>
-    <li>
-        <a [routerLink]="['/tasks', 'week']" class="nav-link">
+        <a [routerLink]="['/dashboard']" class="nav-link">
             <i class="fa fa-calendar"></i>
-            <span>{{'week' | translate}}</span>
-        </a>
-    </li>
-    <li>
-        <a [routerLink]="['/tasks', 'all']" class="nav-link">
-            <i class="fa fa-database"></i>
-            <span>{{'all' | translate}}</span>
-        </a>
-    </li>
-    <li>
-        <a [routerLink]="['/tasks', 'completed']" class="nav-link">
-            <i class="fa fa-check-square-o"></i>
-            <span>{{'completed' | translate}}</span>
-        </a>
-    </li>
-    <li>
-        <a [routerLink]="['/tasks', 'my']" class="nav-link">
-            <i class="fa fa-ticket"></i>
-            <span>{{'my_tasks' | translate}}</span>
+            <span>{{'dashboard' | translate}}</span>
         </a>
     </li>
     <li class="divider"></li>
@@ -41,5 +23,13 @@
             <i class="fa fa-puzzle-piece"></i>
             <span>{{'projects' | translate}}</span>
         </a>
+        <ul>
+            <li *ngFor="let project of projects">
+                <a [routerLink]="['/project', project.id, 'tasks']" class="nav-link">
+                    <i class="fa fa-file-text-o"></i>
+                    <span>{{project.name}}</span>
+                </a>
+            </li>
+        </ul>
     </li>
 </ul>

@@ -25,8 +25,12 @@
         <entry lang="ENG">Completed</entry>
     </sentence>
     <sentence mode="on" keyword="my_tasks">
-        <entry lang="RUS">Мои задачи</entry>
+        <entry lang="RUS">Мои задания</entry>
         <entry lang="ENG">My tasks</entry>
+    </sentence>
+    <sentence mode="on" keyword="tasks_assigned_to_me">
+        <entry lang="RUS">Назначенные мне</entry>
+        <entry lang="ENG">Assigned to me</entry>
     </sentence>
     <sentence mode="on" keyword="projects">
         <entry lang="RUS">Проекты</entry>
@@ -138,7 +142,7 @@
     </sentence>
 
     <sentence mode="on" keyword="urgent">
-        <entry lang="RUS">Наивысший</entry>
+        <entry lang="RUS">Срочный</entry>
         <entry lang="ENG">Urgent</entry>
     </sentence>
     <sentence mode="on" keyword="high">

@@ -8,8 +8,8 @@ import { ReferenceService } from './reference.service';
 import { Project, Task, TaskType, Tag, User, Attachment } from '../models';
 import { serializeObj } from '../utils/obj-utils';
 
-const VIEW_URL = 'p?id=task-view';
-const FORM_URL = 'p?id=task-form';
+const TASK_VIEW = 'p?id=task-view';
+const TASK_FORM = 'p?id=task-form';
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
     'Accept': 'application/json'
@@ -27,15 +27,17 @@ export class TaskService {
     createURLSearchParams(_params): URLSearchParams {
         let params: URLSearchParams = new URLSearchParams();
         for (let p in _params) {
-            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            if (_params[p]) {
+                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            }
         }
         return params;
     }
 
     getTaskPriorityType() {
-        return this.translate.get(['highest', 'height', 'medium', 'normal']).map(t => [
-            { value: 'HIGHEST', text: t.highest },
-            { value: 'HEIGHT', text: t.height },
+        return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(t => [
+            { value: 'URGENT', text: t.urgent },
+            { value: 'HIGH', text: t.high },
             { value: 'MEDIUM', text: t.medium },
             { value: 'NORMAL', text: t.normal, default: true }
         ]);
@@ -51,7 +53,7 @@ export class TaskService {
     }
 
     getTasks(params = {}) {
-        return this.http.get(VIEW_URL, {
+        return this.http.get(TASK_VIEW, {
             headers: HEADERS,
             search: this.createURLSearchParams(params)
         })
@@ -69,19 +71,19 @@ export class TaskService {
             return Observable.of(<Task>this.makeTask({}));
         }
 
-        return this.http.get(FORM_URL + '&docid=' + taskId, { headers: HEADERS })
+        return this.http.get(TASK_FORM + '&taskId=' + taskId, { headers: HEADERS })
             .map(response => <Task>this.makeTask(response.json().objects[1]));
     }
 
     saveTask(task: Task) {
-        let url = FORM_URL + (task.id ? '&docid=' + task.id : '');
+        let url = TASK_FORM + (task.id ? '&taskId=' + task.id : '');
         return this.http.post(url, this.serializeTask(task), { headers: HEADERS })
             .map(response => this.transformPostResponse(response))
             .catch(error => Observable.throw(this.transformPostResponse(error)));
     }
 
     deleteTask(task: Task) {
-        return this.http.delete(VIEW_URL);
+        return this.http.delete(TASK_VIEW);
     }
 
     private transformPostResponse(response: Response) {
@@ -167,7 +169,7 @@ export class TaskService {
             assigneeUserId: task.assignee.id,
             startDate: task.startDate,
             dueDate: task.dueDate,
-            tagIds: Array.isArray(task.tags) ? task.tags.map(it => it.id).join(',') : '',
+            tagIds: Array.isArray(task.tags) ? task.tags.map(it => it.id) : '',
             fileIds: Array.isArray(task.attachments) ? task.attachments.join(',') : ''
         });
     }

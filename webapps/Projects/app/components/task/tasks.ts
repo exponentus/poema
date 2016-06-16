@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { Router, Routes, RouteSegment, RouteTree, OnActivate } from '@angular/router';
 
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
@@ -18,11 +18,12 @@ import { TaskComponent } from './task';
     directives: [PaginationComponent, TaskRowComponent]
 })
 
-// @Routes([
-//     { path: '/:id', component: TaskComponent },
-// ])
+@Routes([
+    { path: '/:id', component: TaskComponent },
+])
 
 export class TasksComponent {
+    title: string;
     tasks: Task[];
     params: any = {};
     meta: any = {};
@@ -31,11 +32,26 @@ export class TasksComponent {
     constructor(
         private router: Router,
         private taskService: TaskService,
-        private notifyService: NotificationService
+        private notifyService: NotificationService,
+        private translate: TranslateService
     ) { }
 
     routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
         this.params.for = curr.getParam('for');
+        this.params.projectId = curr.getParam('projectId');
+        //
+        switch (this.params.for) {
+            case 'inbox':
+                this.title = 'tasks_assigned_to_me';
+                break;
+            case 'my':
+                this.title = 'my_tasks';
+                break;
+            default:
+                this.title = 'tasks';
+                break;
+        }
+        //
         this.loadData(this.params);
     }
 

@@ -58,7 +58,7 @@ export class TaskComponent {
     }
 
     routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
-        this.taskService.getTaskById(this.routeSegment.getParam('id')).subscribe(
+        this.taskService.getTaskById(this.routeSegment.getParam('taskId')).subscribe(
             task => {
                 this.task = task;
                 // resolve related data

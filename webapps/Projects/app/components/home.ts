@@ -8,6 +8,6 @@ import { Router } from '@angular/router';
 
 export class HomeComponent {
     constructor(private router: Router) {
-        router.navigate(['/tasks', 'all']);
+        router.navigate(['/tasks', 'my']);
     }
 }

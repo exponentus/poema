@@ -23,6 +23,7 @@ import { ProjectComponent } from './project';
 ])
 
 export class ProjectsComponent {
+    title = 'projects';
     projects: Project[];
     params: any = {};
     meta: any = {};

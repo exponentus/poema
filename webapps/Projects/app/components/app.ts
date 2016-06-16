@@ -8,6 +8,7 @@ import { NotificationService, NotificationComponent } from '../shared/notificati
 import { DROPDOWN_DIRECTIVES } from '../shared/dropdown';
 import { NavComponent } from './nav';
 import { HomeComponent } from './home';
+import { DashboardComponent } from './dashboard';
 import { ProjectsComponent } from './project/projects';
 import { ProjectComponent } from './project/project';
 import { TasksComponent } from './task/tasks';
@@ -26,12 +27,14 @@ import { User } from '../models/user';
 
 @Routes([
     { path: '/', component: HomeComponent },
-    // { path: '/tasks/:for/:id', component: TasksComponent },
+    { path: '/tasks/:for/:id', component: TaskComponent },
     { path: '/tasks/:for', component: TasksComponent },
     { path: '/tasks', component: TasksComponent },
-    { path: '/task/:id', component: TaskComponent },
-    { path: '/projects/:id', component: ProjectComponent },
+    { path: '/task/:taskId', component: TaskComponent },
+    { path: '/projects/:projectId', component: ProjectComponent },
     { path: '/projects', component: ProjectsComponent },
+    { path: '/project/:projectId/tasks', component: TasksComponent },
+    { path: '/dashboard', component: DashboardComponent },
     { path: '/user-profile', component: UserProfileComponent },
     { path: '/login', component: LoginComponent },
     { path: '/**', component: HomeComponent }
@@ -77,7 +80,6 @@ export class App {
         this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
 
         this.appService.getUserProfile().subscribe((resp: any) => {
-            console.log(resp);
             this.loggedUser = resp.employee;
             this.language = resp.language
             this.isReady = true;

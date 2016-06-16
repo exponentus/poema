@@ -65,13 +65,13 @@ module.exports = {
             'reflect-metadata',
 
             '@angular/common',
-            // '@angular/compiler',
+            '@angular/compiler',
             '@angular/core',
             '@angular/http',
             '@angular/platform-browser',
             '@angular/platform-browser-dynamic',
             '@angular/router',
-            // '@angular/upgrade',
+            '@angular/upgrade',
 
             'zone.js',
             'moment',
