@@ -133,7 +133,7 @@ export class ProjectService {
         return serializeObj({
             name: project.name,
             status: project.status,
-            customerUserId: project.customer.id || '',
+            customerId: project.customer.id || '',
             managerUserId: project.manager.id || '',
             programmerUserId: project.programmer.id || '',
             testerUserId: project.tester.id || '',
