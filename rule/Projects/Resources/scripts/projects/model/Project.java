@@ -5,6 +5,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import projects.model.constants.ProjectStatusType;
 import staff.model.Organization;
 
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "projects")
@@ -22,7 +24,7 @@ public class Project extends SecureAppEntity<UUID> {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true, length = 10)
+    @Column(length = 10)
     private ProjectStatusType status = ProjectStatusType.UNKNOWN;
 
     private Organization customer;
@@ -41,12 +43,18 @@ public class Project extends SecureAppEntity<UUID> {
 
     private Date finishDate;
 
+    @Column(length = 512)
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "project_attachments", joinColumns = {@JoinColumn(name = "parent_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id", referencedColumnName = "id")})
+    @JoinTable(name = "project_attachments", joinColumns = {@JoinColumn(name = "parent_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id", referencedColumnName = "id")},
+            indexes = {@Index(columnList = "parent_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"parent_id", "attachment_id"}))
     private List<Attachment> attachments;
+
+    @Column(name = "has_attachments")
+    private boolean hasAttachments;
 
     public String getName() {
         return name;
@@ -121,6 +129,11 @@ public class Project extends SecureAppEntity<UUID> {
         this.comment = comment;
     }
 
+    public boolean isHasAttachments() {
+        return hasAttachments;
+    }
+
+    @JsonIgnore
     public List<Attachment> getAttachments() {
         return attachments;
     }

@@ -1,20 +1,21 @@
-package projects.page.form;
+package projects.page;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.scripting.*;
+import com.exponentus.scripting._Exception;
+import com.exponentus.scripting._Session;
+import com.exponentus.scripting._Validation;
+import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
-import com.exponentus.util.Util;
-import com.exponentus.webserver.servlet.UploadedFile;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
+import projects.model.Comment;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -27,73 +28,93 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class TaskForm extends _DoPage {
+public class Comments extends _DoPage {
 
-    @SuppressWarnings("unchecked")
     @Override
     public void doGET(_Session session, _WebFormData formData) {
-        IUser<Long> user = session.getUser();
-        Task entity;
-        String id = formData.getValueSilently("taskId");
-
-        if (!id.isEmpty()) {
-            TaskDAO dao = new TaskDAO(session);
-            entity = dao.findById(UUID.fromString(id));
-            addValue("formsesid", Util.generateRandomAsText());
-
-            String attachmentId = formData.getValueSilently("attachment");
-            if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
-                Attachment att = entity.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-                if (showAttachment(att)) {
-                    return;
-                } else {
-                    setBadRequest();
-                }
-            }
-        } else {
-            entity = new Task();
-            entity.setAuthor(user);
-            entity.setRegDate(new Date());
-            TaskTypeDAO tDao = new TaskTypeDAO(session);
-            entity.setTaskType(tDao.findByName("Programming"));
-            entity.setStartDate(new Date());
-            String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-            addValue("formsesid", fsId);
-            List<String> formFiles = null;
-            Object obj = session.getAttribute(fsId);
-            if (obj == null) {
-                formFiles = new ArrayList<>();
-            } else {
-                formFiles = (List<String>) obj;
-            }
-
-            List<IPOJOObject> filesToPublish = new ArrayList<>();
-
-            for (String fn : formFiles) {
-                UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-                if (uf == null) {
-                    uf = new UploadedFile();
-                    uf.setName(fn);
-                    session.setAttribute(fsId + "_file" + fn, uf);
-                }
-                filesToPublish.add(uf);
-            }
-            addContent(new _POJOListWrapper<>(filesToPublish, session));
+        String taskId = formData.getValueSilently("taskId");
+        if (taskId.isEmpty()) {
+            setBadRequest();
+            return;
         }
 
-        addContent(entity);
-        startSaveFormTransact(entity);
+        TaskDAO taskDAO = new TaskDAO(session);
+        Task task = taskDAO.findById(taskId);
+        if (task != null) {
+            responseTaskComments(taskDAO, task);
+        } else {
+            setBadRequest();
+        }
     }
 
     @Override
     public void doPOST(_Session session, _WebFormData formData) {
+        String taskId = formData.getValueSilently("taskId");
+        if (taskId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
+
         try {
-            _Validation ve = validate(formData, session.getLang());
+            TaskDAO taskDAO = new TaskDAO(session);
+            Task task = taskDAO.findById(taskId);
+            if (task != null) {
+                setBadRequest();
+                return;
+            }
+
+            _Validation ve = validateComment(formData, session.getLang());
+            if (ve.hasError()) {
+                setBadRequest();
+                setValidation(ve);
+                return;
+            }
+
+            Comment comment = new Comment();
+            comment.setComment(formData.getValueSilently("comment"));
+
+            String[] fileNames = formData.getListOfValuesSilently("fileid");
+            if (fileNames.length > 0) {
+                File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
+                for (String fn : fileNames) {
+                    File file = new File(userTmpDir + File.separator + fn);
+                    InputStream is = new FileInputStream(file);
+                    Attachment att = new Attachment();
+                    att.setRealFileName(fn);
+                    att.setFile(IOUtils.toByteArray(is));
+                    comment.getAttachments().add(att);
+                }
+            }
+
+        } catch (DatabaseException | IOException e) {
+            error(e);
+            setBadRequest();
+        }
+    }
+
+    @Override
+    public void doPUT(_Session session, _WebFormData formData) {
+        String commentId = formData.getValueSilently("commentId");
+        saveComment(session, formData);
+    }
+
+    @Override
+    public void doDELETE(_Session session, _WebFormData formData) {
+        deleteAttachment(session, formData);
+    }
+
+    private void responseTaskComments(TaskDAO taskDAO, Task task) {
+        List<Comment> comments = taskDAO.findTaskComments(task);
+        addContent(comments);
+    }
+
+    private void saveComment(_Session session, _WebFormData formData) {
+        try {
+            _Validation ve = validateComment(formData, session.getLang());
             if (ve.hasError()) {
                 setBadRequest();
                 setValidation(ve);
@@ -122,8 +143,8 @@ public class TaskForm extends _DoPage {
             entity.setBody(formData.getValue("body"));
             entity.setAssignee((long) formData.getNumberValueSilently("assigneeUserId", 0));
 
-            if (formData.containsField("tagIds")) {
-                String[] tagIds = formData.getListOfValuesSilently("tagIds");
+            if (formData.containsField("tag_ids")) {
+                String[] tagIds = formData.getListOfValuesSilently("tag_ids");
                 if (tagIds.length > 0) {
                     List<Tag> tags = new ArrayList<>();
                     TagDAO tagDAO = new TagDAO(session);
@@ -169,12 +190,12 @@ public class TaskForm extends _DoPage {
         }
     }
 
-    @Override
-    public void doDELETE(_Session session, _WebFormData formData) {
+    private void deleteAttachment(_Session session, _WebFormData formData) {
         String id = formData.getValueSilently("taskId");
         String attachmentId = formData.getValueSilently("attachment");
+        String attachmentName = formData.getValueSilently("att-name");
 
-        if (id.isEmpty() || attachmentId.isEmpty()) {
+        if (id.isEmpty() || attachmentId.isEmpty() || attachmentName.isEmpty()) {
             return;
         }
 
@@ -183,7 +204,7 @@ public class TaskForm extends _DoPage {
 
         List<Attachment> atts = entity.getAttachments();
         List<Attachment> forRemove = atts.stream()
-                .filter(it -> attachmentId.equals(it.getIdentifier())).collect(Collectors.toList());
+                .filter(it -> attachmentId.equals(it.getIdentifier()) && it.getRealFileName().equals(attachmentName)).collect(Collectors.toList());
         atts.removeAll(forRemove);
 
         try {
@@ -193,46 +214,13 @@ public class TaskForm extends _DoPage {
         }
     }
 
-    private _Validation validate(_WebFormData formData, LanguageCode lang) {
+    private _Validation validateComment(_WebFormData formData, LanguageCode lang) {
         _Validation ve = new _Validation();
 
-        if (formData.getValueSilently("projectId").isEmpty()) {
-            ve.addError("projectId", "required", getLocalizedWord("field_is_empty", lang));
-        }
-        if (formData.getValueSilently("taskTypeId").isEmpty()) {
-            ve.addError("taskTypeId", "required", getLocalizedWord("field_is_empty", lang));
-        }
-        if (formData.getValueSilently("body").isEmpty()) {
-            ve.addError("body", "required", getLocalizedWord("field_is_empty", lang));
-        }
-        if (formData.getValueSilently("status").isEmpty()) {
-            ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
-        }
-        if (formData.getValueSilently("priority").isEmpty()) {
-            ve.addError("priority", "required", getLocalizedWord("field_is_empty", lang));
-        }
-        String sDate = formData.getValueSilently("startDate");
-        if (sDate.isEmpty()) {
-            ve.addError("startDate", "required", getLocalizedWord("field_is_empty", lang));
-        } else if (TimeUtil.convertStringToDate(sDate) == null) {
-            ve.addError("startDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
-        }
-
-        String dDate = formData.getValueSilently("startDate");
-        if (dDate.isEmpty()) {
-            ve.addError("dueDate", "required", getLocalizedWord("field_is_empty", lang));
-        } else if (TimeUtil.convertStringToDate(dDate) == null) {
-            ve.addError("dueDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
-        }
-
-        if (formData.getNumberValueSilently("assigneeUserId", 0) == 0) {
-            ve.addError("assigneeUserId", "required", getLocalizedWord("field_is_empty", lang));
+        if (formData.getValueSilently("comment").isEmpty()) {
+            ve.addError("comment", "required", getLocalizedWord("field_is_empty", lang));
         }
 
         return ve;
-    }
-
-    public void createTaskRequest(Task task, _WebFormData formData) {
-
     }
 }

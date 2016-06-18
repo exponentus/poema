@@ -5,8 +5,8 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
-import com.exponentus.user.SuperUser;
 import projects.dao.filter.TaskFilter;
+import projects.model.Comment;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -75,15 +75,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (filter.getStartDate() != null) {
-                if (condition == null) {
-                    condition = cb.equal(c.get("startDate"), filter.getStartDate());
-                } else {
-                    condition = cb.and(cb.equal(c.get("startDate"), filter.getStartDate()), condition);
-                }
-            }
-
-            if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
                 if (condition == null) {
                     condition = cb.and(c.get("readers").in(user.getId()));
                 } else {
@@ -110,6 +102,27 @@ public class TaskDAO extends DAO<Task, UUID> {
             List<Task> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, count, maxPage, pageNum);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Comment> findTaskComments(Task task) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<Comment> cq = cb.createQuery(Comment.class);
+            Root<Comment> c = cq.from(Comment.class);
+            cq.select(c);
+
+            Predicate condition = cb.equal(c.get("task"), task);
+            cq.orderBy(cb.desc(c.get("regDate")));
+            cq.where(condition);
+
+            TypedQuery<Comment> typedQuery = em.createQuery(cq);
+            List<Comment> result = typedQuery.getResultList();
+
+            return result;
         } finally {
             em.close();
         }

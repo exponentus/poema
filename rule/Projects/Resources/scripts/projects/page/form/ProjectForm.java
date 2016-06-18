@@ -1,6 +1,7 @@
 package projects.page.form;
 
 import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -109,11 +110,15 @@ public class ProjectForm extends _DoPage {
                 entity = dao.findById(id);
             }
 
+            User managerUser = userDAO.findById(formData.getNumberValueSilently("managerUserId", 0));
+            User programmerUser = userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0));
+            User testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
+
             entity.setName(formData.getValue("name"));
-            entity.setCustomer(organizationDAO.findById(formData.getValue("customerUserId")));
-            entity.setManager(userDAO.findById(formData.getNumberValueSilently("managerUserId", 0)).getId());
-            entity.setProgrammer(userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0)).getId());
-            entity.setTester(userDAO.findById(formData.getNumberValueSilently("testerUserId", 0)).getId());
+            entity.setCustomer(organizationDAO.findById(formData.getValue("customerId")));
+            entity.setManager(managerUser.getId());
+            entity.setProgrammer(programmerUser.getId());
+            entity.setTester(testerUser.getId());
             entity.setObservers(
                     Arrays.stream(formData.getListOfNumberValues("observerUserIds", 0)).map(Integer::longValue).collect(Collectors.toList()));
             entity.setComment(formData.getValue("comment"));
@@ -136,16 +141,20 @@ public class ProjectForm extends _DoPage {
             if (isNew) {
                 IUser<Long> user = session.getUser();
                 entity.addReaderEditor(user);
+
+                entity.addReader(managerUser);
+                entity.addReader(programmerUser);
+                entity.addReader(testerUser);
                 entity = dao.add(entity);
+
                 LanguageCode lang = session.getLang();
                 List<String> recipients = new ArrayList<String>();
-                recipients.add(userDAO.findById(entity.getManager()).getEmail());
-                recipients.add(userDAO.findById(entity.getProgrammer()).getEmail());
-                recipients.add(userDAO.findById(entity.getTester()).getEmail());
+                recipients.add(managerUser.getEmail());
+                recipients.add(programmerUser.getEmail());
+                recipients.add(testerUser.getEmail());
                 MailAgent ma = new MailAgent();
                 if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_project_short", lang),
                         getLocalizedWord("notify_about_new_project", lang))) {
-
                 }
             } else {
                 entity = dao.update(entity);
@@ -190,8 +199,8 @@ public class ProjectForm extends _DoPage {
         if (formData.getValueSilently("name").isEmpty()) {
             ve.addError("name", "required", getLocalizedWord("field_is_empty", lang));
         }
-        if (formData.getValueSilently("customerUserId").isEmpty()) {
-            ve.addError("customerUserId", "required", getLocalizedWord("field_is_empty", lang));
+        if (formData.getValueSilently("customerId").isEmpty()) {
+            ve.addError("customerId", "required", getLocalizedWord("field_is_empty", lang));
         }
         if (formData.getNumberValueSilently("managerUserId", 0) == 0) {
             ve.addError("managerUserId", "required", getLocalizedWord("field_is_empty", lang));
