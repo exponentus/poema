@@ -24,7 +24,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<Project> getProjectsByStatus(ProjectStatusType status, int pageNum, int pageSize) {
+    public ViewPage<Project> findProjectsByStatus(ProjectStatusType status, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {

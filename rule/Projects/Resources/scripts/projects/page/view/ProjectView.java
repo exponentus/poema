@@ -20,7 +20,7 @@ public class ProjectView extends _DoPage {
         } else {
             int pageSize = session.pageSize;
             int pageNum = formData.getNumberValueSilently("page", 0);
-            ViewPage<Project> vp = projectDAO.getProjectsByStatus(ProjectStatusType.valueOf(statusName), pageNum, pageSize);
+            ViewPage<Project> vp = projectDAO.findProjectsByStatus(ProjectStatusType.valueOf(statusName), pageNum, pageSize);
             addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
         }
     }
