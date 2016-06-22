@@ -41,10 +41,11 @@ public class Request extends SecureAppEntity<UUID> {
     private String comment;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "request_attachments", joinColumns = {@JoinColumn(name = "parent_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "attachment_id", referencedColumnName = "id")},
-            indexes = {@Index(columnList = "parent_id")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"parent_id", "attachment_id"}))
+    @JoinTable(name = "request_attachments",
+            joinColumns = {@JoinColumn(name = "request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "request_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
     private List<Attachment> attachments;
 
     public void setTask(Task task) {

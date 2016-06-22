@@ -39,6 +39,9 @@ public class TaskView extends _DoPage {
         filter.setProject(formData.getValueSilently("projectId"));
         filter.setParentTask(formData.getValueSilently("taskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
+        filter.setSearch(formData.getValueSilently("search"));
+        filter.setStartDate(formData.getDateSilently("startDate"));
+        filter.setDueDate(formData.getDateSilently("dueDate"));
 
         String taskStatus = formData.getValueSilently("taskStatus");
         if (!taskStatus.isEmpty()) {
@@ -50,13 +53,10 @@ public class TaskView extends _DoPage {
             filter.setPriority(TaskPriorityType.valueOf(taskPriority));
         }
 
-        filter.setSearch(formData.getValueSilently("search"));
         long assigneeUserId = (long) formData.getNumberDoubleValueSilently("assigneeUserId", 0);
         if (assigneeUserId > 0) {
             filter.setAssigneeUserId(assigneeUserId);
         }
-        filter.setStartDate(formData.getDateSilently("startDate"));
-        filter.setDueDate(formData.getDateSilently("dueDate"));
 
         if (formData.containsField("tagIds")) {
             List<Tag> tags = new ArrayList<>();

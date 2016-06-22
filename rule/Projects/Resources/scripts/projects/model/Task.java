@@ -65,17 +65,17 @@ public class Task extends SecureAppEntity<UUID> {
     @JoinTable(name = "task_tags")
     private List<Tag> tags;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "comments", joinColumns = {@JoinColumn(name = "task_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "id", referencedColumnName = "id")},
-            indexes = {@Index(columnList = "id, task_id")})
+    @JoinColumn(name = "task_id")
     private List<Comment> comments;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "task_attachments", joinColumns = {@JoinColumn(name = "parent_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "attachment_id", referencedColumnName = "id")},
-            indexes = {@Index(columnList = "parent_id")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"parent_id", "attachment_id"}))
+    @JoinTable(name = "task_attachments",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "task_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"task_id", "attachment_id"}))
     private List<Attachment> attachments;
 
     @Column(name = "customer_observation")
@@ -184,9 +184,12 @@ public class Task extends SecureAppEntity<UUID> {
         this.tags = tags;
     }
 
-    @JsonIgnore
     public List<Comment> getComments() {
         return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     public boolean isHasAttachments() {

@@ -47,10 +47,11 @@ public class Project extends SecureAppEntity<UUID> {
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "project_attachments", joinColumns = {@JoinColumn(name = "parent_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "attachment_id", referencedColumnName = "id")},
-            indexes = {@Index(columnList = "parent_id")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"parent_id", "attachment_id"}))
+    @JoinTable(name = "project_attachments",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "project_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "attachment_id"}))
     private List<Attachment> attachments;
 
     @Column(name = "has_attachments")

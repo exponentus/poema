@@ -107,22 +107,33 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Comment> findTaskComments(Task task) {
+    public List<Comment> findTaskComments(Task task, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
+            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
             CriteriaQuery<Comment> cq = cb.createQuery(Comment.class);
             Root<Comment> c = cq.from(Comment.class);
             cq.select(c);
+            countCq.select(cb.count(c));
 
             Predicate condition = cb.equal(c.get("task"), task);
             cq.orderBy(cb.desc(c.get("regDate")));
             cq.where(condition);
+            countCq.where(condition);
+
+            Query countQuery = em.createQuery(countCq);
+            long count = (long) countQuery.getSingleResult();
+            int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+            if (pageNum == 0) {
+                pageNum = maxPage;
+            }
+            int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 
             TypedQuery<Comment> typedQuery = em.createQuery(cq);
-            List<Comment> result = typedQuery.getResultList();
-
-            return result;
+            typedQuery.setFirstResult(firstRec);
+            typedQuery.setMaxResults(pageSize);
+            return typedQuery.getResultList();
         } finally {
             em.close();
         }

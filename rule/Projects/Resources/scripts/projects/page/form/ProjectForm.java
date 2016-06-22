@@ -2,6 +2,7 @@ package projects.page.form;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
+import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -35,26 +36,28 @@ public class ProjectForm extends _DoForm {
     @Override
     public void doGET(_Session session, _WebFormData formData) {
         IUser<Long> user = session.getUser();
-        Project entity;
+        Project project;
         String projectId = formData.getValueSilently("projectId");
 
         if (!projectId.isEmpty()) {
             ProjectDAO dao = new ProjectDAO(session);
-            entity = dao.findById(projectId);
+            project = dao.findById(projectId);
+
             String attachmentId = formData.getValueSilently("attachment");
-            if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
-                Attachment att = entity.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-                if (showAttachment(att)) {
+            if (!attachmentId.isEmpty()) {
+                AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+                Attachment attachment = attachmentDAO.findById(attachmentId);
+                if (showAttachment(attachment)) {
                     return;
                 } else {
                     setBadRequest();
                 }
             }
         } else {
-            entity = new Project();
-            entity.setAuthor(user);
-            entity.setRegDate(new Date());
-            entity.setComment("");
+            project = new Project();
+            project.setAuthor(user);
+            project.setRegDate(new Date());
+            project.setComment("");
             String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
             List<String> formFiles = null;
             Object obj = session.getAttribute(fsId);
@@ -78,8 +81,8 @@ public class ProjectForm extends _DoForm {
             addContent(new _POJOListWrapper<>(filesToPublish, session));
         }
 
-        addContent(entity);
-        startSaveFormTransact(entity);
+        addContent(project);
+        startSaveFormTransact(project);
     }
 
     @Override
@@ -96,30 +99,30 @@ public class ProjectForm extends _DoForm {
             UserDAO userDAO = new UserDAO(session);
             OrganizationDAO organizationDAO = new OrganizationDAO(session);
             ProjectDAO dao = new ProjectDAO(session);
-            Project entity;
+            Project project;
             String id = formData.getValueSilently("projectId");
             boolean isNew = id.isEmpty();
 
             if (isNew) {
-                entity = new Project();
+                project = new Project();
             } else {
-                entity = dao.findById(id);
+                project = dao.findById(id);
             }
 
             User managerUser = userDAO.findById(formData.getNumberValueSilently("managerUserId", 0));
             User programmerUser = userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0));
             User testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
 
-            entity.setName(formData.getValue("name"));
-            entity.setCustomer(organizationDAO.findById(formData.getValue("customerId")));
-            entity.setManager(managerUser.getId());
-            entity.setProgrammer(programmerUser.getId());
-            entity.setTester(testerUser.getId());
-            entity.setObservers(
+            project.setName(formData.getValue("name"));
+            project.setCustomer(organizationDAO.findById(formData.getValue("customerId")));
+            project.setManager(managerUser.getId());
+            project.setProgrammer(programmerUser.getId());
+            project.setTester(testerUser.getId());
+            project.setObservers(
                     Arrays.stream(formData.getListOfNumberValues("observerUserIds", 0)).map(Integer::longValue).collect(Collectors.toList()));
-            entity.setComment(formData.getValue("comment"));
-            entity.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
-            entity.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
+            project.setComment(formData.getValue("comment"));
+            project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
+            project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
 
             String[] fileNames = formData.getListOfValuesSilently("fileid");
             if (fileNames.length > 0) {
@@ -130,14 +133,14 @@ public class ProjectForm extends _DoForm {
                     Attachment att = new Attachment();
                     att.setRealFileName(fn);
                     att.setFile(IOUtils.toByteArray(is));
-                    entity.getAttachments().add(att);
+                    project.getAttachments().add(att);
                 }
             }
 
             if (isNew) {
                 IUser<Long> user = session.getUser();
-                entity.addReaderEditor(user);
-                entity = dao.add(entity);
+                project.addReaderEditor(user);
+                project = dao.add(project);
                 LanguageCode lang = session.getLang();
                 List<String> recipients = new ArrayList<>();
                 recipients.add(managerUser.getEmail());
@@ -148,10 +151,10 @@ public class ProjectForm extends _DoForm {
                         getLocalizedWord("notify_about_new_project", lang))) {
                 }
             } else {
-                entity = dao.update(entity);
+                project = dao.update(project);
             }
 
-            finishSaveFormTransact(entity);
+            finishSaveFormTransact(project);
         } catch (SecureException e) {
             setError(e);
         } catch (_Exception | DatabaseException | IOException e) {
@@ -170,14 +173,14 @@ public class ProjectForm extends _DoForm {
         }
 
         ProjectDAO dao = new ProjectDAO(session);
-        Project entity = dao.findById(id);
+        Project project = dao.findById(id);
 
-        List<Attachment> atts = entity.getAttachments();
-        List<Attachment> forRemove = atts.stream().filter(it -> attachmentId.equals(it.getIdentifier())).collect(Collectors.toList());
-        atts.removeAll(forRemove);
+        AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+        Attachment attachment = attachmentDAO.findById(attachmentId);
+        project.getAttachments().remove(attachment);
 
         try {
-            dao.update(entity);
+            dao.update(project);
         } catch (SecureException e) {
             setError(e);
         }

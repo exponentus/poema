@@ -35,7 +35,7 @@ public class Comments extends _DoPage {
         TaskDAO taskDAO = new TaskDAO(session);
         Task task = taskDAO.findById(taskId);
         if (task != null) {
-            List<Comment> comments = taskDAO.findTaskComments(task);
+            List<Comment> comments = taskDAO.findTaskComments(task, 0, 30);
             addContent(comments);
         } else {
             setBadRequest();

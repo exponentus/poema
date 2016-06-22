@@ -1,5 +1,8 @@
 package projects.page.form;
 
+import administrator.dao.UserDAO;
+import administrator.model.User;
+import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -29,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class TaskForm extends _DoForm {
 
@@ -37,29 +39,30 @@ public class TaskForm extends _DoForm {
     @Override
     public void doGET(_Session session, _WebFormData formData) {
         IUser<Long> user = session.getUser();
-        Task entity;
+        Task task;
         String id = formData.getValueSilently("taskId");
 
         if (!id.isEmpty()) {
             TaskDAO dao = new TaskDAO(session);
-            entity = dao.findById(UUID.fromString(id));
+            task = dao.findById(UUID.fromString(id));
 
             String attachmentId = formData.getValueSilently("attachment");
-            if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
-                Attachment att = entity.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-                if (showAttachment(att)) {
+            if (!attachmentId.isEmpty()) {
+                AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+                Attachment attachment = attachmentDAO.findById(attachmentId);
+                if (showAttachment(attachment)) {
                     return;
                 } else {
                     setBadRequest();
                 }
             }
         } else {
-            entity = new Task();
-            entity.setAuthor(user);
-            entity.setRegDate(new Date());
+            task = new Task();
+            task.setAuthor(user);
+            task.setRegDate(new Date());
             TaskTypeDAO tDao = new TaskTypeDAO(session);
-            entity.setTaskType(tDao.findByName("Programming"));
-            entity.setStartDate(new Date());
+            task.setTaskType(tDao.findByName("Programming"));
+            task.setStartDate(new Date());
             String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
             List<String> formFiles = null;
@@ -84,8 +87,8 @@ public class TaskForm extends _DoForm {
             addContent(new _POJOListWrapper<>(filesToPublish, session));
         }
 
-        addContent(entity);
-        startSaveFormTransact(entity);
+        addContent(task);
+        startSaveFormTransact(task);
     }
 
     @Override
@@ -98,27 +101,29 @@ public class TaskForm extends _DoForm {
                 return;
             }
 
+            UserDAO userDAO = new UserDAO(session);
             ProjectDAO projectDAO = new ProjectDAO(session);
             TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
             TaskDAO dao = new TaskDAO(session);
-            Task entity;
+            Task task;
             String id = formData.getValueSilently("taskId");
             boolean isNew = id.isEmpty();
 
             if (isNew) {
-                entity = new Task();
+                task = new Task();
             } else {
-                entity = dao.findById(id);
+                task = dao.findById(id);
             }
 
-            entity.setProject(projectDAO.findById(formData.getValue("projectId")));
-            entity.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
-            entity.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
-            entity.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
-            entity.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
-            entity.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
-            entity.setBody(formData.getValue("body"));
-            entity.setAssignee((long) formData.getNumberValueSilently("assigneeUserId", 0));
+            task.setProject(projectDAO.findById(formData.getValue("projectId")));
+            task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
+            task.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
+            task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
+            task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
+            task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
+            task.setBody(formData.getValue("body"));
+            User assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
+            task.setAssignee(assigneeUser.getId());
 
             if (formData.containsField("tagIds")) {
                 String[] tagIds = formData.getListOfValuesSilently("tagIds");
@@ -133,7 +138,7 @@ public class TaskForm extends _DoForm {
                             }
                         }
                     }
-                    entity.setTags(tags);
+                    task.setTags(tags);
                 }
             }
 
@@ -146,19 +151,20 @@ public class TaskForm extends _DoForm {
                     Attachment att = new Attachment();
                     att.setRealFileName(fn);
                     att.setFile(IOUtils.toByteArray(is));
-                    entity.getAttachments().add(att);
+                    task.getAttachments().add(att);
                 }
             }
 
             if (isNew) {
                 IUser<Long> user = session.getUser();
-                entity.addReaderEditor(user);
-                entity = dao.add(entity);
+                task.addReaderEditor(user);
+                task.addReader(assigneeUser);
+                task = dao.add(task);
             } else {
-                entity = dao.update(entity);
+                task = dao.update(task);
             }
 
-            finishSaveFormTransact(entity);
+            finishSaveFormTransact(task);
         } catch (SecureException e) {
             setError(e);
         } catch (_Exception | DatabaseException | IOException e) {
@@ -177,14 +183,14 @@ public class TaskForm extends _DoForm {
         }
 
         TaskDAO dao = new TaskDAO(session);
-        Task entity = dao.findById(id);
+        Task task = dao.findById(id);
 
-        List<Attachment> atts = entity.getAttachments();
-        List<Attachment> forRemove = atts.stream().filter(it -> attachmentId.equals(it.getIdentifier())).collect(Collectors.toList());
-        atts.removeAll(forRemove);
+        AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+        Attachment attachment = attachmentDAO.findById(attachmentId);
+        task.getAttachments().remove(attachment);
 
         try {
-            dao.update(entity);
+            dao.update(task);
         } catch (SecureException e) {
             setError(e);
         }
