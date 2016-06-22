@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
+import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 
@@ -15,12 +15,13 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
 @Component({
     selector: 'task',
     template: require('./templates/task.html'),
-    directives: [FORM_DIRECTIVES, SwitchButtonComponent, DROPDOWN_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, FORM_DIRECTIVES, SwitchButtonComponent, DROPDOWN_DIRECTIVES],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
 })
 
 export class TaskComponent {
+    private sub: any;
     isReady = false;
     task: Task;
     form: ControlGroup;
@@ -34,7 +35,7 @@ export class TaskComponent {
 
     constructor(
         private router: Router,
-        private routeSegment: RouteSegment,
+        private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private appService: AppService,
@@ -57,15 +58,17 @@ export class TaskComponent {
         });
     }
 
-    routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
-        this.taskService.getTaskById(this.routeSegment.getParam('taskId')).subscribe(
-            task => {
-                this.task = task;
-                // resolve related data
-                this.loadData();
-            },
-            errorResponse => this.handleXhrError(errorResponse)
-        );
+    ngOnInit() {
+        this.sub = this.route.params.subscribe(params => {
+            this.taskService.getTaskById(params['taskId']).subscribe(
+                task => {
+                    this.task = task;
+                    // resolve related data
+                    this.loadData();
+                },
+                errorResponse => this.handleXhrError(errorResponse)
+            );
+        });
     }
 
     loadData() {

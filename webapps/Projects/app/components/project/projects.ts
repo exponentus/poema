@@ -1,5 +1,7 @@
-import { Component, Inject } from '@angular/core';
-import { Router, Routes, RouteSegment, RouteTree, OnActivate } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+
+import {Store} from "@ngrx/store";
 
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -14,28 +16,25 @@ import { ProjectComponent } from './project';
 @Component({
     selector: 'projects',
     template: require('./templates/projects.html'),
-    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe],
-    directives: [PaginationComponent, ProjectRowComponent]
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, ProjectRowComponent],
+    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
-
-@Routes([
-    { path: '/:id', component: ProjectComponent }
-])
 
 export class ProjectsComponent {
     title = 'projects';
-    projects: Project[];
+    projects: any
     params: any = {};
     meta: any = {};
     requestProcess: boolean = true;
 
     constructor(
+        private store: Store<any>,
         private router: Router,
         private projectService: ProjectService,
         private notifyService: NotificationService
     ) { }
 
-    routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
+    ngOnInit() {
         this.loadData();
     }
 

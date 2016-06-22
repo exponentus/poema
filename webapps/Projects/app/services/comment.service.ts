@@ -1,0 +1,50 @@
+import { Injectable, Inject } from '@angular/core';
+import { Http, Headers, URLSearchParams } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+
+import { Organization } from '../models/organization';
+
+const HEADERS = new Headers({
+    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+    'Accept': 'application/json'
+});
+
+@Injectable()
+export class CommentService {
+
+    constructor(
+        private http: Http
+    ) { }
+
+    createURLSearchParams(_params): URLSearchParams {
+        let params: URLSearchParams = new URLSearchParams();
+        for (let p in _params) {
+            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+        }
+        return params;
+    }
+
+    getOrganizations(params?) {
+        let url = '/Staff/p?id=get-organizations';
+
+        return this.http.get(url, {
+            headers: HEADERS,
+            search: this.createURLSearchParams(params)
+        })
+            .map(response => response.json().objects[0])
+            .map(data => {
+                return {
+                    organizations: <Organization[]>data.list,
+                    meta: data.meta
+                }
+            });
+    }
+
+    getOrganizationById(id: string) {
+        if (id) {
+            return this.getOrganizations({ ids: id });
+        } else {
+            return this.getOrganizations();
+        }
+    }
+}

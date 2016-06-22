@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { Router, Routes, RouteSegment, RouteTree, OnActivate } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { TranslateService, TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -15,14 +15,11 @@ import { TaskComponent } from './task';
     selector: 'tasks',
     template: require('./templates/tasks.html'),
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe],
-    directives: [PaginationComponent, TaskRowComponent]
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskRowComponent]
 })
 
-@Routes([
-    { path: '/:id', component: TaskComponent },
-])
-
 export class TasksComponent {
+    private sub: any;
     title: string;
     tasks: Task[];
     params: any = {};
@@ -31,28 +28,31 @@ export class TasksComponent {
 
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private taskService: TaskService,
         private notifyService: NotificationService,
         private translate: TranslateService
     ) { }
 
-    routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
-        this.params.for = curr.getParam('for');
-        this.params.projectId = curr.getParam('projectId');
-        //
-        switch (this.params.for) {
-            case 'inbox':
-                this.title = 'tasks_assigned_to_me';
-                break;
-            case 'my':
-                this.title = 'my_tasks';
-                break;
-            default:
-                this.title = 'tasks';
-                break;
-        }
-        //
-        this.loadData(this.params);
+    ngOnInit() {
+        this.sub = this.route.params.subscribe(params => {
+            let taskFor = params['for'];
+            let projectId = params['projectId'];
+            switch (taskFor) {
+                case 'inbox':
+                    this.title = 'tasks_assigned_to_me';
+                    break;
+                case 'my':
+                    this.title = 'my_tasks';
+                    break;
+                default:
+                    this.title = 'tasks';
+                    break;
+            }
+            //
+            this.params = params;
+            this.loadData(this.params);
+        });
     }
 
     loadData(params) {

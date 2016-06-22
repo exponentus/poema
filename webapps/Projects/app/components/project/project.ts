@@ -1,5 +1,5 @@
-import { Component, Inject } from '@angular/core';
-import { Router, RouteSegment, RouteTree, OnActivate } from '@angular/router';
+import { Component, Inject, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 
@@ -16,12 +16,14 @@ import { Project, Organization, User } from '../../models';
     selector: 'project',
     styles: [`project { display: block; }`],
     template: require('./templates/project.html'),
-    directives: [FORM_DIRECTIVES, SwitchButtonComponent, DROPDOWN_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, FORM_DIRECTIVES, SwitchButtonComponent, DROPDOWN_DIRECTIVES],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
 })
 
 export class ProjectComponent {
+    private sub: any;
+
     isReady = false;
     project: Project;
     form: ControlGroup;
@@ -33,7 +35,7 @@ export class ProjectComponent {
 
     constructor(
         private router: Router,
-        private routeSegment: RouteSegment,
+        private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private appService: AppService,
@@ -55,14 +57,17 @@ export class ProjectComponent {
         });
     }
 
-    routerOnActivate(curr: RouteSegment, prev?: RouteSegment, currTree?: RouteTree, prevTree?: RouteTree) {
-        this.projectService.getProjectById(this.routeSegment.getParam('projectId')).subscribe(
-            project => {
-                this.project = project;
-                this.loadData();
-            },
-            error => this.handleXhrError(error)
-        );
+    ngOnInit() {
+        this.sub = this.route.params.subscribe(params => {
+            console.log(params);
+            this.projectService.getProjectById(params['projectId']).subscribe(
+                project => {
+                    this.project = project;
+                    this.loadData();
+                },
+                error => this.handleXhrError(error)
+            );
+        });
 
         // this.loadData();
     }
@@ -81,15 +86,15 @@ export class ProjectComponent {
                 let org = data[3];
 
                 // if (this.project.customer) {
-                    // this.customers.forEach(it => {
-                    //     if (it.id === this.project.customer.id) {
-                    //         this.project.customer = it;
-                    //     }
-                    // });
-                    console.log(org);
-                    if (this.project.customer && org && org.organizations) {
-                        this.project.customer = org.organizations[0];
-                    }
+                // this.customers.forEach(it => {
+                //     if (it.id === this.project.customer.id) {
+                //         this.project.customer = it;
+                //     }
+                // });
+                console.log(org);
+                if (this.project.customer && org && org.organizations) {
+                    this.project.customer = org.organizations[0];
+                }
                 // }
 
                 this.users.forEach(it => {

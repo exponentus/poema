@@ -1,4 +1,5 @@
 import { Component, Inject, Input } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -10,6 +11,7 @@ import { TaskService } from '../../services/task.service';
 @Component({
     selector: 'task-row',
     template: require('./templates/task-row.html'),
+    directives: [ROUTER_DIRECTIVES],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
 

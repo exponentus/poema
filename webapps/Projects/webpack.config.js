@@ -56,27 +56,13 @@ const plugins = basePlugins
 
 module.exports = {
 
+    debug: true,
+
     devtool: process.env.NODE_ENV === 'production' ? false : 'inline-source-map',
 
     entry: {
-        app: './app/main.ts',
-        vendor: [
-            'es6-shim',
-            'reflect-metadata',
-
-            '@angular/common',
-            '@angular/compiler',
-            '@angular/core',
-            '@angular/http',
-            '@angular/platform-browser',
-            '@angular/platform-browser-dynamic',
-            '@angular/router',
-            '@angular/upgrade',
-
-            'zone.js',
-            'moment',
-            'ng2-translate'
-        ]
+        app: './app/main.browser.ts',
+        vendor: './app/vendors.ts'
     },
 
     output: {

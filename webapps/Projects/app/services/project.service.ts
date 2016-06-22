@@ -131,6 +131,7 @@ export class ProjectService {
     //
     private serializeProject(project: Project): string {
         return serializeObj({
+            fsid: Date.now(),
             name: project.name,
             status: project.status,
             customerId: project.customer.id || '',

@@ -161,6 +161,7 @@ export class TaskService {
     //
     private serializeTask(task: Task): string {
         return serializeObj({
+            fsid: Date.now(),
             projectId: task.project.id,
             taskTypeId: task.taskType.id || '',
             status: task.status,
