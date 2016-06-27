@@ -88,7 +88,7 @@ export class AppComponent {
     logout(event) {
         event.preventDefault();
         // this.loggedUser = null;
-        window.location.href = '/Logout';
+        window.location.href = 'Logout';
     }
 
     goBack() {
