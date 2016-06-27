@@ -1,22 +1,19 @@
-import { Attachment } from './attachment';
-import { Organization } from './organization';
-import { User } from './user';
-
 export class Project {
-    id: string;
-    author: User;
+    id: string = '';
+    author: string;
     regDate: Date;
-    url: string;
     wasRead: boolean;
+    fsid: string = '';
 
     name: string;
-    status: string;
-    customer: Organization;
-    manager: User;
-    programmer: User;
-    tester: User;
-    observers: User[];
+    status: string = 'DRAFT';
+    customerId: string;
+    managerUserId: string;
+    programmerUserId: string;
+    testerUserId: string;
+    observerUserIds: string[];
     comment: string;
     finishDate: Date;
-    attachments: Attachment[];
+    hasAttachment: boolean;
+    attachmentIds: string[];
 }

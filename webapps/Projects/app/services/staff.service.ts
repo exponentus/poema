@@ -1,7 +1,8 @@
-import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, URLSearchParams } from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import { createURLSearchParams } from '../utils/utils';
 import { Organization } from '../models/organization';
 
 const HEADERS = new Headers({
@@ -16,20 +17,10 @@ export class StaffService {
         private http: Http
     ) { }
 
-    createURLSearchParams(_params): URLSearchParams {
-        let params: URLSearchParams = new URLSearchParams();
-        for (let p in _params) {
-            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
-        }
-        return params;
-    }
-
-    getOrganizations(params?) {
-        let url = '/Staff/p?id=get-organizations';
-
-        return this.http.get(url, {
+    getOrganizations(queryParams?) {
+        return this.http.get('/Staff/p?id=get-organizations', {
             headers: HEADERS,
-            search: this.createURLSearchParams(params)
+            search: createURLSearchParams(queryParams)
         })
             .map(response => response.json().objects[0])
             .map(data => {
@@ -41,10 +32,6 @@ export class StaffService {
     }
 
     getOrganizationById(id: string) {
-        if (id) {
-            return this.getOrganizations({ ids: id });
-        } else {
-            return this.getOrganizations();
-        }
+        return this.getOrganizations({ ids: id });
     }
 }

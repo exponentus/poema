@@ -2,7 +2,6 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
-
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
@@ -60,7 +59,7 @@ export class TaskComponent {
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
-            this.taskService.getTaskById(params['taskId']).subscribe(
+            this.taskService.fetchTaskById(params['taskId']).subscribe(
                 task => {
                     this.task = task;
                     // resolve related data
@@ -74,45 +73,45 @@ export class TaskComponent {
     loadData() {
         Observable.forkJoin(
             this.appService.getUsers(),
-            this.projectService.getProjects(),
-            this.referenceService.getTags(),
-            this.referenceService.getTaskTypes(),
+            // this.referenceService.getTags(), //this.projectService.fetchProjects(),
+            // this.referenceService.getTags(),
+            // this.referenceService.getTaskTypes(),
             this.taskService.getTaskStatusType(),
             this.taskService.getTaskPriorityType()
         ).subscribe(
             data => {
                 this.users = data[0];
-                this.projects = data[1].projects;
+                this.projects = data[1].tags; //projects;
                 this.tags = data[2].tags;
                 this.taskTypes = data[3].taskTypes;
                 this.taskStatusTypes = data[4];
                 this.taskPriorityTypes = data[5];
 
-                if (this.task.taskType) {
-                    this.taskTypes.forEach(it => {
-                        if (it.id === this.task.taskType.id) {
-                            this.task.taskType = it;
-                        }
-                    });
-                }
-                if (this.task.project) {
-                    this.projects.forEach(it => {
-                        if (it.id === this.task.project.id) {
-                            this.task.project = it;
-                        }
-                    });
-                }
-                if (this.task.tags) {
-                    let tts = this.task.tags.map(it => it.id);
-                    this.task.tags = this.tags.filter(it => tts.indexOf(it.id) != -1);
-                }
-                if (this.task.assignee) {
-                    this.users.forEach(it => {
-                        if (it.id === this.task.assignee.id) {
-                            this.task.assignee = it;
-                        }
-                    });
-                }
+                // if (this.task.taskType) {
+                //     this.taskTypes.forEach(it => {
+                //         if (it.id === this.task.taskType.id) {
+                //             this.task.taskType = it;
+                //         }
+                //     });
+                // }
+                // if (this.task.project) {
+                //     this.projects.forEach(it => {
+                //         if (it.id === this.task.project.id) {
+                //             this.task.project = it;
+                //         }
+                //     });
+                // }
+                // if (this.task.tags) {
+                //     let tts = this.task.tags.map(it => it.id);
+                //     this.task.tags = this.tags.filter(it => tts.indexOf(it.id) != -1);
+                // }
+                // if (this.task.assignee) {
+                //     this.users.forEach(it => {
+                //         if (it.id === this.task.assignee.id) {
+                //             this.task.assignee = it;
+                //         }
+                //     });
+                // }
 
                 console.log(this);
             },
@@ -180,40 +179,40 @@ export class TaskComponent {
         } else {
             param = e;
         }
-        this.projectService.getProjects(param).subscribe(data => {
-            this.projects = this.projects.concat(data.projects);
-        });
+        // this.projectService.fetchProjects(param).subscribe(data => {
+        //     this.projects = this.projects.concat(data.projects);
+        // });
     }
 
     selectProject(project: Project) {
-        this.task.project = project;
+        //this.task.project = project;
         this.closeDropdown();
     }
 
     selectTaskType(taskType: TaskType) {
-        this.task.taskType = taskType;
+        //this.task.taskType = taskType;
         this.closeDropdown();
     }
 
     selectAssigneeUser(assigneeUser: User) {
-        this.task.assignee = assigneeUser;
+        //this.task.assignee = assigneeUser;
         this.closeDropdown();
     }
 
     selectTag(tag: Tag) {
-        if (!this.task.tags) {
-            this.task.tags = [];
-        }
-        this.task.tags.push(tag);
+        // if (!this.task.tags) {
+        //     this.task.tags = [];
+        // }
+        // this.task.tags.push(tag);
         this.closeDropdown();
     }
 
     removeTag(tag: Tag, $event) {
-        this.task.tags.forEach((it, index) => {
-            if (it.id === tag.id) {
-                this.task.tags.splice(index, 1);
-            }
-        });
+        // this.task.tags.forEach((it, index) => {
+        //     if (it.id === tag.id) {
+        //         this.task.tags.splice(index, 1);
+        //     }
+        // });
 
         $event.stopPropagation();
         this.closeDropdown();

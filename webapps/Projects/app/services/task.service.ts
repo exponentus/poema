@@ -1,15 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, Response, URLSearchParams } from '@angular/http';
+import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { ReferenceService } from './reference.service';
 import { Project, Task, TaskType, Tag, User, Attachment } from '../models';
-import { serializeObj } from '../utils/obj-utils';
+import { createURLSearchParams, serializeObj } from '../utils/utils';
 
-const TASK_VIEW = 'p?id=task-view';
-const TASK_FORM = 'p?id=task-form';
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
     'Accept': 'application/json'
@@ -23,16 +20,6 @@ export class TaskService {
         private translate: TranslateService,
         private referenceService: ReferenceService
     ) { }
-
-    createURLSearchParams(_params): URLSearchParams {
-        let params: URLSearchParams = new URLSearchParams();
-        for (let p in _params) {
-            if (_params[p]) {
-                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
-            }
-        }
-        return params;
-    }
 
     getTaskPriorityType() {
         return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(t => [
@@ -52,10 +39,10 @@ export class TaskService {
         ]);
     }
 
-    getTasks(params = {}) {
-        return this.http.get(TASK_VIEW, {
+    fetchTasks(queryParams = {}) {
+        return this.http.get('p?id=task-view', {
             headers: HEADERS,
-            search: this.createURLSearchParams(params)
+            search: createURLSearchParams(queryParams)
         })
             .map(response => response.json().objects[0])
             .map(data => {
@@ -66,112 +53,31 @@ export class TaskService {
             });
     }
 
-    getTaskById(taskId: string) {
+    fetchTaskById(taskId: string) {
         if (taskId === 'new') {
-            return Observable.of(<Task>this.makeTask({}));
+            return Observable.of(new Task());
         }
 
-        return this.http.get(TASK_FORM + '&taskId=' + taskId, { headers: HEADERS })
-            .map(response => <Task>this.makeTask(response.json().objects[1]));
+        return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
+            .map(response => <Task>response.json().objects[1]);
     }
 
     saveTask(task: Task) {
-        let url = TASK_FORM + (task.id ? '&taskId=' + task.id : '');
-        return this.http.post(url, this.serializeTask(task), { headers: HEADERS })
+        let url = 'p?id=task-form' + (task.id ? '&taskId=' + task.id : '');
+        return this.http.post(url, serializeObj(task), { headers: HEADERS })
             .map(response => this.transformPostResponse(response))
             .catch(error => Observable.throw(this.transformPostResponse(error)));
     }
 
     deleteTask(task: Task) {
-        return this.http.delete(TASK_VIEW);
+        return this.http.delete('p?id=task-view&ids=' + task.id);
     }
 
     private transformPostResponse(response: Response) {
         let json = response.json();
-        return {
+        return Object.assign(json, {
             ok: json.type === 'DOCUMENT_SAVED',
-            message: json.captions ? json.captions.type : json.message,
-            validation: json.validation,
-            redirectURL: json.redirectURL,
-            type: json.type
-        };
-    }
-
-    private makeTask(json: any): Task {
-        let task: Task = new Task();
-
-        task.id = json.id;
-        task.regDate = json.regDate;
-        task.wasRead = json.wasRead;
-
-        if (json.projectId) {
-            task.project = new Project();
-            task.project.id = json.projectId;
-        }
-
-        if (json.parentTaskId) {
-            task.parent = new Task();
-            task.parent.id = json.parentTaskId;
-        }
-
-        task.children = [];
-
-        if (json.taskTypeId) {
-            task.taskType = new TaskType();
-            task.taskType.id = json.taskTypeId;
-        }
-
-        task.status = json.status || 'DRAFT';
-        task.priority = json.priority || 'NORMAL';
-        task.body = json.body;
-
-        if (json.assigneeUserId) {
-            task.assignee = new User();
-            task.assignee.id = json.assigneeUserId;
-        }
-
-        task.startDate = json.startDate;
-        task.dueDate = json.dueDate;
-
-        if (json.tagIds) {
-            task.tags = json.tagIds.map(id => {
-                let t = new Tag();
-                t.id = id;
-                return t;
-            });
-        }
-        task.attachments = [];
-
-
-        // "projectId",
-        // "childrenTaskIds",
-        // "status",
-        // "priority",
-        // "body",
-        // "attachments",
-        // "customerObservation",
-        // "tagIds",
-        // "taskTypeId",
-        // "url",
-        // "assigneeUserId",
-
-        return task;
-    }
-
-    //
-    private serializeTask(task: Task): string {
-        return serializeObj({
-            fsid: Date.now(),
-            projectId: task.project.id,
-            taskTypeId: task.taskType.id || '',
-            status: task.status,
-            priority: task.priority,
-            body: task.body,
-            assigneeUserId: task.assignee.id,
-            startDate: task.startDate,
-            dueDate: task.dueDate,
-            tagIds: Array.isArray(task.tags) ? task.tags.map(it => it.id) : '',
-            fileIds: Array.isArray(task.attachments) ? task.attachments.join(',') : ''
+            message: json.captions ? json.captions.type : json.message
         });
     }
 }

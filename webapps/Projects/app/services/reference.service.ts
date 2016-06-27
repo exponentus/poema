@@ -1,7 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, URLSearchParams } from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 
+import { FETCH_TAGS, FETCH_TASK_TYPES } from '../reducers/reference.reducer';
 import { Tag, TaskType } from '../models';
 
 const HEADERS = new Headers({
@@ -13,21 +15,21 @@ const HEADERS = new Headers({
 export class ReferenceService {
 
     constructor(
-        private http: Http
+        private http: Http,
+        private store: Store<any>
     ) { }
 
-    createURLSearchParams(_params): URLSearchParams {
-        let params: URLSearchParams = new URLSearchParams();
-        for (let p in _params) {
-            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
-        }
-        return params;
+    loadReference() {
+        this.fetchTags().subscribe(data => {
+            this.store.dispatch({ type: FETCH_TAGS, payload: data });
+        });
+        this.fetchTaskTypes().subscribe(data => {
+            this.store.dispatch({ type: FETCH_TASK_TYPES, payload: data });
+        });
     }
 
-    getTags() {
-        let url = '/Reference/p?id=tags';
-
-        return this.http.get(url, { headers: HEADERS })
+    fetchTags() {
+        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
@@ -37,10 +39,8 @@ export class ReferenceService {
             });
     }
 
-    getTaskTypes() {
-        let url = '/Reference/p?id=tasktypes';
-
-        return this.http.get(url, { headers: HEADERS })
+    fetchTaskTypes() {
+        return this.http.get('/Reference/p?id=tasktypes', { headers: HEADERS })
             .map(response => response.json().objects[0])
             .map(data => {
                 return {

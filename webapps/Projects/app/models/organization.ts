@@ -1,5 +1,5 @@
 export class Organization {
-    id: string;
+    id: string = '';
     name: string;
     bin: string;
     localizedName: any;

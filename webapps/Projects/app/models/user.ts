@@ -1,13 +1,9 @@
-import { Organization } from './organization';
-
 export class User {
-    id: string;
+    id: string = '';
     login: string;
     email: string;
     userName: string = '@anonymous';
-    pwd: string;
-    pwdConfirm: string;
-    organization: Organization;
-    department: string;
-    position: string;
+    organizationId: string;
+    departmentId: string;
+    positionId: string;
 }

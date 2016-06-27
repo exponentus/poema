@@ -1,10 +1,8 @@
-import { User } from './user';
-
 export class Attachment {
-    id: string;
+    id: string = '';
     fieldName: string;
     realFileName: string;
-    author: User;
+    author: string;
     regDate: Date;
     size: number;
 }

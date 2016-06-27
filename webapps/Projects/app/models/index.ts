@@ -5,3 +5,5 @@ export { Project } from './project';
 export { Task } from './task';
 export { Tag } from './tag';
 export { TaskType } from './task-type';
+export { Comment } from './comment';
+export { Request } from './request';

@@ -1,12 +1,9 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
-
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { NotificationService } from '../../shared/notification';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { Project } from '../../models/project';
-import { ProjectService } from '../../services/project.service';
 
 @Component({
     selector: 'project-row',
@@ -17,18 +14,10 @@ import { ProjectService } from '../../services/project.service';
 
 export class ProjectRowComponent {
     @Input() project: Project;
-    selected: boolean = false;
-
-    constructor(
-        private projectService: ProjectService,
-        private notifyService: NotificationService
-    ) { }
+    // @Output
+    private selected: boolean = false;
 
     toggleSelected() {
         this.selected = !this.selected;
-    }
-
-    deleteProject() {
-        this.projectService.deleteProject([this.project]).subscribe();
     }
 }

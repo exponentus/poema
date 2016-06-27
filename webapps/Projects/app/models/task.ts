@@ -1,26 +1,21 @@
-import { Attachment } from './attachment';
-import { Tag } from './tag';
-import { TaskType } from './task-type';
-import { User } from './user';
-import { Project } from './project';
-
 export class Task {
-    id: string;
-    author: User;
+    id: string = '';
+    author: string;
     regDate: Date;
-    url: string;
     wasRead: boolean;
+    fsid: string = '';
 
-    project: Project;
-    parent: Task;
-    children: Task[];
-    taskType: TaskType;
+    projectId: string;
+    parentTaskId: string;
+    subtaskIds: string[];
+    taskTypeId: string;
     status: string = 'DRAFT';
     priority: string = 'NORMAL';
     body: string;
-    assignee: User;
+    assigneeUserId: string;
     startDate: Date;
     dueDate: Date;
-    tags: Tag[];
-    attachments: Attachment[];
+    tagIds: string[];
+    hasAttachment: boolean;
+    attachmentIds: string[];
 }

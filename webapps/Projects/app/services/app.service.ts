@@ -1,9 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { User } from '../models/user';
-import { parseResponseObjects } from '../utils/obj-utils';
+import { parseResponseObjects } from '../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -14,6 +14,7 @@ const HEADERS = new Headers({
 export class AppService {
 
     private translations: any;
+    isLogged: boolean = false;
 
     constructor(
         private http: Http

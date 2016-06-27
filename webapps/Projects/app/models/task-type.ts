@@ -1,5 +1,5 @@
 export class TaskType {
-    id: string;
+    id: string = '';
     name: string;
     localizedName: any;
 }

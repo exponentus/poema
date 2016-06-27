@@ -3,7 +3,7 @@ import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
-import { AppService } from './services';
+import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { NavComponent } from './components/nav';
@@ -18,6 +18,7 @@ import { User } from './models/user';
 })
 
 export class AppComponent {
+    private sub: any;
     isReady: boolean = false;
     loggedUser: User;
     language: any;
@@ -34,10 +35,15 @@ export class AppComponent {
     constructor(
         private store: Store<any>,
         private appService: AppService,
+        private referenceService: ReferenceService,
         public translate: TranslateService
     ) { }
 
     ngOnInit() {
+        this.sub = this.store.select('reference');
+
+        this.referenceService.loadReference();
+
         this.isSearchOpen = false;
         this.isNavCollapsed = false;
         this.loggedUser = new User();
@@ -45,7 +51,7 @@ export class AppComponent {
 
         // ng2-translate
         var userLang = navigator.language.split('-')[0]; // use navigator lang if available
-        userLang = /(fr|en)/gi.test(userLang) ? userLang : 'en';
+        userLang = /(ru|en)/gi.test(userLang) ? userLang : 'en';
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang('en');
         // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -57,11 +63,12 @@ export class AppComponent {
             this.loggedUser = resp.employee;
             this.language = resp.language
             this.isReady = true;
+            this.appService.isLogged = true;
         });
     }
 
     ngOnDestroy() {
-        // this.store.unsubscribe();
+        this.sub && this.sub.unsubscribe();
     }
 
     toggleNav() {
