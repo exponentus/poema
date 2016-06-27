@@ -3,19 +3,19 @@ import { Project } from '../models/project';
 export const FETCH_NAV_PROJECTS = 'FETCH_NAV_PROJECTS';
 
 export interface IProjectsState {
-    projects: Project[],
+    navProjects: Project[],
     loading: boolean
 };
 
 const initialState: IProjectsState = {
-    projects: [],
+    navProjects: [],
     loading: false
 };
 
 export const navReducer = (state = initialState, {type, payload}) => {
     switch (type) {
         case FETCH_NAV_PROJECTS:
-            return state;
+            return payload;
         default:
             return state;
     }

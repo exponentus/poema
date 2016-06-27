@@ -15,14 +15,18 @@ const routes: RouterConfig = [
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
+    // {
+    //     path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard], children: [
+    //         { path: ':projectId', component: ProjectComponent }
+    //     ]
+    // },
     { path: 'project/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
-    { path: 'tasks/:for/:id', component: TaskComponent, canActivate: [AuthGuard] },
     { path: 'tasks/:for', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'task/:taskId', component: TaskComponent, canActivate: [AuthGuard] },
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
-    { path: '**', component: DashboardComponent }
+    { path: '**', component: DashboardComponent, canActivate: [AuthGuard] }
 ];
 
 export const APP_ROUTER_PROVIDERS = [

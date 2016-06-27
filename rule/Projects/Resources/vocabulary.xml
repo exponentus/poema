@@ -165,4 +165,8 @@
         <entry lang="RUS">Нормальный</entry>
         <entry lang="ENG">Normal</entry>
     </sentence>
+    <sentence mode="on" keyword="change_password">
+        <entry lang="RUS">Изменить пароль</entry>
+        <entry lang="ENG">Change password</entry>
+    </sentence>
 </vocabulary>

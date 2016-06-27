@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
@@ -21,6 +21,7 @@ export class NavComponent {
 
     constructor(
         private store: Store<any>,
+        private router: Router,
         private projectService: ProjectService
     ) { }
 
