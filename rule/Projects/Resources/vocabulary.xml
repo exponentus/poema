@@ -4,6 +4,10 @@
         <entry lang="RUS">Poema</entry>
         <entry lang="ENG">Poema</entry>
     </sentence>
+    <sentence mode="on" keyword="loading">
+        <entry lang="RUS">Загрузка</entry>
+        <entry lang="ENG">Loading</entry>
+    </sentence>
     <sentence mode="on" keyword="inbox">
         <entry lang="RUS">Входящие</entry>
         <entry lang="ENG">Inbox</entry>
@@ -31,6 +35,10 @@
     <sentence mode="on" keyword="tasks_assigned_to_me">
         <entry lang="RUS">Назначенные мне</entry>
         <entry lang="ENG">Assigned to me</entry>
+    </sentence>
+    <sentence mode="on" keyword="dashboard">
+        <entry lang="RUS">Dashboard</entry>
+        <entry lang="ENG">Dashboard</entry>
     </sentence>
     <sentence mode="on" keyword="projects">
         <entry lang="RUS">Проекты</entry>
