@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { createURLSearchParams } from '../utils/utils';
-import { Organization } from '../models/organization';
+import { Organization, User } from '../models';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -33,5 +33,13 @@ export class StaffService {
 
     getOrganizationById(id: string) {
         return this.getOrganizations({ ids: id });
+    }
+
+    getUsers() {
+        let headers = { headers: HEADERS };
+        let url = 'p?id=users';
+
+        return this.http.get(url, headers)
+            .map(response => <User[]>response.json().objects[0].list);
     }
 }

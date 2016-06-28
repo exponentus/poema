@@ -8,7 +8,9 @@
                 <span class="vw-task-body">{{task.body}}</span>
                 <span class="vw-task-status">{{task.status | text:'L' | translate}}</span>
                 <span class="vw-task-priority">{{task.priority | text:'L' | translate}}</span>
-                <span class="vw-task-assignee">{{task.assignee?.userName}}</span>
+                <span class="vw-task-assignee">
+                    <user-cell [userId]="task.assigneeUserId"></user-cell>
+                </span>
                 <span class="vw-date">{{task.startDate | dateFmt}}</span>
                 <span class="vw-date">{{task.dueDate | dateFmt}}</span>
                 <span class="vw-tags">

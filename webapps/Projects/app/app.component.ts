@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
+import { FETCH_ORGANIZATIONS, FETCH_USERS } from './reducers/staff.reducer';
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { NavComponent } from './components/nav';
@@ -36,6 +37,7 @@ export class AppComponent {
         private store: Store<any>,
         private appService: AppService,
         private referenceService: ReferenceService,
+        private staffService: StaffService,
         public translate: TranslateService
     ) { }
 
@@ -43,6 +45,14 @@ export class AppComponent {
         this.sub = this.store.select('reference');
 
         this.referenceService.loadReference();
+
+        this.staffService.getOrganizations().subscribe(data => {
+            this.store.dispatch({ type: FETCH_ORGANIZATIONS, payload: data });
+        });
+
+        this.appService.getUsers().subscribe(data => {
+            this.store.dispatch({ type: FETCH_USERS, payload: data });
+        });
 
         this.isSearchOpen = false;
         this.isNavCollapsed = false;
