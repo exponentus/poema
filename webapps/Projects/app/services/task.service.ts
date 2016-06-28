@@ -59,7 +59,7 @@ export class TaskService {
         }
 
         return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
-            .map(response => <Task>response.json().objects[1]);
+            .map(response => <Task>response.json().objects[0]);
     }
 
     saveTask(task: Task) {
