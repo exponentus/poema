@@ -41,6 +41,7 @@ public class Project extends SecureAppEntity<UUID> {
     @JsonProperty("observerUserIds")
     private List<Long> observers;
 
+    private Date startDate;
     private Date finishDate;
 
     @Column(length = 512)
@@ -112,6 +113,14 @@ public class Project extends SecureAppEntity<UUID> {
 
     public void setObservers(List<Long> observers) {
         this.observers = observers;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public Date getFinishDate() {

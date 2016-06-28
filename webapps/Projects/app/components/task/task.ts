@@ -2,12 +2,14 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { UserSelectComponent } from '../shared/user-select';
+import { ProjectSelectComponent } from '../shared/project-select';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
 import { Project, Task, Tag, TaskType, User } from '../../models';
@@ -20,7 +22,9 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
         FORM_DIRECTIVES,
         SwitchButtonComponent,
         DROPDOWN_DIRECTIVES,
-        UserSelectComponent],
+        UserSelectComponent,
+        ProjectSelectComponent
+    ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
 })
@@ -39,6 +43,7 @@ export class TaskComponent {
     taskStatusTypes: any;
 
     constructor(
+        private store: Store<any>,
         private router: Router,
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
@@ -77,49 +82,18 @@ export class TaskComponent {
     }
 
     loadData() {
+        this.store.select('reference').subscribe((state: any) => {
+            this.tags = state.tags;
+            this.taskTypes = state.taskTypes;
+        });
+
         Observable.forkJoin(
-            this.appService.getUsers(),
-            // this.referenceService.getTags(), //this.projectService.fetchProjects(),
-            // this.referenceService.getTags(),
-            // this.referenceService.getTaskTypes(),
             this.taskService.getTaskStatusType(),
             this.taskService.getTaskPriorityType()
         ).subscribe(
             data => {
-                this.users = data[0];
-                this.projects = data[1].tags; //projects;
-                this.tags = data[2].tags;
-                this.taskTypes = data[3].taskTypes;
-                this.taskStatusTypes = data[4];
-                this.taskPriorityTypes = data[5];
-
-                // if (this.task.taskType) {
-                //     this.taskTypes.forEach(it => {
-                //         if (it.id === this.task.taskType.id) {
-                //             this.task.taskType = it;
-                //         }
-                //     });
-                // }
-                // if (this.task.project) {
-                //     this.projects.forEach(it => {
-                //         if (it.id === this.task.project.id) {
-                //             this.task.project = it;
-                //         }
-                //     });
-                // }
-                // if (this.task.tags) {
-                //     let tts = this.task.tags.map(it => it.id);
-                //     this.task.tags = this.tags.filter(it => tts.indexOf(it.id) != -1);
-                // }
-                // if (this.task.assignee) {
-                //     this.users.forEach(it => {
-                //         if (it.id === this.task.assignee.id) {
-                //             this.task.assignee = it;
-                //         }
-                //     });
-                // }
-
-                console.log(this);
+                this.taskStatusTypes = data[0];
+                this.taskPriorityTypes = data[1];
             },
             error => {
                 this.handleXhrError(error)
