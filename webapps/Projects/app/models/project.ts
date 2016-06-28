@@ -3,7 +3,7 @@ export class Project {
     author: string;
     regDate: Date;
     wasRead: boolean;
-    fsid: string = '';
+    fsid: string = '1';
 
     name: string;
     status: string = 'DRAFT';

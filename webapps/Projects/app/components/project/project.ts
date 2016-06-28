@@ -8,6 +8,8 @@ import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
+import { CustomerSelectComponent } from '../shared/customer-select';
+import { UserSelectComponent } from '../shared/user-select';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
 import { Project, Organization, User } from '../../models';
@@ -20,7 +22,9 @@ import { Project, Organization, User } from '../../models';
         ROUTER_DIRECTIVES,
         FORM_DIRECTIVES,
         DROPDOWN_DIRECTIVES,
-        SwitchButtonComponent
+        SwitchButtonComponent,
+        CustomerSelectComponent,
+        UserSelectComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -70,12 +74,27 @@ export class ProjectComponent {
                 project => {
                     console.log(project);
                     this.project = project;
-                    //this.loadData();
+                    this.loadData();
                     this.isReady = true;
                 },
                 error => this.handleXhrError(error)
             );
         });
+    }
+
+    loadData() {
+        this.store.select('staff').subscribe((state: any) => {
+            if (state.organizations) {
+                this.customers = state.organizations;
+            }
+            if (state.users) {
+                this.users = state.users;
+            }
+        });
+        this.store.select('staff').subscribe((state: any) => {
+            this.customers = state.organizations;
+        });
+        this.projectService.getProjectStatusTypes().subscribe(data => this.projectStatusTypes = data);
     }
 
     // loadData() {
@@ -208,39 +227,40 @@ export class ProjectComponent {
     }
 
     selectCustomer(customer: Organization) {
-        //this.project.customer = customer;
+        // console.log('select', customer);
+        this.project.customerId = customer.id;
         this.closeDropdown();
     }
 
     selectManager(user: User) {
-        //this.project.manager = user;
+        this.project.managerUserId = user.id;
         this.closeDropdown();
     }
 
     selectProgrammer(user: User) {
-        //this.project.programmer = user;
+        this.project.programmerUserId = user.id;
         this.closeDropdown();
     }
 
     selectTester(user: User) {
-        //this.project.tester = user;
+        this.project.testerUserId = user.id;
         this.closeDropdown();
     }
 
     selectObserver(observer: User) {
-        // if (!this.project.observers) {
-        //     this.project.observers = [];
-        // }
-        // this.project.observers.push(observer);
+        if (!this.project.observerUserIds) {
+            this.project.observerUserIds = [];
+        }
+        this.project.observerUserIds.push(observer.id);
         this.closeDropdown();
     }
 
     removeObserver(observer: User, $event) {
-        // this.project.observers.forEach((it, index) => {
-        //     if (it.id === observer.id) {
-        //         this.project.observers.splice(index, 1);
-        //     }
-        // });
+        this.project.observerUserIds.forEach((id, index) => {
+            if (id === observer.id) {
+                this.project.observerUserIds.splice(index, 1);
+            }
+        });
 
         $event.stopPropagation();
         this.closeDropdown();

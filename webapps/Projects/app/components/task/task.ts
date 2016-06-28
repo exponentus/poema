@@ -7,6 +7,7 @@ import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
+import { UserSelectComponent } from '../shared/user-select';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
 import { Project, Task, Tag, TaskType, User } from '../../models';
@@ -14,7 +15,12 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
 @Component({
     selector: 'task',
     template: require('./templates/task.html'),
-    directives: [ROUTER_DIRECTIVES, FORM_DIRECTIVES, SwitchButtonComponent, DROPDOWN_DIRECTIVES],
+    directives: [
+        ROUTER_DIRECTIVES,
+        FORM_DIRECTIVES,
+        SwitchButtonComponent,
+        DROPDOWN_DIRECTIVES,
+        UserSelectComponent],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
 })
@@ -185,34 +191,34 @@ export class TaskComponent {
     }
 
     selectProject(project: Project) {
-        //this.task.project = project;
+        this.task.projectId = project.id;
         this.closeDropdown();
     }
 
     selectTaskType(taskType: TaskType) {
-        //this.task.taskType = taskType;
+        this.task.taskTypeId = taskType.id;
         this.closeDropdown();
     }
 
     selectAssigneeUser(assigneeUser: User) {
-        //this.task.assignee = assigneeUser;
+        this.task.assigneeUserId = assigneeUser.id;
         this.closeDropdown();
     }
 
     selectTag(tag: Tag) {
-        // if (!this.task.tags) {
-        //     this.task.tags = [];
-        // }
-        // this.task.tags.push(tag);
+        if (!this.task.tagIds) {
+            this.task.tagIds = [];
+        }
+        this.task.tagIds.push(tag.id);
         this.closeDropdown();
     }
 
     removeTag(tag: Tag, $event) {
-        // this.task.tags.forEach((it, index) => {
-        //     if (it.id === tag.id) {
-        //         this.task.tags.splice(index, 1);
-        //     }
-        // });
+        this.task.tagIds.forEach((id, index) => {
+            if (id === tag.id) {
+                this.task.tagIds.splice(index, 1);
+            }
+        });
 
         $event.stopPropagation();
         this.closeDropdown();

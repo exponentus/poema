@@ -1,6 +1,3 @@
-<div *ngIf="!isReady">
-    {{'loading' | translate}}
-</div>
 <form class="form" [ngFormModel]="form" *ngIf="isReady">
     <header class="content-header">
         <button class="btn-back" type="button" (click)="close($event)">
@@ -37,23 +34,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.customerUserId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <div *ngIf="project.customer">
-                                    <span>{{project.customer.name}}</span>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <div class="select-search">
-                                    <input name="keyword" placeholder="{{'search' | translate}}" (keyup)="searchCustomer($event)" />
-                                </div>
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'customer')">
-                                    <li class="select-option" [class.selected]="project.customer?.id == m.id" *ngFor="let m of customers" (click)="selectCustomer(m)">
-                                        {{m.name}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <customer-select [customerId]="project.customerId" (onSelect)="selectCustomer($event)"></customer-select>
                     </div>
                     <div [hidden]="form.controls.customerUserId.valid || form.controls.customerUserId.pristine" class="error-message">
                         {{'required' | translate}}
@@ -66,18 +47,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.managerUserId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.manager">{{project.manager.userName || project.manager.login}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'manager')">
-                                    <li class="select-option" [class.selected]="project.manager?.id == m.id" *ngFor="let m of users" (click)="selectManager(m)">
-                                        {{m.name || m.login}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <user-select [userId]="project.managerUserId" (onSelect)="selectManager($event)"></user-select>
                     </div>
                     <div [hidden]="form.controls.managerUserId.valid || form.controls.managerUserId.pristine" class="error-message">
                         {{'required' | translate}}
@@ -90,18 +60,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.programmerUserId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.programmer">{{project.programmer.userName || project.programmer.login}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'programmer')">
-                                    <li class="select-option" [class.selected]="project.programmer?.id == m.id" *ngFor="let m of users" (click)="selectProgrammer(m)">
-                                        {{m.name || m.login}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <user-select [userId]="project.programmerUserId" (onSelect)="selectProgrammer($event)"></user-select>
                     </div>
                     <div [hidden]="form.controls.programmerUserId.valid || form.controls.programmerUserId.pristine" class="error-message">
                         {{'required' | translate}}
@@ -114,18 +73,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.testerUserId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="project.tester">{{project.tester.userName || project.tester.login}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'tester')">
-                                    <li class="select-option" [class.selected]="project.tester?.id == m.id" *ngFor="let m of users" (click)="selectTester(m)">
-                                        {{m.name || m.login}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <user-select [userId]="project.testerUserId" (onSelect)="selectTester($event)"></user-select>
                     </div>
                     <div [hidden]="form.controls.testerUserId.valid || form.controls.testerUserId.pristine" class="error-message">
                         {{'required' | translate}}
@@ -138,18 +86,7 @@
                 </div>
                 <div class="controls">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span class="tag" *ngFor="let m of project.observers" (click)="removeObserver(m, $event)">{{m.userName || m.login}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'observers')">
-                                    <li class="select-option" *ngFor="let m of users" (click)="selectObserver(m)">
-                                        {{m.userName || m.login}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <user-select [userId]="project.observerUserIds" (onSelect)="selectObserver($event)"></user-select>
                     </div>
                 </div>
             </div>

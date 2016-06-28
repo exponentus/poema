@@ -3,7 +3,7 @@ export class Task {
     author: string;
     regDate: Date;
     wasRead: boolean;
-    fsid: string = '';
+    fsid: string = '1';
 
     projectId: string;
     parentTaskId: string;

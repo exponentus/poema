@@ -131,6 +131,11 @@
         <entry lang="KAZ">Іздеу</entry>
         <entry lang="ENG">Search</entry>
     </sentence>
+    <sentence mode="on" keyword="required">
+        <entry lang="RUS">Обязательно</entry>
+        <entry lang="KAZ">Обязательно</entry>
+        <entry lang="ENG">Required</entry>
+    </sentence>
 
     <sentence mode="on" keyword="draft">
         <entry lang="RUS">Черновик</entry>

@@ -116,18 +116,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="task.assignee">{{task.assignee.userName || task.assignee.login}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'assigneeUser')">
-                                    <li class="select-option" [class.selected]="task.assignee?.id == m.id" *ngFor="let m of users" (click)="selectAssigneeUser(m)">
-                                        {{m.name || m.login}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <user-select [userId]="task.assigneeUserId" (onSelect)="selectAssigneeUser($event)"></user-select>
                     </div>
                     <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
                         {{'required' | translate}}
