@@ -36,18 +36,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span *ngIf="task.taskType">{{task.taskType.name}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'taskType')">
-                                    <li class="select-option" [class.selected]="task.taskType?.id == m.id" *ngFor="let m of taskTypes" (click)="selectTaskType(m)">
-                                        {{m.name}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <task-type-select [taskTypeId]="task.taskTypeId" (onSelect)="selectTaskType($event)"></task-type-select>
                     </div>
                     <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
                         {{'required' | translate}}
@@ -122,18 +111,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
                     <div class="span8">
-                        <div dropdown class="select">
-                            <div dropdown-toggle class="select-selection input">
-                                <span class="tag" *ngFor="let m of task.tags" (click)="removeTag(m, $event)">{{m.name}}</span>
-                            </div>
-                            <div class="dropdown-menu select-dropdown">
-                                <ul class="select-list scroll-shadow" (scroll)="onScrollSelectList($event.target, 'tags')">
-                                    <li class="select-option" *ngFor="let m of tags" (click)="selectTag(m)">
-                                        {{m.name}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
                     </div>
                     <div [hidden]="form.controls.tagIds.valid || form.controls.tagIds.pristine" class="error-message">
                         {{'required' | translate}}

@@ -10,6 +10,8 @@ import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
+import { TaskTypeSelectComponent } from '../shared/task-type-select';
+import { TagsSelectComponent } from '../shared/tags-select';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
 import { Project, Task, Tag, TaskType, User } from '../../models';
@@ -23,7 +25,9 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
         SwitchButtonComponent,
         DROPDOWN_DIRECTIVES,
         UserSelectComponent,
-        ProjectSelectComponent
+        ProjectSelectComponent,
+        TaskTypeSelectComponent,
+        TagsSelectComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -177,6 +181,10 @@ export class TaskComponent {
     selectAssigneeUser(assigneeUser: User) {
         this.task.assigneeUserId = assigneeUser.id;
         this.closeDropdown();
+    }
+
+    setTags(tags: Tag[]) {
+        this.task.tagIds = tags.map(it => it.id);
     }
 
     selectTag(tag: Tag) {
