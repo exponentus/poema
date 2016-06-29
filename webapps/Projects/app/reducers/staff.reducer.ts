@@ -14,8 +14,6 @@ const initialState: IStaffState = {
 };
 
 export const staffReducer = (state = initialState, {type, payload}) => {
-    // console.log('staffReducer > ', 'ACTION:', type, payload, state);
-
     switch (type) {
         case FETCH_ORGANIZATIONS:
             return Object.assign({}, state, {

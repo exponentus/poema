@@ -50,7 +50,7 @@ export class AppComponent {
             this.store.dispatch({ type: FETCH_ORGANIZATIONS, payload: data });
         });
 
-        this.appService.getUsers().subscribe(data => {
+        this.staffService.getUsers().subscribe(data => {
             this.store.dispatch({ type: FETCH_USERS, payload: data });
         });
 

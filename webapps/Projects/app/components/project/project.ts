@@ -38,8 +38,6 @@ export class ProjectComponent {
     project: Project;
     form: ControlGroup;
 
-    users: User[];
-    customers: Organization[];
     projectStatusTypes: any;
     private to;
 
@@ -83,79 +81,8 @@ export class ProjectComponent {
     }
 
     loadData() {
-        this.store.select('staff').subscribe((state: any) => {
-            if (state.organizations) {
-                this.customers = state.organizations;
-            }
-            if (state.users) {
-                this.users = state.users;
-            }
-        });
-        this.store.select('staff').subscribe((state: any) => {
-            this.customers = state.organizations;
-        });
         this.projectService.getProjectStatusTypes().subscribe(data => this.projectStatusTypes = data);
     }
-
-    // loadData() {
-    //     Observable.forkJoin(
-    //         this.staffService.getOrganizations(),
-    //         this.appService.getUsers(),
-    //         this.projectService.getProjectStatusTypes(),
-    //         this.staffService.getOrganizationById(this.project.customer ? this.project.customer.id : '')
-    //     ).subscribe(
-    //         data => {
-    //             this.customers = data[0].organizations;
-    //             this.users = data[1];
-    //             this.projectStatusTypes = data[2];
-    //             let org = data[3];
-    //
-    //             // if (this.project.customer) {
-    //             // this.customers.forEach(it => {
-    //             //     if (it.id === this.project.customer.id) {
-    //             //         this.project.customer = it;
-    //             //     }
-    //             // });
-    //             console.log(org);
-    //             if (this.project.customer && org && org.organizations) {
-    //                 this.project.customer = org.organizations[0];
-    //             }
-    //             // }
-    //
-    //             this.users.forEach(it => {
-    //                 if (this.project.manager) {
-    //                     if (it.id === this.project.manager.id) {
-    //                         this.project.manager = it;
-    //                     }
-    //                 }
-    //                 if (this.project.programmer) {
-    //                     if (it.id === this.project.programmer.id) {
-    //                         this.project.programmer = it;
-    //                     }
-    //                 }
-    //                 if (this.project.tester) {
-    //                     if (it.id === this.project.tester.id) {
-    //                         this.project.tester = it;
-    //                     }
-    //                 }
-    //             });
-    //             if (this.project.observers) {
-    //                 for (let obs of this.project.observers) {
-    //                     let obsU: any = this.users.filter(it => it.id == obs.id);
-    //                     if (obsU.length) {
-    //                         obs.userName = obsU[0].userName;
-    //                         obs.login = obsU[0].login;
-    //                     }
-    //                 }
-    //             }
-    //
-    //             console.log(this);
-    //         },
-    //         error => {
-    //             this.handleXhrError(error)
-    //         },
-    //         () => { this.isReady = true });
-    // }
 
     saveProject() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
@@ -197,33 +124,6 @@ export class ProjectComponent {
 
     closeDropdown() {
         document.body.click();
-    }
-
-    onScrollSelectList($el, listId) {
-        // if end scroll
-        if ($el.scrollHeight <= $el.scrollTop + $el.offsetHeight) {
-            if (listId === 'customer') {
-                this.searchCustomer({
-                    page: 2
-                });
-            }
-        }
-    }
-
-    searchCustomer(e) {
-        let param: any = {};
-        if (e.target) {
-            param.keyword = e.target.value;
-        } else {
-            param = e;
-        }
-        this.staffService.getOrganizations(param).subscribe(data => {
-            if (param.keyword) {
-                this.customers = data.organizations;
-            } else {
-                this.customers = this.customers.concat(data.organizations);
-            }
-        });
     }
 
     selectCustomer(customer: Organization) {

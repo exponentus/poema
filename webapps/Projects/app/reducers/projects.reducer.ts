@@ -22,8 +22,6 @@ const initialState: IProjectsState = {
 };
 
 export const projectsReducer = (state = initialState, {type, payload}) => {
-    // console.log('projectReducer > ', 'ACTION:', type, payload, state);
-
     switch (type) {
         case FETCH_NAV_PROJECTS:
             return payload;

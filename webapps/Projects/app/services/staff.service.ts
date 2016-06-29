@@ -36,10 +36,7 @@ export class StaffService {
     }
 
     getUsers() {
-        let headers = { headers: HEADERS };
-        let url = 'p?id=users';
-
-        return this.http.get(url, headers)
+        return this.http.get('p?id=users', { headers: HEADERS })
             .map(response => <User[]>response.json().objects[0].list);
     }
 }

@@ -39,10 +39,6 @@ export class TaskComponent {
     task: Task;
     form: ControlGroup;
 
-    users: User[];
-    tags: Tag[];
-    projects: Project[];
-    taskTypes: TaskType[];
     taskPriorityTypes: any;
     taskStatusTypes: any;
 
@@ -77,7 +73,6 @@ export class TaskComponent {
             this.taskService.fetchTaskById(params['taskId']).subscribe(
                 task => {
                     this.task = task;
-                    // resolve related data
                     this.loadData();
                 },
                 errorResponse => this.handleXhrError(errorResponse)
@@ -86,11 +81,6 @@ export class TaskComponent {
     }
 
     loadData() {
-        this.store.select('reference').subscribe((state: any) => {
-            this.tags = state.tags;
-            this.taskTypes = state.taskTypes;
-        });
-
         Observable.forkJoin(
             this.taskService.getTaskStatusType(),
             this.taskService.getTaskPriorityType()
@@ -106,7 +96,7 @@ export class TaskComponent {
     }
 
     saveTask() {
-        let noty = this.notifyService.process(this.translate.get('wait_while_document_save')).show();
+        let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.taskService.saveTask(this.task).subscribe(
             response => {
                 noty.set({ type: 'success', message: response.message }).remove(1500);
@@ -143,29 +133,6 @@ export class TaskComponent {
 
     closeDropdown() {
         document.body.click();
-    }
-
-    onScrollSelectList($el, listId) {
-        // if end scroll
-        if ($el.scrollHeight <= $el.scrollTop + $el.offsetHeight) {
-            if (listId === 'project') {
-                this.searchProject({
-                    page: 2
-                });
-            }
-        }
-    }
-
-    searchProject(e) {
-        let param = {};
-        if (e.target) {
-            param = { name: e.target.value };
-        } else {
-            param = e;
-        }
-        // this.projectService.fetchProjects(param).subscribe(data => {
-        //     this.projects = this.projects.concat(data.projects);
-        // });
     }
 
     selectProject(project: Project) {
@@ -207,10 +174,6 @@ export class TaskComponent {
     }
 
     ngOnDestroy() {
-        this.users = [];
-        this.tags = [];
-        this.projects = [];
-        this.taskTypes = [];
         this.taskPriorityTypes = [];
         this.taskStatusTypes = [];
     }

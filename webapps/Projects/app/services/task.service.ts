@@ -1,10 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { ReferenceService } from './reference.service';
-import { Project, Task, TaskType, Tag, User, Attachment } from '../models';
+import { Task } from '../models';
 import { createURLSearchParams, serializeObj } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -17,16 +16,15 @@ export class TaskService {
 
     constructor(
         private http: Http,
-        private translate: TranslateService,
-        private referenceService: ReferenceService
+        private translate: TranslateService
     ) { }
 
     getTaskPriorityType() {
         return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(t => [
-            { value: 'URGENT', text: t.urgent },
-            { value: 'HIGH', text: t.high },
+            { value: 'NORMAL', text: t.normal, default: true },
             { value: 'MEDIUM', text: t.medium },
-            { value: 'NORMAL', text: t.normal, default: true }
+            { value: 'HIGH', text: t.high },
+            { value: 'URGENT', text: t.urgent }
         ]);
     }
 

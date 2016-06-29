@@ -19,8 +19,6 @@ const initialState: ITasksState = {
 };
 
 export const tasksReducer = (state = initialState, {type, payload}) => {
-    // console.log('taskReducer > ', 'ACTION:', type, payload, state);
-
     switch (type) {
         case FETCH_TASKS:
             return payload;

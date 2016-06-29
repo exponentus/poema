@@ -14,8 +14,6 @@ const initialState = {
 };
 
 export const referenceReducer = (state = initialState, {type, payload}) => {
-    // console.log('referenceReducer > ', 'ACTION:', type, payload, state);
-
     switch (type) {
         case FETCH_TAGS:
             return Object.assign({}, state, {
