@@ -136,6 +136,18 @@
         <entry lang="KAZ">Обязательно</entry>
         <entry lang="ENG">Required</entry>
     </sentence>
+    <sentence mode="on" keyword="new_request">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Request</entry>
+    </sentence>
+    <sentence mode="on" keyword="task_request">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Request</entry>
+    </sentence>
+    <sentence mode="on" keyword="send_request">
+        <entry lang="RUS">Отправить запрос</entry>
+        <entry lang="ENG">Send request</entry>
+    </sentence>
 
     <sentence mode="on" keyword="draft">
         <entry lang="RUS">Черновик</entry>

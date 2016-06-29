@@ -59,6 +59,9 @@
     <caption name="my_tasks"/>
     <caption name="tasks_assigned_to_me"/>
     <caption name="projects"/>
+    <caption name="task_request"/>
+    <caption name="send_request"/>
+    <caption name="new_request"/>
 
     <caption name="new_project"/>
     <caption name="new_task"/>

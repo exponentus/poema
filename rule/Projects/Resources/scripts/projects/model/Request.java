@@ -31,7 +31,7 @@ public class Request extends SecureAppEntity<UUID> {
     private reference.model.RequestType requestType;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 7, unique = true)
+    @Column(length = 7)
     private ResolutionType resolution = ResolutionType.UNKNOWN;
 
     @Column(name = "resolution_time")

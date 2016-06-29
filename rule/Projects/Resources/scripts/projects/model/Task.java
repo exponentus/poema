@@ -50,6 +50,9 @@ public class Task extends SecureAppEntity<UUID> {
     @Column(length = 10)
     private TaskPriorityType priority = TaskPriorityType.NORMAL;
 
+    @Column(length = 140)
+    private String title;
+
     @Column(length = 2048)
     private String body;
 
@@ -140,6 +143,14 @@ public class Task extends SecureAppEntity<UUID> {
 
     public void setPriority(TaskPriorityType priority) {
         this.priority = priority;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getBody() {
