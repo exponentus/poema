@@ -39,7 +39,14 @@ export class AppComponent {
         private referenceService: ReferenceService,
         private staffService: StaffService,
         public translate: TranslateService
-    ) { }
+    ) {
+        this.appService.getUserProfile().subscribe((resp: any) => {
+            this.loggedUser = resp.employee;
+            this.language = resp.language
+            this.isReady = true;
+            this.appService.isLogged = true;
+        });
+    }
 
     ngOnInit() {
         this.sub = this.store.select('reference');
@@ -68,13 +75,6 @@ export class AppComponent {
         this.translate.use(userLang);
 
         this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
-
-        this.appService.getUserProfile().subscribe((resp: any) => {
-            this.loggedUser = resp.employee;
-            this.language = resp.language
-            this.isReady = true;
-            this.appService.isLogged = true;
-        });
     }
 
     ngOnDestroy() {

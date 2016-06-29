@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -28,16 +28,21 @@ import { User } from '../../models';
 export class UserSelectComponent {
     @Input() userId: string;
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
+    private sub: any;
     private users: any;
     private user: any;
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.store.select('staff').subscribe((state: any) => {
+        this.sub = this.store.select('staff').subscribe((state: any) => {
             this.users = state.users;
             this.user = state.users.filter(it => it.id == this.userId)[0];
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     select(m) {

@@ -12,6 +12,8 @@ import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
 import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
+import { TaskRequestComponent } from './task-request';
+import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
 import { Project, Task, Tag, TaskType, User } from '../../models';
@@ -27,7 +29,8 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
         UserSelectComponent,
         ProjectSelectComponent,
         TaskTypeSelectComponent,
-        TagsSelectComponent
+        TagsSelectComponent,
+        TaskRequestComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -123,6 +126,18 @@ export class TaskComponent {
         }
     }
 
+    canRequestAction() {
+        return true; // this.task.status && this.task.status != 'DRAFT';
+    }
+
+    newRequest() {
+        this.store.dispatch({ type: TASK_REQUEST_NEW, payload: this.task });
+    }
+
+    getTaskStatusType() {
+        return this.taskStatusTypes.filter(it => it.value == this.task.status)[0].text;
+    }
+
     setStatus(value) {
         this.task.status = value;
     }
@@ -176,5 +191,6 @@ export class TaskComponent {
     ngOnDestroy() {
         this.taskPriorityTypes = [];
         this.taskStatusTypes = [];
+        this.store.dispatch({ type: TASK_REQUEST_CANCEL });
     }
 }

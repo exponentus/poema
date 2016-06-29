@@ -3,8 +3,12 @@ import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { FETCH_TAGS, FETCH_TASK_TYPES } from '../reducers/reference.reducer';
-import { Tag, TaskType } from '../models';
+import {
+    FETCH_TAGS,
+    FETCH_TASK_TYPES,
+    FETCH_REQUEST_TYPES
+} from '../reducers/reference.reducer';
+import { Tag, TaskType, RequestType } from '../models';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -26,6 +30,9 @@ export class ReferenceService {
         this.fetchTaskTypes().subscribe(data => {
             this.store.dispatch({ type: FETCH_TASK_TYPES, payload: data });
         });
+        this.fetchRequestTypes().subscribe(data => {
+            this.store.dispatch({ type: FETCH_REQUEST_TYPES, payload: data });
+        });
     }
 
     fetchTags() {
@@ -45,6 +52,17 @@ export class ReferenceService {
             .map(data => {
                 return {
                     taskTypes: <TaskType[]>data.list,
+                    meta: data.meta
+                }
+            });
+    }
+
+    fetchRequestTypes() {
+        return this.http.get('/Reference/p?id=request-types', { headers: HEADERS })
+            .map(response => response.json().objects[0])
+            .map(data => {
+                return {
+                    requestTypes: <RequestType[]>data.list,
                     meta: data.meta
                 }
             });

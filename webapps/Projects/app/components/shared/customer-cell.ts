@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -8,13 +8,18 @@ import { Store } from '@ngrx/store';
 
 export class CustomerCellComponent {
     @Input() customerId: string;
+    private sub: any;
     private customer: any;
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.store.select('staff').subscribe((state: any) => {
+        this.sub = this.store.select('staff').subscribe((state: any) => {
             this.customer = state.organizations.filter(it => it.id == this.customerId)[0];
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 }

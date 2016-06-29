@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
@@ -26,16 +26,21 @@ import { TaskType } from '../../models';
 export class TaskTypeSelectComponent {
     @Input() taskTypeId: string;
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
+    private sub: any;
     private taskTypes: any;
     private taskType: any;
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.store.select('reference').subscribe((state: any) => {
+        this.sub = this.store.select('reference').subscribe((state: any) => {
             this.taskTypes = state.taskTypes;
             this.taskType = state.taskTypes.filter(it => it.id == this.taskTypeId)[0];
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     select(m) {

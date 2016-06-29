@@ -7,7 +7,7 @@ body:not(.side-nav-toggle) .aside + .content {
 }
 
 .view.load:before {
-    background: url(../img/loading.gif) no-repeat center center;
+    background: url("../img/loading.gif") no-repeat center center;
     content: '';
     display: block;
     height: 100px;
@@ -39,7 +39,6 @@ pagination:empty {
     display: inline-block;
     vertical-align: top;
 }
-
 
 /*projects {
     display: block;
@@ -78,7 +77,6 @@ project {
     background-color: #f5f5f5;
 }
 
-
 /* .vw- */
 
 .vw-icon {
@@ -88,7 +86,6 @@ project {
 .vw-date {
     width: 105px;
 }
-
 
 /* .vw-project */
 
@@ -107,7 +104,6 @@ project {
 .vw-project-comment {
     width: 20%;
 }
-
 
 /* .vw-task */
 
@@ -141,4 +137,44 @@ project {
 
 .vw-user-tester {
     width: 10%;
+}
+
+/* .task-request */
+
+.task-request {
+    background: rgba(255, 255, 255, .5);
+    display: none;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.task-request > form {
+    background: #fff;
+    box-shadow: 0 0 3px #000;
+    position: relative;
+    top: 25%;
+    left: 0;
+    margin: 0 auto;
+    max-width: 98%;
+    width: 400px;
+}
+
+.task-request > form > header {
+    padding: 16px;
+}
+
+.task-request > form > section {
+    padding: 4px 16px;
+}
+
+.task-request > form > footer {
+    padding: 16px;
+    text-align: right;
+}
+
+.task-request.task-request-open {
+    display: block;
 }

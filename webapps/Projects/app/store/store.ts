@@ -7,6 +7,7 @@ import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '..
 // reducers
 import { projectsReducer as projects } from '../reducers/projects.reducer';
 import { tasksReducer as tasks } from '../reducers/tasks.reducer';
+import { taskReducer as task } from '../reducers/task.reducer';
 import { staffReducer as staff } from '../reducers/staff.reducer';
 import { referenceReducer as reference } from '../reducers/reference.reducer';
 
@@ -24,6 +25,7 @@ export const APP_STORE = provideStore(
     compose(combineReducers)({
         projects,
         tasks,
+        task,
         staff,
         reference
     })

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -31,16 +31,21 @@ import { Organization } from '../../models';
 export class CustomerSelectComponent {
     @Input() customerId: string;
     @Output() onSelect: EventEmitter<any> = new EventEmitter();
+    private sub: any;
     private customers: any;
     private customer: any;
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.store.select('staff').subscribe((state: any) => {
+        this.sub = this.store.select('staff').subscribe((state: any) => {
             this.customers = state.organizations;
             this.customer = state.organizations.filter(it => it.id == this.customerId)[0];
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     select(m) {

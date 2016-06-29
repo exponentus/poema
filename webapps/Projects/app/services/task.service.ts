@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { Task } from '../models';
+import { Task, Request } from '../models';
 import { createURLSearchParams, serializeObj } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -69,6 +69,13 @@ export class TaskService {
 
     deleteTask(task: Task) {
         return this.http.delete('p?id=task-view&ids=' + task.id);
+    }
+
+    sendTaskRequest(request: Request) {
+        let url = 'p?id=task-requests&taskId=' + request.taskId;
+        return this.http.post(url, serializeObj(request), { headers: HEADERS })
+            .map(response => this.transformPostResponse(response))
+            .catch(error => Observable.throw(this.transformPostResponse(error)));
     }
 
     private transformPostResponse(response: Response) {

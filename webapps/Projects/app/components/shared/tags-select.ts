@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
@@ -26,19 +26,23 @@ import { Tag } from '../../models';
 export class TagsSelectComponent {
     @Input() tagIds: string[] = [];
     @Output() setTags: EventEmitter<any> = new EventEmitter();
-
+    private sub: any;
     private tags: any = [];
     private selectedTags: any = [];
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.store.select('reference').subscribe((state: any) => {
+        this.sub = this.store.select('reference').subscribe((state: any) => {
             this.tags = state.tags;
             if (this.tagIds) {
                 this.selectedTags = state.tags.filter(it => this.tagIds.indexOf(it.id) != -1);
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     getTags() {

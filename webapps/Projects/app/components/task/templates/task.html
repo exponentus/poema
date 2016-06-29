@@ -5,6 +5,7 @@
         </button>
         <h1 class="header-title">
             {{(task.id ? 'task' : 'new_task') | translate}}
+            <small>{{ getTaskStatusType() }}</small>
         </h1>
         <div class="content-actions">
             <button class="btn btn-primary" type="button" [disabled]="!form.valid" (click)="saveTask()">
@@ -12,6 +13,9 @@
             </button>
             <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
+            </button>
+            <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
+                {{'new_request' | translate}}
             </button>
         </div>
     </header>
@@ -39,17 +43,6 @@
                         <task-type-select [taskTypeId]="task.taskTypeId" (onSelect)="selectTaskType($event)"></task-type-select>
                     </div>
                     <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
-                        {{'required' | translate}}
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'status' | translate}}
-                </div>
-                <div class="controls">
-                    <switch-button [model]="task" value="status" [items]="taskStatusTypes"></switch-button>
-                    <div [hidden]="form.controls.status.valid || form.controls.status.pristine" class="error-message">
                         {{'required' | translate}}
                     </div>
                 </div>
@@ -142,3 +135,4 @@
         </fieldset>
     </section>
 </form>
+<task-request [task]="task"></task-request>

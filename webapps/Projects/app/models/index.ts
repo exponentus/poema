@@ -7,3 +7,4 @@ export { Tag } from './tag';
 export { TaskType } from './task-type';
 export { Comment } from './comment';
 export { Request } from './request';
+export { RequestType } from './request-type';
