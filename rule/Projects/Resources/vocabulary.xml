@@ -4,6 +4,10 @@
         <entry lang="RUS">Poema</entry>
         <entry lang="ENG">Poema</entry>
     </sentence>
+    <sentence mode="on" keyword="workspace">
+        <entry lang="RUS">Workspace</entry>
+        <entry lang="ENG">Workspace</entry>
+    </sentence>
     <sentence mode="on" keyword="loading">
         <entry lang="RUS">Загрузка</entry>
         <entry lang="ENG">Loading</entry>

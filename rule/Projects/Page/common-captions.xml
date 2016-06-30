@@ -5,6 +5,7 @@
 
     <caption name="brand"/>
 
+    <caption name="workspace"/>
     <caption name="new_"/>
     <caption name="save_close"/>
     <caption name="cancel"/>
