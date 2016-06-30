@@ -19,13 +19,15 @@
                         <ul class="dropdown-menu right">
                             <li>
                                 <a class="user-profile" [routerLink]="['user-profile']">
-                                    {{loggedUser.name}}
+                                    <i class="fa fa-user"></i>
+                                    <span>{{loggedUser.name}}</span>
                                 </a>
                             </li>
                             <li class="divider"></li>
                             <li>
                                 <a class="ws" href="/Workspace/p?id=workspace">
-                                    {{'workspace' | translate}}
+                                    <i class="fa fa-home"></i>
+                                    <span>{{'workspace' | translate}}</span>
                                 </a>
                             </li>
                         </ul>
