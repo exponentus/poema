@@ -101,6 +101,11 @@ export class AppComponent {
         window.location.href = 'Logout';
     }
 
+    toWs(event) {
+        event.preventDefault();
+        window.location.href = '/Workspace/p?id=workspace';
+    }
+
     goBack() {
         window.history.back();
     }
