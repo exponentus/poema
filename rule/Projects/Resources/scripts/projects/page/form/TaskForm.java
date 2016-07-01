@@ -1,21 +1,15 @@
 package projects.page.form;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.IPOJOObject;
@@ -53,16 +47,14 @@ public class TaskForm extends _DoForm {
 			TaskDAO dao = new TaskDAO(session);
 			task = dao.findById(UUID.fromString(id));
 
-			String attachmentId = formData.getValueSilently("attachment");
-			if (!attachmentId.isEmpty()) {
-				AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-				Attachment attachment = attachmentDAO.findById(attachmentId);
-				if (showAttachment(attachment)) {
+			if (formData.containsField("attachment")) {
+				if (showAttachment(formData.getValueSilently("attachment"), task)) {
 					return;
 				} else {
 					setBadRequest();
 				}
 			}
+
 		} else {
 			task = new Task();
 			task.setAuthor(user);
@@ -147,18 +139,7 @@ public class TaskForm extends _DoForm {
 				}
 			}
 
-			String[] fileNames = formData.getListOfValuesSilently("fileid");
-			if (fileNames.length > 0) {
-				File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
-				for (String fn : fileNames) {
-					File file = new File(userTmpDir + File.separator + fn);
-					InputStream is = new FileInputStream(file);
-					Attachment att = new Attachment();
-					att.setRealFileName(fn);
-					att.setFile(IOUtils.toByteArray(is));
-					task.getAttachments().add(att);
-				}
-			}
+			task.setAttachments(getActualAttachments(task.getAttachments()));
 
 			if (isNew) {
 				IUser<Long> user = session.getUser();
@@ -170,7 +151,7 @@ public class TaskForm extends _DoForm {
 			}
 		} catch (SecureException e) {
 			setError(e);
-		} catch (_Exception | DatabaseException | IOException e) {
+		} catch (_Exception | DatabaseException e) {
 			error(e);
 			setBadRequest();
 		}

@@ -43,16 +43,14 @@ public class ProjectForm extends _DoForm {
 			ProjectDAO dao = new ProjectDAO(session);
 			project = dao.findById(projectId);
 
-			String attachmentId = formData.getValueSilently("attachment");
-			if (!attachmentId.isEmpty()) {
-				AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-				Attachment attachment = attachmentDAO.findById(attachmentId);
-				if (showAttachment(attachment)) {
+			if (formData.containsField("attachment")) {
+				if (showAttachment(formData.getValueSilently("attachment"), project)) {
 					return;
 				} else {
 					setBadRequest();
 				}
 			}
+
 		} else {
 			project = new Project();
 			project.setAuthor(user);
