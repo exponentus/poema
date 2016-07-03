@@ -18,7 +18,7 @@ const initialState: ITasksState = {
     loading: false
 };
 
-export const tasksReducer = (state = initialState, {type, payload}) => {
+export const tasksReducer = (state = initialState, {type, payload}): ITasksState => {
     switch (type) {
         case FETCH_TASKS:
             return payload;

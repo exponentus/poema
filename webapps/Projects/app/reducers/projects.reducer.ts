@@ -21,7 +21,7 @@ const initialState: IProjectsState = {
     loading: false
 };
 
-export const projectsReducer = (state = initialState, {type, payload}) => {
+export const projectsReducer = (state = initialState, {type, payload}): IProjectsState => {
     switch (type) {
         case FETCH_NAV_PROJECTS:
             return payload;

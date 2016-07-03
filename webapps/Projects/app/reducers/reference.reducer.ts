@@ -16,7 +16,7 @@ const initialState = {
     requestTypes: []
 };
 
-export const referenceReducer = (state = initialState, {type, payload}) => {
+export const referenceReducer = (state = initialState, {type, payload}): IReferenceState => {
     switch (type) {
         case FETCH_TAGS:
             return Object.assign({}, state, {

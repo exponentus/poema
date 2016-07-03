@@ -7,14 +7,13 @@
         "typings": "typings"
     },
     "dependencies": {
-        "@angular/common": "2.0.0-rc.3",
-        "@angular/compiler": "2.0.0-rc.3",
-        "@angular/core": "2.0.0-rc.3",
-        "@angular/http": "2.0.0-rc.3",
+        "@angular/common": "2.0.0-rc.4",
+        "@angular/compiler": "2.0.0-rc.4",
+        "@angular/core": "2.0.0-rc.4",
+        "@angular/http": "2.0.0-rc.4",
         "@angular/router": "3.0.0-alpha.7",
-        "@angular/platform-browser": "2.0.0-rc.3",
-        "@angular/platform-browser-dynamic": "2.0.0-rc.3",
-        "@angular/upgrade": "2.0.0-rc.3",
+        "@angular/platform-browser": "2.0.0-rc.4",
+        "@angular/platform-browser-dynamic": "2.0.0-rc.4",
 
         "es6-shim": "^0.35.0",
         "reflect-metadata": "0.1.3",

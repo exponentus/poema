@@ -13,7 +13,7 @@ const initialState: IStaffState = {
     users: []
 };
 
-export const staffReducer = (state = initialState, {type, payload}) => {
+export const staffReducer = (state = initialState, {type, payload}): IStaffState => {
     switch (type) {
         case FETCH_ORGANIZATIONS:
             return Object.assign({}, state, {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
 import { createURLSearchParams } from '../utils/utils';
 import { Organization, User } from '../models';

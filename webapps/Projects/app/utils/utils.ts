@@ -1,4 +1,4 @@
-import { URLSearchParams } from '@angular/http';
+import { URLSearchParams, Response } from '@angular/http';
 
 export function createURLSearchParams(_params): URLSearchParams {
     let params: URLSearchParams = new URLSearchParams();
@@ -9,12 +9,10 @@ export function createURLSearchParams(_params): URLSearchParams {
 }
 
 export function serializeObj(obj) {
-    var result = [];
-
+    let result = [];
     for (var property in obj) {
         result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
     }
-
     return result.join('&');
 }
 
@@ -32,4 +30,12 @@ export function parseResponseObjects(objects: any) {
     }
 
     return result;
+}
+
+export function transformPostResponse(response: Response) {
+    let json = response.json();
+    return Object.assign(json, {
+        ok: json.type === 'DOCUMENT_SAVED',
+        message: json.captions ? json.captions.type : json.message
+    });
 }

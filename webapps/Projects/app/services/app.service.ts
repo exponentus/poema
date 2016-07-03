@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { User } from '../models/user';
+import { User } from '../models';
 import { parseResponseObjects } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -27,27 +27,6 @@ export class AppService {
         return this.http.get(url, headers).map(response => {
             return parseResponseObjects(response.json().objects)
         });
-    }
-
-    getTranslations() {
-        if (this.translations) {
-            return Observable.of(this.translations);
-        }
-
-        let headers = { headers: HEADERS };
-        let url = 'p?id=common-captions';
-
-        return this.http.get(url, headers).map(response => {
-            this.translations = response.json().captions;
-            return this.translations;
-        });
-    }
-
-    getNav() {
-        let headers = { headers: HEADERS };
-        let url = 'p?id=outline';
-
-        return this.http.get(url, headers).map(response => response.json().objects[0]);
     }
 
     updateUserProfile(user: User) {

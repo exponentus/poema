@@ -1,0 +1,9 @@
+<div class="comments-container">
+    <div class="comments">
+        <comment [comment]="comment" *ngFor="let comment of comments"></comment>
+    </div>
+    <footer>
+        <textarea></textarea>
+        <button (click)="addComment($event)">Add comment</button>
+    </footer>
+</div>

@@ -13,6 +13,7 @@ import { ProjectSelectComponent } from '../shared/project-select';
 import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
 import { TaskRequestComponent } from './task-request';
+import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
@@ -30,7 +31,8 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
         ProjectSelectComponent,
         TaskTypeSelectComponent,
         TagsSelectComponent,
-        TaskRequestComponent
+        TaskRequestComponent,
+        CommentsComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -76,26 +78,14 @@ export class TaskComponent {
             this.taskService.fetchTaskById(params['taskId']).subscribe(
                 task => {
                     this.task = task;
-                    this.loadData();
+                    this.isReady = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
         });
-    }
 
-    loadData() {
-        Observable.forkJoin(
-            this.taskService.getTaskStatusType(),
-            this.taskService.getTaskPriorityType()
-        ).subscribe(
-            data => {
-                this.taskStatusTypes = data[0];
-                this.taskPriorityTypes = data[1];
-            },
-            error => {
-                this.handleXhrError(error)
-            },
-            () => this.isReady = true);
+        this.taskService.getTaskStatusTypes().subscribe(tst => this.taskStatusTypes = tst);
+        this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
     }
 
     saveTask() {

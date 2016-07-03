@@ -1,18 +1,18 @@
-import { Project } from '../models/project';
+import { Project } from '../models';
 
 export const FETCH_NAV_PROJECTS = 'FETCH_NAV_PROJECTS';
 
-export interface IProjectsState {
+export interface INavProjectsState {
     navProjects: Project[],
     loading: boolean
 };
 
-const initialState: IProjectsState = {
+const initialState: INavProjectsState = {
     navProjects: [],
     loading: false
 };
 
-export const navReducer = (state = initialState, {type, payload}) => {
+export const navReducer = (state = initialState, {type, payload}): INavProjectsState => {
     switch (type) {
         case FETCH_NAV_PROJECTS:
             return payload;

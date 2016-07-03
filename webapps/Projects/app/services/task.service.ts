@@ -3,8 +3,8 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { Task, Request } from '../models';
-import { createURLSearchParams, serializeObj } from '../utils/utils';
+import { Task, Request, Comment } from '../models';
+import { createURLSearchParams, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -19,7 +19,7 @@ export class TaskService {
         private translate: TranslateService
     ) { }
 
-    getTaskPriorityType() {
+    getTaskPriorityTypes() {
         return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(t => [
             { value: 'NORMAL', text: t.normal, default: true },
             { value: 'MEDIUM', text: t.medium },
@@ -28,7 +28,7 @@ export class TaskService {
         ]);
     }
 
-    getTaskStatusType() {
+    getTaskStatusTypes() {
         return this.translate.get(['draft', 'waiting', 'processed', 'finished']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
             { value: 'WAITING', text: t.waiting },
@@ -63,8 +63,8 @@ export class TaskService {
     saveTask(task: Task) {
         let url = 'p?id=task-form' + (task.id ? '&taskId=' + task.id : '');
         return this.http.post(url, serializeObj(task), { headers: HEADERS })
-            .map(response => this.transformPostResponse(response))
-            .catch(error => Observable.throw(this.transformPostResponse(error)));
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     deleteTask(task: Task) {
@@ -74,15 +74,19 @@ export class TaskService {
     sendTaskRequest(request: Request) {
         let url = 'p?id=task-requests&taskId=' + request.taskId;
         return this.http.post(url, serializeObj(request), { headers: HEADERS })
-            .map(response => this.transformPostResponse(response))
-            .catch(error => Observable.throw(this.transformPostResponse(error)));
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    private transformPostResponse(response: Response) {
-        let json = response.json();
-        return Object.assign(json, {
-            ok: json.type === 'DOCUMENT_SAVED',
-            message: json.captions ? json.captions.type : json.message
-        });
+    fetchComments(task: Task, page = 0) {
+        return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
+            .map(response => <Comment>response.json().objects[0]);
+    }
+
+    addComment(task: Task, comment: Comment) {
+        let url = 'p?id=comments&taskId=' + task.id;
+        return this.http.post(url, serializeObj(comment), { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 }

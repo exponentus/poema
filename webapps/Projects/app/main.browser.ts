@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable'
 import { NotificationService } from './shared/notification';
 import { AppComponent } from './app.component';
 import { APP_ROUTER_PROVIDERS } from './app.routes';
-import { AppService } from './services/app.service';
+import { TranslateService as translateService } from './services/translate.service';
 import { APP_SERVICES } from './services';
 import { APP_STORE } from './store';
 
@@ -20,8 +20,8 @@ bootstrap(AppComponent, [
     TranslateService,
     TRANSLATE_PROVIDERS,
     provide(TranslateLoader, {
-        useFactory: (appService: AppService) => new CustomTranslateLoader(appService),
-        deps: [AppService]
+        useFactory: (trs: translateService) => new CustomTranslateLoader(trs),
+        deps: [translateService]
     }),
     NotificationService,
     APP_SERVICES,
@@ -30,9 +30,9 @@ bootstrap(AppComponent, [
 
 //
 class CustomTranslateLoader implements TranslateLoader {
-    constructor(private appService: AppService) { }
+    constructor(private translateService: translateService) { }
 
     public getTranslation(lang: string): Observable<any> {
-        return this.appService.getTranslations();
+        return this.translateService.fetchTranslations();
     }
 }
