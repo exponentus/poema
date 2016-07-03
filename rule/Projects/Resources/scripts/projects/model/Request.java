@@ -48,6 +48,10 @@ public class Request extends SecureAppEntity<UUID> {
             uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
     private List<Attachment> attachments;
 
+    public Task getTask() {
+        return task;
+    }
+
     public void setTask(Task task) {
         this.task = task;
     }

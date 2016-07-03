@@ -11,6 +11,7 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
+import projects.dao.CommentDAO;
 import projects.dao.TaskDAO;
 import projects.model.Comment;
 import projects.model.Task;
@@ -20,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.UUID;
 
 public class Comments extends _DoPage {
 
@@ -35,7 +35,9 @@ public class Comments extends _DoPage {
         TaskDAO taskDAO = new TaskDAO(session);
         Task task = taskDAO.findById(taskId);
         if (task != null) {
-            List<Comment> comments = taskDAO.findTaskComments(task, 0, 30);
+            CommentDAO commentDAO = new CommentDAO(session);
+            int page = formData.getNumberValueSilently("page", 1);
+            List<Comment> comments = commentDAO.findTaskComments(task, 0, 20);
             addContent(comments);
         } else {
             setBadRequest();
@@ -98,6 +100,7 @@ public class Comments extends _DoPage {
                 return;
             }
 
+            CommentDAO commentDAO = new CommentDAO(session);
             Comment comment = new Comment();
             comment.setComment(formData.getValueSilently("comment"));
 
@@ -114,21 +117,25 @@ public class Comments extends _DoPage {
                 }
             }
 
-            task.getComments().add(comment);
+            commentDAO.add(comment);
 
         } catch (DatabaseException | IOException e) {
             error(e);
             setBadRequest();
+        } catch (SecureException e) {
+            setError(e);
         }
     }
 
     private void deleteComment(_Session session, String taskId, String commentId) {
-        TaskDAO dao = new TaskDAO(session);
-        Task task = dao.findById(taskId);
+        CommentDAO commentDAO = new CommentDAO(session);
+        Comment comment = commentDAO.findById(commentId);
 
-        Comment comment = new Comment();
-        comment.setId(UUID.fromString(commentId));
-        task.getComments().remove(comment);
+        try {
+            commentDAO.delete(comment);
+        } catch (SecureException e) {
+            setError(e);
+        }
     }
 
     private void deleteAttachment(_Session session, String taskId, String attachmentId) {

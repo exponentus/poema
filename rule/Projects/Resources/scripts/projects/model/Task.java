@@ -68,11 +68,6 @@ public class Task extends SecureAppEntity<UUID> {
     @JoinTable(name = "task_tags")
     private List<Tag> tags;
 
-    @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "task_id")
-    private List<Comment> comments;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "task_attachments",
             joinColumns = {@JoinColumn(name = "task_id")},
@@ -193,14 +188,6 @@ public class Task extends SecureAppEntity<UUID> {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
     public boolean isHasAttachments() {

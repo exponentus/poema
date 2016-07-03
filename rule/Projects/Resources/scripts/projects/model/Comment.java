@@ -2,9 +2,11 @@ package projects.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.AppEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +15,12 @@ import java.util.UUID;
 @Table(name = "comments")
 @NamedQuery(name = "Comment.findAll", query = "SELECT m FROM Comment AS m ORDER BY m.regDate ASC")
 public class Comment extends AppEntity<UUID> {
+
+    @JsonIgnore
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Task task;
 
     @Column(nullable = false, length = 512)
     private String comment;
@@ -24,6 +32,14 @@ public class Comment extends AppEntity<UUID> {
             indexes = {@Index(columnList = "comment_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"comment_id", "attachment_id"}))
     private List<Attachment> attachments;
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
     public String getComment() {
         return comment;
