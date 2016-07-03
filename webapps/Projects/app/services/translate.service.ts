@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class TranslateService {
@@ -12,10 +11,6 @@ export class TranslateService {
     ) { }
 
     fetchTranslations() {
-        if (this.translations) {
-            return Observable.of(this.translations);
-        }
-
         let headers = new Headers({
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
             'Accept': 'application/json'

@@ -10,6 +10,7 @@ import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { CustomerSelectComponent } from '../shared/customer-select';
 import { UserSelectComponent } from '../shared/user-select';
+import { AttachmentsComponent } from '../attachments';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
 import { Project, Organization, User } from '../../models';
@@ -24,7 +25,8 @@ import { Project, Organization, User } from '../../models';
         DROPDOWN_DIRECTIVES,
         SwitchButtonComponent,
         CustomerSelectComponent,
-        UserSelectComponent
+        UserSelectComponent,
+        AttachmentsComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]

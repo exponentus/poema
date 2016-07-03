@@ -112,7 +112,7 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset class="fieldset">
+        <!-- <fieldset class="fieldset">
             <legend class="legend">
                 {{'attachments' | translate}}
             </legend>
@@ -132,8 +132,9 @@
                     </div>
                 </div>
             </div>
-        </fieldset>
+        </fieldset> -->
+        <attachments [attachments]="task.attachments"></attachments>
         <comments [task]="task"></comments>
     </section>
 </form>
-<task-request [task]="task"></task-request>
+<task-request></task-request>

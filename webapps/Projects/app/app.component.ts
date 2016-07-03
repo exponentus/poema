@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
+import { FETCH_USER_PROFILE, IAppState } from './reducers/authed.reducer';
 import { FETCH_ORGANIZATIONS, FETCH_USERS } from './reducers/staff.reducer';
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
@@ -40,9 +41,15 @@ export class AppComponent {
         private staffService: StaffService,
         public translate: TranslateService
     ) {
+        this.store.select('authed').subscribe((data: IAppState) => {
+            this.loggedUser = data.userProfile;
+        });
+
         this.appService.getUserProfile().subscribe((resp: any) => {
-            this.loggedUser = resp.employee;
-            this.language = resp.language
+            this.store.dispatch({
+                type: FETCH_USER_PROFILE,
+                payload: resp
+            })
             this.isReady = true;
             this.appService.isLogged = true;
         });
@@ -72,7 +79,7 @@ export class AppComponent {
         // this language will be used as a fallback when a translation isn't found in the current language
         this.translate.setDefaultLang('en');
         // the lang to use, if the lang isn't available, it will use the current loader to get them
-        this.translate.use(userLang);
+        this.translate.use('en'); // userLang
 
         this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
     }

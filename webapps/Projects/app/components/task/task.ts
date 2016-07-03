@@ -13,6 +13,7 @@ import { ProjectSelectComponent } from '../shared/project-select';
 import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
 import { TaskRequestComponent } from './task-request';
+import { AttachmentsComponent } from '../attachments';
 import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
@@ -32,6 +33,7 @@ import { Project, Task, Tag, TaskType, User } from '../../models';
         TaskTypeSelectComponent,
         TagsSelectComponent,
         TaskRequestComponent,
+        AttachmentsComponent,
         CommentsComponent
     ],
     providers: [FormBuilder],

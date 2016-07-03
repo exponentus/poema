@@ -5,6 +5,7 @@ import { compose } from '@ngrx/core/compose';
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
 
 // reducers
+import { authedReducer as authed } from '../reducers/authed.reducer';
 import { projectsReducer as projects } from '../reducers/projects.reducer';
 import { tasksReducer as tasks } from '../reducers/tasks.reducer';
 import { taskReducer as task } from '../reducers/task.reducer';
@@ -23,6 +24,7 @@ export interface IAppStore {
 
 export const APP_STORE = provideStore(
     compose(combineReducers)({
+        authed,
         projects,
         tasks,
         task,

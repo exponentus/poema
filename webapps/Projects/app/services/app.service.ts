@@ -13,7 +13,6 @@ const HEADERS = new Headers({
 @Injectable()
 export class AppService {
 
-    private translations: any;
     isLogged: boolean = false;
 
     constructor(
@@ -21,11 +20,17 @@ export class AppService {
     ) { }
 
     getUserProfile() {
-        let headers = { headers: HEADERS };
-        let url = 'p?id=userprofile';
-
-        return this.http.get(url, headers).map(response => {
-            return parseResponseObjects(response.json().objects)
+        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(response => {
+            let res = parseResponseObjects(response.json().objects);
+            let pageSize = 20;
+            if (res[0].pagesize) {
+                pageSize = res[0].pagesize
+            }
+            return {
+                userProfile: res.employee,
+                languages: res.language.list,
+                pageSize: pageSize
+            };
         });
     }
 
