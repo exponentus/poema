@@ -1,6 +1,5 @@
 import { Project } from '../models';
 
-export const FETCH_NAV_PROJECTS = 'FETCH_NAV_PROJECTS';
 export const FETCH_PROJECTS = 'FETCH_PROJECTS';
 export const FETCH_PROJECT = 'FETCH_PROJECT';
 export const ADD_PROJECT = 'ADD_PROJECT';
@@ -23,8 +22,6 @@ const initialState: IProjectsState = {
 
 export const projectsReducer = (state = initialState, {type, payload}): IProjectsState => {
     switch (type) {
-        case FETCH_NAV_PROJECTS:
-            return payload;
         case FETCH_PROJECTS:
             return payload;
         case FETCH_PROJECT:

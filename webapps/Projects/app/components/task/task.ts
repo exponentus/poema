@@ -180,6 +180,11 @@ export class TaskComponent {
         this.closeDropdown();
     }
 
+    addAttachment(file) {
+        console.log(file);
+        // this.task.attachments.push();
+    }
+
     ngOnDestroy() {
         this.taskPriorityTypes = [];
         this.taskStatusTypes = [];

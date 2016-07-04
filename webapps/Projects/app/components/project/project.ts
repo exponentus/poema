@@ -167,4 +167,8 @@ export class ProjectComponent {
         $event.stopPropagation();
         this.closeDropdown();
     }
+
+    addAttachment(file) {
+        console.log(file);
+    }
 }

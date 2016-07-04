@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { FETCH_NAV_PROJECTS, IProjectsState } from '../reducers/projects.reducer';
+import { FETCH_PROJECTS, IProjectsState } from '../reducers/projects.reducer';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project';
 
@@ -33,7 +33,7 @@ export class NavComponent {
         });
 
         this.projectService.fetchProjects({ nav: 1 }).subscribe(data => {
-            this.store.dispatch({ type: FETCH_NAV_PROJECTS, payload: data });
+            this.store.dispatch({ type: FETCH_PROJECTS, payload: data });
         });
     }
 

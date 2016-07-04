@@ -112,28 +112,7 @@
                 </div>
             </div>
         </fieldset>
-        <!-- <fieldset class="fieldset">
-            <legend class="legend">
-                {{'attachments' | translate}}
-            </legend>
-            <div class="form-group">
-                <button type="button" class="btn btn-upload" data-upload="">
-                    <i class="fa fa-paperclip"></i>
-                    <span>{{'attach_file' | translate}}</span>
-                </button>
-                <div class="attachments" data-upload-files="">
-                    <div class="attachments-file" *ngFor="let att of task.attachments">
-                        <a class="file-name" href="{{att.url}}">
-                            {{att.realFileName}}
-                        </a>
-                        <span class="btn btn-sm btn-link btn-remove-file on-edit">
-                            <i class="fa fa-times"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </fieldset> -->
-        <attachments [attachments]="task.attachments"></attachments>
+        <attachments [attachments]="task.attachments" (upload)="addAttachment($event)"></attachments>
         <comments [task]="task"></comments>
     </section>
 </form>
