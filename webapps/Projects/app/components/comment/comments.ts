@@ -20,7 +20,7 @@ export class CommentsComponent {
     comment: Comment;
     comments: Comment[];
     meta: any;
-    loading: boolean = true;
+    commentText: string;
 
     constructor(
         private store: Store<any>,
@@ -33,22 +33,22 @@ export class CommentsComponent {
     }
 
     loadComments(page) {
-        this.loading = true;
         this.taskService.fetchComments(this.task, page).subscribe((data: any) => {
             if (data) {
-                this.comments = data.comments;
+                this.comments = data.list;
                 this.meta = data.meta;
-                this.loading = false;
             }
         });
     }
 
-    newComment() {
-        this.comment = new Comment();
-    }
-
     addComment($event) {
-        this.taskService.addComment(this.task, this.comment);
+        console.log(this.commentText);
+        this.comment = new Comment();
+        this.comment.comment = this.commentText;
+        this.taskService.addComment(this.task, this.comment).subscribe(r => {
+            console.log(r);
+            this.loadComments(1);
+        });
     }
 
     deleteComment() {

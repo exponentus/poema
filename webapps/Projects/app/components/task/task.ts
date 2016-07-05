@@ -18,7 +18,7 @@ import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
-import { Project, Task, Tag, TaskType, User } from '../../models';
+import { Project, Task, Tag, TaskType, User, Attachment } from '../../models';
 
 @Component({
     selector: 'task',
@@ -181,8 +181,12 @@ export class TaskComponent {
     }
 
     addAttachment(file) {
-        console.log(file);
-        // this.task.attachments.push();
+        let att: Attachment = new Attachment();
+        att.realFileName = file.files[0];
+        if (!this.task.attachments) {
+            this.task.attachments = [];
+        }
+        this.task.attachments.push(att);
     }
 
     ngOnDestroy() {

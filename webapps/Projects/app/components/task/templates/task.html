@@ -112,7 +112,7 @@
                 </div>
             </div>
         </fieldset>
-        <attachments [attachments]="task.attachments" (upload)="addAttachment($event)"></attachments>
+        <attachments [attachments]="task.attachments" [fsId]="task.fsid" (upload)="addAttachment($event)"></attachments>
         <comments [task]="task"></comments>
     </section>
 </form>

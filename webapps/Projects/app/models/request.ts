@@ -1,3 +1,5 @@
+import { Attachment } from './attachment';
+
 export class Request {
     id: string = '';
     taskId: string;
@@ -6,4 +8,5 @@ export class Request {
     resolutionTime: Date;
     comment: string;
     hasAttachment: boolean;
+    attachments: Attachment[];
 }

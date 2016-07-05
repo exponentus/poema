@@ -24,6 +24,8 @@ export function parseResponseObjects(objects: any) {
             result[obj.kind] = obj;
         } else if (obj.list && obj.meta && obj.type) {
             result[obj.type] = obj;
+        } else if (obj.name && obj.value) { // fsid?
+            result[obj.name] = obj.value;
         } else {
             result.push(obj);
         }

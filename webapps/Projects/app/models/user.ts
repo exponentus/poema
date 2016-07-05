@@ -6,4 +6,5 @@ export class User {
     organizationId: string;
     departmentId: string;
     positionId: string;
+    avatarUrl: string;
 }

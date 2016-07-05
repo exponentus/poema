@@ -1,9 +1,11 @@
+import { Attachment } from './attachment';
+
 export class Project {
     id: string = '';
     author: string;
     regDate: Date;
     wasRead: boolean;
-    fsid: string = '1';
+    fsid: string;
 
     name: string;
     status: string = 'DRAFT';
@@ -16,4 +18,6 @@ export class Project {
     finishDate: Date;
     hasAttachment: boolean;
     attachmentIds: string[];
+
+    attachments: Attachment[];
 }

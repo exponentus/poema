@@ -13,7 +13,7 @@ import { UserSelectComponent } from '../shared/user-select';
 import { AttachmentsComponent } from '../attachments';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
-import { Project, Organization, User } from '../../models';
+import { Project, Organization, User, Attachment } from '../../models';
 
 @Component({
     selector: 'project',
@@ -83,7 +83,7 @@ export class ProjectComponent {
     }
 
     loadData() {
-        this.projectService.getProjectStatusTypes().subscribe(data => this.projectStatusTypes = data);
+        this.projectService.getProjectStatusTypes().subscribe(pst => this.projectStatusTypes = pst);
     }
 
     saveProject() {
@@ -169,6 +169,11 @@ export class ProjectComponent {
     }
 
     addAttachment(file) {
-        console.log(file);
+        let att: Attachment = new Attachment();
+        att.realFileName = file.files[0];
+        if (!this.project.attachments) {
+            this.project.attachments = [];
+        }
+        this.project.attachments.push(att);
     }
 }

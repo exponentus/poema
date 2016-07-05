@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { Task, Request, Comment } from '../models';
-import { createURLSearchParams, serializeObj, transformPostResponse } from '../utils/utils';
+import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -57,7 +57,17 @@ export class TaskService {
         }
 
         return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
-            .map(response => <Task>response.json().objects[0]);
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                let task = <Task>data.task;
+                if (data.fsid) {
+                    task.fsid = data.fsid;
+                }
+                if (data.attachment) {
+                    task.attachments = data.attachment.list;
+                }
+                return task;
+            });
     }
 
     saveTask(task: Task) {

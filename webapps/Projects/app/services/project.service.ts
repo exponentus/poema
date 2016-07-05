@@ -9,7 +9,7 @@ import {
     ADD_PROJECT
 } from '../reducers/projects.reducer';
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
-import { createURLSearchParams, serializeObj, transformPostResponse } from '../utils/utils';
+import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -53,7 +53,17 @@ export class ProjectService {
         }
 
         return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
-            .map(response => <Project>response.json().objects[0]);
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                let project = <Project>data.project;
+                if (data.fsid) {
+                    project.fsid = data.fsid;
+                }
+                if (data.attachment) {
+                    project.attachments = data.attachment.list;
+                }
+                return project;
+            });
     }
 
     saveProject(project: Project) {

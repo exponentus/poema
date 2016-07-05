@@ -8,8 +8,7 @@ import { Comment } from '../../models';
 @Component({
     selector: 'comment',
     template: `
-        {{ comment.comment }}
-        {{ comment.attachments }}
+        <p>{{ comment.comment }}</p>
     `,
     host: {
         'class.comment': 'true'

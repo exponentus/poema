@@ -15,11 +15,11 @@ import { Attachment } from '../models';
                 {{'attachments' | translate}}
             </legend>
             <div class="form-group">
-                <form><label class="btn btn-upload" data-upload="">
+                <label class="btn btn-upload" data-upload="">
                     <i class="fa fa-paperclip"></i>
                     <span>{{'attach_file' | translate}}</span>
                     <input type="file" (change)="uploadFile($event)" style="display:none;"/>
-                </label></form>
+                </label>
                 <div class="attachments" data-upload-files="">
                     <div class="attachments-file" *ngFor="let att of attachments">
                         <a class="file-name" href="{{att.url}}">
@@ -37,7 +37,9 @@ import { Attachment } from '../models';
 
 export class AttachmentsComponent {
     @Input() attachments: Attachment[];
+    @Input() fsId: string;
     @Output() upload = new EventEmitter<any>();
+    @Output() remove = new EventEmitter<any>();
 
     constructor(
         private http: Http,
@@ -45,14 +47,9 @@ export class AttachmentsComponent {
     ) { }
 
     uploadFile($event) {
-        // http://localhost:38700/MunicipalProperty/UploadFile?time=1467570792479
         let files: File[] = $event.target.files;
-        this.uploadService.makeFileRequest('UploadFile?time=1467570792479&fsid=1111', [], files).subscribe(r => {
-            console.log(r);
-
-            this.upload.emit({
-                file: $event.target
-            });
+        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.fsId }, files).subscribe(response => {
+            this.upload.emit(response);
         });
     }
 }
