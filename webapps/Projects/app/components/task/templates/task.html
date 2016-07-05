@@ -20,100 +20,109 @@
         </div>
     </header>
     <section class="content-body">
-        <fieldset class="fieldset">
-            <div class="form-group">
-                <div class="control-label">
-                    {{'project' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.projectId.valid">
-                    <div class="span8">
-                        <project-select [projectId]="task.projectId" (onSelect)="selectProject($event)"></project-select>
+        <tabs>
+            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
+                <fieldset class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'project' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.projectId.valid">
+                            <div class="span8">
+                                <project-select [projectId]="task.projectId" (onSelect)="selectProject($event)"></project-select>
+                            </div>
+                        </div>
+                        <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
+                            {{'required' | translate}}
+                        </div>
                     </div>
-                </div>
-                <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
-                    {{'required' | translate}}
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'task_type' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
-                    <div class="span8">
-                        <task-type-select [taskTypeId]="task.taskTypeId" (onSelect)="selectTaskType($event)"></task-type-select>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'task_type' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
+                            <div class="span8">
+                                <task-type-select [taskTypeId]="task.taskTypeId" (onSelect)="selectTaskType($event)"></task-type-select>
+                            </div>
+                            <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
+                                {{'required' | translate}}
+                            </div>
+                        </div>
                     </div>
-                    <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
-                        {{'required' | translate}}
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'priority' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.priority.valid">
+                            <switch-button [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
+                            <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
+                                {{'required' | translate}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'priority' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.priority.valid">
-                    <switch-button [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
-                    <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
-                        {{'required' | translate}}
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.body.valid">
+                            <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea>
+                            <div [hidden]="form.controls.body.valid || form.controls.body.pristine" class="error-message">
+                                {{'required' | translate}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'body' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.body.valid">
-                    <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea>
-                    <div [hidden]="form.controls.body.valid || form.controls.body.pristine" class="error-message">
-                        {{'required' | translate}}
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'assignee_user' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
+                            <div class="span8">
+                                <user-select [userId]="task.assigneeUserId" (onSelect)="selectAssigneeUser($event)"></user-select>
+                            </div>
+                            <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
+                                {{'required' | translate}}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'assignee_user' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
-                    <div class="span8">
-                        <user-select [userId]="task.assigneeUserId" (onSelect)="selectAssigneeUser($event)"></user-select>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'start_date' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input type="date" class="span2" [(ngModel)]="task.startDate" ngControl="startDate" />
+                        </div>
                     </div>
-                    <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
-                        {{'required' | translate}}
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'due_date' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input type="date" class="span2" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'start_date' | translate}}
-                </div>
-                <div class="controls">
-                    <input type="date" class="span2" [(ngModel)]="task.startDate" ngControl="startDate" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'due_date' | translate}}
-                </div>
-                <div class="controls">
-                    <input type="date" class="span2" [(ngModel)]="task.dueDate" ngControl="dueDate" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'tags' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
-                    <div class="span8">
-                        <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tags' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
+                            <div class="span8">
+                                <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
+                            </div>
+                            <div [hidden]="form.controls.tagIds.valid || form.controls.tagIds.pristine" class="error-message">
+                                {{'required' | translate}}
+                            </div>
+                        </div>
                     </div>
-                    <div [hidden]="form.controls.tagIds.valid || form.controls.tagIds.pristine" class="error-message">
-                        {{'required' | translate}}
-                    </div>
-                </div>
-            </div>
-        </fieldset>
-        <attachments [attachments]="task.attachments" [fsId]="task.fsid" (upload)="addAttachment($event)"></attachments>
-        <comments [task]="task"></comments>
+                </fieldset>
+                <attachments [attachments]="task.attachments" [fsId]="task.fsid" (upload)="addAttachment($event)"></attachments>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'comments' | translate}}">
+                <comments [task]="task"></comments>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'requests' | translate}}">
+                <task-requests [task]="task"></task-requests>
+            </tab>
+        </tabs>
     </section>
 </form>
 <task-request></task-request>

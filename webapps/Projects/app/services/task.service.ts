@@ -95,7 +95,7 @@ export class TaskService {
 
     fetchComments(task: Task, page = 0) {
         return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
-            .map(response => <Comment>response.json().objects[0]);
+            .map(response => <Comment[]>parseResponseObjects(response.json().objects).comment);
     }
 
     addComment(task: Task, comment: Comment) {

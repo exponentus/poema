@@ -8,7 +8,7 @@ import { Comment } from '../../models';
 @Component({
     selector: 'comment',
     template: `
-        <p>{{ comment.comment }}</p>
+        <p>{{ comment.comment }}</p><hr>
     `,
     host: {
         'class.comment': 'true'

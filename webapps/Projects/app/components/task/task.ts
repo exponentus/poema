@@ -6,12 +6,14 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
+import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
 import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
+import { TaskRequestsComponent } from './task-requests';
 import { TaskRequestComponent } from './task-request';
 import { AttachmentsComponent } from '../attachments';
 import { CommentsComponent } from '../comment/comments';
@@ -28,10 +30,12 @@ import { Project, Task, Tag, TaskType, Request, User, Attachment } from '../../m
         FORM_DIRECTIVES,
         SwitchButtonComponent,
         DROPDOWN_DIRECTIVES,
+        TAB_DIRECTIVES,
         UserSelectComponent,
         ProjectSelectComponent,
         TaskTypeSelectComponent,
         TagsSelectComponent,
+        TaskRequestsComponent,
         TaskRequestComponent,
         AttachmentsComponent,
         CommentsComponent
