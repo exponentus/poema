@@ -18,7 +18,7 @@ import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
-import { Project, Task, Tag, TaskType, User, Attachment } from '../../models';
+import { Project, Task, Tag, TaskType, Request, User, Attachment } from '../../models';
 
 @Component({
     selector: 'task',
@@ -45,6 +45,7 @@ export class TaskComponent {
     isReady = false;
     task: Task;
     form: ControlGroup;
+    taskRequests: Request[];
 
     taskPriorityTypes: any;
     taskStatusTypes: any;
@@ -81,6 +82,9 @@ export class TaskComponent {
                 task => {
                     this.task = task;
                     this.isReady = true;
+                    this.taskService.fetchTaskRequests(this.task).subscribe(r => {
+                        this.taskRequests = r;
+                    });
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );

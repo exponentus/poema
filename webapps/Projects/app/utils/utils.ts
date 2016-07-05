@@ -8,7 +8,7 @@ export function createURLSearchParams(_params): URLSearchParams {
     return params;
 }
 
-export function serializeObj(obj) {
+export function serializeObj(obj): string {
     let result = [];
     for (var property in obj) {
         result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
@@ -16,7 +16,7 @@ export function serializeObj(obj) {
     return result.join('&');
 }
 
-export function parseResponseObjects(objects: any) {
+export function parseResponseObjects(objects: any): any {
     let result: any = [];
 
     for (let obj of objects) {
@@ -34,7 +34,7 @@ export function parseResponseObjects(objects: any) {
     return result;
 }
 
-export function transformPostResponse(response: Response) {
+export function transformPostResponse(response: Response): any {
     let json = response.json();
     return Object.assign(json, {
         ok: json.type === 'DOCUMENT_SAVED',
@@ -42,7 +42,7 @@ export function transformPostResponse(response: Response) {
     });
 }
 
-export function createCookie(name, value, days) {
+export function createCookie(name, value, days): void {
     let expires;
 
     if (days) {

@@ -46,8 +46,8 @@ export class CommentsComponent {
         this.comment = new Comment();
         this.comment.comment = this.commentText;
         this.taskService.addComment(this.task, this.comment).subscribe(r => {
-            console.log(r);
             this.loadComments(1);
+            this.commentText = '';
         });
     }
 

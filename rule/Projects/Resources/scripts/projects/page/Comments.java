@@ -37,7 +37,7 @@ public class Comments extends _DoPage {
         if (task != null) {
             CommentDAO commentDAO = new CommentDAO(session);
             int page = formData.getNumberValueSilently("page", 1);
-            List<Comment> comments = commentDAO.findTaskComments(task, 0, 20);
+            List<Comment> comments = commentDAO.findTaskComments(task, page, 20);
             addContent(comments);
         } else {
             setBadRequest();

@@ -81,6 +81,11 @@ export class TaskService {
         return this.http.delete('p?id=task-view&ids=' + task.id);
     }
 
+    fetchTaskRequests(task: Task, page = 0) {
+        return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
+            .map(response => <Request[]>parseResponseObjects(response.json().objects).request);
+    }
+
     sendTaskRequest(request: Request) {
         let url = 'p?id=task-requests&taskId=' + request.taskId;
         return this.http.post(url, serializeObj(request), { headers: HEADERS })

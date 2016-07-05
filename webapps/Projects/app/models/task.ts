@@ -1,4 +1,5 @@
 import { Attachment } from './attachment';
+import { Request } from './request';
 
 export class Task {
     id: string = '';
@@ -23,4 +24,5 @@ export class Task {
     attachmentIds: string[];
 
     attachments: Attachment[];
+    requests: Request[];
 }

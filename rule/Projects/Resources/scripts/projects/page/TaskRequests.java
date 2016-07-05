@@ -18,13 +18,30 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.UUID;
 
 public class TaskRequests extends _DoPage {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
-        setBadRequest();
+        String taskId = formData.getValueSilently("taskId");
+        if (taskId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
+
+        TaskDAO taskDAO = new TaskDAO(session);
+        Task task = taskDAO.findById(taskId);
+        if (task == null) {
+            setBadRequest();
+            return;
+        }
+
+        RequestDAO requestDAO = new RequestDAO(session);
+        int page = formData.getNumberValueSilently("page", 1);
+        List<Request> requests = requestDAO.findTaskRequests(task, page, 20);
+        addContent(requests);
     }
 
     @Override
