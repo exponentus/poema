@@ -51,6 +51,7 @@ public class ProjectForm extends _DoForm {
 				}
 			}
 
+			addContent(project.getAttachments());
 		} else {
 			project = new Project();
 			project.setAuthor(user);
@@ -131,6 +132,7 @@ public class ProjectForm extends _DoForm {
 				recipients.add(managerUser.getEmail());
 				recipients.add(programmerUser.getEmail());
 				recipients.add(testerUser.getEmail());
+				// RabbitMQ | Message Queue ~ p4elka events
 				MailAgent ma = new MailAgent();
 				if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_project_short", lang),
 				        getLocalizedWord("notify_about_new_project", lang))) {

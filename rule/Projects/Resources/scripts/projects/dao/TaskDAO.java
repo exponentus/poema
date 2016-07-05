@@ -26,6 +26,10 @@ public class TaskDAO extends DAO<Task, UUID> {
         super(Task.class, session);
     }
 
+    public ViewPage<Task> findSubtasksForTask(Task task, int pageNum, int pageSize) {
+        return null;
+    }
+
     public ViewPage<Task> findAllByTaskFilter(TaskFilter filter, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();

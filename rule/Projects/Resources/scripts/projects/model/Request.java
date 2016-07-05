@@ -22,7 +22,7 @@ public class Request extends SecureAppEntity<UUID> {
     @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false)
+    @JoinColumn(updatable = false, nullable = false)
     private Task task;
 
     @NotNull

@@ -88,7 +88,7 @@ public class Comments extends _DoPage {
         try {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(taskId);
-            if (task != null) {
+            if (task == null) {
                 setBadRequest();
                 return;
             }
@@ -102,6 +102,7 @@ public class Comments extends _DoPage {
 
             CommentDAO commentDAO = new CommentDAO(session);
             Comment comment = new Comment();
+            comment.setTask(task);
             comment.setComment(formData.getValueSilently("comment"));
 
             String[] fileNames = formData.getListOfValuesSilently("fileid");

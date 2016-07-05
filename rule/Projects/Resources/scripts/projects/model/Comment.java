@@ -19,7 +19,7 @@ public class Comment extends AppEntity<UUID> {
     @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(updatable = false, nullable = false)
     private Task task;
 
     @Column(nullable = false, length = 512)

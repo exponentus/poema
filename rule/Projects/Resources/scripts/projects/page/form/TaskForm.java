@@ -55,6 +55,7 @@ public class TaskForm extends _DoForm {
 				}
 			}
 
+			addContent(task.getAttachments());
 		} else {
 			task = new Task();
 			task.setAuthor(user);
