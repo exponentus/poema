@@ -194,7 +194,14 @@ export class TaskComponent {
         if (!this.task.attachments) {
             this.task.attachments = [];
         }
+        if (!this.task.fsid) {
+            this.task.fsid = '' + Date.now();
+        }
         this.task.attachments.push(att);
+    }
+
+    deleteAttachment(attachment: Attachment) {
+        console.log(attachment);
     }
 
     ngOnDestroy() {

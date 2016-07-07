@@ -8,38 +8,32 @@ import { Attachment } from '../models';
 @Component({
     selector: 'attachments',
     pipes: [TranslatePipe],
-    host: {},
+    host: {
+        '[class.attachments]': 'true'
+    },
     template: `
-        <div class="attachments fieldset">
-            <legend class="legend">
-                {{'attachments' | translate}}
-            </legend>
-            <div class="form-group">
-                <label class="btn btn-upload" data-upload="">
-                    <i class="fa fa-paperclip"></i>
-                    <span>{{'attach_file' | translate}}</span>
-                    <input type="file" (change)="uploadFile($event)" style="display:none;"/>
-                </label>
-                <div class="attachments" data-upload-files="">
-                    <div class="attachments-file" *ngFor="let att of attachments">
-                        <a class="file-name" href="{{att.url}}">
-                            {{att.realFileName}}
-                        </a>
-                        <span class="btn btn-sm btn-link btn-remove-file on-edit">
-                            <i class="fa fa-times"></i>
-                        </span>
-                    </div>
-                </div>
+        <label class="btn btn-upload" title="{{'attach_file' | translate}}">
+            <i class="fa fa-paperclip"></i>
+            <span>{{'attach_file' | translate}}</span>
+            <input type="file" (change)="uploadFile($event)" style="display:none;"/>
+        </label>
+        <div class="attach-list">
+            <div class="attach-item" *ngFor="let att of entity.attachments">
+                <a class="attach-name" href="{{entity.url}}&attachment={{att.id}}">
+                    {{att.realFileName}}
+                </a>
+                <button class="btn btn-sm btn-link btn-remove" (click)="deleteAttach(att, $event)">
+                    <i class="fa fa-times"></i>
+                </button>
             </div>
         </div>
     `
 })
 
 export class AttachmentsComponent {
-    @Input() attachments: Attachment[];
-    @Input() fsId: string;
+    @Input() entity: any;
     @Output() upload = new EventEmitter<any>();
-    @Output() remove = new EventEmitter<any>();
+    @Output() delete = new EventEmitter<any>();
 
     constructor(
         private http: Http,
@@ -48,8 +42,12 @@ export class AttachmentsComponent {
 
     uploadFile($event) {
         let files: File[] = $event.target.files;
-        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.fsId }, files).subscribe(response => {
+        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.entity.fsid }, files).subscribe(response => {
             this.upload.emit(response);
         });
+    }
+
+    deleteAttach(att: Attachment, $event) {
+        this.delete.emit(att);
     }
 }

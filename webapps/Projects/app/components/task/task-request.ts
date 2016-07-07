@@ -11,7 +11,8 @@ import {
 } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskService } from '../../services';
-import { Task, Request, RequestType } from '../../models';
+import { Task, Request, RequestType, Attachment } from '../../models';
+import { AttachmentsComponent } from '../attachments';
 
 @Component({
     selector: 'task-request',
@@ -27,7 +28,7 @@ import { Task, Request, RequestType } from '../../models';
                     </select>
                 </div>
                 <textarea class="request-comment" ngControl="comment">{{ comment }}</textarea>
-                <attachments></attachments>
+                <attachments [entity]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
             </section>
             <footer>
                 <button class="btn" type="button" (click)="cancel()">{{ 'cancel' | translate }}</button>
@@ -35,7 +36,7 @@ import { Task, Request, RequestType } from '../../models';
             </footer>
         </form>
     `,
-    directives: [FORM_DIRECTIVES],
+    directives: [FORM_DIRECTIVES, AttachmentsComponent],
     host: {
         '[class.task-request]': 'true',
         '[class.task-request-open]': 'isOpen',
@@ -78,6 +79,10 @@ export class TaskRequestComponent {
                 if (state.task) {
                     this.task = state.task;
                     this.request.taskId = this.task.id;
+
+                    if (!this.request.fsid) {
+                        this.request.fsid = '' + Date.now();
+                    }
                 }
             }
         });
@@ -104,5 +109,18 @@ export class TaskRequestComponent {
             this.notifyService.info('request send: success').show().remove(3000);
             this.cancel();
         });
+    }
+
+    addAttachment(file) {
+        let att: Attachment = new Attachment();
+        att.realFileName = file.files[0];
+        if (!this.request.attachments) {
+            this.request.attachments = [];
+        }
+        this.request.attachments.push(att);
+    }
+
+    deleteAttachment(attachment: Attachment) {
+        console.log(attachment);
     }
 }

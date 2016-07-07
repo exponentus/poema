@@ -174,6 +174,13 @@ export class ProjectComponent {
         if (!this.project.attachments) {
             this.project.attachments = [];
         }
+        if (!this.project.fsid) {
+            this.project.fsid = '' + Date.now();
+        }
         this.project.attachments.push(att);
+    }
+
+    deleteAttachment(attachment: Attachment) {
+        console.log(attachment);
     }
 }

@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 </fieldset>
-                <attachments [attachments]="task.attachments" [fsId]="task.fsid" (upload)="addAttachment($event)"></attachments>
+                <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab class="tab-pane" tabTitle="{{'comments' | translate}}">
                 <comments [task]="task"></comments>

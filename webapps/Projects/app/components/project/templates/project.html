@@ -118,6 +118,6 @@
                 </div>
             </div>
         </fieldset>
-        <attachments [attachments]="project.attachments" [fsId]="project.fsid" (upload)="addAttachment($event)"></attachments>
+        <attachments [entity]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
 </form>

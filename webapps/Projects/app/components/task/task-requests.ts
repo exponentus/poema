@@ -12,6 +12,9 @@ import { TaskService } from '../../services';
         <ul>
             <li *ngFor="let r of requests">
                 {{ r.comment }}
+                {{ r.requestType.name }}
+                {{ r.resolution }}
+                {{ r.resolutionTime }}
             </li>
         </ul>
     `,
