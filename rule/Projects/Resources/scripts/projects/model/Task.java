@@ -13,6 +13,7 @@ import reference.model.TaskType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +75,7 @@ public class Task extends SecureAppEntity<UUID> {
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "task_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"task_id", "attachment_id"}))
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
     @Column(name = "customer_observation")
     private boolean customerObservation;
@@ -237,5 +238,10 @@ public class Task extends SecureAppEntity<UUID> {
 
     public List<String> getTagIds() {
         return tags.stream().map(it -> it.getIdentifier()).collect(Collectors.toList());
+    }
+
+    @Override
+    public String getURL() {
+        return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&taskId=" + getIdentifier();
     }
 }

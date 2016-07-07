@@ -2,27 +2,21 @@ package projects.page;
 
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
-import com.exponentus.scripting.event._DoPage;
-import org.apache.commons.io.IOUtils;
+import com.exponentus.scripting.event._DoForm;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.CommentDAO;
 import projects.dao.TaskDAO;
 import projects.model.Comment;
 import projects.model.Task;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-public class Comments extends _DoPage {
+public class Comments extends _DoForm {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
@@ -104,23 +98,11 @@ public class Comments extends _DoPage {
             Comment comment = new Comment();
             comment.setTask(task);
             comment.setComment(formData.getValueSilently("comment"));
-
-            String[] fileNames = formData.getListOfValuesSilently("fileid");
-            if (fileNames.length > 0) {
-                File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
-                for (String fn : fileNames) {
-                    File file = new File(userTmpDir + File.separator + fn);
-                    InputStream is = new FileInputStream(file);
-                    Attachment att = new Attachment();
-                    att.setRealFileName(fn);
-                    att.setFile(IOUtils.toByteArray(is));
-                    comment.getAttachments().add(att);
-                }
-            }
+            comment.setAttachments(getActualAttachments(comment.getAttachments()));
 
             commentDAO.add(comment);
 
-        } catch (DatabaseException | IOException e) {
+        } catch (DatabaseException e) {
             error(e);
             setBadRequest();
         } catch (SecureException e) {

@@ -1,12 +1,9 @@
 package projects.page;
 
-import com.exponentus.common.model.Attachment;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
-import com.exponentus.scripting.event._DoPage;
-import org.apache.commons.io.IOUtils;
+import com.exponentus.scripting.event._DoForm;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
@@ -14,14 +11,10 @@ import projects.model.Request;
 import projects.model.Task;
 import reference.model.RequestType;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskRequests extends _DoPage {
+public class TaskRequests extends _DoForm {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
@@ -84,23 +77,11 @@ public class TaskRequests extends _DoPage {
             request.setTask(task);
             request.setRequestType(requestType);
             request.setComment(comment);
-
-            String[] fileNames = formData.getListOfValuesSilently("fileid");
-            if (fileNames.length > 0) {
-                File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
-                for (String fn : fileNames) {
-                    File file = new File(userTmpDir + File.separator + fn);
-                    InputStream is = new FileInputStream(file);
-                    Attachment att = new Attachment();
-                    att.setRealFileName(fn);
-                    att.setFile(IOUtils.toByteArray(is));
-                    request.getAttachments().add(att);
-                }
-            }
+            request.setAttachments(getActualAttachments(request.getAttachments()));
 
             requestDAO.add(request);
 
-        } catch (DatabaseException | IOException e) {
+        } catch (DatabaseException e) {
             error(e);
             setBadRequest();
         } catch (SecureException e) {

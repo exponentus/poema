@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class Comment extends AppEntity<UUID> {
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "comment_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"comment_id", "attachment_id"}))
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
     public Task getTask() {
         return task;

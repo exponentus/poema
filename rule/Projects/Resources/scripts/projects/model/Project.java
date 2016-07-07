@@ -10,6 +10,7 @@ import projects.model.constants.ProjectStatusType;
 import staff.model.Organization;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +54,7 @@ public class Project extends SecureAppEntity<UUID> {
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "project_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "attachment_id"}))
-    private List<Attachment> attachments;
+    private List<Attachment> attachments = new ArrayList<>();
 
     @Column(name = "has_attachments")
     private boolean hasAttachments;
@@ -154,5 +155,10 @@ public class Project extends SecureAppEntity<UUID> {
 
     public String getCustomerId() {
         return customer != null ? customer.getIdentifier() : null;
+    }
+
+    @Override
+    public String getURL() {
+        return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&projectId=" + getIdentifier();
     }
 }
