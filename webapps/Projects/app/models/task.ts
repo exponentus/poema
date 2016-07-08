@@ -20,7 +20,7 @@ export class Task {
     startDate: Date;
     dueDate: Date;
     tagIds: string[];
-    hasAttachment: boolean;
+    hasAttachments: boolean;
     attachmentIds: string[];
 
     attachments: Attachment[];

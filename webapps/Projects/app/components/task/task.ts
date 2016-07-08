@@ -88,7 +88,6 @@ export class TaskComponent {
                     this.isReady = true;
                     this.taskService.fetchTaskRequests(this.task).subscribe(r => {
                         this.taskRequests = r.list;
-                        this.hasUnResolvedRequest = r.list.filter(it => it.resolution === 'UNKNOWN').length > 0;
                     });
                 },
                 errorResponse => this.handleXhrError(errorResponse)
@@ -128,7 +127,7 @@ export class TaskComponent {
     }
 
     canRequestAction() {
-        return !this.hasUnResolvedRequest;
+        return true; // !this.hasUnResolvedRequest;
     }
 
     newRequest() {

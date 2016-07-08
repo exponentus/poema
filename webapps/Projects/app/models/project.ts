@@ -16,7 +16,7 @@ export class Project {
     observerUserIds: string[];
     comment: string;
     finishDate: Date;
-    hasAttachment: boolean;
+    hasAttachments: boolean;
     attachmentIds: string[];
 
     attachments: Attachment[];

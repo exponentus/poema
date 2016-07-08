@@ -104,4 +104,8 @@ export class TaskService {
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
+
+    deleteComment(comment: Comment) {
+        return this.http.delete('p?id=comments&commentId=' + comment.id);
+    }
 }

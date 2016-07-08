@@ -9,6 +9,6 @@ export class Request {
     resolution: string;
     resolutionTime: Date;
     comment: string;
-    hasAttachment: boolean;
+    hasAttachments: boolean;
     attachments: Attachment[];
 }

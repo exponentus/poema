@@ -9,8 +9,44 @@ import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project';
 
 @Component({
-    selector: '[nav]',
-    template: require('../templates/nav.html'),
+    selector: '[data-component=nav]',
+    template: `
+        <ul>
+            <li>
+                <a [routerLink]="['/tasks', 'my']" class="nav-link">
+                    <i class="fa fa-pencil"></i>
+                    <span>{{'my_tasks' | translate}}</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/tasks', 'inbox']" class="nav-link">
+                    <i class="fa fa-inbox"></i>
+                    <span>{{'tasks_assigned_to_me' | translate}}</span>
+                </a>
+            </li>
+            <li>
+                <a [routerLink]="['/']" class="nav-link">
+                    <i class="fa fa-calendar"></i>
+                    <span>{{'dashboard' | translate}}</span>
+                </a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a [routerLink]="['/projects']" class="nav-link">
+                    <i class="fa fa-puzzle-piece"></i>
+                    <span>{{'projects' | translate}}</span>
+                </a>
+                <ul>
+                    <li *ngFor="let project of projects">
+                        <a [routerLink]="['/project', project.id, 'tasks']" class="nav-link">
+                            <i class="fa fa-file-text-o"></i>
+                            <span>{{project.name}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    `,
     directives: [ROUTER_DIRECTIVES],
     pipes: [TranslatePipe]
 })
