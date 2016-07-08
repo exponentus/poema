@@ -1,5 +1,7 @@
 package projects.page;
 
+import com.exponentus.common.dao.AttachmentDAO;
+import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
@@ -67,7 +69,16 @@ public class TaskRequests extends _DoForm {
 
     @Override
     public void doDELETE(_Session session, _WebFormData formData) {
-        setBadRequest();
+        String requestId = formData.getValueSilently("requestId");
+        if (requestId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
+
+        String attachmentId = formData.getValueSilently("attachmentId");
+        if (!attachmentId.isEmpty()) {
+            deleteAttachment(session, requestId, attachmentId);
+        }
     }
 
     private void addRequest(_Session session, String taskId, String requestTypeId, String comment) {
@@ -120,6 +131,30 @@ public class TaskRequests extends _DoForm {
             }
 
             request.setResolution(resolutionType);
+
+            requestDAO.update(request);
+        } catch (DatabaseException e) {
+            error(e);
+            setBadRequest();
+        } catch (SecureException e) {
+            error(e);
+            setBadRequest();
+        }
+    }
+
+    private void deleteAttachment(_Session session, String requestId, String attachmentId) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(session);
+            Request request = requestDAO.findById(requestId);
+
+            if (!request.getTask().getEditors().contains(request.getAuthor())) {
+                setBadRequest();
+                return;
+            }
+
+            AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+            Attachment attachment = attachmentDAO.findById(attachmentId);
+            request.getAttachments().remove(attachment);
 
             requestDAO.update(request);
         } catch (DatabaseException e) {

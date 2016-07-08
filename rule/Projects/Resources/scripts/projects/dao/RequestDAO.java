@@ -8,6 +8,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -69,6 +70,8 @@ public class RequestDAO extends DAO<Request, UUID> {
 
             TypedQuery<Request> typedQuery = em.createQuery(cq);
             return typedQuery.getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
         } finally {
             em.close();
         }

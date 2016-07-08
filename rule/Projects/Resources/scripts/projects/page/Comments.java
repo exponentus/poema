@@ -63,18 +63,17 @@ public class Comments extends _DoForm {
 
     @Override
     public void doDELETE(_Session session, _WebFormData formData) {
-        String taskId = formData.getValueSilently("taskId");
         String commentId = formData.getValueSilently("commentId");
-        if (taskId.isEmpty() || commentId.isEmpty()) {
+        if (commentId.isEmpty()) {
             setBadRequest();
             return;
         }
 
         String attachmentId = formData.getValueSilently("attachmentId");
         if (attachmentId.isEmpty()) {
-            deleteComment(session, taskId, commentId);
+            deleteComment(session, commentId);
         } else {
-            deleteAttachment(session, taskId, attachmentId);
+            deleteAttachment(session, commentId, attachmentId);
         }
     }
 
@@ -110,7 +109,7 @@ public class Comments extends _DoForm {
         }
     }
 
-    private void deleteComment(_Session session, String taskId, String commentId) {
+    private void deleteComment(_Session session, String commentId) {
         CommentDAO commentDAO = new CommentDAO(session);
         Comment comment = commentDAO.findById(commentId);
 
@@ -121,20 +120,20 @@ public class Comments extends _DoForm {
         }
     }
 
-    private void deleteAttachment(_Session session, String taskId, String attachmentId) {
-        if (taskId.isEmpty() || attachmentId.isEmpty()) {
+    private void deleteAttachment(_Session session, String commentId, String attachmentId) {
+        if (commentId.isEmpty() || attachmentId.isEmpty()) {
             return;
         }
 
-        TaskDAO dao = new TaskDAO(session);
-        Task task = dao.findById(taskId);
+        CommentDAO commentDAO = new CommentDAO(session);
+        Comment comment = commentDAO.findById(commentId);
 
         AttachmentDAO attachmentDAO = new AttachmentDAO(session);
         Attachment attachment = attachmentDAO.findById(attachmentId);
-        task.getAttachments().remove(attachment);
+        comment.getAttachments().remove(attachment);
 
         try {
-            dao.update(task);
+            commentDAO.update(comment);
         } catch (SecureException e) {
             setError(e);
         }
