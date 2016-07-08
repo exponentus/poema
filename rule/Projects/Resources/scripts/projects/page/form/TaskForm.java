@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.exponentus.messaging.email.MailAgent;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.exponentus.common.dao.AttachmentDAO;
@@ -149,6 +150,15 @@ public class TaskForm extends _DoForm {
 				task = dao.add(task);
 			} else {
 				task = dao.update(task);
+			}
+
+			LanguageCode lang = session.getLang();
+			List<String> recipients = new ArrayList<>();
+			recipients.add(assigneeUser.getEmail());
+			// Message Queue ~ p4elka events
+			MailAgent ma = new MailAgent();
+			if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_task_short", lang),
+					getLocalizedWord("notify_about_new_task", lang))) {
 			}
 		} catch (SecureException e) {
 			setError(e);

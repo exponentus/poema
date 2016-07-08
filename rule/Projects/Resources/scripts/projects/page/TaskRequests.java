@@ -9,6 +9,7 @@ import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.model.Request;
 import projects.model.Task;
+import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
 import java.util.List;
@@ -52,7 +53,16 @@ public class TaskRequests extends _DoForm {
 
     @Override
     public void doPUT(_Session session, _WebFormData formData) {
-        // resolution
+        String requestId = formData.getValueSilently("requestId");
+        String resolution = formData.getValueSilently("resolution");
+        ResolutionType resolutionType = ResolutionType.valueOf(resolution);
+
+        if (resolutionType == ResolutionType.UNKNOWN) {
+            setBadRequest();
+            return;
+        }
+
+        doResolution(session, requestId, resolutionType);
     }
 
     @Override
@@ -70,6 +80,11 @@ public class TaskRequests extends _DoForm {
                 return;
             }
 
+            if (requestDAO.findUnResolvedRequest(task) != null) {
+                setBadRequest();
+                return;
+            }
+
             RequestType requestType = new RequestType();
             requestType.setId(UUID.fromString(requestTypeId));
 
@@ -80,7 +95,33 @@ public class TaskRequests extends _DoForm {
             request.setAttachments(getActualAttachments(request.getAttachments()));
 
             requestDAO.add(request);
+        } catch (DatabaseException e) {
+            error(e);
+            setBadRequest();
+        } catch (SecureException e) {
+            error(e);
+            setBadRequest();
+        }
+    }
 
+    private void doResolution(_Session session, String requestId, ResolutionType resolutionType) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(session);
+            Request request = requestDAO.findById(requestId);
+
+            if (request == null || resolutionType == ResolutionType.UNKNOWN) {
+                setBadRequest();
+                return;
+            }
+
+            if (!request.getTask().getEditors().contains(request.getAuthor())) {
+                setBadRequest();
+                return;
+            }
+
+            request.setResolution(resolutionType);
+
+            requestDAO.update(request);
         } catch (DatabaseException e) {
             error(e);
             setBadRequest();

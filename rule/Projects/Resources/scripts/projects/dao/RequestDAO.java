@@ -5,6 +5,7 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.scripting._Session;
 import projects.model.Request;
 import projects.model.Task;
+import projects.model.constants.ResolutionType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -49,6 +50,25 @@ public class RequestDAO extends DAO<Request, UUID> {
             typedQuery.setFirstResult(firstRec);
             typedQuery.setMaxResults(pageSize);
             return typedQuery.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public Request findUnResolvedRequest(Task task) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<Request> cq = cb.createQuery(Request.class);
+            Root<Request> c = cq.from(Request.class);
+            cq.select(c);
+
+            Predicate condition = cb.equal(c.get("task"), task);
+            condition = cb.and(cb.equal(c.get("resolution"), ResolutionType.UNKNOWN), condition);
+            cq.where(condition);
+
+            TypedQuery<Request> typedQuery = em.createQuery(cq);
+            return typedQuery.getSingleResult();
         } finally {
             em.close();
         }
