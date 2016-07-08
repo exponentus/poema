@@ -10,7 +10,29 @@ import { CommentComponent } from './comment';
 
 @Component({
     selector: 'comments',
-    template: require('./comments.html'),
+    template: `
+        <div class="comments-wrap">
+            <section class="comments">
+                <comment [comment]="comment" *ngFor="let comment of comments"></comment>
+            </section>
+            <section class="comment-composer" [class.edit]="isEdit">
+                <textarea
+                    class="comment-editor"
+                    placeholder="{{ 'add_comment' | translate }}"
+                    [(ngModel)]="commentText"
+                    (focus)="onCommentTextFocus($event)"
+                    (blur)="onCommentTextBlur($event)">
+                </textarea>
+                <div class="buttons">
+                    <button class="btn btn-add-comment"
+                        (click)="addComment($event)"
+                        [disabled]="!commentText">
+                        {{ 'add_comment' | translate }}
+                    </button>
+                </div>
+            </section>
+        </div>
+    `,
     directives: [PaginationComponent, CommentComponent],
     pipes: [TranslatePipe]
 })
@@ -20,7 +42,8 @@ export class CommentsComponent {
     comment: Comment;
     comments: Comment[];
     meta: any;
-    commentText: string;
+    commentText: string = '';
+    isEdit: boolean;
 
     constructor(
         private store: Store<any>,
@@ -39,6 +62,14 @@ export class CommentsComponent {
                 this.meta = data.meta;
             }
         });
+    }
+
+    onCommentTextFocus($event) {
+        this.isEdit = true;
+    }
+
+    onCommentTextBlur($event) {
+        this.isEdit = this.commentText.length > 0;
     }
 
     addComment($event) {

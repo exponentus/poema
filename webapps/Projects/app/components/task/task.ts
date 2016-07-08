@@ -50,7 +50,7 @@ export class TaskComponent {
     task: Task;
     form: ControlGroup;
     taskRequests: Request[];
-
+    hasUnResolvedRequest: boolean = true;
     taskPriorityTypes: any;
     taskStatusTypes: any;
 
@@ -87,7 +87,8 @@ export class TaskComponent {
                     this.task = task;
                     this.isReady = true;
                     this.taskService.fetchTaskRequests(this.task).subscribe(r => {
-                        this.taskRequests = r;
+                        this.taskRequests = r.list;
+                        this.hasUnResolvedRequest = r.list.filter(it => it.resolution === 'UNKNOWN').length > 0;
                     });
                 },
                 errorResponse => this.handleXhrError(errorResponse)
@@ -127,7 +128,7 @@ export class TaskComponent {
     }
 
     canRequestAction() {
-        return true; // this.task.status && this.task.status != 'DRAFT';
+        return !this.hasUnResolvedRequest;
     }
 
     newRequest() {

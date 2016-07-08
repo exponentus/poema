@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("task")
+@JsonRootName("request")
 @Entity
 @Table(name = "requests")
 @NamedQuery(name = "Request.findAll", query = "SELECT m FROM Request AS m ORDER BY m.regDate")
@@ -48,6 +48,10 @@ public class Request extends SecureAppEntity<UUID> {
             indexes = {@Index(columnList = "request_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
     private List<Attachment> attachments = new ArrayList<>();
+
+    public long getAuthorId() {
+        return author;
+    }
 
     public Task getTask() {
         return task;

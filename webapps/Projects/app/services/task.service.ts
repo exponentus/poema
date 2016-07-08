@@ -83,7 +83,7 @@ export class TaskService {
 
     fetchTaskRequests(task: Task, page = 0) {
         return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
-            .map(response => <Request[]>parseResponseObjects(response.json().objects).request);
+            .map(response => parseResponseObjects(response.json().objects).request);
     }
 
     sendTaskRequest(request: Request) {
@@ -95,7 +95,7 @@ export class TaskService {
 
     fetchComments(task: Task, page = 0) {
         return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
-            .map(response => <Comment[]>parseResponseObjects(response.json().objects).comment);
+            .map(response => parseResponseObjects(response.json().objects).comment);
     }
 
     addComment(task: Task, comment: Comment) {

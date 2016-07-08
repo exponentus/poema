@@ -1,3 +1,5 @@
+@import 'comments.css';
+
 body:not(.side-nav-toggle) .aside + .content {
     margin-left: 0;
 }

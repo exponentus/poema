@@ -34,6 +34,10 @@ public class Comment extends AppEntity<UUID> {
             uniqueConstraints = @UniqueConstraint(columnNames = {"comment_id", "attachment_id"}))
     private List<Attachment> attachments = new ArrayList<>();
 
+    public long getAuthorId() {
+        return author;
+    }
+
     public Task getTask() {
         return task;
     }

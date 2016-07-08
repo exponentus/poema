@@ -8,12 +8,12 @@ import { Comment } from '../../models';
 @Component({
     selector: 'comment',
     template: `
-        <p>{{ comment.comment }}</p><hr>
+        <div class="comment-wrap">
+            <span class="comment-author">{{ comment.author }}</span>
+            <span class="comment-time">{{ comment.regDate }}</span>
+            <p class="comment-text">{{ comment.comment }}</p>
+        </div>
     `,
-    host: {
-        'class.comment': 'true'
-    },
-    directives: [],
     pipes: [DateFormatPipe, TranslatePipe]
 })
 

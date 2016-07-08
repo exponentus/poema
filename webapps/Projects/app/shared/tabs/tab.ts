@@ -3,7 +3,7 @@ import { Component, Input } from '@angular/core';
 @Component({
     selector: 'tab',
     template: `
-      <div [hidden]="!active" class="pane">
+      <div [hidden]="!active">
         <ng-content></ng-content>
       </div>
     `
