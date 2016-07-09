@@ -1,8 +1,12 @@
 package projects.page;
 
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.SecureException;
+import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
@@ -14,6 +18,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +38,13 @@ public class TaskRequests extends _DoForm {
             setBadRequest();
             return;
         }
+
+        // check read access
+//        if (!task.getProject().getEditors().contains(session.getUser().getId())
+//                && !task.getReaders().contains(session.getUser().getId())) {
+//            setBadRequest();
+//            return;
+//        }
 
         RequestDAO requestDAO = new RequestDAO(session);
         int page = formData.getNumberValueSilently("page", 1);
@@ -109,6 +121,20 @@ public class TaskRequests extends _DoForm {
             request.addReaderEditor(session.getUser());
 
             requestDAO.add(request);
+
+            //
+            LanguageCode lang = session.getLang();
+            List<String> recipients = new ArrayList<>();
+
+            UserDAO userDAO = new UserDAO(session);
+            User authorUser = userDAO.findById(request.getTask().getAuthor());
+            recipients.add(authorUser.getEmail());
+
+            MailAgent ma = new MailAgent();
+            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_task_request", lang),
+                    getLocalizedWord("notify_about_task_request", lang))) {
+                addContent("notify", "ok");
+            }
         } catch (DatabaseException e) {
             error(e);
             setBadRequest();
@@ -136,6 +162,20 @@ public class TaskRequests extends _DoForm {
             request.setResolution(resolutionType);
 
             requestDAO.update(request);
+
+            //
+            LanguageCode lang = session.getLang();
+            List<String> recipients = new ArrayList<>();
+
+            UserDAO userDAO = new UserDAO(session);
+            User assigneeUser = userDAO.findById(request.getTask().getAssignee());
+            recipients.add(assigneeUser.getEmail());
+
+            MailAgent ma = new MailAgent();
+            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_request_resolution", lang),
+                    getLocalizedWord("notify_about_task_request", lang))) {
+                addContent("notify", "ok");
+            }
         } catch (DatabaseException e) {
             error(e);
             setBadRequest();
@@ -149,7 +189,8 @@ public class TaskRequests extends _DoForm {
         RequestDAO requestDAO = new RequestDAO(session);
         Request request = requestDAO.findById(requestId);
 
-        if (!request.getEditors().contains(request.getAuthor())) {
+        if (!request.getTask().getEditors().contains(session.getUser().getId())
+                && !request.getEditors().contains(request.getAuthor())) {
             setBadRequest();
             return;
         }
@@ -166,7 +207,8 @@ public class TaskRequests extends _DoForm {
             RequestDAO requestDAO = new RequestDAO(session);
             Request request = requestDAO.findById(requestId);
 
-            if (!request.getTask().getEditors().contains(request.getAuthor())) {
+            if (!request.getTask().getEditors().contains(session.getUser().getId())
+                    && !request.getEditors().contains(session.getUser().getId())) {
                 setBadRequest();
                 return;
             }

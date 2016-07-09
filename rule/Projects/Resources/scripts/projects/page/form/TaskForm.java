@@ -148,10 +148,11 @@ public class TaskForm extends _DoForm {
             LanguageCode lang = session.getLang();
             List<String> recipients = new ArrayList<>();
             recipients.add(assigneeUser.getEmail());
-            // Message Queue ~ p4elka events
+
             MailAgent ma = new MailAgent();
             if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_task_short", lang),
                     getLocalizedWord("notify_about_new_task", lang))) {
+                addContent("notify", "ok");
             }
         } catch (SecureException e) {
             setError(e);

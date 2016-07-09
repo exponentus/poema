@@ -125,10 +125,11 @@ public class ProjectForm extends _DoForm {
                 recipients.add(managerUser.getEmail());
                 recipients.add(programmerUser.getEmail());
                 recipients.add(testerUser.getEmail());
-                // Message Queue ~ p4elka events
+
                 MailAgent ma = new MailAgent();
                 if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_project_short", lang),
                         getLocalizedWord("notify_about_new_project", lang))) {
+                    addContent("notify", "ok");
                 }
             } else {
                 project = dao.update(project);

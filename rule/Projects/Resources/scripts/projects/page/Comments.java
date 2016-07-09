@@ -1,9 +1,12 @@
 package projects.page;
 
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
@@ -14,6 +17,7 @@ import projects.dao.TaskDAO;
 import projects.model.Comment;
 import projects.model.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Comments extends _DoForm {
@@ -32,6 +36,13 @@ public class Comments extends _DoForm {
             setBadRequest();
             return;
         }
+
+        // check read access
+//        if (!task.getProject().getEditors().contains(session.getUser().getId())
+//                && !task.getReaders().contains(session.getUser().getId())) {
+//            setBadRequest();
+//            return;
+//        }
 
         CommentDAO commentDAO = new CommentDAO(session);
         int page = formData.getNumberValueSilently("page", 1);
@@ -87,6 +98,11 @@ public class Comments extends _DoForm {
                 return;
             }
 
+            if (!task.getReaders().contains(session.getUser().getId())) {
+                setBadRequest();
+                return;
+            }
+
             _Validation ve = validateComment(formData, session.getLang());
             if (ve.hasError()) {
                 setBadRequest();
@@ -102,6 +118,24 @@ public class Comments extends _DoForm {
 
             commentDAO.add(comment);
 
+            //
+            LanguageCode lang = session.getLang();
+            List<String> recipients = new ArrayList<>();
+
+            UserDAO userDAO = new UserDAO(session);
+            if (comment.getTask().getAuthor() == session.getUser().getId()) {
+                User assigneeUser = userDAO.findById(comment.getTask().getAssignee());
+                recipients.add(assigneeUser.getEmail());
+            } else {
+                User authorUser = userDAO.findById(comment.getTask().getAuthor());
+                recipients.add(authorUser.getEmail());
+            }
+
+            MailAgent ma = new MailAgent();
+            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_comment", lang),
+                    getLocalizedWord("notify_about_comment", lang))) {
+                addContent("notify", "ok");
+            }
         } catch (DatabaseException e) {
             error(e);
             setBadRequest();
@@ -113,6 +147,11 @@ public class Comments extends _DoForm {
     private void deleteComment(_Session session, String commentId) {
         CommentDAO commentDAO = new CommentDAO(session);
         Comment comment = commentDAO.findById(commentId);
+
+        if (!comment.getTask().getEditors().contains(session.getUser().getId())) {
+            setBadRequest();
+            return;
+        }
 
         try {
             commentDAO.delete(comment);
@@ -128,6 +167,11 @@ public class Comments extends _DoForm {
 
         CommentDAO commentDAO = new CommentDAO(session);
         Comment comment = commentDAO.findById(commentId);
+
+        if (comment.getAuthor() == session.getUser().getId()) {
+            setBadRequest();
+            return;
+        }
 
         AttachmentDAO attachmentDAO = new AttachmentDAO(session);
         Attachment attachment = attachmentDAO.findById(attachmentId);
