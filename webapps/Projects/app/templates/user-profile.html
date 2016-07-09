@@ -134,7 +134,9 @@
                         </div>
                         <div class="controls">
                             <select name="lang" class="span2" (change)="changeLang($event)">
-                                <option value="{{lang.code}}" [selected]="lang.code == language" *ngFor="let lang of languages">{{lang.localizedName[lang.code]}}</option>
+                                <option value="{{langCode}}" [selected]="langCode == language" *ngFor="let langCode of languages | keys">
+                                    {{languages[langCode]}}
+                                </option>
                             </select>
                         </div>
                     </div>

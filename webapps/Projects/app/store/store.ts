@@ -1,5 +1,6 @@
-import { combineReducers, provideStore } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
+import { combineReducers, provideStore } from '@ngrx/store';
+import { storeLogger } from 'ngrx-store-logger';
 
 // models
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
@@ -12,18 +13,15 @@ import { taskReducer as task } from '../reducers/task.reducer';
 import { staffReducer as staff } from '../reducers/staff.reducer';
 import { referenceReducer as reference } from '../reducers/reference.reducer';
 
-export interface IAppStore {
-    navProjects: Project[];
-    projects: Project[];
-    tasks: Task[];
-    taskTypes: TaskType[];
-    tags: Tag[];
-    users: User[];
-    organizations: Organization[];
-};
+const logger = storeLogger({
+    level: 'log', // 'console' | 'warn' | 'error' | 'info'; default log
+    collapsed: false,
+    duration: true,
+    timestamp: true
+});
 
 export const APP_STORE = provideStore(
-    compose(combineReducers)({
+    compose(logger, combineReducers)({
         authed,
         projects,
         tasks,

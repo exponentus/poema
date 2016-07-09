@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import { FETCH_USER_PROFILE } from '../reducers/authed.reducer';
 import { User } from '../models';
 import { parseResponseObjects } from '../utils/utils';
 
@@ -27,10 +28,13 @@ export class AppService {
                 pageSize = res[0].pagesize
             }
             return {
-                userProfile: res.employee,
-                languages: res.language.list,
-                pageSize: pageSize
-            };
+                type: FETCH_USER_PROFILE,
+                payload: {
+                    userProfile: res.employee,
+                    languages: res.language.list[0].localizedName,
+                    pageSize: pageSize
+                }
+            }
         });
     }
 

@@ -4,8 +4,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
-import { FETCH_USER_PROFILE, IAppState } from './reducers/authed.reducer';
-import { FETCH_ORGANIZATIONS, FETCH_USERS } from './reducers/staff.reducer';
+import { IAppState } from './reducers/authed.reducer';
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { NavComponent } from './components/nav';
@@ -45,11 +44,8 @@ export class AppComponent {
             this.loggedUser = data.userProfile;
         });
 
-        this.appService.getUserProfile().subscribe((resp: any) => {
-            this.store.dispatch({
-                type: FETCH_USER_PROFILE,
-                payload: resp
-            })
+        this.appService.getUserProfile().subscribe(action => {
+            this.store.dispatch(action);
             this.isReady = true;
             this.appService.isLogged = true;
         });
@@ -60,12 +56,12 @@ export class AppComponent {
 
         this.referenceService.loadReference();
 
-        this.staffService.fetchOrganizations().subscribe(data => {
-            this.store.dispatch({ type: FETCH_ORGANIZATIONS, payload: data });
+        this.staffService.fetchOrganizations().subscribe(action => {
+            this.store.dispatch(action);
         });
 
-        this.staffService.fetchUsers().subscribe(data => {
-            this.store.dispatch({ type: FETCH_USERS, payload: data });
+        this.staffService.fetchUsers().subscribe(action => {
+            this.store.dispatch(action);
         });
 
         this.isSearchOpen = false;

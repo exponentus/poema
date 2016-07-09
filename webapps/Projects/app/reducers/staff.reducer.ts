@@ -21,7 +21,7 @@ export const staffReducer = (state = initialState, {type, payload}): IStaffState
             });
         case FETCH_USERS:
             return Object.assign({}, state, {
-                users: payload
+                users: payload.users
             });
         default:
             return state;

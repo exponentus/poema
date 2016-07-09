@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { TAB_DIRECTIVES } from '../shared/tabs';
+import { KeysPipe } from '../pipes/keys.pipe';
 import { AppService } from '../services/app.service';
 import { TranslateService as translateService } from '../services/translate.service';
 import { User } from '../models/user';
@@ -22,7 +23,7 @@ const HEADERS = new Headers({
     template: require('../templates/user-profile.html'),
     directives: [FORM_DIRECTIVES, TAB_DIRECTIVES],
     providers: [FormBuilder],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, KeysPipe]
 })
 
 export class UserProfileComponent {

@@ -23,14 +23,14 @@ export class ReferenceService {
     ) { }
 
     loadReference() {
-        this.fetchTags().subscribe(data => {
-            this.store.dispatch({ type: FETCH_TAGS, payload: data });
+        this.fetchTags().subscribe(action => {
+            this.store.dispatch(action);
         });
-        this.fetchTaskTypes().subscribe(data => {
-            this.store.dispatch({ type: FETCH_TASK_TYPES, payload: data });
+        this.fetchTaskTypes().subscribe(action => {
+            this.store.dispatch(action);
         });
-        this.fetchRequestTypes().subscribe(data => {
-            this.store.dispatch({ type: FETCH_REQUEST_TYPES, payload: data });
+        this.fetchRequestTypes().subscribe(action => {
+            this.store.dispatch(action);
         });
     }
 
@@ -39,8 +39,11 @@ export class ReferenceService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    tags: <Tag[]>data.list,
-                    meta: data.meta
+                    type: FETCH_TAGS,
+                    payload: {
+                        tags: <Tag[]>data.list,
+                        meta: data.meta
+                    }
                 }
             });
     }
@@ -50,8 +53,11 @@ export class ReferenceService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    taskTypes: <TaskType[]>data.list,
-                    meta: data.meta
+                    type: FETCH_TASK_TYPES,
+                    payload: {
+                        taskTypes: <TaskType[]>data.list,
+                        meta: data.meta
+                    }
                 }
             });
     }
@@ -61,8 +67,11 @@ export class ReferenceService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    requestTypes: <RequestType[]>data.list,
-                    meta: data.meta
+                    type: FETCH_REQUEST_TYPES,
+                    payload: {
+                        requestTypes: <RequestType[]>data.list,
+                        meta: data.meta
+                    }
                 }
             });
     }
