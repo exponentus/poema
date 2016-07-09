@@ -10,7 +10,12 @@ import { Tag } from '../../models';
     template: `
         <div dropdown class="select">
             <div dropdown-toggle class="select-selection input">
-                <span class="tag" *ngFor="let m of selectedTags" (click)="remove(m, $event)">{{m.name}}</span>
+                <span class="tag"
+                    *ngFor="let m of selectedTags"
+                    [style.color]="m.color"
+                    (click)="remove(m, $event)">
+                    {{m.name}}
+                </span>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <ul class="select-list scroll-shadow">

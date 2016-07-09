@@ -21,7 +21,7 @@ import { AttachmentsComponent } from '../attachments';
             <header>{{ 'task_request' | translate }}</header>
             <section>
                 <div>
-                    <select ngControl="requestTypeId">
+                    <select ngControl="requestTypeId" #rt>
                         <option value="{{ rt.id }}"
                             [selected]="rt.id == requestType?.id"
                             *ngFor="let rt of requestTypes">{{ rt.name }}</option>
@@ -32,7 +32,7 @@ import { AttachmentsComponent } from '../attachments';
             </section>
             <footer>
                 <button class="btn" type="button" (click)="cancel()">{{ 'cancel' | translate }}</button>
-                <button class="btn btn-primary" type="submit">{{ 'send_request' | translate }}</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!rt.value">{{ 'send_request' | translate }}</button>
             </footer>
         </form>
     `,

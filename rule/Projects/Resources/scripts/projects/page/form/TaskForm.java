@@ -118,7 +118,7 @@ public class TaskForm extends _DoForm {
             task.setAssignee(assigneeUser.getId());
 
             if (formData.containsField("tagIds")) {
-                String[] tagIds = formData.getListOfValuesSilently("tagIds");
+                String[] tagIds = formData.getValueSilently("tagIds").split(",");
                 if (tagIds.length > 0) {
                     List<Tag> tags = new ArrayList<>();
                     TagDAO tagDAO = new TagDAO(session);

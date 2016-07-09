@@ -1,3 +1,4 @@
+@import 'request.css';
 @import 'comments.css';
 
 body:not(.side-nav-toggle) .aside + .content {
@@ -139,46 +140,6 @@ project {
 
 .vw-user-tester {
     width: 10%;
-}
-
-/* .task-request */
-
-.task-request {
-    background: rgba(255, 255, 255, .5);
-    display: none;
-    height: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-}
-
-.task-request > form {
-    background: #fff;
-    box-shadow: 0 0 3px #000;
-    position: relative;
-    top: 25%;
-    left: 0;
-    margin: 0 auto;
-    max-width: 98%;
-    width: 400px;
-}
-
-.task-request > form > header {
-    padding: 16px;
-}
-
-.task-request > form > section {
-    padding: 4px 16px;
-}
-
-.task-request > form > footer {
-    padding: 16px;
-    text-align: right;
-}
-
-.task-request.task-request-open {
-    display: block;
 }
 
 .attachments {
