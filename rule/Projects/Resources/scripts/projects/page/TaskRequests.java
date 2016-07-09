@@ -44,7 +44,6 @@ public class TaskRequests extends _DoForm {
     public void doPOST(_Session session, _WebFormData formData) {
         String taskId = formData.getValueSilently("taskId");
         String requestTypeId = formData.getValueSilently("requestTypeId");
-
         if (taskId.isEmpty() || requestTypeId.isEmpty()) {
             setBadRequest();
             return;
@@ -75,9 +74,11 @@ public class TaskRequests extends _DoForm {
             return;
         }
 
-        String attachmentId = formData.getValueSilently("attachmentId");
-        if (!attachmentId.isEmpty()) {
+        if (formData.containsField("attachmentId")) {
+            String attachmentId = formData.getValueSilently("attachmentId");
             deleteAttachment(session, requestId, attachmentId);
+        } else {
+            deleteRequest(session, requestId);
         }
     }
 
@@ -104,6 +105,8 @@ public class TaskRequests extends _DoForm {
             request.setRequestType(requestType);
             request.setComment(comment);
             request.setAttachments(getActualAttachments(request.getAttachments()));
+
+            request.addReaderEditor(session.getUser());
 
             requestDAO.add(request);
         } catch (DatabaseException e) {
@@ -139,6 +142,22 @@ public class TaskRequests extends _DoForm {
         } catch (SecureException e) {
             error(e);
             setBadRequest();
+        }
+    }
+
+    private void deleteRequest(_Session session, String requestId) {
+        RequestDAO requestDAO = new RequestDAO(session);
+        Request request = requestDAO.findById(requestId);
+
+        if (!request.getEditors().contains(request.getAuthor())) {
+            setBadRequest();
+            return;
+        }
+
+        try {
+            requestDAO.delete(request);
+        } catch (SecureException e) {
+            setError(e);
         }
     }
 

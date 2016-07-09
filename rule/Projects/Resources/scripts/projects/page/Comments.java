@@ -28,14 +28,15 @@ public class Comments extends _DoForm {
 
         TaskDAO taskDAO = new TaskDAO(session);
         Task task = taskDAO.findById(taskId);
-        if (task != null) {
-            CommentDAO commentDAO = new CommentDAO(session);
-            int page = formData.getNumberValueSilently("page", 1);
-            List<Comment> comments = commentDAO.findTaskComments(task, page, 20);
-            addContent(comments);
-        } else {
+        if (task == null) {
             setBadRequest();
+            return;
         }
+
+        CommentDAO commentDAO = new CommentDAO(session);
+        int page = formData.getNumberValueSilently("page", 1);
+        List<Comment> comments = commentDAO.findTaskComments(task, page, 20);
+        addContent(comments);
     }
 
     @Override
@@ -69,11 +70,11 @@ public class Comments extends _DoForm {
             return;
         }
 
-        String attachmentId = formData.getValueSilently("attachmentId");
-        if (attachmentId.isEmpty()) {
-            deleteComment(session, commentId);
-        } else {
+        if (formData.containsField("attachmentId")) {
+            String attachmentId = formData.getValueSilently("attachmentId");
             deleteAttachment(session, commentId, attachmentId);
+        } else {
+            deleteComment(session, commentId);
         }
     }
 
