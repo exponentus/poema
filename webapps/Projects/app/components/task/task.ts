@@ -201,7 +201,9 @@ export class TaskComponent {
     }
 
     deleteAttachment(attachment: Attachment) {
-        console.log(attachment);
+        this.taskService.deleteTaskAttachment(this.task, attachment).subscribe(r => {
+            this.task.attachments = this.task.attachments.filter(it => it.id != attachment.id);
+        });
     }
 
     ngOnDestroy() {

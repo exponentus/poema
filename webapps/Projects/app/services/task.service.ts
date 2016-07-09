@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { Task, Request, Comment } from '../models';
+import { Task, Request, Comment, Attachment } from '../models';
 import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -81,6 +81,10 @@ export class TaskService {
         return this.http.delete('p?id=task-view&ids=' + task.id);
     }
 
+    deleteTaskAttachment(task: Task, attachment: Attachment) {
+        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id);
+    }
+
     fetchTaskRequests(task: Task, page = 0) {
         return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
             .map(response => parseResponseObjects(response.json().objects).request);
@@ -91,6 +95,14 @@ export class TaskService {
         return this.http.post(url, serializeObj(request), { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
+    deleteRequest(request: Request) {
+        return this.http.delete('p?id=task-requests&requestId=' + request.id);
+    }
+
+    deleteRequestAttachment(request: Request, attachment: Attachment) {
+        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id);
     }
 
     fetchComments(task: Task, page = 0) {
@@ -107,5 +119,9 @@ export class TaskService {
 
     deleteComment(comment: Comment) {
         return this.http.delete('p?id=comments&commentId=' + comment.id);
+    }
+
+    deleteCommentAttachment(comment: Comment, attachment: Attachment) {
+        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id);
     }
 }

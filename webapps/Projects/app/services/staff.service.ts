@@ -16,7 +16,7 @@ export class StaffService {
         private http: Http
     ) { }
 
-    getOrganizations(queryParams?) {
+    fetchOrganizations(queryParams?) {
         return this.http.get('/Staff/p?id=get-organizations', {
             headers: HEADERS,
             search: createURLSearchParams(queryParams)
@@ -30,11 +30,11 @@ export class StaffService {
             });
     }
 
-    getOrganizationById(id: string) {
-        return this.getOrganizations({ ids: id });
+    fetchOrganizationById(id: string) {
+        return this.fetchOrganizations({ ids: id });
     }
 
-    getUsers() {
+    fetchUsers() {
         return this.http.get('p?id=users', { headers: HEADERS })
             .map(response => <User[]>response.json().objects[0].list);
     }

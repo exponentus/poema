@@ -60,11 +60,11 @@ export class AppComponent {
 
         this.referenceService.loadReference();
 
-        this.staffService.getOrganizations().subscribe(data => {
+        this.staffService.fetchOrganizations().subscribe(data => {
             this.store.dispatch({ type: FETCH_ORGANIZATIONS, payload: data });
         });
 
-        this.staffService.getUsers().subscribe(data => {
+        this.staffService.fetchUsers().subscribe(data => {
             this.store.dispatch({ type: FETCH_USERS, payload: data });
         });
 

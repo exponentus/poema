@@ -181,6 +181,8 @@ export class ProjectComponent {
     }
 
     deleteAttachment(attachment: Attachment) {
-        console.log(attachment);
+        this.projectService.deleteProjectAttachment(this.project, attachment).subscribe(r => {
+            this.project.attachments = this.project.attachments.filter(it => it.id != attachment.id);
+        });
     }
 }

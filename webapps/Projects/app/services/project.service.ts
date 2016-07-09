@@ -76,4 +76,8 @@ export class ProjectService {
     deleteProject(projects: Project[]) {
         return this.http.delete('p?id=project-view&ids=' + projects.map(it => it.id).join(','));
     }
+
+    deleteProjectAttachment(project: Project, attachment: Attachment) {
+        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id);
+    }
 }
