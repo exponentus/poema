@@ -21,15 +21,20 @@ const initialState: ITasksState = {
 export const tasksReducer = (state = initialState, {type, payload}): ITasksState => {
     switch (type) {
         case FETCH_TASKS:
-            return payload;
+            return Object.assign({}, state, {
+                tasks: payload.tasks,
+                meta: payload.meta
+            });
         case FETCH_TASK:
-            return payload;
+            return Object.assign({}, state, {
+                task: payload.task
+            });
         case ADD_TASK:
-            return payload;
+            return state;
         case UPDATE_TASK:
-            return payload;
+            return state;
         case DELETE_TASK:
-            return payload;
+            return state;
         default:
             return state;
     }

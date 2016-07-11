@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -7,6 +7,7 @@ import { NotificationService } from '../../shared/notification';
 import { PaginationComponent } from '../../shared/pagination';
 import { Task, Comment } from '../../models';
 import { TaskService } from '../../services';
+import { ITaskState } from '../../reducers/task.reducer';
 import { CommentComponent } from './comment';
 
 @Component({
@@ -43,22 +44,13 @@ import { CommentComponent } from './comment';
 })
 
 export class CommentsComponent {
-    @Input() task: Task;
-    comment: Comment;
-    comments: Comment[];
-    meta: any;
-    commentText: string = '';
-    isEdit: boolean;
+    @Input() comments: Comment[];
+    @Output() add = new EventEmitter<any>();
+    @Output() delete = new EventEmitter<any>();
 
-    constructor(
-        private store: Store<any>,
-        private taskService: TaskService,
-        private notifyService: NotificationService
-    ) { }
-
-    ngOnInit() {
-        this.loadComments(1);
-    }
+    private comment: Comment;
+    private commentText: string = '';
+    private isEdit: boolean;
 
     onCommentTextFocus() {
         this.isEdit = true;
@@ -68,28 +60,14 @@ export class CommentsComponent {
         this.isEdit = this.commentText.length > 0;
     }
 
-    loadComments(page) {
-        this.taskService.fetchComments(this.task, page).subscribe((data: any) => {
-            console.log(data);
-            if (data) {
-                this.comments = data.list;
-                this.meta = data.meta;
-            }
-        });
-    }
-
     addComment($event) {
-        this.comment = new Comment();
-        this.comment.comment = this.commentText;
-        this.taskService.addComment(this.task, this.comment).subscribe(r => {
-            this.loadComments(1);
-            this.commentText = '';
-        });
+        let comment = new Comment();
+        comment.comment = this.commentText;
+        this.add.emit(comment);
+        this.commentText = '';
     }
 
     deleteComment(comment: Comment) {
-        this.taskService.deleteComment(comment).subscribe(response => {
-            this.loadComments(1);
-        });
+        this.delete.emit(comment);
     }
 }

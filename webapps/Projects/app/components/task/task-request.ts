@@ -91,7 +91,6 @@ export class TaskRequestComponent {
     ngOnInit() { }
 
     ngOnDestroy() {
-        this.cancel();
         this.taskSub.unsubscribe();
     }
 

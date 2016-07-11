@@ -1,10 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { NotificationService } from '../../shared/notification';
-import { Task, Request } from '../../models';
-import { TaskService } from '../../services';
+import { Request } from '../../models';
 
 @Component({
     selector: 'task-requests',
@@ -23,24 +20,7 @@ import { TaskService } from '../../services';
 })
 
 export class TaskRequestsComponent {
-    @Input() task: Task;
-    requests: Request[];
-
-    constructor(
-        private store: Store<any>,
-        private taskService: TaskService,
-        private notifyService: NotificationService
-    ) { }
-
-    ngOnInit() {
-        this.loadRequests(1);
-    }
-
-    loadRequests(page) {
-        if (this.task) {
-            this.taskService.fetchTaskRequests(this.task, page).subscribe((data: any) => {
-                this.requests = data.list;
-            });
-        }
-    }
+    @Input() requests: Request[];
+    @Output() accept = new EventEmitter<any>();
+    @Output() decline = new EventEmitter<any>();
 }

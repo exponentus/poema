@@ -22,6 +22,7 @@ public class TaskFilter {
     private TaskStatusType status = TaskStatusType.UNKNOWN;
     private TaskPriorityType priority = TaskPriorityType.UNKNOWN;
     private String search;
+    private Long authorId;
     private Long assigneeUserId;
     private Date startDate;
     private Date dueDate;
@@ -97,6 +98,14 @@ public class TaskFilter {
 
     public void setSearch(String search) {
         this.search = search;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
     public Long getAssigneeUserId() {

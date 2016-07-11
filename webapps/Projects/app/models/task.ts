@@ -6,7 +6,7 @@ export class Task {
     author: string;
     regDate: Date;
     wasRead: boolean;
-    fsid: string;
+    fsid: string = '' + Date.now();
 
     projectId: string;
     parentTaskId: string;

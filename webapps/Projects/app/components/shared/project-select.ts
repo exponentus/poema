@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { IProjectsState } from '../../reducers/projects.reducer';
 import { Project } from '../../models';
 
 @Component({
@@ -35,7 +36,7 @@ export class ProjectSelectComponent {
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.sub = this.store.select('projects').subscribe((state: any) => {
+        this.sub = this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
             this.project = state.projects.filter(it => it.id == this.projectId)[0];
         });

@@ -2,7 +2,7 @@ import { Attachment } from './attachment';
 
 export class Request {
     id: string = '';
-    fsid: string;
+    fsid: string = '' + Date.now();
     regDate: Date;
     taskId: string;
     requestTypeId: string;

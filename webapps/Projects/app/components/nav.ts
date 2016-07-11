@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { FETCH_PROJECTS, IProjectsState } from '../reducers/projects.reducer';
+import { IProjectsState } from '../reducers/projects.reducer';
 import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project';
 
@@ -57,23 +57,24 @@ export class NavComponent {
 
     constructor(
         private store: Store<any>,
-        private router: Router,
         private projectService: ProjectService
     ) { }
 
     ngOnInit() {
-        this.storeSub = this.store.select('projects').subscribe((data: IProjectsState) => {
-            if (data) {
-                this.projects = data.projects;
-            }
+        this.store.select('projects').subscribe((state: IProjectsState) => {
+            this.projects = state.projects;
         });
 
-        this.projectService.fetchProjects({ nav: 1 }).subscribe(data => {
-            this.store.dispatch({ type: FETCH_PROJECTS, payload: data });
-        });
+        this.loadNavProjects();
     }
 
     ngOnDestroy() {
         this.storeSub && this.storeSub.unsubscribe();
+    }
+
+    loadNavProjects() {
+        this.projectService.fetchProjects().subscribe(action => {
+            this.store.dispatch(action);
+        });
     }
 }

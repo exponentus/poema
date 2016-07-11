@@ -23,15 +23,20 @@ const initialState: IProjectsState = {
 export const projectsReducer = (state = initialState, {type, payload}): IProjectsState => {
     switch (type) {
         case FETCH_PROJECTS:
-            return payload;
+            return Object.assign({}, state, {
+                projects: payload.projects,
+                meta: payload.meta
+            });
         case FETCH_PROJECT:
-            return payload;
+            return Object.assign({}, state, {
+                project: payload.project
+            });
         case ADD_PROJECT:
-            return payload;
+            return state;
         case UPDATE_PROJECT:
-            return payload;
+            return state;
         case DELETE_PROJECT:
-            return payload;
+            return state;
         default:
             return state;
     }

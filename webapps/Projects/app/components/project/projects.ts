@@ -57,8 +57,8 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
-        this.projectService.fetchProjects(params).subscribe(data => {
-            this.store.dispatch({ type: FETCH_PROJECTS, payload: data });
+        this.projectService.fetchProjects(params).subscribe(action => {
+            this.store.dispatch(action);
         });
     }
 

@@ -117,10 +117,10 @@
                 <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab class="tab-pane" tabTitle="{{'comments' | translate}}">
-                <comments [task]="task"></comments>
+                <comments [comments]="comments" (add)="addComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
             <tab class="tab-pane" tabTitle="{{'requests' | translate}}">
-                <task-requests [task]="task"></task-requests>
+                <task-requests [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></task-requests>
             </tab>
         </tabs>
     </section>

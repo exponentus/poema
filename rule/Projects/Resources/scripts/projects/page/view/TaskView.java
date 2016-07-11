@@ -21,7 +21,7 @@ public class TaskView extends _DoPage {
     @Override
     public void doGET(_Session session, _WebFormData formData) {
         TaskDAO taskDAO = new TaskDAO(session);
-        TaskFilter taskFilter = createTaskFilter(formData);
+        TaskFilter taskFilter = createTaskFilter(session, formData);
         int pageSize = session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
         ViewPage<Task> vp = taskDAO.findAllByTaskFilter(taskFilter, pageNum, pageSize);
@@ -33,9 +33,10 @@ public class TaskView extends _DoPage {
 
     }
 
-    public TaskFilter createTaskFilter(_WebFormData formData) {
+    public TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
         TaskFilter filter = new TaskFilter();
 
+        String tasksFor = formData.getValueSilently("for");
         filter.setProject(formData.getValueSilently("projectId"));
         filter.setParentTask(formData.getValueSilently("taskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
@@ -56,6 +57,12 @@ public class TaskView extends _DoPage {
         long assigneeUserId = (long) formData.getNumberDoubleValueSilently("assigneeUserId", 0);
         if (assigneeUserId > 0) {
             filter.setAssigneeUserId(assigneeUserId);
+        }
+
+        if ("inbox".equals(tasksFor)) {
+            filter.setAssigneeUserId(session.getUser().getId());
+        } else if ("my".equals(tasksFor)) {
+            filter.setAuthorId(session.getUser().getId());
         }
 
         if (formData.containsField("tagIds")) {

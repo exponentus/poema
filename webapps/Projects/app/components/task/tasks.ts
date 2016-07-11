@@ -73,8 +73,8 @@ export class TasksComponent {
 
     loadData(params) {
         this.requestProcess = true;
-        this.taskService.fetchTasks(params).subscribe(data => {
-            this.store.dispatch({ type: FETCH_TASKS, payload: data });
+        this.taskService.fetchTasks(params).subscribe(action => {
+            this.store.dispatch(action);
         });
     }
 

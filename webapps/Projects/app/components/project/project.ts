@@ -71,9 +71,8 @@ export class ProjectComponent {
 
         this.sub = this.route.params.subscribe(params => {
             this.projectService.fetchProjectById(params['projectId']).subscribe(
-                project => {
-                    console.log(project);
-                    this.project = project;
+                action => {
+                    this.project = action.payload.project;
                     this.loadData();
                     this.isReady = true;
                 },

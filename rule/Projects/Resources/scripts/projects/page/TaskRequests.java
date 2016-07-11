@@ -119,7 +119,6 @@ public class TaskRequests extends _DoForm {
             request.setAttachments(getActualAttachments(request.getAttachments()));
 
             request.addReaderEditor(session.getUser());
-
             requestDAO.add(request);
 
             //

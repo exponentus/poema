@@ -17,10 +17,10 @@ import { TaskRequestsComponent } from './task-requests';
 import { TaskRequestComponent } from './task-request';
 import { AttachmentsComponent } from '../attachments';
 import { CommentsComponent } from '../comment/comments';
-import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL } from '../../reducers/task.reducer';
+import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL, TASK_CLOSE, ITaskState } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
-import { Project, Task, Tag, TaskType, Request, User, Attachment } from '../../models';
+import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from '../../models';
 
 @Component({
     selector: 'task',
@@ -49,10 +49,12 @@ export class TaskComponent {
     isReady = false;
     task: Task;
     form: ControlGroup;
-    taskRequests: Request[];
+    showRequest: boolean = false;
     hasUnResolvedRequest: boolean = true;
     taskPriorityTypes: any;
     taskStatusTypes: any;
+    comments: Comment[];
+    requests: Request[];
 
     constructor(
         private store: Store<any>,
@@ -66,6 +68,11 @@ export class TaskComponent {
         private referenceService: ReferenceService,
         private notifyService: NotificationService
     ) {
+        this.store.select('task').subscribe((state: ITaskState) => {
+            this.requests = state.requests;
+            this.comments = state.comments;
+        });
+
         this.form = formBuilder.group({
             projectId: [''],
             taskTypeId: [''],
@@ -83,12 +90,12 @@ export class TaskComponent {
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
             this.taskService.fetchTaskById(params['taskId']).subscribe(
-                task => {
-                    this.task = task;
+                action => {
+                    this.task = action.payload.task;
                     this.isReady = true;
-                    this.taskService.fetchTaskRequests(this.task).subscribe(r => {
-                        this.taskRequests = r.list;
-                    });
+                    this.taskService.fetchTaskRequests(this.task).subscribe(action => this.store.dispatch(action));
+                    this.loadComments(1);
+                    this.loadRequests(1);
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -96,6 +103,26 @@ export class TaskComponent {
 
         this.taskService.getTaskStatusTypes().subscribe(tst => this.taskStatusTypes = tst);
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
+    }
+
+    loadComments(page) {
+        this.taskService.fetchComments(this.task, page).subscribe(action => this.store.dispatch(action));
+    }
+
+    addComment(comment: Comment) {
+        this.taskService.addComment(this.task, comment).subscribe(r => {
+            this.loadComments(1);
+        });
+    }
+
+    deleteComment(comment: Comment) {
+        this.taskService.deleteComment(comment).subscribe(response => {
+            this.loadComments(1);
+        });
+    }
+
+    loadRequests(page) {
+        this.taskService.fetchTaskRequests(this.task, page).subscribe(action => this.store.dispatch(action));
     }
 
     saveTask() {
@@ -127,7 +154,7 @@ export class TaskComponent {
     }
 
     canRequestAction() {
-        return true; // !this.hasUnResolvedRequest;
+        return this.task && this.task.id; // !this.hasUnResolvedRequest;
     }
 
     newRequest() {
@@ -207,8 +234,6 @@ export class TaskComponent {
     }
 
     ngOnDestroy() {
-        this.taskPriorityTypes = [];
-        this.taskStatusTypes = [];
-        this.store.dispatch({ type: TASK_REQUEST_CANCEL });
+        this.store.dispatch({ type: TASK_CLOSE });
     }
 }

@@ -5,7 +5,7 @@ export class Project {
     author: string;
     regDate: Date;
     wasRead: boolean;
-    fsid: string;
+    fsid: string = '' + Date.now();
 
     name: string;
     status: string = 'DRAFT';

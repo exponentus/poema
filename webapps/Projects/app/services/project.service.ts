@@ -40,16 +40,24 @@ export class ProjectService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    projects: <Project[]>data.list,
-                    meta: data.meta,
-                    loading: true
-                }
+                    type: FETCH_PROJECTS,
+                    payload: {
+                        projects: <Project[]>data.list,
+                        meta: data.meta,
+                        loading: true
+                    }
+                };
             });
     }
 
     fetchProjectById(projectId: string) {
         if (projectId === 'new') {
-            return Observable.of(new Project());
+            return Observable.of({
+                type: FETCH_PROJECT,
+                payload: {
+                    project: new Project()
+                }
+            });
         }
 
         return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
@@ -62,7 +70,12 @@ export class ProjectService {
                 if (data.attachment) {
                     project.attachments = data.attachment.list;
                 }
-                return project;
+                return {
+                    type: FETCH_PROJECT,
+                    payload: {
+                        project: <Project>project
+                    }
+                };
             });
     }
 
