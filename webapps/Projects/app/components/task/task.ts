@@ -51,6 +51,7 @@ export class TaskComponent {
     form: ControlGroup;
     showRequest: boolean = false;
     hasUnResolvedRequest: boolean = true;
+    hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
     taskStatusTypes: any;
     comments: Comment[];
@@ -69,8 +70,21 @@ export class TaskComponent {
         private notifyService: NotificationService
     ) {
         this.store.select('task').subscribe((state: ITaskState) => {
-            this.requests = state.requests;
             this.comments = state.comments;
+            this.requests = state.requests;
+
+            if (!this.requests) {
+                this.hasUnResolvedRequest = false;
+            } else {
+                this.requests.forEach(it => {
+                    if (it.resolution == 'UNKNOWN') {
+                        this.hasUnResolvedRequest = true;
+                    }
+                    if (it.resolution == 'ACCEPT') {
+                        this.hasAcceptedRequestResolution = true;
+                    }
+                });
+            }
         });
 
         this.form = formBuilder.group({
@@ -94,8 +108,10 @@ export class TaskComponent {
                     this.task = action.payload.task;
                     this.isReady = true;
                     this.taskService.fetchTaskRequests(this.task).subscribe(action => this.store.dispatch(action));
-                    this.loadComments(1);
-                    this.loadRequests(1);
+                    if (this.task.id) {
+                        this.loadComments(1);
+                        this.loadRequests(1);
+                    }
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -109,8 +125,8 @@ export class TaskComponent {
         this.taskService.fetchComments(this.task, page).subscribe(action => this.store.dispatch(action));
     }
 
-    addComment(comment: Comment) {
-        this.taskService.addComment(this.task, comment).subscribe(r => {
+    saveComment(comment: Comment) {
+        this.taskService.saveComment(this.task, comment).subscribe(r => {
             this.loadComments(1);
         });
     }
@@ -122,7 +138,23 @@ export class TaskComponent {
     }
 
     loadRequests(page) {
-        this.taskService.fetchTaskRequests(this.task, page).subscribe(action => this.store.dispatch(action));
+        this.taskService.fetchTaskRequests(this.task, page).subscribe(action => {
+            this.store.dispatch(action);
+        });
+    }
+
+    acceptRequest(request: Request) {
+        this.taskService.doRequestResolution(request, 'ACCEPT').subscribe(action => {
+            this.store.dispatch(action);
+            this.loadRequests(1);
+        });
+    }
+
+    declineRequest(request: Request) {
+        this.taskService.doRequestResolution(request, 'DECLINE').subscribe(action => {
+            this.store.dispatch(action);
+            this.loadRequests(1);
+        });
     }
 
     saveTask() {
@@ -143,6 +175,12 @@ export class TaskComponent {
         console.log(errorResponse);
     }
 
+    deleteTask() {
+        this.taskService.deleteTask([this.task]).subscribe(data => {
+            this.close();
+        });
+    }
+
     close() {
         this.router.navigate(['/tasks']);
     }
@@ -154,7 +192,7 @@ export class TaskComponent {
     }
 
     canRequestAction() {
-        return this.task && this.task.id; // !this.hasUnResolvedRequest;
+        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest && !this.hasAcceptedRequestResolution;
     }
 
     newRequest() {

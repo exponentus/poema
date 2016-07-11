@@ -58,18 +58,7 @@ public class Comments extends _DoForm {
             return;
         }
 
-        saveComment(session, taskId, "");
-    }
-
-    @Override
-    public void doPUT(_Session session, _WebFormData formData) {
-        String taskId = formData.getValueSilently("taskId");
         String commentId = formData.getValueSilently("commentId");
-        if (taskId.isEmpty() || commentId.isEmpty()) {
-            setBadRequest();
-            return;
-        }
-
         saveComment(session, taskId, commentId);
     }
 

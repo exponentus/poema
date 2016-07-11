@@ -87,7 +87,7 @@ export class ProjectService {
     }
 
     deleteProject(projects: Project[]) {
-        return this.http.delete('p?id=project-view&ids=' + projects.map(it => it.id).join(','));
+        return this.http.delete('p?id=project-view&projectIds=' + projects.map(it => it.id).join(','));
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {

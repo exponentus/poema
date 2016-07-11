@@ -108,6 +108,12 @@ export class ProjectComponent {
         console.log(errorResponse);
     }
 
+    deleteProject() {
+        this.projectService.deleteProject([this.project]).subscribe(data => {
+            this.close();
+        });
+    }
+
     close() {
         this.router.navigate(['/projects']);
     }

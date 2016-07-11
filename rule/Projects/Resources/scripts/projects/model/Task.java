@@ -69,6 +69,16 @@ public class Task extends SecureAppEntity<UUID> {
     @JoinTable(name = "task_tags")
     private List<Tag> tags;
 
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "task_id")
+    private List<Comment> comments;
+
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "task_id")
+    private List<Request> requests;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "task_attachments",
             joinColumns = {@JoinColumn(name = "task_id")},
@@ -199,6 +209,14 @@ public class Task extends SecureAppEntity<UUID> {
         this.hasAttachments = hasAttachments;
     }
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
     @JsonIgnore
     public List<Attachment> getAttachments() {
         return attachments;
@@ -225,7 +243,7 @@ public class Task extends SecureAppEntity<UUID> {
     }
 
     public String getProjectId() {
-        return project.getIdentifier();
+        return project != null ? project.getIdentifier() : null;
     }
 
     public String getParentTaskId() {
@@ -233,11 +251,11 @@ public class Task extends SecureAppEntity<UUID> {
     }
 
     public String getTaskTypeId() {
-        return taskType.getIdentifier();
+        return taskType != null ? taskType.getIdentifier() : null;
     }
 
     public List<String> getTagIds() {
-        return tags.stream().map(it -> it.getIdentifier()).collect(Collectors.toList());
+        return tags != null ? tags.stream().map(it -> it.getIdentifier()).collect(Collectors.toList()) : null;
     }
 
     @Override

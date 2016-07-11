@@ -54,6 +54,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
+            if (filter.getParentTask() != null) {
+                if (condition == null) {
+                    condition = cb.equal(c.get("parent"), filter.getParentTask());
+                } else {
+                    condition = cb.and(cb.equal(c.get("parent"), filter.getParentTask()), condition);
+                }
+            }
+
             if (filter.getStatus() != TaskStatusType.UNKNOWN) {
                 if (condition == null) {
                     condition = cb.equal(c.get("status"), filter.getStatus());

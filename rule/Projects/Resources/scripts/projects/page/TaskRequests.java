@@ -153,7 +153,7 @@ public class TaskRequests extends _DoForm {
                 return;
             }
 
-            if (!request.getTask().getEditors().contains(request.getAuthor())) {
+            if (!request.getTask().getEditors().contains(session.getUser().getId())) {
                 setBadRequest();
                 return;
             }
@@ -172,7 +172,7 @@ public class TaskRequests extends _DoForm {
 
             MailAgent ma = new MailAgent();
             if (!ma.sendMail(recipients, getLocalizedWord("notify_about_request_resolution", lang),
-                    getLocalizedWord("notify_about_task_request", lang))) {
+                    getLocalizedWord("notify_about_request_resolution", lang))) {
                 addContent("notify", "ok");
             }
         } catch (DatabaseException e) {

@@ -17,6 +17,7 @@ import { CommentComponent } from './comment';
             <section class="comments">
                 <comment *ngFor="let comment of comments"
                     [comment]="comment"
+                    (save)="updateComment($event)"
                     (delete)="deleteComment($event)">
                 </comment>
             </section>
@@ -24,14 +25,14 @@ import { CommentComponent } from './comment';
             <section class="comment-composer" [class.edit]="isEdit">
                 <textarea
                     class="comment-editor"
-                    placeholder="{{ 'add_comment' | translate }}"
+                    placeholder="{{'add_comment' | translate}}"
                     [(ngModel)]="commentText"
-                    (focus)="onCommentTextFocus()"
-                    (blur)="onCommentTextBlur()">
+                    (focus)="onEditorFocus()"
+                    (blur)="onEditorBlur()">
                 </textarea>
                 <div class="buttons">
                     <button class="btn btn-add-comment"
-                        (click)="addComment($event)"
+                        (click)="addComment()"
                         [disabled]="!commentText">
                         {{ 'add_comment' | translate }}
                     </button>
@@ -46,25 +47,30 @@ import { CommentComponent } from './comment';
 export class CommentsComponent {
     @Input() comments: Comment[];
     @Output() add = new EventEmitter<any>();
+    @Output() update = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
 
     private comment: Comment;
     private commentText: string = '';
     private isEdit: boolean;
 
-    onCommentTextFocus() {
+    onEditorFocus() {
         this.isEdit = true;
     }
 
-    onCommentTextBlur() {
+    onEditorBlur() {
         this.isEdit = this.commentText.length > 0;
     }
 
-    addComment($event) {
+    addComment() {
         let comment = new Comment();
         comment.comment = this.commentText;
         this.add.emit(comment);
         this.commentText = '';
+    }
+
+    updateComment(comment: Comment) {
+        this.update.emit(comment);
     }
 
     deleteComment(comment: Comment) {

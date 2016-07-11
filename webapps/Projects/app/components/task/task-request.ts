@@ -1,5 +1,4 @@
 import { Component, Input, HostBinding, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -13,30 +12,25 @@ import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 import { AttachmentsComponent } from '../attachments';
+import { RequestTypeSelectComponent } from '../shared/request-type-select';
 
 @Component({
     selector: 'task-request',
     template: `
-        <form class="task-request-form" [ngFormModel]="rtForm" (submit)="sendRequest($event)">
+        <form class="task-request-form" (submit)="sendRequest($event)">
             <header>{{ 'task_request' | translate }}</header>
             <section>
-                <div>
-                    <select ngControl="requestTypeId" #rt>
-                        <option value="{{ rt.id }}"
-                            [selected]="rt.id == requestType?.id"
-                            *ngFor="let rt of requestTypes">{{ rt.name }}</option>
-                    </select>
-                </div>
-                <textarea class="request-comment" ngControl="comment">{{ comment }}</textarea>
+                <request-type-select [requestTypeId]="request.requestTypeId" (onSelect)="selectRequestType($event)"></request-type-select>
+                <textarea class="request-comment" [(ngModel)]="comment"></textarea>
                 <attachments [entity]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
             </section>
             <footer>
                 <button class="btn" type="button" (click)="cancel()">{{ 'cancel' | translate }}</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!rt.value">{{ 'send_request' | translate }}</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!requestType">{{ 'send_request' | translate }}</button>
             </footer>
         </form>
     `,
-    directives: [FORM_DIRECTIVES, AttachmentsComponent],
+    directives: [AttachmentsComponent, RequestTypeSelectComponent],
     host: {
         '[class.task-request]': 'true',
         '[class.task-request-open]': 'isOpen',
@@ -49,8 +43,6 @@ export class TaskRequestComponent {
     private taskSub: any;
     private refSub: any;
 
-    private rtForm;
-    private task: Task;
     private request: Request;
     private isOpen = false;
     private requestTypes: RequestType[];
@@ -60,13 +52,8 @@ export class TaskRequestComponent {
     constructor(
         private store: Store<any>,
         private notifyService: NotificationService,
-        private taskService: TaskService,
-        fb: FormBuilder
+        private taskService: TaskService
     ) {
-        this.rtForm = fb.group({
-            requestTypeId: [""],
-            comment: [""]
-        });
         this.refSub = store.select('reference').subscribe((state: IReferenceState) => {
             this.requestTypes = state.requestTypes;
         });
@@ -77,8 +64,7 @@ export class TaskRequestComponent {
                 this.isOpen = state.showRequest;
 
                 if (state.task) {
-                    this.task = state.task;
-                    this.request.taskId = this.task.id;
+                    this.request.taskId = state.task.id;
 
                     if (!this.request.fsid) {
                         this.request.fsid = '' + Date.now();
@@ -94,6 +80,11 @@ export class TaskRequestComponent {
         this.taskSub.unsubscribe();
     }
 
+    selectRequestType(requestType: RequestType) {
+        this.requestType = requestType;
+        document.body.click();
+    }
+
     cancel() {
         this.store.dispatch({ type: TASK_REQUEST_CANCEL });
     }
@@ -101,8 +92,8 @@ export class TaskRequestComponent {
     sendRequest($event) {
         $event.preventDefault();
 
-        this.request.comment = this.rtForm.value.comment;
-        this.request.requestTypeId = this.rtForm.value.requestTypeId;
+        this.request.comment = this.comment;
+        this.request.requestTypeId = this.requestType.id;
 
         this.taskService.sendTaskRequest(this.request).subscribe(response => {
             this.notifyService.info('request send: success').show().remove(3000);
@@ -120,6 +111,8 @@ export class TaskRequestComponent {
     }
 
     deleteAttachment(attachment: Attachment) {
-        console.log(attachment);
+        this.taskService.deleteRequestAttachment(this.request, attachment).subscribe(r => {
+            this.request.attachments = this.request.attachments.filter(it => it.id != attachment.id);
+        });
     }
 }

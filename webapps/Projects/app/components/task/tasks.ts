@@ -89,6 +89,6 @@ export class TasksComponent {
     }
 
     deleteTask(task: Task) {
-        this.taskService.deleteTask(task).subscribe();
+        this.taskService.deleteTask([task]).subscribe();
     }
 }

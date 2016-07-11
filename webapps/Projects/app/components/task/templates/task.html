@@ -17,6 +17,9 @@
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
+            <button class="btn" type="button" (click)="deleteTask()">
+                {{'delete' | translate}}
+            </button>
         </div>
     </header>
     <section class="content-body">
@@ -117,9 +120,9 @@
                 <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab class="tab-pane" tabTitle="{{'comments' | translate}}">
-                <comments [comments]="comments" (add)="addComment($event)" (delete)="deleteComment($event)"></comments>
+                <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'requests' | translate}}">
+            <tab class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}">
                 <task-requests [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></task-requests>
             </tab>
         </tabs>

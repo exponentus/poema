@@ -60,4 +60,43 @@ public class ProjectDAO extends DAO<Project, UUID> {
             em.close();
         }
     }
+
+    public ViewPage<Project> findProjectsAccessible(int pageNum, int pageSize) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+            CriteriaQuery<Project> cq = cb.createQuery(Project.class);
+            Root<Project> c = cq.from(Project.class);
+            cq.select(c);
+            countCq.select(cb.count(c));
+
+            Predicate condition = null;
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+                condition = cb.and(c.get("readers").in(user.getId()));
+            }
+            cq.orderBy(cb.asc(c.get("name")));
+            if (condition != null) {
+                cq.where(condition);
+            }
+
+            Query query = em.createQuery(countCq);
+            long count = (long) query.getSingleResult();
+            int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+            if (pageNum == 0) {
+                pageNum = maxPage;
+            }
+            int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+
+            TypedQuery<Project> typedQuery = em.createQuery(cq);
+            typedQuery.setFirstResult(firstRec);
+            typedQuery.setMaxResults(pageSize);
+
+            List<Project> result = typedQuery.getResultList();
+
+            return new ViewPage<>(result, count, maxPage, pageNum);
+        } finally {
+            em.close();
+        }
+    }
 }

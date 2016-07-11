@@ -19,7 +19,10 @@ import { Comment } from '../../models';
                 (delete)="deleteAttachment($event)">
             </attachments> -->
             <div class="buttons">
-                <button type="button" class="btn btn-delete-comment" (click)="deleteComment()">{{ 'delete' | translate }}</button>
+                <!-- <button type="button" class="btn btn-save" (click)="save.emit(comment)">{{ 'save' | translate }}</button> -->
+                <button type="button" class="btn btn-delete" title="{{'delete' | translate}}" (click)="delete.emit(comment)">
+                    <i class="fa fa-remove"></i>
+                </button>
             </div>
         </div>
     `,
@@ -29,9 +32,6 @@ import { Comment } from '../../models';
 
 export class CommentComponent {
     @Input() comment: Comment;
+    @Output() save = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
-
-    deleteComment() {
-        this.delete.emit(this.comment);
-    }
 }

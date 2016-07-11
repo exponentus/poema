@@ -99,8 +99,8 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    deleteTask(task: Task) {
-        return this.http.delete('p?id=task-view&ids=' + task.id);
+    deleteTask(tasks: Task[]) {
+        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(it => it.id).join(','));
     }
 
     deleteTaskAttachment(task: Task, attachment: Attachment) {
@@ -128,6 +128,13 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
+    doRequestResolution(request: Request, resolution: string) {
+        let url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution;
+        return this.http.put(url, '', { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
     deleteRequest(request: Request) {
         return this.http.delete('p?id=task-requests&requestId=' + request.id);
     }
@@ -150,8 +157,8 @@ export class TaskService {
             });
     }
 
-    addComment(task: Task, comment: Comment) {
-        let url = 'p?id=comments&taskId=' + task.id;
+    saveComment(task: Task, comment: Comment) {
+        let url = 'p?id=comments&taskId=' + task.id + (comment.id ? '&commentId=' + comment.id : '');
         return this.http.post(url, serializeObj(comment), { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));

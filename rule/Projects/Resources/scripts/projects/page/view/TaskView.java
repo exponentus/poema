@@ -1,6 +1,7 @@
 package projects.page.view;
 
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
@@ -30,7 +31,15 @@ public class TaskView extends _DoPage {
 
     @Override
     public void doDELETE(_Session session, _WebFormData formData) {
-
+        TaskDAO taskDAO = new TaskDAO(session);
+        for (String id : formData.getListOfValuesSilently("taskIds")) {
+            Task m = taskDAO.findById(id);
+            try {
+                taskDAO.delete(m);
+            } catch (SecureException e) {
+                setError(e);
+            }
+        }
     }
 
     public TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
