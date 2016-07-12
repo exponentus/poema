@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class UploadService {
-    private progress$;
-    private progressObserver: Observable<any>;
+    public progress$: Observable<any>;
+    private progressObserver: any;
 
     constructor() {
         this.progress$ = Observable.create(observer => {
@@ -40,7 +40,7 @@ export class UploadService {
 
             xhr.upload.onprogress = (event) => {
                 let progress = Math.round(event.loaded / event.total * 100);
-                // this.progressObserver.next(progress);
+                this.progressObserver.next(progress);
             };
 
             xhr.open('POST', url, true);

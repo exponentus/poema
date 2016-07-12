@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
-import { IAppState } from './reducers/authed.reducer';
+import { IAuthedState } from './reducers/authed.reducer';
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { NavComponent } from './components/nav';
@@ -27,6 +27,7 @@ export class AppComponent {
     isNavCollapsed: Boolean;
     isSearchOpen: Boolean;
     isMobileDevice: Boolean;
+    workspaceUrl: string = '/Workspace/p?id=workspace';
 
     @HostListener('window:resize', ['$event.target']) resize(window) { this.onResize(window); };
     @HostBinding('class.phone') get device() { return this.isMobileDevice; };
@@ -40,7 +41,7 @@ export class AppComponent {
         private staffService: StaffService,
         public translate: TranslateService
     ) {
-        this.store.select('authed').subscribe((data: IAppState) => {
+        this.store.select('authed').subscribe((data: IAuthedState) => {
             this.loggedUser = data.userProfile;
         });
 
@@ -102,11 +103,6 @@ export class AppComponent {
         event.preventDefault();
         // this.loggedUser = null;
         window.location.href = 'Logout';
-    }
-
-    toWs(event) {
-        event.preventDefault();
-        window.location.href = '/Workspace/p?id=workspace';
     }
 
     goBack() {

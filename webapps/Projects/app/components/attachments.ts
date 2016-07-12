@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -35,10 +35,28 @@ export class AttachmentsComponent {
     @Output() upload = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
 
+    private sub: any;
+    private progressEl: any;
+    private progress: number = 0;
+
     constructor(
         private http: Http,
         private uploadService: UploadService
     ) { }
+
+    ngOnInit() {
+        this.sub = this.uploadService.progress$.subscribe(progress => {
+            if (progress > 0 && progress < 100) {
+                this.progress = progress;
+            } else {
+                this.progress = 0;
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
+    }
 
     uploadFile($event) {
         let files: File[] = $event.target.files;

@@ -14,7 +14,7 @@ import { Request } from '../../models';
             </div>
             <div class="dropdown-menu select-dropdown">
                 <ul class="select-list scroll-shadow">
-                    <li class="select-option" [class.selected]="requestTypeId == m.id" *ngFor="let m of requestTypes" (click)="select(m)">
+                    <li class="select-option" [class.selected]="requestType?.id == m.id" *ngFor="let m of requestTypes" (click)="select(m)">
                         {{m.name}}
                     </li>
                 </ul>

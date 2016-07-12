@@ -10,7 +10,7 @@ import { KeysPipe } from '../pipes/keys.pipe';
 import { AppService } from '../services/app.service';
 import { TranslateService as translateService } from '../services/translate.service';
 import { User } from '../models/user';
-import { IAppState } from '../reducers/authed.reducer';
+import { IAuthedState } from '../reducers/authed.reducer';
 import { createCookie } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -48,7 +48,7 @@ export class UserProfileComponent {
         if (ck) {
             this.language = ck[2];
         }
-        this.store.select('authed').subscribe((data: IAppState) => {
+        this.store.select('authed').subscribe((data: IAuthedState) => {
             this.user = data.userProfile;
             this.pageSize = data.pageSize;
             this.languages = data.languages;

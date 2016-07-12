@@ -15,8 +15,8 @@ import { Request } from '../../models';
                     {{ r.resolutionTime }}
                 </span>
                 <span *ngIf="r.resolution == 'UNKNOWN'">
-                    <button class="btn" (click)="doAccept(r)" [disabled]="disabled" type="button">Accept</button>
-                    <button class="btn" (click)="doDecline(r)" [disabled]="disabled" type="button">Decline</button>
+                    <button class="btn btn-accept" (click)="doAccept(r)" [disabled]="disabled" type="button">Accept</button>
+                    <button class="btn btn-decline" (click)="doDecline(r)" [disabled]="disabled" type="button">Decline</button>
                 </span>
             </li>
         </ul>
