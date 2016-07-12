@@ -72,9 +72,9 @@ public class ProjectDAO extends DAO<Project, UUID> {
             countCq.select(cb.count(c));
 
             Predicate condition = null;
-            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                condition = cb.and(c.get("readers").in(user.getId()));
-            }
+//            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+//                condition = cb.and(c.get("readers").in(user.getId()));
+//            }
             cq.orderBy(cb.asc(c.get("name")));
             if (condition != null) {
                 cq.where(condition);

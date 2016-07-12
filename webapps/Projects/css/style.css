@@ -1,6 +1,7 @@
 @import 'request.css';
 @import 'comments.css';
 @import 'task.css';
+@import 'dashboard.css';
 
 body:not(.side-nav-toggle) .aside + .content {
     margin-left: 0;
@@ -33,6 +34,10 @@ body:not(.side-nav-toggle) .aside + .content {
     top: 0;
     width: 100%;
     z-index: 99;
+}
+
+.content-actions .pagination {
+    float: right;
 }
 
 pagination:empty {
