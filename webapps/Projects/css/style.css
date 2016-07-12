@@ -131,6 +131,10 @@ project {
     width: 20%;
 }
 
+.vw-tags .tag {
+    padding: 0 4px;
+}
+
 .vw-user-manager {
     width: 10%;
 }
