@@ -79,6 +79,7 @@ public class Task extends SecureAppEntity<UUID> {
     @JoinColumn(name = "task_id")
     private List<Request> requests;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "task_attachments",
             joinColumns = {@JoinColumn(name = "task_id")},
@@ -217,7 +218,6 @@ public class Task extends SecureAppEntity<UUID> {
         return requests;
     }
 
-    @JsonIgnore
     public List<Attachment> getAttachments() {
         return attachments;
     }

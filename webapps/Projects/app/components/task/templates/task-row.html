@@ -14,7 +14,7 @@
                 <span class="vw-date">{{task.startDate | dateFmt}}</span>
                 <span class="vw-date">{{task.dueDate | dateFmt}}</span>
                 <span class="vw-tags">
-                    <span class="tag" *ngFor="let tag of task.tags">{{tag.name}}</span>
+                    <tags-cell [tagIds]="task.tagIds"></tags-cell>
                 </span>
             </div>
         </a>

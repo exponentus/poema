@@ -1,5 +1,6 @@
 @import 'request.css';
 @import 'comments.css';
+@import 'task.css';
 
 body:not(.side-nav-toggle) .aside + .content {
     margin-left: 0;
@@ -127,7 +128,7 @@ project {
 }
 
 .vw-tags {
-    width: 10%;
+    width: 20%;
 }
 
 .vw-user-manager {
@@ -146,4 +147,9 @@ project {
     border-bottom: 1px dotted #ccc;
     border-top: 1px dotted #ccc;
     display: block;
+}
+
+.content-actions .buttons {
+    display: inline-block;
+    vertical-align: top;
 }

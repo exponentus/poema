@@ -23,6 +23,7 @@ const routes: RouterConfig = [
     { path: 'project/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'tasks/:for', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
+    { path: 'task/:taskId/:new', component: TaskComponent, canActivate: [AuthGuard] },
     { path: 'task/:taskId', component: TaskComponent, canActivate: [AuthGuard] },
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },

@@ -1,6 +1,8 @@
 {
     "name": "ng-projects",
     "version": "1.0.0",
+    "author": "LOF/MK",
+    "license": "LOF",
     "scripts": {
         "postinstall": "npm run typings install",
         "start": "node server.js",

@@ -86,7 +86,10 @@ public class TaskForm extends _DoForm {
     @Override
     public void doPOST(_Session session, _WebFormData formData) {
         try {
-            _Validation ve = validate(formData, session.getLang());
+            String parentTaskId = formData.getValueSilently("parentTaskId");
+            boolean isSubTask = !parentTaskId.isEmpty();
+
+            _Validation ve = validate(formData, session.getLang(), isSubTask);
             if (ve.hasError()) {
                 setBadRequest();
                 setValidation(ve);
@@ -97,18 +100,26 @@ public class TaskForm extends _DoForm {
             ProjectDAO projectDAO = new ProjectDAO(session);
             TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
             TaskDAO dao = new TaskDAO(session);
+            Task parentTask = null;
             Task task;
             String id = formData.getValueSilently("taskId");
             boolean isNew = id.isEmpty();
 
             if (isNew) {
                 task = new Task();
+                if (!parentTaskId.isEmpty()) {
+                    parentTask = dao.findById(parentTaskId);
+                    task.setParent(parentTask);
+                    task.setTaskType(parentTask.getTaskType());
+                }
             } else {
                 task = dao.findById(id);
             }
 
-            task.setProject(projectDAO.findById(formData.getValue("projectId")));
-            task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
+            if (!isSubTask) {
+                task.setProject(projectDAO.findById(formData.getValue("projectId")));
+                task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
+            }
             task.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
             task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
             task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
@@ -185,13 +196,13 @@ public class TaskForm extends _DoForm {
         }
     }
 
-    private _Validation validate(_WebFormData formData, LanguageCode lang) {
+    private _Validation validate(_WebFormData formData, LanguageCode lang, boolean isSubTask) {
         _Validation ve = new _Validation();
 
-        if (formData.getValueSilently("projectId").isEmpty()) {
+        if (!isSubTask && formData.getValueSilently("projectId").isEmpty()) {
             ve.addError("projectId", "required", getLocalizedWord("field_is_empty", lang));
         }
-        if (formData.getValueSilently("taskTypeId").isEmpty()) {
+        if (!isSubTask && formData.getValueSilently("taskTypeId").isEmpty()) {
             ve.addError("taskTypeId", "required", getLocalizedWord("field_is_empty", lang));
         }
         if (formData.getValueSilently("body").isEmpty()) {

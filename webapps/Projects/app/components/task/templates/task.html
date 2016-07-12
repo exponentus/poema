@@ -4,8 +4,13 @@
             <i class="fa fa-chevron-left"></i>
         </button>
         <h1 class="header-title">
-            {{(task.id ? 'task' : 'new_task') | translate}}
-            <small>{{ getTaskStatusType() }}</small>
+            <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
+                {{parentTask.body}}
+            </a>
+            <div>
+                {{getTitle() | translate}}
+                <small>{{ getTaskStatusType() }}</small>
+            </div>
         </h1>
         <div class="content-actions">
             <button class="btn btn-primary" type="button" [disabled]="!form.valid" (click)="saveTask()">
@@ -17,16 +22,26 @@
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
-            <button class="btn" type="button" (click)="deleteTask()">
-                {{'delete' | translate}}
+            <button *ngIf="!isNew" class="btn" type="button" (click)="addSubtask($event)">
+                {{'add_subtask' | translate}}
             </button>
+            <div *ngIf="!isNew" dropdown class="buttons">
+                <div dropdown-toggle>
+                    <span class="btn">...</span>
+                </div>
+                <div class="dropdown-menu">
+                    <button class="btn" type="button" (click)="deleteTask()">
+                        {{'delete' | translate}}
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
     <section class="content-body">
         <tabs>
             <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
                 <fieldset class="fieldset">
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isSubtask">
                         <div class="control-label">
                             {{'project' | translate}}
                         </div>
@@ -39,7 +54,7 @@
                             {{'required' | translate}}
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isSubtask">
                         <div class="control-label">
                             {{'task_type' | translate}}
                         </div>
@@ -111,18 +126,15 @@
                             <div class="span8">
                                 <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
                             </div>
-                            <div [hidden]="form.controls.tagIds.valid || form.controls.tagIds.pristine" class="error-message">
-                                {{'required' | translate}}
-                            </div>
                         </div>
                     </div>
                 </fieldset>
                 <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'comments' | translate}}">
+            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}">
+            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}">
                 <task-requests [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></task-requests>
             </tab>
         </tabs>

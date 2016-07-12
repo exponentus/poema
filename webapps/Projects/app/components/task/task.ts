@@ -47,7 +47,17 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
 export class TaskComponent {
     private sub: any;
     isReady = false;
+    isNew = true;
+    isSubtask = false;
+    parentTask: Task;
     task: Task;
+    rights: any = {
+        addSubtask: false,
+        doRequest: false,
+        doResolution: false,
+        addComment: false,
+        removeTask: false
+    };
     form: ControlGroup;
     showRequest: boolean = false;
     hasUnResolvedRequest: boolean = true;
@@ -103,15 +113,24 @@ export class TaskComponent {
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
+            this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
+            this.isSubtask = params['taskId'] && params['new'] === 'new';
+
             this.taskService.fetchTaskById(params['taskId']).subscribe(
                 action => {
-                    this.task = action.payload.task;
-                    this.isReady = true;
-                    this.taskService.fetchTaskRequests(this.task).subscribe(action => this.store.dispatch(action));
-                    if (this.task.id) {
+                    if (this.isSubtask) {
+                        this.parentTask = action.payload.task;
+                        this.task = new Task();
+                        this.task.parentTaskId = this.parentTask.id;
+                    } else {
+                        this.task = action.payload.task;
+                        this.isSubtask = !!this.task.parentTaskId;
+                    }
+                    if (!this.isNew) {
                         this.loadComments(1);
                         this.loadRequests(1);
                     }
+                    this.isReady = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -121,6 +140,43 @@ export class TaskComponent {
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
     }
 
+    getTitle() {
+        if (this.isNew && this.isSubtask) {
+            return 'new_subtask';
+        } else if (this.isNew) {
+            return 'new_task';
+        } else if (this.isSubtask) {
+            return 'sub_task';
+        } else {
+            return 'task';
+        }
+    }
+
+    saveTask() {
+        let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
+        this.taskService.saveTask(this.task).subscribe(
+            response => {
+                noty.set({ type: 'success', message: response.message }).remove(1500);
+                this.close();
+            },
+            error => {
+                noty.set({ type: 'error', message: error.message }).remove(1500);
+                this.errorSaveTask(error);
+            }
+        );
+    }
+
+    deleteTask() {
+        this.taskService.deleteTask([this.task]).subscribe(data => {
+            this.close();
+        });
+    }
+
+    addSubtask() {
+        this.router.navigate(['/task', this.task.id, '/new']);
+    }
+
+    //
     loadComments(page) {
         this.taskService.fetchComments(this.task, page).subscribe(action => this.store.dispatch(action));
     }
@@ -137,6 +193,7 @@ export class TaskComponent {
         });
     }
 
+    //
     loadRequests(page) {
         this.taskService.fetchTaskRequests(this.task, page).subscribe(action => {
             this.store.dispatch(action);
@@ -157,28 +214,9 @@ export class TaskComponent {
         });
     }
 
-    saveTask() {
-        let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
-        this.taskService.saveTask(this.task).subscribe(
-            response => {
-                noty.set({ type: 'success', message: response.message }).remove(1500);
-                this.close();
-            },
-            error => {
-                noty.set({ type: 'error', message: error.message }).remove(1500);
-                this.errorSaveTask(error);
-            }
-        );
-    }
-
+    //
     errorSaveTask(errorResponse) {
         console.log(errorResponse);
-    }
-
-    deleteTask() {
-        this.taskService.deleteTask([this.task]).subscribe(data => {
-            this.close();
-        });
     }
 
     close() {
