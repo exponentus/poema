@@ -26,7 +26,7 @@ import { Project } from '../models/project';
             </li>
             <li>
                 <a [routerLink]="['/']" class="nav-link">
-                    <i class="fa fa-calendar"></i>
+                    <i class="fa fa-dashboard"></i>
                     <span>{{'dashboard' | translate}}</span>
                 </a>
             </li>
