@@ -35,6 +35,7 @@ public class Request extends SecureAppEntity<UUID> {
     @Column(length = 7)
     private ResolutionType resolution = ResolutionType.UNKNOWN;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "resolution_time")
     private Date resolutionTime;
 

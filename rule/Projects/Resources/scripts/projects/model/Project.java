@@ -42,7 +42,10 @@ public class Project extends SecureAppEntity<UUID> {
     @JsonProperty("observerUserIds")
     private List<Long> observers;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date finishDate;
 
     @Column(length = 512)

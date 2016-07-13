@@ -28,11 +28,9 @@ public class Task extends SecureAppEntity<UUID> {
 
     @NotNull
     @ManyToOne
-    @JoinColumn
     private Project project;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn
     private Task parent;
 
     @OneToMany(mappedBy = "parent")
@@ -40,7 +38,6 @@ public class Task extends SecureAppEntity<UUID> {
 
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn
     private TaskType taskType;
 
     @Enumerated(EnumType.STRING)
@@ -71,12 +68,10 @@ public class Task extends SecureAppEntity<UUID> {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "task_id")
     private List<Comment> comments;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "task_id")
     private List<Request> requests;
 
     @JsonIgnore

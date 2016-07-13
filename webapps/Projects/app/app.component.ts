@@ -45,6 +45,8 @@ export class AppComponent {
             this.loggedUser = data.userProfile;
         });
 
+        this.sub = this.store.select('reference');
+
         this.appService.getUserProfile().subscribe(action => {
             this.store.dispatch(action);
             this.isReady = true;
@@ -53,8 +55,6 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        this.sub = this.store.select('reference');
-
         this.referenceService.loadReference();
 
         this.staffService.fetchOrganizations().subscribe(action => {
