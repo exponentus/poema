@@ -84,7 +84,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.body.valid">
                             <div class="span8">
-                                <markdown-editor [markdown]="task.body" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
+                                <markdown-editor [markdown]="task.body || ''" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
                                 <!-- <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea> -->
                             </div>
                         </div>
