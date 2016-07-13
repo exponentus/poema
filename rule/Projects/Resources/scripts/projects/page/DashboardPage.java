@@ -28,6 +28,7 @@ public class DashboardPage extends _DoPage {
             return;
         }
 
+        // project data
         ProjectDAO projectDAO = new ProjectDAO(session);
         Project project = projectDAO.findById(projectId);
 

@@ -59,7 +59,7 @@ public class Comments extends _DoForm {
         }
 
         String commentId = formData.getValueSilently("commentId");
-        saveComment(session, taskId, commentId);
+        saveComment(session, formData, taskId, commentId);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class Comments extends _DoForm {
         }
     }
 
-    private void saveComment(_Session session, String taskId, String commentId) {
+    private void saveComment(_Session session, _WebFormData formData, String taskId, String commentId) {
         try {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(taskId);
@@ -100,12 +100,23 @@ public class Comments extends _DoForm {
             }
 
             CommentDAO commentDAO = new CommentDAO(session);
-            Comment comment = new Comment();
-            comment.setTask(task);
+            Comment comment;
+            boolean isNew = commentId.isEmpty();
+
+            if (isNew) {
+                comment = new Comment();
+                comment.setTask(task);
+            } else {
+                comment = commentDAO.findById(commentId);
+            }
             comment.setComment(formData.getValueSilently("comment"));
             comment.setAttachments(getActualAttachments(comment.getAttachments()));
 
-            commentDAO.add(comment);
+            if (isNew) {
+                commentDAO.add(comment);
+            } else {
+                commentDAO.update(comment);
+            }
 
             //
             LanguageCode lang = session.getLang();

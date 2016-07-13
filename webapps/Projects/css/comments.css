@@ -13,22 +13,70 @@
     width: 100%;
 }
 
-.comment-wrap {
-    border-bottom: 1px solid #f5f5f5;
-    margin-bottom: 8px;
-}
-
-.comment-text {
+/* .comment */
+.comment {
+    display: block;
     margin: 0;
-    padding: 2px;
+    padding: 6px 4px 6px 48px;
+    position: relative;
 }
 
-.comment-author {
+.comment:hover {
+    background: #f5f5f5;
+}
+
+.comment__avatar {
+    border: 1px solid #aaa;
+    border-radius: 50%;
+    display: inline-block;
+    height: 36px;
+    margin-left: -40px;
+    position: absolute;
+    vertical-align: top;
+    width: 36px;
+}
+
+.comment__details {
+    display: inline-block;
+    max-width: 100%;
+    padding-left: 4px;
+    vertical-align: top;
+    width: 100%;
+}
+
+.comment__editor,
+.comment__text {
+    display: block;
+    margin: 0;
+    padding: 4px;
+}
+
+.comment__editor textarea {
+    display: block;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.comment__editor button {}
+
+.comment__author {
     color: #666;
+    font-weight: bold;
 }
 
-.comment-time {
+.comment__time {
     color: #888;
+}
+
+.comment__buttons {
+    display: none;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
+
+.comment:hover .comment__buttons {
+    display: block;
 }
 
 /* .comment-composer */
@@ -36,39 +84,21 @@
     background: white;
     bottom: 0;
     display: block;
-    height: 40px;
-    overflow: hidden;
     padding: 4px;
-    /*position: absolute;*/
     width: 100%;
-}
-
-.comment-composer.edit {
-    height: auto;
 }
 
 .comment-editor {
-    /*border: 0;*/
-    /*height: 100%;*/
     min-height: 30px;
-    /*padding-right: 80px;*/
     position: relative;
     width: 100%;
-    z-index: 1;
 }
 
 .comment-composer.edit .comment-editor {
     /*box-shadow: 0 0 3px red;*/
 }
 
-.comment-composer .buttons {
-    display: none;
+.comment-composer .btn-add-comment {
+    margin: 4px 0 0;
     position: relative;
-    right: 0;
-    width: 80px;
-    z-index: 2;
-}
-
-.comment-composer.edit .buttons {
-    display: block;
 }

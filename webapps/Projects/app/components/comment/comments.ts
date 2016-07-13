@@ -17,6 +17,7 @@ import { CommentComponent } from './comment';
             <section class="comments">
                 <comment *ngFor="let comment of comments"
                     [comment]="comment"
+                    [editable]="true"
                     (save)="updateComment($event)"
                     (delete)="deleteComment($event)">
                 </comment>
@@ -30,13 +31,11 @@ import { CommentComponent } from './comment';
                     (focus)="onEditorFocus()"
                     (blur)="onEditorBlur()">
                 </textarea>
-                <div class="buttons">
-                    <button class="btn btn-add-comment"
-                        (click)="addComment()"
-                        [disabled]="!commentText">
-                        {{ 'add_comment' | translate }}
-                    </button>
-                </div>
+                <button class="btn btn-add-comment"
+                    (click)="addComment()"
+                    [disabled]="!commentText">
+                    {{ 'add_comment' | translate }}
+                </button>
             </section>
         </div>
     `,
