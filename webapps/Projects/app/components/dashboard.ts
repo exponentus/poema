@@ -45,10 +45,10 @@ export class DashboardComponent {
     private projectId: string;
 
     constructor(private http: Http) {
-        this.fetchDashboardData();
+        this.fetchDashboardProjects();
     }
 
-    private fetchDashboardData() {
+    private fetchDashboardProjects() {
         this.http.get('p?id=dashboard', { headers: HEADERS })
             .map(response => parseResponseObjects(response.json().objects).project)
             .subscribe(data => {
@@ -60,7 +60,7 @@ export class DashboardComponent {
         this.http.post('p?id=dashboard', `projectId=${this.projectId}`, { headers: HEADERS })
             .map(response => response.json())
             .subscribe(data => {
-                this.fetchDashboardData();
+                this.fetchDashboardProjects();
             });
     }
 
@@ -68,7 +68,7 @@ export class DashboardComponent {
         this.http.delete(`p?id=dashboard&projectId=${projectId}`, { headers: HEADERS })
             .map(response => response.json())
             .subscribe(data => {
-                this.fetchDashboardData();
+                this.fetchDashboardProjects();
             });
     }
 
