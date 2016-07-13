@@ -3,6 +3,12 @@
 @import 'task.css';
 @import 'dashboard.css';
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 body:not(.side-nav-toggle) .aside + .content {
     margin-left: 0;
 }

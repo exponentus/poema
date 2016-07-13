@@ -8,6 +8,7 @@ import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
@@ -38,7 +39,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         TaskRequestsComponent,
         TaskRequestComponent,
         AttachmentsComponent,
-        CommentsComponent
+        CommentsComponent,
+        MarkdownEditorComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -102,7 +104,7 @@ export class TaskComponent {
             taskTypeId: [''],
             status: [''],
             priority: [''],
-            body: ['', Validators.required],
+            body: [''/*, Validators.required*/],
             assigneeUserId: [''],
             startDate: [''],
             dueDate: [''],
@@ -150,6 +152,10 @@ export class TaskComponent {
         } else {
             return 'task';
         }
+    }
+
+    updateTaskBody(text: string) {
+        this.task.body = text;
     }
 
     saveTask() {

@@ -1,7 +1,6 @@
 .comments-wrap {
-    background: white;
-    display: block;
-    /*height: 100%;*/
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     position: relative;
@@ -44,6 +43,15 @@
     width: 100%;
 }
 
+.comment__author {
+    color: #666;
+    font-weight: bold;
+}
+
+.comment__time {
+    color: #888;
+}
+
 .comment__editor,
 .comment__text {
     display: block;
@@ -59,15 +67,6 @@
 
 .comment__editor button {}
 
-.comment__author {
-    color: #666;
-    font-weight: bold;
-}
-
-.comment__time {
-    color: #888;
-}
-
 .comment__buttons {
     display: none;
     position: absolute;
@@ -81,7 +80,7 @@
 
 /* .comment-composer */
 .comment-composer {
-    background: white;
+    background: #f5f5f5;
     bottom: 0;
     display: block;
     padding: 4px;
@@ -101,4 +100,44 @@
 .comment-composer .btn-add-comment {
     margin: 4px 0 0;
     position: relative;
+}
+
+/* .rt-editor */
+.rt-editor {
+    margin: 0;
+    padding: 0;
+}
+
+.rt-editor__area {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    border-top: 1px solid transparent;
+    box-sizing: border-box;
+    color: #000;
+    display: block;
+    font-size: 1em;
+    max-width: 100%;
+    min-height: 30px;
+    outline: 0;
+    padding: 7px;
+    position: relative;
+    vertical-align: middle;
+    width: 100%;
+}
+
+.rt-editor__area.edit {
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    border-top: 1px solid silver;
+}
+
+.rt-editor__area.edit:hover {
+    border-color: #888;
+}
+
+.rt-editor__area.edit:focus {
+    border-color: #4d90fe;
+    box-shadow: 0 0 1px rgba(39,128,248,.196);
 }

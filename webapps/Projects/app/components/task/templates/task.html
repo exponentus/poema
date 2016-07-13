@@ -83,9 +83,9 @@
                             {{'body' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.body.valid">
-                            <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea>
-                            <div [hidden]="form.controls.body.valid || form.controls.body.pristine" class="error-message">
-                                {{'required' | translate}}
+                            <div class="span8">
+                                <markdown-editor [markdown]="task.body" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
+                                <!-- <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea> -->
                             </div>
                         </div>
                     </div>

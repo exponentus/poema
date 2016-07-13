@@ -4,6 +4,8 @@ import 'zone.js/dist/zone';
 import 'moment';
 import 'ng2-translate';
 import '@ngrx/store';
+import 'marked';
+import 'to-markdown';
 
 // RxJS
 // import 'rxjs';

@@ -2,8 +2,9 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
 import { AttachmentsComponent } from '../attachments';
-import { DateFormatPipe } from '../../pipes';
+import { DateFormatPipe, MarkedPipe } from '../../pipes';
 import { Comment } from '../../models';
 
 @Component({
@@ -14,9 +15,16 @@ import { Comment } from '../../models';
             <div class="comment__details">
                 <span class="comment__author">{{comment.authorId}}</span>
                 <span class="comment__time">{{comment.regDate}}</span>
-                <p class="comment__text" *ngIf="!edit">{{comment.comment}}</p>
+                <p class="comment__text" *ngIf="!edit" innerHTML="{{comment.comment | marked}}"></p>
                 <div class="comment__editor" *ngIf="edit">
-                    <textarea [(ngModel)]="commentText" [disabled]="saving"></textarea>
+                    <markdown-editor
+                        markdown="{{comment.comment}}"
+                        editable="true"
+                        klass="comment__editor"
+                        placeHolder="{{'add_comment' | translate}}"
+                        (update)="setCommentText($event)">
+                    </markdown-editor>
+                    <!-- <textarea [(ngModel)]="commentText" [disabled]="saving"></textarea> -->
                     <button type="button" class="btn btn-cancel" [disabled]="saving" (click)="toggleEdit()">{{'cancel' | translate}}</button>
                     <button type="button" class="btn btn-primary btn-save" [disabled]="saving" (click)="saveComment()">{{'save' | translate}}</button>
                 </div>
@@ -36,8 +44,8 @@ import { Comment } from '../../models';
             </div>
         </div>
     `,
-    directives: [AttachmentsComponent],
-    pipes: [DateFormatPipe, TranslatePipe]
+    directives: [AttachmentsComponent, MarkdownEditorComponent],
+    pipes: [DateFormatPipe, TranslatePipe, MarkedPipe]
 })
 
 export class CommentComponent {
@@ -57,6 +65,10 @@ export class CommentComponent {
         } else {
             this.commentText = '';
         }
+    }
+
+    private setCommentText(text: string) {
+        this.commentText = text;
     }
 
     private saveComment() {

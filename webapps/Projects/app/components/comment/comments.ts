@@ -22,15 +22,23 @@ import { CommentComponent } from './comment';
                     (delete)="deleteComment($event)">
                 </comment>
             </section>
-            <markdown-editor></markdown-editor>
             <section class="comment-composer" [class.edit]="isEdit">
-                <textarea
+                <markdown-editor
+                    markdown=""
+                    editable="true"
+                    klass="comment-editor"
+                    placeHolder="{{'add_comment' | translate}}"
+                    (update)="updateMDContent($event)"
+                    (focus)="onEditorFocus($event)"
+                    (blur)="onEditorBlur($event)">
+                </markdown-editor>
+                <!-- <textarea
                     class="comment-editor"
                     placeholder="{{'add_comment' | translate}}"
                     [(ngModel)]="commentText"
                     (focus)="onEditorFocus()"
                     (blur)="onEditorBlur()">
-                </textarea>
+                </textarea> -->
                 <button class="btn btn-add-comment"
                     (click)="addComment()"
                     [disabled]="!commentText">
@@ -59,6 +67,10 @@ export class CommentsComponent {
 
     onEditorBlur() {
         this.isEdit = this.commentText.length > 0;
+    }
+
+    updateMDContent(text: string) {
+        this.commentText = text;
     }
 
     addComment() {
