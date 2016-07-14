@@ -173,8 +173,16 @@ public class TaskForm extends _DoForm {
 
 			MailAgent ma = new MailAgent();
 			Map<String, String> vars = new HashMap<String, String>();
-			Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedWord("notify_about_new_task", lang), vars);
-			if (!ma.sendMеssage(memo, recipients)) {
+			vars.put("assignee", assigneeUser.getUserName());
+			vars.put("content", task.getBody());
+			User user = userDAO.findById(task.getAuthor());
+			if (user != null) {
+				vars.put("sender", user.getUserName());
+			} else {
+				vars.put("sender", "");
+			}
+			Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang), vars);
+			if (ma.sendMеssage(memo, recipients)) {
 				addContent("notify", "ok");
 			}
 		} catch (SecureException e) {
