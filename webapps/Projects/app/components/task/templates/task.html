@@ -104,7 +104,7 @@
                             {{'start_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input type="date" class="span2" [(ngModel)]="task.startDate" ngControl="startDate" />
+                            <input datepicker class="span2" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -112,7 +112,7 @@
                             {{'due_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input type="date" class="span2" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                            <input datepicker class="span2" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
                         </div>
                     </div>
                     <div class="form-group">

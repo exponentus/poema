@@ -2,6 +2,7 @@
 @import 'comments.css';
 @import 'task.css';
 @import 'dashboard.css';
+@import 'pikaday.css';
 
 body {
     display: flex;

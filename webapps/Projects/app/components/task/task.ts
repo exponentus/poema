@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
+import { DatepickerDirective } from '../../shared/datepicker/datepicker';
 import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { MarkdownEditorComponent } from '../../shared/markdown';
@@ -40,7 +41,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         TaskRequestComponent,
         AttachmentsComponent,
         CommentsComponent,
-        MarkdownEditorComponent
+        MarkdownEditorComponent,
+        DatepickerDirective
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -153,6 +155,14 @@ export class TaskComponent {
         } else {
             return 'task';
         }
+    }
+
+    setStartDate(date) {
+        this.task.startDate = date;
+    }
+
+    setDueDate(date) {
+        this.task.dueDate = date;
     }
 
     updateTaskBody(text: string) {
