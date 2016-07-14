@@ -131,6 +131,7 @@ public class TaskForm extends _DoForm {
 				task.setProject(projectDAO.findById(formData.getValue("projectId")));
 				task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
 			}
+			task.setTitle(formData.getValue("title"));
 			task.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
 			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
@@ -227,9 +228,13 @@ public class TaskForm extends _DoForm {
 		if (!isSubTask && formData.getValueSilently("taskTypeId").isEmpty()) {
 			ve.addError("taskTypeId", "required", getLocalizedWord("field_is_empty", lang));
 		}
-		if (formData.getValueSilently("body").isEmpty()) {
-			ve.addError("body", "required", getLocalizedWord("field_is_empty", lang));
+		if (formData.getValueSilently("title").isEmpty()) {
+			ve.addError("title", "required", getLocalizedWord("field_is_empty", lang));
 		}
+		// if (formData.getValueSilently("body").isEmpty()) {
+		// ve.addError("body", "required", getLocalizedWord("field_is_empty",
+		// lang));
+		// }
 		if (formData.getValueSilently("status").isEmpty()) {
 			ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
 		}

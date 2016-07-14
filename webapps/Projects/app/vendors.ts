@@ -6,9 +6,9 @@ import 'ng2-translate';
 import '@ngrx/store';
 import 'marked';
 import 'to-markdown';
+import 'pikaday';
 
 // RxJS
-// import 'rxjs';
 import 'rxjs/Observable';
 import 'rxjs/Subscription';
 import 'rxjs/add/observable/forkJoin';

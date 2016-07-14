@@ -66,6 +66,8 @@
 
     <caption name="new_project"/>
     <caption name="new_task"/>
+    <caption name="task_title"/>
+    <caption name="add_comment"/>
 
     <!-- common form captions -->
     <caption name="body"/>

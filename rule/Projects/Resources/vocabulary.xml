@@ -68,6 +68,10 @@
         <entry lang="RUS">Новая задача</entry>
         <entry lang="ENG">New task</entry>
     </sentence>
+    <sentence mode="on" keyword="task_title">
+        <entry lang="RUS">Заголовок</entry>
+        <entry lang="ENG">Title</entry>
+    </sentence>
     <sentence mode="on" keyword="task_type">
         <entry lang="RUS">Тип задачи</entry>
         <entry lang="ENG">Task type</entry>
@@ -151,6 +155,10 @@
     <sentence mode="on" keyword="send_request">
         <entry lang="RUS">Отправить запрос</entry>
         <entry lang="ENG">Send request</entry>
+    </sentence>
+    <sentence mode="on" keyword="add_comment">
+        <entry lang="RUS">Добавить комментарий</entry>
+        <entry lang="ENG">Add comment</entry>
     </sentence>
 
     <sentence mode="on" keyword="draft">

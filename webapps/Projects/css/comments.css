@@ -83,11 +83,12 @@
     background: #f5f5f5;
     bottom: 0;
     display: block;
-    padding: 4px;
+    padding: 8px;
     width: 100%;
 }
 
-.comment-editor {
+.comment-composer .rt-editor__area {
+    display: block;
     min-height: 30px;
     position: relative;
     width: 100%;

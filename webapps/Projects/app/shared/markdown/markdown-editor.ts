@@ -1,21 +1,20 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-const marked = require('marked');
-const toMarkdown = require('to-markdown');
+import { MarkdownConverter } from './markdown-converter';
 
 @Component({
     selector: 'markdown-editor',
     template: `
         <div class="rt-editor">
-            <div class="rt-editor__area {{klass}}" [class.edit]="editable" contenteditable="true"
-                innerHtml="{{html}}"
+            <div class="rt-editor__area {{klass}}" [class.edit]="editable" [contentEditable]="editable"
+                innerHTML="{{html}}"
                 (keyup)="updateValue($event.target)"
-                (focus)="focus.emit(1)"
-                (blur)="blur.emit(1)">
+                (focus)="focus.emit($event)"
+                (blur)="blur.emit($event)">
             </div>
             <!-- <span class="rt-editor__placeholder" *ngIf="!html.length">{{placeHolder}}</span> -->
         </div>
-    `
+    `,
+    providers: [MarkdownConverter]
 })
 
 export class MarkdownEditorComponent {
@@ -23,18 +22,25 @@ export class MarkdownEditorComponent {
     @Input() markdown: string = '';
     @Input() klass: string = '';
     @Input() placeHolder: string;
+    @Input() updateTimeout: number = 150;
 
     @Output() update = new EventEmitter<any>();
     @Output() focus = new EventEmitter<any>();
     @Output() blur = new EventEmitter<any>();
 
     private html: string;
+    private to: any;
+
+    constructor(private mdc: MarkdownConverter) { }
 
     ngOnInit() {
-        this.html = marked(this.markdown);
+        this.html = this.mdc.toHtml(this.markdown);
     }
 
     updateValue($el) {
-        this.update.emit(toMarkdown($el.innerHTML));
+        clearTimeout(this.to);
+        this.to = setTimeout(() => {
+            this.update.emit(this.mdc.toMarkdown($el.innerHTML));
+        }, this.updateTimeout);
     }
 }

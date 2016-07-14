@@ -6,7 +6,7 @@
         <button class="btn" type="button" (click)="newProject()">
             {{'new_project' | translate}}
         </button>
-        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (onPageChange)="goToPage($event)"></pagination>
+        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>
 </div>
 <div class="content-body">
@@ -24,7 +24,6 @@
                     <span class="vw-user-manager">{{'manager' | translate}}</span>
                     <span class="vw-user-programmer">{{'programmer' | translate}}</span>
                     <span class="vw-user-tester">{{'tester' | translate}}</span>
-                    <span class="vw-project-comment">{{'comment' | translate}}</span>
                     <span class="vw-date">{{'finish_date' | translate}}</span>
                 </div>
             </div>

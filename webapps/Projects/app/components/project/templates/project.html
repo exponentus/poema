@@ -98,7 +98,7 @@
                     {{'finish_date' | translate}}
                 </div>
                 <div class="controls">
-                    <input type="date" class="span2" [(ngModel)]="project.finishDate" ngControl="finishDate" />
+                    <input class="span2" datepicker (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" ngControl="finishDate" />
                 </div>
             </div>
             <div class="form-group">
@@ -106,10 +106,12 @@
                     {{'comment' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.comment.valid">
-                    <textarea class="span8" [(ngModel)]="project.comment" ngControl="comment"></textarea>
+                    <div class="span8">
+                        <markdown-editor [markdown]="project.comment || ''" editable="true" updateTimeout="300" (update)="updateProjectComment($event)"></markdown-editor>
+                    </div>
                 </div>
             </div>
         </fieldset>
-        <attachments [entity]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        <attachments [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
 </form>

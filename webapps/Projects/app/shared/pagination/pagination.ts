@@ -1,4 +1,4 @@
-import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 
 @Component({
     selector: 'pagination',
@@ -14,8 +14,7 @@ import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/co
 })
 
 export class PaginationComponent {
-    @HostBinding('hidden') get hostHidden() { return this.totalPages < 2; };
-
+    @HostBinding('hidden') get isHidden() { return this.totalPages < 2; };
     @Input() maxPageControl: number = 5;
     @Input() totalPages: number = -1;
     @Input('page')
@@ -28,7 +27,7 @@ export class PaginationComponent {
         }
     }
 
-    @Output() onPageChange = new EventEmitter<any>();
+    @Output() change = new EventEmitter<any>();
 
     initialized: number = 0;
     currentPage: number = 0;
@@ -41,7 +40,7 @@ export class PaginationComponent {
     toPage(event, page: number) {
         event.preventDefault();
         this.currentPage = +page;
-        this.onPageChange.emit({ page: page });
+        this.change.emit({ page: page });
         this.pagination();
     }
 

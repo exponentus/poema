@@ -6,7 +6,9 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
+import { DatepickerDirective } from '../../shared/datepicker/datepicker';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { CustomerSelectComponent } from '../shared/customer-select';
 import { UserSelectComponent } from '../shared/user-select';
@@ -26,7 +28,9 @@ import { Project, Organization, User, Attachment } from '../../models';
         SwitchButtonComponent,
         CustomerSelectComponent,
         UserSelectComponent,
-        AttachmentsComponent
+        AttachmentsComponent,
+        MarkdownEditorComponent,
+        DatepickerDirective
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -83,6 +87,14 @@ export class ProjectComponent {
 
     loadData() {
         this.projectService.getProjectStatusTypes().subscribe(pst => this.projectStatusTypes = pst);
+    }
+
+    updateProjectComment(text: string) {
+        this.project.comment = text;
+    }
+
+    setFinishDate(date) {
+        this.project.finishDate = date;
     }
 
     saveProject() {

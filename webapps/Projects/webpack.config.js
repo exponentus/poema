@@ -31,7 +31,7 @@ const prodPlugins = [
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
         beautify: false,
-        mangle: false,
+        mangle: true,
         comments: false,
         sourceMap: false,
         compress: {

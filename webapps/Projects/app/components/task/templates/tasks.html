@@ -6,7 +6,7 @@
         <button class="btn" type="button" (click)="newTask()">
             {{'new_task' | translate}}
         </button>
-        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (onPageChange)="goToPage($event)"></pagination>
+        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>
 </div>
 <div class="content-body">
@@ -17,7 +17,7 @@
                     <input type="checkbox" class="all" />
                 </label>
                 <div class="entry-captions">
-                    <span class="vw-task-body">{{'body' | translate}}</span>
+                    <span class="vw-task-body">{{'task_title' | translate}}</span>
                     <span class="vw-task-status">{{'status' | translate}}</span>
                     <span class="vw-task-priority">{{'priority' | translate}}</span>
                     <span class="vw-task-assignee">{{'assignee_user' | translate}}</span>

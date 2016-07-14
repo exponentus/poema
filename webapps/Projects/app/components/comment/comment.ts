@@ -2,9 +2,9 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
+import { MarkdownEditorComponent, MarkedPipe } from '../../shared/markdown';
 import { AttachmentsComponent } from '../attachments';
-import { DateFormatPipe, MarkedPipe } from '../../pipes';
+import { DateFormatPipe } from '../../pipes';
 import { Comment } from '../../models';
 
 @Component({
@@ -20,16 +20,14 @@ import { Comment } from '../../models';
                     <markdown-editor
                         markdown="{{comment.comment}}"
                         editable="true"
-                        klass="comment__editor"
                         placeHolder="{{'add_comment' | translate}}"
                         (update)="setCommentText($event)">
                     </markdown-editor>
-                    <!-- <textarea [(ngModel)]="commentText" [disabled]="saving"></textarea> -->
                     <button type="button" class="btn btn-cancel" [disabled]="saving" (click)="toggleEdit()">{{'cancel' | translate}}</button>
                     <button type="button" class="btn btn-primary btn-save" [disabled]="saving" (click)="saveComment()">{{'save' | translate}}</button>
                 </div>
                 <!-- <attachments
-                    [entity]="comment"
+                    [model]="comment"
                     (upload)="addAttachment($event)"
                     (delete)="deleteAttachment($event)">
                 </attachments> -->

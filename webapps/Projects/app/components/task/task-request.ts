@@ -22,7 +22,7 @@ import { RequestTypeSelectComponent } from '../shared/request-type-select';
             <section>
                 <request-type-select [requestTypeId]="request.requestTypeId" (onSelect)="selectRequestType($event)"></request-type-select>
                 <textarea class="request-comment" [(ngModel)]="comment"></textarea>
-                <attachments [entity]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
+                <attachments [model]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
             </section>
             <footer>
                 <button class="btn" type="button" (click)="cancel()">{{ 'cancel' | translate }}</button>

@@ -1,7 +1,9 @@
+@import 'attachments.css';
 @import 'request.css';
 @import 'comments.css';
 @import 'task.css';
 @import 'dashboard.css';
+@import 'pikaday.css';
 
 body {
     display: flex;
@@ -156,12 +158,6 @@ project {
 
 .vw-user-tester {
     width: 10%;
-}
-
-.attachments {
-    border-bottom: 1px dotted #ccc;
-    border-top: 1px dotted #ccc;
-    display: block;
 }
 
 .content-actions .buttons {

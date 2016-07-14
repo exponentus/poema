@@ -5,7 +5,7 @@
         </button>
         <h1 class="header-title">
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
-                {{parentTask.body}}
+                {{parentTask.title}}
             </a>
             <div>
                 {{getTitle() | translate}}
@@ -41,6 +41,14 @@
         <tabs>
             <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
                 <fieldset class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'task_title' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.title.valid">
+                            <input class="span8" [(ngModel)]="task.title" ngControl="title" />
+                        </div>
+                    </div>
                     <div class="form-group" *ngIf="!isSubtask">
                         <div class="control-label">
                             {{'project' | translate}}
@@ -80,17 +88,6 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            {{'body' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.body.valid">
-                            <div class="span8">
-                                <markdown-editor [markdown]="task.body || ''" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
-                                <!-- <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
                             {{'assignee_user' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
@@ -107,7 +104,7 @@
                             {{'start_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input type="date" class="span2" [(ngModel)]="task.startDate" ngControl="startDate" />
+                            <input datepicker class="span2" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -115,7 +112,7 @@
                             {{'due_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input type="date" class="span2" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                            <input datepicker class="span2" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -128,8 +125,18 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.body.valid">
+                            <div class="span8">
+                                <markdown-editor [markdown]="task.body || ''" editable="true" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
-                <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>

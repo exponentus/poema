@@ -7,6 +7,7 @@ import { TRANSLATE_PROVIDERS, TranslateService, TranslateLoader } from 'ng2-tran
 import { Observable } from 'rxjs/Observable'
 
 import { NotificationService } from './shared/notification';
+import { MarkdownConverter } from './shared/markdown';
 import { AppComponent } from './app.component';
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { TranslateService as translateService } from './services/translate.service';
@@ -24,6 +25,7 @@ bootstrap(AppComponent, [
         deps: [translateService]
     }),
     NotificationService,
+    MarkdownConverter,
     APP_SERVICES,
     APP_STORE
 ]).catch(err => console.error(err));
