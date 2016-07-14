@@ -4,9 +4,11 @@ import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.email.MailAgent;
+import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
@@ -18,9 +20,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TaskRequests extends _DoForm {
 
@@ -130,16 +130,19 @@ public class TaskRequests extends _DoForm {
             recipients.add(authorUser.getEmail());
 
             MailAgent ma = new MailAgent();
-            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_task_request", lang),
-                    getLocalizedWord("notify_about_task_request", lang))) {
+            Map<String, String> vars = new HashMap<String, String>();
+            Memo memo = new Memo(getLocalizedWord("notify_about_task_request", lang), getLocalizedWord("notify_about_task_request", lang), vars);
+            if (!ma.sendMеssage(memo, recipients)) {
                 addContent("notify", "ok");
             }
         } catch (DatabaseException e) {
-            error(e);
+            logError(e);
             setBadRequest();
         } catch (SecureException e) {
-            error(e);
+            logError(e);
             setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
         }
     }
 
@@ -171,16 +174,19 @@ public class TaskRequests extends _DoForm {
             recipients.add(assigneeUser.getEmail());
 
             MailAgent ma = new MailAgent();
-            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_request_resolution", lang),
-                    getLocalizedWord("notify_about_request_resolution", lang))) {
+            Map<String, String> vars = new HashMap<String, String>();
+            Memo memo = new Memo(getLocalizedWord("notify_about_request_resolution", lang), getLocalizedWord("notify_about_request_resolution", lang), vars);
+            if (!ma.sendMеssage(memo, recipients)) {
                 addContent("notify", "ok");
             }
         } catch (DatabaseException e) {
-            error(e);
+            logError(e);
             setBadRequest();
         } catch (SecureException e) {
-            error(e);
+            logError(e);
             setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
         }
     }
 
@@ -218,10 +224,10 @@ public class TaskRequests extends _DoForm {
 
             requestDAO.update(request);
         } catch (DatabaseException e) {
-            error(e);
+            logError(e);
             setBadRequest();
         } catch (SecureException e) {
-            error(e);
+            logError(e);
             setBadRequest();
         }
     }

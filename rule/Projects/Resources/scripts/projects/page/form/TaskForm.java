@@ -5,9 +5,11 @@ import administrator.model.User;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
+import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.email.MailAgent;
+import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting.*;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
@@ -23,10 +25,7 @@ import reference.dao.TagDAO;
 import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TaskForm extends _DoForm {
 
@@ -162,15 +161,18 @@ public class TaskForm extends _DoForm {
             recipients.add(assigneeUser.getEmail());
 
             MailAgent ma = new MailAgent();
-            if (!ma.sendMail(recipients, getLocalizedWord("notify_about_new_task_short", lang),
-                    getLocalizedWord("notify_about_new_task", lang))) {
+            Map<String, String> vars = new HashMap<String, String>();
+            Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedWord("notify_about_new_task", lang), vars);
+            if (!ma.sendMеssage(memo, recipients)) {
                 addContent("notify", "ok");
             }
         } catch (SecureException e) {
             setError(e);
         } catch (_Exception | DatabaseException e) {
-            error(e);
+            logError(e);
             setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
         }
     }
 
