@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 
 import { NotificationService } from './notification.service';
 import { Notification } from './notification';
@@ -7,10 +7,10 @@ import { Notification } from './notification';
     selector: 'notification',
     template: `
         <div class="nb-notify-entry-{{notify.type}}"
-                [class.dismiss-click]="notify.delay == 'click'"
-                [style.display]="notify.display ? 'block': 'none'"
-                (click)="notify.dismiss()"
-                *ngFor="let notify of notifications">
+            [class.dismiss-click]="notify.delay == 'click'"
+            [style.display]="notify.display ? 'block': 'none'"
+            (click)="notify.dismiss()"
+            *ngFor="let notify of notifications">
             {{notify.message}}
         </div>
     `
@@ -18,7 +18,7 @@ import { Notification } from './notification';
 
 export class NotificationComponent implements OnInit {
     @HostBinding('class.nb-notify') true;
-    @HostBinding('class.hidden') get hidden() { return this.notifications.length == 0; };
+    @HostBinding('class.hidden') get isHidden() { return this.notifications.length == 0; };
 
     public notifications: Notification[] = [];
     private listener: any;
@@ -31,11 +31,9 @@ export class NotificationComponent implements OnInit {
                 case 'cleanAll':
                     this.notifications = [];
                     break;
-
                 case 'add':
                     this.addNotify(item.notify);
                     break;
-
                 default:
                     break;
             }
