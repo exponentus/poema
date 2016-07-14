@@ -22,6 +22,7 @@ export class MarkdownEditorComponent {
     @Input() markdown: string = '';
     @Input() klass: string = '';
     @Input() placeHolder: string;
+    @Input() updateTimeout: number = 150;
 
     @Output() update = new EventEmitter<any>();
     @Output() focus = new EventEmitter<any>();
@@ -40,6 +41,6 @@ export class MarkdownEditorComponent {
         clearTimeout(this.to);
         this.to = setTimeout(() => {
             this.update.emit(this.mdc.toMarkdown($el.innerHTML));
-        }, 500);
+        }, this.updateTimeout);
     }
 }

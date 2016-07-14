@@ -156,6 +156,10 @@
         <entry lang="RUS">Отправить запрос</entry>
         <entry lang="ENG">Send request</entry>
     </sentence>
+    <sentence mode="on" keyword="add_comment">
+        <entry lang="RUS">Добавить комментарий</entry>
+        <entry lang="ENG">Add comment</entry>
+    </sentence>
 
     <sentence mode="on" keyword="draft">
         <entry lang="RUS">Черновик</entry>

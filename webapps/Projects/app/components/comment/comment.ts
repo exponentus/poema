@@ -20,11 +20,9 @@ import { Comment } from '../../models';
                     <markdown-editor
                         markdown="{{comment.comment}}"
                         editable="true"
-                        klass="comment__editor"
                         placeHolder="{{'add_comment' | translate}}"
                         (update)="setCommentText($event)">
                     </markdown-editor>
-                    <!-- <textarea [(ngModel)]="commentText" [disabled]="saving"></textarea> -->
                     <button type="button" class="btn btn-cancel" [disabled]="saving" (click)="toggleEdit()">{{'cancel' | translate}}</button>
                     <button type="button" class="btn btn-primary btn-save" [disabled]="saving" (click)="saveComment()">{{'save' | translate}}</button>
                 </div>

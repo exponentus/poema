@@ -107,7 +107,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.comment.valid">
                     <div class="span8">
-                        <markdown-editor [markdown]="project.comment || ''" editable="true" (update)="updateProjectComment($event)"></markdown-editor>
+                        <markdown-editor [markdown]="project.comment || ''" editable="true" updateTimeout="300" (update)="updateProjectComment($event)"></markdown-editor>
                     </div>
                 </div>
             </div>

@@ -87,7 +87,8 @@
     width: 100%;
 }
 
-.comment-editor {
+.comment-composer .rt-editor__area {
+    display: block;
     min-height: 30px;
     position: relative;
     width: 100%;

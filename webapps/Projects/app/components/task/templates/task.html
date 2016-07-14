@@ -5,7 +5,7 @@
         </button>
         <h1 class="header-title">
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
-                {{parentTask.body}}
+                {{parentTask.title}}
             </a>
             <div>
                 {{getTitle() | translate}}
@@ -131,7 +131,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.body.valid">
                             <div class="span8">
-                                <markdown-editor [markdown]="task.body || ''" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
+                                <markdown-editor [markdown]="task.body || ''" editable="true" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
                             </div>
                         </div>
                     </div>
