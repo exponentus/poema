@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </fieldset>
-                <attachments [entity]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>

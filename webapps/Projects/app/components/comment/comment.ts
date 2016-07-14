@@ -27,7 +27,7 @@ import { Comment } from '../../models';
                     <button type="button" class="btn btn-primary btn-save" [disabled]="saving" (click)="saveComment()">{{'save' | translate}}</button>
                 </div>
                 <!-- <attachments
-                    [entity]="comment"
+                    [model]="comment"
                     (upload)="addAttachment($event)"
                     (delete)="deleteAttachment($event)">
                 </attachments> -->

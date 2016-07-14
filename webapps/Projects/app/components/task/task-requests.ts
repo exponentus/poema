@@ -1,27 +1,44 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { AttachmentsComponent } from '../attachments';
 import { Request } from '../../models';
 
 @Component({
     selector: 'task-requests',
     template: `
-        <ul>
-            <li *ngFor="let r of requests">
-                <span>{{ r.comment }}</span>
-                <span>{{ r.requestType.name }}</span>
-                <span *ngIf="r.resolution != 'UNKNOWN'">
-                    {{ r.resolution }}
-                    {{ r.resolutionTime }}
-                </span>
-                <span *ngIf="r.resolution == 'UNKNOWN'">
-                    <button class="btn btn-accept" (click)="doAccept(r)" [disabled]="disabled" type="button">Accept</button>
-                    <button class="btn btn-decline" (click)="doDecline(r)" [disabled]="disabled" type="button">Decline</button>
-                </span>
+        <ul class="request-list">
+            <li class="request-list__item" *ngFor="let request of requests">
+                <div class="request">
+                    <div class="request__details">
+                        <span class="request__type">{{ request.requestType.name }}</span>
+                        <span class="request__comment">{{ request.comment }}</span>
+                        <time class="request__time">{{ request.regDate }}</time>
+                    </div>
+                    <div class="request__resol">
+                        <span class="request__resolution">{{ request.resolution }}</span>
+                        <time class="request__resolution_time">{{ request.resolutionTime }}</time>
+                        <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">
+                            <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="doAccept(request)">
+                                {{ 'accept' | translate }}
+                            </button>
+                            <button type="button" class="btn" [disabled]="disabled" (click)="doDecline(request)">
+                                {{ 'decline' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="request__attachments" *ngIf="request.attachments">
+                        <!-- <attachments
+                            [model]="request"
+                            (upload)="addAttachment($event)"
+                            (delete)="deleteAttachment($event)">
+                        </attachments> -->
+                    </div>
+                </div>
             </li>
         </ul>
     `,
-    directives: [],
+    directives: [AttachmentsComponent],
     pipes: [TranslatePipe]
 })
 

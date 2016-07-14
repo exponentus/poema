@@ -112,6 +112,6 @@
                 </div>
             </div>
         </fieldset>
-        <attachments [entity]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        <attachments [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
 </form>
