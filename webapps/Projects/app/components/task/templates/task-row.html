@@ -5,7 +5,7 @@
         </label>
         <a class="entry-link" [routerLink]="['/task', task.id]">
             <div class="entry-fields">
-                <span class="vw-task-body">{{task.body}}</span>
+                <span class="vw-task-body">{{task.title}}</span>
                 <span class="vw-task-status">{{task.status | text:'L' | translate}}</span>
                 <span class="vw-task-priority">{{task.priority | text:'L' | translate}}</span>
                 <span class="vw-task-assignee">

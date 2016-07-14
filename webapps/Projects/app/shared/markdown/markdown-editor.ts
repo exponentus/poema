@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-
-const marked = require('marked');
-const toMarkdown = require('to-markdown');
+import { MarkdownConverter } from './markdown-converter';
 
 @Component({
     selector: 'markdown-editor',
@@ -15,7 +13,8 @@ const toMarkdown = require('to-markdown');
             </div>
             <!-- <span class="rt-editor__placeholder" *ngIf="!html.length">{{placeHolder}}</span> -->
         </div>
-    `
+    `,
+    providers: [MarkdownConverter]
 })
 
 export class MarkdownEditorComponent {
@@ -29,12 +28,18 @@ export class MarkdownEditorComponent {
     @Output() blur = new EventEmitter<any>();
 
     private html: string;
+    private to: any;
+
+    constructor(private mdc: MarkdownConverter) { }
 
     ngOnInit() {
-        this.html = marked(this.markdown);
+        this.html = this.mdc.toHtml(this.markdown);
     }
 
     updateValue($el) {
-        this.update.emit(toMarkdown($el.innerHTML));
+        clearTimeout(this.to);
+        this.to = setTimeout(() => {
+            this.update.emit(this.mdc.toMarkdown($el.innerHTML));
+        }, 500);
     }
 }

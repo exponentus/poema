@@ -106,7 +106,9 @@
                     {{'comment' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.comment.valid">
-                    <textarea class="span8" [(ngModel)]="project.comment" ngControl="comment"></textarea>
+                    <div class="span8">
+                        <markdown-editor [markdown]="project.comment || ''" editable="true" (update)="updateProjectComment($event)"></markdown-editor>
+                    </div>
                 </div>
             </div>
         </fieldset>

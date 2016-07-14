@@ -41,6 +41,14 @@
         <tabs>
             <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
                 <fieldset class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'task_title' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.title.valid">
+                            <input class="span8" [(ngModel)]="task.title" ngControl="title" />
+                        </div>
+                    </div>
                     <div class="form-group" *ngIf="!isSubtask">
                         <div class="control-label">
                             {{'project' | translate}}
@@ -80,17 +88,6 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            {{'body' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.body.valid">
-                            <div class="span8">
-                                <markdown-editor [markdown]="task.body || ''" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
-                                <!-- <textarea class="span8" [(ngModel)]="task.body" ngControl="body"></textarea> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
                             {{'assignee_user' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
@@ -125,6 +122,16 @@
                         <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
                             <div class="span8">
                                 <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="!form.controls.body.valid">
+                            <div class="span8">
+                                <markdown-editor [markdown]="task.body || ''" editable="true" (update)="updateTaskBody($event)"></markdown-editor>
                             </div>
                         </div>
                     </div>

@@ -8,7 +8,7 @@ import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
-import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
+import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
@@ -100,6 +100,7 @@ export class TaskComponent {
         });
 
         this.form = formBuilder.group({
+            title: [''],
             projectId: [''],
             taskTypeId: [''],
             status: [''],

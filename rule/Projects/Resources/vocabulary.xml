@@ -68,6 +68,10 @@
         <entry lang="RUS">Новая задача</entry>
         <entry lang="ENG">New task</entry>
     </sentence>
+    <sentence mode="on" keyword="task_title">
+        <entry lang="RUS">Заголовок</entry>
+        <entry lang="ENG">Title</entry>
+    </sentence>
     <sentence mode="on" keyword="task_type">
         <entry lang="RUS">Тип задачи</entry>
         <entry lang="ENG">Task type</entry>
