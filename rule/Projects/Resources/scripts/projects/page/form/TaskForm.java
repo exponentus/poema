@@ -2,9 +2,7 @@ package projects.page.form;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -12,6 +10,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
@@ -96,11 +95,12 @@ public class TaskForm extends _DoForm {
 
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
+		LanguageCode lang = session.getLang();
 		try {
 			String parentTaskId = formData.getValueSilently("parentTaskId");
 			boolean isSubTask = !parentTaskId.isEmpty();
 
-			_Validation ve = validate(formData, session.getLang(), isSubTask);
+			_Validation ve = validate(formData, lang, isSubTask);
 			if (ve.hasError()) {
 				setBadRequest();
 				setValidation(ve);
@@ -137,7 +137,7 @@ public class TaskForm extends _DoForm {
 			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
 			task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
 			task.setBody(formData.getValue("body"));
-			User assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
+			IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
 			task.setAssignee(assigneeUser.getId());
 
 			if (formData.containsField("tagIds")) {
@@ -168,21 +168,16 @@ public class TaskForm extends _DoForm {
 				task = dao.update(task);
 			}
 
-			LanguageCode lang = session.getLang();
 			List<String> recipients = new ArrayList<>();
-			recipients.add(assigneeUser.getEmail());
+			recipients.add(((User) assigneeUser).getEmail());
 
 			MailAgent ma = new MailAgent();
-			Map<String, String> vars = new HashMap<String, String>();
-			vars.put("assignee", assigneeUser.getUserName());
-			vars.put("content", task.getBody());
-			User user = userDAO.findById(task.getAuthor());
-			if (user != null) {
-				vars.put("sender", user.getUserName());
-			} else {
-				vars.put("sender", "");
-			}
-			Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang), vars);
+			Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang));
+			memo.addVar("assignee", assigneeUser.getUserName());
+			memo.addVar("title", task.getTitle());
+			memo.addVar("content", task.getBody());
+			memo.addVar("author", task.getAuthor().getUserName());
+			memo.addVar("url", Environment.getFullHostName() + "//" + session.getAppEnv().appName + "//" + task.getURL());
 			if (ma.sendMеssage(memo, recipients)) {
 				addContent("notify", "ok");
 			}
