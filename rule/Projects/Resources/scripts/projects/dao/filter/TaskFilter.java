@@ -27,6 +27,7 @@ public class TaskFilter {
     private Date startDate;
     private Date dueDate;
     private List<Tag> tags;
+    private boolean isParentOnly;
 
     public Project getProject() {
         return project;
@@ -138,5 +139,13 @@ public class TaskFilter {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public boolean isParentOnly() {
+        return isParentOnly;
+    }
+
+    public void setParentOnly(boolean parentOnly) {
+        isParentOnly = parentOnly;
     }
 }

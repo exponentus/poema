@@ -8,7 +8,7 @@ import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
-import { ProjectRowComponent } from './project-row';
+import { ProjectListComponent } from './project-list';
 import { ProjectComponent } from './project';
 import { FETCH_PROJECTS, IProjectsState } from '../../reducers/projects.reducer';
 
@@ -19,7 +19,7 @@ import { FETCH_PROJECTS, IProjectsState } from '../../reducers/projects.reducer'
     directives: [
         ROUTER_DIRECTIVES,
         PaginationComponent,
-        ProjectRowComponent
+        ProjectListComponent
     ],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })

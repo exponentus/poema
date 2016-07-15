@@ -1,0 +1,50 @@
+<div class="view project-list">
+    <header class="entries-head" *ngIf="showHeader">
+        <div class="head-wrap">
+            <label class="entry-select">
+                <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
+            </label>
+            <div class="entry-captions">
+                <span class="project-list__name">{{'name' | translate}}</span>
+                <span class="project-list__status">{{'status' | translate}}</span>
+                <span class="vw-icon"><i class="fa fa-paperclip"></i></span>
+                <span class="project-list__customer">{{'customer' | translate}}</span>
+                <span class="project-list__manager">{{'manager' | translate}}</span>
+                <span class="project-list__programmer">{{'programmer' | translate}}</span>
+                <span class="project-list__tester">{{'tester' | translate}}</span>
+                <span class="project-list__finish_date">{{'finish_date' | translate}}</span>
+            </div>
+        </div>
+    </header>
+    <div class="entries">
+        <div class="entry-wrap" *ngFor="let project of projects" [class.active]="isSelected(project.id)">
+            <div class="entry">
+                <label class="entry-select">
+                    <input type="checkbox" name="project-id" value="{{project.id}}" [checked]="isSelected(project.id)" (change)="toggleSelected(project.id)" />
+                </label>
+                <a class="entry-link" [routerLink]="['./', project.id]">
+                    <div class="entry-fields">
+                        <span class="project-list__name">{{project.name}}</span>
+                        <span class="project-list__status">{{project.status | text:'L' | translate}}</span>
+                        <span class="vw-icon">
+                            <i class="fa fa-paperclip" *ngIf="project.hasAttachments"></i>
+                        </span>
+                        <span class="project-list__customer">
+                            <customer-cell [customerId]="project.customerId"></customer-cell>
+                        </span>
+                        <span class="project-list__manager">
+                            <user-cell [userId]="project.managerUserId"></user-cell>
+                        </span>
+                        <span class="project-list__programmer">
+                            <user-cell [userId]="project.programmerUserId"></user-cell>
+                        </span>
+                        <span class="project-list__tester">
+                            <user-cell [userId]="project.testerUserId"></user-cell>
+                        </span>
+                        <span class="project-list__finish_date">{{project.finishDate | dateFmt}}</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,27 +10,6 @@
     </div>
 </div>
 <div class="content-body">
-    <div class="view view-project" [class.load]="requestProcess">
-        <header class="entries-head">
-            <div class="head-wrap">
-                <label class="entry-select">
-                    <input type="checkbox" class="all" />
-                </label>
-                <div class="entry-captions">
-                    <span class="vw-project-name">{{'name' | translate}}</span>
-                    <span class="vw-project-status">{{'status' | translate}}</span>
-                    <span class="vw-icon"><i class="fa fa-paperclip"></i></span>
-                    <span class="vw-project-customer">{{'customer' | translate}}</span>
-                    <span class="vw-user-manager">{{'manager' | translate}}</span>
-                    <span class="vw-user-programmer">{{'programmer' | translate}}</span>
-                    <span class="vw-user-tester">{{'tester' | translate}}</span>
-                    <span class="vw-date">{{'finish_date' | translate}}</span>
-                </div>
-            </div>
-        </header>
-        <div class="entries">
-            <project-row [project]="project" *ngFor="let project of projects"></project-row>
-        </div>
-    </div>
+    <project-list [projects]="projects"></project-list>
 </div>
 <router-outlet></router-outlet>

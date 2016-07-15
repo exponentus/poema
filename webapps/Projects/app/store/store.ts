@@ -6,6 +6,7 @@ import { storeLogger } from 'ngrx-store-logger';
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
 
 // reducers
+import { environmentReducer as environment } from '../reducers/environment.reducer';
 import { authedReducer as authed } from '../reducers/authed.reducer';
 import { projectsReducer as projects } from '../reducers/projects.reducer';
 import { tasksReducer as tasks } from '../reducers/tasks.reducer';
@@ -22,6 +23,7 @@ const logger = storeLogger({
 
 export const APP_STORE = provideStore(
     compose(logger, combineReducers)({
+        environment,
         authed,
         projects,
         tasks,

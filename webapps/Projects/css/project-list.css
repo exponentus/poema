@@ -1,0 +1,32 @@
+/* .project-list */
+.project-list__name {
+    width: 18%;
+}
+
+.project-list__status {
+    width: 100px;
+}
+
+.project-list__customer {
+    width: 15%;
+}
+
+.project-list__comment {
+    width: 20%;
+}
+
+.project-list__finish_date {
+    width: 130px;
+}
+
+.project-list__manager {
+    width: 130px;
+}
+
+.project-list__programmer {
+    width: 130px;
+}
+
+.project-list__tester {
+    width: 130px;
+}

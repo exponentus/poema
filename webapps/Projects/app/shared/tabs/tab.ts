@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'tab',
@@ -12,4 +12,5 @@ import { Component, Input } from '@angular/core';
 export class Tab {
     @Input('tabTitle') title: string;
     @Input() active = false;
+    @Output() select = new EventEmitter<any>();
 }

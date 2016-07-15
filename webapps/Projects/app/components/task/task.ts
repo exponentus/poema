@@ -15,6 +15,7 @@ import { UserSelectComponent } from '../shared/user-select';
 import { ProjectSelectComponent } from '../shared/project-select';
 import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
+import { TaskListComponent } from './task-list';
 import { TaskRequestsComponent } from './task-requests';
 import { TaskRequestComponent } from './task-request';
 import { AttachmentsComponent } from '../attachment/attachments';
@@ -37,6 +38,7 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         ProjectSelectComponent,
         TaskTypeSelectComponent,
         TagsSelectComponent,
+        TaskListComponent,
         TaskRequestsComponent,
         TaskRequestComponent,
         AttachmentsComponent,
@@ -54,6 +56,7 @@ export class TaskComponent {
     isNew = true;
     isSubtask = false;
     parentTask: Task;
+    subTasks: Task[];
     task: Task;
     rights: any = {
         addSubtask: false,
@@ -131,10 +134,10 @@ export class TaskComponent {
                         this.task = action.payload.task;
                         this.isSubtask = !!this.task.parentTaskId;
                     }
-                    if (!this.isNew) {
-                        this.loadComments(1);
-                        this.loadRequests(1);
-                    }
+                    // if (!this.isNew) {
+                    //     this.loadComments(1);
+                    //     this.loadRequests(1);
+                    // }
                     this.isReady = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
@@ -194,7 +197,7 @@ export class TaskComponent {
     }
 
     //
-    loadComments(page) {
+    loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(action => this.store.dispatch(action));
     }
 
@@ -211,7 +214,7 @@ export class TaskComponent {
     }
 
     //
-    loadRequests(page) {
+    loadRequests(page = 1) {
         this.taskService.fetchTaskRequests(this.task, page).subscribe(action => {
             this.store.dispatch(action);
         });
@@ -228,6 +231,13 @@ export class TaskComponent {
         this.taskService.doRequestResolution(request, 'DECLINE').subscribe(action => {
             this.store.dispatch(action);
             this.loadRequests(1);
+        });
+    }
+
+    // loadSubtasks
+    loadSubtasks() {
+        this.taskService.fetchTasks({ parentTaskId: this.task.id, parentOnly: false }).subscribe(action => {
+            this.subTasks = action.payload.tasks;
         });
     }
 

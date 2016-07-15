@@ -9,27 +9,7 @@
         <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>
 </div>
-<div class="content-body">
-    <div class="view view-task" [class.load]="requestProcess">
-        <header class="entries-head">
-            <div class="head-wrap">
-                <label class="entry-select">
-                    <input type="checkbox" class="all" />
-                </label>
-                <div class="entry-captions">
-                    <span class="vw-task-body">{{'task_title' | translate}}</span>
-                    <span class="vw-task-status">{{'status' | translate}}</span>
-                    <span class="vw-task-priority">{{'priority' | translate}}</span>
-                    <span class="vw-task-assignee">{{'assignee_user' | translate}}</span>
-                    <span class="vw-date">{{'start_date' | translate}}</span>
-                    <span class="vw-date">{{'due_date' | translate}}</span>
-                    <span class="vw-tags">{{'tags' | translate}}</span>
-                </div>
-            </div>
-        </header>
-        <div class="entries">
-            <task-row [task]="task" *ngFor="let task of tasks"></task-row>
-        </div>
-    </div>
+<div class="content-body" [class.load]="requestProcess">
+    <task-list [tasks]="tasks"></task-list>
 </div>
 <router-outlet></router-outlet>

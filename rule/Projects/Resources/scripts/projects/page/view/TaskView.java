@@ -47,11 +47,18 @@ public class TaskView extends _DoPage {
 
         String tasksFor = formData.getValueSilently("for");
         filter.setProject(formData.getValueSilently("projectId"));
-        filter.setParentTask(formData.getValueSilently("taskId"));
+        filter.setParentTask(formData.getValueSilently("parentTaskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
         filter.setSearch(formData.getValueSilently("search"));
         filter.setStartDate(formData.getDateSilently("startDate"));
         filter.setDueDate(formData.getDateSilently("dueDate"));
+
+        String parentOnly = formData.getValueSilently("parentOnly");
+        if (!parentOnly.equals("false")) {
+            filter.setParentOnly(true);
+        } else {
+            filter.setParentOnly(false);
+        }
 
         String taskStatus = formData.getValueSilently("taskStatus");
         if (!taskStatus.isEmpty()) {

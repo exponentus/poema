@@ -8,7 +8,7 @@ import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
-import { TaskRowComponent } from './task-row';
+import { TaskListComponent } from './task-list';
 import { TaskComponent } from './task';
 import { FETCH_TASKS, ITasksState } from '../../reducers/tasks.reducer';
 
@@ -16,7 +16,7 @@ import { FETCH_TASKS, ITasksState } from '../../reducers/tasks.reducer';
     selector: 'tasks',
     template: require('./templates/tasks.html'),
     // changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskRowComponent],
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskListComponent],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
 

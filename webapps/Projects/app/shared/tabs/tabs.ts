@@ -27,5 +27,6 @@ export class Tabs implements AfterContentInit {
     selectTab(tab: Tab) {
         this.tabs.forEach(tab => tab.active = false);
         tab.active = true;
+        tab.select.emit(true)
     }
 }

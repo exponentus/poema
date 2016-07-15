@@ -3,23 +3,26 @@ import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
-import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from '../../services';
+import { AppService, ReferenceService, StaffService } from '../../services';
+import { IEnvironmentState, HIDE_NAV } from '../../reducers/environment.reducer';
 import { IAuthedState } from '../../reducers/authed.reducer';
 import { NotificationService, NotificationComponent } from '../../shared/notification';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { NavbarComponent } from '../navbar/navbar';
 import { NavComponent } from '../nav/nav';
 import { User } from '../../models/user';
 
 @Component({
     selector: 'app',
     template: require('./app.html'),
-    directives: [ROUTER_DIRECTIVES, NavComponent, NotificationComponent, DROPDOWN_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES, NotificationComponent, NavbarComponent, NavComponent],
     providers: [NotificationService],
     pipes: [TranslatePipe]
 })
 
 export class AppComponent {
     private sub: any;
+    private subEnv: any;
     isReady: boolean = false;
     loggedUser: User;
     language: any;
@@ -46,6 +49,12 @@ export class AppComponent {
         });
 
         this.sub = this.store.select('reference');
+
+        this.subEnv = this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            // this.isMobileDevice = state.isMobile;
+            this.isSearchOpen = state.isSearchOpen;
+            this.isNavCollapsed = !state.isNavOpen;
+        });
 
         this.appService.getUserProfile().subscribe(action => {
             this.store.dispatch(action);
@@ -83,33 +92,13 @@ export class AppComponent {
 
     ngOnDestroy() {
         this.sub && this.sub.unsubscribe();
-    }
-
-    toggleNav() {
-        this.isNavCollapsed = !this.isNavCollapsed;
+        this.subEnv && this.subEnv.unsubscribe();
     }
 
     hideNav(event) {
-        event.preventDefault();
-        this.isNavCollapsed = false;
-        this.isSearchOpen = false;
-    }
-
-    searchToggle() {
-        this.isSearchOpen = !this.isSearchOpen;
-    }
-
-    logout(event) {
-        event.preventDefault();
-        // this.loggedUser = null;
-        window.location.href = 'Logout';
-    }
-
-    goBack() {
-        window.history.back();
-    }
-
-    preventDefault(event) {
+        // this.isNavCollapsed = false;
+        // this.isSearchOpen = false;
+        this.store.dispatch({ type: HIDE_NAV });
         event.preventDefault();
     }
 

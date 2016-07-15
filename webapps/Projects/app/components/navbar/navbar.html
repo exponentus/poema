@@ -1,0 +1,39 @@
+<div class="navbar-header">
+    <button class="btn-side-nav-toggle" type="button" (click)="toggleNav()"></button>
+    <img class="brand-logo" alt="logo" src="{{ 'img/logo.png' }}" />
+    <span class="brand-title">
+        {{ HEADER_TITLE }}
+    </span>
+</div>
+<nav class="navbar-nav navbar-right">
+    <ul class="nav nav-inline navbar-right">
+        <li dropdown class="dropdown">
+            <a dropdown-toggle href="#" class="dropdown-toggle" (click)="$event.preventDefault()">
+                <i class="fa fa-user"></i>
+            </a>
+            <ul class="dropdown-menu right">
+                <li *ngIf="loggedUser">
+                    <a class="user-profile" [routerLink]="['/user-profile']">
+                        <i class="fa fa-user"></i>
+                        <span>{{ loggedUser.name }}</span>
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a class="ws" href="{{workspaceUrl}}">
+                        <i class="fa fa-th"></i>
+                        <span>{{ 'workspace' | translate }}</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <form class="navbar-form navbar-search" name="ft-search" (submit)="ftSearch()">
+        <input type="hidden" name="id" value="search" />
+        <input type="search" class="q" name="keyword" value="{{ search_keyword }}" placeholder="{{ 'search' | translate }}" required autocomplete="off" (focus)="searchFocus()" (blur)="searchBlur($event.target)" />
+        <button type="reset">
+            <i class="fa fa-times"></i>
+        </button>
+        <input type="submit" value="search" />
+    </form>
+</nav>

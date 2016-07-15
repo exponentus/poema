@@ -1,6 +1,8 @@
 @import 'attachments.css';
 @import 'request.css';
 @import 'comments.css';
+@import 'project-list.css';
+@import 'task-list.css';
 @import 'task.css';
 @import 'dashboard.css';
 @import 'pikaday.css';
@@ -57,20 +59,6 @@ pagination:empty {
     vertical-align: top;
 }
 
-/*projects {
-    display: block;
-    position: relative;
-}
-
-project {
-    background: #fff;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 99;
-}*/
-
 .entry-wrap.active .entry {
     background: #eee;
 }
@@ -102,62 +90,6 @@ project {
 
 .vw-date {
     width: 105px;
-}
-
-/* .vw-project */
-
-.vw-project-name {
-    width: 18%;
-}
-
-.vw-project-status {
-    width: 100px;
-}
-
-.vw-project-customer {
-    width: 15%;
-}
-
-.vw-project-comment {
-    width: 20%;
-}
-
-/* .vw-task */
-
-.vw-task-status {
-    width: 100px;
-}
-
-.vw-task-priority {
-    width: 100px;
-}
-
-.vw-task-body {
-    width: 20%;
-}
-
-.vw-task-assignee {
-    width: 10%;
-}
-
-.vw-tags {
-    width: 20%;
-}
-
-.vw-tags .tag {
-    padding: 0 4px;
-}
-
-.vw-user-manager {
-    width: 10%;
-}
-
-.vw-user-programmer {
-    width: 10%;
-}
-
-.vw-user-tester {
-    width: 10%;
 }
 
 .content-actions .buttons {

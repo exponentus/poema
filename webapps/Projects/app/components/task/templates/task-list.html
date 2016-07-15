@@ -1,0 +1,42 @@
+<div class="view task-list">
+    <header class="entries-head" *ngIf="showHeader">
+        <div class="head-wrap">
+            <label class="entry-select">
+                <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
+            </label>
+            <div class="entry-captions">
+                <span class="task-list__title">{{'task_title' | translate}}</span>
+                <span class="task-list__status">{{'status' | translate}}</span>
+                <span class="task-list__priority">{{'priority' | translate}}</span>
+                <span class="task-list__assignee">{{'assignee_user' | translate}}</span>
+                <span class="task-list__start_date">{{'start_date' | translate}}</span>
+                <span class="task-list__due_date">{{'due_date' | translate}}</span>
+                <span class="task-list__tags">{{'tags' | translate}}</span>
+            </div>
+        </div>
+    </header>
+    <div class="entries">
+        <div class="entry-wrap" *ngFor="let task of tasks" [class.active]="isSelected(task.id)">
+            <div class="entry">
+                <label class="entry-select">
+                    <input type="checkbox" name="task-id" value="{{task.id}}" [checked]="isSelected(task.id)" (change)="toggleSelected(task.id)" />
+                </label>
+                <a class="entry-link" [routerLink]="['/task', task.id]">
+                    <div class="entry-fields">
+                        <span class="task-list__title">{{task.title}}</span>
+                        <span class="task-list__status">{{task.status | text:'L' | translate}}</span>
+                        <span class="task-list__priority">{{task.priority | text:'L' | translate}}</span>
+                        <span class="task-list__assignee">
+                            <user-cell [userId]="task.assigneeUserId"></user-cell>
+                        </span>
+                        <span class="task-list__start_date">{{task.startDate | dateFmt}}</span>
+                        <span class="task-list__due_date">{{task.dueDate | dateFmt}}</span>
+                        <span class="task-list__tags">
+                            <tags-cell [tagIds]="task.tagIds"></tags-cell>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

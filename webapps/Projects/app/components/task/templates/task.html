@@ -138,10 +138,13 @@
                 </fieldset>
                 <attachments [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
-            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}">
+            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
+                <task-list [tasks]="subTasks"></task-list>
+            </tab>
+            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
-            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}">
+            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
                 <task-requests [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></task-requests>
             </tab>
         </tabs>
