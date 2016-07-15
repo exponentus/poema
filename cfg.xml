@@ -29,10 +29,14 @@
 		<entry>POR</entry>
 	</langs>
 	<mail mode="ON">
-		
+		<smtphost></smtphost>
+		<smtpauth>true</smtpauth>
+		<smtpport>2525</smtpport>
+		<smtpuser>test@exponentus.com</smtpuser>
+		<smtppassword></smtppassword>
 	</mail>
 	<slack mode="ON">
-		<token></token>
+		<token>xoxp-23444271154-23444271170-50169425446-bac36b43f2</token>
 	</slack>
 	<tls mode="OFF">
 		<port>38700</port>
