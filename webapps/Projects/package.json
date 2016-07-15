@@ -3,17 +3,15 @@
     "version": "1.0.0",
     "author": "LOF/MK",
     "license": "LOF",
-    "description": "LOF",
+    "description": "Task manager",
     "scripts": {
         "postinstall": "npm run typings install",
         "typings": "typings",
         "start": "node server.js",
-        "clean": "rm -rf dist",
+        "clean": "rm -rf js",
         "build": "npm run clean && webpack",
         "build:w": "npm run clean && webpack -w",
-        "build_prod": "npm run build && browserify -s main dist/main.js > dist/bundle.js && npm run minify",
-        "minify": "uglifyjs dist/bundle.js --screw-ie8 --compress --mangle --output dist/bundle.min.js",
-        "build": "set NODE_ENV=production & webpack -p --optimize-minimize --optimize-dedupe"
+        "build:prod": "npm run clean && webpack --config webpack.prod.config.js --progress --profile --colors --display-error-details --display-cached"
     },
     "dependencies": {
         "@angular/common": "2.0.0-rc.4",
@@ -38,10 +36,11 @@
         "ts-loader": "^0.8.2",
         "typescript": "^1.8.10",
         "typings": "^0.8.1",
+        "html-loader": "0.4.3",
         "raw-loader": "^0.5.1",
         "html-webpack-plugin": "^2.16.1",
         "compression-webpack-plugin": "0.3.1",
-        "webpack": "^1.13.0",
+        "webpack": "^1.13.1",
         "webpack-dev-server": "^1.14.1",
         "ngrx-store-logger": "~0.1.6"
     }
