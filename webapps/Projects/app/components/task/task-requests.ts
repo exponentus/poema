@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { AttachmentsComponent } from '../attachments';
+import { AttachmentsComponent } from '../attachment/attachments';
 import { Request } from '../../models';
 
 @Component({

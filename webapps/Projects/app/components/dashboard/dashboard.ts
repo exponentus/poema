@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { ProjectSelectComponent } from './shared/project-select';
-import { Project } from '../models';
-import { parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
+import { ProjectSelectComponent } from '../shared/project-select';
+import { Project } from '../../models';
+import { parseResponseObjects, serializeObj, transformPostResponse } from '../../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

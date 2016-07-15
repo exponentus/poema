@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { NotificationService } from './shared/notification';
 import { MarkdownConverter } from './shared/markdown';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/application/app';
 import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { TranslateService as translateService } from './services/translate.service';
 import { APP_SERVICES } from './services';

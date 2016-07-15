@@ -11,7 +11,7 @@ import {
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
-import { AttachmentsComponent } from '../attachments';
+import { AttachmentsComponent } from '../attachment/attachments';
 import { RequestTypeSelectComponent } from '../shared/request-type-select';
 
 @Component({

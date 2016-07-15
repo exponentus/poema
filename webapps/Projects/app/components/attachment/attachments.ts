@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, HostBinding, OnInit, OnDestroy 
 import { Http, Headers } from '@angular/http';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { UploadService } from '../services';
-import { Attachment } from '../models';
+import { UploadService } from '../../services';
+import { Attachment } from '../../models';
 
 @Component({
     selector: 'attachments',

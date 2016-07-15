@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { IProjectsState } from '../reducers/projects.reducer';
-import { ProjectService } from '../services/project.service';
-import { Project } from '../models/project';
+import { IProjectsState } from '../../reducers/projects.reducer';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project';
 
 @Component({
     selector: '[data-component=nav]',

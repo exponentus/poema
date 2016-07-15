@@ -5,13 +5,13 @@ import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from 
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
-import { TAB_DIRECTIVES } from '../shared/tabs';
-import { KeysPipe } from '../pipes/keys.pipe';
-import { AppService } from '../services/app.service';
-import { TranslateService as translateService } from '../services/translate.service';
-import { User } from '../models/user';
-import { IAuthedState } from '../reducers/authed.reducer';
-import { createCookie } from '../utils/utils';
+import { TAB_DIRECTIVES } from '../../shared/tabs';
+import { KeysPipe } from '../../pipes/keys.pipe';
+import { AppService } from '../../services/app.service';
+import { TranslateService as translateService } from '../../services/translate.service';
+import { User } from '../../models/user';
+import { IAuthedState } from '../../reducers/authed.reducer';
+import { createCookie } from '../../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -20,7 +20,7 @@ const HEADERS = new Headers({
 
 @Component({
     selector: '[user-profile]',
-    template: require('../templates/user-profile.html'),
+    template: require('./user-profile.html'),
     directives: [FORM_DIRECTIVES, TAB_DIRECTIVES],
     providers: [FormBuilder],
     pipes: [TranslatePipe, KeysPipe]

@@ -3,16 +3,16 @@ import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
-import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from './services';
-import { IAuthedState } from './reducers/authed.reducer';
-import { NotificationService, NotificationComponent } from './shared/notification';
-import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
-import { NavComponent } from './components/nav';
-import { User } from './models/user';
+import { AppService, ProjectService, TaskService, ReferenceService, StaffService } from '../../services';
+import { IAuthedState } from '../../reducers/authed.reducer';
+import { NotificationService, NotificationComponent } from '../../shared/notification';
+import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { NavComponent } from '../nav/nav';
+import { User } from '../../models/user';
 
 @Component({
     selector: 'app',
-    template: require('./templates/app.html'),
+    template: require('./app.html'),
     directives: [ROUTER_DIRECTIVES, NavComponent, NotificationComponent, DROPDOWN_DIRECTIVES],
     providers: [NotificationService],
     pipes: [TranslatePipe]

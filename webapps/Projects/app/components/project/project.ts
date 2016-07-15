@@ -12,7 +12,7 @@ import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { CustomerSelectComponent } from '../shared/customer-select';
 import { UserSelectComponent } from '../shared/user-select';
-import { AttachmentsComponent } from '../attachments';
+import { AttachmentsComponent } from '../attachment/attachments';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
 import { Project, Organization, User, Attachment } from '../../models';

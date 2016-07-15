@@ -17,7 +17,7 @@ import { TaskTypeSelectComponent } from '../shared/task-type-select';
 import { TagsSelectComponent } from '../shared/tags-select';
 import { TaskRequestsComponent } from './task-requests';
 import { TaskRequestComponent } from './task-request';
-import { AttachmentsComponent } from '../attachments';
+import { AttachmentsComponent } from '../attachment/attachments';
 import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL, TASK_CLOSE, ITaskState } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';

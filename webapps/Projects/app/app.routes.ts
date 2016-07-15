@@ -1,12 +1,12 @@
 import { provideRouter, RouterConfig }  from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
-import { DashboardComponent } from './components/dashboard';
+import { DashboardComponent } from './components/dashboard/dashboard';
 import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
 import { TasksComponent } from './components/task/tasks';
 import { TaskComponent } from './components/task/task';
-import { UserProfileComponent } from './components/user-profile';
+import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { User } from './models/user';
 

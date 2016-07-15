@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { MarkdownEditorComponent, MarkedPipe } from '../../shared/markdown';
-import { AttachmentsComponent } from '../attachments';
+import { AttachmentsComponent } from '../attachment/attachments';
 import { DateFormatPipe } from '../../pipes';
 import { Comment } from '../../models';
 
