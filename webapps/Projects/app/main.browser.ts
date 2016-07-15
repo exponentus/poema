@@ -14,6 +14,10 @@ import { TranslateService as translateService } from './services/translate.servi
 import { APP_SERVICES } from './services';
 import { APP_STORE } from './store';
 
+if (webpack.ENV === 'production') {
+    enableProdMode();
+}
+
 bootstrap(AppComponent, [
     HTTP_PROVIDERS,
     APP_ROUTER_PROVIDERS,

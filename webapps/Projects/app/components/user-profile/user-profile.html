@@ -106,11 +106,7 @@
                         </div>
                         <div class="controls">
                             <ul class="input-placeholder list-style-none">
-                                <xsl:for-each select="fields/roles/entry">
-                                    <li>
-                                        <xsl:value-of select="." />
-                                    </li>
-                                </xsl:for-each>
+                                <li *ngFor="let role of user.roles">{{role}}</li>
                             </ul>
                         </div>
                     </div>
