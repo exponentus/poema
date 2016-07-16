@@ -9,10 +9,10 @@ import {
     TASK_REQUEST_CANCEL
 } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
-import { TaskService } from '../../services';
-import { Task, Request, RequestType, Attachment } from '../../models';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { RequestTypeInputComponent } from '../shared/request-type-input';
+import { TaskService } from '../../services';
+import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
     selector: 'task-request',

@@ -21,6 +21,10 @@ body:not(.side-nav-toggle) .aside + .content {
     margin-left: 280px;
 }
 
+.select .select-search {
+    background: #f5f5f5;
+}
+
 .view.load:before {
     background: url("../img/loading.gif") no-repeat center center;
     content: '';

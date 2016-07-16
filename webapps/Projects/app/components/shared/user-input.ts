@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { IStaffState } from '../../reducers/staff.reducer';
 import { User } from '../../models';
 
 @Component({
@@ -22,7 +23,7 @@ import { User } from '../../models';
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
                     <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = ''">
+                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
@@ -42,7 +43,7 @@ export class UserInputComponent {
     @Input() userIds: string[];
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
-    @Input() searchable: boolean = true;
+    @Input() searchable: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private users: User[] = [];
     private selectedUsers: User[] = [];
@@ -51,7 +52,7 @@ export class UserInputComponent {
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.sub = this.store.select('staff').subscribe((state: any) => {
+        this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
             this.users = state.users;
             if (this.selectedUsers) {
                 this.selectedUsers = state.users.filter(it => this.userIds.indexOf(it.id) != -1);

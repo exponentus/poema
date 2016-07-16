@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
+import { IReferenceState } from '../../reducers/reference.reducer';
 import { Tag } from '../../models';
 
 @Component({
@@ -30,7 +31,7 @@ import { Tag } from '../../models';
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
                     <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = ''">
+                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
@@ -51,7 +52,7 @@ import { Tag } from '../../models';
 export class TagsInputComponent {
     @Input() tagIds: string[] = [];
     @Input() editable: boolean = false;
-    @Input() searchable: boolean = true;
+    @Input() searchable: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private tags: Tag[] = [];
     private selectedTags: Tag[] = [];
@@ -60,7 +61,7 @@ export class TagsInputComponent {
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
-        this.sub = this.store.select('reference').subscribe((state: any) => {
+        this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.tags = state.tags;
             if (this.tagIds) {
                 this.selectedTags = state.tags.filter(it => this.tagIds.indexOf(it.id) != -1);
@@ -100,6 +101,8 @@ export class TagsInputComponent {
 
     onScroll($event) {
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
-        console.log(scrollHeight - clientHeight, scrollTop);
+        if ((scrollHeight - clientHeight) == scrollTop) {
+            console.log('scroll end');
+        }
     }
 }

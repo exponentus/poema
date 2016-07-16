@@ -2,8 +2,7 @@ import { Component, Input, Output } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { OrganizationInputComponent } from '../shared/organization-input';
-import { UserInputComponent } from '../shared/user-input';
+import { OrganizationInputComponent, UserInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { Project } from '../../models';
 

@@ -19,7 +19,7 @@ import { Project } from '../../models';
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
                     <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = ''">
+                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
@@ -38,7 +38,7 @@ import { Project } from '../../models';
 export class ProjectInputComponent {
     @Input() projectId: string;
     @Input() editable: boolean = false;
-    @Input() searchable: boolean = true;
+    @Input() searchable: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private projects: Project[] = [];
     private project: Project;
@@ -70,6 +70,8 @@ export class ProjectInputComponent {
 
     onScroll($event) {
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
-        console.log(scrollHeight - clientHeight, scrollTop);
+        if ((scrollHeight - clientHeight) == scrollTop) {
+            console.log('scroll end');
+        }
     }
 }

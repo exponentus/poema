@@ -4,7 +4,6 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
 import { NotificationService } from '../../shared/notification';
-import { PaginationComponent } from '../../shared/pagination';
 import { Task, Comment } from '../../models';
 import { TaskService } from '../../services';
 import { ITaskState } from '../../reducers/task.reducer';
@@ -40,7 +39,7 @@ import { CommentComponent } from './comment';
             </section>
         </div>
     `,
-    directives: [PaginationComponent, CommentComponent, MarkdownEditorComponent],
+    directives: [CommentComponent, MarkdownEditorComponent],
     pipes: [TranslatePipe]
 })
 
