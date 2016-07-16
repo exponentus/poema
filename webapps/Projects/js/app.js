@@ -3692,7 +3692,14 @@ webpackJsonp([0],{
 	function createURLSearchParams(_params) {
 	    var params = new http_1.URLSearchParams();
 	    for (var p in _params) {
-	        params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+	        if (_params[p] instanceof Array) {
+	            for (var t in _params[p]) {
+	                params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
+	            }
+	        }
+	        else {
+	            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+	        }
 	    }
 	    return params;
 	}
@@ -4770,6 +4777,7 @@ webpackJsonp([0],{
 	        this.renderer = renderer;
 	        this.open = false;
 	        this.mouseEvent = false;
+	        this.dropdownToggle = new core_1.EventEmitter();
 	        this.selfClick = false;
 	        this.delay = 500;
 	        this.documentClickListener = this.renderer.listenGlobal('body', 'click', function () {
@@ -4819,8 +4827,9 @@ webpackJsonp([0],{
 	        this.documentClickListener();
 	    };
 	    DropdownComponent.prototype.toggleDropdown = function (event) {
-	        this.open = !this.open;
 	        event.preventDefault();
+	        this.open = !this.open;
+	        this.dropdownToggle.emit(this.open);
 	    };
 	    __decorate([
 	        core_1.HostBinding('class.dropdown'), 
@@ -4860,6 +4869,10 @@ webpackJsonp([0],{
 	        core_1.Input(), 
 	        __metadata('design:type', Object)
 	    ], DropdownComponent.prototype, "mouseEvent", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], DropdownComponent.prototype, "dropdownToggle", void 0);
 	    DropdownComponent = __decorate([
 	        core_1.Component({
 	            selector: '[dropdown]',
@@ -5304,13 +5317,15 @@ webpackJsonp([0],{
 	var notification_1 = __webpack_require__(376);
 	var pipes_1 = __webpack_require__(493);
 	var pagination_1 = __webpack_require__(692);
+	var staff_service_1 = __webpack_require__(476);
 	var project_service_1 = __webpack_require__(458);
 	var project_list_1 = __webpack_require__(602);
 	var ProjectsComponent = (function () {
-	    function ProjectsComponent(store, router, projectService, notifyService) {
+	    function ProjectsComponent(store, router, projectService, staffService, notifyService) {
 	        this.store = store;
 	        this.router = router;
 	        this.projectService = projectService;
+	        this.staffService = staffService;
 	        this.notifyService = notifyService;
 	        this.title = 'projects';
 	        this.params = {};
@@ -5333,8 +5348,17 @@ webpackJsonp([0],{
 	    };
 	    ProjectsComponent.prototype.loadData = function (params) {
 	        var _this = this;
-	        this.projectService.fetchProjects(params).subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.projectService.fetchProjects(params).subscribe(function (fpAction) {
+	            var customerIds = fpAction.payload.projects.map(function (it) { return it.customerId; });
+	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (foAction) {
+	                var orgs = foAction.payload.organizations;
+	                fpAction.payload.projects.map(function (p) {
+	                    if (p.customerId) {
+	                        p.customer = orgs.filter(function (org) { return org.id == p.customerId; })[0];
+	                    }
+	                });
+	                _this.store.dispatch(fpAction);
+	            });
 	        });
 	    };
 	    ProjectsComponent.prototype.goToPage = function (params) {
@@ -5358,7 +5382,7 @@ webpackJsonp([0],{
 	            ],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_service_1.ProjectService, notification_1.NotificationService])
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_service_1.ProjectService, staff_service_1.StaffService, notification_1.NotificationService])
 	    ], ProjectsComponent);
 	    return ProjectsComponent;
 	}());
@@ -5740,27 +5764,42 @@ webpackJsonp([0],{
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(5);
-	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var dropdown_1 = __webpack_require__(480);
+	var staff_service_1 = __webpack_require__(476);
+	var models_1 = __webpack_require__(460);
 	var OrganizationInputComponent = (function () {
-	    function OrganizationInputComponent(store) {
-	        this.store = store;
+	    function OrganizationInputComponent(staffService) {
+	        this.staffService = staffService;
 	        this.editable = false;
 	        this.searchable = false;
 	        this.select = new core_1.EventEmitter();
+	        this.organizations = [];
 	        this.keyWord = '';
+	        this.allLoaded = false;
 	    }
-	    OrganizationInputComponent.prototype.ngOnInit = function () {
+	    OrganizationInputComponent.prototype.ngAfterContentInit = function () {
 	        var _this = this;
-	        this.sub = this.store.select('staff').subscribe(function (state) {
-	            _this.organizations = state.organizations;
-	            _this.org = state.organizations.filter(function (it) { return it.id == _this.orgId; })[0];
-	            _this.searchable = _this.organizations.length > 13;
-	        });
+	        if (!this.org && this.orgId) {
+	            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(function (action) {
+	                _this.org = action.payload.organizations[0];
+	            });
+	        }
 	    };
-	    OrganizationInputComponent.prototype.ngOnDestroy = function () {
-	        this.sub.unsubscribe();
+	    OrganizationInputComponent.prototype.loadOrganizations = function (page) {
+	        var _this = this;
+	        if (page === void 0) { page = 1; }
+	        if (this.allLoaded || this.meta && (page <= this.meta.page)) {
+	            console.log(this.meta.page, page);
+	            return;
+	        }
+	        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(function (action) {
+	            _this.organizations = _this.organizations.concat(action.payload.organizations);
+	            _this.meta = action.payload.meta;
+	            if (!_this.searchable) {
+	                _this.searchable = _this.organizations.length > 13;
+	            }
+	        });
 	    };
 	    OrganizationInputComponent.prototype.getOrganizations = function () {
 	        var _this = this;
@@ -5780,13 +5819,22 @@ webpackJsonp([0],{
 	    OrganizationInputComponent.prototype.onScroll = function ($event) {
 	        var _a = $event.target, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight, scrollTop = _a.scrollTop;
 	        if ((scrollHeight - clientHeight) == scrollTop) {
-	            console.log('scroll end');
+	            if (this.meta && this.meta.page < this.meta.totalPages) {
+	                this.loadOrganizations(this.meta.page + 1);
+	            }
+	            else {
+	                this.allLoaded = true;
+	            }
 	        }
 	    };
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
 	    ], OrganizationInputComponent.prototype, "orgId", void 0);
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', models_1.Organization)
+	    ], OrganizationInputComponent.prototype, "org", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
@@ -5802,11 +5850,11 @@ webpackJsonp([0],{
 	    OrganizationInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'organization-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            {{org?.name}}\n        </span>\n        <div dropdown class=\"select organization-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{org?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <!-- <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button> -->\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"org?.id == m.id\" *ngFor=\"let m of getOrganizations()\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            {{org?.name}}\n        </span>\n        <div dropdown class=\"select organization-input\" *ngIf=\"editable\" (dropdownToggle)=\"loadOrganizations()\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{org?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <!-- <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button> -->\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"org?.id == m.id\" *ngFor=\"let m of getOrganizations()\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store])
+	        __metadata('design:paramtypes', [staff_service_1.StaffService])
 	    ], OrganizationInputComponent);
 	    return OrganizationInputComponent;
 	}());
@@ -5932,7 +5980,7 @@ webpackJsonp([0],{
 /***/ 605:
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"project-list__name\">{{'name' | translate}}</span>\r\n                <span class=\"project-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"project-list__customer\">{{'customer' | translate}}</span>\r\n                <span class=\"project-list__manager\">{{'manager' | translate}}</span>\r\n                <span class=\"project-list__programmer\">{{'programmer' | translate}}</span>\r\n                <span class=\"project-list__tester\">{{'tester' | translate}}</span>\r\n                <span class=\"project-list__finish_date\">{{'finish_date' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"project-list__name\">{{project.name}}</span>\r\n                        <span class=\"project-list__status\">{{project.status | text:'L' | translate}}</span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"project-list__customer\">\r\n                            <organization-input [orgId]=\"project.customerId\"></organization-input>\r\n                        </span>\r\n                        <span class=\"project-list__manager\">\r\n                            <user-input [userIds]=\"[project.managerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__programmer\">\r\n                            <user-input [userIds]=\"[project.programmerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__tester\">\r\n                            <user-input [userIds]=\"[project.testerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__finish_date\">{{project.finishDate | dateFmt}}</span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"project-list__name\">{{'name' | translate}}</span>\r\n                <span class=\"project-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"project-list__customer\">{{'customer' | translate}}</span>\r\n                <span class=\"project-list__manager\">{{'manager' | translate}}</span>\r\n                <span class=\"project-list__programmer\">{{'programmer' | translate}}</span>\r\n                <span class=\"project-list__tester\">{{'tester' | translate}}</span>\r\n                <span class=\"project-list__finish_date\">{{'finish_date' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"project-list__name\">{{project.name}}</span>\r\n                        <span class=\"project-list__status\">{{project.status | text:'L' | translate}}</span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"project-list__customer\">\r\n                            <organization-input [org]=\"project.customer\"></organization-input>\r\n                        </span>\r\n                        <span class=\"project-list__manager\">\r\n                            <user-input [userIds]=\"[project.managerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__programmer\">\r\n                            <user-input [userIds]=\"[project.programmerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__tester\">\r\n                            <user-input [userIds]=\"[project.testerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__finish_date\">{{project.finishDate | dateFmt}}</span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
 

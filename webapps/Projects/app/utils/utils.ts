@@ -3,7 +3,13 @@ import { URLSearchParams, Response } from '@angular/http';
 export function createURLSearchParams(_params): URLSearchParams {
     let params: URLSearchParams = new URLSearchParams();
     for (let p in _params) {
-        params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+        if (_params[p] instanceof Array) {
+            for (let t in _params[p]) {
+                params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
+            }
+        } else {
+            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+        }
     }
     return params;
 }

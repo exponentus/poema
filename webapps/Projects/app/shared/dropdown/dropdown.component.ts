@@ -1,4 +1,16 @@
-import { Component, Input, HostBinding, HostListener, Renderer, AfterContentInit, OnDestroy, ContentChildren, EventEmitter, QueryList } from '@angular/core';
+import {
+    Component,
+    Input,
+    Output,
+    HostBinding,
+    HostListener,
+    Renderer,
+    AfterContentInit,
+    OnDestroy,
+    ContentChildren,
+    EventEmitter,
+    QueryList
+} from '@angular/core';
 
 import { DropdownToggleComponent } from './dropdown-toggle.component';
 
@@ -32,6 +44,7 @@ export class DropdownComponent {
     @ContentChildren(DropdownToggleComponent) toggleComponent: QueryList<DropdownToggleComponent>;
     @Input() open = false;
     @Input() mouseEvent = false;
+    @Output() dropdownToggle = new EventEmitter<any>();
     private documentClickListener;
     private documentKeyupListener;
     private selfClick: boolean = false;
@@ -65,7 +78,8 @@ export class DropdownComponent {
     }
 
     toggleDropdown(event) {
-        this.open = !this.open;
         event.preventDefault();
+        this.open = !this.open;
+        this.dropdownToggle.emit(this.open);
     }
 }

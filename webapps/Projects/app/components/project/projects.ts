@@ -6,6 +6,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
+import { StaffService } from '../../services/staff.service';
 import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
 import { ProjectListComponent } from './project-list';
@@ -37,6 +38,7 @@ export class ProjectsComponent {
         private store: Store<any>,
         private router: Router,
         private projectService: ProjectService,
+        private staffService: StaffService,
         private notifyService: NotificationService
     ) { }
 
@@ -57,8 +59,17 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
-        this.projectService.fetchProjects(params).subscribe(action => {
-            this.store.dispatch(action);
+        this.projectService.fetchProjects(params).subscribe(fpAction => {
+            let customerIds = fpAction.payload.projects.map(it => it.customerId);
+            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(foAction => {
+                let orgs = foAction.payload.organizations;
+                fpAction.payload.projects.map(p => {
+                    if (p.customerId) {
+                        p.customer = orgs.filter(org => org.id == p.customerId)[0];
+                    }
+                });
+                this.store.dispatch(fpAction);
+            });
         });
     }
 

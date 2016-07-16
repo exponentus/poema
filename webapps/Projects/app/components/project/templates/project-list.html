@@ -30,7 +30,7 @@
                             <i class="fa fa-paperclip" *ngIf="project.hasAttachments"></i>
                         </span>
                         <span class="project-list__customer">
-                            <organization-input [orgId]="project.customerId"></organization-input>
+                            <organization-input [org]="project.customer"></organization-input>
                         </span>
                         <span class="project-list__manager">
                             <user-input [userIds]="[project.managerUserId]"></user-input>

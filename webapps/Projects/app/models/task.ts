@@ -1,4 +1,5 @@
 import { Attachment } from './attachment';
+import { Project } from './project';
 import { Request } from './request';
 
 export class Task {
@@ -8,6 +9,7 @@ export class Task {
     wasRead: boolean;
     fsid: string = '' + Date.now();
 
+    project: Project;
     projectId: string;
     parentTaskId: string;
     hasSubtasks: string[];

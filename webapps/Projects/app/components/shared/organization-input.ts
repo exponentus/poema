@@ -1,9 +1,8 @@
-import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, Input, Output, AfterContentInit, EventEmitter } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
-import { IStaffState } from '../../reducers/staff.reducer';
+import { StaffService } from '../../services/staff.service';
 import { Organization } from '../../models';
 
 @Component({
@@ -12,7 +11,7 @@ import { Organization } from '../../models';
         <span *ngIf="!editable">
             {{org?.name}}
         </span>
-        <div dropdown class="select organization-input" *ngIf="editable">
+        <div dropdown class="select organization-input" *ngIf="editable" (dropdownToggle)="loadOrganizations()">
             <div dropdown-toggle class="select-selection input">
                 <span>{{org?.name}}</span>
             </div>
@@ -37,26 +36,38 @@ import { Organization } from '../../models';
 
 export class OrganizationInputComponent {
     @Input() orgId: string;
+    @Input() org: Organization;
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
-    private organizations: any;
-    private org: any;
+    private organizations: Organization[] = [];
     private keyWord: string = '';
-    private sub: any;
+    private meta: any;
+    private allLoaded = false;
 
-    constructor(private store: Store<any>) { }
+    constructor(private staffService: StaffService) { }
 
-    ngOnInit() {
-        this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
-            this.organizations = state.organizations;
-            this.org = state.organizations.filter(it => it.id == this.orgId)[0];
-            this.searchable = this.organizations.length > 13;
-        });
+    ngAfterContentInit() {
+        if (!this.org && this.orgId) {
+            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(action => {
+                this.org = action.payload.organizations[0];
+            })
+        }
     }
 
-    ngOnDestroy() {
-        this.sub.unsubscribe();
+    loadOrganizations(page = 1) {
+        if (this.allLoaded || this.meta && (page <= this.meta.page)) {
+            console.log(this.meta.page, page);
+            return;
+        }
+
+        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(action => {
+            this.organizations = this.organizations.concat(action.payload.organizations);
+            this.meta = action.payload.meta;
+            if (!this.searchable) {
+                this.searchable = this.organizations.length > 13;
+            }
+        });
     }
 
     getOrganizations() {
@@ -79,7 +90,11 @@ export class OrganizationInputComponent {
     onScroll($event) {
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
         if ((scrollHeight - clientHeight) == scrollTop) {
-            console.log('scroll end');
+            if (this.meta && this.meta.page < this.meta.totalPages) {
+                this.loadOrganizations(this.meta.page + 1);
+            } else {
+                this.allLoaded = true;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+import { Organization } from './organization';
 import { Attachment } from './attachment';
 
 export class Project {
@@ -9,6 +10,7 @@ export class Project {
 
     name: string;
     status: string = 'DRAFT';
+    customer: Organization;
     customerId: string;
     managerUserId: string;
     programmerUserId: string;
