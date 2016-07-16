@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { ProjectSelectComponent } from '../shared/project-select';
+import { ProjectInputComponent } from '../shared/project-input';
 import { Project } from '../../models';
 import { parseResponseObjects, serializeObj, transformPostResponse } from '../../utils/utils';
 
@@ -30,12 +30,12 @@ const HEADERS = new Headers({
                 </section>
             </div>
             <div class="span3">
-                <project-select (onSelect)="selectProject($event)"></project-select>
+                <project-input editable="true" (select)="selectProject($event)"></project-input>
                 <button class="btn" type="button" (click)="addProjectToDashboard()">{{'dashboard_add_project' | translate}}</button>
             </div>
         </div>
     `,
-    directives: [ProjectSelectComponent],
+    directives: [ProjectInputComponent],
     pipes: [TranslatePipe]
 })
 

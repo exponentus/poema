@@ -12,7 +12,7 @@ import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 import { AttachmentsComponent } from '../attachment/attachments';
-import { RequestTypeSelectComponent } from '../shared/request-type-select';
+import { RequestTypeInputComponent } from '../shared/request-type-input';
 
 @Component({
     selector: 'task-request',
@@ -20,7 +20,7 @@ import { RequestTypeSelectComponent } from '../shared/request-type-select';
         <form class="task-request-form" (submit)="sendRequest($event)">
             <header>{{ 'task_request' | translate }}</header>
             <section>
-                <request-type-select [requestTypeId]="request.requestTypeId" (onSelect)="selectRequestType($event)"></request-type-select>
+                <request-type-input editable="true" [requestTypeId]="request.requestTypeId" (select)="setRequestType($event)"></request-type-input>
                 <textarea class="request-comment" [(ngModel)]="comment"></textarea>
                 <attachments [model]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
             </section>
@@ -30,7 +30,7 @@ import { RequestTypeSelectComponent } from '../shared/request-type-select';
             </footer>
         </form>
     `,
-    directives: [AttachmentsComponent, RequestTypeSelectComponent],
+    directives: [AttachmentsComponent, RequestTypeInputComponent],
     host: {
         '[class.task-request]': 'true',
         '[class.task-request-open]': 'isOpen',
@@ -80,11 +80,6 @@ export class TaskRequestComponent {
         this.taskSub.unsubscribe();
     }
 
-    selectRequestType(requestType: RequestType) {
-        this.requestType = requestType;
-        document.body.click();
-    }
-
     cancel() {
         this.store.dispatch({ type: TASK_REQUEST_CANCEL });
     }
@@ -99,6 +94,10 @@ export class TaskRequestComponent {
             this.notifyService.info('request send: success').show().remove(3000);
             this.cancel();
         });
+    }
+
+    setRequestType(requestType: RequestType) {
+        this.requestType = requestType;
     }
 
     addAttachment(file) {

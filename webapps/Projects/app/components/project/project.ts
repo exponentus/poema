@@ -10,8 +10,8 @@ import { DatepickerDirective } from '../../shared/datepicker/datepicker';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
-import { CustomerSelectComponent } from '../shared/customer-select';
-import { UserSelectComponent } from '../shared/user-select';
+import { OrganizationInputComponent } from '../shared/organization-input';
+import { UserInputComponent } from '../shared/user-input';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { TextTransformPipe } from '../../pipes';
 import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
@@ -26,8 +26,8 @@ import { Project, Organization, User, Attachment } from '../../models';
         FORM_DIRECTIVES,
         DROPDOWN_DIRECTIVES,
         SwitchButtonComponent,
-        CustomerSelectComponent,
-        UserSelectComponent,
+        OrganizationInputComponent,
+        UserInputComponent,
         AttachmentsComponent,
         MarkdownEditorComponent,
         DatepickerDirective
@@ -93,10 +93,6 @@ export class ProjectComponent {
         this.project.comment = text;
     }
 
-    setFinishDate(date) {
-        this.project.finishDate = date;
-    }
-
     saveProject() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.projectService.saveProject(this.project).subscribe(
@@ -141,37 +137,28 @@ export class ProjectComponent {
         this.project.status = value;
     }
 
-    closeDropdown() {
-        document.body.click();
-    }
-
-    selectCustomer(customer: Organization) {
+    setCustomer(customer: Organization) {
         // console.log('select', customer);
         this.project.customerId = customer.id;
-        this.closeDropdown();
     }
 
-    selectManager(user: User) {
+    setManager(user: User) {
         this.project.managerUserId = user.id;
-        this.closeDropdown();
     }
 
-    selectProgrammer(user: User) {
+    setProgrammer(user: User) {
         this.project.programmerUserId = user.id;
-        this.closeDropdown();
     }
 
-    selectTester(user: User) {
+    setTester(user: User) {
         this.project.testerUserId = user.id;
-        this.closeDropdown();
     }
 
-    selectObserver(observer: User) {
+    setObserver(observer: User) {
         if (!this.project.observerUserIds) {
             this.project.observerUserIds = [];
         }
         this.project.observerUserIds.push(observer.id);
-        this.closeDropdown();
     }
 
     removeObserver(observer: User, $event) {
@@ -182,7 +169,10 @@ export class ProjectComponent {
         });
 
         $event.stopPropagation();
-        this.closeDropdown();
+    }
+
+    setFinishDate(date) {
+        this.project.finishDate = date;
     }
 
     addAttachment(file) {

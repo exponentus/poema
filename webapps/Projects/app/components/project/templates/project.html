@@ -41,7 +41,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.customerUserId.valid">
                     <div class="span8">
-                        <customer-select [customerId]="project.customerId" (onSelect)="selectCustomer($event)"></customer-select>
+                        <organization-input editable="true" [orgId]="project.customerId" (select)="setCustomer($event)"></organization-input>
                     </div>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.managerUserId.valid">
                     <div class="span8">
-                        <user-select [userId]="project.managerUserId" (onSelect)="selectManager($event)"></user-select>
+                        <user-input editable="true" [userId]="project.managerUserId" (select)="setManager($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.programmerUserId.valid">
                     <div class="span8">
-                        <user-select [userId]="project.programmerUserId" (onSelect)="selectProgrammer($event)"></user-select>
+                        <user-input editable="true" [userId]="project.programmerUserId" (select)="setProgrammer($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.testerUserId.valid">
                     <div class="span8">
-                        <user-select [userId]="project.testerUserId" (onSelect)="selectTester($event)"></user-select>
+                        <user-input editable="true" [userId]="project.testerUserId" (select)="setTester($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="controls">
                     <div class="span8">
-                        <user-select [userId]="project.observerUserIds" (onSelect)="selectObserver($event)"></user-select>
+                        <user-input editable="true" [userId]="project.observerUserIds" (select)="setObserver($event)"></user-input>
                     </div>
                 </div>
             </div>

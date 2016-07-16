@@ -11,10 +11,10 @@ import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
-import { UserSelectComponent } from '../shared/user-select';
-import { ProjectSelectComponent } from '../shared/project-select';
-import { TaskTypeSelectComponent } from '../shared/task-type-select';
-import { TagsSelectComponent } from '../shared/tags-select';
+import { UserInputComponent } from '../shared/user-input';
+import { ProjectInputComponent } from '../shared/project-input';
+import { TaskTypeInputComponent } from '../shared/task-type-input';
+import { TagsInputComponent } from '../shared/tags-input';
 import { TaskListComponent } from './task-list';
 import { TaskRequestsComponent } from './task-requests';
 import { TaskRequestComponent } from './task-request';
@@ -34,10 +34,10 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         SwitchButtonComponent,
         DROPDOWN_DIRECTIVES,
         TAB_DIRECTIVES,
-        UserSelectComponent,
-        ProjectSelectComponent,
-        TaskTypeSelectComponent,
-        TagsSelectComponent,
+        UserInputComponent,
+        ProjectInputComponent,
+        TaskTypeInputComponent,
+        TagsInputComponent,
         TaskListComponent,
         TaskRequestsComponent,
         TaskRequestComponent,

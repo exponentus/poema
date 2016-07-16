@@ -55,7 +55,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.projectId.valid">
                             <div class="span8">
-                                <project-select [projectId]="task.projectId" (onSelect)="selectProject($event)"></project-select>
+                                <project-input editable="true" [projectId]="task.projectId" (select)="selectProject($event)"></project-input>
                             </div>
                         </div>
                         <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
@@ -68,7 +68,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
                             <div class="span8">
-                                <task-type-select [taskTypeId]="task.taskTypeId" (onSelect)="selectTaskType($event)"></task-type-select>
+                                <task-type-input editable="true" [taskTypeId]="task.taskTypeId" (select)="selectTaskType($event)"></task-type-input>
                             </div>
                             <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
                                 {{'required' | translate}}
@@ -92,7 +92,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
                             <div class="span8">
-                                <user-select [userId]="task.assigneeUserId" (onSelect)="selectAssigneeUser($event)"></user-select>
+                                <user-input editable="true" [userId]="task.assigneeUserId" (select)="selectAssigneeUser($event)"></user-input>
                             </div>
                             <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
                                 {{'required' | translate}}
@@ -121,7 +121,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
                             <div class="span8">
-                                <tags-select [tagIds]="task.tagIds" (setTags)="setTags($event)"></tags-select>
+                                <tags-input editable="true" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
                             </div>
                         </div>
                     </div>

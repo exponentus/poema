@@ -20,7 +20,6 @@ import { User } from '../../models/user';
 export class NavbarComponent {
     private sub: any;
     loggedUser: User;
-
     HEADER_TITLE: string = 'Projects';
     workspaceUrl: string = '/Workspace/p?id=workspace';
 

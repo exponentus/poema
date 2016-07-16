@@ -27,9 +27,9 @@ export class AppComponent {
     loggedUser: User;
     language: any;
     HEADER_TITLE: string = 'Projects';
-    isNavCollapsed: Boolean;
-    isSearchOpen: Boolean;
-    isMobileDevice: Boolean;
+    isNavCollapsed: boolean = false;
+    isSearchOpen: boolean = false;
+    isMobileDevice: boolean = false;
     workspaceUrl: string = '/Workspace/p?id=workspace';
 
     @HostListener('window:resize', ['$event.target']) resize(window) { this.onResize(window); };
@@ -51,7 +51,6 @@ export class AppComponent {
         this.sub = this.store.select('reference');
 
         this.subEnv = this.store.select('environment').subscribe((state: IEnvironmentState) => {
-            // this.isMobileDevice = state.isMobile;
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;
         });
@@ -74,8 +73,6 @@ export class AppComponent {
             this.store.dispatch(action);
         });
 
-        this.isSearchOpen = false;
-        this.isNavCollapsed = false;
         this.loggedUser = new User();
         this.isMobileDevice = this.isMobile();
 
@@ -96,8 +93,6 @@ export class AppComponent {
     }
 
     hideNav(event) {
-        // this.isNavCollapsed = false;
-        // this.isSearchOpen = false;
         this.store.dispatch({ type: HIDE_NAV });
         event.preventDefault();
     }

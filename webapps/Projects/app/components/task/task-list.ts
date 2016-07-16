@@ -2,15 +2,15 @@ import { Component, Input, Output } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { UserCellComponent } from '../shared/user-cell';
-import { TagsCellComponent } from '../shared/tags-cell';
+import { UserInputComponent } from '../shared/user-input';
+import { TagsInputComponent } from '../shared/tags-input';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { Task } from '../../models';
 
 @Component({
     selector: 'task-list',
     template: require('./templates/task-list.html'),
-    directives: [ROUTER_DIRECTIVES, UserCellComponent, TagsCellComponent],
+    directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
 
