@@ -160,18 +160,6 @@ export class TaskComponent {
         }
     }
 
-    setStartDate(date) {
-        this.task.startDate = date;
-    }
-
-    setDueDate(date) {
-        this.task.dueDate = date;
-    }
-
-    updateTaskBody(text: string) {
-        this.task.body = text;
-    }
-
     saveTask() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.taskService.saveTask(this.task).subscribe(
@@ -276,46 +264,32 @@ export class TaskComponent {
         this.task.priority = value;
     }
 
-    closeDropdown() {
-        document.body.click();
-    }
-
-    selectProject(project: Project) {
+    setProject(project: Project) {
         this.task.projectId = project.id;
-        this.closeDropdown();
     }
 
-    selectTaskType(taskType: TaskType) {
+    setTaskType(taskType: TaskType) {
         this.task.taskTypeId = taskType.id;
-        this.closeDropdown();
     }
 
-    selectAssigneeUser(assigneeUser: User) {
-        this.task.assigneeUserId = assigneeUser.id;
-        this.closeDropdown();
+    setAssigneeUser(assigneeUser: User[]) {
+        this.task.assigneeUserId = assigneeUser[0].id;
+    }
+
+    setStartDate(date) {
+        this.task.startDate = date;
+    }
+
+    setDueDate(date) {
+        this.task.dueDate = date;
+    }
+
+    updateTaskBody(text: string) {
+        this.task.body = text;
     }
 
     setTags(tags: Tag[]) {
         this.task.tagIds = tags.map(it => it.id);
-    }
-
-    selectTag(tag: Tag) {
-        if (!this.task.tagIds) {
-            this.task.tagIds = [];
-        }
-        this.task.tagIds.push(tag.id);
-        this.closeDropdown();
-    }
-
-    removeTag(tag: Tag, $event) {
-        this.task.tagIds.forEach((id, index) => {
-            if (id === tag.id) {
-                this.task.tagIds.splice(index, 1);
-            }
-        });
-
-        $event.stopPropagation();
-        this.closeDropdown();
     }
 
     addAttachment(file) {

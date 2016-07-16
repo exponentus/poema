@@ -27,7 +27,7 @@
                         <span class="task-list__status">{{task.status | text:'L' | translate}}</span>
                         <span class="task-list__priority">{{task.priority | text:'L' | translate}}</span>
                         <span class="task-list__assignee">
-                            <user-input [userId]="task.assigneeUserId"></user-input>
+                            <user-input [userIds]="[task.assigneeUserId]"></user-input>
                         </span>
                         <span class="task-list__start_date">{{task.startDate | dateFmt}}</span>
                         <span class="task-list__due_date">{{task.dueDate | dateFmt}}</span>

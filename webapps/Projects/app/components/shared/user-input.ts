@@ -9,11 +9,15 @@ import { User } from '../../models';
     selector: 'user-input',
     template: `
         <span *ngIf="!editable">
-            {{user?.userName || user?.login}}
+            <span [class.tag]="multiple" *ngFor="let m of selectedUsers">
+                {{m?.userName || m?.login}}
+            </span>
         </span>
         <div dropdown class="select user-input" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
-                <span>{{user?.userName || user?.login}}</span>
+                <span [class.tag]="multiple" *ngFor="let m of selectedUsers" (click)="remove(m, $event)">
+                    {{m?.userName || m?.login}}
+                </span>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -23,7 +27,7 @@ import { User } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="userId == m.id" *ngFor="let m of users" (click)="onSelect(m)">
+                    <li class="select-option" [class.selected]="userIds.indexOf(m.id) !=- 1" *ngFor="let m of getUsers()" (click)="add(m)">
                         {{m.name || m.login}}
                     </li>
                 </ul>
@@ -35,12 +39,13 @@ import { User } from '../../models';
 })
 
 export class UserInputComponent {
-    @Input() userId: string;
+    @Input() userIds: string[];
+    @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() searchable: boolean = true;
     @Output() select: EventEmitter<any> = new EventEmitter();
-    private users: any;
-    private user: any;
+    private users: User[] = [];
+    private selectedUsers: User[] = [];
     private sub: any;
 
     constructor(private store: Store<any>) { }
@@ -48,7 +53,9 @@ export class UserInputComponent {
     ngOnInit() {
         this.sub = this.store.select('staff').subscribe((state: any) => {
             this.users = state.users;
-            this.user = state.users.filter(it => it.id == this.userId)[0];
+            if (this.selectedUsers) {
+                this.selectedUsers = state.users.filter(it => this.userIds.indexOf(it.id) != -1);
+            }
             this.searchable = this.users.length > 13;
         });
     }
@@ -57,18 +64,43 @@ export class UserInputComponent {
         this.sub.unsubscribe();
     }
 
+    getUsers() {
+        if (this.multiple && this.userIds) {
+            return this.users.filter(it => this.userIds.indexOf(it.id) == -1);
+        } else {
+            return this.users;
+        }
+    }
+
     search(keyWord) {
         console.log(keyWord);
     }
 
-    onSelect(m) {
-        this.user = m;
-        this.select.emit(this.user);
-        document.body.click();
+    add(user: User) {
+        if (this.multiple) {
+            this.selectedUsers.push(user);
+            this.userIds = this.selectedUsers.map(it => it.id);
+        } else {
+            this.selectedUsers = [user];
+            this.userIds = [user.id];
+            document.body.click();
+        }
+        this.select.emit(this.selectedUsers);
+    }
+
+    remove(user: User, $event) {
+        if (this.multiple) {
+            $event.stopPropagation();
+            this.selectedUsers = this.selectedUsers.filter(it => it.id != user.id);
+            this.userIds = this.selectedUsers.map(it => it.id);
+            this.select.emit(this.selectedUsers);
+        }
     }
 
     onScroll($event) {
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
-        console.log(scrollHeight - clientHeight, scrollTop);
+        if ((scrollHeight - clientHeight) == scrollTop) {
+            console.log('scroll end');
+        }
     }
 }

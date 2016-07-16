@@ -35,8 +35,10 @@ import { Tag } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="taskTypeId == m.id" *ngFor="let m of getTags()" (click)="add(m)">
-                        {{m.name}}
+                    <li class="select-option" *ngFor="let m of getTags()" (click)="add(m)">
+                        <span [style.color]="m.color">
+                            {{m.name}}
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -71,10 +73,6 @@ export class TagsInputComponent {
         this.sub.unsubscribe();
     }
 
-    search(keyWord) {
-        console.log(keyWord);
-    }
-
     getTags() {
         if (this.tagIds) {
             return this.tags.filter(it => this.tagIds.indexOf(it.id) == -1);
@@ -83,13 +81,18 @@ export class TagsInputComponent {
         }
     }
 
+    search(keyWord) {
+        console.log(keyWord);
+    }
+
     add(tag: Tag) {
         this.selectedTags.push(tag);
-        this.tagIds.push(tag.id);
+        this.tagIds = this.selectedTags.map(it => it.id);
         this.select.emit(this.selectedTags);
     }
 
-    remove(tag: Tag) {
+    remove(tag: Tag, $event) {
+        $event.stopPropagation();
         this.selectedTags = this.selectedTags.filter(it => it.id != tag.id);
         this.tagIds = this.selectedTags.map(it => it.id);
         this.select.emit(this.selectedTags);

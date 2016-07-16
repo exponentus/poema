@@ -89,10 +89,6 @@ export class ProjectComponent {
         this.projectService.getProjectStatusTypes().subscribe(pst => this.projectStatusTypes = pst);
     }
 
-    updateProjectComment(text: string) {
-        this.project.comment = text;
-    }
-
     saveProject() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.projectService.saveProject(this.project).subscribe(
@@ -138,27 +134,23 @@ export class ProjectComponent {
     }
 
     setCustomer(customer: Organization) {
-        // console.log('select', customer);
         this.project.customerId = customer.id;
     }
 
-    setManager(user: User) {
-        this.project.managerUserId = user.id;
+    setManager(user: User[]) {
+        this.project.managerUserId = user[0].id;
     }
 
-    setProgrammer(user: User) {
-        this.project.programmerUserId = user.id;
+    setProgrammer(user: User[]) {
+        this.project.programmerUserId = user[0].id;
     }
 
-    setTester(user: User) {
-        this.project.testerUserId = user.id;
+    setTester(user: User[]) {
+        this.project.testerUserId = user[0].id;
     }
 
-    setObserver(observer: User) {
-        if (!this.project.observerUserIds) {
-            this.project.observerUserIds = [];
-        }
-        this.project.observerUserIds.push(observer.id);
+    setObserver(observers: User[]) {
+        this.project.observerUserIds = observers.map(it => it.id);
     }
 
     removeObserver(observer: User, $event) {
@@ -173,6 +165,10 @@ export class ProjectComponent {
 
     setFinishDate(date) {
         this.project.finishDate = date;
+    }
+
+    setProjectComment(text: string) {
+        this.project.comment = text;
     }
 
     addAttachment(file) {

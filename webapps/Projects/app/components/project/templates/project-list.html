@@ -33,13 +33,13 @@
                             <organization-input [orgId]="project.customerId"></organization-input>
                         </span>
                         <span class="project-list__manager">
-                            <user-input [userId]="project.managerUserId"></user-input>
+                            <user-input [userIds]="[project.managerUserId]"></user-input>
                         </span>
                         <span class="project-list__programmer">
-                            <user-input [userId]="project.programmerUserId"></user-input>
+                            <user-input [userIds]="[project.programmerUserId]"></user-input>
                         </span>
                         <span class="project-list__tester">
-                            <user-input [userId]="project.testerUserId"></user-input>
+                            <user-input [userIds]="[project.testerUserId]"></user-input>
                         </span>
                         <span class="project-list__finish_date">{{project.finishDate | dateFmt}}</span>
                     </div>

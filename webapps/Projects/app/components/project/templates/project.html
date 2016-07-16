@@ -51,7 +51,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.managerUserId.valid">
                     <div class="span8">
-                        <user-input editable="true" [userId]="project.managerUserId" (select)="setManager($event)"></user-input>
+                        <user-input editable="true" [userIds]="[project.managerUserId]" (select)="setManager($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.programmerUserId.valid">
                     <div class="span8">
-                        <user-input editable="true" [userId]="project.programmerUserId" (select)="setProgrammer($event)"></user-input>
+                        <user-input editable="true" [userIds]="[project.programmerUserId]" (select)="setProgrammer($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.testerUserId.valid">
                     <div class="span8">
-                        <user-input editable="true" [userId]="project.testerUserId" (select)="setTester($event)"></user-input>
+                        <user-input editable="true" [userIds]="[project.testerUserId]" (select)="setTester($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="controls">
                     <div class="span8">
-                        <user-input editable="true" [userId]="project.observerUserIds" (select)="setObserver($event)"></user-input>
+                        <user-input editable="true" multiple="true" [userIds]="project.observerUserIds" (select)="setObserver($event)"></user-input>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.comment.valid">
                     <div class="span8">
-                        <markdown-editor [markdown]="project.comment || ''" editable="true" updateTimeout="300" (update)="updateProjectComment($event)"></markdown-editor>
+                        <markdown-editor [markdown]="project.comment || ''" editable="true" updateTimeout="300" (update)="setProjectComment($event)"></markdown-editor>
                     </div>
                 </div>
             </div>
