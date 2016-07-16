@@ -1,4 +1,4 @@
-import { Component, Input, Output, AfterContentInit, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
@@ -11,7 +11,7 @@ import { Organization } from '../../models';
         <span *ngIf="!editable">
             {{org?.name}}
         </span>
-        <div dropdown class="select organization-input" *ngIf="editable" (dropdownToggle)="loadOrganizations()">
+        <div dropdown class="select organization-input" *ngIf="editable" (dropdownToggle)="startLoad()">
             <div dropdown-toggle class="select-selection input">
                 <span>{{org?.name}}</span>
             </div>
@@ -44,10 +44,11 @@ export class OrganizationInputComponent {
     private keyWord: string = '';
     private meta: any;
     private allLoaded = false;
+    private firstLoad = true;
 
     constructor(private staffService: StaffService) { }
 
-    ngAfterContentInit() {
+    ngOnInit() {
         if (!this.org && this.orgId) {
             this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(action => {
                 this.org = action.payload.organizations[0];
@@ -55,12 +56,14 @@ export class OrganizationInputComponent {
         }
     }
 
-    loadOrganizations(page = 1) {
-        if (this.allLoaded || this.meta && (page <= this.meta.page)) {
-            console.log(this.meta.page, page);
-            return;
+    startLoad() {
+        if (this.firstLoad) {
+            this.loadOrganizations();
+            this.firstLoad = false;
         }
+    }
 
+    loadOrganizations(page = 1) {
         this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(action => {
             this.organizations = this.organizations.concat(action.payload.organizations);
             this.meta = action.payload.meta;
@@ -88,6 +91,10 @@ export class OrganizationInputComponent {
     }
 
     onScroll($event) {
+        if (this.allLoaded) {
+            return;
+        }
+
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
         if ((scrollHeight - clientHeight) == scrollTop) {
             if (this.meta && this.meta.page < this.meta.totalPages) {
