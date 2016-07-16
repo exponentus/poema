@@ -28,7 +28,7 @@ import { User } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="userIds.indexOf(m.id) !=- 1" *ngFor="let m of getUsers()" (click)="add(m)">
+                    <li class="select-option" [class.selected]="userIds && userIds.indexOf(m.id) !=- 1" *ngFor="let m of getUsers()" (click)="add(m)">
                         {{m.name || m.login}}
                     </li>
                 </ul>
@@ -54,7 +54,7 @@ export class UserInputComponent {
     ngOnInit() {
         this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
             this.users = state.users;
-            if (this.selectedUsers) {
+            if (this.userIds) {
                 this.selectedUsers = state.users.filter(it => this.userIds.indexOf(it.id) != -1);
             }
             this.searchable = this.users.length > 13;
