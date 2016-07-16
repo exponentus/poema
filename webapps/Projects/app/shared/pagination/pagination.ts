@@ -1,14 +1,14 @@
-import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding } from '@angular/core';
 
 @Component({
     selector: 'pagination',
     template: `
         <div class="pagination" *ngIf="totalPages > 1">
-            <a href="#" *ngIf="startPage > 1" (click)="toPage($event, 1)">1</a>
+            <a href="#" *ngIf="startPage > 1" (click)="setPage(1, $event)">1</a>
             <span *ngIf="startPage > 1">...</span>
-            <a [class.page-active]="p == currentPage" href="#" *ngFor="let p of pages" (click)="toPage($event, p)">{{p}}</a>
+            <a [class.page-active]="p == currentPage" href="#" *ngFor="let p of pages" (click)="setPage(p, $event)">{{p}}</a>
             <span *ngIf="stopPage < totalPages">...</span>
-            <a *ngIf="stopPage < totalPages" href="#" (click)="toPage($event, totalPages)">{{totalPages}}</a>
+            <a *ngIf="stopPage < totalPages" href="#" (click)="setPage(totalPages, $event)">{{totalPages}}</a>
         </div>
     `
 })
@@ -16,32 +16,24 @@ import { Component, Input, Output, EventEmitter, HostBinding } from '@angular/co
 export class PaginationComponent {
     @HostBinding('hidden') get isHidden() { return this.totalPages < 2; };
     @Input() maxPageControl: number = 5;
-    @Input() totalPages: number = -1;
-    @Input('page')
-    set page(value: string) {
-        this.currentPage = +value;
-
-        if (this.initialized < 2) {
-            ++this.initialized;
-            this.pagination();
-        }
+    @Input('totalPages') set _totalPages(totalPages: number) {
+        this.totalPages = totalPages;
+        this.currentPage = totalPages;
     }
-
-    @Output() change = new EventEmitter<any>();
-
-    initialized: number = 0;
-    currentPage: number = 0;
-    startPage: number = 0;
-    stopPage: number = 0;
-    pages: number[] = [];
-
-    constructor() { }
-
-    toPage(event, page: number) {
-        event.preventDefault();
-        this.currentPage = +page;
-        this.change.emit({ page: page });
+    @Input('page') set _page(page: number) {
+        this.currentPage = page;
         this.pagination();
+    }
+    @Output() change = new EventEmitter<any>();
+    private totalPages: number = 0;
+    private currentPage: number = 0;
+    private startPage: number = 0;
+    private stopPage: number = 0;
+    private pages: number[] = [];
+
+    setPage(page: number, $event) {
+        $event.preventDefault();
+        this.change.emit({ page: page });
     }
 
     pagination() {
@@ -50,10 +42,6 @@ export class PaginationComponent {
         if (this.totalPages <= 1) {
             return;
         }
-
-        this.maxPageControl = +this.maxPageControl;
-        this.totalPages = +this.totalPages;
-        this.currentPage = +this.currentPage;
 
         let perPage = Math.floor(this.maxPageControl / 2);
         this.startPage = (this.currentPage - perPage);

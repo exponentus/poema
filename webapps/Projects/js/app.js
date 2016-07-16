@@ -5546,9 +5546,8 @@ webpackJsonp([0],{
 	var PaginationComponent = (function () {
 	    function PaginationComponent() {
 	        this.maxPageControl = 5;
-	        this.totalPages = -1;
 	        this.change = new core_1.EventEmitter();
-	        this.initialized = 0;
+	        this.totalPages = 0;
 	        this.currentPage = 0;
 	        this.startPage = 0;
 	        this.stopPage = 0;
@@ -5560,31 +5559,31 @@ webpackJsonp([0],{
 	        configurable: true
 	    });
 	    ;
-	    Object.defineProperty(PaginationComponent.prototype, "page", {
-	        set: function (value) {
-	            this.currentPage = +value;
-	            if (this.initialized < 2) {
-	                ++this.initialized;
-	                this.pagination();
-	            }
+	    Object.defineProperty(PaginationComponent.prototype, "_totalPages", {
+	        set: function (totalPages) {
+	            this.totalPages = totalPages;
+	            this.currentPage = totalPages;
 	        },
 	        enumerable: true,
 	        configurable: true
 	    });
-	    PaginationComponent.prototype.toPage = function (event, page) {
-	        event.preventDefault();
-	        this.currentPage = +page;
+	    Object.defineProperty(PaginationComponent.prototype, "_page", {
+	        set: function (page) {
+	            this.currentPage = page;
+	            this.pagination();
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    PaginationComponent.prototype.setPage = function (page, $event) {
+	        $event.preventDefault();
 	        this.change.emit({ page: page });
-	        this.pagination();
 	    };
 	    PaginationComponent.prototype.pagination = function () {
 	        this.pages = [];
 	        if (this.totalPages <= 1) {
 	            return;
 	        }
-	        this.maxPageControl = +this.maxPageControl;
-	        this.totalPages = +this.totalPages;
-	        this.currentPage = +this.currentPage;
 	        var perPage = Math.floor(this.maxPageControl / 2);
 	        this.startPage = (this.currentPage - perPage);
 	        this.stopPage = (this.currentPage + perPage);
@@ -5617,14 +5616,15 @@ webpackJsonp([0],{
 	        __metadata('design:type', Number)
 	    ], PaginationComponent.prototype, "maxPageControl", void 0);
 	    __decorate([
-	        core_1.Input(), 
-	        __metadata('design:type', Number)
-	    ], PaginationComponent.prototype, "totalPages", void 0);
+	        core_1.Input('totalPages'), 
+	        __metadata('design:type', Number), 
+	        __metadata('design:paramtypes', [Number])
+	    ], PaginationComponent.prototype, "_totalPages", null);
 	    __decorate([
 	        core_1.Input('page'), 
-	        __metadata('design:type', String), 
-	        __metadata('design:paramtypes', [String])
-	    ], PaginationComponent.prototype, "page", null);
+	        __metadata('design:type', Number), 
+	        __metadata('design:paramtypes', [Number])
+	    ], PaginationComponent.prototype, "_page", null);
 	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', Object)
@@ -5632,7 +5632,7 @@ webpackJsonp([0],{
 	    PaginationComponent = __decorate([
 	        core_1.Component({
 	            selector: 'pagination',
-	            template: "\n        <div class=\"pagination\" *ngIf=\"totalPages > 1\">\n            <a href=\"#\" *ngIf=\"startPage > 1\" (click)=\"toPage($event, 1)\">1</a>\n            <span *ngIf=\"startPage > 1\">...</span>\n            <a [class.page-active]=\"p == currentPage\" href=\"#\" *ngFor=\"let p of pages\" (click)=\"toPage($event, p)\">{{p}}</a>\n            <span *ngIf=\"stopPage < totalPages\">...</span>\n            <a *ngIf=\"stopPage < totalPages\" href=\"#\" (click)=\"toPage($event, totalPages)\">{{totalPages}}</a>\n        </div>\n    "
+	            template: "\n        <div class=\"pagination\" *ngIf=\"totalPages > 1\">\n            <a href=\"#\" *ngIf=\"startPage > 1\" (click)=\"setPage(1, $event)\">1</a>\n            <span *ngIf=\"startPage > 1\">...</span>\n            <a [class.page-active]=\"p == currentPage\" href=\"#\" *ngFor=\"let p of pages\" (click)=\"setPage(p, $event)\">{{p}}</a>\n            <span *ngIf=\"stopPage < totalPages\">...</span>\n            <a *ngIf=\"stopPage < totalPages\" href=\"#\" (click)=\"setPage(totalPages, $event)\">{{totalPages}}</a>\n        </div>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], PaginationComponent);
