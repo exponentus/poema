@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 
 export class LoginComponent {
     constructor() {
-        // window.location.href = 'Logout';
+        window.location.href = 'Logout';
     }
 }

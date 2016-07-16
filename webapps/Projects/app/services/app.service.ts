@@ -21,21 +21,27 @@ export class AppService {
     ) { }
 
     getUserProfile() {
-        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(response => {
-            let res = parseResponseObjects(response.json().objects);
-            let pageSize = 20;
-            if (res[0].pagesize) {
-                pageSize = res[0].pagesize
-            }
-            return {
-                type: FETCH_USER_PROFILE,
-                payload: {
-                    userProfile: res.employee,
-                    languages: res.language.list[0].localizedName,
-                    pageSize: pageSize
+        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
+            response => {
+                let res = parseResponseObjects(response.json().objects);
+                let pageSize = 20;
+                if (res[0].pagesize) {
+                    pageSize = res[0].pagesize
                 }
+                this.isLogged = true;
+                return {
+                    type: FETCH_USER_PROFILE,
+                    payload: {
+                        userProfile: res.employee,
+                        languages: res.language.list[0].localizedName,
+                        pageSize: pageSize
+                    }
+                }
+            },
+            error => {
+                this.isLogged = false;
             }
-        });
+        );
     }
 
     updateUserProfile(user: User) {

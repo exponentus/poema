@@ -24,13 +24,12 @@ export class AppComponent {
     private sub: any;
     private subEnv: any;
     isReady: boolean = false;
-    loggedUser: User;
+    loggedUser: User = new User();
     language: any;
     HEADER_TITLE: string = 'Projects';
     isNavCollapsed: boolean = false;
     isSearchOpen: boolean = false;
     isMobileDevice: boolean = false;
-    workspaceUrl: string = '/Workspace/p?id=workspace';
 
     @HostListener('window:resize', ['$event.target']) resize(window) { this.onResize(window); };
     @HostBinding('class.phone') get device() { return this.isMobileDevice; };
@@ -58,7 +57,6 @@ export class AppComponent {
         this.appService.getUserProfile().subscribe(action => {
             this.store.dispatch(action);
             this.isReady = true;
-            this.appService.isLogged = true;
         });
     }
 
@@ -73,7 +71,6 @@ export class AppComponent {
             this.store.dispatch(action);
         });
 
-        this.loggedUser = new User();
         this.isMobileDevice = this.isMobile();
 
         // ng2-translate

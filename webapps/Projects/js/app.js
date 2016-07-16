@@ -455,11 +455,11 @@ webpackJsonp([0],{
 	        this.staffService = staffService;
 	        this.translate = translate;
 	        this.isReady = false;
+	        this.loggedUser = new user_1.User();
 	        this.HEADER_TITLE = 'Projects';
 	        this.isNavCollapsed = false;
 	        this.isSearchOpen = false;
 	        this.isMobileDevice = false;
-	        this.workspaceUrl = '/Workspace/p?id=workspace';
 	        this.store.select('authed').subscribe(function (data) {
 	            _this.loggedUser = data.userProfile;
 	        });
@@ -471,7 +471,6 @@ webpackJsonp([0],{
 	        this.appService.getUserProfile().subscribe(function (action) {
 	            _this.store.dispatch(action);
 	            _this.isReady = true;
-	            _this.appService.isLogged = true;
 	        });
 	    }
 	    AppComponent.prototype.resize = function (window) { this.onResize(window); };
@@ -503,7 +502,6 @@ webpackJsonp([0],{
 	        this.staffService.fetchUsers().subscribe(function (action) {
 	            _this.store.dispatch(action);
 	        });
-	        this.loggedUser = new user_1.User();
 	        this.isMobileDevice = this.isMobile();
 	        var userLang = navigator.language.split('-')[0];
 	        userLang = /(ru|en)/gi.test(userLang) ? userLang : 'en';
@@ -3623,12 +3621,14 @@ webpackJsonp([0],{
 	        this.isLogged = false;
 	    }
 	    AppService.prototype.getUserProfile = function () {
+	        var _this = this;
 	        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(function (response) {
 	            var res = utils_1.parseResponseObjects(response.json().objects);
 	            var pageSize = 20;
 	            if (res[0].pagesize) {
 	                pageSize = res[0].pagesize;
 	            }
+	            _this.isLogged = true;
 	            return {
 	                type: authed_reducer_1.FETCH_USER_PROFILE,
 	                payload: {
@@ -3637,6 +3637,8 @@ webpackJsonp([0],{
 	                    pageSize: pageSize
 	                }
 	            };
+	        }, function (error) {
+	            _this.isLogged = false;
 	        });
 	    };
 	    AppService.prototype.updateUserProfile = function (user) {
@@ -7734,6 +7736,7 @@ webpackJsonp([0],{
 	var core_1 = __webpack_require__(5);
 	var LoginComponent = (function () {
 	    function LoginComponent() {
+	        window.location.href = 'Logout';
 	    }
 	    LoginComponent = __decorate([
 	        core_1.Component({
