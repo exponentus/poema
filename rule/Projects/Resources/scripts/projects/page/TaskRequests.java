@@ -1,9 +1,7 @@
 package projects.page;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -180,11 +178,10 @@ public class TaskRequests extends _DoForm {
 			recipients.add(assigneeUser.getEmail());
 
 			MailAgent ma = new MailAgent();
-			Map<String, String> vars = new HashMap<String, String>();
 			Memo memo = new Memo(getLocalizedWord("notify_about_request_resolution", lang),
 			        getLocalizedWord("notify_about_request_resolution", lang));
 			if (!ma.sendMеssage(memo, recipients)) {
-				addContent("notify", "ok");
+				addValue("notify", "ok");
 			}
 		} catch (DatabaseException e) {
 			logError(e);

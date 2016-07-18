@@ -10,7 +10,6 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
@@ -177,9 +176,9 @@ public class TaskForm extends _DoForm {
 			memo.addVar("title", task.getTitle());
 			memo.addVar("content", task.getBody());
 			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("url", Environment.getFullHostName() + "//" + session.getAppEnv().appName + "//" + task.getURL());
+			memo.addVar("url", session.getAppEnv().getURL() + "//" + task.getURL());
 			if (ma.sendMеssage(memo, recipients)) {
-				addContent("notify", "ok");
+				addValue("notify", "ok");
 			}
 		} catch (SecureException e) {
 			setError(e);

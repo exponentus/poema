@@ -139,7 +139,7 @@ public class Comments extends _DoForm {
 			MailAgent ma = new MailAgent();
 			Memo memo = new Memo(getLocalizedWord("notify_about_comment", lang), getLocalizedWord("notify_about_comment", lang));
 			if (!ma.sendMеssage(memo, recipients)) {
-				addContent("notify", "ok");
+				addValue("notify", "ok");
 			}
 		} catch (DatabaseException e) {
 			logError(e);
