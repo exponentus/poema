@@ -12,9 +12,13 @@ import { TaskType } from '../../models';
         <span *ngIf="!editable">
             {{taskType?.name}}
         </span>
-        <div dropdown class="select task-type-input" *ngIf="editable">
+        <div dropdown class="select task-type-input" [class.allow-clear]="allowClear" [class.has-selected]="taskType" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span>{{taskType?.name}}</span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && taskType" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -37,8 +41,10 @@ import { TaskType } from '../../models';
 
 export class TaskTypeInputComponent {
     @Input() taskTypeId: string;
+    @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private taskTypes: any;
     private taskType: any;
@@ -60,6 +66,11 @@ export class TaskTypeInputComponent {
 
     search(keyWord) {
         console.log(keyWord);
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.onSelect(null);
     }
 
     onSelect(m) {

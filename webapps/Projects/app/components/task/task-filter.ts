@@ -1,0 +1,72 @@
+import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { Store } from '@ngrx/store';
+
+import { TaskTypeInputComponent, UserInputComponent, TagsInputComponent } from '../shared';
+import { DateFormatPipe } from '../../pipes';
+import { SET_FILTER } from '../../reducers/tasks.reducer';
+import { Task, TaskType, User, Tag } from '../../models';
+
+@Component({
+    selector: 'task-filter',
+    template: `
+        <div class="task-filter__icon">
+            <i class="fa fa-filter"></i>
+        </div>
+        <task-type-input [taskTypeId]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (select)="setTaskType($event)"></task-type-input>
+        <user-input [assigneeUserId]="assigneeUserId" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></user-input>
+        <tags-input [tagIds]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
+    `,
+    directives: [TaskTypeInputComponent, UserInputComponent, TagsInputComponent],
+    pipes: [DateFormatPipe, TranslatePipe]
+})
+
+export class TaskFilterComponent {
+    @HostBinding('class.task-filter') true;
+    @Output() change = new EventEmitter<any>();
+
+    private taskTypeId: string;
+    private assigneeUserId: string;
+    private tagIds: string[] = [];
+
+    constructor(private store: Store<any>) { }
+
+    setTaskType(taskType: TaskType) {
+        if (taskType) {
+            this.taskTypeId = taskType.id;
+        } else {
+            this.taskTypeId = null;
+        }
+        this.updateFilter();
+    }
+
+    setAssigneeUser(assigneeUsers: User[]) {
+        if (assigneeUsers.length) {
+            this.assigneeUserId = assigneeUsers[0].id;
+        } else {
+            this.assigneeUserId = null;
+        }
+        this.updateFilter();
+    }
+
+    setTags(tags: Tag[]) {
+        this.tagIds = tags.map(it => it.id);
+        this.updateFilter();
+    }
+
+    updateFilter() {
+        // this.store.dispatch({
+        //     type: SET_FILTER,
+        //     payload: {
+        //         taskType: this.taskType,
+        //         assigneeUser: this.assigneeUser,
+        //         tags: this.tags
+        //     }
+        // });
+        this.change.emit({
+            taskTypeId: this.taskTypeId,
+            assigneeUserId: this.assigneeUserId,
+            tagIds: this.tagIds
+        });
+    }
+}

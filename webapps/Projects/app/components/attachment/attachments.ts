@@ -25,6 +25,7 @@ import { Attachment } from '../../models';
             </div>
         </div>
     `,
+    providers: [UploadService],
     pipes: [TranslatePipe]
 })
 

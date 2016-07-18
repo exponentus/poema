@@ -18,7 +18,7 @@ import { Tag } from '../../models';
                 {{m.name}}
             </span>
         </span>
-        <div dropdown class="select tags-input" *ngIf="editable">
+        <div dropdown class="select tags-input" [class.allow-clear]="allowClear" [class.has-selected]="selectedTags.length" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span
                     class="tag"
@@ -27,6 +27,10 @@ import { Tag } from '../../models';
                     (click)="remove(m, $event)">
                     {{m.name}}
                 </span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && selectedTags.length" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -51,8 +55,10 @@ import { Tag } from '../../models';
 
 export class TagsInputComponent {
     @Input() tagIds: string[] = [];
+    @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private tags: Tag[] = [];
     private selectedTags: Tag[] = [];
@@ -84,6 +90,13 @@ export class TagsInputComponent {
 
     search(keyWord) {
         console.log(keyWord);
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.selectedTags = [];
+        this.tagIds = [];
+        this.select.emit(this.selectedTags);
     }
 
     add(tag: Tag) {

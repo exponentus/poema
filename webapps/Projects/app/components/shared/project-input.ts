@@ -12,9 +12,13 @@ import { Project } from '../../models';
         <span *ngIf="!editable">
             {{project?.name}}
         </span>
-        <div dropdown class="select project-input" *ngIf="editable">
+        <div dropdown class="select project-input" [class.allow-clear]="allowClear" [class.has-selected]="project" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span>{{project?.name}}</span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && project" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -37,8 +41,10 @@ import { Project } from '../../models';
 
 export class ProjectInputComponent {
     @Input() projectId: string;
+    @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private projects: Project[] = [];
     private project: Project;
@@ -60,6 +66,11 @@ export class ProjectInputComponent {
 
     search(keyWord) {
         console.log(keyWord);
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.onSelect(null);
     }
 
     onSelect(m) {

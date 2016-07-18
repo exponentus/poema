@@ -8,7 +8,9 @@ export function createURLSearchParams(_params): URLSearchParams {
                 params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
             }
         } else {
-            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            if (typeof (_params[p]) != 'undefined') {
+                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+            }
         }
     }
     return params;

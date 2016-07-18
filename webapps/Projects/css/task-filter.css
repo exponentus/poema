@@ -1,0 +1,23 @@
+.task-filter {
+    display: inline-flex;
+    padding: 0 6px;
+}
+
+.task-filter__icon {
+    display: inline-block;
+    padding: 8px;
+}
+
+.task-filter .task-type-input {}
+
+.task-filter .user-input {}
+
+.task-filter .tags-input {}
+
+.task-filter .input {
+    border: 0;
+}
+
+.task-filter .tags-input .tag {
+    padding: 0 2px;
+}

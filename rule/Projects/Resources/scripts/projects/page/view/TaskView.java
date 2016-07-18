@@ -83,7 +83,7 @@ public class TaskView extends _DoPage {
 
         if (formData.containsField("tagIds")) {
             List<Tag> tags = new ArrayList<>();
-            String[] tagIds = formData.getValueSilently("tagIds").split(",");
+            String[] tagIds = formData.getListOfValuesSilently("tagIds");
             for (String tid : tagIds) {
                 Tag tag = new Tag();
                 tag.setId(UUID.fromString(tid));

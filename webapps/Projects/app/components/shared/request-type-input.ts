@@ -12,9 +12,13 @@ import { Request } from '../../models';
         <span *ngIf="!editable">
             {{requestType?.name}}
         </span>
-        <div dropdown class="select task-type-input" *ngIf="editable">
+        <div dropdown class="select task-type-input" [class.allow-clear]="allowClear" [class.has-selected]="requestType" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span>{{requestType?.name}}</span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && requestType" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -37,8 +41,10 @@ import { Request } from '../../models';
 
 export class RequestTypeInputComponent {
     @Input() requestTypeId: string;
+    @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private requestTypes: any;
     private requestType: any;
@@ -60,6 +66,11 @@ export class RequestTypeInputComponent {
 
     search(keyWord) {
         console.log(keyWord);
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.onSelect(null);
     }
 
     onSelect(m) {

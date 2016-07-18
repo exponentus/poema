@@ -14,11 +14,15 @@ import { User } from '../../models';
                 {{m?.userName || m?.login}}
             </span>
         </span>
-        <div dropdown class="select user-input" *ngIf="editable">
+        <div dropdown class="select user-input" [class.allow-clear]="allowClear" [class.has-selected]="selectedUsers.length" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span [class.tag]="multiple" *ngFor="let m of selectedUsers" (click)="remove(m, $event)">
                     {{m?.userName || m?.login}}
                 </span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && selectedUsers.length" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -41,9 +45,11 @@ import { User } from '../../models';
 
 export class UserInputComponent {
     @Input() userIds: string[];
+    @Input() placeHolder: string = '';
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private users: User[] = [];
     private selectedUsers: User[] = [];
@@ -75,6 +81,13 @@ export class UserInputComponent {
 
     search(keyWord) {
         console.log(keyWord);
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.selectedUsers = [];
+        this.userIds = [];
+        this.select.emit(this.selectedUsers);
     }
 
     add(user: User) {

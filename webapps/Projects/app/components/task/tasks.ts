@@ -6,6 +6,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
+import { TaskFilterComponent } from './task-filter';
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { TaskListComponent } from './task-list';
@@ -16,7 +17,7 @@ import { FETCH_TASKS, ITasksState } from '../../reducers/tasks.reducer';
     selector: 'tasks',
     template: require('./templates/tasks.html'),
     // changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskListComponent],
+    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskListComponent, TaskFilterComponent],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
 
@@ -27,6 +28,7 @@ export class TasksComponent {
     tasks: Task[];
     params: any = {};
     meta: any = {};
+    filter: any = {};
     requestProcess: boolean = true;
 
     constructor(
@@ -38,10 +40,11 @@ export class TasksComponent {
     ) { }
 
     ngOnInit() {
-        this.storeSub = this.store.select('tasks').subscribe((data: ITasksState) => {
-            if (data) {
-                this.tasks = data.tasks;
-                this.meta = data.meta;
+        this.storeSub = this.store.select('tasks').subscribe((state: ITasksState) => {
+            if (state) {
+                this.tasks = state.tasks;
+                this.meta = state.meta;
+                this.filter = state.filter
                 this.requestProcess = false;
             }
         });
@@ -82,6 +85,11 @@ export class TasksComponent {
         this.loadData({
             page: params.page
         });
+    }
+
+    changeFilter(filter) {
+        console.log(filter);
+        this.loadData(filter);
     }
 
     newTask() {

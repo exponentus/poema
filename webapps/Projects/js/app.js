@@ -3700,7 +3700,9 @@ webpackJsonp([0],{
 	            }
 	        }
 	        else {
-	            params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+	            if (typeof (_params[p]) != 'undefined') {
+	                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+	            }
 	        }
 	    }
 	    return params;
@@ -4328,11 +4330,17 @@ webpackJsonp([0],{
 	exports.ADD_TASK = 'ADD_TASK';
 	exports.UPDATE_TASK = 'UPDATE_TASK';
 	exports.DELETE_TASK = 'DELETE_TASK';
+	exports.SET_FILTER = 'SET_FILTER';
 	;
 	var initialState = {
 	    meta: {},
 	    tasks: [],
-	    loading: false
+	    loading: false,
+	    filter: {
+	        taskType: null,
+	        assigneeUser: null,
+	        tags: []
+	    }
 	};
 	exports.tasksReducer = function (state, _a) {
 	    if (state === void 0) { state = initialState; }
@@ -4353,6 +4361,10 @@ webpackJsonp([0],{
 	            return state;
 	        case exports.DELETE_TASK:
 	            return state;
+	        case exports.SET_FILTER:
+	            return Object.assign({}, state, {
+	                filter: payload
+	            });
 	        default:
 	            return state;
 	    }
@@ -5237,8 +5249,10 @@ webpackJsonp([0],{
 	var ProjectInputComponent = (function () {
 	    function ProjectInputComponent(store) {
 	        this.store = store;
+	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	        this.projects = [];
 	    }
@@ -5255,6 +5269,10 @@ webpackJsonp([0],{
 	    };
 	    ProjectInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
+	    };
+	    ProjectInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.onSelect(null);
 	    };
 	    ProjectInputComponent.prototype.onSelect = function (m) {
 	        this.project = m;
@@ -5273,6 +5291,10 @@ webpackJsonp([0],{
 	    ], ProjectInputComponent.prototype, "projectId", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], ProjectInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], ProjectInputComponent.prototype, "editable", void 0);
 	    __decorate([
@@ -5280,13 +5302,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], ProjectInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], ProjectInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], ProjectInputComponent.prototype, "select", void 0);
 	    ProjectInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'project-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            {{project?.name}}\n        </span>\n        <div dropdown class=\"select project-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{project?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"project?.id == m.id\" *ngFor=\"let m of projects\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            {{project?.name}}\n        </span>\n        <div dropdown class=\"select project-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"project\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{project?.name}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && project\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"project?.id == m.id\" *ngFor=\"let m of projects\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -5802,8 +5828,10 @@ webpackJsonp([0],{
 	var OrganizationInputComponent = (function () {
 	    function OrganizationInputComponent(staffService) {
 	        this.staffService = staffService;
+	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	        this.organizations = [];
 	        this.keyWord = '';
@@ -5845,6 +5873,10 @@ webpackJsonp([0],{
 	    OrganizationInputComponent.prototype.search = function (keyWord) {
 	        this.keyWord = keyWord.toLowerCase();
 	    };
+	    OrganizationInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.onSelect(null);
+	    };
 	    OrganizationInputComponent.prototype.onSelect = function (m) {
 	        this.org = m;
 	        this.select.emit(this.org);
@@ -5874,6 +5906,10 @@ webpackJsonp([0],{
 	    ], OrganizationInputComponent.prototype, "org", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], OrganizationInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], OrganizationInputComponent.prototype, "editable", void 0);
 	    __decorate([
@@ -5881,13 +5917,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], OrganizationInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], OrganizationInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], OrganizationInputComponent.prototype, "select", void 0);
 	    OrganizationInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'organization-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            {{org?.name}}\n        </span>\n        <div dropdown class=\"select organization-input\" *ngIf=\"editable\" (dropdownToggle)=\"startLoad()\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{org?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <!-- <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button> -->\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"org?.id == m.id\" *ngFor=\"let m of getOrganizations()\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            {{org?.name}}\n        </span>\n        <div dropdown class=\"select organization-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"org\" *ngIf=\"editable\" (dropdownToggle)=\"startLoad()\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{org?.name}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && org\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <!-- <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button> -->\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"org?.id == m.id\" *ngFor=\"let m of getOrganizations()\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -5920,8 +5960,10 @@ webpackJsonp([0],{
 	var RequestTypeInputComponent = (function () {
 	    function RequestTypeInputComponent(store) {
 	        this.store = store;
+	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	    }
 	    RequestTypeInputComponent.prototype.ngOnInit = function () {
@@ -5937,6 +5979,10 @@ webpackJsonp([0],{
 	    };
 	    RequestTypeInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
+	    };
+	    RequestTypeInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.onSelect(null);
 	    };
 	    RequestTypeInputComponent.prototype.onSelect = function (m) {
 	        this.requestType = m;
@@ -5955,6 +6001,10 @@ webpackJsonp([0],{
 	    ], RequestTypeInputComponent.prototype, "requestTypeId", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], RequestTypeInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], RequestTypeInputComponent.prototype, "editable", void 0);
 	    __decorate([
@@ -5962,13 +6012,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], RequestTypeInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], RequestTypeInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], RequestTypeInputComponent.prototype, "select", void 0);
 	    RequestTypeInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'request-type-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            {{requestType?.name}}\n        </span>\n        <div dropdown class=\"select task-type-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{requestType?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"requestType?.id == m.id\" *ngFor=\"let m of requestTypes\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            {{requestType?.name}}\n        </span>\n        <div dropdown class=\"select task-type-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"requestType\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{requestType?.name}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && requestType\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"requestType?.id == m.id\" *ngFor=\"let m of requestTypes\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -6002,8 +6056,10 @@ webpackJsonp([0],{
 	    function TagsInputComponent(store) {
 	        this.store = store;
 	        this.tagIds = [];
+	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	        this.tags = [];
 	        this.selectedTags = [];
@@ -6033,6 +6089,12 @@ webpackJsonp([0],{
 	    TagsInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
 	    };
+	    TagsInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.selectedTags = [];
+	        this.tagIds = [];
+	        this.select.emit(this.selectedTags);
+	    };
 	    TagsInputComponent.prototype.add = function (tag) {
 	        this.selectedTags.push(tag);
 	        this.tagIds = this.selectedTags.map(function (it) { return it.id; });
@@ -6056,6 +6118,10 @@ webpackJsonp([0],{
 	    ], TagsInputComponent.prototype, "tagIds", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], TagsInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], TagsInputComponent.prototype, "editable", void 0);
 	    __decorate([
@@ -6063,13 +6129,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], TagsInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], TagsInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], TagsInputComponent.prototype, "select", void 0);
 	    TagsInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'tags-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            <span\n                class=\"tag\"\n                *ngFor=\"let m of selectedTags\"\n                [style.color]=\"m.color\"\n                (click)=\"remove(m, $event)\">\n                {{m.name}}\n            </span>\n        </span>\n        <div dropdown class=\"select tags-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span\n                    class=\"tag\"\n                    *ngFor=\"let m of selectedTags\"\n                    [style.color]=\"m.color\"\n                    (click)=\"remove(m, $event)\">\n                    {{m.name}}\n                </span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" *ngFor=\"let m of getTags()\" (click)=\"add(m)\">\n                        <span [style.color]=\"m.color\">\n                            {{m.name}}\n                        </span>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            <span\n                class=\"tag\"\n                *ngFor=\"let m of selectedTags\"\n                [style.color]=\"m.color\"\n                (click)=\"remove(m, $event)\">\n                {{m.name}}\n            </span>\n        </span>\n        <div dropdown class=\"select tags-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"selectedTags.length\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span\n                    class=\"tag\"\n                    *ngFor=\"let m of selectedTags\"\n                    [style.color]=\"m.color\"\n                    (click)=\"remove(m, $event)\">\n                    {{m.name}}\n                </span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && selectedTags.length\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" *ngFor=\"let m of getTags()\" (click)=\"add(m)\">\n                        <span [style.color]=\"m.color\">\n                            {{m.name}}\n                        </span>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -6102,8 +6172,10 @@ webpackJsonp([0],{
 	var TaskTypeInputComponent = (function () {
 	    function TaskTypeInputComponent(store) {
 	        this.store = store;
+	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	    }
 	    TaskTypeInputComponent.prototype.ngOnInit = function () {
@@ -6119,6 +6191,10 @@ webpackJsonp([0],{
 	    };
 	    TaskTypeInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
+	    };
+	    TaskTypeInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.onSelect(null);
 	    };
 	    TaskTypeInputComponent.prototype.onSelect = function (m) {
 	        this.taskType = m;
@@ -6137,6 +6213,10 @@ webpackJsonp([0],{
 	    ], TaskTypeInputComponent.prototype, "taskTypeId", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], TaskTypeInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], TaskTypeInputComponent.prototype, "editable", void 0);
 	    __decorate([
@@ -6144,13 +6224,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], TaskTypeInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], TaskTypeInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], TaskTypeInputComponent.prototype, "select", void 0);
 	    TaskTypeInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-type-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            {{taskType?.name}}\n        </span>\n        <div dropdown class=\"select task-type-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{taskType?.name}}</span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"taskTypeId == m.id\" *ngFor=\"let m of taskTypes\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            {{taskType?.name}}\n        </span>\n        <div dropdown class=\"select task-type-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"taskType\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{taskType?.name}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && taskType\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"taskTypeId == m.id\" *ngFor=\"let m of taskTypes\" (click)=\"onSelect(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -6183,9 +6267,11 @@ webpackJsonp([0],{
 	var UserInputComponent = (function () {
 	    function UserInputComponent(store) {
 	        this.store = store;
+	        this.placeHolder = '';
 	        this.multiple = false;
 	        this.editable = false;
 	        this.searchable = false;
+	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
 	        this.users = [];
 	        this.selectedUsers = [];
@@ -6214,6 +6300,12 @@ webpackJsonp([0],{
 	    };
 	    UserInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
+	    };
+	    UserInputComponent.prototype.clear = function ($event) {
+	        $event.stopPropagation();
+	        this.selectedUsers = [];
+	        this.userIds = [];
+	        this.select.emit(this.selectedUsers);
 	    };
 	    UserInputComponent.prototype.add = function (user) {
 	        if (this.multiple) {
@@ -6247,6 +6339,10 @@ webpackJsonp([0],{
 	    ], UserInputComponent.prototype, "userIds", void 0);
 	    __decorate([
 	        core_1.Input(), 
+	        __metadata('design:type', String)
+	    ], UserInputComponent.prototype, "placeHolder", void 0);
+	    __decorate([
+	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], UserInputComponent.prototype, "multiple", void 0);
 	    __decorate([
@@ -6258,13 +6354,17 @@ webpackJsonp([0],{
 	        __metadata('design:type', Boolean)
 	    ], UserInputComponent.prototype, "searchable", void 0);
 	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], UserInputComponent.prototype, "allowClear", void 0);
+	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
 	    ], UserInputComponent.prototype, "select", void 0);
 	    UserInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'user-input',
-	            template: "\n        <span *ngIf=\"!editable\">\n            <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\">\n                {{m?.userName || m?.login}}\n            </span>\n        </span>\n        <div dropdown class=\"select user-input\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\" (click)=\"remove(m, $event)\">\n                    {{m?.userName || m?.login}}\n                </span>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"userIds && userIds.indexOf(m.id) !=- 1\" *ngFor=\"let m of getUsers()\" (click)=\"add(m)\">\n                        {{m.name || m.login}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+	            template: "\n        <span *ngIf=\"!editable\">\n            <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\">\n                {{m?.userName || m?.login}}\n            </span>\n        </span>\n        <div dropdown class=\"select user-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"selectedUsers.length\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\" (click)=\"remove(m, $event)\">\n                    {{m?.userName || m?.login}}\n                </span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && selectedUsers.length\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"userIds && userIds.indexOf(m.id) !=- 1\" *ngFor=\"let m of getUsers()\" (click)=\"add(m)\">\n                        {{m.name || m.login}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
 	            directives: [dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -6686,6 +6786,7 @@ webpackJsonp([0],{
 	        core_1.Component({
 	            selector: 'attachments',
 	            template: "\n        <label class=\"btn btn-upload\" title=\"{{ 'attach_file' | translate }}\">\n            <i class=\"fa fa-paperclip\"></i>\n            <span>{{ 'attach_file' | translate }}</span>\n            <input type=\"file\" (change)=\"uploadFile($event.target.files)\" style=\"display:none;\"/>\n        </label>\n        <div class=\"attachment-list\">\n            <div class=\"attachment-list__item\" *ngFor=\"let att of model.attachments\">\n                <div class=\"attachment\">\n                    <a class=\"attachment__link\" href=\"{{model.url}}&attachment={{att.id}}\">{{ att.realFileName }}</a>\n                    <span class=\"attachment__size\"></span>\n                    <button type=\"button\" class=\"btn btn-sm btn-link btn-remove\" (click)=\"deleteAttach(att)\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n            </div>\n        </div>\n    ",
+	            providers: [services_1.UploadService],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
 	        __metadata('design:paramtypes', [http_1.Http, services_1.UploadService])
@@ -6724,6 +6825,7 @@ webpackJsonp([0],{
 	var notification_1 = __webpack_require__(376);
 	var pipes_1 = __webpack_require__(493);
 	var pagination_1 = __webpack_require__(601);
+	var task_filter_1 = __webpack_require__(694);
 	var task_service_1 = __webpack_require__(471);
 	var task_list_1 = __webpack_require__(620);
 	var TasksComponent = (function () {
@@ -6735,14 +6837,16 @@ webpackJsonp([0],{
 	        this.notifyService = notifyService;
 	        this.params = {};
 	        this.meta = {};
+	        this.filter = {};
 	        this.requestProcess = true;
 	    }
 	    TasksComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.storeSub = this.store.select('tasks').subscribe(function (data) {
-	            if (data) {
-	                _this.tasks = data.tasks;
-	                _this.meta = data.meta;
+	        this.storeSub = this.store.select('tasks').subscribe(function (state) {
+	            if (state) {
+	                _this.tasks = state.tasks;
+	                _this.meta = state.meta;
+	                _this.filter = state.filter;
 	                _this.requestProcess = false;
 	            }
 	        });
@@ -6780,6 +6884,10 @@ webpackJsonp([0],{
 	            page: params.page
 	        });
 	    };
+	    TasksComponent.prototype.changeFilter = function (filter) {
+	        console.log(filter);
+	        this.loadData(filter);
+	    };
 	    TasksComponent.prototype.newTask = function () {
 	        this.router.navigate(['/task', 'new']);
 	    };
@@ -6790,7 +6898,7 @@ webpackJsonp([0],{
 	        core_1.Component({
 	            selector: 'tasks',
 	            template: __webpack_require__(622),
-	            directives: [router_1.ROUTER_DIRECTIVES, pagination_1.PaginationComponent, task_list_1.TaskListComponent],
+	            directives: [router_1.ROUTER_DIRECTIVES, pagination_1.PaginationComponent, task_list_1.TaskListComponent, task_filter_1.TaskFilterComponent],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, task_service_1.TaskService, notification_1.NotificationService])
@@ -6895,7 +7003,7 @@ webpackJsonp([0],{
 /***/ 622:
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"requestProcess\">\r\n    <task-list [tasks]=\"tasks\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
+	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"requestProcess\">\r\n    <task-list [tasks]=\"tasks\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ },
 
@@ -7960,6 +8068,83 @@ webpackJsonp([0],{
 	        };
 	    };
 	};
+
+
+/***/ },
+
+/***/ 694:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var ng2_translate_1 = __webpack_require__(350);
+	var store_1 = __webpack_require__(437);
+	var shared_1 = __webpack_require__(604);
+	var pipes_1 = __webpack_require__(493);
+	var TaskFilterComponent = (function () {
+	    function TaskFilterComponent(store) {
+	        this.store = store;
+	        this.change = new core_1.EventEmitter();
+	        this.tagIds = [];
+	    }
+	    TaskFilterComponent.prototype.setTaskType = function (taskType) {
+	        if (taskType) {
+	            this.taskTypeId = taskType.id;
+	        }
+	        else {
+	            this.taskTypeId = null;
+	        }
+	        this.updateFilter();
+	    };
+	    TaskFilterComponent.prototype.setAssigneeUser = function (assigneeUsers) {
+	        if (assigneeUsers.length) {
+	            this.assigneeUserId = assigneeUsers[0].id;
+	        }
+	        else {
+	            this.assigneeUserId = null;
+	        }
+	        this.updateFilter();
+	    };
+	    TaskFilterComponent.prototype.setTags = function (tags) {
+	        this.tagIds = tags.map(function (it) { return it.id; });
+	        this.updateFilter();
+	    };
+	    TaskFilterComponent.prototype.updateFilter = function () {
+	        this.change.emit({
+	            taskTypeId: this.taskTypeId,
+	            assigneeUserId: this.assigneeUserId,
+	            tagIds: this.tagIds
+	        });
+	    };
+	    __decorate([
+	        core_1.HostBinding('class.task-filter'), 
+	        __metadata('design:type', Object)
+	    ], TaskFilterComponent.prototype, "true", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], TaskFilterComponent.prototype, "change", void 0);
+	    TaskFilterComponent = __decorate([
+	        core_1.Component({
+	            selector: 'task-filter',
+	            template: "\n        <div class=\"task-filter__icon\">\n            <i class=\"fa fa-filter\"></i>\n        </div>\n        <task-type-input [taskTypeId]=\"taskTypeId\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'task_type' | translate}}\" (select)=\"setTaskType($event)\"></task-type-input>\n        <user-input [assigneeUserId]=\"assigneeUserId\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'assignee_user' | translate}}\" (select)=\"setAssigneeUser($event)\"></user-input>\n        <tags-input [tagIds]=\"tagIds\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'tags' | translate}}\" (select)=\"setTags($event)\"></tags-input>\n    ",
+	            directives: [shared_1.TaskTypeInputComponent, shared_1.UserInputComponent, shared_1.TagsInputComponent],
+	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe]
+	        }), 
+	        __metadata('design:paramtypes', [store_1.Store])
+	    ], TaskFilterComponent);
+	    return TaskFilterComponent;
+	}());
+	exports.TaskFilterComponent = TaskFilterComponent;
 
 
 /***/ }

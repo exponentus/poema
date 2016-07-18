@@ -11,9 +11,13 @@ import { Organization } from '../../models';
         <span *ngIf="!editable">
             {{org?.name}}
         </span>
-        <div dropdown class="select organization-input" *ngIf="editable" (dropdownToggle)="startLoad()">
+        <div dropdown class="select organization-input" [class.allow-clear]="allowClear" [class.has-selected]="org" *ngIf="editable" (dropdownToggle)="startLoad()">
             <div dropdown-toggle class="select-selection input">
                 <span>{{org?.name}}</span>
+                <span class="placeholder">{{placeHolder}}</span>
+                <div class="clear" *ngIf="allowClear && org" (click)="clear($event)">
+                    <i class="fa fa-times"></i>
+                </div>
             </div>
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
@@ -37,8 +41,10 @@ import { Organization } from '../../models';
 export class OrganizationInputComponent {
     @Input() orgId: string;
     @Input() org: Organization;
+    @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
+    @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private organizations: Organization[] = [];
     private keyWord: string = '';
@@ -82,6 +88,11 @@ export class OrganizationInputComponent {
 
     search(keyWord) {
         this.keyWord = keyWord.toLowerCase();
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.onSelect(null);
     }
 
     onSelect(m) {
