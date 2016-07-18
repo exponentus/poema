@@ -44,7 +44,7 @@ export class TasksComponent {
             if (state) {
                 this.tasks = state.tasks;
                 this.meta = state.meta;
-                this.filter = state.filter
+                // this.filter = state.filter
                 this.requestProcess = false;
             }
         });
@@ -83,12 +83,15 @@ export class TasksComponent {
 
     goToPage(params) {
         this.loadData({
-            page: params.page
+            page: params.page,
+            taskTypeId: this.filter.taskTypeId,
+            assigneeUserId: this.filter.assigneeUserId,
+            tagIds: this.filter.tagIds
         });
     }
 
     changeFilter(filter) {
-        console.log(filter);
+        this.filter = filter;
         this.loadData(filter);
     }
 

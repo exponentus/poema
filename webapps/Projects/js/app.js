@@ -6846,7 +6846,6 @@ webpackJsonp([0],{
 	            if (state) {
 	                _this.tasks = state.tasks;
 	                _this.meta = state.meta;
-	                _this.filter = state.filter;
 	                _this.requestProcess = false;
 	            }
 	        });
@@ -6881,11 +6880,14 @@ webpackJsonp([0],{
 	    };
 	    TasksComponent.prototype.goToPage = function (params) {
 	        this.loadData({
-	            page: params.page
+	            page: params.page,
+	            taskTypeId: this.filter.taskTypeId,
+	            assigneeUserId: this.filter.assigneeUserId,
+	            tagIds: this.filter.tagIds
 	        });
 	    };
 	    TasksComponent.prototype.changeFilter = function (filter) {
-	        console.log(filter);
+	        this.filter = filter;
 	        this.loadData(filter);
 	    };
 	    TasksComponent.prototype.newTask = function () {
