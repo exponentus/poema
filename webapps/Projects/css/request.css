@@ -38,8 +38,8 @@
 
 .request__buttons {}
 
-/* .task-request */
-.task-request {
+/* .request-composer */
+.request-composer {
     background: rgba(255, 255, 255, .5);
     display: none;
     height: 100%;
@@ -49,7 +49,11 @@
     width: 100%;
 }
 
-.task-request > form {
+.request-composer.open {
+    display: block;
+}
+
+.request-composer > form {
     background: #fff;
     box-shadow: 0 0 3px #000;
     position: relative;
@@ -57,22 +61,31 @@
     left: 0;
     margin: 0 auto;
     max-width: 98%;
-    width: 400px;
+    width: 500px;
 }
 
-.task-request > form > header {
-    padding: 16px;
+.request-composer header {
+    padding: 12px 16px 8px;
 }
 
-.task-request > form > section {
-    padding: 4px 16px;
+.request-composer section {
+    padding: 8px 16px;
 }
 
-.task-request > form > footer {
-    padding: 16px;
+.request-composer footer {
+    border-top: 1px solid #eee;
+    padding: 8px;
     text-align: right;
 }
 
-.task-request.task-request-open {
-    display: block;
+.request-composer .rt-editor {
+    margin: 8px 0;
+    min-height: 60px;
+    padding: 4px;
+}
+
+.request-composer .attachments {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }

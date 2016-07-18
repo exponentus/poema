@@ -8,7 +8,7 @@ import { Attachment } from '../../models';
 @Component({
     selector: 'attachments',
     template: `
-        <label class="btn btn-upload" title="{{ 'attach_file' | translate }}">
+        <label class="btn btn-upload" title="{{'attach_file' | translate}}" *ngIf="editable">
             <i class="fa fa-paperclip"></i>
             <span>{{ 'attach_file' | translate }}</span>
             <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>
@@ -18,7 +18,7 @@ import { Attachment } from '../../models';
                 <div class="attachment">
                     <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
                     <span class="attachment__size"></span>
-                    <button type="button" class="btn btn-sm btn-link btn-remove" (click)="deleteAttach(att)">
+                    <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
@@ -32,6 +32,7 @@ import { Attachment } from '../../models';
 export class AttachmentsComponent {
     @HostBinding('class.attachments') true;
     @Input() model: any;
+    @Input() editable: boolean = false;
     @Output() upload = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
 
@@ -61,9 +62,5 @@ export class AttachmentsComponent {
         this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.model.fsid }, files).subscribe(response => {
             this.upload.emit(response);
         });
-    }
-
-    deleteAttach(attachment: Attachment) {
-        this.delete.emit(attachment);
     }
 }

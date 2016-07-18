@@ -1,6 +1,6 @@
-import { Component, Input, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Component, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import {
@@ -9,37 +9,50 @@ import {
     TASK_REQUEST_CANCEL
 } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
+import { MarkdownEditorComponent } from '../../shared/markdown';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { RequestTypeInputComponent } from '../shared/request-type-input';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
-    selector: 'task-request',
+    selector: 'request',
     template: `
-        <form class="task-request-form" (submit)="sendRequest($event)">
-            <header>{{ 'task_request' | translate }}</header>
+        <form (submit)="sendRequest($event)">
+            <header>{{'task_request' | translate}}</header>
             <section>
-                <request-type-input editable="true" [requestTypeId]="request.requestTypeId" (select)="setRequestType($event)"></request-type-input>
-                <textarea class="request-comment" [(ngModel)]="comment"></textarea>
-                <attachments [model]="request" (upload)="addAttachment($event)" (delete)="addAttachment($event)"></attachments>
+                <request-type-input
+                    editable="true"
+                    placeHolder="{{'request_type' | translate}}"
+                    (select)="setRequestType($event)">
+                </request-type-input>
+                <textarea class="rt-editor" placeholder="{{'comment' | translate}}" [(ngModel)]="comment"></textarea>
+                <!-- <markdown-editor
+                    [markdown]="''"
+                    editable="true"
+                    placeHolder="{{'comment' | translate}}"
+                    updateTimeout="100"
+                    (update)="setComment($event)">
+                </markdown-editor> -->
+                <attachments [model]="request" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </section>
             <footer>
-                <button class="btn" type="button" (click)="cancel()">{{ 'cancel' | translate }}</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!requestType">{{ 'send_request' | translate }}</button>
+                <button class="btn" type="button" (click)="cancel()">{{'cancel' | translate}}</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!requestType">{{'send_request' | translate}}</button>
             </footer>
         </form>
     `,
-    directives: [AttachmentsComponent, RequestTypeInputComponent],
     host: {
-        '[class.task-request]': 'true',
-        '[class.task-request-open]': 'isOpen',
+        '[class.request-composer]': 'true',
+        '[class.open]': 'isOpen',
         '(keyup.escape)': 'cancel()'
     },
+    directives: [AttachmentsComponent, RequestTypeInputComponent, MarkdownEditorComponent],
     pipes: [TranslatePipe]
 })
 
-export class TaskRequestComponent {
+export class RequestComponent {
+    @Output() send = new EventEmitter<any>();
     private taskSub: any;
     private refSub: any;
 
@@ -51,6 +64,7 @@ export class TaskRequestComponent {
 
     constructor(
         private store: Store<any>,
+        private translate: TranslateService,
         private notifyService: NotificationService,
         private taskService: TaskService
     ) {
@@ -91,13 +105,17 @@ export class TaskRequestComponent {
         this.request.requestTypeId = this.requestType.id;
 
         this.taskService.sendTaskRequest(this.request).subscribe(response => {
-            this.notifyService.info('request send: success').show().remove(3000);
+            this.notifyService.info(this.translate.instant('request_send_success')).show().remove(3000);
             this.cancel();
         });
     }
 
     setRequestType(requestType: RequestType) {
         this.requestType = requestType;
+    }
+
+    setComment(comment: string) {
+        this.comment = comment;
     }
 
     addAttachment(file) {
@@ -110,8 +128,8 @@ export class TaskRequestComponent {
     }
 
     deleteAttachment(attachment: Attachment) {
-        this.taskService.deleteRequestAttachment(this.request, attachment).subscribe(r => {
-            this.request.attachments = this.request.attachments.filter(it => it.id != attachment.id);
-        });
+        // this.taskService.deleteRequestAttachment(this.request, attachment).subscribe(r => {
+        this.request.attachments = this.request.attachments.filter(it => it.id != attachment.id);
+        // });
     }
 }

@@ -5,6 +5,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { Request } from '../../models';
+import { AppService } from '../../services';
 
 @Component({
     selector: 'request-type-input',
@@ -14,7 +15,9 @@ import { Request } from '../../models';
         </span>
         <div dropdown class="select task-type-input" [class.allow-clear]="allowClear" [class.has-selected]="requestType" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
-                <span>{{requestType?.name}}</span>
+                <span *ngIf="requestType">
+                    {{requestType.localizedName[appService.language]}}
+                </span>
                 <span class="placeholder">{{placeHolder}}</span>
                 <div class="clear" *ngIf="allowClear && requestType" (click)="clear($event)">
                     <i class="fa fa-times"></i>
@@ -29,7 +32,7 @@ import { Request } from '../../models';
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" [class.selected]="requestType?.id == m.id" *ngFor="let m of requestTypes" (click)="onSelect(m)">
-                        {{m.name}}
+                        {{m.localizedName[appService.language]}}
                     </li>
                 </ul>
             </div>
@@ -50,7 +53,10 @@ export class RequestTypeInputComponent {
     private requestType: any;
     private sub: any;
 
-    constructor(private store: Store<any>) { }
+    constructor(
+        private store: Store<any>,
+        private appService: AppService
+    ) { }
 
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {

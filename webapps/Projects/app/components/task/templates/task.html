@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </fieldset>
-                <attachments [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments editable="true" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
                 <task-list [tasks]="subTasks"></task-list>
@@ -145,9 +145,9 @@
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
             <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
-                <task-requests [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></task-requests>
+                <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
             </tab>
         </tabs>
     </section>
 </form>
-<task-request></task-request>
+<request></request>

@@ -65,7 +65,11 @@ export class TasksComponent {
             }
             //
             this.params = params;
-            this.loadData(this.params);
+            this.loadData(Object.assign({}, this.params, {
+                taskTypeId: this.filter.taskTypeId,
+                assigneeUserId: this.filter.assigneeUserId,
+                tagIds: this.filter.tagIds
+            }));
         });
     }
 

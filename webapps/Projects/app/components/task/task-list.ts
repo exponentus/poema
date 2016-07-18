@@ -4,12 +4,13 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { UserInputComponent, TagsInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
+import { TaskStreamComponent } from './task-stream';
 import { Task } from '../../models';
 
 @Component({
     selector: 'task-list',
     template: require('./templates/task-list.html'),
-    directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent],
+    directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent, TaskStreamComponent],
     pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
 })
 

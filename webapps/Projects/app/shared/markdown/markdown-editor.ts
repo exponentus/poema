@@ -11,7 +11,7 @@ import { MarkdownConverter } from './markdown-converter';
                 (focus)="focus.emit($event)"
                 (blur)="blur.emit($event)">
             </div>
-            <!-- <span class="rt-editor__placeholder" *ngIf="!html.length">{{placeHolder}}</span> -->
+            <span class="rt-editor__placeholder" *ngIf="placeHolder && !hasValue">{{placeHolder}}</span>
         </div>
     `,
     providers: [MarkdownConverter]
@@ -28,6 +28,7 @@ export class MarkdownEditorComponent {
     @Output() focus = new EventEmitter<any>();
     @Output() blur = new EventEmitter<any>();
 
+    private hasValue: boolean = false;
     private html: string;
     private to: any;
 
@@ -35,9 +36,11 @@ export class MarkdownEditorComponent {
 
     ngOnInit() {
         this.html = this.mdc.toHtml(this.markdown);
+        this.hasValue = this.markdown.length > 0;
     }
 
     updateValue($el) {
+        this.hasValue = $el.innerHTML.length > 0;
         clearTimeout(this.to);
         this.to = setTimeout(() => {
             this.update.emit(this.mdc.toMarkdown($el.innerHTML));

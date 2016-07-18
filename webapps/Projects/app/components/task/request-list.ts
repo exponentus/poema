@@ -1,18 +1,19 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { MarkedPipe } from '../../shared/markdown';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { Request } from '../../models';
 
 @Component({
-    selector: 'task-requests',
+    selector: 'request-list',
     template: `
         <ul class="request-list">
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
                     <div class="request__details">
                         <span class="request__type">{{ request.requestType.name }}</span>
-                        <span class="request__comment">{{ request.comment }}</span>
+                        <span class="request__comment">{{request.comment}}</span>
                         <time class="request__time">{{ request.regDate }}</time>
                     </div>
                     <div class="request__resol">
@@ -28,21 +29,17 @@ import { Request } from '../../models';
                         </div>
                     </div>
                     <div class="request__attachments" *ngIf="request.attachments">
-                        <!-- <attachments
-                            [model]="request"
-                            (upload)="addAttachment($event)"
-                            (delete)="deleteAttachment($event)">
-                        </attachments> -->
+                        <attachments [model]="request"></attachments>
                     </div>
                 </div>
             </li>
         </ul>
     `,
     directives: [AttachmentsComponent],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, MarkedPipe]
 })
 
-export class TaskRequestsComponent {
+export class RequestListComponent {
     @Input() requests: Request[];
     @Output() accept = new EventEmitter<any>();
     @Output() decline = new EventEmitter<any>();

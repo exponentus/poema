@@ -61,6 +61,7 @@
     <caption name="tasks_assigned_to_me"/>
     <caption name="projects"/>
     <caption name="task_request"/>
+    <caption name="request_type"/>
     <caption name="send_request"/>
     <caption name="new_request"/>
 
@@ -68,6 +69,10 @@
     <caption name="new_task"/>
     <caption name="task_title"/>
     <caption name="add_comment"/>
+    <caption name="add_subtask"/>
+    <caption name="subtasks"/>
+    <caption name="comments"/>
+    <caption name="requests"/>
 
     <!-- common form captions -->
     <caption name="body"/>

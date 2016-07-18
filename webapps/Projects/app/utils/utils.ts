@@ -18,7 +18,7 @@ export function createURLSearchParams(_params): URLSearchParams {
 
 export function serializeObj(obj): string {
     let result = [];
-    for (var property in obj) {
+    for (let property in obj) {
         result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
     }
     return result.join('&');

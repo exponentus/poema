@@ -20,7 +20,8 @@ const HEADERS = new Headers({
             </h1>
         </div>
         <div class="content-body">
-            <div class="dashboard" *ngFor="let project of projects">
+            Здесь что-то будет
+            <!-- <div class="dashboard" *ngFor="let project of projects">
                 <header>
                     <span>{{project.name}}</span>
                     <button (click)="deleteProjectFromDashboard(project.id)">delete</button>
@@ -32,7 +33,7 @@ const HEADERS = new Headers({
             <div class="span3">
                 <project-input editable="true" (select)="selectProject($event)"></project-input>
                 <button class="btn" type="button" (click)="addProjectToDashboard()">{{'dashboard_add_project' | translate}}</button>
-            </div>
+            </div> -->
         </div>
     `,
     directives: [ProjectInputComponent],

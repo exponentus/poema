@@ -25,7 +25,7 @@ import { CommentComponent } from './comment';
                 <div class="comment-composer__editor">
                     <markdown-editor
                         editable="true"
-                        placeHolder="{{'add_comment' | translate}}"
+                        placeHolder="{{'comment' | translate}}"
                         (update)="setCommentText($event)"
                         (focus)="onEditorFocus($event)"
                         (blur)="onEditorBlur($event)">

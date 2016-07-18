@@ -11,6 +11,7 @@ export class Task {
 
     project: Project;
     projectId: string;
+    parentTask: Task;
     parentTaskId: string;
     hasSubtasks: string[];
     taskTypeId: string;

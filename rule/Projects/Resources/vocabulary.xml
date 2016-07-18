@@ -160,6 +160,30 @@
         <entry lang="RUS">Добавить комментарий</entry>
         <entry lang="ENG">Add comment</entry>
     </sentence>
+    <sentence mode="on" keyword="add_subtask">
+        <entry lang="RUS">Добавить подзадачу</entry>
+        <entry lang="ENG">Add subtask</entry>
+    </sentence>
+    <sentence mode="on" keyword="subtasks">
+        <entry lang="RUS">Подзадачи</entry>
+        <entry lang="ENG">Subtasks</entry>
+    </sentence>
+    <sentence mode="on" keyword="subtasks">
+        <entry lang="RUS">Подзадачи</entry>
+        <entry lang="ENG">Subtasks</entry>
+    </sentence>
+    <sentence mode="on" keyword="comments">
+        <entry lang="RUS">Комментарии</entry>
+        <entry lang="ENG">Comments</entry>
+    </sentence>
+    <sentence mode="on" keyword="requests">
+        <entry lang="RUS">Запросы</entry>
+        <entry lang="ENG">Requests</entry>
+    </sentence>
+    <sentence mode="on" keyword="request_type">
+        <entry lang="RUS">Тип запроса</entry>
+        <entry lang="ENG">Request type</entry>
+    </sentence>
 
     <sentence mode="on" keyword="draft">
         <entry lang="RUS">Черновик</entry>

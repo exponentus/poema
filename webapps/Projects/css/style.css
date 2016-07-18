@@ -7,6 +7,7 @@
 @import 'task.css';
 @import 'dashboard.css';
 @import 'pikaday.css';
+@import 'rt-editor.css';
 
 body {
     display: flex;
@@ -100,4 +101,8 @@ pagination:empty {
 .content-actions .buttons {
     display: inline-block;
     vertical-align: top;
+}
+
+.entry-wrap .entry-wrap {
+    padding-left: 48px;
 }

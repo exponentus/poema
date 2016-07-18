@@ -15,10 +15,16 @@ const HEADERS = new Headers({
 export class AppService {
 
     isLogged: boolean = false;
+    language: string = 'RUS';
 
     constructor(
         private http: Http
-    ) { }
+    ) {
+        let ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
+        if (ck) {
+            this.language = ck[2];
+        }
+    }
 
     getUserProfile() {
         return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
@@ -34,7 +40,8 @@ export class AppService {
                     payload: {
                         userProfile: res.employee,
                         languages: res.language.list[0].localizedName,
-                        pageSize: pageSize
+                        pageSize: pageSize,
+                        language: this.language
                     }
                 }
             },

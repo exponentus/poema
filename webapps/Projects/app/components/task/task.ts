@@ -13,8 +13,8 @@ import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { ProjectInputComponent, UserInputComponent, TaskTypeInputComponent, TagsInputComponent } from '../shared';
 import { TaskListComponent } from './task-list';
-import { TaskRequestsComponent } from './task-requests';
-import { TaskRequestComponent } from './task-request';
+import { RequestListComponent } from './request-list';
+import { RequestComponent } from './request';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { CommentsComponent } from '../comment/comments';
 import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL, TASK_CLOSE, ITaskState } from '../../reducers/task.reducer';
@@ -36,8 +36,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         TaskTypeInputComponent,
         TagsInputComponent,
         TaskListComponent,
-        TaskRequestsComponent,
-        TaskRequestComponent,
+        RequestListComponent,
+        RequestComponent,
         AttachmentsComponent,
         CommentsComponent,
         MarkdownEditorComponent,
@@ -131,10 +131,15 @@ export class TaskComponent {
                         this.task = action.payload.task;
                         this.isSubtask = !!this.task.parentTaskId;
                     }
-                    // if (!this.isNew) {
-                    //     this.loadComments(1);
-                    //     this.loadRequests(1);
-                    // }
+                    if (!this.isNew) {
+                        this.loadComments(1);
+                        this.loadRequests(1);
+                    }
+                    if (this.task.parentTaskId && !this.task.parentTask) {
+                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(action => {
+                            this.parentTask = action.payload.task;
+                        });
+                    }
                     this.isReady = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
@@ -221,7 +226,7 @@ export class TaskComponent {
 
     // loadSubtasks
     loadSubtasks() {
-        this.taskService.fetchTasks({ parentTaskId: this.task.id, parentOnly: false }).subscribe(action => {
+        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(action => {
             this.subTasks = action.payload.tasks;
         });
     }

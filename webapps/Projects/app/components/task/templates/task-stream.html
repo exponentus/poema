@@ -1,0 +1,23 @@
+<div class="entry-wrap level-{{level}}" *ngFor="let task of tasks">
+    <div class="entry">
+        <label class="entry-select">
+            <input type="checkbox" name="task-id" value="{{task.id}}" (change)="toggleSelected(task.id)" />
+        </label>
+        <a class="entry-link" [routerLink]="['/task', task.id]">
+            <div class="entry-fields">
+                <span class="task-list__title">{{task.title}}</span>
+                <span class="task-list__status">{{task.status | text:'L' | translate}}</span>
+                <span class="task-list__priority">{{task.priority | text:'L' | translate}}</span>
+                <span class="task-list__assignee">
+                        <user-input [userIds]="[task.assigneeUserId]"></user-input>
+                    </span>
+                <span class="task-list__start_date">{{task.startDate | dateFmt}}</span>
+                <span class="task-list__due_date">{{task.dueDate | dateFmt}}</span>
+                <span class="task-list__tags">
+                        <tags-input [tagIds]="task.tagIds"></tags-input>
+                    </span>
+            </div>
+        </a>
+    </div>
+    <task-stream [level]="level" [task]="task"></task-stream>
+</div>
