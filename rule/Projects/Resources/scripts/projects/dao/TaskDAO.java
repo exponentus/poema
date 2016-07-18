@@ -102,6 +102,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
+            if (filter.getTags() != null) {
+                if (condition == null) {
+                    condition = cb.and(c.get("tags").in(filter.getTags()));
+                } else {
+                    condition = cb.and(c.get("tags").in(filter.getTags()), condition);
+                }
+            }
+
             if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
                 if (condition == null) {
                     condition = cb.and(c.get("readers").in(user.getId()));
