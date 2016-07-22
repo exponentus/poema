@@ -13,7 +13,7 @@
             </div>
         </h1>
         <div class="content-actions">
-            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask(form)">
+            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask()">
                 <span *ngIf="isNew">{{'send_task' | translate}}</span>
                 <span *ngIf="!isNew">{{'save_close' | translate}}</span>
             </button>
@@ -25,6 +25,9 @@
             </button>
             <button *ngIf="!isNew && FEATURE_FLAGS.subTask" class="btn" type="button" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
+            </button>
+            <button class="btn" type="button" *ngIf="canSaveTask()" (click)="completeTask()">
+                <span>{{'complete_task' | translate}}</span>
             </button>
             <div *ngIf="!isNew" dropdown class="buttons">
                 <div dropdown-toggle>

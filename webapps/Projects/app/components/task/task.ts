@@ -178,11 +178,23 @@ export class TaskComponent {
         return this.isNew;
     }
 
-    saveTask($ev) {
-        console.log($ev);
-
+    saveTask() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.taskService.saveTask(this.task).subscribe(
+            response => {
+                noty.set({ type: 'success', message: response.message }).remove(1500);
+                this.close();
+            },
+            error => {
+                noty.set({ type: 'error', message: error.message }).remove(1500);
+                this.errorSaveTask(error);
+            }
+        );
+    }
+
+    completeTask() {
+        let noty = this.notifyService.process(this.translate.instant('wait_while_process')).show();
+        this.taskService.completeTask(this.task).subscribe(
             response => {
                 noty.set({ type: 'success', message: response.message }).remove(1500);
                 this.close();

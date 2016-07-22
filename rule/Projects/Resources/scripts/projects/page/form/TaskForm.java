@@ -189,6 +189,16 @@ public class TaskForm extends _DoForm {
     @Override
     public void doPUT(_Session session, _WebFormData formData) {
         String taskId = formData.getValueSilently("taskId");
+        String action = formData.getValueSilently("_action");
+
+        if (taskId.isEmpty() || action.isEmpty()) {
+            setBadRequest();
+            return;
+        }
+
+        if (action.equals("complete")) {
+            doTaskComplete(session, taskId);
+        }
     }
 
     @Override
@@ -251,5 +261,37 @@ public class TaskForm extends _DoForm {
         }
 
         return ve;
+    }
+
+    private void doTaskComplete(_Session session, String taskId) {
+        TaskDAO dao = new TaskDAO(session);
+        Task task = dao.findById(taskId);
+
+        try {
+            task.setStatus(TaskStatusType.FINISHED);
+            dao.update(task);
+
+            LanguageCode lang = session.getLang();
+            UserDAO userDAO = new UserDAO(session);
+            IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+
+            List<String> recipients = new ArrayList<>();
+            recipients.add(((User) assigneeUser).getEmail());
+
+            MailAgent ma = new MailAgent();
+            Memo memo = new Memo(getLocalizedWord("notify_about_finish_task", lang), getLocalizedEmailTemplate("task_finish", lang));
+            memo.addVar("taskTitle", task.getTitle());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+            if (ma.sendMеssage(memo, recipients)) {
+                addValue("notify", "ok");
+            }
+        } catch (SecureException e) {
+            setError(e);
+        } catch (DatabaseException e) {
+            logError(e);
+            setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
+        }
     }
 }

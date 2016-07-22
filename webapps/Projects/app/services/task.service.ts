@@ -99,6 +99,12 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
+    completeTask(task: Task) {
+        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=complete', '', { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
     deleteTask(tasks: Task[]) {
         return this.http.delete('p?id=task-view&taskIds=' + tasks.map(it => it.id).join(','));
     }
