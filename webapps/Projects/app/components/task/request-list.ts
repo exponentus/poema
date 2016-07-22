@@ -9,6 +9,11 @@ import { Request } from '../../models';
     selector: 'request-list',
     template: `
         <ul class="request-list">
+            <li class="request-list__header">
+                <span class="request__type">{{'request_type' | translate}}</span>
+                <span class="request__comment">{{'comment' | translate}}</span>
+                <time class="request__time">{{'request_time' | translate}}</time>
+            </li>
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
                     <div class="request__details">

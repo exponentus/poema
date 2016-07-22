@@ -51,16 +51,22 @@ export class TaskComponent {
     private sub: any;
     isReady = false;
     isNew = true;
+    isEditable = true;
     isSubtask = false;
     parentTask: Task;
     subTasks: Task[];
     task: Task;
+    acl: any = {};
     rights: any = {
         addSubtask: false,
         doRequest: false,
         doResolution: false,
         addComment: false,
         removeTask: false
+    };
+    FEATURE_FLAGS: any = {
+        subTask: true,
+        comments: true
     };
     form: ControlGroup;
     showRequest: boolean = false;
@@ -134,6 +140,7 @@ export class TaskComponent {
                     if (!this.isNew) {
                         this.loadComments(1);
                         this.loadRequests(1);
+                        this.loadSubtasks();
                     }
                     if (this.task.parentTaskId && !this.task.parentTask) {
                         this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(action => {
@@ -150,6 +157,10 @@ export class TaskComponent {
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
     }
 
+    ngOnDestroy() {
+        this.store.dispatch({ type: TASK_CLOSE });
+    }
+
     getTitle() {
         if (this.isNew && this.isSubtask) {
             return 'new_subtask';
@@ -162,7 +173,14 @@ export class TaskComponent {
         }
     }
 
-    saveTask() {
+    getEditable() {
+        console.log('getEditable');
+        return this.isNew;
+    }
+
+    saveTask($ev) {
+        console.log($ev);
+
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.taskService.saveTask(this.task).subscribe(
             response => {
@@ -203,6 +221,10 @@ export class TaskComponent {
         });
     }
 
+    hasComments() {
+        return this.comments && this.comments.length;
+    }
+
     //
     loadRequests(page = 1) {
         this.taskService.fetchTaskRequests(this.task, page).subscribe(action => {
@@ -224,11 +246,19 @@ export class TaskComponent {
         });
     }
 
+    hasRequests() {
+        return this.requests && this.requests.length;
+    }
+
     // loadSubtasks
     loadSubtasks() {
         this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(action => {
             this.subTasks = action.payload.tasks;
         });
+    }
+
+    hasSubTasks() {
+        return this.subTasks && this.subTasks.length;
     }
 
     //
@@ -246,6 +276,11 @@ export class TaskComponent {
         }
     }
 
+    // check rights
+    canSaveTask() {
+        return true;
+    }
+
     canRequestAction() {
         return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest && !this.hasAcceptedRequestResolution;
     }
@@ -254,6 +289,7 @@ export class TaskComponent {
         this.store.dispatch({ type: TASK_REQUEST_NEW, payload: this.task });
     }
 
+    //
     getTaskStatusType() {
         return this.taskStatusTypes.filter(it => it.value == this.task.status)[0].text;
     }
@@ -310,9 +346,5 @@ export class TaskComponent {
         this.taskService.deleteTaskAttachment(this.task, attachment).subscribe(r => {
             this.task.attachments = this.task.attachments.filter(it => it.id != attachment.id);
         });
-    }
-
-    ngOnDestroy() {
-        this.store.dispatch({ type: TASK_CLOSE });
     }
 }

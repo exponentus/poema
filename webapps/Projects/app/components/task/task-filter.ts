@@ -1,6 +1,5 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
-import { Store } from '@ngrx/store';
 
 import { TaskTypeInputComponent, UserInputComponent, TagsInputComponent } from '../shared';
 import { DateFormatPipe } from '../../pipes';
@@ -29,7 +28,7 @@ export class TaskFilterComponent {
     private assigneeUserId: string;
     private tagIds: string[] = [];
 
-    constructor(private store: Store<any>) { }
+    constructor() { }
 
     setTaskType(taskType: TaskType) {
         if (taskType) {
@@ -55,14 +54,6 @@ export class TaskFilterComponent {
     }
 
     updateFilter() {
-        // this.store.dispatch({
-        //     type: SET_FILTER,
-        //     payload: {
-        //         taskType: this.taskType,
-        //         assigneeUser: this.assigneeUser,
-        //         tags: this.tags
-        //     }
-        // });
         this.change.emit({
             taskTypeId: this.taskTypeId,
             assigneeUserId: this.assigneeUserId,

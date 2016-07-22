@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'pagination',
@@ -10,7 +10,8 @@ import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding }
             <span *ngIf="stopPage < totalPages">...</span>
             <a *ngIf="stopPage < totalPages" href="#" (click)="setPage(totalPages, $event)">{{totalPages}}</a>
         </div>
-    `
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class PaginationComponent {

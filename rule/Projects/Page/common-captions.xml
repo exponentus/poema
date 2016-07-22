@@ -62,6 +62,7 @@
     <caption name="projects"/>
     <caption name="task_request"/>
     <caption name="request_type"/>
+    <caption name="send_task"/>
     <caption name="send_request"/>
     <caption name="new_request"/>
 

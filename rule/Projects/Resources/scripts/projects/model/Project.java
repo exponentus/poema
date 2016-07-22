@@ -51,16 +51,13 @@ public class Project extends SecureAppEntity<UUID> {
     @Column(length = 512)
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "project_attachments",
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "project_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "attachment_id"}))
     private List<Attachment> attachments = new ArrayList<>();
-
-    @Column(name = "has_attachments")
-    private boolean hasAttachments;
 
     public String getName() {
         return name;
@@ -144,7 +141,7 @@ public class Project extends SecureAppEntity<UUID> {
     }
 
     public boolean isHasAttachments() {
-        return hasAttachments;
+        return attachments.size() > 0;
     }
 
     @JsonIgnore

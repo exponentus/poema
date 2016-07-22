@@ -1,7 +1,8 @@
 /* .task-list */
 .task-list {}
 
-.task-list__title {
+span.task-list__title {
+    padding-left: 20px;
     width: 20%;
 }
 
@@ -31,4 +32,22 @@
 
 .task-list__tags .tag {
     padding: 0 4px;
+}
+
+.level-1 .level-indent {
+    padding-left: 36px;
+}
+
+.level-1 .entry-expander {
+    padding-left: 20px;
+    width: 55px;
+}
+
+.level-2 .level-indent {
+    padding-left: 48px;
+}
+
+.level-2 .entry-expander {
+    padding-left: 28px;
+    width: 65px;
 }

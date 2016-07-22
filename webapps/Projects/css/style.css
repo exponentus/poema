@@ -102,7 +102,3 @@ pagination:empty {
     display: inline-block;
     vertical-align: top;
 }
-
-.entry-wrap .entry-wrap {
-    padding-left: 48px;
-}

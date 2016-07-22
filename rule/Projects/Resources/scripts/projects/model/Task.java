@@ -67,17 +67,17 @@ public class Task extends SecureAppEntity<UUID> {
     private List<Tag> tags;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "task_id")
     private List<Comment> comments;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "task_id")
     private List<Request> requests;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "task_attachments",
             joinColumns = {@JoinColumn(name = "task_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
@@ -87,15 +87,6 @@ public class Task extends SecureAppEntity<UUID> {
 
     @Column(name = "customer_observation")
     private boolean customerObservation;
-
-    @Column(name = "has_attachments")
-    private boolean hasAttachments;
-
-    @Column(name = "has_comments")
-    private boolean hasComments;
-
-    @Column(name = "has_subtasks")
-    private boolean hasSubtasks;
 
     @JsonIgnore
     public Project getProject() {
@@ -199,20 +190,28 @@ public class Task extends SecureAppEntity<UUID> {
         this.tags = tags;
     }
 
-    public boolean isHasAttachments() {
-        return hasAttachments;
+    public boolean isHasRequests() {
+        return requests != null && requests.size() > 0;
     }
 
-    public void setHasAttachments(boolean hasAttachments) {
-        this.hasAttachments = hasAttachments;
+    public boolean isHasComments() {
+        return comments != null && comments.size() > 0;
     }
 
     public List<Comment> getComments() {
         return comments;
     }
 
+    public boolean isHasSubtasks() {
+        return subtasks != null && subtasks.size() > 0;
+    }
+
     public List<Request> getRequests() {
         return requests;
+    }
+
+    public boolean isHasAttachments() {
+        return attachments.size() > 0;
     }
 
     public List<Attachment> getAttachments() {
@@ -223,21 +222,6 @@ public class Task extends SecureAppEntity<UUID> {
         this.attachments = attachments;
     }
 
-    public boolean isHasComments() {
-        return hasComments;
-    }
-
-    public void setHasComments(boolean hasComments) {
-        this.hasComments = hasComments;
-    }
-
-    public boolean isHasSubtasks() {
-        return hasSubtasks;
-    }
-
-    public void setHasSubtasks(boolean hasSubtasks) {
-        this.hasSubtasks = hasSubtasks;
-    }
 
     public String getProjectId() {
         return project != null ? project.getIdentifier() : null;
@@ -253,6 +237,14 @@ public class Task extends SecureAppEntity<UUID> {
 
     public List<String> getTagIds() {
         return tags != null ? tags.stream().map(it -> it.getIdentifier()).collect(Collectors.toList()) : null;
+    }
+
+    public boolean isCustomerObservation() {
+        return customerObservation;
+    }
+
+    public void setCustomerObservation(boolean customerObservation) {
+        this.customerObservation = customerObservation;
     }
 
     @Override

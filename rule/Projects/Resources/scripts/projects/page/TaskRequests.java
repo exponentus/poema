@@ -1,11 +1,6 @@
 package projects.page;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.eclipse.persistence.exceptions.DatabaseException;
-
+import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.MsgException;
@@ -17,8 +12,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.model.Request;
@@ -26,211 +20,223 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class TaskRequests extends _DoForm {
 
-	@Override
-	public void doGET(_Session session, _WebFormData formData) {
-		String taskId = formData.getValueSilently("taskId");
-		if (taskId.isEmpty()) {
-			setBadRequest();
-			return;
-		}
+    @Override
+    public void doGET(_Session session, _WebFormData formData) {
+        String taskId = formData.getValueSilently("taskId");
+        if (taskId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
 
-		TaskDAO taskDAO = new TaskDAO(session);
-		Task task = taskDAO.findById(taskId);
-		if (task == null) {
-			setBadRequest();
-			return;
-		}
+        TaskDAO taskDAO = new TaskDAO(session);
+        Task task = taskDAO.findById(taskId);
+        if (task == null) {
+            setBadRequest();
+            return;
+        }
 
-		// check read access
-		// if
-		// (!task.getProject().getEditors().contains(session.getUser().getId())
-		// && !task.getReaders().contains(session.getUser().getId())) {
-		// setBadRequest();
-		// return;
-		// }
+        // check read access
+        // if
+        // (!task.getProject().getEditors().contains(session.getUser().getId())
+        // && !task.getReaders().contains(session.getUser().getId())) {
+        // setBadRequest();
+        // return;
+        // }
 
-		RequestDAO requestDAO = new RequestDAO(session);
-		int page = formData.getNumberValueSilently("page", 1);
-		List<Request> requests = requestDAO.findTaskRequests(task, page, 20);
-		addContent(requests);
-	}
+        RequestDAO requestDAO = new RequestDAO(session);
+        int page = formData.getNumberValueSilently("page", 1);
+        List<Request> requests = requestDAO.findTaskRequests(task, page, 20);
+        addContent(requests);
+    }
 
-	@Override
-	public void doPOST(_Session session, _WebFormData formData) {
-		String taskId = formData.getValueSilently("taskId");
-		String requestTypeId = formData.getValueSilently("requestTypeId");
-		if (taskId.isEmpty() || requestTypeId.isEmpty()) {
-			setBadRequest();
-			return;
-		}
+    @Override
+    public void doPOST(_Session session, _WebFormData formData) {
+        String taskId = formData.getValueSilently("taskId");
+        String requestTypeId = formData.getValueSilently("requestTypeId");
+        if (taskId.isEmpty() || requestTypeId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
 
-		addRequest(session, taskId, requestTypeId, formData.getValueSilently("comment"));
-	}
+        addRequest(session, taskId, requestTypeId, formData.getValueSilently("comment"));
+    }
 
-	@Override
-	public void doPUT(_Session session, _WebFormData formData) {
-		String requestId = formData.getValueSilently("requestId");
-		String resolution = formData.getValueSilently("resolution");
-		ResolutionType resolutionType = ResolutionType.valueOf(resolution);
+    @Override
+    public void doPUT(_Session session, _WebFormData formData) {
+        String requestId = formData.getValueSilently("requestId");
+        String resolution = formData.getValueSilently("resolution");
+        ResolutionType resolutionType = ResolutionType.valueOf(resolution);
 
-		if (resolutionType == ResolutionType.UNKNOWN) {
-			setBadRequest();
-			return;
-		}
+        if (resolutionType == ResolutionType.UNKNOWN) {
+            setBadRequest();
+            return;
+        }
 
-		doResolution(session, requestId, resolutionType);
-	}
+        doResolution(session, requestId, resolutionType);
+    }
 
-	@Override
-	public void doDELETE(_Session session, _WebFormData formData) {
-		String requestId = formData.getValueSilently("requestId");
-		if (requestId.isEmpty()) {
-			setBadRequest();
-			return;
-		}
+    @Override
+    public void doDELETE(_Session session, _WebFormData formData) {
+        String requestId = formData.getValueSilently("requestId");
+        if (requestId.isEmpty()) {
+            setBadRequest();
+            return;
+        }
 
-		if (formData.containsField("attachmentId")) {
-			String attachmentId = formData.getValueSilently("attachmentId");
-			deleteAttachment(session, requestId, attachmentId);
-		} else {
-			deleteRequest(session, requestId);
-		}
-	}
+        if (formData.containsField("attachmentId")) {
+            String attachmentId = formData.getValueSilently("attachmentId");
+            deleteAttachment(session, requestId, attachmentId);
+        } else {
+            deleteRequest(session, requestId);
+        }
+    }
 
-	private void addRequest(_Session session, String taskId, String requestTypeId, String comment) {
-		try {
-			RequestDAO requestDAO = new RequestDAO(session);
-			TaskDAO taskDAO = new TaskDAO(session);
-			Task task = taskDAO.findById(taskId);
-			if (task == null) {
-				setBadRequest();
-				return;
-			}
+    private void addRequest(_Session session, String taskId, String requestTypeId, String comment) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(session);
+            TaskDAO taskDAO = new TaskDAO(session);
+            Task task = taskDAO.findById(taskId);
+            if (task == null) {
+                setBadRequest();
+                return;
+            }
 
-			if (requestDAO.findUnResolvedRequest(task) != null) {
-				setBadRequest();
-				return;
-			}
+            if (requestDAO.findUnResolvedRequest(task) != null) {
+                setBadRequest();
+                return;
+            }
 
-			RequestType requestType = new RequestType();
-			requestType.setId(UUID.fromString(requestTypeId));
+            RequestType requestType = new RequestType();
+            requestType.setId(UUID.fromString(requestTypeId));
 
-			Request request = new Request();
-			request.setTask(task);
-			request.setRequestType(requestType);
-			request.setComment(comment);
-			request.setAttachments(getActualAttachments(request.getAttachments()));
+            Request request = new Request();
+            request.setTask(task);
+            request.setRequestType(requestType);
+            request.setComment(comment);
+            request.setAttachments(getActualAttachments(request.getAttachments()));
+            request.addReaderEditor(session.getUser());
+            requestDAO.add(request);
 
-			request.addReaderEditor(session.getUser());
-			requestDAO.add(request);
+            // Notify task author about request
+            LanguageCode lang = session.getLang();
+            List<String> recipients = new ArrayList<>();
 
-			//
-			LanguageCode lang = session.getLang();
-			List<String> recipients = new ArrayList<>();
+            UserDAO userDAO = new UserDAO(session);
+            IUser<Long> authorUser = userDAO.findById(request.getTask().getAuthorId());
+            recipients.add(authorUser.getEmail());
 
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> authorUser = userDAO.findById(request.getTask().getAuthorId());
-			recipients.add(authorUser.getEmail());
+            MailAgent ma = new MailAgent();
+            Memo memo = new Memo(getLocalizedWord("notify_about_task_request", lang), getLocalizedEmailTemplate("newrequest", lang));
+            memo.addVar("taskTitle", task.getTitle());
+            memo.addVar("requestType", request.getRequestType().getName());
+            memo.addVar("comment", request.getComment());
+            memo.addVar("author", session.getUser().getUserName());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+            if (ma.sendMеssage(memo, recipients)) {
+                addValue("notify", "ok");
+            }
+        } catch (DatabaseException e) {
+            logError(e);
+            setBadRequest();
+        } catch (SecureException e) {
+            logError(e);
+            setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
+        }
+    }
 
-			MailAgent ma = new MailAgent();
-			Memo memo = new Memo(getLocalizedWord("notify_about_task_request", lang), getLocalizedWord("notify_about_task_request", lang));
-			if (!ma.sendMеssage(memo, recipients)) {
-				addContent("notify", "ok");
-			}
-		} catch (DatabaseException e) {
-			logError(e);
-			setBadRequest();
-		} catch (SecureException e) {
-			logError(e);
-			setBadRequest();
-		} catch (MsgException e) {
-			logError(e);
-		}
-	}
+    private void doResolution(_Session session, String requestId, ResolutionType resolutionType) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(session);
+            Request request = requestDAO.findById(requestId);
 
-	private void doResolution(_Session session, String requestId, ResolutionType resolutionType) {
-		try {
-			RequestDAO requestDAO = new RequestDAO(session);
-			Request request = requestDAO.findById(requestId);
+            if (request == null || resolutionType == ResolutionType.UNKNOWN) {
+                setBadRequest();
+                return;
+            }
 
-			if (request == null || resolutionType == ResolutionType.UNKNOWN) {
-				setBadRequest();
-				return;
-			}
+            if (!request.getTask().getEditors().contains(session.getUser().getId())) {
+                setBadRequest();
+                return;
+            }
 
-			if (!request.getTask().getEditors().contains(session.getUser().getId())) {
-				setBadRequest();
-				return;
-			}
+            request.setResolution(resolutionType);
+            requestDAO.update(request);
 
-			request.setResolution(resolutionType);
+            //
+            LanguageCode lang = session.getLang();
+            List<String> recipients = new ArrayList<>();
 
-			requestDAO.update(request);
+            UserDAO userDAO = new UserDAO(session);
+            IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
+            recipients.add(assigneeUser.getEmail());
 
-			//
-			LanguageCode lang = session.getLang();
-			List<String> recipients = new ArrayList<>();
+            MailAgent ma = new MailAgent();
+            Memo memo = new Memo(getLocalizedWord("notify_about_request_resolution", lang), getLocalizedEmailTemplate("request_resolution", lang));
+            memo.addVar("taskTitle", request.getTask().getTitle());
+            memo.addVar("taskAuthor", request.getTask().getAuthor().getUserName());
+            memo.addVar("requestType", request.getRequestType().getName());
+            memo.addVar("requestComment", request.getComment());
+            memo.addVar("requestResolution", request.getResolution().name());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getTask().getURL());
+            if (ma.sendMеssage(memo, recipients)) {
+                addValue("notify", "ok");
+            }
+        } catch (DatabaseException e) {
+            logError(e);
+            setBadRequest();
+        } catch (SecureException e) {
+            logError(e);
+            setBadRequest();
+        } catch (MsgException e) {
+            logError(e);
+        }
+    }
 
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
-			recipients.add(assigneeUser.getEmail());
+    private void deleteRequest(_Session session, String requestId) {
+        RequestDAO requestDAO = new RequestDAO(session);
+        Request request = requestDAO.findById(requestId);
 
-			MailAgent ma = new MailAgent();
-			Memo memo = new Memo(getLocalizedWord("notify_about_request_resolution", lang),
-			        getLocalizedWord("notify_about_request_resolution", lang));
-			if (!ma.sendMеssage(memo, recipients)) {
-				addValue("notify", "ok");
-			}
-		} catch (DatabaseException e) {
-			logError(e);
-			setBadRequest();
-		} catch (SecureException e) {
-			logError(e);
-			setBadRequest();
-		} catch (MsgException e) {
-			logError(e);
-		}
-	}
+        if (!request.getTask().getEditors().contains(session.getUser().getId()) || !request.getEditors().contains(request.getAuthorId())) {
+            setBadRequest();
+            return;
+        }
 
-	private void deleteRequest(_Session session, String requestId) {
-		RequestDAO requestDAO = new RequestDAO(session);
-		Request request = requestDAO.findById(requestId);
+        try {
+            requestDAO.delete(request);
+        } catch (SecureException e) {
+            setError(e);
+        }
+    }
 
-		if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(request.getAuthorId())) {
-			setBadRequest();
-			return;
-		}
+    private void deleteAttachment(_Session session, String requestId, String attachmentId) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(session);
+            Request request = requestDAO.findById(requestId);
 
-		try {
-			requestDAO.delete(request);
-		} catch (SecureException e) {
-			setError(e);
-		}
-	}
+            if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(session.getUser().getId())) {
+                setBadRequest();
+                return;
+            }
 
-	private void deleteAttachment(_Session session, String requestId, String attachmentId) {
-		try {
-			RequestDAO requestDAO = new RequestDAO(session);
-			Request request = requestDAO.findById(requestId);
+            AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+            Attachment attachment = attachmentDAO.findById(attachmentId);
+            request.getAttachments().remove(attachment);
 
-			if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(session.getUser().getId())) {
-				setBadRequest();
-				return;
-			}
-
-			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-			Attachment attachment = attachmentDAO.findById(attachmentId);
-			request.getAttachments().remove(attachment);
-
-			requestDAO.update(request);
-		} catch (DatabaseException e) {
-			logError(e);
-			setBadRequest();
-		} catch (SecureException e) {
-			logError(e);
-			setBadRequest();
-		}
-	}
+            requestDAO.update(request);
+        } catch (DatabaseException e) {
+            logError(e);
+            setBadRequest();
+        } catch (SecureException e) {
+            logError(e);
+            setBadRequest();
+        }
+    }
 }

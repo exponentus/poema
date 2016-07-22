@@ -45,7 +45,6 @@ public class TaskView extends _DoPage {
     public TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
         TaskFilter filter = new TaskFilter();
 
-        String tasksFor = formData.getValueSilently("for");
         filter.setProject(formData.getValueSilently("projectId"));
         filter.setParentTask(formData.getValueSilently("parentTaskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
@@ -75,6 +74,7 @@ public class TaskView extends _DoPage {
             filter.setAssigneeUserId(assigneeUserId);
         }
 
+        String tasksFor = formData.getValueSilently("for");
         if ("inbox".equals(tasksFor)) {
             filter.setAssigneeUserId(session.getUser().getId());
         } else if ("my".equals(tasksFor)) {

@@ -6,8 +6,8 @@
             </label>
             <div class="entry-captions">
                 <span class="project-list__name">{{'name' | translate}}</span>
-                <span class="project-list__status">{{'status' | translate}}</span>
                 <span class="vw-icon"><i class="fa fa-paperclip"></i></span>
+                <span class="project-list__status">{{'status' | translate}}</span>
                 <span class="project-list__customer">{{'customer' | translate}}</span>
                 <span class="project-list__manager">{{'manager' | translate}}</span>
                 <span class="project-list__programmer">{{'programmer' | translate}}</span>
@@ -25,10 +25,10 @@
                 <a class="entry-link" [routerLink]="['./', project.id]">
                     <div class="entry-fields">
                         <span class="project-list__name">{{project.name}}</span>
-                        <span class="project-list__status">{{project.status | text:'L' | translate}}</span>
                         <span class="vw-icon">
                             <i class="fa fa-paperclip" *ngIf="project.hasAttachments"></i>
                         </span>
+                        <span class="project-list__status">{{project.status | text:'L' | translate}}</span>
                         <span class="project-list__customer">
                             <organization-input [org]="project.customer"></organization-input>
                         </span>

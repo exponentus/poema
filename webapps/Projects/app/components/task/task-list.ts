@@ -1,10 +1,12 @@
 import { Component, Input, Output } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { Store } from '@ngrx/store';
 
 import { UserInputComponent, TagsInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { TaskStreamComponent } from './task-stream';
+import { EXPAND_STREAM, COLLAPSE_STREAM } from '../../reducers/tasks.reducer';
 import { Task } from '../../models';
 
 @Component({
@@ -25,6 +27,10 @@ export class TaskListComponent {
     private tasks: Task[];
     private selectedIds: string[] = [];
     private isSelectedAll: boolean = false;
+
+    private expandedIds: string[] = [];
+
+    constructor(private store: Store<any>) { }
 
     isSelected(id: string) {
         return this.selectedIds.indexOf(id) != -1;
@@ -50,5 +56,10 @@ export class TaskListComponent {
                 this.isSelectedAll = false;
             }
         }
+    }
+
+    toggleExpandable(id: string, $event) {
+        $event.preventDefault();
+        $event.stopPropagation();
     }
 }

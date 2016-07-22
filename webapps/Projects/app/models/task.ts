@@ -13,7 +13,9 @@ export class Task {
     projectId: string;
     parentTask: Task;
     parentTaskId: string;
-    hasSubtasks: string[];
+    hasSubtasks: boolean;
+    hasRequests: boolean;
+    hasComments: boolean;
     taskTypeId: string;
     status: string = 'DRAFT';
     priority: string = 'NORMAL';

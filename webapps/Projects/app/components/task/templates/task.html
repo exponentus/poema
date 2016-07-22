@@ -13,8 +13,9 @@
             </div>
         </h1>
         <div class="content-actions">
-            <button class="btn btn-primary" type="button" [disabled]="!form.valid" (click)="saveTask()">
-                {{'save_close' | translate}}
+            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask(form)">
+                <span *ngIf="isNew">{{'send_task' | translate}}</span>
+                <span *ngIf="!isNew">{{'save_close' | translate}}</span>
             </button>
             <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
@@ -22,7 +23,7 @@
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
-            <button *ngIf="!isNew" class="btn" type="button" (click)="addSubtask($event)">
+            <button *ngIf="!isNew && FEATURE_FLAGS.subTask" class="btn" type="button" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
             </button>
             <div *ngIf="!isNew" dropdown class="buttons">
@@ -30,9 +31,11 @@
                     <span class="btn">...</span>
                 </div>
                 <div class="dropdown-menu">
-                    <button class="btn" type="button" (click)="deleteTask()">
-                        {{'delete' | translate}}
-                    </button>
+                    <ul class="menu">
+                        <li (click)="deleteTask()">
+                            <a class="menu-item" (click)="deleteTask()">{{'delete' | translate}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -46,7 +49,7 @@
                             {{'task_title' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.title.valid">
-                            <input class="span8" [(ngModel)]="task.title" ngControl="title" />
+                            <input class="span8" [(ngModel)]="task.title" ngControl="title" [disabled]="!isEditable" />
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!isSubtask">
@@ -55,7 +58,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.projectId.valid">
                             <div class="span8">
-                                <project-input editable="true" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
+                                <project-input [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
                             </div>
                         </div>
                         <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
@@ -68,7 +71,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
                             <div class="span8">
-                                <task-type-input editable="true" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
+                                <task-type-input [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
                             </div>
                             <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
                                 {{'required' | translate}}
@@ -80,7 +83,7 @@
                             {{'priority' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.priority.valid">
-                            <switch-button [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
+                            <switch-button [disabled]="!isEditable" [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
                             <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
                                 {{'required' | translate}}
                             </div>
@@ -92,7 +95,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
                             <div class="span8">
-                                <user-input editable="true" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
+                                <user-input [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
                             </div>
                             <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
                                 {{'required' | translate}}
@@ -104,7 +107,7 @@
                             {{'start_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input datepicker class="span2" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
+                            <input datepicker class="span2" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" [disabled]="!isEditable" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -112,7 +115,7 @@
                             {{'due_date' | translate}}
                         </div>
                         <div class="controls">
-                            <input datepicker class="span2" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                            <input datepicker class="span2" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" [disabled]="!isEditable" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -121,7 +124,7 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
                             <div class="span8">
-                                <tags-input editable="true" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
+                                <tags-input [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
                             </div>
                         </div>
                     </div>
@@ -131,20 +134,20 @@
                         </div>
                         <div class="controls" [class.has-error]="!form.controls.body.valid">
                             <div class="span8">
-                                <markdown-editor [markdown]="task.body || ''" editable="true" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
+                                <markdown-editor [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
                             </div>
                         </div>
                     </div>
                 </fieldset>
                 <attachments editable="true" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
-            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
+            <tab *ngIf="!isNew && hasSubTasks()" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
                 <task-list [tasks]="subTasks"></task-list>
             </tab>
-            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
+            <tab *ngIf="!isNew && FEATURE_FLAGS.comments" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
             </tab>
-            <tab *ngIf="!isNew" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
+            <tab *ngIf="!isNew && hasRequests()" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
                 <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
             </tab>
         </tabs>

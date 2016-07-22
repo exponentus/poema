@@ -13,14 +13,16 @@
             <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
             </button>
-            <div dropdown class="buttons">
+            <div *ngIf="!isNew" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
                 </div>
                 <div class="dropdown-menu">
-                    <button class="btn" type="button" (click)="deleteProject()">
-                        {{'delete' | translate}}
-                    </button>
+                    <ul class="menu">
+                        <li (click)="deleteTask()">
+                            <a class="menu-item" (click)="deleteProject()">{{'delete' | translate}}</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>

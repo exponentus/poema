@@ -38,8 +38,8 @@ import { Project, Organization, User, Attachment } from '../../models';
 export class ProjectComponent {
     private sub: any;
     private storeSub: any;
-
     isReady = false;
+    isNew = true;
     project: Project;
     form: ControlGroup;
 
@@ -78,6 +78,7 @@ export class ProjectComponent {
                     this.project = action.payload.project;
                     this.loadData();
                     this.isReady = true;
+                    this.isNew = this.project.id == '';
                 },
                 error => this.handleXhrError(error)
             );

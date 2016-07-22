@@ -5,11 +5,13 @@ import { MarkdownConverter } from './markdown-converter';
     selector: 'markdown-editor',
     template: `
         <div class="rt-editor">
-            <div class="rt-editor__area {{klass}}" [class.edit]="editable" [contentEditable]="editable"
-                innerHTML="{{html}}"
+            <div class="rt-editor__area {{klass}}"
+                [class.edit]="editable"
+                [contentEditable]="editable"
                 (keyup)="updateValue($event.target)"
                 (focus)="focus.emit($event)"
-                (blur)="blur.emit($event)">
+                (blur)="blur.emit($event)"
+                innerHTML="{{html}}">
             </div>
             <span class="rt-editor__placeholder" *ngIf="placeHolder && !hasValue">{{placeHolder}}</span>
         </div>

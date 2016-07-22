@@ -65,11 +65,7 @@ export class TasksComponent {
             }
             //
             this.params = params;
-            this.loadData(Object.assign({}, this.params, {
-                taskTypeId: this.filter.taskTypeId,
-                assigneeUserId: this.filter.assigneeUserId,
-                tagIds: this.filter.tagIds
-            }));
+            this.loadData(Object.assign({}, this.params, this.filter));
         });
     }
 
@@ -86,12 +82,7 @@ export class TasksComponent {
     }
 
     goToPage(params) {
-        this.loadData({
-            page: params.page,
-            taskTypeId: this.filter.taskTypeId,
-            assigneeUserId: this.filter.assigneeUserId,
-            tagIds: this.filter.tagIds
-        });
+        this.loadData(Object.assign({}, params, this.filter));
     }
 
     changeFilter(filter) {

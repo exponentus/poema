@@ -114,7 +114,6 @@ public class ProjectForm extends _DoForm {
             project.setComment(formData.getValue("comment"));
             project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
             project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
-
             project.setAttachments(getActualAttachments(project.getAttachments()));
 
             if (isNew) {
@@ -134,7 +133,7 @@ public class ProjectForm extends _DoForm {
                 memo.addVar("tester", testerUser.getUserName());
                 memo.addVar("$projectName$", project.getName());
                 memo.addVar("author", project.getAuthor().getUserName());
-                memo.addVar("url", session.getAppEnv().getURL() + "//" + project.getURL());
+                memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
                 if (!ma.sendMеssage(memo, recipients)) {
                     addContent("notify", "ok");
                 }

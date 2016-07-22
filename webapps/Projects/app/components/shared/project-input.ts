@@ -23,12 +23,12 @@ import { Project } from '../../models';
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
                     <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
+                    <!-- <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
                         <i class="fa fa-times"></i>
-                    </button>
+                    </button> -->
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="project?.id == m.id" *ngFor="let m of projects" (click)="onSelect(m)">
+                    <li class="select-option" [class.selected]="project?.id == m.id" *ngFor="let m of getProjects()" (click)="onSelect(m)">
                         {{m.name}}
                     </li>
                 </ul>
@@ -49,6 +49,7 @@ export class ProjectInputComponent {
     private projects: Project[] = [];
     private project: Project;
     private sub: any;
+    private keyWord: string = '';
 
     constructor(private store: Store<any>) { }
 
@@ -64,8 +65,15 @@ export class ProjectInputComponent {
         this.sub.unsubscribe();
     }
 
+    getProjects() {
+        if (this.keyWord) {
+            return this.projects.filter(it => it.name.toLowerCase().indexOf(this.keyWord) != -1);
+        }
+        return this.projects;
+    }
+
     search(keyWord) {
-        console.log(keyWord);
+        this.keyWord = keyWord.toLowerCase();
     }
 
     clear($event) {

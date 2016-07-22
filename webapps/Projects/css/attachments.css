@@ -2,4 +2,19 @@
     border-bottom: 1px dotted #ccc;
     border-top: 1px dotted #ccc;
     display: block;
+    margin: 0;
+}
+
+.attachment-list {
+    padding: 0;
+}
+
+.attachment-list__item {
+    display: inline-block;
+    margin: 2px;
+    padding: 4px 6px;
+}
+
+.attachment__link {
+    padding: 4px 6px;
 }

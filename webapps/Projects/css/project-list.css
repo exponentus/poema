@@ -1,6 +1,6 @@
 /* .project-list */
 .project-list__name {
-    width: 18%;
+    width: 20%;
 }
 
 .project-list__status {
@@ -8,10 +8,6 @@
 }
 
 .project-list__customer {
-    width: 15%;
-}
-
-.project-list__comment {
     width: 20%;
 }
 

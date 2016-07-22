@@ -52,6 +52,7 @@ public class TaskForm extends _DoForm {
             }
 
             addContent(task.getAttachments());
+            addContent(task.getACL(session));
         } else {
             task = new Task();
             task.setAuthor(user);
@@ -115,6 +116,7 @@ public class TaskForm extends _DoForm {
                     task.setParent(parentTask);
                     task.setTaskType(parentTask.getTaskType());
                 }
+                task.setStatus(TaskStatusType.WAITING);
             } else {
                 task = dao.findById(id);
             }
@@ -124,7 +126,6 @@ public class TaskForm extends _DoForm {
                 task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
             }
             task.setTitle(formData.getValue("title"));
-            task.setStatus(TaskStatusType.valueOf(formData.getValueSilently("status")));
             task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
             task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
             task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
@@ -169,7 +170,7 @@ public class TaskForm extends _DoForm {
             memo.addVar("title", task.getTitle());
             memo.addVar("content", task.getBody());
             memo.addVar("author", task.getAuthor().getUserName());
-            memo.addVar("url", session.getAppEnv().getURL() + "//" + task.getURL());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
             if (ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
@@ -181,6 +182,11 @@ public class TaskForm extends _DoForm {
         } catch (MsgException e) {
             logError(e);
         }
+    }
+
+    @Override
+    public void doPUT(_Session session, _WebFormData formData) {
+        String taskId = formData.getValueSilently("taskId");
     }
 
     @Override
@@ -218,10 +224,6 @@ public class TaskForm extends _DoForm {
         if (formData.getValueSilently("title").isEmpty()) {
             ve.addError("title", "required", getLocalizedWord("field_is_empty", lang));
         }
-        // if (formData.getValueSilently("body").isEmpty()) {
-        // ve.addError("body", "required", getLocalizedWord("field_is_empty",
-        // lang));
-        // }
         if (formData.getValueSilently("status").isEmpty()) {
             ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
         }

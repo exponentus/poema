@@ -34,10 +34,10 @@ import { Task, Request, RequestType, Attachment } from '../../models';
                     updateTimeout="100"
                     (update)="setComment($event)">
                 </markdown-editor> -->
-                <attachments [model]="request" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments [model]="request" editable="true" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </section>
             <footer>
-                <button class="btn" type="button" (click)="cancel()">{{'cancel' | translate}}</button>
+                <button class="btn btn-cancel" type="button" (click)="cancel()">{{'cancel' | translate}}</button>
                 <button class="btn btn-primary" type="submit" [disabled]="!requestType">{{'send_request' | translate}}</button>
             </footer>
         </form>
