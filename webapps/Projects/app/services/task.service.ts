@@ -106,11 +106,13 @@ export class TaskService {
     }
 
     deleteTask(tasks: Task[]) {
-        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(it => it.id).join(','));
+        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(it => it.id).join(','), { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     deleteTaskAttachment(task: Task, attachment: Attachment) {
-        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id);
+        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     fetchTaskRequests(task: Task, page = 0) {
@@ -142,11 +144,13 @@ export class TaskService {
     }
 
     deleteRequest(request: Request) {
-        return this.http.delete('p?id=task-requests&requestId=' + request.id);
+        return this.http.delete('p?id=task-requests&requestId=' + request.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     deleteRequestAttachment(request: Request, attachment: Attachment) {
-        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id);
+        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     fetchComments(task: Task, page = 0) {
@@ -171,10 +175,12 @@ export class TaskService {
     }
 
     deleteComment(comment: Comment) {
-        return this.http.delete('p?id=comments&commentId=' + comment.id);
+        return this.http.delete('p?id=comments&commentId=' + comment.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     deleteCommentAttachment(comment: Comment, attachment: Attachment) {
-        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id);
+        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 }

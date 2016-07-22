@@ -33,8 +33,12 @@
                         <span class="vw-icon">
                             <i class="fa fa-paperclip" *ngIf="task.hasAttachments"></i>
                         </span>
-                        <span class="task-list__status">{{task.status | text:'L' | translate}}</span>
-                        <span class="task-list__priority">{{task.priority | text:'L' | translate}}</span>
+                        <span class="task-list__status">
+                            <span class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
+                        </span>
+                        <span class="task-list__priority">
+                            <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
+                        </span>
                         <span class="task-list__assignee">
                             <user-input [userIds]="[task.assigneeUserId]"></user-input>
                         </span>

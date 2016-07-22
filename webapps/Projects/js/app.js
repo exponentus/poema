@@ -4269,10 +4269,12 @@ webpackJsonp([0],[
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    ProjectService.prototype.deleteProject = function (projects) {
-	        return this.http.delete('p?id=project-view&projectIds=' + projects.map(function (it) { return it.id; }).join(','));
+	        return this.http.delete('p?id=project-view&projectIds=' + projects.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    ProjectService.prototype.deleteProjectAttachment = function (project, attachment) {
-	        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id);
+	        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    ProjectService = __decorate([
 	        core_1.Injectable(), 
@@ -4603,10 +4605,12 @@ webpackJsonp([0],[
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteTask = function (tasks) {
-	        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(function (it) { return it.id; }).join(','));
+	        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteTaskAttachment = function (task, attachment) {
-	        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id);
+	        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.fetchTaskRequests = function (task, page) {
 	        if (page === void 0) { page = 0; }
@@ -4635,10 +4639,12 @@ webpackJsonp([0],[
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteRequest = function (request) {
-	        return this.http.delete('p?id=task-requests&requestId=' + request.id);
+	        return this.http.delete('p?id=task-requests&requestId=' + request.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteRequestAttachment = function (request, attachment) {
-	        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id);
+	        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.fetchComments = function (task, page) {
 	        if (page === void 0) { page = 0; }
@@ -4661,10 +4667,12 @@ webpackJsonp([0],[
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteComment = function (comment) {
-	        return this.http.delete('p?id=comments&commentId=' + comment.id);
+	        return this.http.delete('p?id=comments&commentId=' + comment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService.prototype.deleteCommentAttachment = function (comment, attachment) {
-	        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id);
+	        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    TaskService = __decorate([
 	        core_1.Injectable(), 
@@ -6835,7 +6843,7 @@ webpackJsonp([0],[
 /* 610 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"project-list__name\">{{'name' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"project-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"project-list__customer\">{{'customer' | translate}}</span>\r\n                <span class=\"project-list__manager\">{{'manager' | translate}}</span>\r\n                <span class=\"project-list__programmer\">{{'programmer' | translate}}</span>\r\n                <span class=\"project-list__tester\">{{'tester' | translate}}</span>\r\n                <span class=\"project-list__finish_date\">{{'finish_date' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"project-list__name\">{{project.name}}</span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"project-list__status\">{{project.status | text:'L' | translate}}</span>\r\n                        <span class=\"project-list__customer\">\r\n                            <organization-input [org]=\"project.customer\"></organization-input>\r\n                        </span>\r\n                        <span class=\"project-list__manager\">\r\n                            <user-input [userIds]=\"[project.managerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__programmer\">\r\n                            <user-input [userIds]=\"[project.programmerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__tester\">\r\n                            <user-input [userIds]=\"[project.testerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__finish_date\">{{project.finishDate | dateFmt}}</span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"project-list__name\">{{'name' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"project-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"project-list__customer\">{{'customer' | translate}}</span>\r\n                <span class=\"project-list__manager\">{{'manager' | translate}}</span>\r\n                <span class=\"project-list__programmer\">{{'programmer' | translate}}</span>\r\n                <span class=\"project-list__tester\">{{'tester' | translate}}</span>\r\n                <span class=\"project-list__finish_date\">{{'finish_date' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"project-list__name\">{{project.name}}</span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"project-list__status\">\r\n                            <span class=\"status-{{project.status | text:'L'}}\">{{project.status | text:'L' | translate}}</span>\r\n                        </span>\r\n                        <span class=\"project-list__customer\">\r\n                            <organization-input [org]=\"project.customer\"></organization-input>\r\n                        </span>\r\n                        <span class=\"project-list__manager\">\r\n                            <user-input [userIds]=\"[project.managerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__programmer\">\r\n                            <user-input [userIds]=\"[project.programmerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__tester\">\r\n                            <user-input [userIds]=\"[project.testerUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"project-list__finish_date\">{{project.finishDate | dateFmt}}</span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
 /* 611 */
@@ -6931,11 +6939,14 @@ webpackJsonp([0],[
 	    };
 	    ProjectComponent.prototype.errorSaveProject = function (errorResponse) {
 	        console.log(errorResponse);
+	        this.notifyService.error(errorResponse.message).show().remove(2000);
 	    };
 	    ProjectComponent.prototype.deleteProject = function () {
 	        var _this = this;
 	        this.projectService.deleteProject([this.project]).subscribe(function (data) {
 	            _this.close();
+	        }, function (error) {
+	            _this.errorSaveProject(error);
 	        });
 	    };
 	    ProjectComponent.prototype.close = function () {
@@ -7604,7 +7615,7 @@ webpackJsonp([0],[
 /* 624 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"task-list__title\">{{'task_title' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"task-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"task-list__priority\">{{'priority' | translate}}</span>\r\n                <span class=\"task-list__assignee\">{{'assignee_user' | translate}}</span>\r\n                <span class=\"task-list__start_date\">{{'start_date' | translate}}</span>\r\n                <span class=\"task-list__due_date\">{{'due_date' | translate}}</span>\r\n                <span class=\"task-list__tags\">{{'tags' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let task of tasks\">\r\n            <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"task-list__title\">\r\n                            <div class=\"entry-expander\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                <i class=\"entry-expander_icon fa\"></i>\r\n                            </div>\r\n                            <span>{{task.title}}</span>\r\n                        </span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"task-list__status\">{{task.status | text:'L' | translate}}</span>\r\n                        <span class=\"task-list__priority\">{{task.priority | text:'L' | translate}}</span>\r\n                        <span class=\"task-list__assignee\">\r\n                            <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"task-list__start_date\">{{task.startDate | dateFmt}}</span>\r\n                        <span class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</span>\r\n                        <span class=\"task-list__tags\">\r\n                            <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                        </span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n            <!-- <task-stream [level]=\"0\" [task]=\"task\"></task-stream> -->\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"task-list__title\">{{'task_title' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"task-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"task-list__priority\">{{'priority' | translate}}</span>\r\n                <span class=\"task-list__assignee\">{{'assignee_user' | translate}}</span>\r\n                <span class=\"task-list__start_date\">{{'start_date' | translate}}</span>\r\n                <span class=\"task-list__due_date\">{{'due_date' | translate}}</span>\r\n                <span class=\"task-list__tags\">{{'tags' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let task of tasks\">\r\n            <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"task-list__title\">\r\n                            <div class=\"entry-expander\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                <i class=\"entry-expander_icon fa\"></i>\r\n                            </div>\r\n                            <span>{{task.title}}</span>\r\n                        </span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"task-list__status\">\r\n                            <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                        </span>\r\n                        <span class=\"task-list__priority\">\r\n                            <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                        </span>\r\n                        <span class=\"task-list__assignee\">\r\n                            <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"task-list__start_date\">{{task.startDate | dateFmt}}</span>\r\n                        <span class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</span>\r\n                        <span class=\"task-list__tags\">\r\n                            <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                        </span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n            <!-- <task-stream [level]=\"0\" [task]=\"task\"></task-stream> -->\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
 /* 625 */
@@ -7730,6 +7741,7 @@ webpackJsonp([0],[
 	                    _this.loadRequests(1);
 	                    _this.loadSubtasks();
 	                }
+	                _this.parentTask = null;
 	                if (_this.task.parentTaskId && !_this.task.parentTask) {
 	                    _this.taskService.fetchTaskById(_this.task.parentTaskId).subscribe(function (action) {
 	                        _this.parentTask = action.payload.task;
@@ -7788,6 +7800,8 @@ webpackJsonp([0],[
 	        var _this = this;
 	        this.taskService.deleteTask([this.task]).subscribe(function (data) {
 	            _this.close();
+	        }, function (error) {
+	            _this.errorSaveTask(error);
 	        });
 	    };
 	    TaskComponent.prototype.addSubtask = function () {
@@ -7848,6 +7862,7 @@ webpackJsonp([0],[
 	    };
 	    TaskComponent.prototype.errorSaveTask = function (errorResponse) {
 	        console.log(errorResponse);
+	        this.notifyService.error(errorResponse.message).show().remove(2000);
 	    };
 	    TaskComponent.prototype.close = function () {
 	        this.router.navigate(['/tasks']);

@@ -108,12 +108,17 @@ export class ProjectComponent {
 
     errorSaveProject(errorResponse) {
         console.log(errorResponse);
+        this.notifyService.error(errorResponse.message).show().remove(2000);
     }
 
     deleteProject() {
-        this.projectService.deleteProject([this.project]).subscribe(data => {
-            this.close();
-        });
+        this.projectService.deleteProject([this.project]).subscribe(
+            data => {
+                this.close();
+            },
+            error => {
+                this.errorSaveProject(error);
+            });
     }
 
     close() {

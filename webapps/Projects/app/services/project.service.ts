@@ -87,10 +87,12 @@ export class ProjectService {
     }
 
     deleteProject(projects: Project[]) {
-        return this.http.delete('p?id=project-view&projectIds=' + projects.map(it => it.id).join(','));
+        return this.http.delete('p?id=project-view&projectIds=' + projects.map(it => it.id).join(','), { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {
-        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id);
+        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 }

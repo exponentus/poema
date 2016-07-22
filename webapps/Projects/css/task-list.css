@@ -34,6 +34,64 @@ span.task-list__title {
     padding: 0 4px;
 }
 
+/* DRAFT(453), WAITING(454), PROCESSED(455), WAIT_DECISION(456), FINISHED */
+.priority-high,
+.priority-medium,
+.priority-normal,
+.priority-urgent,
+.status-draft,
+.status-finished,
+.status-processed,
+.status-wait_decision,
+.status-waiting {
+    display: inline-block;
+    border-radius: 2px;
+    padding: 1px 3px;
+}
+
+.status-draft {
+    background: #f5f5f5;
+}
+
+.status-waiting {
+    background: #3F51B5;
+    color: #eaeaea;
+}
+
+.status-processed {
+    background: #8BC34A;
+    color: white;
+}
+
+.status-wait_decision {
+    background: #FFEB3B;
+    color: #585757;
+}
+
+.status-finished {
+    background: #fd918a;
+    color: #ffffff;
+}
+
+/* URGENT(1), HIGH(2), MEDIUM(3), NORMAL */
+
+.priority-urgent {
+    background: #ffabab;
+}
+
+.priority-high {
+    background: #ffc107;
+}
+
+.priority-medium {
+    background: #d0d7ff;
+}
+
+.priority-normal {
+    background: transparent;
+}
+
+/* */
 .level-1 .level-indent {
     padding-left: 36px;
 }

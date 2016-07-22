@@ -142,6 +142,7 @@ export class TaskComponent {
                         this.loadRequests(1);
                         this.loadSubtasks();
                     }
+                    this.parentTask = null;
                     if (this.task.parentTaskId && !this.task.parentTask) {
                         this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(action => {
                             this.parentTask = action.payload.task;
@@ -207,9 +208,13 @@ export class TaskComponent {
     }
 
     deleteTask() {
-        this.taskService.deleteTask([this.task]).subscribe(data => {
-            this.close();
-        });
+        this.taskService.deleteTask([this.task]).subscribe(
+            data => {
+                this.close();
+            },
+            error => {
+                this.errorSaveTask(error);
+            });
     }
 
     addSubtask() {
@@ -276,6 +281,7 @@ export class TaskComponent {
     //
     errorSaveTask(errorResponse) {
         console.log(errorResponse);
+        this.notifyService.error(errorResponse.message).show().remove(2000);
     }
 
     close() {
