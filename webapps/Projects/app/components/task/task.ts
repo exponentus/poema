@@ -289,6 +289,12 @@ export class TaskComponent {
         this.store.dispatch({ type: TASK_REQUEST_NEW, payload: this.task });
     }
 
+    requestSendEventHandler({requestSendSuccess}) {
+        if (requestSendSuccess) {
+            this.close();
+        }
+    }
+
     //
     getTaskStatusType() {
         return this.taskStatusTypes.filter(it => it.value == this.task.status)[0].text;

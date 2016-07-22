@@ -1,6 +1,8 @@
 import { Task, Request, Comment } from '../models';
 
 export const TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
+export const TASK_REQUEST_SEND_PROCESS = 'TASK_REQUEST_SEND_PROCESS';
+export const TASK_REQUEST_SEND_SUCCESS = 'TASK_REQUEST_SEND_SUCCESS';
 export const TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 export const FETCH_REQUESTS = 'FETCH_REQUESTS';

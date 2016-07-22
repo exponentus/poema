@@ -107,6 +107,9 @@ export class RequestComponent {
         this.taskService.sendTaskRequest(this.request).subscribe(response => {
             this.notifyService.info(this.translate.instant('request_send_success')).show().remove(3000);
             this.cancel();
+            this.send.emit({
+                requestSendSuccess: true
+            });
         });
     }
 

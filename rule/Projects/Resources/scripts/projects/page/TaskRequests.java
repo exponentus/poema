@@ -170,7 +170,7 @@ public class TaskRequests extends _DoForm {
             request.setResolution(resolutionType);
             requestDAO.update(request);
 
-            //
+            // Notify assigneeUser about resolution
             LanguageCode lang = session.getLang();
             List<String> recipients = new ArrayList<>();
 

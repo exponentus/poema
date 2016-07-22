@@ -161,18 +161,20 @@ public class TaskForm extends _DoForm {
                 task = dao.update(task);
             }
 
-            List<String> recipients = new ArrayList<>();
-            recipients.add(((User) assigneeUser).getEmail());
+            if (isNew) {
+                List<String> recipients = new ArrayList<>();
+                recipients.add(((User) assigneeUser).getEmail());
 
-            MailAgent ma = new MailAgent();
-            Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang));
-            memo.addVar("assignee", assigneeUser.getUserName());
-            memo.addVar("title", task.getTitle());
-            memo.addVar("content", task.getBody());
-            memo.addVar("author", task.getAuthor().getUserName());
-            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-            if (ma.sendMеssage(memo, recipients)) {
-                addValue("notify", "ok");
+                MailAgent ma = new MailAgent();
+                Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang));
+                memo.addVar("assignee", assigneeUser.getUserName());
+                memo.addVar("title", task.getTitle());
+                memo.addVar("content", task.getBody());
+                memo.addVar("author", task.getAuthor().getUserName());
+                memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+                if (ma.sendMеssage(memo, recipients)) {
+                    addValue("notify", "ok");
+                }
             }
         } catch (SecureException e) {
             setError(e);

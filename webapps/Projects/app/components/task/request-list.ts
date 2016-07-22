@@ -17,12 +17,15 @@ import { Request } from '../../models';
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
                     <div class="request__details">
-                        <span class="request__type">{{ request.requestType.name }}</span>
-                        <span class="request__comment">{{request.comment}}</span>
+                        <div class="request__type">{{ request.requestType.name }}</div>
+                        <div class="request__comment">{{request.comment}}</div>
                         <time class="request__time">{{ request.regDate }}</time>
+                        <div class="request__attachments" *ngIf="request.attachments">
+                            <attachments [model]="request"></attachments>
+                        </div>
                     </div>
                     <div class="request__resol">
-                        <span class="request__resolution">{{ request.resolution }}</span>
+                        <div class="request__resolution">{{ request.resolution }}</div>
                         <time class="request__resolution_time">{{ request.resolutionTime }}</time>
                         <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">
                             <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="doAccept(request)">
@@ -32,9 +35,6 @@ import { Request } from '../../models';
                                 {{ 'decline' | translate }}
                             </button>
                         </div>
-                    </div>
-                    <div class="request__attachments" *ngIf="request.attachments">
-                        <attachments [model]="request"></attachments>
                     </div>
                 </div>
             </li>

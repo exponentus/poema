@@ -32,7 +32,7 @@
                 </div>
                 <div class="dropdown-menu">
                     <ul class="menu">
-                        <li (click)="deleteTask()">
+                        <li>
                             <a class="menu-item" (click)="deleteTask()">{{'delete' | translate}}</a>
                         </li>
                     </ul>
@@ -153,4 +153,4 @@
         </tabs>
     </section>
 </form>
-<request></request>
+<request (send)="requestSendEventHandler($event)"></request>

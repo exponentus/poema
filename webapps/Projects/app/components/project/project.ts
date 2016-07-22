@@ -18,7 +18,6 @@ import { Project, Organization, User, Attachment } from '../../models';
 
 @Component({
     selector: 'project',
-    styles: [`project { display: block; }`],
     template: require('./templates/project.html'),
     directives: [
         ROUTER_DIRECTIVES,
@@ -40,11 +39,10 @@ export class ProjectComponent {
     private storeSub: any;
     isReady = false;
     isNew = true;
+    isEditable = true;
     project: Project;
     form: ControlGroup;
-
     projectStatusTypes: any;
-    private to;
 
     constructor(
         private store: Store<any>,
