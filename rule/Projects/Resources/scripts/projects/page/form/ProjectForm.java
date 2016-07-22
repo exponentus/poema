@@ -110,7 +110,7 @@ public class ProjectForm extends _DoForm {
             project.setProgrammer(programmerUser.getId());
             project.setTester(testerUser.getId());
             project.setObservers(
-                    Arrays.stream(formData.getListOfNumberValues("observerUserIds", 0)).map(Integer::longValue).collect(Collectors.toList()));
+                    Arrays.stream(formData.getValueSilently("observerUserIds", "0").split(",")).map(Long::valueOf).collect(Collectors.toList()));
             project.setComment(formData.getValue("comment"));
             project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
             project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
