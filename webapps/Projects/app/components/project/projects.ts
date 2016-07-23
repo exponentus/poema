@@ -11,7 +11,8 @@ import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
 import { ProjectListComponent } from './project-list';
 import { ProjectComponent } from './project';
-import { FETCH_PROJECTS, IProjectsState } from '../../reducers/projects.reducer';
+import { ProjectActions } from '../../actions/project.actions';
+import { IProjectsState } from '../../reducers/projects.reducer';
 
 @Component({
     selector: 'project-list',
@@ -37,6 +38,7 @@ export class ProjectsComponent {
     constructor(
         private store: Store<any>,
         private router: Router,
+        private projectActions: ProjectActions,
         private projectService: ProjectService,
         private staffService: StaffService,
         private notifyService: NotificationService
@@ -59,16 +61,16 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
-        this.projectService.fetchProjects(params).subscribe(fpAction => {
-            let customerIds = fpAction.payload.projects.map(it => it.customerId);
-            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(foAction => {
-                let orgs = foAction.payload.organizations;
-                fpAction.payload.projects.map(p => {
+        this.projectService.fetchProjects(params).subscribe(data => {
+            let customerIds = data.projects.map(it => it.customerId);
+            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(payload => {
+                let orgs = payload.organizations;
+                data.projects.map(p => {
                     if (p.customerId) {
                         p.customer = orgs.filter(org => org.id == p.customerId)[0];
                     }
                 });
-                this.store.dispatch(fpAction);
+                this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
             });
         });
     }

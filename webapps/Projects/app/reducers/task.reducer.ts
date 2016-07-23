@@ -1,12 +1,6 @@
 import { Task, Request, Comment } from '../models';
 
-export const TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
-export const TASK_REQUEST_SEND_PROCESS = 'TASK_REQUEST_SEND_PROCESS';
-export const TASK_REQUEST_SEND_SUCCESS = 'TASK_REQUEST_SEND_SUCCESS';
-export const TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
-export const FETCH_COMMENTS = 'FETCH_COMMENTS';
-export const FETCH_REQUESTS = 'FETCH_REQUESTS';
-export const TASK_CLOSE = 'TASK_CLOSE';
+import { TaskActions } from '../actions';
 
 export interface ITaskState {
     task: Task,
@@ -26,24 +20,24 @@ const initialState: ITaskState = {
 
 export const taskReducer = (state = initialState, {type, payload}): ITaskState => {
     switch (type) {
-        case FETCH_REQUESTS:
+        case TaskActions.FETCH_TASK_REQUESTS_FULFILLED:
             return Object.assign({}, state, {
                 requests: payload.requests
             });
-        case TASK_REQUEST_NEW:
+        case TaskActions.TASK_REQUEST_NEW:
             return Object.assign({}, state, {
                 task: payload,
                 showRequest: true
             });
-        case TASK_REQUEST_CANCEL:
+        case TaskActions.TASK_REQUEST_CANCEL:
             return Object.assign({}, state, {
                 showRequest: false
             });
-        case FETCH_COMMENTS:
+        case TaskActions.FETCH_TASK_COMMENTS_FULFILLED:
             return Object.assign({}, state, {
                 comments: payload.comments
             });
-        case TASK_CLOSE:
+        case TaskActions.TASK_UNLOAD:
             return {
                 task: null,
                 request: null,

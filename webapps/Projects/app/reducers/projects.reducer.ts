@@ -1,10 +1,6 @@
 import { Project } from '../models';
 
-export const FETCH_PROJECTS = 'FETCH_PROJECTS';
-export const FETCH_PROJECT = 'FETCH_PROJECT';
-export const ADD_PROJECT = 'ADD_PROJECT';
-export const UPDATE_PROJECT = 'UPDATE_PROJECT';
-export const DELETE_PROJECT = 'DELETE_PROJECT';
+import { ProjectActions } from '../actions/project.actions';
 
 export interface IProjectsState {
     meta: {},
@@ -22,21 +18,20 @@ const initialState: IProjectsState = {
 
 export const projectsReducer = (state = initialState, {type, payload}): IProjectsState => {
     switch (type) {
-        case FETCH_PROJECTS:
+        case ProjectActions.FETCH_PROJECTS:
+            return Object.assign({}, state, {
+                loading: true
+            });
+        case ProjectActions.FETCH_PROJECTS_FAILED:
+            return Object.assign({}, state, {
+                loading: false
+            });
+        case ProjectActions.FETCH_PROJECTS_FULFILLED:
             return Object.assign({}, state, {
                 projects: payload.projects,
-                meta: payload.meta
+                meta: payload.meta,
+                loading: false
             });
-        case FETCH_PROJECT:
-            return Object.assign({}, state, {
-                project: payload.project
-            });
-        case ADD_PROJECT:
-            return state;
-        case UPDATE_PROJECT:
-            return state;
-        case DELETE_PROJECT:
-            return state;
         default:
             return state;
     }

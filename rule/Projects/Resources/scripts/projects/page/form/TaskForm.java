@@ -165,8 +165,10 @@ public class TaskForm extends _DoForm {
                 List<String> recipients = new ArrayList<>();
                 recipients.add(((User) assigneeUser).getEmail());
 
+                String mailTemplate = isSubTask ? "new_subtask" : "newtask";
+
                 MailAgent ma = new MailAgent();
-                Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate("newtask", lang));
+                Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate(mailTemplate, lang));
                 memo.addVar("assignee", assigneeUser.getUserName());
                 memo.addVar("title", task.getTitle());
                 memo.addVar("content", task.getBody());
@@ -268,6 +270,10 @@ public class TaskForm extends _DoForm {
         Task task = dao.findById(taskId);
 
         try {
+            if (task.getStatus() == TaskStatusType.FINISHED) {
+                return;
+            }
+
             task.setStatus(TaskStatusType.FINISHED);
             dao.update(task);
 

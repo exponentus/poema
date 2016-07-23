@@ -11,7 +11,8 @@ import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
 import { TaskListComponent } from './task-list';
 import { TaskComponent } from './task';
-import { FETCH_TASKS, ITasksState } from '../../reducers/tasks.reducer';
+import { TaskActions } from '../../actions';
+import { ITasksState } from '../../reducers/tasks.reducer';
 
 @Component({
     selector: 'tasks',
@@ -35,6 +36,7 @@ export class TasksComponent {
         private store: Store<any>,
         private router: Router,
         private route: ActivatedRoute,
+        private taskActions: TaskActions,
         private taskService: TaskService,
         private notifyService: NotificationService
     ) { }
@@ -76,8 +78,8 @@ export class TasksComponent {
 
     loadData(params) {
         this.requestProcess = true;
-        this.taskService.fetchTasks(params).subscribe(action => {
-            this.store.dispatch(action);
+        this.taskService.fetchTasks(params).subscribe(payload => {
+            this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
         });
     }
 

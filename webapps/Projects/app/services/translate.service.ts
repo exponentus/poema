@@ -4,8 +4,6 @@ import { Http, Headers } from '@angular/http';
 @Injectable()
 export class TranslateService {
 
-    private translations: any = null;
-
     constructor(
         private http: Http
     ) { }
@@ -17,12 +15,7 @@ export class TranslateService {
         });
 
         return this.http.get('p?id=common-captions', { headers: headers }).map(response => {
-            this.translations = response.json().captions;
-            return this.translations;
+            return response.json().captions;
         });
-    }
-
-    getTranslations() {
-        return this.translations;
     }
 }

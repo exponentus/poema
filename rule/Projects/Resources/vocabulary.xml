@@ -134,6 +134,10 @@
         <entry lang="ENG">Comment</entry>
     </sentence>
 
+    <sentence mode="on" keyword="delete">
+        <entry lang="RUS">Удалить</entry>
+        <entry lang="ENG">Delete</entry>
+    </sentence>
     <sentence mode="on" keyword="search">
         <entry lang="RUS">Поиск</entry>
         <entry lang="KAZ">Іздеу</entry>
@@ -156,6 +160,10 @@
         <entry lang="RUS">Отправить запрос</entry>
         <entry lang="ENG">Send request</entry>
     </sentence>
+    <sentence mode="on" keyword="complete_task">
+        <entry lang="RUS">Завершить задачу</entry>
+        <entry lang="ENG">Complete task</entry>
+    </sentence>
     <sentence mode="on" keyword="send_task">
         <entry lang="RUS">Отправить задачу</entry>
         <entry lang="ENG">Send task</entry>
@@ -172,10 +180,6 @@
         <entry lang="RUS">Подзадачи</entry>
         <entry lang="ENG">Subtasks</entry>
     </sentence>
-    <sentence mode="on" keyword="subtasks">
-        <entry lang="RUS">Подзадачи</entry>
-        <entry lang="ENG">Subtasks</entry>
-    </sentence>
     <sentence mode="on" keyword="comments">
         <entry lang="RUS">Комментарии</entry>
         <entry lang="ENG">Comments</entry>
@@ -187,6 +191,26 @@
     <sentence mode="on" keyword="request_type">
         <entry lang="RUS">Тип запроса</entry>
         <entry lang="ENG">Request type</entry>
+    </sentence>
+    <sentence mode="on" keyword="request_time">
+        <entry lang="RUS">Дата запроса</entry>
+        <entry lang="ENG">Request date</entry>
+    </sentence>
+    <sentence mode="on" keyword="accept">
+        <entry lang="RUS">Принять</entry>
+        <entry lang="ENG">Accept</entry>
+    </sentence>
+    <sentence mode="on" keyword="accepted">
+        <entry lang="RUS">Принято</entry>
+        <entry lang="ENG">Accepted</entry>
+    </sentence>
+    <sentence mode="on" keyword="decline">
+        <entry lang="RUS">Отклонить</entry>
+        <entry lang="ENG">Decline</entry>
+    </sentence>
+    <sentence mode="on" keyword="declined">
+        <entry lang="RUS">Отклонено</entry>
+        <entry lang="ENG">Declined</entry>
     </sentence>
 
     <sentence mode="on" keyword="draft">

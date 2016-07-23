@@ -5,9 +5,15 @@
     padding: 8px;
 }
 
+.request-list__header {
+    background-color: #eee;
+    margin: 0;
+    padding: 4px;
+}
+
 .request-list__item {
     margin: 0 0 8px;
-    padding: 0;
+    padding: 8px 4px;
 }
 
 /* .request */
@@ -20,21 +26,40 @@
     width: 50%;
 }
 
-.request__comment {}
+.request__type {
+    display: inline-block;
+    width: 20%;
+}
 
-.request__type {}
+.request__comment {
+    display: inline-block;
+    width: 20%;
+}
 
-.request__attachments {}
+.request__time {
+    display: inline-block;
+    width: 20%;
+}
 
-.request__time {}
+.request__attachments,
+.request__attachments .attachments {
+    border: 0;
+    display: block;
+}
 
 .request__resol {
     width: 50%;
 }
 
-.request__resolution {}
+.request__resolution {
+    display: inline-block;
+    width: 50%;
+}
 
-.request__resolution_time {}
+.request__resolution_time {
+    display: inline-block;
+    width: 50%;
+}
 
 .request__buttons {}
 

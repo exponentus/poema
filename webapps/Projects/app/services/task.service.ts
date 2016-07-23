@@ -3,15 +3,6 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import {
-    FETCH_TASKS,
-    FETCH_TASK,
-    ADD_TASK
-} from '../reducers/tasks.reducer';
-import {
-    FETCH_COMMENTS,
-    FETCH_REQUESTS
-} from '../reducers/task.reducer';
 import { Task, Request, Comment, Attachment } from '../models';
 import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
@@ -46,6 +37,11 @@ export class TaskService {
         ]);
     }
 
+
+    //===================================
+    //  TASK
+    //-----------------------------------
+
     fetchTasks(queryParams = {}) {
         return this.http.get('p?id=task-view', {
             headers: HEADERS,
@@ -54,23 +50,15 @@ export class TaskService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    type: FETCH_TASKS,
-                    payload: {
-                        tasks: <Task[]>data.list,
-                        meta: data.meta
-                    }
+                    tasks: <Task[]>data.list,
+                    meta: data.meta
                 }
             });
     }
 
     fetchTaskById(taskId: string) {
         if (taskId === 'new') {
-            return Observable.of({
-                type: FETCH_TASK,
-                payload: {
-                    task: new Task()
-                }
-            });
+            return Observable.of(new Task());
         }
 
         return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
@@ -83,12 +71,7 @@ export class TaskService {
                 if (data.attachment) {
                     task.attachments = <Attachment[]>data.attachment.list;
                 }
-                return {
-                    type: FETCH_TASK,
-                    payload: {
-                        task: <Task>task
-                    }
-                }
+                return <Task>task
             });
     }
 
@@ -115,16 +98,18 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
+
+    //===================================
+    //  REQUEST
+    //-----------------------------------
+
     fetchTaskRequests(task: Task, page = 0) {
         return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
             .map(response => parseResponseObjects(response.json().objects).request || {})
             .map(data => {
                 return {
-                    type: FETCH_REQUESTS,
-                    payload: {
-                        requests: <Request[]>data.list,
-                        meta: data.meta
-                    }
+                    requests: <Request[]>data.list,
+                    meta: data.meta
                 }
             });
     }
@@ -153,16 +138,18 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
+
+    //===================================
+    //  COMMENT
+    //-----------------------------------
+
     fetchComments(task: Task, page = 0) {
         return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
             .map(response => parseResponseObjects(response.json().objects).comment || {})
             .map(data => {
                 return {
-                    type: FETCH_COMMENTS,
-                    payload: {
-                        comments: <Comment[]>data.list,
-                        meta: data.meta
-                    }
+                    comments: <Comment[]>data.list,
+                    meta: data.meta
                 }
             });
     }

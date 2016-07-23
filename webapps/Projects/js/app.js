@@ -12,9 +12,10 @@ webpackJsonp([0],[
 	var markdown_1 = __webpack_require__(380);
 	var app_1 = __webpack_require__(393);
 	var app_routes_1 = __webpack_require__(488);
-	var translate_service_1 = __webpack_require__(457);
-	var services_1 = __webpack_require__(453);
+	var translate_service_1 = __webpack_require__(463);
+	var services_1 = __webpack_require__(460);
 	var store_1 = __webpack_require__(638);
+	var actions_1 = __webpack_require__(453);
 	if (false) {
 	    core_1.enableProdMode();
 	}
@@ -31,7 +32,8 @@ webpackJsonp([0],[
 	    notification_1.NotificationService,
 	    markdown_1.MarkdownConverter,
 	    services_1.APP_SERVICES,
-	    store_1.APP_STORE
+	    store_1.APP_STORE,
+	    actions_1.APP_STORE_ACTIONS
 	]).catch(function (err) { return console.error(err); });
 	var CustomTranslateLoader = (function () {
 	    function CustomTranslateLoader(translateService) {
@@ -816,23 +818,26 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var services_1 = __webpack_require__(453);
-	var environment_reducer_1 = __webpack_require__(479);
+	var actions_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
 	var notification_1 = __webpack_require__(376);
 	var dropdown_1 = __webpack_require__(480);
 	var navbar_1 = __webpack_require__(483);
 	var nav_1 = __webpack_require__(485);
-	var user_1 = __webpack_require__(461);
+	var models_1 = __webpack_require__(465);
 	var AppComponent = (function () {
-	    function AppComponent(store, appService, referenceService, staffService, translate) {
+	    function AppComponent(store, appActions, referenceActions, staffActions, appService, referenceService, staffService, translate) {
 	        var _this = this;
 	        this.store = store;
+	        this.appActions = appActions;
+	        this.referenceActions = referenceActions;
+	        this.staffActions = staffActions;
 	        this.appService = appService;
 	        this.referenceService = referenceService;
 	        this.staffService = staffService;
 	        this.translate = translate;
 	        this.isReady = false;
-	        this.loggedUser = new user_1.User();
+	        this.loggedUser = new models_1.User();
 	        this.HEADER_TITLE = 'Projects';
 	        this.isNavCollapsed = false;
 	        this.isSearchOpen = false;
@@ -845,8 +850,8 @@ webpackJsonp([0],[
 	            _this.isSearchOpen = state.isSearchOpen;
 	            _this.isNavCollapsed = !state.isNavOpen;
 	        });
-	        this.appService.getUserProfile().subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.appService.fetchUserProfile().subscribe(function (data) {
+	            _this.store.dispatch(_this.appActions.fetchUserProfileFulfilled(data));
 	            _this.isReady = true;
 	        });
 	    }
@@ -872,12 +877,20 @@ webpackJsonp([0],[
 	    ;
 	    AppComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.referenceService.loadReference();
-	        this.staffService.fetchOrganizations().subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.referenceService.fetchTags().subscribe(function (payload) {
+	            _this.store.dispatch(_this.referenceActions.fetchTags(payload.tags));
 	        });
-	        this.staffService.fetchUsers().subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.referenceService.fetchTaskTypes().subscribe(function (payload) {
+	            _this.store.dispatch(_this.referenceActions.fetchTaskTypes(payload.taskTypes));
+	        });
+	        this.referenceService.fetchRequestTypes().subscribe(function (payload) {
+	            _this.store.dispatch(_this.referenceActions.fetchRequestTypes(payload.requestTypes));
+	        });
+	        this.staffService.fetchOrganizations().subscribe(function (payload) {
+	            _this.store.dispatch(_this.staffActions.fetchOrganizations(payload.organizations));
+	        });
+	        this.staffService.fetchUsers().subscribe(function (payload) {
+	            _this.store.dispatch(_this.staffActions.fetchUsers(payload.users));
 	        });
 	        this.isMobileDevice = this.isMobile();
 	        var userLang = navigator.language.split('-')[0];
@@ -891,7 +904,7 @@ webpackJsonp([0],[
 	        this.subEnv && this.subEnv.unsubscribe();
 	    };
 	    AppComponent.prototype.hideNav = function (event) {
-	        this.store.dispatch({ type: environment_reducer_1.HIDE_NAV });
+	        this.store.dispatch({ type: actions_1.EnvironmentActions.HIDE_NAV });
 	        event.preventDefault();
 	    };
 	    AppComponent.prototype.isMobile = function () {
@@ -926,7 +939,7 @@ webpackJsonp([0],[
 	            providers: [notification_1.NotificationService],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, services_1.AppService, services_1.ReferenceService, services_1.StaffService, ng2_translate_1.TranslateService])
+	        __metadata('design:paramtypes', [store_1.Store, actions_1.AppActions, actions_1.ReferenceActions, actions_1.StaffActions, services_1.AppService, services_1.ReferenceService, services_1.StaffService, ng2_translate_1.TranslateService])
 	    ], AppComponent);
 	    return AppComponent;
 	}());
@@ -3930,28 +3943,25 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var app_service_1 = __webpack_require__(454);
-	exports.AppService = app_service_1.AppService;
-	var translate_service_1 = __webpack_require__(457);
-	exports.TranslateService = translate_service_1.TranslateService;
-	var project_service_1 = __webpack_require__(458);
-	exports.ProjectService = project_service_1.ProjectService;
-	var task_service_1 = __webpack_require__(471);
-	exports.TaskService = task_service_1.TaskService;
-	var reference_service_1 = __webpack_require__(474);
-	exports.ReferenceService = reference_service_1.ReferenceService;
-	var staff_service_1 = __webpack_require__(476);
-	exports.StaffService = staff_service_1.StaffService;
-	var upload_service_1 = __webpack_require__(478);
-	exports.UploadService = upload_service_1.UploadService;
-	exports.APP_SERVICES = [
-	    app_service_1.AppService,
-	    translate_service_1.TranslateService,
-	    project_service_1.ProjectService,
-	    task_service_1.TaskService,
-	    reference_service_1.ReferenceService,
-	    staff_service_1.StaffService,
-	    upload_service_1.UploadService
+	var environment_actions_1 = __webpack_require__(454);
+	exports.EnvironmentActions = environment_actions_1.EnvironmentActions;
+	var app_actions_1 = __webpack_require__(455);
+	exports.AppActions = app_actions_1.AppActions;
+	var project_actions_1 = __webpack_require__(456);
+	exports.ProjectActions = project_actions_1.ProjectActions;
+	var task_actions_1 = __webpack_require__(457);
+	exports.TaskActions = task_actions_1.TaskActions;
+	var reference_actions_1 = __webpack_require__(458);
+	exports.ReferenceActions = reference_actions_1.ReferenceActions;
+	var staff_actions_1 = __webpack_require__(459);
+	exports.StaffActions = staff_actions_1.StaffActions;
+	exports.APP_STORE_ACTIONS = [
+	    environment_actions_1.EnvironmentActions,
+	    app_actions_1.AppActions,
+	    project_actions_1.ProjectActions,
+	    task_actions_1.TaskActions,
+	    reference_actions_1.ReferenceActions,
+	    staff_actions_1.StaffActions
 	];
 
 
@@ -3970,9 +3980,554 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(5);
+	var EnvironmentActions = (function () {
+	    function EnvironmentActions() {
+	    }
+	    EnvironmentActions.prototype.setIsMobile = function (isMobile) {
+	        return {
+	            type: EnvironmentActions.SET_IS_MOBILE,
+	            payload: isMobile
+	        };
+	    };
+	    EnvironmentActions.prototype.toggleNav = function () {
+	        return {
+	            type: EnvironmentActions.TOGGLE_NAV
+	        };
+	    };
+	    EnvironmentActions.prototype.toggleSearch = function () {
+	        return {
+	            type: EnvironmentActions.TOGGLE_SEARCH
+	        };
+	    };
+	    EnvironmentActions.prototype.hideNav = function () {
+	        return {
+	            type: EnvironmentActions.HIDE_NAV
+	        };
+	    };
+	    EnvironmentActions.SET_IS_MOBILE = 'SET_IS_MOBILE';
+	    EnvironmentActions.IS_DESKTOP = 'IS_DESKTOP';
+	    EnvironmentActions.TOGGLE_NAV = 'TOGGLE_NAV';
+	    EnvironmentActions.TOGGLE_SEARCH = 'TOGGLE_SEARCH';
+	    EnvironmentActions.HIDE_NAV = 'HIDE_NAV';
+	    EnvironmentActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], EnvironmentActions);
+	    return EnvironmentActions;
+	}());
+	exports.EnvironmentActions = EnvironmentActions;
+
+
+/***/ },
+/* 455 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var AppActions = (function () {
+	    function AppActions() {
+	    }
+	    AppActions.prototype.fetchUserProfile = function () {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE
+	        };
+	    };
+	    AppActions.prototype.fetchUserProfileFailed = function (error) {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE_FAILED,
+	            payload: error
+	        };
+	    };
+	    AppActions.prototype.fetchUserProfileFulfilled = function (payload) {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE_FULFILLED,
+	            payload: payload
+	        };
+	    };
+	    AppActions.prototype.updateUserProfile = function (userProfile) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE,
+	            payload: {
+	                userProfile: userProfile
+	            }
+	        };
+	    };
+	    AppActions.prototype.updateUserProfileFailed = function (error) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE_FAILED,
+	            payload: error
+	        };
+	    };
+	    AppActions.prototype.updateUserProfileFulfilled = function (userProfile) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE_FULFILLED,
+	            payload: {
+	                userProfile: userProfile
+	            }
+	        };
+	    };
+	    AppActions.FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
+	    AppActions.FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
+	    AppActions.FETCH_USER_PROFILE_FULFILLED = 'FETCH_USER_PROFILE_FULFILLED';
+	    AppActions.UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+	    AppActions.UPDATE_USER_PROFILE_FAILED = 'UPDATE_USER_PROFILE_FAILED';
+	    AppActions.UPDATE_USER_PROFILE_FULFILLED = 'UPDATE_USER_PROFILE_FULFILLED';
+	    AppActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], AppActions);
+	    return AppActions;
+	}());
+	exports.AppActions = AppActions;
+
+
+/***/ },
+/* 456 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var ProjectActions = (function () {
+	    function ProjectActions() {
+	    }
+	    ProjectActions.prototype.createProject = function (project) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.createProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.createProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjects = function () {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjectsFailed = function (error) {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjectsFulfilled = function (projects, meta) {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS_FULFILLED,
+	            payload: {
+	                projects: projects,
+	                meta: meta
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.updateProject = function (projectId, changes) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT,
+	            payload: {
+	                changes: changes,
+	                projectId: projectId
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.updateProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.updateProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.deleteProject = function (projectId) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT,
+	            payload: {
+	                projectId: projectId
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.deleteProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.deleteProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.CREATE_PROJECT = 'CREATE_PROJECT';
+	    ProjectActions.CREATE_PROJECT_FAILED = 'CREATE_PROJECT_FAILED';
+	    ProjectActions.CREATE_PROJECT_FULFILLED = 'CREATE_PROJECT_FULFILLED';
+	    ProjectActions.FETCH_PROJECTS = 'FETCH_PROJECTS';
+	    ProjectActions.FETCH_PROJECTS_FAILED = 'FETCH_PROJECTS_FAILED';
+	    ProjectActions.FETCH_PROJECTS_FULFILLED = 'FETCH_PROJECTS_FULFILLED';
+	    ProjectActions.UPDATE_PROJECT = 'UPDATE_PROJECT';
+	    ProjectActions.UPDATE_PROJECT_FAILED = 'UPDATE_PROJECT_FAILED';
+	    ProjectActions.UPDATE_PROJECT_FULFILLED = 'UPDATE_PROJECT_FULFILLED';
+	    ProjectActions.DELETE_PROJECT = 'DELETE_PROJECT';
+	    ProjectActions.DELETE_PROJECT_FAILED = 'DELETE_PROJECT_FAILED';
+	    ProjectActions.DELETE_PROJECT_FULFILLED = 'DELETE_PROJECT_FULFILLED';
+	    ProjectActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], ProjectActions);
+	    return ProjectActions;
+	}());
+	exports.ProjectActions = ProjectActions;
+
+
+/***/ },
+/* 457 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var TaskActions = (function () {
+	    function TaskActions() {
+	    }
+	    TaskActions.prototype.createTask = function (task) {
+	        return {
+	            type: TaskActions.CREATE_TASK,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.createTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.CREATE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.createTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.CREATE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.fetchTasks = function () {
+	        return {
+	            type: TaskActions.FETCH_TASKS
+	        };
+	    };
+	    TaskActions.prototype.fetchTasksFailed = function (error) {
+	        return {
+	            type: TaskActions.FETCH_TASKS_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.fetchTasksFulfilled = function (tasks, meta) {
+	        return {
+	            type: TaskActions.FETCH_TASKS_FULFILLED,
+	            payload: {
+	                tasks: tasks,
+	                meta: meta
+	            }
+	        };
+	    };
+	    TaskActions.prototype.fetchTask = function (taskId) {
+	        return {
+	            type: TaskActions.FETCH_TASK
+	        };
+	    };
+	    TaskActions.prototype.fetchTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.FETCH_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.fetchTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.FETCH_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.updateTask = function (taskId, changes) {
+	        return {
+	            type: TaskActions.UPDATE_TASK,
+	            payload: {
+	                changes: changes,
+	                taskId: taskId
+	            }
+	        };
+	    };
+	    TaskActions.prototype.updateTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.UPDATE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.updateTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.UPDATE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.deleteTask = function (taskId) {
+	        return {
+	            type: TaskActions.DELETE_TASK,
+	            payload: {
+	                taskId: taskId
+	            }
+	        };
+	    };
+	    TaskActions.prototype.deleteTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.DELETE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.deleteTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.DELETE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.CREATE_TASK = 'CREATE_TASK';
+	    TaskActions.CREATE_TASK_FAILED = 'CREATE_TASK_FAILED';
+	    TaskActions.CREATE_TASK_FULFILLED = 'CREATE_TASK_FULFILLED';
+	    TaskActions.TASK_UNLOAD = 'TASK_UNLOAD';
+	    TaskActions.FETCH_TASKS = 'FETCH_TASKS';
+	    TaskActions.FETCH_TASKS_FAILED = 'FETCH_TASKS_FAILED';
+	    TaskActions.FETCH_TASKS_FULFILLED = 'FETCH_TASKS_FULFILLED';
+	    TaskActions.FETCH_TASK = 'FETCH_TASK';
+	    TaskActions.FETCH_TASK_FAILED = 'FETCH_TASK_FAILED';
+	    TaskActions.FETCH_TASK_FULFILLED = 'FETCH_TASK_FULFILLED';
+	    TaskActions.UPDATE_TASK = 'UPDATE_TASK';
+	    TaskActions.UPDATE_TASK_FAILED = 'UPDATE_TASK_FAILED';
+	    TaskActions.UPDATE_TASK_FULFILLED = 'UPDATE_TASK_FULFILLED';
+	    TaskActions.DELETE_TASK = 'DELETE_TASK';
+	    TaskActions.DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
+	    TaskActions.DELETE_TASK_FULFILLED = 'DELETE_TASK_FULFILLED';
+	    TaskActions.CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
+	    TaskActions.CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
+	    TaskActions.CREATE_TASK_COMMENT_FULFILLED = 'CREATE_TASK_COMMENT_FULFILLED';
+	    TaskActions.FETCH_TASK_COMMENTS = 'FETCH_TASK_COMMENTS';
+	    TaskActions.FETCH_TASK_COMMENTS_FAILED = 'FETCH_TASK_COMMENTS_FAILED';
+	    TaskActions.FETCH_TASK_COMMENTS_FULFILLED = 'FETCH_TASK_COMMENTS_FULFILLED';
+	    TaskActions.UPDATE_TASK_COMMENT = 'UPDATE_TASK_COMMENT';
+	    TaskActions.UPDATE_TASK_COMMENT_FAILED = 'UPDATE_TASK_COMMENT_FAILED';
+	    TaskActions.UPDATE_TASK_COMMENT_FULFILLED = 'UPDATE_TASK_COMMENT_FULFILLED';
+	    TaskActions.DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
+	    TaskActions.DELETE_TASK_COMMENT_FAILED = 'DELETE_TASK_COMMENT_FAILED';
+	    TaskActions.DELETE_TASK_COMMENT_FULFILLED = 'DELETE_TASK_COMMENT_FULFILLED';
+	    TaskActions.TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
+	    TaskActions.TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
+	    TaskActions.CREATE_TASK_REQUEST = 'CREATE_REQUEST_TASK';
+	    TaskActions.CREATE_TASK_REQUEST_FAILED = 'CREATE_TASK_REQUEST_FAILED';
+	    TaskActions.CREATE_TASK_REQUEST_FULFILLED = 'CREATE_TASK_REQUEST_FULFILLED';
+	    TaskActions.FETCH_TASK_REQUESTS = 'FETCH_TASK_REQUESTS';
+	    TaskActions.FETCH_TASK_REQUESTS_FAILED = 'FETCH_TASK_REQUESTS_FAILED';
+	    TaskActions.FETCH_TASK_REQUESTS_FULFILLED = 'FETCH_TASK_REQUESTS_FULFILLED';
+	    TaskActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], TaskActions);
+	    return TaskActions;
+	}());
+	exports.TaskActions = TaskActions;
+
+
+/***/ },
+/* 458 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var ReferenceActions = (function () {
+	    function ReferenceActions() {
+	    }
+	    ReferenceActions.prototype.fetchTaskTypes = function (taskTypes) {
+	        return {
+	            type: ReferenceActions.FETCH_TASK_TYPES,
+	            payload: { taskTypes: taskTypes }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchRequestTypes = function (requestTypes) {
+	        return {
+	            type: ReferenceActions.FETCH_REQUEST_TYPES,
+	            payload: { requestTypes: requestTypes }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchTags = function (tags) {
+	        return {
+	            type: ReferenceActions.FETCH_TAGS,
+	            payload: { tags: tags }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchReferenceFailed = function (error) {
+	        return {
+	            type: ReferenceActions.FETCH_REFERENCE_FAILED,
+	            payload: error
+	        };
+	    };
+	    ReferenceActions.FETCH_TASK_TYPES = 'FETCH_TASK_TYPES';
+	    ReferenceActions.FETCH_REQUEST_TYPES = 'FETCH_REQUEST_TYPES';
+	    ReferenceActions.FETCH_TAGS = 'FETCH_TAGS';
+	    ReferenceActions.FETCH_REFERENCE_FAILED = 'FETCH_REFERENCE_FAILED';
+	    ReferenceActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], ReferenceActions);
+	    return ReferenceActions;
+	}());
+	exports.ReferenceActions = ReferenceActions;
+
+
+/***/ },
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
+	var StaffActions = (function () {
+	    function StaffActions() {
+	    }
+	    StaffActions.prototype.fetchOrganizations = function (organizations) {
+	        return {
+	            type: StaffActions.FETCH_ORGANIZATIONS,
+	            payload: { organizations: organizations }
+	        };
+	    };
+	    StaffActions.prototype.fetchUsers = function (users) {
+	        return {
+	            type: StaffActions.FETCH_USERS,
+	            payload: { users: users }
+	        };
+	    };
+	    StaffActions.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
+	    StaffActions.FETCH_USERS = 'FETCH_USERS';
+	    StaffActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], StaffActions);
+	    return StaffActions;
+	}());
+	exports.StaffActions = StaffActions;
+
+
+/***/ },
+/* 460 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var app_service_1 = __webpack_require__(461);
+	exports.AppService = app_service_1.AppService;
+	var translate_service_1 = __webpack_require__(463);
+	exports.TranslateService = translate_service_1.TranslateService;
+	var project_service_1 = __webpack_require__(464);
+	exports.ProjectService = project_service_1.ProjectService;
+	var task_service_1 = __webpack_require__(476);
+	exports.TaskService = task_service_1.TaskService;
+	var reference_service_1 = __webpack_require__(477);
+	exports.ReferenceService = reference_service_1.ReferenceService;
+	var staff_service_1 = __webpack_require__(478);
+	exports.StaffService = staff_service_1.StaffService;
+	var upload_service_1 = __webpack_require__(479);
+	exports.UploadService = upload_service_1.UploadService;
+	exports.APP_SERVICES = [
+	    app_service_1.AppService,
+	    translate_service_1.TranslateService,
+	    project_service_1.ProjectService,
+	    task_service_1.TaskService,
+	    reference_service_1.ReferenceService,
+	    staff_service_1.StaffService,
+	    upload_service_1.UploadService
+	];
+
+
+/***/ },
+/* 461 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
-	var authed_reducer_1 = __webpack_require__(455);
-	var utils_1 = __webpack_require__(456);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -3987,7 +4542,7 @@ webpackJsonp([0],[
 	            this.language = ck[2];
 	        }
 	    }
-	    AppService.prototype.getUserProfile = function () {
+	    AppService.prototype.fetchUserProfile = function () {
 	        var _this = this;
 	        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(function (response) {
 	            var res = utils_1.parseResponseObjects(response.json().objects);
@@ -3997,13 +4552,10 @@ webpackJsonp([0],[
 	            }
 	            _this.isLogged = true;
 	            return {
-	                type: authed_reducer_1.FETCH_USER_PROFILE,
-	                payload: {
-	                    userProfile: res.employee,
-	                    languages: res.language.list[0].localizedName,
-	                    pageSize: pageSize,
-	                    language: _this.language
-	                }
+	                userProfile: res.employee,
+	                languages: res.language.list[0].localizedName,
+	                pageSize: pageSize,
+	                language: _this.language
 	            };
 	        }, function (error) {
 	            _this.isLogged = false;
@@ -4024,35 +4576,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 455 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
-	;
-	var initialState = {
-	    userProfile: null,
-	    languages: {},
-	    pageSize: 20
-	};
-	exports.authedReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_USER_PROFILE:
-	            return Object.assign({}, state, {
-	                userProfile: payload.userProfile,
-	                languages: payload.languages,
-	                pageSize: payload.pageSize
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 456 */
+/* 462 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4137,7 +4661,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 457 */
+/* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4155,21 +4679,15 @@ webpackJsonp([0],[
 	var TranslateService = (function () {
 	    function TranslateService(http) {
 	        this.http = http;
-	        this.translations = null;
 	    }
 	    TranslateService.prototype.fetchTranslations = function () {
-	        var _this = this;
 	        var headers = new http_1.Headers({
 	            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	            'Accept': 'application/json'
 	        });
 	        return this.http.get('p?id=common-captions', { headers: headers }).map(function (response) {
-	            _this.translations = response.json().captions;
-	            return _this.translations;
+	            return response.json().captions;
 	        });
-	    };
-	    TranslateService.prototype.getTranslations = function () {
-	        return this.translations;
 	    };
 	    TranslateService = __decorate([
 	        core_1.Injectable(), 
@@ -4181,7 +4699,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 458 */
+/* 464 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4198,9 +4716,8 @@ webpackJsonp([0],[
 	var http_1 = __webpack_require__(329);
 	var Observable_1 = __webpack_require__(38);
 	var ng2_translate_1 = __webpack_require__(350);
-	var projects_reducer_1 = __webpack_require__(459);
-	var models_1 = __webpack_require__(460);
-	var utils_1 = __webpack_require__(456);
+	var models_1 = __webpack_require__(465);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -4226,23 +4743,14 @@ webpackJsonp([0],[
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: projects_reducer_1.FETCH_PROJECTS,
-	                payload: {
-	                    projects: data.list,
-	                    meta: data.meta,
-	                    loading: true
-	                }
+	                projects: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
 	    ProjectService.prototype.fetchProjectById = function (projectId) {
 	        if (projectId === 'new') {
-	            return Observable_1.Observable.of({
-	                type: projects_reducer_1.FETCH_PROJECT,
-	                payload: {
-	                    project: new models_1.Project()
-	                }
-	            });
+	            return Observable_1.Observable.of(new models_1.Project());
 	        }
 	        return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
 	            .map(function (response) {
@@ -4254,12 +4762,7 @@ webpackJsonp([0],[
 	            if (data.attachment) {
 	                project.attachments = data.attachment.list;
 	            }
-	            return {
-	                type: projects_reducer_1.FETCH_PROJECT,
-	                payload: {
-	                    project: project
-	                }
-	            };
+	            return project;
 	        });
 	    };
 	    ProjectService.prototype.saveProject = function (project) {
@@ -4286,76 +4789,34 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 459 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.FETCH_PROJECTS = 'FETCH_PROJECTS';
-	exports.FETCH_PROJECT = 'FETCH_PROJECT';
-	exports.ADD_PROJECT = 'ADD_PROJECT';
-	exports.UPDATE_PROJECT = 'UPDATE_PROJECT';
-	exports.DELETE_PROJECT = 'DELETE_PROJECT';
-	;
-	var initialState = {
-	    meta: {},
-	    projects: [],
-	    project: undefined,
-	    loading: false
-	};
-	exports.projectsReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_PROJECTS:
-	            return Object.assign({}, state, {
-	                projects: payload.projects,
-	                meta: payload.meta
-	            });
-	        case exports.FETCH_PROJECT:
-	            return Object.assign({}, state, {
-	                project: payload.project
-	            });
-	        case exports.ADD_PROJECT:
-	            return state;
-	        case exports.UPDATE_PROJECT:
-	            return state;
-	        case exports.DELETE_PROJECT:
-	            return state;
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 460 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var user_1 = __webpack_require__(461);
+	var user_1 = __webpack_require__(466);
 	exports.User = user_1.User;
-	var organization_1 = __webpack_require__(462);
+	var organization_1 = __webpack_require__(467);
 	exports.Organization = organization_1.Organization;
-	var attachment_1 = __webpack_require__(463);
+	var attachment_1 = __webpack_require__(468);
 	exports.Attachment = attachment_1.Attachment;
-	var project_1 = __webpack_require__(464);
+	var project_1 = __webpack_require__(469);
 	exports.Project = project_1.Project;
-	var task_1 = __webpack_require__(465);
+	var task_1 = __webpack_require__(470);
 	exports.Task = task_1.Task;
-	var tag_1 = __webpack_require__(466);
+	var tag_1 = __webpack_require__(471);
 	exports.Tag = tag_1.Tag;
-	var task_type_1 = __webpack_require__(467);
+	var task_type_1 = __webpack_require__(472);
 	exports.TaskType = task_type_1.TaskType;
-	var comment_1 = __webpack_require__(468);
+	var comment_1 = __webpack_require__(473);
 	exports.Comment = comment_1.Comment;
-	var request_1 = __webpack_require__(469);
+	var request_1 = __webpack_require__(474);
 	exports.Request = request_1.Request;
-	var request_type_1 = __webpack_require__(470);
+	var request_type_1 = __webpack_require__(475);
 	exports.RequestType = request_type_1.RequestType;
 
 
 /***/ },
-/* 461 */
+/* 466 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4370,7 +4831,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 462 */
+/* 467 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4384,7 +4845,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 463 */
+/* 468 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4398,7 +4859,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 464 */
+/* 469 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4414,7 +4875,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 465 */
+/* 470 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4431,7 +4892,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 466 */
+/* 471 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4445,7 +4906,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 467 */
+/* 472 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4459,7 +4920,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 468 */
+/* 473 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4474,7 +4935,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 469 */
+/* 474 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4489,7 +4950,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 470 */
+/* 475 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4503,7 +4964,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 471 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4520,10 +4981,8 @@ webpackJsonp([0],[
 	var http_1 = __webpack_require__(329);
 	var Observable_1 = __webpack_require__(38);
 	var ng2_translate_1 = __webpack_require__(350);
-	var tasks_reducer_1 = __webpack_require__(472);
-	var task_reducer_1 = __webpack_require__(473);
-	var models_1 = __webpack_require__(460);
-	var utils_1 = __webpack_require__(456);
+	var models_1 = __webpack_require__(465);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -4558,22 +5017,14 @@ webpackJsonp([0],[
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: tasks_reducer_1.FETCH_TASKS,
-	                payload: {
-	                    tasks: data.list,
-	                    meta: data.meta
-	                }
+	                tasks: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
 	    TaskService.prototype.fetchTaskById = function (taskId) {
 	        if (taskId === 'new') {
-	            return Observable_1.Observable.of({
-	                type: tasks_reducer_1.FETCH_TASK,
-	                payload: {
-	                    task: new models_1.Task()
-	                }
-	            });
+	            return Observable_1.Observable.of(new models_1.Task());
 	        }
 	        return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
 	            .map(function (response) {
@@ -4585,12 +5036,7 @@ webpackJsonp([0],[
 	            if (data.attachment) {
 	                task.attachments = data.attachment.list;
 	            }
-	            return {
-	                type: tasks_reducer_1.FETCH_TASK,
-	                payload: {
-	                    task: task
-	                }
-	            };
+	            return task;
 	        });
 	    };
 	    TaskService.prototype.saveTask = function (task) {
@@ -4618,11 +5064,8 @@ webpackJsonp([0],[
 	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).request || {}; })
 	            .map(function (data) {
 	            return {
-	                type: task_reducer_1.FETCH_REQUESTS,
-	                payload: {
-	                    requests: data.list,
-	                    meta: data.meta
-	                }
+	                requests: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
@@ -4652,11 +5095,8 @@ webpackJsonp([0],[
 	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).comment || {}; })
 	            .map(function (data) {
 	            return {
-	                type: task_reducer_1.FETCH_COMMENTS,
-	                payload: {
-	                    comments: data.list,
-	                    meta: data.meta
-	                }
+	                comments: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
@@ -4684,132 +5124,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 472 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.FETCH_TASKS = 'FETCH_TASKS';
-	exports.FETCH_TASK = 'FETCH_TASK';
-	exports.ADD_TASK = 'ADD_TASK';
-	exports.UPDATE_TASK = 'UPDATE_TASK';
-	exports.DELETE_TASK = 'DELETE_TASK';
-	exports.SET_FILTER = 'SET_FILTER';
-	exports.EXPAND_STREAM = 'EXPAND_STREAM';
-	exports.COLLAPSE_STREAM = 'COLLAPSE_STREAM';
-	;
-	var initialState = {
-	    meta: {},
-	    tasks: [],
-	    expandedIds: [],
-	    loading: false,
-	    filter: {
-	        taskType: null,
-	        assigneeUser: null,
-	        tags: []
-	    }
-	};
-	exports.tasksReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_TASKS:
-	            return Object.assign({}, state, {
-	                tasks: payload.tasks,
-	                meta: payload.meta
-	            });
-	        case exports.FETCH_TASK:
-	            return Object.assign({}, state, {
-	                task: payload.task
-	            });
-	        case exports.ADD_TASK:
-	            return state;
-	        case exports.UPDATE_TASK:
-	            return state;
-	        case exports.DELETE_TASK:
-	            return state;
-	        case exports.SET_FILTER:
-	            return Object.assign({}, state, {
-	                filter: payload
-	            });
-	        case exports.EXPAND_STREAM:
-	            if (state.expandedIds.indexOf(payload.id) == -1) {
-	                return Object.assign({}, state, {
-	                    expandedIds: state.expandedIds.concat(payload.id)
-	                });
-	            }
-	            return state;
-	        case exports.COLLAPSE_STREAM:
-	            var ind = state.expandedIds.indexOf(payload.id);
-	            if (ind != -1) {
-	                var ids = state.expandedIds.splice(ind);
-	                return Object.assign({}, state, {
-	                    expandedIds: ids
-	                });
-	            }
-	            return state;
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 473 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
-	exports.TASK_REQUEST_SEND_PROCESS = 'TASK_REQUEST_SEND_PROCESS';
-	exports.TASK_REQUEST_SEND_SUCCESS = 'TASK_REQUEST_SEND_SUCCESS';
-	exports.TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
-	exports.FETCH_COMMENTS = 'FETCH_COMMENTS';
-	exports.FETCH_REQUESTS = 'FETCH_REQUESTS';
-	exports.TASK_CLOSE = 'TASK_CLOSE';
-	;
-	var initialState = {
-	    task: null,
-	    request: null,
-	    requests: [],
-	    showRequest: false,
-	    comments: []
-	};
-	exports.taskReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_REQUESTS:
-	            return Object.assign({}, state, {
-	                requests: payload.requests
-	            });
-	        case exports.TASK_REQUEST_NEW:
-	            return Object.assign({}, state, {
-	                task: payload,
-	                showRequest: true
-	            });
-	        case exports.TASK_REQUEST_CANCEL:
-	            return Object.assign({}, state, {
-	                showRequest: false
-	            });
-	        case exports.FETCH_COMMENTS:
-	            return Object.assign({}, state, {
-	                comments: payload.comments
-	            });
-	        case exports.TASK_CLOSE:
-	            return {
-	                task: null,
-	                request: null,
-	                requests: [],
-	                showRequest: false,
-	                comments: []
-	            };
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 474 */
+/* 477 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4824,39 +5139,21 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
-	var store_1 = __webpack_require__(437);
-	var reference_reducer_1 = __webpack_require__(475);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
 	});
 	var ReferenceService = (function () {
-	    function ReferenceService(http, store) {
+	    function ReferenceService(http) {
 	        this.http = http;
-	        this.store = store;
 	    }
-	    ReferenceService.prototype.loadReference = function () {
-	        var _this = this;
-	        this.fetchTags().subscribe(function (action) {
-	            _this.store.dispatch(action);
-	        });
-	        this.fetchTaskTypes().subscribe(function (action) {
-	            _this.store.dispatch(action);
-	        });
-	        this.fetchRequestTypes().subscribe(function (action) {
-	            _this.store.dispatch(action);
-	        });
-	    };
 	    ReferenceService.prototype.fetchTags = function () {
 	        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: reference_reducer_1.FETCH_TAGS,
-	                payload: {
-	                    tags: data.list,
-	                    meta: data.meta
-	                }
+	                tags: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
@@ -4865,11 +5162,8 @@ webpackJsonp([0],[
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: reference_reducer_1.FETCH_TASK_TYPES,
-	                payload: {
-	                    taskTypes: data.list,
-	                    meta: data.meta
-	                }
+	                taskTypes: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
@@ -4878,17 +5172,14 @@ webpackJsonp([0],[
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: reference_reducer_1.FETCH_REQUEST_TYPES,
-	                payload: {
-	                    requestTypes: data.list,
-	                    meta: data.meta
-	                }
+	                requestTypes: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
 	    ReferenceService = __decorate([
 	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http, store_1.Store])
+	        __metadata('design:paramtypes', [http_1.Http])
 	    ], ReferenceService);
 	    return ReferenceService;
 	}());
@@ -4896,43 +5187,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 475 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.FETCH_TAGS = 'FETCH_TAGS';
-	exports.FETCH_TASK_TYPES = 'FETCH_TASK_TYPES';
-	exports.FETCH_REQUEST_TYPES = 'FETCH_REQUEST_TYPES';
-	;
-	var initialState = {
-	    tags: [],
-	    taskTypes: [],
-	    requestTypes: []
-	};
-	exports.referenceReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_TAGS:
-	            return Object.assign({}, state, {
-	                tags: payload.tags
-	            });
-	        case exports.FETCH_TASK_TYPES:
-	            return Object.assign({}, state, {
-	                taskTypes: payload.taskTypes
-	            });
-	        case exports.FETCH_REQUEST_TYPES:
-	            return Object.assign({}, state, {
-	                requestTypes: payload.requestTypes
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 476 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4947,8 +5202,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
-	var staff_reducer_1 = __webpack_require__(477);
-	var utils_1 = __webpack_require__(456);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -4966,22 +5220,17 @@ webpackJsonp([0],[
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                type: staff_reducer_1.FETCH_ORGANIZATIONS,
-	                payload: {
-	                    organizations: data.list,
-	                    meta: data.meta
-	                }
+	                organizations: data.list,
+	                meta: data.meta
 	            };
 	        });
 	    };
 	    StaffService.prototype.fetchUsers = function () {
 	        return this.http.get('p?id=users', { headers: HEADERS })
-	            .map(function (response) {
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
 	            return {
-	                type: staff_reducer_1.FETCH_USERS,
-	                payload: {
-	                    users: response.json().objects[0].list
-	                }
+	                users: data.list
 	            };
 	        });
 	    };
@@ -4995,37 +5244,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 477 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
-	exports.FETCH_USERS = 'FETCH_USERS';
-	;
-	var initialState = {
-	    organizations: [],
-	    users: []
-	};
-	exports.staffReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.FETCH_ORGANIZATIONS:
-	            return Object.assign({}, state, {
-	                organizations: payload.organizations
-	            });
-	        case exports.FETCH_USERS:
-	            return Object.assign({}, state, {
-	                users: payload.users
-	            });
-	        default:
-	            return state;
-	    }
-	};
-
-
-/***/ },
-/* 478 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5085,53 +5304,6 @@ webpackJsonp([0],[
 	    return UploadService;
 	}());
 	exports.UploadService = UploadService;
-
-
-/***/ },
-/* 479 */
-/***/ function(module, exports) {
-
-	"use strict";
-	exports.IS_MOBILE = 'IS_MOBILE';
-	exports.IS_DESKTOP = 'IS_DESKTOP';
-	exports.TOGGLE_NAV = 'TOGGLE_NAV';
-	exports.HIDE_NAV = 'HIDE_NAV';
-	exports.TOGGLE_SEARCH = 'TOGGLE_SEARCH';
-	;
-	var initialState = {
-	    isMobile: false,
-	    isNavOpen: true,
-	    isSearchOpen: false
-	};
-	exports.environmentReducer = function (state, _a) {
-	    if (state === void 0) { state = initialState; }
-	    var type = _a.type, payload = _a.payload;
-	    switch (type) {
-	        case exports.IS_MOBILE:
-	            return Object.assign({}, state, {
-	                isMobile: true
-	            });
-	        case exports.IS_DESKTOP:
-	            return Object.assign({}, state, {
-	                isMobile: false
-	            });
-	        case exports.TOGGLE_NAV:
-	            return Object.assign({}, state, {
-	                isNavOpen: !state.isNavOpen
-	            });
-	        case exports.TOGGLE_SEARCH:
-	            return Object.assign({}, state, {
-	                isSearchOpen: !state.isSearchOpen
-	            });
-	        case exports.HIDE_NAV:
-	            return Object.assign({}, state, {
-	                isNavOpen: true,
-	                isSearchOpen: false
-	            });
-	        default:
-	            return state;
-	    }
-	};
 
 
 /***/ },
@@ -5336,44 +5508,41 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var environment_reducer_1 = __webpack_require__(479);
-	var notification_1 = __webpack_require__(376);
+	var environment_actions_1 = __webpack_require__(454);
 	var dropdown_1 = __webpack_require__(480);
+	var user_1 = __webpack_require__(466);
 	var NavbarComponent = (function () {
-	    function NavbarComponent(store) {
-	        var _this = this;
+	    function NavbarComponent(store, environmentActions) {
 	        this.store = store;
+	        this.environmentActions = environmentActions;
 	        this.HEADER_TITLE = 'Projects';
 	        this.workspaceUrl = '/Workspace/p?id=workspace';
-	        this.sub = this.store.select('authed').subscribe(function (data) {
-	            _this.loggedUser = data.userProfile;
-	        });
 	    }
-	    NavbarComponent.prototype.ngOnDestroy = function () {
-	        this.sub && this.sub.unsubscribe();
-	    };
 	    NavbarComponent.prototype.searchFocus = function () {
-	        this.store.dispatch({ type: environment_reducer_1.TOGGLE_SEARCH });
+	        this.store.dispatch(this.environmentActions.toggleSearch());
 	    };
 	    NavbarComponent.prototype.searchBlur = function () {
-	        this.store.dispatch({ type: environment_reducer_1.HIDE_NAV });
+	        this.store.dispatch(this.environmentActions.hideNav());
 	    };
 	    NavbarComponent.prototype.toggleNav = function () {
-	        this.store.dispatch({ type: environment_reducer_1.TOGGLE_NAV });
+	        this.store.dispatch(this.environmentActions.toggleNav());
 	    };
 	    NavbarComponent.prototype.logout = function (event) {
 	        event.preventDefault();
 	        window.location.href = 'Logout';
 	    };
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', user_1.User)
+	    ], NavbarComponent.prototype, "user", void 0);
 	    NavbarComponent = __decorate([
 	        core_1.Component({
 	            selector: 'navbar',
 	            template: __webpack_require__(484),
-	            directives: [router_1.ROUTER_DIRECTIVES, notification_1.NotificationComponent, dropdown_1.DROPDOWN_DIRECTIVES],
-	            providers: [notification_1.NotificationService],
+	            directives: [router_1.ROUTER_DIRECTIVES, dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store])
+	        __metadata('design:paramtypes', [store_1.Store, environment_actions_1.EnvironmentActions])
 	    ], NavbarComponent);
 	    return NavbarComponent;
 	}());
@@ -5384,7 +5553,7 @@ webpackJsonp([0],[
 /* 484 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"navbar-header\">\r\n    <button class=\"btn-side-nav-toggle\" type=\"button\" (click)=\"toggleNav()\"></button>\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{ 'img/logo.png' }}\" />\r\n    <span class=\"brand-title\">\r\n        {{ HEADER_TITLE }}\r\n    </span>\r\n</div>\r\n<nav class=\"navbar-nav navbar-right\">\r\n    <ul class=\"nav nav-inline navbar-right\">\r\n        <li dropdown class=\"dropdown\">\r\n            <a dropdown-toggle href=\"#\" class=\"dropdown-toggle\" (click)=\"$event.preventDefault()\">\r\n                <i class=\"fa fa-user\"></i>\r\n            </a>\r\n            <ul class=\"dropdown-menu right\">\r\n                <li *ngIf=\"loggedUser\">\r\n                    <a class=\"user-profile\" [routerLink]=\"['/user-profile']\">\r\n                        <i class=\"fa fa-user\"></i>\r\n                        <span>{{ loggedUser.name }}</span>\r\n                    </a>\r\n                </li>\r\n                <li class=\"divider\"></li>\r\n                <li>\r\n                    <a class=\"ws\" href=\"{{workspaceUrl}}\">\r\n                        <i class=\"fa fa-th\"></i>\r\n                        <span>{{ 'workspace' | translate }}</span>\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n    <form class=\"navbar-form navbar-search\" name=\"ft-search\" (submit)=\"ftSearch()\">\r\n        <input type=\"hidden\" name=\"id\" value=\"search\" />\r\n        <input type=\"search\" class=\"q\" name=\"keyword\" value=\"{{ search_keyword }}\" placeholder=\"{{ 'search' | translate }}\" required autocomplete=\"off\" (focus)=\"searchFocus()\" (blur)=\"searchBlur($event.target)\" />\r\n        <button type=\"reset\">\r\n            <i class=\"fa fa-times\"></i>\r\n        </button>\r\n        <input type=\"submit\" value=\"search\" />\r\n    </form>\r\n</nav>\r\n"
+	module.exports = "<div class=\"navbar-header\">\r\n    <button class=\"btn-side-nav-toggle\" type=\"button\" (click)=\"toggleNav()\"></button>\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{ 'img/logo.png' }}\" />\r\n    <span class=\"brand-title\">\r\n        {{ HEADER_TITLE }}\r\n    </span>\r\n</div>\r\n<nav class=\"navbar-nav navbar-right\">\r\n    <ul class=\"nav nav-inline navbar-right\">\r\n        <li dropdown class=\"dropdown\">\r\n            <a dropdown-toggle href=\"#\" class=\"dropdown-toggle\" (click)=\"$event.preventDefault()\">\r\n                <i class=\"fa fa-user\"></i>\r\n            </a>\r\n            <ul class=\"dropdown-menu right\">\r\n                <li *ngIf=\"user\">\r\n                    <a class=\"user-profile\" [routerLink]=\"['/user-profile']\">\r\n                        <i class=\"fa fa-user\"></i>\r\n                        <span>{{ user.name }}</span>\r\n                    </a>\r\n                </li>\r\n                <li class=\"divider\"></li>\r\n                <li>\r\n                    <a class=\"ws\" href=\"{{workspaceUrl}}\">\r\n                        <i class=\"fa fa-th\"></i>\r\n                        <span>{{ 'workspace' | translate }}</span>\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n    <form class=\"navbar-form navbar-search\" name=\"ft-search\" (submit)=\"ftSearch()\">\r\n        <input type=\"hidden\" name=\"id\" value=\"search\" />\r\n        <input type=\"search\" class=\"q\" name=\"keyword\" value=\"{{ search_keyword }}\" placeholder=\"{{ 'search' | translate }}\" required autocomplete=\"off\" (focus)=\"searchFocus()\" (blur)=\"searchBlur($event.target)\" />\r\n        <button type=\"reset\">\r\n            <i class=\"fa fa-times\"></i>\r\n        </button>\r\n        <input type=\"submit\" value=\"search\" />\r\n    </form>\r\n</nav>\r\n"
 
 /***/ },
 /* 485 */
@@ -5404,10 +5573,12 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var project_service_1 = __webpack_require__(458);
+	var project_actions_1 = __webpack_require__(456);
+	var project_service_1 = __webpack_require__(464);
 	var NavComponent = (function () {
-	    function NavComponent(store, projectService) {
+	    function NavComponent(store, projectActions, projectService) {
 	        this.store = store;
+	        this.projectActions = projectActions;
 	        this.projectService = projectService;
 	    }
 	    NavComponent.prototype.ngOnInit = function () {
@@ -5422,8 +5593,8 @@ webpackJsonp([0],[
 	    };
 	    NavComponent.prototype.loadNavProjects = function () {
 	        var _this = this;
-	        this.projectService.fetchProjects().subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.projectService.fetchProjects().subscribe(function (data) {
+	            _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
 	        });
 	    };
 	    NavComponent = __decorate([
@@ -5433,7 +5604,7 @@ webpackJsonp([0],[
 	            directives: [router_1.ROUTER_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, project_service_1.ProjectService])
+	        __metadata('design:paramtypes', [store_1.Store, project_actions_1.ProjectActions, project_service_1.ProjectService])
 	    ], NavComponent);
 	    return NavComponent;
 	}());
@@ -5450,7 +5621,7 @@ webpackJsonp([0],[
 /* 487 */
 /***/ function(module, exports) {
 
-	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <header class=\"header navbar navbar-fixed-top\">\r\n        <div class=\"container\">\r\n            <navbar></navbar>\r\n        </div>\r\n    </header>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n"
+	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <header class=\"header navbar navbar-fixed-top\">\r\n        <div class=\"container\">\r\n            <navbar [user]=\"loggedUser\"></navbar>\r\n        </div>\r\n    </header>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n"
 
 /***/ },
 /* 488 */
@@ -5502,7 +5673,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var router_1 = __webpack_require__(394);
-	var services_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
 	var AuthGuard = (function () {
 	    function AuthGuard(appService, router) {
 	        this.appService = appService;
@@ -5541,7 +5712,7 @@ webpackJsonp([0],[
 	var http_1 = __webpack_require__(329);
 	var ng2_translate_1 = __webpack_require__(350);
 	var project_input_1 = __webpack_require__(491);
-	var utils_1 = __webpack_require__(456);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -5717,13 +5888,15 @@ webpackJsonp([0],[
 	var notification_1 = __webpack_require__(376);
 	var pipes_1 = __webpack_require__(493);
 	var pagination_1 = __webpack_require__(601);
-	var staff_service_1 = __webpack_require__(476);
-	var project_service_1 = __webpack_require__(458);
+	var staff_service_1 = __webpack_require__(478);
+	var project_service_1 = __webpack_require__(464);
 	var project_list_1 = __webpack_require__(603);
+	var project_actions_1 = __webpack_require__(456);
 	var ProjectsComponent = (function () {
-	    function ProjectsComponent(store, router, projectService, staffService, notifyService) {
+	    function ProjectsComponent(store, router, projectActions, projectService, staffService, notifyService) {
 	        this.store = store;
 	        this.router = router;
+	        this.projectActions = projectActions;
 	        this.projectService = projectService;
 	        this.staffService = staffService;
 	        this.notifyService = notifyService;
@@ -5748,16 +5921,16 @@ webpackJsonp([0],[
 	    };
 	    ProjectsComponent.prototype.loadData = function (params) {
 	        var _this = this;
-	        this.projectService.fetchProjects(params).subscribe(function (fpAction) {
-	            var customerIds = fpAction.payload.projects.map(function (it) { return it.customerId; });
-	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (foAction) {
-	                var orgs = foAction.payload.organizations;
-	                fpAction.payload.projects.map(function (p) {
+	        this.projectService.fetchProjects(params).subscribe(function (data) {
+	            var customerIds = data.projects.map(function (it) { return it.customerId; });
+	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (payload) {
+	                var orgs = payload.organizations;
+	                data.projects.map(function (p) {
 	                    if (p.customerId) {
 	                        p.customer = orgs.filter(function (org) { return org.id == p.customerId; })[0];
 	                    }
 	                });
-	                _this.store.dispatch(fpAction);
+	                _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
 	            });
 	        });
 	    };
@@ -5782,7 +5955,7 @@ webpackJsonp([0],[
 	            ],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_service_1.ProjectService, staff_service_1.StaffService, notification_1.NotificationService])
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService, notification_1.NotificationService])
 	    ], ProjectsComponent);
 	    return ProjectsComponent;
 	}());
@@ -6289,8 +6462,8 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
 	var dropdown_1 = __webpack_require__(480);
-	var staff_service_1 = __webpack_require__(476);
-	var models_1 = __webpack_require__(460);
+	var staff_service_1 = __webpack_require__(478);
+	var models_1 = __webpack_require__(465);
 	var OrganizationInputComponent = (function () {
 	    function OrganizationInputComponent(staffService) {
 	        this.staffService = staffService;
@@ -6307,8 +6480,8 @@ webpackJsonp([0],[
 	    OrganizationInputComponent.prototype.ngOnInit = function () {
 	        var _this = this;
 	        if (!this.org && this.orgId) {
-	            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(function (action) {
-	                _this.org = action.payload.organizations[0];
+	            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(function (payload) {
+	                _this.org = payload.organizations[0];
 	            });
 	        }
 	    };
@@ -6321,9 +6494,9 @@ webpackJsonp([0],[
 	    OrganizationInputComponent.prototype.loadOrganizations = function (page) {
 	        var _this = this;
 	        if (page === void 0) { page = 1; }
-	        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(function (action) {
-	            _this.organizations = _this.organizations.concat(action.payload.organizations);
-	            _this.meta = action.payload.meta;
+	        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(function (payload) {
+	            _this.organizations = _this.organizations.concat(payload.organizations);
+	            _this.meta = payload.meta;
 	            if (!_this.searchable) {
 	                _this.searchable = _this.organizations.length > 13;
 	            }
@@ -6422,7 +6595,7 @@ webpackJsonp([0],[
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var dropdown_1 = __webpack_require__(480);
-	var services_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
 	var RequestTypeInputComponent = (function () {
 	    function RequestTypeInputComponent(store, appService) {
 	        this.store = store;
@@ -6878,8 +7051,8 @@ webpackJsonp([0],[
 	var shared_1 = __webpack_require__(604);
 	var attachments_1 = __webpack_require__(617);
 	var pipes_1 = __webpack_require__(493);
-	var services_1 = __webpack_require__(453);
-	var models_1 = __webpack_require__(460);
+	var services_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var ProjectComponent = (function () {
 	    function ProjectComponent(store, router, route, formBuilder, translate, appService, projectService, staffService, notifyService) {
 	        this.store = store;
@@ -6910,8 +7083,8 @@ webpackJsonp([0],[
 	            attachments: ['']
 	        });
 	        this.sub = this.route.params.subscribe(function (params) {
-	            _this.projectService.fetchProjectById(params['projectId']).subscribe(function (action) {
-	                _this.project = action.payload.project;
+	            _this.projectService.fetchProjectById(params['projectId']).subscribe(function (project) {
+	                _this.project = project;
 	                _this.loadData();
 	                _this.isReady = true;
 	                _this.isNew = _this.project.id == '';
@@ -6938,7 +7111,6 @@ webpackJsonp([0],[
 	        }, function () { return noty.remove(1500); });
 	    };
 	    ProjectComponent.prototype.errorSaveProject = function (errorResponse) {
-	        console.log(errorResponse);
 	        this.notifyService.error(errorResponse.message).show().remove(2000);
 	    };
 	    ProjectComponent.prototype.deleteProject = function () {
@@ -7197,7 +7369,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
 	var ng2_translate_1 = __webpack_require__(350);
-	var services_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
 	var AttachmentsComponent = (function () {
 	    function AttachmentsComponent(http, uploadService) {
 	        this.http = http;
@@ -7289,13 +7461,15 @@ webpackJsonp([0],[
 	var pipes_1 = __webpack_require__(493);
 	var pagination_1 = __webpack_require__(601);
 	var task_filter_1 = __webpack_require__(620);
-	var task_service_1 = __webpack_require__(471);
+	var task_service_1 = __webpack_require__(476);
 	var task_list_1 = __webpack_require__(621);
+	var actions_1 = __webpack_require__(453);
 	var TasksComponent = (function () {
-	    function TasksComponent(store, router, route, taskService, notifyService) {
+	    function TasksComponent(store, router, route, taskActions, taskService, notifyService) {
 	        this.store = store;
 	        this.router = router;
 	        this.route = route;
+	        this.taskActions = taskActions;
 	        this.taskService = taskService;
 	        this.notifyService = notifyService;
 	        this.params = {};
@@ -7337,8 +7511,8 @@ webpackJsonp([0],[
 	    TasksComponent.prototype.loadData = function (params) {
 	        var _this = this;
 	        this.requestProcess = true;
-	        this.taskService.fetchTasks(params).subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.taskService.fetchTasks(params).subscribe(function (payload) {
+	            _this.store.dispatch(_this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
 	        });
 	    };
 	    TasksComponent.prototype.goToPage = function (params) {
@@ -7361,7 +7535,7 @@ webpackJsonp([0],[
 	            directives: [router_1.ROUTER_DIRECTIVES, pagination_1.PaginationComponent, task_list_1.TaskListComponent, task_filter_1.TaskFilterComponent],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, task_service_1.TaskService, notification_1.NotificationService])
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, actions_1.TaskActions, task_service_1.TaskService, notification_1.NotificationService])
 	    ], TasksComponent);
 	    return TasksComponent;
 	}());
@@ -7551,8 +7725,8 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var shared_1 = __webpack_require__(604);
 	var pipes_1 = __webpack_require__(493);
-	var services_1 = __webpack_require__(453);
-	var models_1 = __webpack_require__(460);
+	var services_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var TaskStreamComponent = (function () {
 	    function TaskStreamComponent(taskService) {
 	        this.taskService = taskService;
@@ -7573,7 +7747,7 @@ webpackJsonp([0],[
 	        var _this = this;
 	        this.taskService.fetchTasks({
 	            parentTaskId: this.task.id
-	        }).subscribe(function (action) { return _this.tasks = action.payload.tasks; });
+	        }).subscribe(function (payload) { return _this.tasks = payload.tasks; });
 	    };
 	    TaskStreamComponent.prototype.getStream = function () {
 	        return this.tasks;
@@ -7654,18 +7828,19 @@ webpackJsonp([0],[
 	var request_1 = __webpack_require__(631);
 	var attachments_1 = __webpack_require__(617);
 	var comments_1 = __webpack_require__(632);
-	var task_reducer_1 = __webpack_require__(473);
 	var pipes_1 = __webpack_require__(493);
-	var services_1 = __webpack_require__(453);
-	var models_1 = __webpack_require__(460);
+	var actions_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var TaskComponent = (function () {
-	    function TaskComponent(store, router, route, formBuilder, translate, appService, projectService, taskService, referenceService, notifyService) {
+	    function TaskComponent(store, router, route, formBuilder, translate, taskActions, appService, projectService, taskService, referenceService, notifyService) {
 	        var _this = this;
 	        this.store = store;
 	        this.router = router;
 	        this.route = route;
 	        this.formBuilder = formBuilder;
 	        this.translate = translate;
+	        this.taskActions = taskActions;
 	        this.appService = appService;
 	        this.projectService = projectService;
 	        this.taskService = taskService;
@@ -7726,14 +7901,14 @@ webpackJsonp([0],[
 	        this.sub = this.route.params.subscribe(function (params) {
 	            _this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new');
 	            _this.isSubtask = params['taskId'] && params['new'] === 'new';
-	            _this.taskService.fetchTaskById(params['taskId']).subscribe(function (action) {
+	            _this.taskService.fetchTaskById(params['taskId']).subscribe(function (task) {
 	                if (_this.isSubtask) {
-	                    _this.parentTask = action.payload.task;
+	                    _this.parentTask = task;
 	                    _this.task = new models_1.Task();
 	                    _this.task.parentTaskId = _this.parentTask.id;
 	                }
 	                else {
-	                    _this.task = action.payload.task;
+	                    _this.task = task;
 	                    _this.isSubtask = !!_this.task.parentTaskId;
 	                }
 	                if (!_this.isNew) {
@@ -7743,8 +7918,8 @@ webpackJsonp([0],[
 	                }
 	                _this.parentTask = null;
 	                if (_this.task.parentTaskId && !_this.task.parentTask) {
-	                    _this.taskService.fetchTaskById(_this.task.parentTaskId).subscribe(function (action) {
-	                        _this.parentTask = action.payload.task;
+	                    _this.taskService.fetchTaskById(_this.task.parentTaskId).subscribe(function (parentTask) {
+	                        _this.parentTask = parentTask;
 	                    });
 	                }
 	                _this.isReady = true;
@@ -7754,7 +7929,7 @@ webpackJsonp([0],[
 	        this.taskService.getTaskPriorityTypes().subscribe(function (tpt) { return _this.taskPriorityTypes = tpt; });
 	    };
 	    TaskComponent.prototype.ngOnDestroy = function () {
-	        this.store.dispatch({ type: task_reducer_1.TASK_CLOSE });
+	        this.store.dispatch({ type: actions_1.TaskActions.TASK_UNLOAD });
 	    };
 	    TaskComponent.prototype.getTitle = function () {
 	        if (this.isNew && this.isSubtask) {
@@ -7810,7 +7985,9 @@ webpackJsonp([0],[
 	    TaskComponent.prototype.loadComments = function (page) {
 	        var _this = this;
 	        if (page === void 0) { page = 1; }
-	        this.taskService.fetchComments(this.task, page).subscribe(function (action) { return _this.store.dispatch(action); });
+	        this.taskService.fetchComments(this.task, page).subscribe(function (payload) {
+	            _this.store.dispatch({ type: actions_1.TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });
+	        });
 	    };
 	    TaskComponent.prototype.saveComment = function (comment) {
 	        var _this = this;
@@ -7830,8 +8007,8 @@ webpackJsonp([0],[
 	    TaskComponent.prototype.loadRequests = function (page) {
 	        var _this = this;
 	        if (page === void 0) { page = 1; }
-	        this.taskService.fetchTaskRequests(this.task, page).subscribe(function (action) {
-	            _this.store.dispatch(action);
+	        this.taskService.fetchTaskRequests(this.task, page).subscribe(function (payload) {
+	            _this.store.dispatch({ type: actions_1.TaskActions.FETCH_TASK_REQUESTS_FULFILLED, payload: payload });
 	        });
 	    };
 	    TaskComponent.prototype.acceptRequest = function (request) {
@@ -7853,8 +8030,8 @@ webpackJsonp([0],[
 	    };
 	    TaskComponent.prototype.loadSubtasks = function () {
 	        var _this = this;
-	        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(function (action) {
-	            _this.subTasks = action.payload.tasks;
+	        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(function (payload) {
+	            _this.subTasks = payload.tasks;
 	        });
 	    };
 	    TaskComponent.prototype.hasSubTasks = function () {
@@ -7879,17 +8056,13 @@ webpackJsonp([0],[
 	        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest && !this.hasAcceptedRequestResolution;
 	    };
 	    TaskComponent.prototype.newRequest = function () {
-	        this.store.dispatch({ type: task_reducer_1.TASK_REQUEST_NEW, payload: this.task });
+	        this.store.dispatch({ type: actions_1.TaskActions.TASK_REQUEST_NEW, payload: this.task });
 	    };
 	    TaskComponent.prototype.requestSendEventHandler = function (_a) {
 	        var requestSendSuccess = _a.requestSendSuccess;
 	        if (requestSendSuccess) {
 	            this.close();
 	        }
-	    };
-	    TaskComponent.prototype.getTaskStatusType = function () {
-	        var _this = this;
-	        return this.taskStatusTypes.filter(function (it) { return it.value == _this.task.status; })[0].text;
 	    };
 	    TaskComponent.prototype.setStatus = function (value) {
 	        this.task.status = value;
@@ -7960,7 +8133,7 @@ webpackJsonp([0],[
 	            providers: [common_1.FormBuilder],
 	            pipes: [ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, common_1.FormBuilder, ng2_translate_1.TranslateService, services_1.AppService, services_1.ProjectService, services_1.TaskService, services_1.ReferenceService, notification_1.NotificationService])
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, common_1.FormBuilder, ng2_translate_1.TranslateService, actions_1.TaskActions, services_1.AppService, services_1.ProjectService, services_1.TaskService, services_1.ReferenceService, notification_1.NotificationService])
 	    ], TaskComponent);
 	    return TaskComponent;
 	}());
@@ -8084,6 +8257,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
 	var markdown_1 = __webpack_require__(380);
+	var pipes_1 = __webpack_require__(493);
 	var attachments_1 = __webpack_require__(617);
 	var RequestListComponent = (function () {
 	    function RequestListComponent() {
@@ -8114,9 +8288,9 @@ webpackJsonp([0],[
 	    RequestListComponent = __decorate([
 	        core_1.Component({
 	            selector: 'request-list',
-	            template: "\n        <ul class=\"request-list\">\n            <li class=\"request-list__header\">\n                <span class=\"request__type\">{{'request_type' | translate}}</span>\n                <span class=\"request__comment\">{{'comment' | translate}}</span>\n                <time class=\"request__time\">{{'request_time' | translate}}</time>\n            </li>\n            <li class=\"request-list__item\" *ngFor=\"let request of requests\">\n                <div class=\"request\">\n                    <div class=\"request__details\">\n                        <div class=\"request__type\">{{ request.requestType.name }}</div>\n                        <div class=\"request__comment\">{{request.comment}}</div>\n                        <time class=\"request__time\">{{ request.regDate }}</time>\n                        <div class=\"request__attachments\" *ngIf=\"request.attachments\">\n                            <attachments [model]=\"request\"></attachments>\n                        </div>\n                    </div>\n                    <div class=\"request__resol\">\n                        <div class=\"request__resolution\">{{ request.resolution }}</div>\n                        <time class=\"request__resolution_time\">{{ request.resolutionTime }}</time>\n                        <div class=\"request__buttons\" *ngIf=\"request.resolution == 'UNKNOWN'\">\n                            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"disabled\" (click)=\"doAccept(request)\">\n                                {{ 'accept' | translate }}\n                            </button>\n                            <button type=\"button\" class=\"btn\" [disabled]=\"disabled\" (click)=\"doDecline(request)\">\n                                {{ 'decline' | translate }}\n                            </button>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n    ",
+	            template: "\n        <ul class=\"request-list\">\n            <li class=\"request-list__header\">\n                <div class=\"request__details\">\n                    <div class=\"request__type\">{{'request_type' | translate}}</div>\n                    <div class=\"request__comment\">{{'comment' | translate}}</div>\n                    <div class=\"request__time\">{{'request_time' | translate}}</div>\n                </div>\n            </li>\n            <li class=\"request-list__item\" *ngFor=\"let request of requests\">\n                <div class=\"request\">\n                    <div class=\"request__details\">\n                        <div class=\"request__type\">{{request.requestType.name}}</div>\n                        <div class=\"request__comment\">{{request.comment}}</div>\n                        <div class=\"request__time\">{{request.regDate}}</div>\n                        <div class=\"request__attachments\" *ngIf=\"request.attachments\">\n                            <attachments [model]=\"request\"></attachments>\n                        </div>\n                    </div>\n                    <div class=\"request__resol\">\n                        <div class=\"request__resolution\">\n                            <span *ngIf=\"request.resolution == 'ACCEPT'\">{{'accepted' | text:'L' | translate}}</span>\n                            <span *ngIf=\"request.resolution == 'DECLINE'\">{{'declined' | text:'L' | translate}}</span>\n                        </div>\n                        <div class=\"request__resolution_time\">{{request.resolutionTime}}</div>\n                        <div class=\"request__buttons\" *ngIf=\"request.resolution == 'UNKNOWN'\">\n                            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"disabled\" (click)=\"doAccept(request)\">\n                                {{'accept' | translate}}\n                            </button>\n                            <button type=\"button\" class=\"btn\" [disabled]=\"disabled\" (click)=\"doDecline(request)\">\n                                {{'decline' | translate}}\n                            </button>\n                        </div>\n                    </div>\n                </div>\n            </li>\n        </ul>\n    ",
 	            directives: [attachments_1.AttachmentsComponent],
-	            pipes: [ng2_translate_1.TranslatePipe, markdown_1.MarkedPipe]
+	            pipes: [ng2_translate_1.TranslatePipe, markdown_1.MarkedPipe, pipes_1.TextTransformPipe, pipes_1.DateFormatPipe]
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], RequestListComponent);
@@ -8143,12 +8317,12 @@ webpackJsonp([0],[
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var notification_1 = __webpack_require__(376);
-	var task_reducer_1 = __webpack_require__(473);
 	var markdown_1 = __webpack_require__(380);
 	var attachments_1 = __webpack_require__(617);
 	var request_type_input_1 = __webpack_require__(606);
-	var services_1 = __webpack_require__(453);
-	var models_1 = __webpack_require__(460);
+	var actions_1 = __webpack_require__(453);
+	var services_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var RequestComponent = (function () {
 	    function RequestComponent(store, translate, notifyService, taskService) {
 	        var _this = this;
@@ -8179,7 +8353,7 @@ webpackJsonp([0],[
 	        this.taskSub.unsubscribe();
 	    };
 	    RequestComponent.prototype.cancel = function () {
-	        this.store.dispatch({ type: task_reducer_1.TASK_REQUEST_CANCEL });
+	        this.store.dispatch({ type: actions_1.TaskActions.TASK_REQUEST_CANCEL });
 	    };
 	    RequestComponent.prototype.sendRequest = function ($event) {
 	        var _this = this;
@@ -8251,7 +8425,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
 	var markdown_editor_1 = __webpack_require__(391);
-	var models_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var comment_1 = __webpack_require__(633);
 	var CommentsComponent = (function () {
 	    function CommentsComponent() {
@@ -8330,7 +8504,7 @@ webpackJsonp([0],[
 	var markdown_1 = __webpack_require__(380);
 	var attachments_1 = __webpack_require__(617);
 	var pipes_1 = __webpack_require__(493);
-	var models_1 = __webpack_require__(460);
+	var models_1 = __webpack_require__(465);
 	var CommentComponent = (function () {
 	    function CommentComponent() {
 	        this.editable = false;
@@ -8390,7 +8564,7 @@ webpackJsonp([0],[
 /* 634 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" [ngFormModel]=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">\r\n                {{parentTask.title}}\r\n            </a>\r\n            <div>\r\n                {{getTitle() | translate}}\r\n                <small>{{ getTaskStatusType() }}</small>\r\n            </div>\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!form.valid\" (click)=\"saveTask()\">\r\n                <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button *ngIf=\"!isNew && FEATURE_FLAGS.subTask\" class=\"btn\" type=\"button\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canSaveTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew\" dropdown class=\"buttons\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_title' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.title.valid\">\r\n                            <input class=\"span8\" [(ngModel)]=\"task.title\" ngControl=\"title\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'project' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.projectId.valid\">\r\n                            <div class=\"span8\">\r\n                                <project-input [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                            </div>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.projectId.valid || form.controls.projectId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_type' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.taskTypeId.valid\">\r\n                            <div class=\"span8\">\r\n                                <task-type-input [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'priority' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.priority.valid\">\r\n                            <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                            <div [hidden]=\"form.controls.priority.valid || form.controls.priority.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'assignee_user' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.assigneeUserId.valid\">\r\n                            <div class=\"span8\">\r\n                                <user-input [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'start_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" ngControl=\"startDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'due_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" ngControl=\"dueDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'tags' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.tagIds.valid\">\r\n                            <div class=\"span8\">\r\n                                <tags-input [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'body' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.body.valid\">\r\n                            <div class=\"span8\">\r\n                                <markdown-editor [markdown]=\"task.body || ''\" [editable]=\"isEditable\" updateTimeout=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n                <attachments editable=\"true\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasSubTasks()\" class=\"tab-pane\" tabTitle=\"{{'subtasks' | translate}}\" (select)=\"loadSubtasks()\">\r\n                <task-list [tasks]=\"subTasks\"></task-list>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && FEATURE_FLAGS.comments\" class=\"tab-pane\" tabTitle=\"{{'comments' | translate}}\" (select)=\"loadComments()\">\r\n                <comments [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasRequests()\" class=\"tab-pane\" tabTitle=\"{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}\" (select)=\"loadRequests()\">\r\n                <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n<request (send)=\"requestSendEventHandler($event)\"></request>\r\n"
+	module.exports = "<form class=\"form\" [ngFormModel]=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">\r\n                {{parentTask.title}}\r\n            </a>\r\n            <div>\r\n                {{getTitle() | translate}}\r\n                <small class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</small>\r\n            </div>\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!form.valid\" (click)=\"saveTask()\">\r\n                <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button *ngIf=\"!isNew && FEATURE_FLAGS.subTask\" class=\"btn\" type=\"button\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canSaveTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew\" dropdown class=\"buttons\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_title' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.title.valid\">\r\n                            <input class=\"span8\" [(ngModel)]=\"task.title\" ngControl=\"title\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'project' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.projectId.valid\">\r\n                            <div class=\"span8\">\r\n                                <project-input [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                            </div>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.projectId.valid || form.controls.projectId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_type' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.taskTypeId.valid\">\r\n                            <div class=\"span8\">\r\n                                <task-type-input [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'priority' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.priority.valid\">\r\n                            <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                            <div [hidden]=\"form.controls.priority.valid || form.controls.priority.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'assignee_user' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.assigneeUserId.valid\">\r\n                            <div class=\"span8\">\r\n                                <user-input [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'start_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" ngControl=\"startDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'due_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" ngControl=\"dueDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'tags' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.tagIds.valid\">\r\n                            <div class=\"span8\">\r\n                                <tags-input [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'body' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.body.valid\">\r\n                            <div class=\"span8\">\r\n                                <markdown-editor [markdown]=\"task.body || ''\" [editable]=\"isEditable\" updateTimeout=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n                <attachments editable=\"true\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasSubTasks()\" class=\"tab-pane\" tabTitle=\"{{'subtasks' | translate}}\" (select)=\"loadSubtasks()\">\r\n                <task-list [tasks]=\"subTasks\"></task-list>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && FEATURE_FLAGS.comments\" class=\"tab-pane\" tabTitle=\"{{'comments' | translate}}\" (select)=\"loadComments()\">\r\n                <comments [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasRequests()\" class=\"tab-pane\" tabTitle=\"{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}\" (select)=\"loadRequests()\">\r\n                <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n<request (send)=\"requestSendEventHandler($event)\"></request>\r\n"
 
 /***/ },
 /* 635 */
@@ -8414,10 +8588,10 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var tabs_1 = __webpack_require__(627);
 	var keys_pipe_1 = __webpack_require__(600);
-	var app_service_1 = __webpack_require__(454);
-	var translate_service_1 = __webpack_require__(457);
-	var user_1 = __webpack_require__(461);
-	var utils_1 = __webpack_require__(456);
+	var app_service_1 = __webpack_require__(461);
+	var translate_service_1 = __webpack_require__(463);
+	var user_1 = __webpack_require__(466);
+	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -8547,13 +8721,13 @@ webpackJsonp([0],[
 	var compose_1 = __webpack_require__(640);
 	var store_1 = __webpack_require__(437);
 	var ngrx_store_logger_1 = __webpack_require__(641);
-	var environment_reducer_1 = __webpack_require__(479);
-	var authed_reducer_1 = __webpack_require__(455);
-	var projects_reducer_1 = __webpack_require__(459);
-	var tasks_reducer_1 = __webpack_require__(472);
-	var task_reducer_1 = __webpack_require__(473);
-	var staff_reducer_1 = __webpack_require__(477);
-	var reference_reducer_1 = __webpack_require__(475);
+	var environment_reducer_1 = __webpack_require__(642);
+	var authed_reducer_1 = __webpack_require__(643);
+	var projects_reducer_1 = __webpack_require__(644);
+	var tasks_reducer_1 = __webpack_require__(645);
+	var task_reducer_1 = __webpack_require__(646);
+	var staff_reducer_1 = __webpack_require__(647);
+	var reference_reducer_1 = __webpack_require__(648);
 	var logger = ngrx_store_logger_1.storeLogger({
 	    level: 'log',
 	    collapsed: false,
@@ -8733,6 +8907,289 @@ webpackJsonp([0],[
 	            return nextState;
 	        };
 	    };
+	};
+
+
+/***/ },
+/* 642 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var environment_actions_1 = __webpack_require__(454);
+	;
+	var initialState = {
+	    isMobile: false,
+	    isNavOpen: true,
+	    isSearchOpen: false
+	};
+	exports.environmentReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case environment_actions_1.EnvironmentActions.SET_IS_MOBILE:
+	            return Object.assign({}, state, {
+	                isMobile: payload
+	            });
+	        case environment_actions_1.EnvironmentActions.TOGGLE_NAV:
+	            return Object.assign({}, state, {
+	                isNavOpen: !state.isNavOpen
+	            });
+	        case environment_actions_1.EnvironmentActions.TOGGLE_SEARCH:
+	            return Object.assign({}, state, {
+	                isSearchOpen: !state.isSearchOpen
+	            });
+	        case environment_actions_1.EnvironmentActions.HIDE_NAV:
+	            return Object.assign({}, state, {
+	                isNavOpen: true,
+	                isSearchOpen: false
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 643 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var app_actions_1 = __webpack_require__(455);
+	;
+	var initialState = {
+	    userProfile: null,
+	    languages: {},
+	    pageSize: 20,
+	    language: 'RUS'
+	};
+	exports.authedReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case app_actions_1.AppActions.FETCH_USER_PROFILE_FULFILLED:
+	            return Object.assign({}, state, {
+	                userProfile: payload.userProfile,
+	                languages: payload.languages,
+	                pageSize: payload.pageSize,
+	                language: payload.language
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 644 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var project_actions_1 = __webpack_require__(456);
+	;
+	var initialState = {
+	    meta: {},
+	    projects: [],
+	    project: undefined,
+	    loading: false
+	};
+	exports.projectsReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case project_actions_1.ProjectActions.FETCH_PROJECTS:
+	            return Object.assign({}, state, {
+	                loading: true
+	            });
+	        case project_actions_1.ProjectActions.FETCH_PROJECTS_FAILED:
+	            return Object.assign({}, state, {
+	                loading: false
+	            });
+	        case project_actions_1.ProjectActions.FETCH_PROJECTS_FULFILLED:
+	            return Object.assign({}, state, {
+	                projects: payload.projects,
+	                meta: payload.meta,
+	                loading: false
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 645 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var actions_1 = __webpack_require__(453);
+	exports.SET_FILTER = 'SET_FILTER';
+	exports.EXPAND_ID = 'EXPAND_ID';
+	exports.COLLAPSE_ID = 'COLLAPSE_ID';
+	;
+	var initialState = {
+	    meta: {},
+	    tasks: [],
+	    expandIds: [],
+	    loading: false,
+	    filter: {
+	        taskType: null,
+	        assigneeUser: null,
+	        tags: []
+	    }
+	};
+	exports.tasksReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case actions_1.TaskActions.FETCH_TASKS_FULFILLED:
+	            return Object.assign({}, state, {
+	                tasks: payload.tasks,
+	                meta: payload.meta
+	            });
+	        case actions_1.TaskActions.FETCH_TASK_FULFILLED:
+	            return Object.assign({}, state, {
+	                task: payload.task
+	            });
+	        case exports.SET_FILTER:
+	            return Object.assign({}, state, {
+	                filter: payload
+	            });
+	        case exports.EXPAND_ID:
+	            if (state.expandIds.indexOf(payload.id) == -1) {
+	                return Object.assign({}, state, {
+	                    expandIds: state.expandIds.push(payload.id)
+	                });
+	            }
+	            return state;
+	        case exports.COLLAPSE_ID:
+	            var ind = state.expandIds.indexOf(payload.id);
+	            if (ind != -1) {
+	                var ids = state.expandIds.splice(ind);
+	                return Object.assign({}, state, {
+	                    expandIds: ids
+	                });
+	            }
+	            return state;
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 646 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var actions_1 = __webpack_require__(453);
+	;
+	var initialState = {
+	    task: null,
+	    request: null,
+	    requests: [],
+	    showRequest: false,
+	    comments: []
+	};
+	exports.taskReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case actions_1.TaskActions.FETCH_TASK_REQUESTS_FULFILLED:
+	            return Object.assign({}, state, {
+	                requests: payload.requests
+	            });
+	        case actions_1.TaskActions.TASK_REQUEST_NEW:
+	            return Object.assign({}, state, {
+	                task: payload,
+	                showRequest: true
+	            });
+	        case actions_1.TaskActions.TASK_REQUEST_CANCEL:
+	            return Object.assign({}, state, {
+	                showRequest: false
+	            });
+	        case actions_1.TaskActions.FETCH_TASK_COMMENTS_FULFILLED:
+	            return Object.assign({}, state, {
+	                comments: payload.comments
+	            });
+	        case actions_1.TaskActions.TASK_UNLOAD:
+	            return {
+	                task: null,
+	                request: null,
+	                requests: [],
+	                showRequest: false,
+	                comments: []
+	            };
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 647 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var actions_1 = __webpack_require__(453);
+	;
+	var initialState = {
+	    organizations: [],
+	    users: []
+	};
+	exports.staffReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case actions_1.StaffActions.FETCH_ORGANIZATIONS:
+	            return Object.assign({}, state, {
+	                organizations: payload.organizations
+	            });
+	        case actions_1.StaffActions.FETCH_USERS:
+	            return Object.assign({}, state, {
+	                users: payload.users
+	            });
+	        default:
+	            return state;
+	    }
+	};
+
+
+/***/ },
+/* 648 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var reference_actions_1 = __webpack_require__(458);
+	;
+	var initialState = {
+	    tags: [],
+	    taskTypes: [],
+	    requestTypes: [],
+	    fetchFail: false
+	};
+	exports.referenceReducer = function (state, _a) {
+	    if (state === void 0) { state = initialState; }
+	    var type = _a.type, payload = _a.payload;
+	    switch (type) {
+	        case reference_actions_1.ReferenceActions.FETCH_TAGS:
+	            return Object.assign({}, state, {
+	                tags: payload.tags
+	            });
+	        case reference_actions_1.ReferenceActions.FETCH_TASK_TYPES:
+	            return Object.assign({}, state, {
+	                taskTypes: payload.taskTypes
+	            });
+	        case reference_actions_1.ReferenceActions.FETCH_REQUEST_TYPES:
+	            return Object.assign({}, state, {
+	                requestTypes: payload.requestTypes
+	            });
+	        case reference_actions_1.ReferenceActions.FETCH_REFERENCE_FAILED:
+	            return Object.assign({}, state, {
+	                fetchFail: true
+	            });
+	        default:
+	            return state;
+	    }
 	};
 
 

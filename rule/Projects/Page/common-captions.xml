@@ -10,6 +10,7 @@
     <caption name="save_close"/>
     <caption name="cancel"/>
     <caption name="select"/>
+    <caption name="delete"/>
     <caption name="close"/>
     <caption name="search"/>
     <caption name="filter"/>
@@ -62,6 +63,7 @@
     <caption name="projects"/>
     <caption name="task_request"/>
     <caption name="request_type"/>
+    <caption name="complete_task"/>
     <caption name="send_task"/>
     <caption name="send_request"/>
     <caption name="new_request"/>
@@ -74,6 +76,13 @@
     <caption name="subtasks"/>
     <caption name="comments"/>
     <caption name="requests"/>
+
+    <caption name="request_time"/>
+
+    <caption name="accept"/>
+    <caption name="accepted"/>
+    <caption name="decline"/>
+    <caption name="declined"/>
 
     <!-- common form captions -->
     <caption name="body"/>

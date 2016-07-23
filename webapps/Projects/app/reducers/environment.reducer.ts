@@ -1,8 +1,4 @@
-export const IS_MOBILE = 'IS_MOBILE';
-export const IS_DESKTOP = 'IS_DESKTOP';
-export const TOGGLE_NAV = 'TOGGLE_NAV';
-export const HIDE_NAV = 'HIDE_NAV';
-export const TOGGLE_SEARCH = 'TOGGLE_SEARCH';
+import { EnvironmentActions } from '../actions/environment.actions';
 
 export interface IEnvironmentState {
     isMobile: boolean,
@@ -18,23 +14,19 @@ const initialState: IEnvironmentState = {
 
 export const environmentReducer = (state = initialState, {type, payload}): IEnvironmentState => {
     switch (type) {
-        case IS_MOBILE:
+        case EnvironmentActions.SET_IS_MOBILE:
             return Object.assign({}, state, {
-                isMobile: true
+                isMobile: payload
             });
-        case IS_DESKTOP:
-            return Object.assign({}, state, {
-                isMobile: false
-            });
-        case TOGGLE_NAV:
+        case EnvironmentActions.TOGGLE_NAV:
             return Object.assign({}, state, {
                 isNavOpen: !state.isNavOpen
             });
-        case TOGGLE_SEARCH:
+        case EnvironmentActions.TOGGLE_SEARCH:
             return Object.assign({}, state, {
                 isSearchOpen: !state.isSearchOpen
             });
-        case HIDE_NAV:
+        case EnvironmentActions.HIDE_NAV:
             return Object.assign({}, state, {
                 isNavOpen: true,
                 isSearchOpen: false

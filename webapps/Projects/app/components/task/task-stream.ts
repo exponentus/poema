@@ -32,7 +32,7 @@ export class TaskStreamComponent {
     ngOnInit() {
         this.taskService.fetchTasks({
             parentTaskId: this.task.id
-        }).subscribe(action => this.tasks = action.payload.tasks);
+        }).subscribe(payload => this.tasks = payload.tasks);
     }
 
     getStream() {

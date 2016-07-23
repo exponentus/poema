@@ -3,15 +3,12 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import {
-    ITaskState,
-    TASK_REQUEST_NEW,
-    TASK_REQUEST_CANCEL
-} from '../../reducers/task.reducer';
+import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { MarkdownEditorComponent } from '../../shared/markdown';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { RequestTypeInputComponent } from '../shared/request-type-input';
+import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 
@@ -95,7 +92,7 @@ export class RequestComponent {
     }
 
     cancel() {
-        this.store.dispatch({ type: TASK_REQUEST_CANCEL });
+        this.store.dispatch({ type: TaskActions.TASK_REQUEST_CANCEL });
     }
 
     sendRequest($event) {

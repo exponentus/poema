@@ -17,8 +17,9 @@ import { RequestListComponent } from './request-list';
 import { RequestComponent } from './request';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { CommentsComponent } from '../comment/comments';
-import { TASK_REQUEST_NEW, TASK_REQUEST_CANCEL, TASK_CLOSE, ITaskState } from '../../reducers/task.reducer';
+import { ITaskState } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
+import { TaskActions } from '../../actions';
 import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
 import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from '../../models';
 
@@ -83,6 +84,7 @@ export class TaskComponent {
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private translate: TranslateService,
+        private taskActions: TaskActions,
         private appService: AppService,
         private projectService: ProjectService,
         private taskService: TaskService,
@@ -128,13 +130,13 @@ export class TaskComponent {
             this.isSubtask = params['taskId'] && params['new'] === 'new';
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
-                action => {
+                task => {
                     if (this.isSubtask) {
-                        this.parentTask = action.payload.task;
+                        this.parentTask = task;
                         this.task = new Task();
                         this.task.parentTaskId = this.parentTask.id;
                     } else {
-                        this.task = action.payload.task;
+                        this.task = task;
                         this.isSubtask = !!this.task.parentTaskId;
                     }
                     if (!this.isNew) {
@@ -144,11 +146,12 @@ export class TaskComponent {
                     }
                     this.parentTask = null;
                     if (this.task.parentTaskId && !this.task.parentTask) {
-                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(action => {
-                            this.parentTask = action.payload.task;
+                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(parentTask => {
+                            this.parentTask = parentTask;
                         });
                     }
                     this.isReady = true;
+                    // this.store.dispatch(this.taskActions.fetchTaskFulfilled(this.task));
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -159,7 +162,7 @@ export class TaskComponent {
     }
 
     ngOnDestroy() {
-        this.store.dispatch({ type: TASK_CLOSE });
+        this.store.dispatch({ type: TaskActions.TASK_UNLOAD });
     }
 
     getTitle() {
@@ -223,7 +226,9 @@ export class TaskComponent {
 
     //
     loadComments(page = 1) {
-        this.taskService.fetchComments(this.task, page).subscribe(action => this.store.dispatch(action));
+        this.taskService.fetchComments(this.task, page).subscribe(payload => {
+            this.store.dispatch({ type: TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });
+        });
     }
 
     saveComment(comment: Comment) {
@@ -244,8 +249,8 @@ export class TaskComponent {
 
     //
     loadRequests(page = 1) {
-        this.taskService.fetchTaskRequests(this.task, page).subscribe(action => {
-            this.store.dispatch(action);
+        this.taskService.fetchTaskRequests(this.task, page).subscribe(payload => {
+            this.store.dispatch({ type: TaskActions.FETCH_TASK_REQUESTS_FULFILLED, payload: payload });
         });
     }
 
@@ -269,8 +274,8 @@ export class TaskComponent {
 
     // loadSubtasks
     loadSubtasks() {
-        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(action => {
-            this.subTasks = action.payload.tasks;
+        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(payload => {
+            this.subTasks = payload.tasks;
         });
     }
 
@@ -304,7 +309,7 @@ export class TaskComponent {
     }
 
     newRequest() {
-        this.store.dispatch({ type: TASK_REQUEST_NEW, payload: this.task });
+        this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
     }
 
     requestSendEventHandler({requestSendSuccess}) {
@@ -314,10 +319,6 @@ export class TaskComponent {
     }
 
     //
-    getTaskStatusType() {
-        return this.taskStatusTypes.filter(it => it.value == this.task.status)[0].text;
-    }
-
     setStatus(value) {
         this.task.status = value;
     }

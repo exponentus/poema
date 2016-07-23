@@ -1,7 +1,6 @@
 import { Organization, User } from '../models';
 
-export const FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
-export const FETCH_USERS = 'FETCH_USERS';
+import { StaffActions } from '../actions';
 
 export interface IStaffState {
     organizations: Organization[],
@@ -15,11 +14,11 @@ const initialState: IStaffState = {
 
 export const staffReducer = (state = initialState, {type, payload}): IStaffState => {
     switch (type) {
-        case FETCH_ORGANIZATIONS:
+        case StaffActions.FETCH_ORGANIZATIONS:
             return Object.assign({}, state, {
                 organizations: payload.organizations
             });
-        case FETCH_USERS:
+        case StaffActions.FETCH_USERS:
             return Object.assign({}, state, {
                 users: payload.users
             });

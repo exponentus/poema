@@ -3,14 +3,15 @@ import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
+import { EnvironmentActions, AppActions, ReferenceActions, StaffActions } from '../../actions';
 import { AppService, ReferenceService, StaffService } from '../../services';
-import { IEnvironmentState, HIDE_NAV } from '../../reducers/environment.reducer';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { IAuthedState } from '../../reducers/authed.reducer';
 import { NotificationService, NotificationComponent } from '../../shared/notification';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { NavbarComponent } from '../navbar/navbar';
 import { NavComponent } from '../nav/nav';
-import { User } from '../../models/user';
+import { Tag, User } from '../../models';
 
 @Component({
     selector: 'app',
@@ -38,6 +39,9 @@ export class AppComponent {
 
     constructor(
         private store: Store<any>,
+        private appActions: AppActions,
+        private referenceActions: ReferenceActions,
+        private staffActions: StaffActions,
         private appService: AppService,
         private referenceService: ReferenceService,
         private staffService: StaffService,
@@ -54,21 +58,31 @@ export class AppComponent {
             this.isNavCollapsed = !state.isNavOpen;
         });
 
-        this.appService.getUserProfile().subscribe(action => {
-            this.store.dispatch(action);
+        this.appService.fetchUserProfile().subscribe(data => {
+            this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
             this.isReady = true;
         });
     }
 
     ngOnInit() {
-        this.referenceService.loadReference();
-
-        this.staffService.fetchOrganizations().subscribe(action => {
-            this.store.dispatch(action);
+        this.referenceService.fetchTags().subscribe(payload => {
+            this.store.dispatch(this.referenceActions.fetchTags(payload.tags));
         });
 
-        this.staffService.fetchUsers().subscribe(action => {
-            this.store.dispatch(action);
+        this.referenceService.fetchTaskTypes().subscribe(payload => {
+            this.store.dispatch(this.referenceActions.fetchTaskTypes(payload.taskTypes));
+        });
+
+        this.referenceService.fetchRequestTypes().subscribe(payload => {
+            this.store.dispatch(this.referenceActions.fetchRequestTypes(payload.requestTypes));
+        });
+
+        this.staffService.fetchOrganizations().subscribe(payload => {
+            this.store.dispatch(this.staffActions.fetchOrganizations(payload.organizations));
+        });
+
+        this.staffService.fetchUsers().subscribe(payload => {
+            this.store.dispatch(this.staffActions.fetchUsers(payload.users));
         });
 
         this.isMobileDevice = this.isMobile();
@@ -90,7 +104,7 @@ export class AppComponent {
     }
 
     hideNav(event) {
-        this.store.dispatch({ type: HIDE_NAV });
+        this.store.dispatch({ type: EnvironmentActions.HIDE_NAV });
         event.preventDefault();
     }
 

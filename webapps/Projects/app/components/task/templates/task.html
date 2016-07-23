@@ -9,7 +9,7 @@
             </a>
             <div>
                 {{getTitle() | translate}}
-                <small>{{ getTaskStatusType() }}</small>
+                <small class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</small>
             </div>
         </h1>
         <div class="content-actions">

@@ -12,10 +12,10 @@
                 <i class="fa fa-user"></i>
             </a>
             <ul class="dropdown-menu right">
-                <li *ngIf="loggedUser">
+                <li *ngIf="user">
                     <a class="user-profile" [routerLink]="['/user-profile']">
                         <i class="fa fa-user"></i>
-                        <span>{{ loggedUser.name }}</span>
+                        <span>{{ user.name }}</span>
                     </a>
                 </li>
                 <li class="divider"></li>

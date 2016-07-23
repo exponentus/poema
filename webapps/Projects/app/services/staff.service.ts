@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import {
-    FETCH_USERS,
-    FETCH_ORGANIZATIONS
-} from '../reducers/staff.reducer';
 import { Organization, User } from '../models';
 import { createURLSearchParams } from '../utils/utils';
 
@@ -28,23 +24,18 @@ export class StaffService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    type: FETCH_ORGANIZATIONS,
-                    payload: {
-                        organizations: <Organization[]>data.list,
-                        meta: data.meta
-                    }
+                    organizations: <Organization[]>data.list,
+                    meta: data.meta
                 }
             });
     }
 
     fetchUsers() {
         return this.http.get('p?id=users', { headers: HEADERS })
-            .map(response => {
+            .map(response => response.json().objects[0])
+            .map(data => {
                 return {
-                    type: FETCH_USERS,
-                    payload: {
-                        users: <User[]>response.json().objects[0].list
-                    }
+                    users: <User[]>data.list
                 }
             });
     }

@@ -56,8 +56,8 @@ export class OrganizationInputComponent {
 
     ngOnInit() {
         if (!this.org && this.orgId) {
-            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(action => {
-                this.org = action.payload.organizations[0];
+            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(payload => {
+                this.org = payload.organizations[0];
             })
         }
     }
@@ -70,9 +70,9 @@ export class OrganizationInputComponent {
     }
 
     loadOrganizations(page = 1) {
-        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(action => {
-            this.organizations = this.organizations.concat(action.payload.organizations);
-            this.meta = action.payload.meta;
+        this.staffService.fetchOrganizations({ page: page, keyWord: this.keyWord }).subscribe(payload => {
+            this.organizations = this.organizations.concat(payload.organizations);
+            this.meta = payload.meta;
             if (!this.searchable) {
                 this.searchable = this.organizations.length > 13;
             }

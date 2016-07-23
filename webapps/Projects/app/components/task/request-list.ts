@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { MarkedPipe } from '../../shared/markdown';
+import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { Request } from '../../models';
 
@@ -10,29 +11,34 @@ import { Request } from '../../models';
     template: `
         <ul class="request-list">
             <li class="request-list__header">
-                <span class="request__type">{{'request_type' | translate}}</span>
-                <span class="request__comment">{{'comment' | translate}}</span>
-                <time class="request__time">{{'request_time' | translate}}</time>
+                <div class="request__details">
+                    <div class="request__type">{{'request_type' | translate}}</div>
+                    <div class="request__comment">{{'comment' | translate}}</div>
+                    <div class="request__time">{{'request_time' | translate}}</div>
+                </div>
             </li>
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
                     <div class="request__details">
-                        <div class="request__type">{{ request.requestType.name }}</div>
+                        <div class="request__type">{{request.requestType.name}}</div>
                         <div class="request__comment">{{request.comment}}</div>
-                        <time class="request__time">{{ request.regDate }}</time>
+                        <div class="request__time">{{request.regDate}}</div>
                         <div class="request__attachments" *ngIf="request.attachments">
                             <attachments [model]="request"></attachments>
                         </div>
                     </div>
                     <div class="request__resol">
-                        <div class="request__resolution">{{ request.resolution }}</div>
-                        <time class="request__resolution_time">{{ request.resolutionTime }}</time>
+                        <div class="request__resolution">
+                            <span *ngIf="request.resolution == 'ACCEPT'">{{'accepted' | text:'L' | translate}}</span>
+                            <span *ngIf="request.resolution == 'DECLINE'">{{'declined' | text:'L' | translate}}</span>
+                        </div>
+                        <div class="request__resolution_time">{{request.resolutionTime}}</div>
                         <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">
                             <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="doAccept(request)">
-                                {{ 'accept' | translate }}
+                                {{'accept' | translate}}
                             </button>
                             <button type="button" class="btn" [disabled]="disabled" (click)="doDecline(request)">
-                                {{ 'decline' | translate }}
+                                {{'decline' | translate}}
                             </button>
                         </div>
                     </div>
@@ -41,7 +47,7 @@ import { Request } from '../../models';
         </ul>
     `,
     directives: [AttachmentsComponent],
-    pipes: [TranslatePipe, MarkedPipe]
+    pipes: [TranslatePipe, MarkedPipe, TextTransformPipe, DateFormatPipe]
 })
 
 export class RequestListComponent {

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { IProjectsState } from '../../reducers/projects.reducer';
+import { ProjectActions } from '../../actions/project.actions';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 
@@ -21,6 +22,7 @@ export class NavComponent {
 
     constructor(
         private store: Store<any>,
+        private projectActions: ProjectActions,
         private projectService: ProjectService
     ) { }
 
@@ -28,7 +30,6 @@ export class NavComponent {
         this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
         });
-
         this.loadNavProjects();
     }
 
@@ -37,8 +38,8 @@ export class NavComponent {
     }
 
     loadNavProjects() {
-        this.projectService.fetchProjects().subscribe(action => {
-            this.store.dispatch(action);
+        this.projectService.fetchProjects().subscribe(data => {
+            this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
         });
     }
 }

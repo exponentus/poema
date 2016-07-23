@@ -13,6 +13,7 @@ import { APP_ROUTER_PROVIDERS } from './app.routes';
 import { TranslateService as translateService } from './services/translate.service';
 import { APP_SERVICES } from './services';
 import { APP_STORE } from './store';
+import { APP_STORE_ACTIONS } from './actions';
 
 if (webpack.ENV === 'production') {
     enableProdMode();
@@ -31,7 +32,8 @@ bootstrap(AppComponent, [
     NotificationService,
     MarkdownConverter,
     APP_SERVICES,
-    APP_STORE
+    APP_STORE,
+    APP_STORE_ACTIONS
 ]).catch(err => console.error(err));
 
 //

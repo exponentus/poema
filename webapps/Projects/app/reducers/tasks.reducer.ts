@@ -1,18 +1,15 @@
 import { Task, Tag, TaskType, User } from '../models';
 
-export const FETCH_TASKS = 'FETCH_TASKS';
-export const FETCH_TASK = 'FETCH_TASK';
-export const ADD_TASK = 'ADD_TASK';
-export const UPDATE_TASK = 'UPDATE_TASK';
-export const DELETE_TASK = 'DELETE_TASK';
+import { TaskActions } from '../actions';
+
 export const SET_FILTER = 'SET_FILTER';
-export const EXPAND_STREAM = 'EXPAND_STREAM';
-export const COLLAPSE_STREAM = 'COLLAPSE_STREAM';
+export const EXPAND_ID = 'EXPAND_ID';
+export const COLLAPSE_ID = 'COLLAPSE_ID';
 
 export interface ITasksState {
     meta: {},
     tasks: Task[],
-    expandedIds: string[],
+    expandIds: string[],
     loading: boolean,
     filter: {
         taskType: TaskType,
@@ -24,7 +21,7 @@ export interface ITasksState {
 const initialState: ITasksState = {
     meta: {},
     tasks: [],
-    expandedIds: [],
+    expandIds: [],
     loading: false,
     filter: {
         taskType: null,
@@ -35,38 +32,32 @@ const initialState: ITasksState = {
 
 export const tasksReducer = (state = initialState, {type, payload}): ITasksState => {
     switch (type) {
-        case FETCH_TASKS:
+        case TaskActions.FETCH_TASKS_FULFILLED:
             return Object.assign({}, state, {
                 tasks: payload.tasks,
                 meta: payload.meta
             });
-        case FETCH_TASK:
+        case TaskActions.FETCH_TASK_FULFILLED:
             return Object.assign({}, state, {
                 task: payload.task
             });
-        case ADD_TASK:
-            return state;
-        case UPDATE_TASK:
-            return state;
-        case DELETE_TASK:
-            return state;
         case SET_FILTER:
             return Object.assign({}, state, {
                 filter: payload
             });
-        case EXPAND_STREAM:
-            if (state.expandedIds.indexOf(payload.id) == -1) {
+        case EXPAND_ID:
+            if (state.expandIds.indexOf(payload.id) == -1) {
                 return Object.assign({}, state, {
-                    expandedIds: state.expandedIds.concat(payload.id)
+                    expandIds: state.expandIds.push(payload.id)
                 });
             }
             return state;
-        case COLLAPSE_STREAM:
-            let ind = state.expandedIds.indexOf(payload.id);
+        case COLLAPSE_ID:
+            let ind = state.expandIds.indexOf(payload.id);
             if (ind != -1) {
-                let ids = state.expandedIds.splice(ind);
+                let ids = state.expandIds.splice(ind);
                 return Object.assign({}, state, {
-                    expandedIds: ids
+                    expandIds: ids
                 });
             }
             return state;

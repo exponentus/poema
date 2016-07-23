@@ -72,8 +72,8 @@ export class ProjectComponent {
 
         this.sub = this.route.params.subscribe(params => {
             this.projectService.fetchProjectById(params['projectId']).subscribe(
-                action => {
-                    this.project = action.payload.project;
+                project => {
+                    this.project = project;
                     this.loadData();
                     this.isReady = true;
                     this.isNew = this.project.id == '';
@@ -107,7 +107,6 @@ export class ProjectComponent {
     }
 
     errorSaveProject(errorResponse) {
-        console.log(errorResponse);
         this.notifyService.error(errorResponse.message).show().remove(2000);
     }
 

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { FETCH_USER_PROFILE } from '../reducers/authed.reducer';
 import { User } from '../models';
 import { parseResponseObjects } from '../utils/utils';
 
@@ -26,7 +25,7 @@ export class AppService {
         }
     }
 
-    getUserProfile() {
+    fetchUserProfile() {
         return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
             response => {
                 let res = parseResponseObjects(response.json().objects);
@@ -36,13 +35,10 @@ export class AppService {
                 }
                 this.isLogged = true;
                 return {
-                    type: FETCH_USER_PROFILE,
-                    payload: {
-                        userProfile: res.employee,
-                        languages: res.language.list[0].localizedName,
-                        pageSize: pageSize,
-                        language: this.language
-                    }
+                    userProfile: res.employee,
+                    languages: res.language.list[0].localizedName,
+                    pageSize: pageSize,
+                    language: this.language
                 }
             },
             error => {

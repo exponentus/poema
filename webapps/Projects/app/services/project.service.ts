@@ -3,11 +3,6 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import {
-    FETCH_PROJECTS,
-    FETCH_PROJECT,
-    ADD_PROJECT
-} from '../reducers/projects.reducer';
 import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
 import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
@@ -40,24 +35,15 @@ export class ProjectService {
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    type: FETCH_PROJECTS,
-                    payload: {
-                        projects: <Project[]>data.list,
-                        meta: data.meta,
-                        loading: true
-                    }
+                    projects: <Project[]>data.list,
+                    meta: data.meta
                 };
             });
     }
 
     fetchProjectById(projectId: string) {
         if (projectId === 'new') {
-            return Observable.of({
-                type: FETCH_PROJECT,
-                payload: {
-                    project: new Project()
-                }
-            });
+            return Observable.of(new Project());
         }
 
         return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
@@ -70,12 +56,7 @@ export class ProjectService {
                 if (data.attachment) {
                     project.attachments = data.attachment.list;
                 }
-                return {
-                    type: FETCH_PROJECT,
-                    payload: {
-                        project: <Project>project
-                    }
-                };
+                return <Project>project;
             });
     }
 

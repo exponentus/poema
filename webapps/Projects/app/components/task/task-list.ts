@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { UserInputComponent, TagsInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { TaskStreamComponent } from './task-stream';
-import { EXPAND_STREAM, COLLAPSE_STREAM } from '../../reducers/tasks.reducer';
 import { Task } from '../../models';
 
 @Component({

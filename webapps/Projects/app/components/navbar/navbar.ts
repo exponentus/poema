@@ -1,48 +1,39 @@
-import { Component, HostBinding, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, HostBinding, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { IS_MOBILE, IS_DESKTOP, TOGGLE_NAV, TOGGLE_SEARCH, HIDE_NAV } from '../../reducers/environment.reducer';
-import { IAuthedState } from '../../reducers/authed.reducer';
-import { NotificationService, NotificationComponent } from '../../shared/notification';
+import { EnvironmentActions } from '../../actions/environment.actions';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { User } from '../../models/user';
 
 @Component({
     selector: 'navbar',
     template: require('./navbar.html'),
-    directives: [ROUTER_DIRECTIVES, NotificationComponent, DROPDOWN_DIRECTIVES],
-    providers: [NotificationService],
+    directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES],
     pipes: [TranslatePipe]
 })
 
 export class NavbarComponent {
-    private sub: any;
-    loggedUser: User;
+    @Input() user: User;
     HEADER_TITLE: string = 'Projects';
     workspaceUrl: string = '/Workspace/p?id=workspace';
 
-    constructor(private store: Store<any>) {
-        this.sub = this.store.select('authed').subscribe((data: IAuthedState) => {
-            this.loggedUser = data.userProfile;
-        });
-    }
-
-    ngOnDestroy() {
-        this.sub && this.sub.unsubscribe();
-    }
+    constructor(
+        private store: Store<any>,
+        private environmentActions: EnvironmentActions
+    ) { }
 
     searchFocus() {
-        this.store.dispatch({ type: TOGGLE_SEARCH });
+        this.store.dispatch(this.environmentActions.toggleSearch());
     }
 
     searchBlur() {
-        this.store.dispatch({ type: HIDE_NAV });
+        this.store.dispatch(this.environmentActions.hideNav());
     }
 
     toggleNav() {
-        this.store.dispatch({ type: TOGGLE_NAV });
+        this.store.dispatch(this.environmentActions.toggleNav());
     }
 
     logout(event) {
