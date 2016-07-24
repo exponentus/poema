@@ -36,7 +36,6 @@ import { Project, Organization, User, Attachment } from '../../models';
 
 export class ProjectComponent {
     private sub: any;
-    private storeSub: any;
     isReady = false;
     isNew = true;
     isEditable = true;
@@ -83,6 +82,10 @@ export class ProjectComponent {
         });
     }
 
+    ngOnDestroy() {
+        this.sub.unsubscribe();
+    }
+
     loadData() {
         this.projectService.getProjectStatusTypes().subscribe(pst => this.projectStatusTypes = pst);
     }
@@ -117,7 +120,8 @@ export class ProjectComponent {
             },
             error => {
                 this.errorSaveProject(error);
-            });
+            }
+        );
     }
 
     close() {

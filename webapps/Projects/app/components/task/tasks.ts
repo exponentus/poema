@@ -23,14 +23,12 @@ import { ITasksState } from '../../reducers/tasks.reducer';
 })
 
 export class TasksComponent {
-    private storeSub: any;
-    private paramsSub: any;
+    private subs: any = [];
     title: string;
     tasks: Task[];
-    params: any = {};
     meta: any = {};
     filter: any = {};
-    requestProcess: boolean = true;
+    loading: boolean = true;
 
     constructor(
         private store: Store<any>,
@@ -42,16 +40,16 @@ export class TasksComponent {
     ) { }
 
     ngOnInit() {
-        this.storeSub = this.store.select('tasks').subscribe((state: ITasksState) => {
+        this.subs.push(this.store.select(state => state.tasks).subscribe((state: ITasksState) => {
             if (state) {
                 this.tasks = state.tasks;
                 this.meta = state.meta;
                 // this.filter = state.filter
-                this.requestProcess = false;
+                this.loading = state.loading;
             }
-        });
+        }));
 
-        this.paramsSub = this.route.params.subscribe(params => {
+        this.subs.push(this.route.params.subscribe(params => {
             let taskFor = params['for'];
             let projectId = params['projectId'];
             switch (taskFor) {
@@ -65,22 +63,23 @@ export class TasksComponent {
                     this.title = 'tasks';
                     break;
             }
-            //
-            this.params = params;
-            this.loadData(Object.assign({}, this.params, this.filter));
-        });
+
+            this.loadData(Object.assign({}, params, this.filter));
+        }));
     }
 
     ngOnDestroy() {
-        this.storeSub.unsubscribe();
-        this.paramsSub.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
     }
 
     loadData(params) {
-        this.requestProcess = true;
-        this.taskService.fetchTasks(params).subscribe(payload => {
-            this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
-        });
+        this.store.dispatch(this.taskActions.fetchTasks());
+        this.taskService.fetchTasks(params).subscribe(
+            payload => {
+                this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
+            },
+            error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
+        );
     }
 
     goToPage(params) {

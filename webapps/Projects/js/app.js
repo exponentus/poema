@@ -3983,12 +3983,6 @@ webpackJsonp([0],[
 	var EnvironmentActions = (function () {
 	    function EnvironmentActions() {
 	    }
-	    EnvironmentActions.prototype.setIsMobile = function (isMobile) {
-	        return {
-	            type: EnvironmentActions.SET_IS_MOBILE,
-	            payload: isMobile
-	        };
-	    };
 	    EnvironmentActions.prototype.toggleNav = function () {
 	        return {
 	            type: EnvironmentActions.TOGGLE_NAV
@@ -4004,8 +3998,6 @@ webpackJsonp([0],[
 	            type: EnvironmentActions.HIDE_NAV
 	        };
 	    };
-	    EnvironmentActions.SET_IS_MOBILE = 'SET_IS_MOBILE';
-	    EnvironmentActions.IS_DESKTOP = 'IS_DESKTOP';
 	    EnvironmentActions.TOGGLE_NAV = 'TOGGLE_NAV';
 	    EnvironmentActions.TOGGLE_SEARCH = 'TOGGLE_SEARCH';
 	    EnvironmentActions.HIDE_NAV = 'HIDE_NAV';
@@ -5885,7 +5877,6 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var notification_1 = __webpack_require__(376);
 	var pipes_1 = __webpack_require__(493);
 	var pagination_1 = __webpack_require__(601);
 	var staff_service_1 = __webpack_require__(478);
@@ -5893,34 +5884,33 @@ webpackJsonp([0],[
 	var project_list_1 = __webpack_require__(603);
 	var project_actions_1 = __webpack_require__(456);
 	var ProjectsComponent = (function () {
-	    function ProjectsComponent(store, router, projectActions, projectService, staffService, notifyService) {
+	    function ProjectsComponent(store, router, projectActions, projectService, staffService) {
 	        this.store = store;
 	        this.router = router;
 	        this.projectActions = projectActions;
 	        this.projectService = projectService;
 	        this.staffService = staffService;
-	        this.notifyService = notifyService;
 	        this.title = 'projects';
-	        this.params = {};
 	        this.meta = {};
-	        this.requestProcess = true;
+	        this.loading = true;
 	    }
 	    ProjectsComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.storeSub = this.store.select('projects').subscribe(function (data) {
-	            if (data) {
-	                _this.projects = data.projects;
-	                _this.meta = data.meta;
-	                _this.requestProcess = false;
+	        this.subs = this.store.select('projects').subscribe(function (state) {
+	            if (state) {
+	                _this.projects = state.projects;
+	                _this.meta = state.meta;
+	                _this.loading = state.loading;
 	            }
 	        });
 	        this.loadData();
 	    };
 	    ProjectsComponent.prototype.ngOnDestroy = function () {
-	        this.storeSub && this.storeSub.unsubscribe();
+	        this.subs && this.subs.unsubscribe();
 	    };
 	    ProjectsComponent.prototype.loadData = function (params) {
 	        var _this = this;
+	        this.store.dispatch(this.projectActions.fetchProjects());
 	        this.projectService.fetchProjects(params).subscribe(function (data) {
 	            var customerIds = data.projects.map(function (it) { return it.customerId; });
 	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (payload) {
@@ -5931,7 +5921,7 @@ webpackJsonp([0],[
 	                    }
 	                });
 	                _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
-	            });
+	            }, function (error) { return _this.store.dispatch(_this.projectActions.fetchProjectsFailed(error)); });
 	        });
 	    };
 	    ProjectsComponent.prototype.goToPage = function (params) {
@@ -5955,7 +5945,7 @@ webpackJsonp([0],[
 	            ],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService, notification_1.NotificationService])
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService])
 	    ], ProjectsComponent);
 	    return ProjectsComponent;
 	}());
@@ -7091,6 +7081,9 @@ webpackJsonp([0],[
 	            }, function (error) { return _this.handleXhrError(error); });
 	        });
 	    };
+	    ProjectComponent.prototype.ngOnDestroy = function () {
+	        this.sub.unsubscribe();
+	    };
 	    ProjectComponent.prototype.loadData = function () {
 	        var _this = this;
 	        this.projectService.getProjectStatusTypes().subscribe(function (pst) { return _this.projectStatusTypes = pst; });
@@ -7472,21 +7465,21 @@ webpackJsonp([0],[
 	        this.taskActions = taskActions;
 	        this.taskService = taskService;
 	        this.notifyService = notifyService;
-	        this.params = {};
+	        this.subs = [];
 	        this.meta = {};
 	        this.filter = {};
-	        this.requestProcess = true;
+	        this.loading = true;
 	    }
 	    TasksComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.storeSub = this.store.select('tasks').subscribe(function (state) {
+	        this.subs.push(this.store.select(function (state) { return state.tasks; }).subscribe(function (state) {
 	            if (state) {
 	                _this.tasks = state.tasks;
 	                _this.meta = state.meta;
-	                _this.requestProcess = false;
+	                _this.loading = state.loading;
 	            }
-	        });
-	        this.paramsSub = this.route.params.subscribe(function (params) {
+	        }));
+	        this.subs.push(this.route.params.subscribe(function (params) {
 	            var taskFor = params['for'];
 	            var projectId = params['projectId'];
 	            switch (taskFor) {
@@ -7500,20 +7493,18 @@ webpackJsonp([0],[
 	                    _this.title = 'tasks';
 	                    break;
 	            }
-	            _this.params = params;
-	            _this.loadData(Object.assign({}, _this.params, _this.filter));
-	        });
+	            _this.loadData(Object.assign({}, params, _this.filter));
+	        }));
 	    };
 	    TasksComponent.prototype.ngOnDestroy = function () {
-	        this.storeSub.unsubscribe();
-	        this.paramsSub.unsubscribe();
+	        this.subs.map(function (s) { return s.unsubscribe(); });
 	    };
 	    TasksComponent.prototype.loadData = function (params) {
 	        var _this = this;
-	        this.requestProcess = true;
+	        this.store.dispatch(this.taskActions.fetchTasks());
 	        this.taskService.fetchTasks(params).subscribe(function (payload) {
 	            _this.store.dispatch(_this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
-	        });
+	        }, function (error) { return _this.store.dispatch(_this.taskActions.fetchTasksFailed(error)); });
 	    };
 	    TasksComponent.prototype.goToPage = function (params) {
 	        this.loadData(Object.assign({}, params, this.filter));
@@ -7795,7 +7786,7 @@ webpackJsonp([0],[
 /* 625 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"requestProcess\">\r\n    <task-list [tasks]=\"tasks\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
+	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"loading\">\r\n    <task-list [tasks]=\"tasks\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ },
 /* 626 */
@@ -7846,6 +7837,7 @@ webpackJsonp([0],[
 	        this.taskService = taskService;
 	        this.referenceService = referenceService;
 	        this.notifyService = notifyService;
+	        this.subs = [];
 	        this.isReady = false;
 	        this.isNew = true;
 	        this.isEditable = true;
@@ -7865,7 +7857,7 @@ webpackJsonp([0],[
 	        this.showRequest = false;
 	        this.hasUnResolvedRequest = true;
 	        this.hasAcceptedRequestResolution = false;
-	        this.store.select('task').subscribe(function (state) {
+	        this.subs.push(this.store.select('task').subscribe(function (state) {
 	            _this.comments = state.comments;
 	            _this.requests = state.requests;
 	            if (!_this.requests) {
@@ -7881,7 +7873,7 @@ webpackJsonp([0],[
 	                    }
 	                });
 	            }
-	        });
+	        }));
 	        this.form = formBuilder.group({
 	            title: [''],
 	            projectId: [''],
@@ -7898,7 +7890,7 @@ webpackJsonp([0],[
 	    }
 	    TaskComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.sub = this.route.params.subscribe(function (params) {
+	        this.subs.push(this.route.params.subscribe(function (params) {
 	            _this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new');
 	            _this.isSubtask = params['taskId'] && params['new'] === 'new';
 	            _this.taskService.fetchTaskById(params['taskId']).subscribe(function (task) {
@@ -7924,12 +7916,13 @@ webpackJsonp([0],[
 	                }
 	                _this.isReady = true;
 	            }, function (errorResponse) { return _this.handleXhrError(errorResponse); });
-	        });
+	        }));
 	        this.taskService.getTaskStatusTypes().subscribe(function (tst) { return _this.taskStatusTypes = tst; });
 	        this.taskService.getTaskPriorityTypes().subscribe(function (tpt) { return _this.taskPriorityTypes = tpt; });
 	    };
 	    TaskComponent.prototype.ngOnDestroy = function () {
 	        this.store.dispatch({ type: actions_1.TaskActions.TASK_UNLOAD });
+	        this.subs.map(function (s) { return s.unsubscribe(); });
 	    };
 	    TaskComponent.prototype.getTitle = function () {
 	        if (this.isNew && this.isSubtask) {
@@ -8051,6 +8044,9 @@ webpackJsonp([0],[
 	    };
 	    TaskComponent.prototype.canSaveTask = function () {
 	        return true;
+	    };
+	    TaskComponent.prototype.canCompleteTask = function () {
+	        return !this.isNew && this.task.status != 'FINISHED';
 	    };
 	    TaskComponent.prototype.canRequestAction = function () {
 	        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest && !this.hasAcceptedRequestResolution;
@@ -8564,7 +8560,7 @@ webpackJsonp([0],[
 /* 634 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" [ngFormModel]=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">\r\n                {{parentTask.title}}\r\n            </a>\r\n            <div>\r\n                {{getTitle() | translate}}\r\n                <small class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</small>\r\n            </div>\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!form.valid\" (click)=\"saveTask()\">\r\n                <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button *ngIf=\"!isNew && FEATURE_FLAGS.subTask\" class=\"btn\" type=\"button\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canSaveTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew\" dropdown class=\"buttons\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_title' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.title.valid\">\r\n                            <input class=\"span8\" [(ngModel)]=\"task.title\" ngControl=\"title\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'project' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.projectId.valid\">\r\n                            <div class=\"span8\">\r\n                                <project-input [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                            </div>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.projectId.valid || form.controls.projectId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_type' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.taskTypeId.valid\">\r\n                            <div class=\"span8\">\r\n                                <task-type-input [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'priority' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.priority.valid\">\r\n                            <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                            <div [hidden]=\"form.controls.priority.valid || form.controls.priority.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'assignee_user' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.assigneeUserId.valid\">\r\n                            <div class=\"span8\">\r\n                                <user-input [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'start_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" ngControl=\"startDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'due_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" ngControl=\"dueDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'tags' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.tagIds.valid\">\r\n                            <div class=\"span8\">\r\n                                <tags-input [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'body' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.body.valid\">\r\n                            <div class=\"span8\">\r\n                                <markdown-editor [markdown]=\"task.body || ''\" [editable]=\"isEditable\" updateTimeout=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n                <attachments editable=\"true\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasSubTasks()\" class=\"tab-pane\" tabTitle=\"{{'subtasks' | translate}}\" (select)=\"loadSubtasks()\">\r\n                <task-list [tasks]=\"subTasks\"></task-list>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && FEATURE_FLAGS.comments\" class=\"tab-pane\" tabTitle=\"{{'comments' | translate}}\" (select)=\"loadComments()\">\r\n                <comments [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasRequests()\" class=\"tab-pane\" tabTitle=\"{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}\" (select)=\"loadRequests()\">\r\n                <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n<request (send)=\"requestSendEventHandler($event)\"></request>\r\n"
+	module.exports = "<form class=\"form\" [ngFormModel]=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">\r\n                {{parentTask.title}}\r\n            </a>\r\n            <div>\r\n                {{getTitle() | translate}}\r\n                <small class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</small>\r\n            </div>\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!form.valid\" (click)=\"saveTask()\">\r\n                <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button *ngIf=\"!isNew && FEATURE_FLAGS.subTask\" class=\"btn\" type=\"button\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canCompleteTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew\" dropdown class=\"buttons\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_title' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.title.valid\">\r\n                            <input class=\"span8\" [(ngModel)]=\"task.title\" ngControl=\"title\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'project' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.projectId.valid\">\r\n                            <div class=\"span8\">\r\n                                <project-input [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                            </div>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.projectId.valid || form.controls.projectId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                        <div class=\"control-label\">\r\n                            {{'task_type' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.taskTypeId.valid\">\r\n                            <div class=\"span8\">\r\n                                <task-type-input [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'priority' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.priority.valid\">\r\n                            <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                            <div [hidden]=\"form.controls.priority.valid || form.controls.priority.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'assignee_user' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.assigneeUserId.valid\">\r\n                            <div class=\"span8\">\r\n                                <user-input [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                            </div>\r\n                            <div [hidden]=\"form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine\" class=\"error-message\">\r\n                                {{'required' | translate}}\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'start_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" ngControl=\"startDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'due_date' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" ngControl=\"dueDate\" [disabled]=\"!isEditable\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'tags' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.tagIds.valid\">\r\n                            <div class=\"span8\">\r\n                                <tags-input [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'body' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"!form.controls.body.valid\">\r\n                            <div class=\"span8\">\r\n                                <markdown-editor [markdown]=\"task.body || ''\" [editable]=\"isEditable\" updateTimeout=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                            </div>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n                <attachments editable=\"true\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasSubTasks()\" class=\"tab-pane\" tabTitle=\"{{'subtasks' | translate}}\" (select)=\"loadSubtasks()\">\r\n                <task-list [tasks]=\"subTasks\"></task-list>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && FEATURE_FLAGS.comments\" class=\"tab-pane\" tabTitle=\"{{'comments' | translate}}\" (select)=\"loadComments()\">\r\n                <comments [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n            </tab>\r\n            <tab *ngIf=\"!isNew && hasRequests()\" class=\"tab-pane\" tabTitle=\"{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}\" (select)=\"loadRequests()\">\r\n                <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n<request (send)=\"requestSendEventHandler($event)\"></request>\r\n"
 
 /***/ },
 /* 635 */
@@ -8669,7 +8665,7 @@ webpackJsonp([0],[
 /* 636 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} {{user.name}}\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" [(ngModel)]=\"user.login\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" [(ngModel)]=\"user.pwd\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" [(ngModel)]=\"user.pwd_confirm\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"email\" class=\"span4\" [(ngModel)]=\"user.email\" ngControl=\"email\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
+	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} {{user.name}}\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" [(ngModel)]=\"user.login\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" [(ngModel)]=\"user.pwd\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" [(ngModel)]=\"user.pwd_confirm\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"email\" class=\"span4\" [(ngModel)]=\"user.email\" ngControl=\"email\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
 
 /***/ },
 /* 637 */
@@ -8926,10 +8922,6 @@ webpackJsonp([0],[
 	    if (state === void 0) { state = initialState; }
 	    var type = _a.type, payload = _a.payload;
 	    switch (type) {
-	        case environment_actions_1.EnvironmentActions.SET_IS_MOBILE:
-	            return Object.assign({}, state, {
-	                isMobile: payload
-	            });
 	        case environment_actions_1.EnvironmentActions.TOGGLE_NAV:
 	            return Object.assign({}, state, {
 	                isNavOpen: !state.isNavOpen

@@ -26,7 +26,7 @@
             <button *ngIf="!isNew && FEATURE_FLAGS.subTask" class="btn" type="button" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
             </button>
-            <button class="btn" type="button" *ngIf="canSaveTask()" (click)="completeTask()">
+            <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
                 <span>{{'complete_task' | translate}}</span>
             </button>
             <div *ngIf="!isNew" dropdown class="buttons">

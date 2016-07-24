@@ -6,7 +6,6 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
 import projects.model.Project;
-import projects.model.constants.ProjectStatusType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -24,43 +23,6 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<Project> findProjectsByStatus(ProjectStatusType status, int pageNum, int pageSize) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            CriteriaQuery<Project> cq = cb.createQuery(Project.class);
-            Root<Project> c = cq.from(Project.class);
-            cq.select(c);
-            countCq.select(cb.count(c));
-
-            Predicate condition = cb.equal(c.get("status"), status);
-            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                condition = cb.and(c.get("readers").in(user.getId()), condition);
-            }
-            cq.orderBy(cb.asc(c.get("name")));
-            cq.where(condition);
-
-            Query query = em.createQuery(countCq);
-            long count = (long) query.getSingleResult();
-            int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-            if (pageNum == 0) {
-                pageNum = maxPage;
-            }
-            int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-
-            TypedQuery<Project> typedQuery = em.createQuery(cq);
-            typedQuery.setFirstResult(firstRec);
-            typedQuery.setMaxResults(pageSize);
-
-            List<Project> result = typedQuery.getResultList();
-
-            return new ViewPage<>(result, count, maxPage, pageNum);
-        } finally {
-            em.close();
-        }
-    }
-
     public ViewPage<Project> findProjectsAccessible(int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -72,12 +34,13 @@ public class ProjectDAO extends DAO<Project, UUID> {
             countCq.select(cb.count(c));
 
             Predicate condition = null;
-//            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-//                condition = cb.and(c.get("readers").in(user.getId()));
-//            }
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+                condition = cb.and(c.get("readers").in(user.getId()));
+            }
             cq.orderBy(cb.asc(c.get("name")));
             if (condition != null) {
                 cq.where(condition);
+                countCq.where(condition);
             }
 
             Query query = em.createQuery(countCq);

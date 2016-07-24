@@ -3,7 +3,6 @@ import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { NotificationService } from '../../shared/notification';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { PaginationComponent } from '../../shared/pagination';
 import { StaffService } from '../../services/staff.service';
@@ -27,51 +26,52 @@ import { IProjectsState } from '../../reducers/projects.reducer';
 })
 
 export class ProjectsComponent {
-    private storeSub: any;
+    private subs: any;
 
     title = 'projects';
     projects: Project[];
-    params: any = {};
     meta: any = {};
-    requestProcess: boolean = true;
+    loading: boolean = true;
 
     constructor(
         private store: Store<any>,
         private router: Router,
         private projectActions: ProjectActions,
         private projectService: ProjectService,
-        private staffService: StaffService,
-        private notifyService: NotificationService
+        private staffService: StaffService
     ) { }
 
     ngOnInit() {
-        this.storeSub = this.store.select('projects').subscribe((data: IProjectsState) => {
-            if (data) {
-                this.projects = data.projects;
-                this.meta = data.meta;
-                this.requestProcess = false;
+        this.subs = this.store.select('projects').subscribe((state: IProjectsState) => {
+            if (state) {
+                this.projects = state.projects;
+                this.meta = state.meta;
+                this.loading = state.loading;
             }
         });
-
         this.loadData();
     }
 
     ngOnDestroy() {
-        this.storeSub && this.storeSub.unsubscribe();
+        this.subs && this.subs.unsubscribe();
     }
 
     loadData(params?) {
+        this.store.dispatch(this.projectActions.fetchProjects());
         this.projectService.fetchProjects(params).subscribe(data => {
             let customerIds = data.projects.map(it => it.customerId);
-            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(payload => {
-                let orgs = payload.organizations;
-                data.projects.map(p => {
-                    if (p.customerId) {
-                        p.customer = orgs.filter(org => org.id == p.customerId)[0];
-                    }
-                });
-                this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
-            });
+            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(
+                payload => {
+                    let orgs = payload.organizations;
+                    data.projects.map(p => {
+                        if (p.customerId) {
+                            p.customer = orgs.filter(org => org.id == p.customerId)[0];
+                        }
+                    });
+                    this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
+                },
+                error => this.store.dispatch(this.projectActions.fetchProjectsFailed(error))
+            );
         });
     }
 

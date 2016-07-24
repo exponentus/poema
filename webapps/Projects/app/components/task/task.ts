@@ -49,7 +49,7 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
 })
 
 export class TaskComponent {
-    private sub: any;
+    private subs: any = [];
     isReady = false;
     isNew = true;
     isEditable = true;
@@ -91,7 +91,7 @@ export class TaskComponent {
         private referenceService: ReferenceService,
         private notifyService: NotificationService
     ) {
-        this.store.select('task').subscribe((state: ITaskState) => {
+        this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
             this.comments = state.comments;
             this.requests = state.requests;
 
@@ -107,7 +107,7 @@ export class TaskComponent {
                     }
                 });
             }
-        });
+        }));
 
         this.form = formBuilder.group({
             title: [''],
@@ -125,7 +125,7 @@ export class TaskComponent {
     }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
+        this.subs.push(this.route.params.subscribe(params => {
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
 
@@ -155,7 +155,7 @@ export class TaskComponent {
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
-        });
+        }));
 
         this.taskService.getTaskStatusTypes().subscribe(tst => this.taskStatusTypes = tst);
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
@@ -163,6 +163,7 @@ export class TaskComponent {
 
     ngOnDestroy() {
         this.store.dispatch({ type: TaskActions.TASK_UNLOAD });
+        this.subs.map(s => s.unsubscribe());
     }
 
     getTitle() {
@@ -302,6 +303,10 @@ export class TaskComponent {
     // check rights
     canSaveTask() {
         return true;
+    }
+
+    canCompleteTask() {
+        return !this.isNew && this.task.status != 'FINISHED';
     }
 
     canRequestAction() {

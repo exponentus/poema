@@ -14,10 +14,6 @@ const initialState: IEnvironmentState = {
 
 export const environmentReducer = (state = initialState, {type, payload}): IEnvironmentState => {
     switch (type) {
-        case EnvironmentActions.SET_IS_MOBILE:
-            return Object.assign({}, state, {
-                isMobile: payload
-            });
         case EnvironmentActions.TOGGLE_NAV:
             return Object.assign({}, state, {
                 isNavOpen: !state.isNavOpen

@@ -106,7 +106,7 @@
                         </div>
                         <div class="controls">
                             <ul class="input-placeholder list-style-none">
-                                <li *ngFor="let role of user.roles">{{role}}</li>
+                                <li *ngFor="let role of user.roles">{{role.localizedName[language]}}</li>
                             </ul>
                         </div>
                     </div>

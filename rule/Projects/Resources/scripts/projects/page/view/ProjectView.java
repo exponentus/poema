@@ -8,7 +8,6 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import projects.dao.ProjectDAO;
 import projects.model.Project;
-import projects.model.constants.ProjectStatusType;
 
 public class ProjectView extends _DoPage {
 
@@ -17,13 +16,7 @@ public class ProjectView extends _DoPage {
         ProjectDAO projectDAO = new ProjectDAO(session);
         int pageSize = session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
-        String statusName = formData.getValueSilently("projectStatus");
-        ViewPage<Project> vp;
-        if (statusName.isEmpty()) {
-            vp = projectDAO.findProjectsAccessible(pageNum, pageSize);
-        } else {
-            vp = projectDAO.findProjectsByStatus(ProjectStatusType.valueOf(statusName), pageNum, pageSize);
-        }
+        ViewPage<Project> vp = projectDAO.findProjectsAccessible(pageNum, pageSize);
         addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
     }
 
