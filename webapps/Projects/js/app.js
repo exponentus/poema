@@ -836,20 +836,21 @@ webpackJsonp([0],[
 	        this.referenceService = referenceService;
 	        this.staffService = staffService;
 	        this.translate = translate;
+	        this.subs = [];
 	        this.isReady = false;
 	        this.loggedUser = new models_1.User();
 	        this.HEADER_TITLE = 'Projects';
 	        this.isNavCollapsed = false;
 	        this.isSearchOpen = false;
 	        this.isMobileDevice = false;
-	        this.store.select('authed').subscribe(function (data) {
+	        this.subs.push(this.store.select('authed').subscribe(function (data) {
 	            _this.loggedUser = data.userProfile;
-	        });
-	        this.sub = this.store.select('reference');
-	        this.subEnv = this.store.select('environment').subscribe(function (state) {
+	        }));
+	        this.subs.push(this.store.select('reference'));
+	        this.subs.push(this.store.select('environment').subscribe(function (state) {
 	            _this.isSearchOpen = state.isSearchOpen;
 	            _this.isNavCollapsed = !state.isNavOpen;
-	        });
+	        }));
 	        this.appService.fetchUserProfile().subscribe(function (data) {
 	            _this.store.dispatch(_this.appActions.fetchUserProfileFulfilled(data));
 	            _this.isReady = true;
@@ -900,8 +901,7 @@ webpackJsonp([0],[
 	        this.translate.get('brand').subscribe(function (value) { return _this.HEADER_TITLE = value; });
 	    };
 	    AppComponent.prototype.ngOnDestroy = function () {
-	        this.sub && this.sub.unsubscribe();
-	        this.subEnv && this.subEnv.unsubscribe();
+	        this.subs.map(function (s) { return s.unsubscribe(); });
 	    };
 	    AppComponent.prototype.hideNav = function (event) {
 	        this.store.dispatch({ type: actions_1.EnvironmentActions.HIDE_NAV });
@@ -5575,13 +5575,13 @@ webpackJsonp([0],[
 	    }
 	    NavComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.store.select('projects').subscribe(function (state) {
+	        this.sub = this.store.select('projects').subscribe(function (state) {
 	            _this.projects = state.projects;
 	        });
 	        this.loadNavProjects();
 	    };
 	    NavComponent.prototype.ngOnDestroy = function () {
-	        this.storeSub && this.storeSub.unsubscribe();
+	        this.sub.unsubscribe();
 	    };
 	    NavComponent.prototype.loadNavProjects = function () {
 	        var _this = this;
@@ -5630,7 +5630,7 @@ webpackJsonp([0],[
 	var user_profile_1 = __webpack_require__(635);
 	var login_1 = __webpack_require__(637);
 	var routes = [
-	    { path: '', component: dashboard_1.DashboardComponent, canActivate: [auth_guard_1.AuthGuard] },
+	    { path: '', component: tasks_1.TasksComponent, canActivate: [auth_guard_1.AuthGuard] },
 	    { path: 'dashboard', component: dashboard_1.DashboardComponent, canActivate: [auth_guard_1.AuthGuard] },
 	    { path: 'projects/:projectId', component: project_1.ProjectComponent, canActivate: [auth_guard_1.AuthGuard] },
 	    { path: 'projects', component: projects_1.ProjectsComponent, canActivate: [auth_guard_1.AuthGuard] },
@@ -5641,7 +5641,7 @@ webpackJsonp([0],[
 	    { path: 'task/:taskId', component: task_1.TaskComponent, canActivate: [auth_guard_1.AuthGuard] },
 	    { path: 'user-profile', component: user_profile_1.UserProfileComponent, canActivate: [auth_guard_1.AuthGuard] },
 	    { path: 'login', component: login_1.LoginComponent },
-	    { path: '**', component: dashboard_1.DashboardComponent, canActivate: [auth_guard_1.AuthGuard] }
+	    { path: '**', component: tasks_1.TasksComponent, canActivate: [auth_guard_1.AuthGuard] }
 	];
 	exports.APP_ROUTER_PROVIDERS = [
 	    router_1.provideRouter(routes),
@@ -8327,11 +8327,12 @@ webpackJsonp([0],[
 	        this.notifyService = notifyService;
 	        this.taskService = taskService;
 	        this.send = new core_1.EventEmitter();
+	        this.subs = [];
 	        this.isOpen = false;
-	        this.refSub = store.select('reference').subscribe(function (state) {
+	        this.subs.push(store.select('reference').subscribe(function (state) {
 	            _this.requestTypes = state.requestTypes;
-	        });
-	        this.taskSub = store.select('task').subscribe(function (state) {
+	        }));
+	        this.subs.push(store.select('task').subscribe(function (state) {
 	            if (state) {
 	                _this.request = state.request || new models_1.Request();
 	                _this.isOpen = state.showRequest;
@@ -8342,11 +8343,11 @@ webpackJsonp([0],[
 	                    }
 	                }
 	            }
-	        });
+	        }));
 	    }
 	    RequestComponent.prototype.ngOnInit = function () { };
 	    RequestComponent.prototype.ngOnDestroy = function () {
-	        this.taskSub.unsubscribe();
+	        this.subs.map(function (s) { return s.unsubscribe(); });
 	    };
 	    RequestComponent.prototype.cancel = function () {
 	        this.store.dispatch({ type: actions_1.TaskActions.TASK_REQUEST_CANCEL });
@@ -8610,7 +8611,7 @@ webpackJsonp([0],[
 	        if (ck) {
 	            this.language = ck[2];
 	        }
-	        this.store.select('authed').subscribe(function (data) {
+	        this.sub = this.store.select('authed').subscribe(function (data) {
 	            _this.user = data.userProfile;
 	            _this.pageSize = data.pageSize;
 	            _this.languages = data.languages;
@@ -8622,6 +8623,9 @@ webpackJsonp([0],[
 	            email: []
 	        });
 	    }
+	    UserProfileComponent.prototype.ngOnDestroy = function () {
+	        this.sub.unsubscribe();
+	    };
 	    UserProfileComponent.prototype.toggleChangePassword = function () {
 	        this.changePassword = !this.changePassword;
 	    };

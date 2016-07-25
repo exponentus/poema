@@ -50,8 +50,7 @@ import { Task, Request, RequestType, Attachment } from '../../models';
 
 export class RequestComponent {
     @Output() send = new EventEmitter<any>();
-    private taskSub: any;
-    private refSub: any;
+    private subs: any = [];
 
     private request: Request;
     private isOpen = false;
@@ -65,11 +64,11 @@ export class RequestComponent {
         private notifyService: NotificationService,
         private taskService: TaskService
     ) {
-        this.refSub = store.select('reference').subscribe((state: IReferenceState) => {
+        this.subs.push(store.select('reference').subscribe((state: IReferenceState) => {
             this.requestTypes = state.requestTypes;
-        });
+        }));
 
-        this.taskSub = store.select('task').subscribe((state: ITaskState) => {
+        this.subs.push(store.select('task').subscribe((state: ITaskState) => {
             if (state) {
                 this.request = state.request || new Request();
                 this.isOpen = state.showRequest;
@@ -82,13 +81,13 @@ export class RequestComponent {
                     }
                 }
             }
-        });
+        }));
     }
 
     ngOnInit() { }
 
     ngOnDestroy() {
-        this.taskSub.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
     }
 
     cancel() {

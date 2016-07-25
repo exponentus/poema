@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
@@ -27,6 +27,7 @@ const HEADERS = new Headers({
 })
 
 export class UserProfileComponent {
+    private sub: any;
     user: User = new User();
     form: ControlGroup;
     changePassword: boolean = false;
@@ -48,7 +49,7 @@ export class UserProfileComponent {
         if (ck) {
             this.language = ck[2];
         }
-        this.store.select('authed').subscribe((data: IAuthedState) => {
+        this.sub = this.store.select('authed').subscribe((data: IAuthedState) => {
             this.user = data.userProfile;
             this.pageSize = data.pageSize;
             this.languages = data.languages;
@@ -60,6 +61,10 @@ export class UserProfileComponent {
             pwd_confirm: [],
             email: []
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     toggleChangePassword() {

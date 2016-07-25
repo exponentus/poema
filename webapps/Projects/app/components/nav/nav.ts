@@ -17,7 +17,7 @@ import { Project } from '../../models/project';
 })
 
 export class NavComponent {
-    private storeSub: Subscription;
+    private sub: Subscription;
     private projects: Project[];
 
     constructor(
@@ -27,14 +27,14 @@ export class NavComponent {
     ) { }
 
     ngOnInit() {
-        this.store.select('projects').subscribe((state: IProjectsState) => {
+        this.sub = this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
         });
         this.loadNavProjects();
     }
 
     ngOnDestroy() {
-        this.storeSub && this.storeSub.unsubscribe();
+        this.sub.unsubscribe();
     }
 
     loadNavProjects() {

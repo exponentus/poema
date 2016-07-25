@@ -14,7 +14,7 @@ public class ProjectView extends _DoPage {
     @Override
     public void doGET(_Session session, _WebFormData formData) {
         ProjectDAO projectDAO = new ProjectDAO(session);
-        int pageSize = session.pageSize;
+        int pageSize = 200; // session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
         ViewPage<Project> vp = projectDAO.findProjectsAccessible(pageNum, pageSize);
         addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));

@@ -22,8 +22,7 @@ import { Tag, User } from '../../models';
 })
 
 export class AppComponent {
-    private sub: any;
-    private subEnv: any;
+    private subs: any = [];
     isReady: boolean = false;
     loggedUser: User = new User();
     language: any;
@@ -47,16 +46,16 @@ export class AppComponent {
         private staffService: StaffService,
         public translate: TranslateService
     ) {
-        this.store.select('authed').subscribe((data: IAuthedState) => {
+        this.subs.push(this.store.select('authed').subscribe((data: IAuthedState) => {
             this.loggedUser = data.userProfile;
-        });
+        }));
 
-        this.sub = this.store.select('reference');
+        this.subs.push(this.store.select('reference'));
 
-        this.subEnv = this.store.select('environment').subscribe((state: IEnvironmentState) => {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;
-        });
+        }));
 
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
@@ -99,8 +98,7 @@ export class AppComponent {
     }
 
     ngOnDestroy() {
-        this.sub && this.sub.unsubscribe();
-        this.subEnv && this.subEnv.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
     }
 
     hideNav(event) {
