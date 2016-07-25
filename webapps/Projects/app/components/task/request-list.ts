@@ -4,34 +4,34 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { MarkedPipe } from '../../shared/markdown';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { AttachmentsComponent } from '../attachment/attachments';
+import { AppService } from '../../services';
 import { Request } from '../../models';
 
 @Component({
     selector: 'request-list',
     template: `
         <ul class="request-list">
-            <li class="request-list__header">
-                <div class="request__details">
-                    <div class="request__type">{{'request_type' | translate}}</div>
-                    <div class="request__comment">{{'comment' | translate}}</div>
-                    <div class="request__time">{{'request_time' | translate}}</div>
-                </div>
-            </li>
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
-                    <div class="request__details">
-                        <div class="request__type">{{request.requestType.name}}</div>
-                        <div class="request__comment">{{request.comment}}</div>
+                    <header class="request__header">
+                        <div class="request__type">{{request.requestType.localizedName[appService.language]}}</div>
                         <div class="request__time">{{request.regDate}}</div>
-                        <div class="request__attachments" *ngIf="request.attachments">
+                    </header>
+                    <section class="request__content">
+                        <div class="request__comment">{{request.comment}}</div>
+                        <div class="request__attachments" *ngIf="request.attachments.length">
                             <attachments [model]="request"></attachments>
                         </div>
-                    </div>
-                    <div class="request__resol">
-                        <div class="request__resolution">
-                            <span *ngIf="request.resolution == 'ACCEPT'">{{'accepted' | text:'L' | translate}}</span>
-                            <span *ngIf="request.resolution == 'DECLINE'">{{'declined' | text:'L' | translate}}</span>
-                        </div>
+                    </section>
+                    <div class="request__resolution">
+                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPT'">
+                            <i class="fa fa-check"></i>
+                            {{'accepted' | text:'L' | translate}}
+                        </span>
+                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINE'">
+                            <i class="fa fa-times"></i>
+                            {{'declined' | text:'L' | translate}}
+                        </span>
                         <div class="request__resolution_time">{{request.resolutionTime}}</div>
                         <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">
                             <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="doAccept(request)">
@@ -54,8 +54,9 @@ export class RequestListComponent {
     @Input() requests: Request[];
     @Output() accept = new EventEmitter<any>();
     @Output() decline = new EventEmitter<any>();
-
     private disabled = false;
+
+    constructor(private appService: AppService) { }
 
     doAccept(request: Request) {
         this.disabled = true;

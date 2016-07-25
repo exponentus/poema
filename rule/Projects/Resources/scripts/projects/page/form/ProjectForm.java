@@ -20,9 +20,7 @@ import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import staff.dao.OrganizationDAO;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProjectForm extends _DoForm {
@@ -104,22 +102,38 @@ public class ProjectForm extends _DoForm {
             IUser<Long> programmerUser = userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0));
             IUser<Long> testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
 
+            List<IUser<Long>> observerUsers = new ArrayList<>();
+            List<Long> ouIds = Arrays.stream(formData.getValueSilently("observerUserIds", "0").split(",")).map(Long::valueOf).collect(Collectors.toList());
+            for (long uid : ouIds) {
+                IUser<Long> ou = userDAO.findById(uid);
+                observerUsers.add(ou);
+            }
+
             project.setName(formData.getValue("name"));
             project.setCustomer(organizationDAO.findById(formData.getValue("customerId")));
             project.setManager(managerUser.getId());
             project.setProgrammer(programmerUser.getId());
             project.setTester(testerUser.getId());
-            project.setObservers(
-                    Arrays.stream(formData.getValueSilently("observerUserIds", "0").split(",")).map(Long::valueOf).collect(Collectors.toList()));
+            project.setObservers(ouIds);
             project.setComment(formData.getValue("comment"));
             project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
             project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
             project.setAttachments(getActualAttachments(project.getAttachments()));
 
+            Set<Long> readers = new HashSet<>();
+            readers.add(managerUser.getId());
+            readers.add(programmerUser.getId());
+            readers.add(testerUser.getId());
+            readers.add(session.getUser().getId());
+            readers.addAll(ouIds);
+
+            project.setReaders(readers);
+
             if (isNew) {
                 IUser<Long> user = session.getUser();
                 project.addReaderEditor(user);
                 project = dao.add(project);
+
                 LanguageCode lang = session.getLang();
                 List<String> recipients = new ArrayList<>();
                 recipients.add(managerUser.getEmail());
@@ -131,7 +145,7 @@ public class ProjectForm extends _DoForm {
                 memo.addVar("manager", managerUser.getUserName());
                 memo.addVar("programmer", programmerUser.getUserName());
                 memo.addVar("tester", testerUser.getUserName());
-                memo.addVar("$projectName$", project.getName());
+                memo.addVar("projectName", project.getName());
                 memo.addVar("author", project.getAuthor().getUserName());
                 memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
                 if (!ma.sendMеssage(memo, recipients)) {

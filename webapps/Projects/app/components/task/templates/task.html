@@ -20,7 +20,7 @@
             <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
             </button>
-            <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
+            <button class="btn" type="button" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
             <button *ngIf="!isNew && FEATURE_FLAGS.subTask" class="btn" type="button" (click)="addSubtask($event)">
