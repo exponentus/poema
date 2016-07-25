@@ -45,7 +45,7 @@ export class Notification {
         }
     }
 
-    remove(delay: any) {
+    remove(delay: any = 0) {
         this.delay = delay;
 
         if (delay === 'click') {

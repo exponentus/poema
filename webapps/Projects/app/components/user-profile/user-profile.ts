@@ -5,6 +5,7 @@ import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from 
 import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
+import { NotificationService } from '../../shared/notification';
 import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { KeysPipe } from '../../pipes/keys.pipe';
 import { AppService } from '../../services/app.service';
@@ -35,15 +36,17 @@ export class UserProfileComponent {
     language: string = 'RUS';
     languages: any;
     pageSizes = [10, 20, 30, 40, 50];
+    errors = {};
 
     constructor(
         private store: Store<any>,
         private http: Http,
         private router: Router,
         private formBuilder: FormBuilder,
-        private ng2TranslateService: TranslateService,
+        private ng2Translate: TranslateService,
         private appService: AppService,
-        private translateService: translateService
+        private translateService: translateService,
+        private notifyService: NotificationService
     ) {
         let ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
         if (ck) {
@@ -59,7 +62,7 @@ export class UserProfileComponent {
                 pwd: [],
                 pwd_new: [],
                 pwd_confirm: [],
-                email: []
+                email: [this.user.email]
             });
         });
     }
@@ -73,7 +76,23 @@ export class UserProfileComponent {
     }
 
     updateUserProfile() {
-        this.appService.updateUserProfile(this.form.value).subscribe(data => console.log(data));
+        let noty = this.notifyService.process(this.ng2Translate.instant('wait_while_document_save')).show();
+        this.appService.updateUserProfile(this.form.value).subscribe(
+            data => {
+                this.errors = [];
+                noty.remove();
+                this.router.navigate(['/tasks']);
+            },
+            error => {
+                this.errors = [];
+                noty.remove()
+                if (error.validation) {
+                    for (let err of error.validation.errors) {
+                        this.errors[err.field] = err.message;
+                    }
+                }
+            }
+        );
     }
 
     changeLang($event) {
@@ -82,8 +101,8 @@ export class UserProfileComponent {
         return this.http.post(url, {}, { headers: HEADERS })
             .map(response => response.json())
             .subscribe(data => {
-                this.ng2TranslateService.reloadLang(langCode).subscribe(r => {
-                    this.ng2TranslateService.use(langCode);
+                this.ng2Translate.reloadLang(langCode).subscribe(r => {
+                    this.ng2Translate.use(langCode);
                 });
                 createCookie('lang', langCode, 365);
                 window.location.reload();

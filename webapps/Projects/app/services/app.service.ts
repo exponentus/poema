@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 import { User } from '../models';
-import { parseResponseObjects, serializeObj } from '../utils/utils';
+import { parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -45,14 +46,9 @@ export class AppService {
     }
 
     updateUserProfile(userForm: any) {
-        return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: HEADERS }).map(
-            response => {
-                return response;
-            },
-            error => {
-                return error;
-            }
-        );
+        return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: HEADERS })
+            .map(response => response.json())
+            .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     logout() {

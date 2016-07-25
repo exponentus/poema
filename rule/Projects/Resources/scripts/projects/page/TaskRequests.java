@@ -34,20 +34,8 @@ public class TaskRequests extends _DoForm {
             return;
         }
 
-        TaskDAO taskDAO = new TaskDAO(session);
-        Task task = taskDAO.findById(taskId);
-        if (task == null) {
-            setBadRequest();
-            return;
-        }
-
-        // check read access
-        // if
-        // (!task.getProject().getEditors().contains(session.getUser().getId())
-        // && !task.getReaders().contains(session.getUser().getId())) {
-        // setBadRequest();
-        // return;
-        // }
+        Task task = new Task();
+        task.setId(UUID.fromString(taskId));
 
         RequestDAO requestDAO = new RequestDAO(session);
         int page = formData.getNumberValueSilently("page", 1);

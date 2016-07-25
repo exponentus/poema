@@ -528,6 +528,7 @@ webpackJsonp([0],[
 	    };
 	    Notification.prototype.remove = function (delay) {
 	        var _this = this;
+	        if (delay === void 0) { delay = 0; }
 	        this.delay = delay;
 	        if (delay === 'click') {
 	        }
@@ -4519,6 +4520,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
+	var Observable_1 = __webpack_require__(38);
 	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -4554,11 +4556,9 @@ webpackJsonp([0],[
 	        });
 	    };
 	    AppService.prototype.updateUserProfile = function (userForm) {
-	        return this.http.post('p?id=userprofile', utils_1.serializeObj(userForm), { headers: HEADERS }).map(function (response) {
-	            return response;
-	        }, function (error) {
-	            return error;
-	        });
+	        return this.http.post('p?id=userprofile', utils_1.serializeObj(userForm), { headers: HEADERS })
+	            .map(function (response) { return response.json(); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
 	    };
 	    AppService.prototype.logout = function () {
 	        return this.http.delete('/');
@@ -7920,6 +7920,7 @@ webpackJsonp([0],[
 	                    });
 	                }
 	                _this.isReady = true;
+	                console.log(_this.task);
 	            }, function (errorResponse) { return _this.handleXhrError(errorResponse); });
 	        }));
 	        this.taskService.getTaskStatusTypes().subscribe(function (tst) { return _this.taskStatusTypes = tst; });
@@ -8588,6 +8589,7 @@ webpackJsonp([0],[
 	var common_1 = __webpack_require__(2);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
+	var notification_1 = __webpack_require__(376);
 	var tabs_1 = __webpack_require__(627);
 	var keys_pipe_1 = __webpack_require__(600);
 	var app_service_1 = __webpack_require__(461);
@@ -8599,19 +8601,21 @@ webpackJsonp([0],[
 	    'Accept': 'application/json'
 	});
 	var UserProfileComponent = (function () {
-	    function UserProfileComponent(store, http, router, formBuilder, ng2TranslateService, appService, translateService) {
+	    function UserProfileComponent(store, http, router, formBuilder, ng2Translate, appService, translateService, notifyService) {
 	        var _this = this;
 	        this.store = store;
 	        this.http = http;
 	        this.router = router;
 	        this.formBuilder = formBuilder;
-	        this.ng2TranslateService = ng2TranslateService;
+	        this.ng2Translate = ng2Translate;
 	        this.appService = appService;
 	        this.translateService = translateService;
+	        this.notifyService = notifyService;
 	        this.user = new user_1.User();
 	        this.changePassword = false;
 	        this.language = 'RUS';
 	        this.pageSizes = [10, 20, 30, 40, 50];
+	        this.errors = {};
 	        var ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
 	        if (ck) {
 	            this.language = ck[2];
@@ -8625,7 +8629,7 @@ webpackJsonp([0],[
 	                pwd: [],
 	                pwd_new: [],
 	                pwd_confirm: [],
-	                email: []
+	                email: [_this.user.email]
 	            });
 	        });
 	    }
@@ -8636,7 +8640,22 @@ webpackJsonp([0],[
 	        this.changePassword = !this.changePassword;
 	    };
 	    UserProfileComponent.prototype.updateUserProfile = function () {
-	        this.appService.updateUserProfile(this.form.value).subscribe(function (data) { return console.log(data); });
+	        var _this = this;
+	        var noty = this.notifyService.process(this.ng2Translate.instant('wait_while_document_save')).show();
+	        this.appService.updateUserProfile(this.form.value).subscribe(function (data) {
+	            _this.errors = [];
+	            noty.remove();
+	            _this.router.navigate(['/tasks']);
+	        }, function (error) {
+	            _this.errors = [];
+	            noty.remove();
+	            if (error.validation) {
+	                for (var _i = 0, _a = error.validation.errors; _i < _a.length; _i++) {
+	                    var err = _a[_i];
+	                    _this.errors[err.field] = err.message;
+	                }
+	            }
+	        });
 	    };
 	    UserProfileComponent.prototype.changeLang = function ($event) {
 	        var _this = this;
@@ -8645,8 +8664,8 @@ webpackJsonp([0],[
 	        return this.http.post(url, {}, { headers: HEADERS })
 	            .map(function (response) { return response.json(); })
 	            .subscribe(function (data) {
-	            _this.ng2TranslateService.reloadLang(langCode).subscribe(function (r) {
-	                _this.ng2TranslateService.use(langCode);
+	            _this.ng2Translate.reloadLang(langCode).subscribe(function (r) {
+	                _this.ng2Translate.use(langCode);
 	            });
 	            utils_1.createCookie('lang', langCode, 365);
 	            window.location.reload();
@@ -8664,7 +8683,7 @@ webpackJsonp([0],[
 	            providers: [common_1.FormBuilder],
 	            pipes: [ng2_translate_1.TranslatePipe, keys_pipe_1.KeysPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, http_1.Http, router_1.Router, common_1.FormBuilder, ng2_translate_1.TranslateService, app_service_1.AppService, translate_service_1.TranslateService])
+	        __metadata('design:paramtypes', [store_1.Store, http_1.Http, router_1.Router, common_1.FormBuilder, ng2_translate_1.TranslateService, app_service_1.AppService, translate_service_1.TranslateService, notification_1.NotificationService])
 	    ], UserProfileComponent);
 	    return UserProfileComponent;
 	}());
@@ -8675,7 +8694,7 @@ webpackJsonp([0],[
 /* 636 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} {{user.name}}\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_new' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" ngControl=\"pwd_new\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"password\" class=\"span4\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"email\" class=\"span4\" ngControl=\"email\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.organization\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.department\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.position\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.roles\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
+	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n            <i class=\"fa fa-chevron-left\"></i>\r\n        </button>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} {{user.name}}\r\n        </h1>\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" (click)=\"close($event)\">\r\n                {{'close' | translate}}\r\n            </button>\r\n        </div>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_new' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_new\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_new\" ngControl=\"pwd_new\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_confirm\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_confirm\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.email\">\r\n                            <input type=\"email\" class=\"span4\" [class.invalid]=\"errors.email\" ngControl=\"email\" />\r\n                            <div class=\"error-message\">{{errors.email | translate}}</div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.organization\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.department\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.position\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.roles\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
 
 /***/ },
 /* 637 */
