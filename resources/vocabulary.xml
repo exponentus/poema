@@ -202,16 +202,6 @@
         <entry lang="ENG">Clear Recycle Bin</entry>
         <entry lang="CHI">清空回收站</entry>
     </sentence>
-    <sentence mode="on" keyword="Старый пароль">
-        <entry lang="KAZ">Ескі құпия сөз</entry>
-        <entry lang="ENG">Old password</entry>
-        <entry lang="CHI">旧密码</entry>
-    </sentence>
-    <sentence mode="on" keyword="Новый пароль">
-        <entry lang="KAZ">Жаңа құпия сөз</entry>
-        <entry lang="ENG">New password</entry>
-        <entry lang="CHI">新密码</entry>
-    </sentence>
     <sentence mode="on" keyword="Группы">
         <entry lang="KAZ">Топтар</entry>
         <entry lang="ENG">Groups</entry>
@@ -331,6 +321,13 @@
         <entry lang="ENG">Password</entry>
         <entry lang="CHI">密码</entry>
     </sentence>
+    <sentence mode="on" keyword="password_new">
+        <entry lang="ENG">New password</entry>
+        <entry lang="RUS">Новый пароль</entry>
+        <entry lang="KAZ">Жаңа құпия сөз</entry>
+        <entry lang="ENG">New password</entry>
+        <entry lang="CHO">新密码</entry>
+    </sentence>
     <sentence mode="on" keyword="password_confirm">
         <entry lang="ENG">Confirm password</entry>
         <entry lang="RUS">Confirm password</entry>
@@ -342,6 +339,10 @@
         <entry lang="RUS">Passwords do not match</entry>
         <entry lang="KAZ">Passwords do not match</entry>
         <entry lang="CHO">Passwords do not match</entry>
+    </sentence>
+    <sentence mode="on" keyword="change_password">
+        <entry lang="RUS">Изменить пароль</entry>
+        <entry lang="ENG">Change password</entry>
     </sentence>
     <sentence mode="on" keyword="Войти">
         <entry lang="KAZ">Кіру</entry>

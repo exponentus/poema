@@ -53,13 +53,14 @@ export class UserProfileComponent {
             this.user = data.userProfile;
             this.pageSize = data.pageSize;
             this.languages = data.languages;
-        });
 
-        this.form = formBuilder.group({
-            login: [],
-            pwd: [],
-            pwd_confirm: [],
-            email: []
+            this.form = formBuilder.group({
+                login: [this.user.name],
+                pwd: [],
+                pwd_new: [],
+                pwd_confirm: [],
+                email: []
+            });
         });
     }
 
@@ -72,7 +73,7 @@ export class UserProfileComponent {
     }
 
     updateUserProfile() {
-        this.appService.updateUserProfile(this.user);
+        this.appService.updateUserProfile(this.form.value).subscribe(data => console.log(data));
     }
 
     changeLang($event) {

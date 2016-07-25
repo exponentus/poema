@@ -116,4 +116,11 @@
         </fieldset>
         <attachments editable="true" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
+    <footer>
+        <div class="record-author" *ngIf="project.authorId">
+            <span>{{'author' | translate}}</span>
+            <user-input [editable]="false" [userIds]="[project.authorId]"></user-input>
+            <time>{{project.regDate}}</time>
+        </div>
+    </footer>
 </form>

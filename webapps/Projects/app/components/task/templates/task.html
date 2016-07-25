@@ -155,5 +155,12 @@
             </tab>
         </tabs>
     </section>
+    <footer>
+        <div class="record-author" *ngIf="task.authorId">
+            <span>{{'author' | translate}}</span>
+            <user-input [editable]="false" [userIds]="[task.authorId]"></user-input>
+            <time>{{task.regDate}}</time>
+        </div>
+    </footer>
 </form>
 <request (send)="requestSendEventHandler($event)"></request>

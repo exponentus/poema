@@ -38,6 +38,7 @@
     <caption name="email"/>
     <caption name="change_password"/>
     <caption name="password"/>
+    <caption name="password_new"/>
     <caption name="password_confirm"/>
     <caption name="password_confirm_not_equals"/>
     <caption name="email"/>
