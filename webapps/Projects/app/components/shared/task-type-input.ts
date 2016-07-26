@@ -2,6 +2,7 @@ import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { LocalizedNamePipe } from '../../pipes';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskType } from '../../models';
@@ -9,12 +10,12 @@ import { TaskType } from '../../models';
 @Component({
     selector: 'task-type-input',
     template: `
-        <span *ngIf="!editable">
-            {{taskType?.name}}
+        <span class="input task-type-input" *ngIf="!editable">
+            {{taskType | localizedName}}
         </span>
         <div dropdown class="select task-type-input" [class.allow-clear]="allowClear" [class.has-selected]="taskType" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
-                <span>{{taskType?.name}}</span>
+                <span>{{taskType | localizedName}}</span>
                 <span class="placeholder">{{placeHolder}}</span>
                 <div class="clear" *ngIf="allowClear && taskType" (click)="clear($event)">
                     <i class="fa fa-times"></i>
@@ -29,14 +30,14 @@ import { TaskType } from '../../models';
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" [class.selected]="taskTypeId == m.id" *ngFor="let m of taskTypes" (click)="onSelect(m)">
-                        {{m.name}}
+                        {{m | localizedName}}
                     </li>
                 </ul>
             </div>
         </div>
     `,
     directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, LocalizedNamePipe]
 })
 
 export class TaskTypeInputComponent {
@@ -50,7 +51,9 @@ export class TaskTypeInputComponent {
     private taskType: any;
     private sub: any;
 
-    constructor(private store: Store<any>) { }
+    constructor(
+        private store: Store<any>
+    ) { }
 
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {

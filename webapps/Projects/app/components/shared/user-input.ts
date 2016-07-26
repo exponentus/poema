@@ -9,7 +9,7 @@ import { User } from '../../models';
 @Component({
     selector: 'user-input',
     template: `
-        <span *ngIf="!editable">
+        <span class="input user-input" *ngIf="!editable">
             <span [class.tag]="multiple" *ngFor="let m of selectedUsers">
                 {{m?.userName || m?.login}}
             </span>

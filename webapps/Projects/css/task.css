@@ -8,3 +8,19 @@
     font-size: .9em;
     padding: 8px;
 }
+
+.record-author .input.user-input {
+    border: 0;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.entry-fields span.input {
+    background: transparent;
+    border: 0;
+    display: inline;
+    margin: 0;
+    padding: 0;
+}

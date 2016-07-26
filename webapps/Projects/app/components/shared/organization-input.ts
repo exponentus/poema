@@ -8,7 +8,7 @@ import { Organization } from '../../models';
 @Component({
     selector: 'organization-input',
     template: `
-        <span *ngIf="!editable">
+        <span class="input organization-input" *ngIf="!editable">
             {{org?.name}}
         </span>
         <div dropdown class="select organization-input" [class.allow-clear]="allowClear" [class.has-selected]="org" *ngIf="editable" (dropdownToggle)="startLoad()">

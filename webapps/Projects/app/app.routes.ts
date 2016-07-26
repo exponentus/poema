@@ -14,6 +14,7 @@ import { User } from './models/user';
 const routes: RouterConfig = [
     { path: '', component: TasksComponent, canActivate: [RedirectGuard, AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
     // {
@@ -21,7 +22,6 @@ const routes: RouterConfig = [
     //         { path: ':projectId', component: ProjectComponent }
     //     ]
     // },
-    { path: 'project/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'tasks/:for', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'task/:taskId/:new', component: TaskComponent, canActivate: [AuthGuard] },

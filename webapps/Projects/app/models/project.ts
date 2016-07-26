@@ -5,6 +5,7 @@ export class Project {
     id: string = '';
     author: string;
     regDate: Date;
+    editable: boolean = false;
     wasRead: boolean;
     fsid: string = '' + Date.now();
 

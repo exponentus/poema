@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { LocalizedNamePipe } from '../../pipes';
 import { MarkedPipe } from '../../shared/markdown';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { AttachmentsComponent } from '../attachment/attachments';
-import { AppService } from '../../services';
 import { Request } from '../../models';
 
 @Component({
@@ -14,7 +14,7 @@ import { Request } from '../../models';
             <li class="request-list__item" *ngFor="let request of requests">
                 <div class="request">
                     <header class="request__header">
-                        <div class="request__type">{{request.requestType.localizedName[appService.language]}}</div>
+                        <div class="request__type">{{request.requestType | localizedName}}</div>
                         <div class="request__time">{{request.regDate}}</div>
                     </header>
                     <section class="request__content">
@@ -47,7 +47,7 @@ import { Request } from '../../models';
         </ul>
     `,
     directives: [AttachmentsComponent],
-    pipes: [TranslatePipe, MarkedPipe, TextTransformPipe, DateFormatPipe]
+    pipes: [TranslatePipe, MarkedPipe, TextTransformPipe, DateFormatPipe, LocalizedNamePipe]
 })
 
 export class RequestListComponent {
@@ -55,8 +55,6 @@ export class RequestListComponent {
     @Output() accept = new EventEmitter<any>();
     @Output() decline = new EventEmitter<any>();
     private disabled = false;
-
-    constructor(private appService: AppService) { }
 
     doAccept(request: Request) {
         this.disabled = true;

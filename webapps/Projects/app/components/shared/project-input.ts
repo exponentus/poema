@@ -9,7 +9,7 @@ import { Project } from '../../models';
 @Component({
     selector: 'project-input',
     template: `
-        <span *ngIf="!editable">
+        <span class="input project-input" *ngIf="!editable">
             {{project?.name}}
         </span>
         <div dropdown class="select project-input" [class.allow-clear]="allowClear" [class.has-selected]="project" *ngIf="editable">

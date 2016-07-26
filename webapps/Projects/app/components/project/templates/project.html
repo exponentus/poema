@@ -4,16 +4,16 @@
             <i class="fa fa-chevron-left"></i>
         </button>
         <h1 class="header-title">
-            {{(project.id ? 'project' : 'new_project') | translate}}
+            {{title | translate}}
         </h1>
         <div class="content-actions">
-            <button class="btn btn-primary" type="button" [disabled]="!form.valid" (click)="saveProject()">
+            <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
                 {{'save_close' | translate}}
             </button>
             <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
             </button>
-            <div *ngIf="!isNew" dropdown class="buttons">
+            <div *ngIf="!isNew && isEditable" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
                 </div>
@@ -34,7 +34,9 @@
                     {{'name' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="!form.controls.name.valid">
-                    <input class="span8" [(ngModel)]="project.name" ngControl="name" />
+                    <div class="span8">
+                        <input [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -100,7 +102,10 @@
                     {{'finish_date' | translate}}
                 </div>
                 <div class="controls">
-                    <input class="span2" datepicker (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" ngControl="finishDate" />
+                    <div class="span2" *ngIf="!isEditable">
+                        <span class="input">{{project.finishDate}}</span>
+                    </div>
+                    <input class="span2" datepicker *ngIf="isEditable" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" ngControl="finishDate" />
                 </div>
             </div>
             <div class="form-group">
@@ -114,12 +119,12 @@
                 </div>
             </div>
         </fieldset>
-        <attachments editable="true" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
     <footer>
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
-            <user-input [editable]="false" [userIds]="[project.authorId]"></user-input>
+            <user-input [userIds]="[project.authorId]"></user-input>
             <time>{{project.regDate}}</time>
         </div>
     </footer>

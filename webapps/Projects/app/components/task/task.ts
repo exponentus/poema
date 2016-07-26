@@ -20,7 +20,7 @@ import { CommentsComponent } from '../comment/comments';
 import { ITaskState } from '../../reducers/task.reducer';
 import { TextTransformPipe } from '../../pipes';
 import { TaskActions } from '../../actions';
-import { AppService, ProjectService, TaskService, ReferenceService } from '../../services';
+import { TaskService } from '../../services';
 import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from '../../models';
 
 @Component({
@@ -85,10 +85,7 @@ export class TaskComponent {
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private taskActions: TaskActions,
-        private appService: AppService,
-        private projectService: ProjectService,
         private taskService: TaskService,
-        private referenceService: ReferenceService,
         private notifyService: NotificationService
     ) {
         this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
@@ -150,6 +147,7 @@ export class TaskComponent {
                             this.parentTask = parentTask;
                         });
                     }
+                    this.isEditable = this.isNew || this.task.editable;
                     this.isReady = true;
                     // this.store.dispatch(this.taskActions.fetchTaskFulfilled(this.task));
                     console.log(this.task);
@@ -167,7 +165,7 @@ export class TaskComponent {
         this.subs.map(s => s.unsubscribe());
     }
 
-    getTitle() {
+    get title() {
         if (this.isNew && this.isSubtask) {
             return 'new_subtask';
         } else if (this.isNew) {
@@ -177,11 +175,6 @@ export class TaskComponent {
         } else {
             return 'task';
         }
-    }
-
-    getEditable() {
-        console.log('getEditable');
-        return this.isNew;
     }
 
     saveTask() {
@@ -303,11 +296,11 @@ export class TaskComponent {
 
     // check rights
     canSaveTask() {
-        return true;
+        return this.isEditable;
     }
 
     canCompleteTask() {
-        return !this.isNew && this.task.status != 'FINISHED';
+        return !this.isNew && this.isEditable && this.task.status != 'FINISHED';
     }
 
     canRequestAction() {

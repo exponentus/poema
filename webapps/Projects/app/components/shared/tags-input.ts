@@ -2,6 +2,7 @@ import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { LocalizedNamePipe } from '../../pipes';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { Tag } from '../../models';
@@ -9,13 +10,12 @@ import { Tag } from '../../models';
 @Component({
     selector: 'tags-input',
     template: `
-        <span *ngIf="!editable">
+        <span class="input tags-input" *ngIf="!editable">
             <span
                 class="tag"
                 *ngFor="let m of selectedTags"
-                [style.color]="m.color"
-                (click)="remove(m, $event)">
-                {{m.name}}
+                [style.color]="m.color">
+                {{m | localizedName}}
             </span>
         </span>
         <div dropdown class="select tags-input" [class.allow-clear]="allowClear" [class.has-selected]="selectedTags.length" *ngIf="editable">
@@ -25,7 +25,7 @@ import { Tag } from '../../models';
                     *ngFor="let m of selectedTags"
                     [style.color]="m.color"
                     (click)="remove(m, $event)">
-                    {{m.name}}
+                    {{m | localizedName}}
                 </span>
                 <span class="placeholder">{{placeHolder}}</span>
                 <div class="clear" *ngIf="allowClear && selectedTags.length" (click)="clear($event)">
@@ -42,7 +42,7 @@ import { Tag } from '../../models';
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" *ngFor="let m of getTags()" (click)="add(m)">
                         <span [style.color]="m.color">
-                            {{m.name}}
+                            {{m | localizedName}}
                         </span>
                     </li>
                 </ul>
@@ -50,7 +50,7 @@ import { Tag } from '../../models';
         </div>
     `,
     directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe, LocalizedNamePipe]
 })
 
 export class TagsInputComponent {
@@ -64,7 +64,9 @@ export class TagsInputComponent {
     private selectedTags: Tag[] = [];
     private sub: any;
 
-    constructor(private store: Store<any>) { }
+    constructor(
+        private store: Store<any>
+    ) { }
 
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {

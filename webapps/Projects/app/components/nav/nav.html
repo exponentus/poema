@@ -25,7 +25,7 @@
         </a>
         <ul>
             <li *ngFor="let project of projects">
-                <a [routerLink]="['/project', project.id, 'tasks']" class="nav-link">
+                <a [routerLink]="['/projects', project.id, 'tasks']" class="nav-link">
                     <i class="fa fa-file-text-o"></i>
                     <span>{{project.name}}</span>
                 </a>

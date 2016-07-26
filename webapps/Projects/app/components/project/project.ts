@@ -13,7 +13,7 @@ import { SwitchButtonComponent } from '../../shared/switch-button';
 import { OrganizationInputComponent, UserInputComponent } from '../shared';
 import { AttachmentsComponent } from '../attachment/attachments';
 import { TextTransformPipe } from '../../pipes';
-import { AppService, ProjectService, TaskService, StaffService, ReferenceService } from '../../services';
+import { ProjectService } from '../../services';
 import { Project, Organization, User, Attachment } from '../../models';
 
 @Component({
@@ -49,13 +49,9 @@ export class ProjectComponent {
         private route: ActivatedRoute,
         private formBuilder: FormBuilder,
         private translate: TranslateService,
-        private appService: AppService,
         private projectService: ProjectService,
-        private staffService: StaffService,
         private notifyService: NotificationService
-    ) { }
-
-    ngOnInit() {
+    ) {
         this.form = this.formBuilder.group({
             name: ['', Validators.required],
             status: [''],
@@ -68,14 +64,17 @@ export class ProjectComponent {
             finishDate: [''],
             attachments: ['']
         });
+    }
 
+    ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
             this.projectService.fetchProjectById(params['projectId']).subscribe(
                 project => {
                     this.project = project;
-                    this.loadData();
-                    this.isReady = true;
                     this.isNew = this.project.id == '';
+                    this.isEditable = this.isNew || this.project.editable;
+                    this.isReady = true;
+                    this.loadData();
                 },
                 error => this.handleXhrError(error)
             );
@@ -84,6 +83,14 @@ export class ProjectComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    get title() {
+        if (this.isNew) {
+            return 'new_project';
+        } else {
+            return 'project';
+        }
     }
 
     loadData() {
