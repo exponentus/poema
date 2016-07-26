@@ -1,6 +1,7 @@
 import { provideRouter, RouterConfig }  from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
+import { RedirectGuard } from './redirect.guard';
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
@@ -11,7 +12,7 @@ import { LoginComponent } from './components/login';
 import { User } from './models/user';
 
 const routes: RouterConfig = [
-    { path: '', component: TasksComponent, canActivate: [AuthGuard] },
+    { path: '', component: TasksComponent, canActivate: [RedirectGuard, AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
@@ -32,5 +33,6 @@ const routes: RouterConfig = [
 
 export const APP_ROUTER_PROVIDERS = [
     provideRouter(routes),
-    AuthGuard
+    AuthGuard,
+    RedirectGuard
 ];

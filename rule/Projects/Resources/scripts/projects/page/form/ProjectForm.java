@@ -44,6 +44,7 @@ public class ProjectForm extends _DoForm {
             }
 
             addContent(project.getAttachments());
+            addContent(project.getACL(session));
         } else {
             project = new Project();
             project.setAuthor(user);
