@@ -5719,16 +5719,14 @@ webpackJsonp([0],[
 	            var index = location.search.indexOf(s);
 	            if (index != -1) {
 	                var id = location.search.substring(index + s.length, location.search.length);
-	                history.replaceState({}, '', location.pathname);
-	                this.router.navigate(['/projects/' + id]);
+	                location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/' + id;
 	                return false;
 	            }
 	            s = 'id=task-form&taskId=';
 	            index = location.search.indexOf(s);
 	            if (index != -1) {
 	                var id = location.search.substring(index + s.length, location.search.length);
-	                history.replaceState({}, '', location.pathname);
-	                this.router.navigate(['/task/' + id]);
+	                location.href = location.protocol + '//' + location.host + location.pathname + '#/task/' + id;
 	                return false;
 	            }
 	        }
