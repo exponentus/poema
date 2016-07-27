@@ -28,8 +28,8 @@
             </ul>
         </li>
     </ul>
-    <form class="navbar-form navbar-search" (submit)="search(keyWord)">
-        <input type="search" class="q" name="keyword" #keyWord placeholder="{{ 'search' | translate }}" required autocomplete="off" (focus)="searchFocus()" (blur)="searchBlur($event.target)" />
+    <form class="navbar-form navbar-search">
+        <input type="search" class="q" name="keyword" #keyWord placeholder="{{ 'search' | translate }}" required autocomplete="off" (keyup)="search($event.target)" (focus)="searchFocus()" (blur)="searchBlur($event.target)" />
         <button type="reset" (click)="search('')"><i class="fa fa-times"></i></button>
         <input type="submit" value="search" />
     </form>

@@ -33,7 +33,7 @@ import { User } from '../../models';
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" [class.selected]="userIds && userIds.indexOf(m.id) !=- 1" *ngFor="let m of getUsers()" (click)="add(m)">
-                        {{m.name || m.login}}
+                        {{m.userName || m.login}}
                     </li>
                 </ul>
             </div>
