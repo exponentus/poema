@@ -102,3 +102,8 @@ pagination:empty {
     display: inline-block;
     vertical-align: top;
 }
+
+.form .content-footer {
+    background: #f5f5f5;
+    margin-top: 1em;
+}

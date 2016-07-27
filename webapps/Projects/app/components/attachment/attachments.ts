@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, HostBinding, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -8,29 +8,33 @@ import { Attachment } from '../../models';
 @Component({
     selector: 'attachments',
     template: `
-        <label class="btn btn-upload" title="{{'attach_file' | translate}}" *ngIf="editable">
-            <i class="fa fa-paperclip"></i>
-            <span>{{ 'attach_file' | translate }}</span>
-            <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>
-        </label>
-        <div class="attachment-list">
-            <div class="attachment-list__item" *ngFor="let att of model.attachments">
-                <div class="attachment">
-                    <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
-                    <span class="attachment__size"></span>
-                    <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
-                        <i class="fa fa-times"></i>
-                    </button>
+        <div class="attachments">
+            <label class="btn btn-upload" title="{{'attach_file' | translate}}" *ngIf="editable">
+                <i class="fa fa-paperclip"></i>
+                <span>{{ 'attach_file' | translate }}</span>
+                <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>
+            </label>
+            <div class="attachment-list" *ngIf="!isHidden">
+                <div class="attachment-list__item" *ngFor="let att of model.attachments">
+                    <div class="attachment">
+                        <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
+                        <span class="attachment__size"></span>
+                        <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     `,
     providers: [UploadService],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe],
+    host: {
+        '[class.hidden]': 'isHidden'
+    }
 })
 
 export class AttachmentsComponent {
-    @HostBinding('class.attachments') true;
     @Input() model: any;
     @Input() editable: boolean = false;
     @Output() upload = new EventEmitter<any>();
@@ -56,6 +60,10 @@ export class AttachmentsComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    get isHidden() {
+        return !this.editable && !this.model.attachments;
     }
 
     uploadFile(files: File[]) {

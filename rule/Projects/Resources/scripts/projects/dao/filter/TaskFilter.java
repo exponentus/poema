@@ -93,6 +93,10 @@ public class TaskFilter {
         this.priority = priority;
     }
 
+    public boolean hasSearch() {
+        return search != null && !search.isEmpty();
+    }
+
     public String getSearch() {
         return search;
     }

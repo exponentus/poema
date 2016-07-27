@@ -42,13 +42,13 @@ public class TaskView extends _DoPage {
         }
     }
 
-    public TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
+    private TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
         TaskFilter filter = new TaskFilter();
 
         filter.setProject(formData.getValueSilently("projectId"));
         filter.setParentTask(formData.getValueSilently("parentTaskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
-        filter.setSearch(formData.getValueSilently("search"));
+        filter.setSearch(formData.getValueSilently("keyWord"));
         filter.setStartDate(formData.getDateSilently("startDate"));
         filter.setDueDate(formData.getDateSilently("dueDate"));
 

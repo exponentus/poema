@@ -3,17 +3,23 @@ import { EnvironmentActions } from '../actions/environment.actions';
 export interface IEnvironmentState {
     isMobile: boolean,
     isNavOpen: boolean,
-    isSearchOpen: boolean
+    isSearchOpen: boolean,
+    keyWord: string
 };
 
 const initialState: IEnvironmentState = {
     isMobile: false,
     isNavOpen: true,
-    isSearchOpen: false
+    isSearchOpen: false,
+    keyWord: ''
 };
 
 export const environmentReducer = (state = initialState, {type, payload}): IEnvironmentState => {
     switch (type) {
+        case EnvironmentActions.SEARCH:
+            return Object.assign({}, state, {
+                keyWord: payload.keyWord
+            });
         case EnvironmentActions.TOGGLE_NAV:
             return Object.assign({}, state, {
                 isNavOpen: !state.isNavOpen

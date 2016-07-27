@@ -112,6 +112,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
+            if (filter.hasSearch()) {
+                if (condition != null) {
+                    condition = cb.and(cb.like(cb.lower(c.<String>get("title")), "%" + filter.getSearch() + "%"), condition);
+                } else {
+                    condition = cb.and(cb.like(cb.lower(c.<String>get("title")), "%" + filter.getSearch() + "%"));
+                }
+            }
+
             cq.orderBy(cb.asc(c.get("regDate")));
             if (condition != null) {
                 cq.where(condition);

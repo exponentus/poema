@@ -121,7 +121,7 @@
         </fieldset>
         <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
     </section>
-    <footer>
+    <footer class="content-footer">
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
             <user-input [userIds]="[project.authorId]"></user-input>

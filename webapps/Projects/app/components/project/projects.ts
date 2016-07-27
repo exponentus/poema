@@ -11,6 +11,7 @@ import { ProjectService } from '../../services/project.service';
 import { ProjectListComponent } from './project-list';
 import { ProjectComponent } from './project';
 import { ProjectActions } from '../../actions/project.actions';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { IProjectsState } from '../../reducers/projects.reducer';
 
 @Component({
@@ -26,11 +27,12 @@ import { IProjectsState } from '../../reducers/projects.reducer';
 })
 
 export class ProjectsComponent {
-    private subs: any;
+    private subs: any = [];
 
     title = 'projects';
     projects: Project[];
     meta: any = {};
+    keyWord: string = '';
     loading: boolean = true;
 
     constructor(
@@ -42,18 +44,27 @@ export class ProjectsComponent {
     ) { }
 
     ngOnInit() {
-        this.subs = this.store.select('projects').subscribe((state: IProjectsState) => {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            if (this.keyWord != state.keyWord) {
+                this.loadData({
+                    keyWord: state.keyWord
+                });
+            }
+            this.keyWord = state.keyWord;
+        }));
+
+        this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
             if (state) {
                 this.projects = state.projects;
                 this.meta = state.meta;
                 this.loading = state.loading;
             }
-        });
+        }));
         this.loadData();
     }
 
     ngOnDestroy() {
-        this.subs && this.subs.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
     }
 
     loadData(params?) {
@@ -77,7 +88,8 @@ export class ProjectsComponent {
 
     goToPage(params) {
         this.loadData({
-            page: params.page
+            page: params.page,
+            keyWord: this.keyWord
         });
     }
 

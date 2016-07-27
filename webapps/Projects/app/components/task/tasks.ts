@@ -13,6 +13,7 @@ import { TaskListComponent } from './task-list';
 import { TaskComponent } from './task';
 import { TaskActions } from '../../actions';
 import { ITasksState } from '../../reducers/tasks.reducer';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 
 @Component({
     selector: 'tasks',
@@ -27,6 +28,7 @@ export class TasksComponent {
     title: string;
     tasks: Task[];
     meta: any = {};
+    keyWord: string = '';
     filter: any = {};
     loading: boolean = true;
 
@@ -40,6 +42,15 @@ export class TasksComponent {
     ) { }
 
     ngOnInit() {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            if (this.keyWord != state.keyWord) {
+                this.loadData({
+                    keyWord: state.keyWord
+                });
+            }
+            this.keyWord = state.keyWord;
+        }));
+
         this.subs.push(this.store.select(state => state.tasks).subscribe((state: ITasksState) => {
             if (state) {
                 this.tasks = state.tasks;

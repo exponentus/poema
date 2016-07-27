@@ -2,7 +2,6 @@ package projects.dao;
 
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
 import projects.model.Project;
@@ -23,7 +22,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<Project> findProjectsAccessible(int pageNum, int pageSize) {
+    public ViewPage<Project> findProjects(String keyWord, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -34,14 +33,21 @@ public class ProjectDAO extends DAO<Project, UUID> {
             countCq.select(cb.count(c));
 
             Predicate condition = null;
-            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                condition = cb.and(c.get("readers").in(user.getId()));
+//            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+//                condition = cb.and(c.get("readers").in(user.getId()));
+//            }
+            if (keyWord != null && !keyWord.isEmpty()) {
+                if (condition != null) {
+                    condition = cb.and(cb.like(cb.lower(c.<String>get("name")), "%" + keyWord + "%"), condition);
+                } else {
+                    condition = cb.and(cb.like(cb.lower(c.<String>get("name")), "%" + keyWord + "%"));
+                }
             }
-            cq.orderBy(cb.asc(c.get("name")));
             if (condition != null) {
                 cq.where(condition);
                 countCq.where(condition);
             }
+            cq.orderBy(cb.asc(c.get("name")));
 
             Query query = em.createQuery(countCq);
             long count = (long) query.getSingleResult();

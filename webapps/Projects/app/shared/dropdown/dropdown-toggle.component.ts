@@ -11,6 +11,7 @@ export class DropdownToggleComponent {
     @HostBinding('class.dropdown-toggle') true;
 
     @HostListener('click', ['$event']) public onClick($event: MouseEvent): void {
+        $event.preventDefault();
         this.toggle.emit($event);
     }
 }

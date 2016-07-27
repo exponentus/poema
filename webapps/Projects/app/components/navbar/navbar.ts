@@ -16,8 +16,9 @@ import { User } from '../../models/user';
 
 export class NavbarComponent {
     @Input() user: User;
-    HEADER_TITLE: string = 'Projects';
-    workspaceUrl: string = '/Workspace/p?id=workspace';
+    headerTitle: string = 'Projects';
+    workspaceUrl: string = 'Logout'; // '/Workspace/p?id=workspace';
+    logoUrl: string = 'img/logo.png';
 
     constructor(
         private store: Store<any>,
@@ -30,6 +31,10 @@ export class NavbarComponent {
 
     searchBlur() {
         this.store.dispatch(this.environmentActions.hideNav());
+    }
+
+    search(keyWordInput) {
+        this.store.dispatch(this.environmentActions.search(keyWordInput.value));
     }
 
     toggleNav() {
