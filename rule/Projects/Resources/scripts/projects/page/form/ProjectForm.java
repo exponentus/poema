@@ -103,11 +103,9 @@ public class ProjectForm extends _DoForm {
             IUser<Long> programmerUser = userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0));
             IUser<Long> testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
 
-            List<IUser<Long>> observerUsers = new ArrayList<>();
             List<Long> ouIds = Arrays.stream(formData.getValueSilently("observerUserIds", "0").split(",")).map(Long::valueOf).collect(Collectors.toList());
             for (long uid : ouIds) {
                 IUser<Long> ou = userDAO.findById(uid);
-                observerUsers.add(ou);
             }
 
             project.setName(formData.getValue("name"));

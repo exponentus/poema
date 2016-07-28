@@ -132,6 +132,8 @@ public class TaskForm extends _DoForm {
             task.setBody(formData.getValue("body"));
             IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
             task.setAssignee(assigneeUser.getId());
+            task.setAttachments(getActualAttachments(task.getAttachments()));
+            task.setCustomerObservation(Boolean.valueOf(formData.getValue("customerObservation")));
 
             if (formData.containsField("tagIds")) {
                 String[] tagIds = formData.getValueSilently("tagIds").split(",");
@@ -149,8 +151,6 @@ public class TaskForm extends _DoForm {
                     task.setTags(tags);
                 }
             }
-
-            task.setAttachments(getActualAttachments(task.getAttachments()));
 
             if (isNew) {
                 IUser<Long> user = session.getUser();

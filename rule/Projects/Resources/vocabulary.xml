@@ -104,6 +104,10 @@
         <entry lang="RUS">Метки</entry>
         <entry lang="ENG">Tags</entry>
     </sentence>
+    <sentence mode="on" keyword="publish_to_customer">
+        <entry lang="RUS">Опубликовать заказчику</entry>
+        <entry lang="ENG">Publish  to the customer</entry>
+    </sentence>
 
     <sentence mode="on" keyword="name">
         <entry lang="RUS">Название</entry>

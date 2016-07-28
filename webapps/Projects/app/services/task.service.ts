@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
+import * as moment from 'moment';
 
 import { Task, Request, Comment, Attachment } from '../models';
 import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
@@ -53,6 +54,24 @@ export class TaskService {
                     tasks: <Task[]>data.list,
                     meta: data.meta
                 }
+            });
+    }
+
+    fetchTaskStream(task: Task) {
+        return this.http.get('p?id=task-view', {
+            headers: HEADERS,
+            search: createURLSearchParams({ taskId: task.id, stream: 1 })
+        })
+            .map(response => response.json().objects)
+            .map(data => {
+                let list = [];
+                data.map(it => list = list.concat(it.list));
+                list = list.sort(function(a: any, b: any) {
+                    let r1 = moment(a.regDate, 'DD.MM.YYYY HH:mm').valueOf();
+                    let r2 = moment(b.regDate, 'DD.MM.YYYY HH:mm').valueOf();
+                    return r1 - r2;
+                });
+                return list;
             });
     }
 

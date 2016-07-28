@@ -3,7 +3,7 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { UserInputComponent, TagsInputComponent } from '../shared';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
+import { TextTransformPipe, DateFormatPipe, LocalizedNamePipe } from '../../pipes';
 import { TaskService } from '../../services';
 import { Task, Request, Comment } from '../../models';
 
@@ -11,7 +11,7 @@ import { Task, Request, Comment } from '../../models';
     selector: 'task-stream',
     template: require('./templates/task-stream.html'),
     directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent, TaskStreamComponent],
-    pipes: [DateFormatPipe, TextTransformPipe, TranslatePipe]
+    pipes: [DateFormatPipe, TextTransformPipe, TranslatePipe, LocalizedNamePipe]
 })
 
 export class TaskStreamComponent {
@@ -22,20 +22,20 @@ export class TaskStreamComponent {
     @Input() task: Task;
 
     private loading: boolean = true;
+    private stream: any[] = [];
     public level: number = 0;
-    private tasks: Task[];
-    private comments: Comment[] = [];
-    private requests: Request[] = [];
 
     constructor(private taskService: TaskService) { }
 
     ngOnInit() {
-        this.taskService.fetchTasks({
-            parentTaskId: this.task.id
-        }).subscribe(payload => this.tasks = payload.tasks);
+        if (this.task.hasSubtasks || this.task.hasRequests) {
+            this.taskService.fetchTaskStream(this.task).subscribe(payload => {
+                this.stream = payload;
+            });
+        }
     }
 
     getStream() {
-        return this.tasks;
+        return this.stream;
     }
 }

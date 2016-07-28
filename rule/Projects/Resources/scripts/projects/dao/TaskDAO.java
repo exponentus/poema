@@ -114,9 +114,9 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             if (filter.hasSearch()) {
                 if (condition != null) {
-                    condition = cb.and(cb.like(cb.lower(c.<String>get("title")), "%" + filter.getSearch() + "%"), condition);
+                    condition = cb.and(cb.like(cb.lower(c.get("title")), "%" + filter.getSearch() + "%"), condition);
                 } else {
-                    condition = cb.and(cb.like(cb.lower(c.<String>get("title")), "%" + filter.getSearch() + "%"));
+                    condition = cb.and(cb.like(cb.lower(c.get("title")), "%" + filter.getSearch() + "%"));
                 }
             }
 
@@ -139,6 +139,18 @@ public class TaskDAO extends DAO<Task, UUID> {
             List<Task> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, count, maxPage, pageNum);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<Object> findTaskStream(Task task) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        try {
+            String jpql = "SELECT t, r, c FROM Task t LEFT JOIN t.requests r LEFT JOIN t.comments c WHERE t.parent = :parentTask";
+            TypedQuery<Object> query = em.createQuery(jpql, Object.class);
+            query.setParameter("parentTask", task);
+            return query.getResultList();
         } finally {
             em.close();
         }

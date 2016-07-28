@@ -106,6 +106,7 @@
     <caption name="comment"/>
     <caption name="note"/>
     <caption name="tags"/>
+    <caption name="publish_to_customer"/>
     <caption name="task"/>
     <caption name="project"/>
     <caption name="task_type"/>

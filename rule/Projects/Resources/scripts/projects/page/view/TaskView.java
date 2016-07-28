@@ -2,12 +2,14 @@ package projects.page.view;
 
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
+import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
+import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -21,12 +23,11 @@ public class TaskView extends _DoPage {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
-        TaskDAO taskDAO = new TaskDAO(session);
-        TaskFilter taskFilter = createTaskFilter(session, formData);
-        int pageSize = session.pageSize;
-        int pageNum = formData.getNumberValueSilently("page", 0);
-        ViewPage<Task> vp = taskDAO.findAllByTaskFilter(taskFilter, pageNum, pageSize);
-        addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
+        if (formData.containsField("stream")) {
+            responseTaskStream(session, formData);
+        } else {
+            responseTaskList(session, formData);
+        }
     }
 
     @Override
@@ -42,7 +43,41 @@ public class TaskView extends _DoPage {
         }
     }
 
-    private TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
+    private void responseTaskList(_Session session, _WebFormData formData) {
+        TaskDAO taskDAO = new TaskDAO(session);
+        TaskFilter taskFilter = createTaskFilter(session, formData);
+        int pageSize = session.pageSize;
+        int pageNum = formData.getNumberValueSilently("page", 0);
+        ViewPage<Task> vp = taskDAO.findAllByTaskFilter(taskFilter, pageNum, pageSize);
+        addContent(new _POJOListWrapper(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum(), session));
+    }
+
+    private void responseTaskStream(_Session session, _WebFormData formData) {
+        try {
+            String taskId = formData.getValue("taskId");
+            TaskDAO taskDAO = new TaskDAO(session);
+            Task task = taskDAO.findById(taskId);
+            List<Task> subTasks = task.getSubtasks();
+            List<Request> requests = task.getRequests();
+            // List<Comment> comments = task.getComments();
+
+            if (subTasks.size() > 0) {
+                addContent(subTasks);
+            }
+            if (requests.size() > 0) {
+                addContent(requests);
+            }
+//            if (comments.size() > 0) {
+//                addContent(comments);
+//            }
+        } catch (_Exception e) {
+            setBadRequest();
+            setError(e);
+            e.printStackTrace();
+        }
+    }
+
+    private static TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
         TaskFilter filter = new TaskFilter();
 
         filter.setProject(formData.getValueSilently("projectId"));
