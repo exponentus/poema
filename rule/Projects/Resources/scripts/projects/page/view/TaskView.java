@@ -59,7 +59,6 @@ public class TaskView extends _DoPage {
             Task task = taskDAO.findById(taskId);
             List<Task> subTasks = task.getSubtasks();
             List<Request> requests = task.getRequests();
-            // List<Comment> comments = task.getComments();
 
             if (subTasks.size() > 0) {
                 addContent(subTasks);
@@ -67,11 +66,7 @@ public class TaskView extends _DoPage {
             if (requests.size() > 0) {
                 addContent(requests);
             }
-//            if (comments.size() > 0) {
-//                addContent(comments);
-//            }
         } catch (_Exception e) {
-            setBadRequest();
             setError(e);
             e.printStackTrace();
         }

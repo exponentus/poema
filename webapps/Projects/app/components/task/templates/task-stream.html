@@ -1,51 +1,57 @@
-<div class="entry-wrap level-{{level}}" *ngFor="let m of stream">
-    <div class="entry" *ngIf="m.kind == 'task'">
-        <label class="entry-select">
-            <input type="checkbox" name="task-id" value="{{m.id}}" (change)="toggleSelected(m.id)" />
-        </label>
-        <a class="entry-link" [routerLink]="['/task', m.id]">
-            <div class="entry-fields">
-                <span class="task-list__title level-indent">
-                    <div class="entry-expander" [class.is-expanded]="true" (click)="toggleExpandable(m.id)">
-                        <i class="entry-expander_icon fa"></i>
+<div *ngFor="let m of stream">
+    <div class="entry-wrap level-{{level}}">
+        <div class="entry" *ngIf="m.kind == 'task'">
+            <label class="entry-select">
+                <input type="checkbox" name="task-id" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+            </label>
+            <a class="entry-link" [routerLink]="['/task', m.id]">
+                <div class="entry-fields">
+                    <div class="task-list__title expandable-level" [class.has-expandable]="m.hasSubtasks || m.hasRequests">
+                        <div class="entry-expander" [class.is-expanded]="expandedIds.indexOf(m.id) != -1" (click)="toggleExpandable(m.id, $event)">
+                            <i class="entry-expander_icon fa"></i>
+                        </div>
+                        <span>{{m.title}}</span>
                     </div>
-                    <span>{{m.title}}</span>
-                </span>
-                <span class="vw-icon">
-                    <i class="fa fa-paperclip" *ngIf="m.hasAttachments"></i>
-                </span>
-                <span class="task-list__status">{{m.status | text:'L' | translate}}</span>
-                <span class="task-list__priority">{{m.priority | text:'L' | translate}}</span>
-                <span class="task-list__assignee">
-                    <user-input [userIds]="[m.assigneeUserId]"></user-input>
-                </span>
-                <span class="task-list__start_date">{{m.startDate | dateFmt}}</span>
-                <span class="task-list__due_date">{{m.dueDate | dateFmt}}</span>
-                <span class="task-list__tags">
-                    <tags-input [tagIds]="m.tagIds"></tags-input>
-                </span>
+                    <div class="vw-icon">
+                        <i class="fa fa-paperclip" *ngIf="m.hasAttachments"></i>
+                    </div>
+                    <div class="task-list__status">
+                        <span class="status-{{m.status | text:'L'}}">{{m.status | text:'L' | translate}}</span>
+                    </div>
+                    <div class="task-list__priority">
+                        <span class="priority-{{m.priority | text:'L'}}">{{m.priority | text:'L' | translate}}</span>
+                    </div>
+                    <div class="task-list__assignee">
+                        <user-input [userIds]="[m.assigneeUserId]"></user-input>
+                    </div>
+                    <div class="task-list__start_date">{{m.startDate | dateFmt}}</div>
+                    <div class="task-list__due_date">{{m.dueDate | dateFmt}}</div>
+                    <div class="task-list__tags">
+                        <tags-input [tagIds]="m.tagIds"></tags-input>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="entry" *ngIf="m.kind == 'request'">
+            <label class="entry-select">
+                <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+            </label>
+            <div class="entry-link">
+                <div class="entry-fields">
+                    <div class="task-list__request_type expandable-level">{{m.requestType | localizedName}}</div>
+                </div>
             </div>
-        </a>
-    </div>
-    <div class="entry" *ngIf="m.kind == 'request'">
-        <label class="entry-select">
-            <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
-        </label>
-        <div class="entry-link">
-            <div class="entry-fields">
-                <span class="task-list__request_type">{{m.requestType | localizedName}}</span>
+        </div>
+        <div class="entry" *ngIf="m.kind == 'comment'">
+            <label class="entry-select">
+                <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+            </label>
+            <div class="entry-link">
+                <div class="entry-fields">
+                    <div class="task-list__comment_comment">{{m.comment}}</div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="entry" *ngIf="m.kind == 'comment'">
-        <label class="entry-select">
-            <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
-        </label>
-        <div class="entry-link">
-            <div class="entry-fields">
-                <span class="task-list__comment_comment">{{m.comment}}</span>
-            </div>
-        </div>
-    </div>
-    <task-stream *ngIf="m.kind == 'task'" [level]="level" [task]="m"></task-stream>
+    <task-stream *ngIf="m.kind == 'task'" [level]="level" [task]="m" [expandedIds]="expandedIds" (toggleStream)="onToggleStream($event)"></task-stream>
 </div>

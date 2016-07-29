@@ -1,4 +1,4 @@
-import { Component, Input, Output } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
@@ -6,6 +6,8 @@ import { Store } from '@ngrx/store';
 import { UserInputComponent, TagsInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { TaskStreamComponent } from './task-stream';
+import { TaskActions } from '../../actions';
+import { ITasksState } from '../../reducers/tasks.reducer';
 import { Task } from '../../models';
 
 @Component({
@@ -22,6 +24,7 @@ export class TaskListComponent {
         this.isSelectedAll = false;
     }
     @Input() showHeader: boolean = true;
+    @Output() toggleStream = new EventEmitter<any>();
 
     private tasks: Task[];
     private selectedIds: string[] = [];
@@ -29,7 +32,14 @@ export class TaskListComponent {
 
     private expandedIds: string[] = [];
 
-    constructor(private store: Store<any>) { }
+    constructor(
+        private store: Store<any>,
+        private taskActions: TaskActions
+    ) {
+        this.store.select('tasks').subscribe((state: ITasksState) => {
+            this.expandedIds = state.expandedIds;
+        });
+    }
 
     isSelected(id: string) {
         return this.selectedIds.indexOf(id) != -1;
@@ -57,8 +67,14 @@ export class TaskListComponent {
         }
     }
 
+    onToggleStream(id: string) {
+        // this.toggleStream.emit(id);
+        this.store.dispatch(this.taskActions.toggleStreamExpand(id));
+    }
+
     toggleExpandable(id: string, $event) {
         $event.preventDefault();
         $event.stopPropagation();
+        this.onToggleStream(id);
     }
 }

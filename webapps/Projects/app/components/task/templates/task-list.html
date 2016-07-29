@@ -5,52 +5,54 @@
                 <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
             </label>
             <div class="entry-captions">
-                <span class="task-list__title">{{'task_title' | translate}}</span>
-                <span class="vw-icon"><i class="fa fa-paperclip"></i></span>
-                <span class="task-list__status">{{'status' | translate}}</span>
-                <span class="task-list__priority">{{'priority' | translate}}</span>
-                <span class="task-list__assignee">{{'assignee_user' | translate}}</span>
-                <span class="task-list__start_date">{{'start_date' | translate}}</span>
-                <span class="task-list__due_date">{{'due_date' | translate}}</span>
-                <span class="task-list__tags">{{'tags' | translate}}</span>
+                <div class="task-list__title">{{'task_title' | translate}}</div>
+                <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
+                <div class="task-list__status">{{'status' | translate}}</div>
+                <div class="task-list__priority">{{'priority' | translate}}</div>
+                <div class="task-list__assignee">{{'assignee_user' | translate}}</div>
+                <div class="task-list__start_date">{{'start_date' | translate}}</div>
+                <div class="task-list__due_date">{{'due_date' | translate}}</div>
+                <div class="task-list__tags">{{'tags' | translate}}</div>
             </div>
         </div>
     </header>
     <div class="entries">
-        <div class="entry-wrap" *ngFor="let task of tasks">
-            <div class="entry" [class.active]="isSelected(task.id)">
-                <label class="entry-select">
-                    <input type="checkbox" name="task-id" value="{{task.id}}" [checked]="isSelected(task.id)" (change)="toggleSelected(task.id)" />
-                </label>
-                <a class="entry-link" [routerLink]="['/task', task.id]">
-                    <div class="entry-fields">
-                        <span class="task-list__title">
-                            <div class="entry-expander" (click)="toggleExpandable(task.id, $event)">
-                                <i class="entry-expander_icon fa"></i>
+        <div *ngFor="let task of tasks">
+            <div class="entry-wrap">
+                <div class="entry" [class.active]="isSelected(task.id)">
+                    <label class="entry-select">
+                        <input type="checkbox" name="task-id" value="{{task.id}}" [checked]="isSelected(task.id)" (change)="toggleSelected(task.id)" />
+                    </label>
+                    <a class="entry-link" [routerLink]="['/task', task.id]">
+                        <div class="entry-fields">
+                            <div class="task-list__title expandable-level" [class.has-expandable]="task.hasSubtasks || task.hasRequests">
+                                <div class="entry-expander" [class.is-expanded]="expandedIds.indexOf(task.id) != -1" (click)="toggleExpandable(task.id, $event)">
+                                    <i class="entry-expander_icon fa"></i>
+                                </div>
+                                <span>{{task.title}}</span>
                             </div>
-                            <span>{{task.title}}</span>
-                        </span>
-                        <span class="vw-icon">
-                            <i class="fa fa-paperclip" *ngIf="task.hasAttachments"></i>
-                        </span>
-                        <span class="task-list__status">
-                            <span class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
-                        </span>
-                        <span class="task-list__priority">
-                            <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
-                        </span>
-                        <span class="task-list__assignee">
-                            <user-input [userIds]="[task.assigneeUserId]"></user-input>
-                        </span>
-                        <span class="task-list__start_date">{{task.startDate | dateFmt}}</span>
-                        <span class="task-list__due_date">{{task.dueDate | dateFmt}}</span>
-                        <span class="task-list__tags">
-                            <tags-input [tagIds]="task.tagIds"></tags-input>
-                        </span>
-                    </div>
-                </a>
+                            <div class="vw-icon">
+                                <i class="fa fa-paperclip" *ngIf="task.hasAttachments"></i>
+                            </div>
+                            <div class="task-list__status">
+                                <span class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
+                            </div>
+                            <div class="task-list__priority">
+                                <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
+                            </div>
+                            <div class="task-list__assignee">
+                                <user-input [userIds]="[task.assigneeUserId]"></user-input>
+                            </div>
+                            <div class="task-list__start_date">{{task.startDate | dateFmt}}</div>
+                            <div class="task-list__due_date">{{task.dueDate | dateFmt}}</div>
+                            <div class="task-list__tags">
+                                <tags-input [tagIds]="task.tagIds"></tags-input>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
-            <task-stream [level]="0" [task]="task"></task-stream>
+            <task-stream [level]="0" [task]="task" [expandedIds]="expandedIds" (toggleStream)="onToggleStream($event)"></task-stream>
         </div>
     </div>
 </div>

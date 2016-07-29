@@ -3,13 +3,11 @@ import { Task, Tag, TaskType, User } from '../models';
 import { TaskActions } from '../actions';
 
 export const SET_FILTER = 'SET_FILTER';
-export const EXPAND_ID = 'EXPAND_ID';
-export const COLLAPSE_ID = 'COLLAPSE_ID';
 
 export interface ITasksState {
     meta: {},
     tasks: Task[],
-    expandIds: string[],
+    expandedIds: string[],
     loading: boolean,
     filter: {
         taskType: TaskType,
@@ -21,7 +19,7 @@ export interface ITasksState {
 const initialState: ITasksState = {
     meta: {},
     tasks: [],
-    expandIds: [],
+    expandedIds: [] = [],
     loading: false,
     filter: {
         taskType: null,
@@ -41,26 +39,23 @@ export const tasksReducer = (state = initialState, {type, payload}): ITasksState
             return Object.assign({}, state, {
                 task: payload.task
             });
+        case TaskActions.TOGGLE_STREAM_EXPAND:
+            let ind = state.expandedIds.indexOf(payload);
+            if (ind == -1) {
+                let ps = [].concat(state.expandedIds);
+                ps.push(payload);
+                return Object.assign({}, state, {
+                    expandedIds: ps
+                });
+            } else {
+                return Object.assign({}, state, {
+                    expandedIds: state.expandedIds.filter(it => it != payload)
+                });
+            }
         case SET_FILTER:
             return Object.assign({}, state, {
                 filter: payload
             });
-        case EXPAND_ID:
-            if (state.expandIds.indexOf(payload.id) == -1) {
-                return Object.assign({}, state, {
-                    expandIds: state.expandIds.push(payload.id)
-                });
-            }
-            return state;
-        case COLLAPSE_ID:
-            let ind = state.expandIds.indexOf(payload.id);
-            if (ind != -1) {
-                let ids = state.expandIds.splice(ind);
-                return Object.assign({}, state, {
-                    expandIds: ids
-                });
-            }
-            return state;
         default:
             return state;
     }

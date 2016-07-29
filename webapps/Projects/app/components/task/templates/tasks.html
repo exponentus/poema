@@ -11,6 +11,6 @@
     </div>
 </div>
 <div class="content-body" [class.load]="loading">
-    <task-list [tasks]="tasks"></task-list>
+    <task-list [tasks]="tasks" (toggleStream)="onToggleStream($event)"></task-list>
 </div>
 <router-outlet></router-outlet>

@@ -1,11 +1,13 @@
-import { Component, Input, Output, OnInit, HostBinding } from '@angular/core';
+import { Component, Input, Output, OnInit, HostBinding, EventEmitter } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
+import { Store } from '@ngrx/store';
 
 import { UserInputComponent, TagsInputComponent } from '../shared';
 import { TextTransformPipe, DateFormatPipe, LocalizedNamePipe } from '../../pipes';
 import { TaskService } from '../../services';
-import { Task, Request, Comment } from '../../models';
+import { ITasksState } from '../../reducers/tasks.reducer';
+import { Task } from '../../models';
 
 @Component({
     selector: 'task-stream',
@@ -20,22 +22,47 @@ export class TaskStreamComponent {
         this.level = 1 + level;
     };
     @Input() task: Task;
-
+    @Input() expandedIds: string[] = [];
+    @Output() toggleStream = new EventEmitter<any>();
     private loading: boolean = true;
     private stream: any[] = [];
     public level: number = 0;
 
-    constructor(private taskService: TaskService) { }
+    constructor(
+        private store: Store<any>,
+        private taskService: TaskService
+    ) {
+
+    }
 
     ngOnInit() {
-        if (this.task.hasSubtasks || this.task.hasRequests) {
+        // this.loadStream(this.task);
+        this.store.select('tasks').subscribe((state: ITasksState) => {
+            this.expandedIds = state.expandedIds;
+
+            if (this.expandedIds.indexOf(this.task.id) != -1) {
+                this.loadStream(this.task);
+            } else {
+                this.stream = [];
+            }
+        });
+    }
+
+    loadStream(task: Task) {
+        if (task.hasSubtasks || task.hasRequests) {
             this.taskService.fetchTaskStream(this.task).subscribe(payload => {
                 this.stream = payload;
             });
         }
     }
 
-    getStream() {
-        return this.stream;
+    onToggleStream(id: string) {
+        this.toggleStream.emit(id);
+    }
+
+    toggleExpandable(id: string, $event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        this.toggleStream.emit(id);
     }
 }

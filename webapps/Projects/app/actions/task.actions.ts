@@ -29,6 +29,8 @@ export class TaskActions {
     static DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
     static DELETE_TASK_FULFILLED = 'DELETE_TASK_FULFILLED';
 
+    static TOGGLE_STREAM_EXPAND = 'TOGGLE_STREAM_EXPAND';
+
     // TASK COMMENT
     static CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
     static CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
@@ -201,6 +203,17 @@ export class TaskActions {
             payload: {
                 task
             }
+        };
+    }
+
+
+    //===================================
+    //  TASK STREAM ACTIONS
+    //-----------------------------------
+    toggleStreamExpand(id: string) {
+        return {
+            type: TaskActions.TOGGLE_STREAM_EXPAND,
+            payload: id
         };
     }
 }

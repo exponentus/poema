@@ -51,7 +51,7 @@ export class TasksComponent {
             this.keyWord = state.keyWord;
         }));
 
-        this.subs.push(this.store.select(state => state.tasks).subscribe((state: ITasksState) => {
+        this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
             if (state) {
                 this.tasks = state.tasks;
                 this.meta = state.meta;
@@ -100,6 +100,10 @@ export class TasksComponent {
     changeFilter(filter) {
         this.filter = filter;
         this.loadData(filter);
+    }
+
+    onToggleStream(id: string) {
+        this.store.dispatch(this.taskActions.toggleStreamExpand(id));
     }
 
     newTask() {

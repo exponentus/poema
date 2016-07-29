@@ -1,7 +1,7 @@
 /* .task-list */
 .task-list {}
 
-span.task-list__title {
+div.task-list__title {
     padding-left: 20px;
     width: 20%;
 }
@@ -92,20 +92,20 @@ span.task-list__title {
 }
 
 /* */
-.level-1 .level-indent {
+.level-1 div.expandable-level {
     padding-left: 36px;
 }
 
-.level-1 .entry-expander {
+.level-1 .has-expandable .entry-expander {
     padding-left: 20px;
     width: 55px;
 }
 
-.level-2 .level-indent {
+.level-2 div.expandable-level {
     padding-left: 48px;
 }
 
-.level-2 .entry-expander {
+.level-2 .has-expandable .entry-expander {
     padding-left: 28px;
     width: 65px;
 }

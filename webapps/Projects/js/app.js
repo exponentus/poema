@@ -11,7 +11,7 @@ webpackJsonp([0],[
 	var notification_1 = __webpack_require__(376);
 	var markdown_1 = __webpack_require__(380);
 	var app_1 = __webpack_require__(393);
-	var app_routes_1 = __webpack_require__(488);
+	var app_routes_1 = __webpack_require__(591);
 	var translate_service_1 = __webpack_require__(463);
 	var services_1 = __webpack_require__(460);
 	var store_1 = __webpack_require__(640);
@@ -822,9 +822,9 @@ webpackJsonp([0],[
 	var actions_1 = __webpack_require__(453);
 	var services_1 = __webpack_require__(460);
 	var notification_1 = __webpack_require__(376);
-	var dropdown_1 = __webpack_require__(480);
-	var navbar_1 = __webpack_require__(483);
-	var nav_1 = __webpack_require__(485);
+	var dropdown_1 = __webpack_require__(583);
+	var navbar_1 = __webpack_require__(586);
+	var nav_1 = __webpack_require__(588);
 	var models_1 = __webpack_require__(465);
 	var AppComponent = (function () {
 	    function AppComponent(store, appActions, referenceActions, staffActions, appService, referenceService, staffService, translate) {
@@ -935,7 +935,7 @@ webpackJsonp([0],[
 	    AppComponent = __decorate([
 	        core_1.Component({
 	            selector: 'app',
-	            template: __webpack_require__(487),
+	            template: __webpack_require__(590),
 	            directives: [router_1.ROUTER_DIRECTIVES, dropdown_1.DROPDOWN_DIRECTIVES, notification_1.NotificationComponent, navbar_1.NavbarComponent, nav_1.NavComponent],
 	            providers: [notification_1.NotificationService],
 	            pipes: [ng2_translate_1.TranslatePipe]
@@ -4340,6 +4340,12 @@ webpackJsonp([0],[
 	            }
 	        };
 	    };
+	    TaskActions.prototype.toggleStreamExpand = function (id) {
+	        return {
+	            type: TaskActions.TOGGLE_STREAM_EXPAND,
+	            payload: id
+	        };
+	    };
 	    TaskActions.CREATE_TASK = 'CREATE_TASK';
 	    TaskActions.CREATE_TASK_FAILED = 'CREATE_TASK_FAILED';
 	    TaskActions.CREATE_TASK_FULFILLED = 'CREATE_TASK_FULFILLED';
@@ -4356,6 +4362,7 @@ webpackJsonp([0],[
 	    TaskActions.DELETE_TASK = 'DELETE_TASK';
 	    TaskActions.DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
 	    TaskActions.DELETE_TASK_FULFILLED = 'DELETE_TASK_FULFILLED';
+	    TaskActions.TOGGLE_STREAM_EXPAND = 'TOGGLE_STREAM_EXPAND';
 	    TaskActions.CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
 	    TaskActions.CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
 	    TaskActions.CREATE_TASK_COMMENT_FULFILLED = 'CREATE_TASK_COMMENT_FULFILLED';
@@ -4494,11 +4501,11 @@ webpackJsonp([0],[
 	exports.ProjectService = project_service_1.ProjectService;
 	var task_service_1 = __webpack_require__(476);
 	exports.TaskService = task_service_1.TaskService;
-	var reference_service_1 = __webpack_require__(477);
+	var reference_service_1 = __webpack_require__(580);
 	exports.ReferenceService = reference_service_1.ReferenceService;
-	var staff_service_1 = __webpack_require__(478);
+	var staff_service_1 = __webpack_require__(581);
 	exports.StaffService = staff_service_1.StaffService;
-	var upload_service_1 = __webpack_require__(479);
+	var upload_service_1 = __webpack_require__(582);
 	exports.UploadService = upload_service_1.UploadService;
 	exports.APP_SERVICES = [
 	    app_service_1.AppService,
@@ -4987,7 +4994,7 @@ webpackJsonp([0],[
 	var http_1 = __webpack_require__(329);
 	var Observable_1 = __webpack_require__(38);
 	var ng2_translate_1 = __webpack_require__(350);
-	var moment = __webpack_require__(496);
+	var moment = __webpack_require__(477);
 	var models_1 = __webpack_require__(465);
 	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
@@ -5148,7 +5155,110 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 477 */
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */,
+/* 575 */,
+/* 576 */,
+/* 577 */,
+/* 578 */,
+/* 579 */,
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5211,7 +5321,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 478 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5268,7 +5378,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 479 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5331,17 +5441,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 480 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var dropdown_component_1 = __webpack_require__(481);
-	var dropdown_toggle_component_1 = __webpack_require__(482);
+	var dropdown_component_1 = __webpack_require__(584);
+	var dropdown_toggle_component_1 = __webpack_require__(585);
 	exports.DROPDOWN_DIRECTIVES = [dropdown_component_1.DropdownComponent, dropdown_toggle_component_1.DropdownToggleComponent];
 
 
 /***/ },
-/* 481 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5355,7 +5465,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(5);
-	var dropdown_toggle_component_1 = __webpack_require__(482);
+	var dropdown_toggle_component_1 = __webpack_require__(585);
 	var DropdownComponent = (function () {
 	    function DropdownComponent(renderer) {
 	        var _this = this;
@@ -5471,7 +5581,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 482 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5516,7 +5626,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 483 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5534,7 +5644,7 @@ webpackJsonp([0],[
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var environment_actions_1 = __webpack_require__(454);
-	var dropdown_1 = __webpack_require__(480);
+	var dropdown_1 = __webpack_require__(583);
 	var user_1 = __webpack_require__(466);
 	var NavbarComponent = (function () {
 	    function NavbarComponent(store, environmentActions) {
@@ -5567,7 +5677,7 @@ webpackJsonp([0],[
 	    NavbarComponent = __decorate([
 	        core_1.Component({
 	            selector: 'navbar',
-	            template: __webpack_require__(484),
+	            template: __webpack_require__(587),
 	            directives: [router_1.ROUTER_DIRECTIVES, dropdown_1.DROPDOWN_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -5579,13 +5689,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 484 */
+/* 587 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"navbar-header\">\r\n    <button class=\"btn-side-nav-toggle\" type=\"button\" (click)=\"toggleNav()\"></button>\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{ logoUrl }}\" />\r\n    <span class=\"brand-title\">\r\n        {{ headerTitle }}\r\n    </span>\r\n</div>\r\n<nav class=\"navbar-nav navbar-right\">\r\n    <ul class=\"nav nav-inline navbar-right\">\r\n        <li dropdown class=\"dropdown\">\r\n            <a dropdown-toggle href=\"#\" class=\"dropdown-toggle\">\r\n                <i class=\"fa fa-user\"></i>\r\n            </a>\r\n            <ul class=\"dropdown-menu right\">\r\n                <li *ngIf=\"user\">\r\n                    <a class=\"user-profile\" [routerLink]=\"['/user-profile']\">\r\n                        <i class=\"fa fa-user\"></i>\r\n                        <span>{{ user.name }}</span>\r\n                    </a>\r\n                </li>\r\n                <li class=\"divider\"></li>\r\n                <li>\r\n                    <a class=\"ws\" href=\"{{workspaceUrl}}\">\r\n                        <i class=\"fa fa-th\"></i>\r\n                        <span>{{ 'workspace' | translate }}</span>\r\n                    </a>\r\n                </li>\r\n            </ul>\r\n        </li>\r\n    </ul>\r\n    <form class=\"navbar-form navbar-search\">\r\n        <input type=\"search\" class=\"q\" name=\"keyword\" #keyWord placeholder=\"{{ 'search' | translate }}\" required autocomplete=\"off\" (keyup)=\"search($event.target)\" (focus)=\"searchFocus()\" (blur)=\"searchBlur($event.target)\" />\r\n        <button type=\"reset\" (click)=\"search('')\"><i class=\"fa fa-times\"></i></button>\r\n        <input type=\"submit\" value=\"search\" />\r\n    </form>\r\n</nav>\r\n"
 
 /***/ },
-/* 485 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5629,7 +5739,7 @@ webpackJsonp([0],[
 	    NavComponent = __decorate([
 	        core_1.Component({
 	            selector: '[data-c=nav]',
-	            template: __webpack_require__(486),
+	            template: __webpack_require__(589),
 	            directives: [router_1.ROUTER_DIRECTIVES],
 	            pipes: [ng2_translate_1.TranslatePipe]
 	        }), 
@@ -5641,27 +5751,27 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 486 */
+/* 589 */
 /***/ function(module, exports) {
 
 	module.exports = "<ul>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'my']\" class=\"nav-link\">\r\n            <i class=\"fa fa-pencil\"></i>\r\n            <span>{{'my_tasks' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'inbox']\" class=\"nav-link\">\r\n            <i class=\"fa fa-inbox\"></i>\r\n            <span>{{'tasks_assigned_to_me' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <!-- <li>\r\n        <a [routerLink]=\"['/']\" class=\"nav-link\">\r\n            <i class=\"fa fa-dashboard\"></i>\r\n            <span>{{'dashboard' | translate}}</span>\r\n        </a>\r\n    </li> -->\r\n    <li class=\"divider\"></li>\r\n    <li>\r\n        <a [routerLink]=\"['/projects']\" class=\"nav-link\">\r\n            <i class=\"fa fa-puzzle-piece\"></i>\r\n            <span>{{'projects' | translate}}</span>\r\n        </a>\r\n        <ul>\r\n            <li *ngFor=\"let project of projects\">\r\n                <a [routerLink]=\"['/projects', project.id, 'tasks']\" class=\"nav-link\">\r\n                    <i class=\"fa fa-file-text-o\"></i>\r\n                    <span>{{project.name}}</span>\r\n                </a>\r\n            </li>\r\n        </ul>\r\n    </li>\r\n</ul>\r\n"
 
 /***/ },
-/* 487 */
+/* 590 */
 /***/ function(module, exports) {
 
 	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <header class=\"header navbar navbar-fixed-top\">\r\n        <div class=\"container\">\r\n            <navbar [user]=\"loggedUser\"></navbar>\r\n        </div>\r\n    </header>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n"
 
 /***/ },
-/* 488 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var router_1 = __webpack_require__(394);
-	var auth_guard_1 = __webpack_require__(489);
-	var redirect_guard_1 = __webpack_require__(490);
-	var dashboard_1 = __webpack_require__(491);
-	var projects_1 = __webpack_require__(493);
+	var auth_guard_1 = __webpack_require__(592);
+	var redirect_guard_1 = __webpack_require__(593);
+	var dashboard_1 = __webpack_require__(594);
+	var projects_1 = __webpack_require__(596);
 	var project_1 = __webpack_require__(614);
 	var tasks_1 = __webpack_require__(621);
 	var task_1 = __webpack_require__(628);
@@ -5689,7 +5799,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 489 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5726,7 +5836,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 490 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5774,7 +5884,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 491 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5790,7 +5900,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var http_1 = __webpack_require__(329);
 	var ng2_translate_1 = __webpack_require__(350);
-	var project_input_1 = __webpack_require__(492);
+	var project_input_1 = __webpack_require__(595);
 	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -5844,7 +5954,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 492 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5860,7 +5970,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var dropdown_1 = __webpack_require__(480);
+	var dropdown_1 = __webpack_require__(583);
 	var ProjectInputComponent = (function () {
 	    function ProjectInputComponent(store) {
 	        this.store = store;
@@ -5947,7 +6057,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 493 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5964,9 +6074,9 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var pagination_1 = __webpack_require__(603);
-	var staff_service_1 = __webpack_require__(478);
+	var staff_service_1 = __webpack_require__(581);
 	var project_service_1 = __webpack_require__(464);
 	var project_list_1 = __webpack_require__(605);
 	var project_actions_1 = __webpack_require__(456);
@@ -6051,11 +6161,11 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 494 */
+/* 597 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var date_format_pipe_1 = __webpack_require__(495);
+	var date_format_pipe_1 = __webpack_require__(598);
 	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
 	var text_transform_pipe_1 = __webpack_require__(599);
 	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
@@ -6068,7 +6178,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 495 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6082,7 +6192,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(5);
-	var moment = __webpack_require__(496);
+	var moment = __webpack_require__(477);
 	var DateFormatPipe = (function () {
 	    function DateFormatPipe() {
 	    }
@@ -6109,109 +6219,6 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 496 */,
-/* 497 */,
-/* 498 */,
-/* 499 */,
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */,
-/* 508 */,
-/* 509 */,
-/* 510 */,
-/* 511 */,
-/* 512 */,
-/* 513 */,
-/* 514 */,
-/* 515 */,
-/* 516 */,
-/* 517 */,
-/* 518 */,
-/* 519 */,
-/* 520 */,
-/* 521 */,
-/* 522 */,
-/* 523 */,
-/* 524 */,
-/* 525 */,
-/* 526 */,
-/* 527 */,
-/* 528 */,
-/* 529 */,
-/* 530 */,
-/* 531 */,
-/* 532 */,
-/* 533 */,
-/* 534 */,
-/* 535 */,
-/* 536 */,
-/* 537 */,
-/* 538 */,
-/* 539 */,
-/* 540 */,
-/* 541 */,
-/* 542 */,
-/* 543 */,
-/* 544 */,
-/* 545 */,
-/* 546 */,
-/* 547 */,
-/* 548 */,
-/* 549 */,
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */,
-/* 556 */,
-/* 557 */,
-/* 558 */,
-/* 559 */,
-/* 560 */,
-/* 561 */,
-/* 562 */,
-/* 563 */,
-/* 564 */,
-/* 565 */,
-/* 566 */,
-/* 567 */,
-/* 568 */,
-/* 569 */,
-/* 570 */,
-/* 571 */,
-/* 572 */,
-/* 573 */,
-/* 574 */,
-/* 575 */,
-/* 576 */,
-/* 577 */,
-/* 578 */,
-/* 579 */,
-/* 580 */,
-/* 581 */,
-/* 582 */,
-/* 583 */,
-/* 584 */,
-/* 585 */,
-/* 586 */,
-/* 587 */,
-/* 588 */,
-/* 589 */,
-/* 590 */,
-/* 591 */,
-/* 592 */,
-/* 593 */,
-/* 594 */,
-/* 595 */,
-/* 596 */,
-/* 597 */,
-/* 598 */,
 /* 599 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -6487,7 +6494,7 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(394);
 	var ng2_translate_1 = __webpack_require__(350);
 	var shared_1 = __webpack_require__(606);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var ProjectListComponent = (function () {
 	    function ProjectListComponent() {
 	        this.showHeader = true;
@@ -6560,7 +6567,7 @@ webpackJsonp([0],[
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	__export(__webpack_require__(607));
-	__export(__webpack_require__(492));
+	__export(__webpack_require__(595));
 	__export(__webpack_require__(608));
 	__export(__webpack_require__(609));
 	__export(__webpack_require__(610));
@@ -6583,8 +6590,8 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
-	var dropdown_1 = __webpack_require__(480);
-	var staff_service_1 = __webpack_require__(478);
+	var dropdown_1 = __webpack_require__(583);
+	var staff_service_1 = __webpack_require__(581);
 	var models_1 = __webpack_require__(465);
 	var OrganizationInputComponent = (function () {
 	    function OrganizationInputComponent(staffService) {
@@ -6716,8 +6723,8 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var pipes_1 = __webpack_require__(494);
-	var dropdown_1 = __webpack_require__(480);
+	var pipes_1 = __webpack_require__(597);
+	var dropdown_1 = __webpack_require__(583);
 	var RequestTypeInputComponent = (function () {
 	    function RequestTypeInputComponent(store) {
 	        this.store = store;
@@ -6811,8 +6818,8 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var pipes_1 = __webpack_require__(494);
-	var dropdown_1 = __webpack_require__(480);
+	var pipes_1 = __webpack_require__(597);
+	var dropdown_1 = __webpack_require__(583);
 	var TagsInputComponent = (function () {
 	    function TagsInputComponent(store) {
 	        this.store = store;
@@ -6928,8 +6935,8 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var pipes_1 = __webpack_require__(494);
-	var dropdown_1 = __webpack_require__(480);
+	var pipes_1 = __webpack_require__(597);
+	var dropdown_1 = __webpack_require__(583);
 	var TaskTypeInputComponent = (function () {
 	    function TaskTypeInputComponent(store) {
 	        this.store = store;
@@ -7023,7 +7030,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
-	var dropdown_1 = __webpack_require__(480);
+	var dropdown_1 = __webpack_require__(583);
 	var UserInputComponent = (function () {
 	    function UserInputComponent(store) {
 	        this.store = store;
@@ -7168,12 +7175,12 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var notification_1 = __webpack_require__(376);
 	var datepicker_1 = __webpack_require__(615);
-	var dropdown_1 = __webpack_require__(480);
+	var dropdown_1 = __webpack_require__(583);
 	var markdown_1 = __webpack_require__(380);
 	var switch_button_1 = __webpack_require__(617);
 	var shared_1 = __webpack_require__(606);
 	var attachments_1 = __webpack_require__(619);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var services_1 = __webpack_require__(460);
 	var models_1 = __webpack_require__(465);
 	var ProjectComponent = (function () {
@@ -7601,7 +7608,7 @@ webpackJsonp([0],[
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var notification_1 = __webpack_require__(376);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var pagination_1 = __webpack_require__(603);
 	var task_filter_1 = __webpack_require__(622);
 	var task_service_1 = __webpack_require__(476);
@@ -7631,7 +7638,7 @@ webpackJsonp([0],[
 	            }
 	            _this.keyWord = state.keyWord;
 	        }));
-	        this.subs.push(this.store.select(function (state) { return state.tasks; }).subscribe(function (state) {
+	        this.subs.push(this.store.select('tasks').subscribe(function (state) {
 	            if (state) {
 	                _this.tasks = state.tasks;
 	                _this.meta = state.meta;
@@ -7672,6 +7679,9 @@ webpackJsonp([0],[
 	        this.filter = filter;
 	        this.loadData(filter);
 	    };
+	    TasksComponent.prototype.onToggleStream = function (id) {
+	        this.store.dispatch(this.taskActions.toggleStreamExpand(id));
+	    };
 	    TasksComponent.prototype.newTask = function () {
 	        this.router.navigate(['/task', 'new']);
 	    };
@@ -7709,7 +7719,7 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
 	var shared_1 = __webpack_require__(606);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var TaskFilterComponent = (function () {
 	    function TaskFilterComponent() {
 	        this.change = new core_1.EventEmitter();
@@ -7785,15 +7795,22 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var store_1 = __webpack_require__(437);
 	var shared_1 = __webpack_require__(606);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var task_stream_1 = __webpack_require__(624);
+	var actions_1 = __webpack_require__(453);
 	var TaskListComponent = (function () {
-	    function TaskListComponent(store) {
+	    function TaskListComponent(store, taskActions) {
+	        var _this = this;
 	        this.store = store;
+	        this.taskActions = taskActions;
 	        this.showHeader = true;
+	        this.toggleStream = new core_1.EventEmitter();
 	        this.selectedIds = [];
 	        this.isSelectedAll = false;
 	        this.expandedIds = [];
+	        this.store.select('tasks').subscribe(function (state) {
+	            _this.expandedIds = state.expandedIds;
+	        });
 	    }
 	    Object.defineProperty(TaskListComponent.prototype, "_tasks", {
 	        set: function (tasks) {
@@ -7829,9 +7846,13 @@ webpackJsonp([0],[
 	            }
 	        }
 	    };
+	    TaskListComponent.prototype.onToggleStream = function (id) {
+	        this.store.dispatch(this.taskActions.toggleStreamExpand(id));
+	    };
 	    TaskListComponent.prototype.toggleExpandable = function (id, $event) {
 	        $event.preventDefault();
 	        $event.stopPropagation();
+	        this.onToggleStream(id);
 	    };
 	    __decorate([
 	        core_1.Input('tasks'), 
@@ -7842,6 +7863,10 @@ webpackJsonp([0],[
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
 	    ], TaskListComponent.prototype, "showHeader", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], TaskListComponent.prototype, "toggleStream", void 0);
 	    TaskListComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-list',
@@ -7849,7 +7874,7 @@ webpackJsonp([0],[
 	            directives: [router_1.ROUTER_DIRECTIVES, shared_1.UserInputComponent, shared_1.TagsInputComponent, task_stream_1.TaskStreamComponent],
 	            pipes: [pipes_1.DateFormatPipe, ng2_translate_1.TranslatePipe, pipes_1.TextTransformPipe]
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store])
+	        __metadata('design:paramtypes', [store_1.Store, actions_1.TaskActions])
 	    ], TaskListComponent);
 	    return TaskListComponent;
 	}());
@@ -7873,13 +7898,17 @@ webpackJsonp([0],[
 	var core_1 = __webpack_require__(5);
 	var router_1 = __webpack_require__(394);
 	var ng2_translate_1 = __webpack_require__(350);
+	var store_1 = __webpack_require__(437);
 	var shared_1 = __webpack_require__(606);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var services_1 = __webpack_require__(460);
 	var models_1 = __webpack_require__(465);
 	var TaskStreamComponent = (function () {
-	    function TaskStreamComponent(taskService) {
+	    function TaskStreamComponent(store, taskService) {
+	        this.store = store;
 	        this.taskService = taskService;
+	        this.expandedIds = [];
+	        this.toggleStream = new core_1.EventEmitter();
 	        this.loading = true;
 	        this.stream = [];
 	        this.level = 0;
@@ -7894,14 +7923,31 @@ webpackJsonp([0],[
 	    ;
 	    TaskStreamComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        if (this.task.hasSubtasks || this.task.hasRequests) {
+	        this.store.select('tasks').subscribe(function (state) {
+	            _this.expandedIds = state.expandedIds;
+	            if (_this.expandedIds.indexOf(_this.task.id) != -1) {
+	                _this.loadStream(_this.task);
+	            }
+	            else {
+	                _this.stream = [];
+	            }
+	        });
+	    };
+	    TaskStreamComponent.prototype.loadStream = function (task) {
+	        var _this = this;
+	        if (task.hasSubtasks || task.hasRequests) {
 	            this.taskService.fetchTaskStream(this.task).subscribe(function (payload) {
 	                _this.stream = payload;
 	            });
 	        }
 	    };
-	    TaskStreamComponent.prototype.getStream = function () {
-	        return this.stream;
+	    TaskStreamComponent.prototype.onToggleStream = function (id) {
+	        this.toggleStream.emit(id);
+	    };
+	    TaskStreamComponent.prototype.toggleExpandable = function (id, $event) {
+	        $event.preventDefault();
+	        $event.stopPropagation();
+	        this.toggleStream.emit(id);
 	    };
 	    __decorate([
 	        core_1.HostBinding('class.stream-level'), 
@@ -7916,6 +7962,14 @@ webpackJsonp([0],[
 	        core_1.Input(), 
 	        __metadata('design:type', models_1.Task)
 	    ], TaskStreamComponent.prototype, "task", void 0);
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Array)
+	    ], TaskStreamComponent.prototype, "expandedIds", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], TaskStreamComponent.prototype, "toggleStream", void 0);
 	    TaskStreamComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-stream',
@@ -7923,7 +7977,7 @@ webpackJsonp([0],[
 	            directives: [router_1.ROUTER_DIRECTIVES, shared_1.UserInputComponent, shared_1.TagsInputComponent, TaskStreamComponent],
 	            pipes: [pipes_1.DateFormatPipe, pipes_1.TextTransformPipe, ng2_translate_1.TranslatePipe, pipes_1.LocalizedNamePipe]
 	        }), 
-	        __metadata('design:paramtypes', [services_1.TaskService])
+	        __metadata('design:paramtypes', [store_1.Store, services_1.TaskService])
 	    ], TaskStreamComponent);
 	    return TaskStreamComponent;
 	}());
@@ -7934,19 +7988,19 @@ webpackJsonp([0],[
 /* 625 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"entry-wrap level-{{level}}\" *ngFor=\"let m of stream\">\r\n    <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n        <label class=\"entry-select\">\r\n            <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n        </label>\r\n        <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n            <div class=\"entry-fields\">\r\n                <span class=\"task-list__title level-indent\">\r\n                    <div class=\"entry-expander\" [class.is-expanded]=\"true\" (click)=\"toggleExpandable(m.id)\">\r\n                        <i class=\"entry-expander_icon fa\"></i>\r\n                    </div>\r\n                    <span>{{m.title}}</span>\r\n                </span>\r\n                <span class=\"vw-icon\">\r\n                    <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                </span>\r\n                <span class=\"task-list__status\">{{m.status | text:'L' | translate}}</span>\r\n                <span class=\"task-list__priority\">{{m.priority | text:'L' | translate}}</span>\r\n                <span class=\"task-list__assignee\">\r\n                    <user-input [userIds]=\"[m.assigneeUserId]\"></user-input>\r\n                </span>\r\n                <span class=\"task-list__start_date\">{{m.startDate | dateFmt}}</span>\r\n                <span class=\"task-list__due_date\">{{m.dueDate | dateFmt}}</span>\r\n                <span class=\"task-list__tags\">\r\n                    <tags-input [tagIds]=\"m.tagIds\"></tags-input>\r\n                </span>\r\n            </div>\r\n        </a>\r\n    </div>\r\n    <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n        <label class=\"entry-select\">\r\n            <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n        </label>\r\n        <div class=\"entry-link\">\r\n            <div class=\"entry-fields\">\r\n                <span class=\"task-list__request_type\">{{m.requestType | localizedName}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n        <label class=\"entry-select\">\r\n            <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n        </label>\r\n        <div class=\"entry-link\">\r\n            <div class=\"entry-fields\">\r\n                <span class=\"task-list__comment_comment\">{{m.comment}}</span>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m.kind == 'task'\" [level]=\"level\" [task]=\"m\"></task-stream>\r\n</div>\r\n"
+	module.exports = "<div *ngFor=\"let m of stream\">\r\n    <div class=\"entry-wrap level-{{level}}\">\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"m.hasSubtasks || m.hasRequests\">\r\n                        <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(m.id) != -1\" (click)=\"toggleExpandable(m.id, $event)\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        <span>{{m.title}}</span>\r\n                    </div>\r\n                    <div class=\"vw-icon\">\r\n                        <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                    </div>\r\n                    <div class=\"task-list__status\">\r\n                        <span class=\"status-{{m.status | text:'L'}}\">{{m.status | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__priority\">\r\n                        <span class=\"priority-{{m.priority | text:'L'}}\">{{m.priority | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__assignee\">\r\n                        <user-input [userIds]=\"[m.assigneeUserId]\"></user-input>\r\n                    </div>\r\n                    <div class=\"task-list__start_date\">{{m.startDate | dateFmt}}</div>\r\n                    <div class=\"task-list__due_date\">{{m.dueDate | dateFmt}}</div>\r\n                    <div class=\"task-list__tags\">\r\n                        <tags-input [tagIds]=\"m.tagIds\"></tags-input>\r\n                    </div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__request_type expandable-level\">{{m.requestType | localizedName}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__comment_comment\">{{m.comment}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m.kind == 'task'\" [level]=\"level\" [task]=\"m\" [expandedIds]=\"expandedIds\" (toggleStream)=\"onToggleStream($event)\"></task-stream>\r\n</div>\r\n"
 
 /***/ },
 /* 626 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <span class=\"task-list__title\">{{'task_title' | translate}}</span>\r\n                <span class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></span>\r\n                <span class=\"task-list__status\">{{'status' | translate}}</span>\r\n                <span class=\"task-list__priority\">{{'priority' | translate}}</span>\r\n                <span class=\"task-list__assignee\">{{'assignee_user' | translate}}</span>\r\n                <span class=\"task-list__start_date\">{{'start_date' | translate}}</span>\r\n                <span class=\"task-list__due_date\">{{'due_date' | translate}}</span>\r\n                <span class=\"task-list__tags\">{{'tags' | translate}}</span>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let task of tasks\">\r\n            <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <span class=\"task-list__title\">\r\n                            <div class=\"entry-expander\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                <i class=\"entry-expander_icon fa\"></i>\r\n                            </div>\r\n                            <span>{{task.title}}</span>\r\n                        </span>\r\n                        <span class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                        </span>\r\n                        <span class=\"task-list__status\">\r\n                            <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                        </span>\r\n                        <span class=\"task-list__priority\">\r\n                            <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                        </span>\r\n                        <span class=\"task-list__assignee\">\r\n                            <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                        </span>\r\n                        <span class=\"task-list__start_date\">{{task.startDate | dateFmt}}</span>\r\n                        <span class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</span>\r\n                        <span class=\"task-list__tags\">\r\n                            <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                        </span>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n            <task-stream [level]=\"0\" [task]=\"task\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"task-list__title\">{{'task_title' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"task-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"task-list__priority\">{{'priority' | translate}}</div>\r\n                <div class=\"task-list__assignee\">{{'assignee_user' | translate}}</div>\r\n                <div class=\"task-list__start_date\">{{'start_date' | translate}}</div>\r\n                <div class=\"task-list__due_date\">{{'due_date' | translate}}</div>\r\n                <div class=\"task-list__tags\">{{'tags' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div *ngFor=\"let task of tasks\">\r\n            <div class=\"entry-wrap\">\r\n                <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                    <label class=\"entry-select\">\r\n                        <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                    </label>\r\n                    <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                        <div class=\"entry-fields\">\r\n                            <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"task.hasSubtasks || task.hasRequests\">\r\n                                <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(task.id) != -1\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                    <i class=\"entry-expander_icon fa\"></i>\r\n                                </div>\r\n                                <span>{{task.title}}</span>\r\n                            </div>\r\n                            <div class=\"vw-icon\">\r\n                                <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                            </div>\r\n                            <div class=\"task-list__status\">\r\n                                <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__priority\">\r\n                                <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__assignee\">\r\n                                <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                            </div>\r\n                            <div class=\"task-list__start_date\">{{task.startDate | dateFmt}}</div>\r\n                            <div class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</div>\r\n                            <div class=\"task-list__tags\">\r\n                                <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <task-stream [level]=\"0\" [task]=\"task\" [expandedIds]=\"expandedIds\" (toggleStream)=\"onToggleStream($event)\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
 /* 627 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"loading\">\r\n    <task-list [tasks]=\"tasks\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
+	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"loading\">\r\n    <task-list [tasks]=\"tasks\" (toggleStream)=\"onToggleStream($event)\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ },
 /* 628 */
@@ -7970,7 +8024,7 @@ webpackJsonp([0],[
 	var notification_1 = __webpack_require__(376);
 	var datepicker_1 = __webpack_require__(615);
 	var tabs_1 = __webpack_require__(629);
-	var dropdown_1 = __webpack_require__(480);
+	var dropdown_1 = __webpack_require__(583);
 	var markdown_1 = __webpack_require__(380);
 	var switch_button_1 = __webpack_require__(617);
 	var shared_1 = __webpack_require__(606);
@@ -7979,7 +8033,7 @@ webpackJsonp([0],[
 	var request_1 = __webpack_require__(633);
 	var attachments_1 = __webpack_require__(619);
 	var comments_1 = __webpack_require__(634);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var actions_1 = __webpack_require__(453);
 	var services_1 = __webpack_require__(460);
 	var models_1 = __webpack_require__(465);
@@ -8411,9 +8465,9 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(5);
 	var ng2_translate_1 = __webpack_require__(350);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var markdown_1 = __webpack_require__(380);
-	var pipes_2 = __webpack_require__(494);
+	var pipes_2 = __webpack_require__(597);
 	var attachments_1 = __webpack_require__(619);
 	var RequestListComponent = (function () {
 	    function RequestListComponent() {
@@ -8660,7 +8714,7 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var markdown_1 = __webpack_require__(380);
 	var attachments_1 = __webpack_require__(619);
-	var pipes_1 = __webpack_require__(494);
+	var pipes_1 = __webpack_require__(597);
 	var models_1 = __webpack_require__(465);
 	var CommentComponent = (function () {
 	    function CommentComponent() {
@@ -9203,13 +9257,11 @@ webpackJsonp([0],[
 	"use strict";
 	var actions_1 = __webpack_require__(453);
 	exports.SET_FILTER = 'SET_FILTER';
-	exports.EXPAND_ID = 'EXPAND_ID';
-	exports.COLLAPSE_ID = 'COLLAPSE_ID';
 	;
 	var initialState = {
 	    meta: {},
 	    tasks: [],
-	    expandIds: [],
+	    expandedIds: [],
 	    loading: false,
 	    filter: {
 	        taskType: null,
@@ -9230,26 +9282,24 @@ webpackJsonp([0],[
 	            return Object.assign({}, state, {
 	                task: payload.task
 	            });
+	        case actions_1.TaskActions.TOGGLE_STREAM_EXPAND:
+	            var ind = state.expandedIds.indexOf(payload);
+	            if (ind == -1) {
+	                var ps = [].concat(state.expandedIds);
+	                ps.push(payload);
+	                return Object.assign({}, state, {
+	                    expandedIds: ps
+	                });
+	            }
+	            else {
+	                return Object.assign({}, state, {
+	                    expandedIds: state.expandedIds.filter(function (it) { return it != payload; })
+	                });
+	            }
 	        case exports.SET_FILTER:
 	            return Object.assign({}, state, {
 	                filter: payload
 	            });
-	        case exports.EXPAND_ID:
-	            if (state.expandIds.indexOf(payload.id) == -1) {
-	                return Object.assign({}, state, {
-	                    expandIds: state.expandIds.push(payload.id)
-	                });
-	            }
-	            return state;
-	        case exports.COLLAPSE_ID:
-	            var ind = state.expandIds.indexOf(payload.id);
-	            if (ind != -1) {
-	                var ids = state.expandIds.splice(ind);
-	                return Object.assign({}, state, {
-	                    expandIds: ids
-	                });
-	            }
-	            return state;
 	        default:
 	            return state;
 	    }
