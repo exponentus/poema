@@ -7808,7 +7808,7 @@ webpackJsonp([0],[
 	        this.selectedIds = [];
 	        this.isSelectedAll = false;
 	        this.expandedIds = [];
-	        this.store.select('tasks').subscribe(function (state) {
+	        this.sub = this.store.select('tasks').subscribe(function (state) {
 	            _this.expandedIds = state.expandedIds;
 	        });
 	    }
@@ -7821,6 +7821,9 @@ webpackJsonp([0],[
 	        enumerable: true,
 	        configurable: true
 	    });
+	    TaskListComponent.prototype.ngOnDestroy = function () {
+	        this.sub.unsubscribe();
+	    };
 	    TaskListComponent.prototype.isSelected = function (id) {
 	        return this.selectedIds.indexOf(id) != -1;
 	    };
@@ -7923,15 +7926,20 @@ webpackJsonp([0],[
 	    ;
 	    TaskStreamComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.store.select('tasks').subscribe(function (state) {
+	        this.sub = this.store.select('tasks').subscribe(function (state) {
 	            _this.expandedIds = state.expandedIds;
 	            if (_this.expandedIds.indexOf(_this.task.id) != -1) {
-	                _this.loadStream(_this.task);
+	                if (!_this.stream.length) {
+	                    _this.loadStream(_this.task);
+	                }
 	            }
 	            else {
 	                _this.stream = [];
 	            }
 	        });
+	    };
+	    TaskStreamComponent.prototype.ngOnDestroy = function () {
+	        this.sub.unsubscribe();
 	    };
 	    TaskStreamComponent.prototype.loadStream = function (task) {
 	        var _this = this;

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, HostBinding, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, HostBinding, EventEmitter } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
@@ -24,6 +24,7 @@ export class TaskStreamComponent {
     @Input() task: Task;
     @Input() expandedIds: string[] = [];
     @Output() toggleStream = new EventEmitter<any>();
+    private sub: any;
     private loading: boolean = true;
     private stream: any[] = [];
     public level: number = 0;
@@ -31,21 +32,24 @@ export class TaskStreamComponent {
     constructor(
         private store: Store<any>,
         private taskService: TaskService
-    ) {
-
-    }
+    ) { }
 
     ngOnInit() {
-        // this.loadStream(this.task);
-        this.store.select('tasks').subscribe((state: ITasksState) => {
+        this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
             this.expandedIds = state.expandedIds;
 
             if (this.expandedIds.indexOf(this.task.id) != -1) {
-                this.loadStream(this.task);
+                if (!this.stream.length) {
+                    this.loadStream(this.task);
+                }
             } else {
                 this.stream = [];
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     loadStream(task: Task) {

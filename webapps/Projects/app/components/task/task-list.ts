@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
@@ -25,20 +25,23 @@ export class TaskListComponent {
     }
     @Input() showHeader: boolean = true;
     @Output() toggleStream = new EventEmitter<any>();
-
+    private sub: any;
     private tasks: Task[];
     private selectedIds: string[] = [];
     private isSelectedAll: boolean = false;
-
     private expandedIds: string[] = [];
 
     constructor(
         private store: Store<any>,
         private taskActions: TaskActions
     ) {
-        this.store.select('tasks').subscribe((state: ITasksState) => {
+        this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
             this.expandedIds = state.expandedIds;
         });
+    }
+
+    ngOnDestroy() {
+        this.sub.unsubscribe();
     }
 
     isSelected(id: string) {
