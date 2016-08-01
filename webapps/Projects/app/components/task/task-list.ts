@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
@@ -24,7 +24,6 @@ export class TaskListComponent {
         this.isSelectedAll = false;
     }
     @Input() showHeader: boolean = true;
-    @Output() toggleStream = new EventEmitter<any>();
     private sub: any;
     private tasks: Task[];
     private selectedIds: string[] = [];
@@ -71,7 +70,6 @@ export class TaskListComponent {
     }
 
     onToggleStream(id: string) {
-        // this.toggleStream.emit(id);
         this.store.dispatch(this.taskActions.toggleStreamExpand(id));
     }
 

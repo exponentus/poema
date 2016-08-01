@@ -26,11 +26,11 @@ import { Request } from '../../models';
                     <div class="request__resolution">
                         <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPT'">
                             <i class="fa fa-check"></i>
-                            {{'accepted' | text:'L' | translate}}
+                            {{'accepted' | translate}}
                         </span>
                         <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINE'">
                             <i class="fa fa-times"></i>
-                            {{'declined' | text:'L' | translate}}
+                            {{'declined' | translate}}
                         </span>
                         <div class="request__resolution_time">{{request.resolutionTime}}</div>
                         <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">

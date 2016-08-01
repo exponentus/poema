@@ -102,10 +102,6 @@ export class TasksComponent {
         this.loadData(filter);
     }
 
-    onToggleStream(id: string) {
-        this.store.dispatch(this.taskActions.toggleStreamExpand(id));
-    }
-
     newTask() {
         this.router.navigate(['/task', 'new']);
     }

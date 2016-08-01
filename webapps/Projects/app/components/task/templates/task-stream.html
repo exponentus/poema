@@ -36,11 +36,25 @@
             <label class="entry-select">
                 <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
             </label>
-            <div class="entry-link">
+            <a class="entry-link" [routerLink]="['/task', task.id]">
                 <div class="entry-fields">
                     <div class="task-list__request_type expandable-level">{{m.requestType | localizedName}}</div>
+                    <div class="request__time">{{m.regDate}}</div>
+                    <div class="request__comment">{{m.comment}}</div>
+                    <div class="request__attachments" *ngIf="m.attachments && m.attachments.length">
+                        <i class="fa fa-paperclip"></i>
+                    </div>
+                    <span class="{{m.resolution | text:'L'}}" *ngIf="m.resolution == 'ACCEPT'">
+                        <i class="fa fa-check"></i>
+                        {{'accepted' | translate}}
+                    </span>
+                    <span class="{{m.resolution | text:'L'}}" *ngIf="m.resolution == 'DECLINE'">
+                        <i class="fa fa-times"></i>
+                        {{'declined' | translate}}
+                    </span>
+                    <div class="request__resolution_time">{{m.resolutionTime}}</div>
                 </div>
-            </div>
+            </a>
         </div>
         <div class="entry" *ngIf="m.kind == 'comment'">
             <label class="entry-select">
@@ -53,5 +67,5 @@
             </div>
         </div>
     </div>
-    <task-stream *ngIf="m.kind == 'task'" [level]="level" [task]="m" [expandedIds]="expandedIds" (toggleStream)="onToggleStream($event)"></task-stream>
+    <task-stream *ngIf="m.kind == 'task'" [level]="level" [task]="m" (toggleStream)="onToggleStream($event)"></task-stream>
 </div>

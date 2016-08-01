@@ -22,12 +22,12 @@ export class TaskStreamComponent {
         this.level = 1 + level;
     };
     @Input() task: Task;
-    @Input() expandedIds: string[] = [];
     @Output() toggleStream = new EventEmitter<any>();
     private sub: any;
+    private expandedIds: string[] = [];
     private loading: boolean = true;
     private stream: any[] = [];
-    public level: number = 0;
+    public level: number = 1;
 
     constructor(
         private store: Store<any>,
