@@ -90,31 +90,3 @@ div.task-list__title {
 .priority-normal {
     background: transparent;
 }
-
-/* */
-.level-1 div.expandable-level {
-    padding-left: 36px;
-}
-
-.level-1 .has-expandable .entry-expander {
-    padding-left: 20px;
-    width: 55px;
-}
-
-.level-2 div.expandable-level {
-    padding-left: 48px;
-}
-
-.level-2 .has-expandable .entry-expander {
-    padding-left: 28px;
-    width: 65px;
-}
-
-.level-3 div.expandable-level {
-    padding-left: 56px;
-}
-
-.level-3 .has-expandable .entry-expander {
-    padding-left: 18px;
-    width: 85px;
-}

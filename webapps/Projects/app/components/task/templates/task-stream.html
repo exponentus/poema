@@ -38,7 +38,12 @@
             </label>
             <a class="entry-link" [routerLink]="['/task', task.id]">
                 <div class="entry-fields">
-                    <div class="task-list__request_type expandable-level">{{m.requestType | localizedName}}</div>
+                    <div class="task-list__request_type expandable-level">
+                        <div class="entry-expander">
+                            <i class="entry-expander_icon fa"></i>
+                        </div>
+                        {{m.requestType | localizedName}}
+                    </div>
                     <div class="request__time">{{m.regDate}}</div>
                     <div class="request__comment">{{m.comment}}</div>
                     <div class="request__attachments" *ngIf="m.attachments && m.attachments.length">
