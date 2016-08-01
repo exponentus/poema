@@ -90,3 +90,18 @@ div.task-list__title {
 .priority-normal {
     background: transparent;
 }
+
+/* .stream-level */
+.stream-level {
+    display: block;
+    transition: max-height .15s;
+}
+
+.stream-level.close {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.stream-level.open {
+    max-height: 1000px;
+}

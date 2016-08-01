@@ -7803,16 +7803,27 @@ webpackJsonp([0],[
 	        this.showHeader = true;
 	        this.selectedIds = [];
 	        this.isSelectedAll = false;
+	        this.loading = true;
 	        this.expandedIds = [];
+	        this.loadedExpandedCount = 0;
+	        this.timeout = 0;
 	        this.sub = this.store.select('tasks').subscribe(function (state) {
 	            _this.expandedIds = state.expandedIds;
 	        });
 	    }
 	    Object.defineProperty(TaskListComponent.prototype, "_tasks", {
 	        set: function (tasks) {
+	            var _this = this;
 	            this.tasks = tasks;
 	            this.selectedIds = [];
 	            this.isSelectedAll = false;
+	            this.loadedExpandedCount = 0;
+	            this.loading = true;
+	            if (this.loading && this.tasks.length > 0) {
+	                this.timeout = setTimeout(function () {
+	                    _this.loading = false;
+	                }, 300);
+	            }
 	        },
 	        enumerable: true,
 	        configurable: true
@@ -7843,6 +7854,14 @@ webpackJsonp([0],[
 	            if (!this.selectedIds.length) {
 	                this.isSelectedAll = false;
 	            }
+	        }
+	    };
+	    TaskListComponent.prototype.onLoadStreamLevel = function (id) {
+	        this.loadedExpandedCount++;
+	        if (this.loadedExpandedCount >= this.expandedIds.length) {
+	            this.loading = false;
+	            this.loadedExpandedCount--;
+	            clearTimeout(this.timeout);
 	        }
 	    };
 	    TaskListComponent.prototype.onToggleStream = function (id) {
@@ -7903,11 +7922,19 @@ webpackJsonp([0],[
 	        this.store = store;
 	        this.taskService = taskService;
 	        this.toggleStream = new core_1.EventEmitter();
+	        this.loadStreamLevel = new core_1.EventEmitter();
 	        this.expandedIds = [];
 	        this.loading = true;
+	        this.expanded = false;
 	        this.stream = [];
 	        this.level = 1;
 	    }
+	    Object.defineProperty(TaskStreamComponent.prototype, "isHidden", {
+	        get: function () { return !this.expanded; },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    ;
 	    Object.defineProperty(TaskStreamComponent.prototype, "_level", {
 	        set: function (level) {
 	            this.level = 1 + level;
@@ -7924,9 +7951,13 @@ webpackJsonp([0],[
 	                if (!_this.stream.length) {
 	                    _this.loadStream(_this.task);
 	                }
+	                else {
+	                    _this.expanded = true;
+	                    _this.onLoadStreamLevel(_this.task.id);
+	                }
 	            }
 	            else {
-	                _this.stream = [];
+	                _this.expanded = false;
 	            }
 	        });
 	    };
@@ -7936,10 +7967,16 @@ webpackJsonp([0],[
 	    TaskStreamComponent.prototype.loadStream = function (task) {
 	        var _this = this;
 	        if (task.hasSubtasks || task.hasRequests) {
+	            this.loading = true;
 	            this.taskService.fetchTaskStream(this.task).subscribe(function (payload) {
 	                _this.stream = payload;
-	            });
+	                _this.expanded = _this.stream.length > 0;
+	                _this.onLoadStreamLevel(_this.task.id);
+	            }, function (err) { console.log('error'); }, function () { _this.loading = false; });
 	        }
+	    };
+	    TaskStreamComponent.prototype.onLoadStreamLevel = function (id) {
+	        this.loadStreamLevel.emit(id);
 	    };
 	    TaskStreamComponent.prototype.onToggleStream = function (id) {
 	        this.toggleStream.emit(id);
@@ -7947,8 +7984,12 @@ webpackJsonp([0],[
 	    TaskStreamComponent.prototype.toggleExpandable = function (id, $event) {
 	        $event.preventDefault();
 	        $event.stopPropagation();
-	        this.toggleStream.emit(id);
+	        this.onToggleStream(id);
 	    };
+	    __decorate([
+	        core_1.HostBinding('class.hidden'), 
+	        __metadata('design:type', Object)
+	    ], TaskStreamComponent.prototype, "isHidden", null);
 	    __decorate([
 	        core_1.HostBinding('class.stream-level'), 
 	        __metadata('design:type', Object)
@@ -7966,6 +8007,10 @@ webpackJsonp([0],[
 	        core_1.Output(), 
 	        __metadata('design:type', Object)
 	    ], TaskStreamComponent.prototype, "toggleStream", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], TaskStreamComponent.prototype, "loadStreamLevel", void 0);
 	    TaskStreamComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-stream',
@@ -7984,13 +8029,13 @@ webpackJsonp([0],[
 /* 625 */
 /***/ function(module, exports) {
 
-	module.exports = "<div *ngFor=\"let m of stream\">\r\n    <div class=\"entry-wrap level-{{level}}\">\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"m.hasSubtasks || m.hasRequests\">\r\n                        <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(m.id) != -1\" (click)=\"toggleExpandable(m.id, $event)\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        <span>{{m.title}}</span>\r\n                    </div>\r\n                    <div class=\"vw-icon\">\r\n                        <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                    </div>\r\n                    <div class=\"task-list__status\">\r\n                        <span class=\"status-{{m.status | text:'L'}}\">{{m.status | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__priority\">\r\n                        <span class=\"priority-{{m.priority | text:'L'}}\">{{m.priority | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__assignee\">\r\n                        <user-input [userIds]=\"[m.assigneeUserId]\"></user-input>\r\n                    </div>\r\n                    <div class=\"task-list__start_date\">{{m.startDate | dateFmt}}</div>\r\n                    <div class=\"task-list__due_date\">{{m.dueDate | dateFmt}}</div>\r\n                    <div class=\"task-list__tags\">\r\n                        <tags-input [tagIds]=\"m.tagIds\"></tags-input>\r\n                    </div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__request_type expandable-level\">\r\n                        <div class=\"entry-expander\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        {{m.requestType | localizedName}}\r\n                    </div>\r\n                    <div class=\"request__time\">{{m.regDate}}</div>\r\n                    <div class=\"request__comment\">{{m.comment}}</div>\r\n                    <div class=\"request__attachments\" *ngIf=\"m.attachments && m.attachments.length\">\r\n                        <i class=\"fa fa-paperclip\"></i>\r\n                    </div>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'ACCEPT'\">\r\n                        <i class=\"fa fa-check\"></i>\r\n                        {{'accepted' | translate}}\r\n                    </span>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'DECLINE'\">\r\n                        <i class=\"fa fa-times\"></i>\r\n                        {{'declined' | translate}}\r\n                    </span>\r\n                    <div class=\"request__resolution_time\">{{m.resolutionTime}}</div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__comment_comment\">{{m.comment}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m.kind == 'task'\" [level]=\"level\" [task]=\"m\" (toggleStream)=\"onToggleStream($event)\"></task-stream>\r\n</div>\r\n"
+	module.exports = "<div *ngFor=\"let m of stream\">\r\n    <div class=\"entry-wrap level-{{level}}\">\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"m.hasSubtasks || m.hasRequests\">\r\n                        <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(m.id) != -1\" (click)=\"toggleExpandable(m.id, $event)\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        <span>{{m.title}}</span>\r\n                    </div>\r\n                    <div class=\"vw-icon\">\r\n                        <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                    </div>\r\n                    <div class=\"task-list__status\">\r\n                        <span class=\"status-{{m.status | text:'L'}}\">{{m.status | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__priority\">\r\n                        <span class=\"priority-{{m.priority | text:'L'}}\">{{m.priority | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__assignee\">\r\n                        <user-input [userIds]=\"[m.assigneeUserId]\"></user-input>\r\n                    </div>\r\n                    <div class=\"task-list__start_date\">{{m.startDate | dateFmt}}</div>\r\n                    <div class=\"task-list__due_date\">{{m.dueDate | dateFmt}}</div>\r\n                    <div class=\"task-list__tags\">\r\n                        <tags-input [tagIds]=\"m.tagIds\"></tags-input>\r\n                    </div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__request_type expandable-level\">\r\n                        <div class=\"entry-expander\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        {{m.requestType | localizedName}}\r\n                    </div>\r\n                    <div class=\"request__time\">{{m.regDate}}</div>\r\n                    <div class=\"request__comment\">{{m.comment}}</div>\r\n                    <div class=\"request__attachments\" *ngIf=\"m.attachments && m.attachments.length\">\r\n                        <i class=\"fa fa-paperclip\"></i>\r\n                    </div>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'ACCEPT'\">\r\n                        <i class=\"fa fa-check\"></i>\r\n                        {{'accepted' | translate}}\r\n                    </span>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'DECLINE'\">\r\n                        <i class=\"fa fa-times\"></i>\r\n                        {{'declined' | translate}}\r\n                    </span>\r\n                    <div class=\"request__resolution_time\">{{m.resolutionTime}}</div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__comment_comment\">{{m.comment}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m.kind == 'task'\" [level]=\"level\" [task]=\"m\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n</div>\r\n"
 
 /***/ },
 /* 626 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"task-list__title\">{{'task_title' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"task-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"task-list__priority\">{{'priority' | translate}}</div>\r\n                <div class=\"task-list__assignee\">{{'assignee_user' | translate}}</div>\r\n                <div class=\"task-list__start_date\">{{'start_date' | translate}}</div>\r\n                <div class=\"task-list__due_date\">{{'due_date' | translate}}</div>\r\n                <div class=\"task-list__tags\">{{'tags' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div *ngFor=\"let task of tasks\">\r\n            <div class=\"entry-wrap\">\r\n                <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                    <label class=\"entry-select\">\r\n                        <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                    </label>\r\n                    <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                        <div class=\"entry-fields\">\r\n                            <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"task.hasSubtasks || task.hasRequests\">\r\n                                <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(task.id) != -1\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                    <i class=\"entry-expander_icon fa\"></i>\r\n                                </div>\r\n                                <span>{{task.title}}</span>\r\n                            </div>\r\n                            <div class=\"vw-icon\">\r\n                                <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                            </div>\r\n                            <div class=\"task-list__status\">\r\n                                <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__priority\">\r\n                                <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__assignee\">\r\n                                <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                            </div>\r\n                            <div class=\"task-list__start_date\">{{task.startDate | dateFmt}}</div>\r\n                            <div class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</div>\r\n                            <div class=\"task-list__tags\">\r\n                                <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <task-stream [task]=\"task\" (toggleStream)=\"onToggleStream($event)\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"task-list__title\">{{'task_title' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"task-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"task-list__priority\">{{'priority' | translate}}</div>\r\n                <div class=\"task-list__assignee\">{{'assignee_user' | translate}}</div>\r\n                <div class=\"task-list__start_date\">{{'start_date' | translate}}</div>\r\n                <div class=\"task-list__due_date\">{{'due_date' | translate}}</div>\r\n                <div class=\"task-list__tags\">{{'tags' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\" [class.hidden]=\"loading\">\r\n        <div *ngFor=\"let task of tasks\">\r\n            <div class=\"entry-wrap\">\r\n                <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                    <label class=\"entry-select\">\r\n                        <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                    </label>\r\n                    <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                        <div class=\"entry-fields\">\r\n                            <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"task.hasSubtasks || task.hasRequests\">\r\n                                <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(task.id) != -1\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                    <i class=\"entry-expander_icon fa\"></i>\r\n                                </div>\r\n                                <span>{{task.title}}</span>\r\n                            </div>\r\n                            <div class=\"vw-icon\">\r\n                                <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                            </div>\r\n                            <div class=\"task-list__status\">\r\n                                <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__priority\">\r\n                                <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__assignee\">\r\n                                <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                            </div>\r\n                            <div class=\"task-list__start_date\">{{task.startDate | dateFmt}}</div>\r\n                            <div class=\"task-list__due_date\">{{task.dueDate | dateFmt}}</div>\r\n                            <div class=\"task-list__tags\">\r\n                                <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <task-stream [task]=\"task\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
 /* 627 */

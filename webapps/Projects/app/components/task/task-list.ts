@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
@@ -22,13 +22,24 @@ export class TaskListComponent {
         this.tasks = tasks;
         this.selectedIds = [];
         this.isSelectedAll = false;
+        this.loadedExpandedCount = 0;
+        this.loading = true; // this.tasks.filter(it => (it.hasSubtasks || it.hasRequests)).length > 0 && this.expandedIds.length > 0;
+
+        if (this.loading && this.tasks.length > 0) {
+            this.timeout = setTimeout(() => {
+                this.loading = false;
+            }, 300);
+        }
     }
     @Input() showHeader: boolean = true;
     private sub: any;
     private tasks: Task[];
     private selectedIds: string[] = [];
     private isSelectedAll: boolean = false;
+    private loading: boolean = true;
     private expandedIds: string[] = [];
+    private loadedExpandedCount: number = 0;
+    private timeout: number = 0;
 
     constructor(
         private store: Store<any>,
@@ -43,6 +54,7 @@ export class TaskListComponent {
         this.sub.unsubscribe();
     }
 
+    // select
     isSelected(id: string) {
         return this.selectedIds.indexOf(id) != -1;
     }
@@ -66,6 +78,16 @@ export class TaskListComponent {
             if (!this.selectedIds.length) {
                 this.isSelectedAll = false;
             }
+        }
+    }
+
+    // level
+    onLoadStreamLevel(id: string) {
+        this.loadedExpandedCount++;
+        if (this.loadedExpandedCount >= this.expandedIds.length) {
+            this.loading = false;
+            this.loadedExpandedCount--;
+            clearTimeout(this.timeout);
         }
     }
 

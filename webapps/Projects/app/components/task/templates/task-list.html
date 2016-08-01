@@ -16,7 +16,7 @@
             </div>
         </div>
     </header>
-    <div class="entries">
+    <div class="entries" [class.hidden]="loading">
         <div *ngFor="let task of tasks">
             <div class="entry-wrap">
                 <div class="entry" [class.active]="isSelected(task.id)">
@@ -52,7 +52,7 @@
                     </a>
                 </div>
             </div>
-            <task-stream [task]="task" (toggleStream)="onToggleStream($event)"></task-stream>
+            <task-stream [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
         </div>
     </div>
 </div>

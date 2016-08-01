@@ -17,15 +17,20 @@ import { Task } from '../../models';
 })
 
 export class TaskStreamComponent {
+    @HostBinding('class.hidden') get isHidden() { return !this.expanded; };
+    // @HostBinding('class.open') get isHidden() { return this.expanded; };
+    // @HostBinding('class.close') get isHidden() { return !this.expanded; };
     @HostBinding('class.stream-level') true;
     @Input('level') set _level(level: number) {
         this.level = 1 + level;
     };
     @Input() task: Task;
     @Output() toggleStream = new EventEmitter<any>();
+    @Output() loadStreamLevel = new EventEmitter<any>();
     private sub: any;
     private expandedIds: string[] = [];
     private loading: boolean = true;
+    private expanded: boolean = false;
     private stream: any[] = [];
     public level: number = 1;
 
@@ -41,9 +46,13 @@ export class TaskStreamComponent {
             if (this.expandedIds.indexOf(this.task.id) != -1) {
                 if (!this.stream.length) {
                     this.loadStream(this.task);
+                } else {
+                    this.expanded = true;
+                    this.onLoadStreamLevel(this.task.id);
                 }
             } else {
-                this.stream = [];
+                // this.stream = [];
+                this.expanded = false;
             }
         });
     }
@@ -54,10 +63,21 @@ export class TaskStreamComponent {
 
     loadStream(task: Task) {
         if (task.hasSubtasks || task.hasRequests) {
-            this.taskService.fetchTaskStream(this.task).subscribe(payload => {
-                this.stream = payload;
-            });
+            this.loading = true;
+            this.taskService.fetchTaskStream(this.task).subscribe(
+                payload => {
+                    this.stream = payload;
+                    this.expanded = this.stream.length > 0;
+                    this.onLoadStreamLevel(this.task.id);
+                },
+                err => { console.log('error'); },
+                () => { this.loading = false; }
+            );
         }
+    }
+
+    onLoadStreamLevel(id: string) {
+        this.loadStreamLevel.emit(id);
     }
 
     onToggleStream(id: string) {
@@ -67,6 +87,6 @@ export class TaskStreamComponent {
     toggleExpandable(id: string, $event) {
         $event.preventDefault();
         $event.stopPropagation();
-        this.toggleStream.emit(id);
+        this.onToggleStream(id);
     }
 }
