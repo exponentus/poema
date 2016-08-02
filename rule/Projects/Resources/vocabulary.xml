@@ -106,7 +106,7 @@
     </sentence>
     <sentence mode="on" keyword="publish_to_customer">
         <entry lang="RUS">Опубликовать заказчику</entry>
-        <entry lang="ENG">Publish  to the customer</entry>
+        <entry lang="ENG">Publish to the customer</entry>
     </sentence>
 
     <sentence mode="on" keyword="name">
@@ -183,6 +183,14 @@
     <sentence mode="on" keyword="subtasks">
         <entry lang="RUS">Подзадачи</entry>
         <entry lang="ENG">Subtasks</entry>
+    </sentence>
+    <sentence mode="on" keyword="subtask">
+        <entry lang="RUS">Подзадача</entry>
+        <entry lang="ENG">Subtask</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_subtask">
+        <entry lang="RUS">Новая подзадача</entry>
+        <entry lang="ENG">New subtask</entry>
     </sentence>
     <sentence mode="on" keyword="comments">
         <entry lang="RUS">Комментарии</entry>

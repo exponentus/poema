@@ -8191,7 +8191,7 @@ webpackJsonp([0],[
 	                return 'new_task';
 	            }
 	            else if (this.isSubtask) {
-	                return 'sub_task';
+	                return 'subtask';
 	            }
 	            else {
 	                return 'task';
