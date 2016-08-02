@@ -1,25 +1,17 @@
 <form class="form" [ngFormModel]="form" *ngIf="isReady">
     <header class="content-header">
-        <button class="btn-back" type="button" (click)="close($event)">
-            <i class="fa fa-chevron-left"></i>
-        </button>
-        <h1 class="header-title">
-            <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
-                {{parentTask.title}}
-            </a>
-            <div>
-                {{title | translate}}
-                <small class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</small>
-            </div>
-        </h1>
         <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
             <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask()">
                 <span *ngIf="isNew">{{'send_task' | translate}}</span>
                 <span *ngIf="!isNew">{{'save_close' | translate}}</span>
             </button>
-            <button class="btn" type="button" (click)="close($event)">
+            <!-- <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
-            </button>
+            </button> -->
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
@@ -42,6 +34,18 @@
                 </div>
             </div>
         </div>
+        <h1 class="header-title task-header-title">
+            <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
+                {{parentTask.title}}
+            </a>
+            <div class="header-title-flex">
+                <label>
+                    {{title | translate}}<br/>
+                    <small class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</small>
+                </label>
+                <input placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+            </div>
+        </h1>
     </header>
     <section class="content-body">
         <div class="task-tabs" *ngIf="hasSubTasks() || hasRequests()">
@@ -61,14 +65,14 @@
         </div>
         <div class="task-tab pinned">
             <fieldset class="fieldset">
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class="control-label">
                         {{'task_title' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="!form.controls.title.valid">
                         <input class="span8" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group" *ngIf="!isSubtask">
                     <div class="control-label">
                         {{'project' | translate}}

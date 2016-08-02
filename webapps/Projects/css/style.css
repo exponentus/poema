@@ -52,8 +52,38 @@ body:not(.side-nav-toggle) .aside + .content {
     z-index: 99;
 }
 
+.form .content-actions {
+    border-bottom: 1px solid #e6e6e6;
+    border-top: 1px solid transparent;
+    margin: 0;
+    padding: 6px;
+    vertical-align: middle;
+}
+
+.content-actions .btn-back {
+    border-radius: 2px;
+    margin: 0 12px 0 0;
+    width: auto;
+}
+
 .content-actions .pagination {
     float: right;
+}
+
+.header-title.header-title-flex,
+.task-header-title {
+    padding: 6px 16px;
+}
+
+.header-title-flex {
+    align-items: center;
+    display: flex;
+}
+
+.header-title-flex > label {
+    color: #666;
+    padding: 7px;
+    white-space: nowrap;
 }
 
 pagination:empty {

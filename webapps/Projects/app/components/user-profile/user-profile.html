@@ -1,19 +1,17 @@
 <form class="form form-userprofile" autocomplete="off" [ngFormModel]="form" *ngIf="user">
     <header class="content-header">
-        <button class="btn-back" type="button" (click)="close($event)">
-            <i class="fa fa-chevron-left"></i>
-        </button>
-        <h1 class="header-title">
-            {{'employee' | translate}} {{user.name}}
-        </h1>
         <div class="content-actions">
+            <button class="btn-back" type="button" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
             <button class="btn btn-primary" type="button" [disabled]="!form.valid" (click)="updateUserProfile()">
                 {{'save_close' | translate}}
             </button>
-            <button class="btn" type="button" (click)="close($event)">
-                {{'close' | translate}}
-            </button>
         </div>
+        <h1 class="header-title">
+            {{'employee' | translate}} {{user.name}}
+        </h1>
     </header>
     <section class="content-body">
         <tabs>

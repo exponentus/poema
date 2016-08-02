@@ -101,33 +101,23 @@ export class ProjectComponent {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
         this.projectService.saveProject(this.project).subscribe(
             response => {
-                console.log(response);
-                noty.set({ type: 'success', message: response.message }).remove(1500);
+                noty.set({ type: 'success', message: response.message });
                 this.close();
                 return response;
             },
             error => {
-                console.log(error);
-                noty.set({ type: 'error', message: error.message }).remove(1500);
-                this.errorSaveProject(error);
+                noty.remove();
+                this.handleXhrError(error);
                 return error;
             },
             () => noty.remove(1500)
         );
     }
 
-    errorSaveProject(errorResponse) {
-        this.notifyService.error(errorResponse.message).show().remove(2000);
-    }
-
     deleteProject() {
         this.projectService.deleteProject([this.project]).subscribe(
-            data => {
-                this.close();
-            },
-            error => {
-                this.errorSaveProject(error);
-            }
+            data => this.close(),
+            error => this.handleXhrError(error)
         );
     }
 
@@ -139,6 +129,8 @@ export class ProjectComponent {
         console.log(errorResponse);
         if (errorResponse.status === 401) {
             this.router.navigate(['/login']);
+        } else {
+            this.notifyService.error(errorResponse.message).show().remove(2000);
         }
     }
 

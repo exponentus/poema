@@ -1,18 +1,16 @@
 <form class="form" [ngFormModel]="form" *ngIf="isReady">
     <header class="content-header">
-        <button class="btn-back" type="button" (click)="close($event)">
-            <i class="fa fa-chevron-left"></i>
-        </button>
-        <h1 class="header-title">
-            {{title | translate}}
-        </h1>
         <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
             <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
                 {{'save_close' | translate}}
             </button>
-            <button class="btn" type="button" (click)="close($event)">
+            <!-- <button class="btn" type="button" (click)="close($event)">
                 {{'close' | translate}}
-            </button>
+            </button> -->
             <div *ngIf="!isNew && isEditable" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
@@ -26,10 +24,14 @@
                 </div>
             </div>
         </div>
+        <h1 class="header-title header-title-flex">
+            <label>{{title | translate}}</label>
+            <input placeholder="{{'name' | translate}}" [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
+        </h1>
     </header>
     <section class="content-body">
         <fieldset class="fieldset">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="control-label">
                     {{'name' | translate}}
                 </div>
@@ -38,7 +40,7 @@
                         <input [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="form-group">
                 <div class="control-label">
                     {{'customer' | translate}}
