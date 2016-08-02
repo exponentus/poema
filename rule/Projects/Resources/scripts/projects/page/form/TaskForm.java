@@ -195,6 +195,7 @@ public class TaskForm extends _DoForm {
         String action = formData.getValueSilently("_action");
 
         if (taskId.isEmpty() || action.isEmpty()) {
+            addContent("error", "taskId or _action empty");
             setBadRequest();
             return;
         }
@@ -210,6 +211,7 @@ public class TaskForm extends _DoForm {
         String attachmentId = formData.getValueSilently("attachmentId");
 
         if (id.isEmpty() || attachmentId.isEmpty()) {
+            addContent("error", "taskId or attachmentId empty");
             return;
         }
 
@@ -272,6 +274,7 @@ public class TaskForm extends _DoForm {
 
         try {
             if (task.getStatus() == TaskStatusType.FINISHED) {
+                addContent("info", "task status is finished");
                 return;
             }
 

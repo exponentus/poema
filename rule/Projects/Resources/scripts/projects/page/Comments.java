@@ -13,7 +13,6 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
-import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.CommentDAO;
 import projects.dao.TaskDAO;
 import projects.model.Comment;
@@ -29,6 +28,7 @@ public class Comments extends _DoForm {
     public void doGET(_Session session, _WebFormData formData) {
         String taskId = formData.getValueSilently("taskId");
         if (taskId.isEmpty()) {
+            addContent("error", "taskId empty");
             setBadRequest();
             return;
         }
@@ -46,6 +46,7 @@ public class Comments extends _DoForm {
     public void doPOST(_Session session, _WebFormData formData) {
         String taskId = formData.getValueSilently("taskId");
         if (taskId.isEmpty()) {
+            addContent("error", "taskId empty");
             setBadRequest();
             return;
         }
@@ -58,6 +59,7 @@ public class Comments extends _DoForm {
     public void doDELETE(_Session session, _WebFormData formData) {
         String commentId = formData.getValueSilently("commentId");
         if (commentId.isEmpty()) {
+            addContent("error", "commentId empty");
             setBadRequest();
             return;
         }
@@ -75,11 +77,13 @@ public class Comments extends _DoForm {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(taskId);
             if (task == null) {
+                addContent("error", "task not found");
                 setBadRequest();
                 return;
             }
 
             if (!task.getReaders().contains(session.getUser().getId())) {
+                addContent("error", "task: no read access");
                 setBadRequest();
                 return;
             }
@@ -128,13 +132,11 @@ public class Comments extends _DoForm {
             if (!ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
-        } catch (DatabaseException e) {
-            logError(e);
-            setBadRequest();
         } catch (SecureException e) {
             setError(e);
         } catch (MsgException e) {
             logError(e);
+            setError(e);
         }
     }
 
@@ -143,6 +145,7 @@ public class Comments extends _DoForm {
         Comment comment = commentDAO.findById(commentId);
 
         if (!comment.getTask().getEditors().contains(session.getUser().getId())) {
+            addContent("error", "task: no editor access");
             setBadRequest();
             return;
         }
@@ -151,6 +154,7 @@ public class Comments extends _DoForm {
             commentDAO.delete(comment);
         } catch (SecureException e) {
             setError(e);
+            logError(e);
         }
     }
 
@@ -163,6 +167,7 @@ public class Comments extends _DoForm {
         Comment comment = commentDAO.findById(commentId);
 
         if (comment.getAuthorId() == session.getUser().getId()) {
+            addContent("error", "not author");
             setBadRequest();
             return;
         }
@@ -175,6 +180,7 @@ public class Comments extends _DoForm {
             commentDAO.update(comment);
         } catch (SecureException e) {
             setError(e);
+            logError(e);
         }
     }
 

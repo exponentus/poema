@@ -23,7 +23,7 @@
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
-            <button *ngIf="!isNew && FEATURE_FLAGS.subTask" class="btn" type="button" (click)="addSubtask($event)">
+            <button class="btn" type="button" *ngIf="canAddSubTask()" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
             </button>
             <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
@@ -182,7 +182,7 @@
         <!-- <tab *ngIf="!isNew && hasRequests()" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
                 <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
             </tab> -->
-        <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
+        <comments *ngIf="!isNew" [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
     </section>
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">

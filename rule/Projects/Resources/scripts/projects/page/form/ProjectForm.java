@@ -169,6 +169,7 @@ public class ProjectForm extends _DoForm {
         String attachmentId = formData.getValueSilently("attachmentId");
 
         if (id.isEmpty() || attachmentId.isEmpty()) {
+            addContent("error", "projectId or attachmentId empty");
             return;
         }
 

@@ -232,6 +232,10 @@ export class TaskComponent {
             });
     }
 
+    canAddSubTask() {
+        return !this.isNew && !this.isSubtask && this.FEATURE_FLAGS.subTask;
+    }
+
     addSubtask() {
         this.router.navigate(['/task', this.task.id, '/new']);
     }

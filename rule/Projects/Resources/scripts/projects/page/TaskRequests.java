@@ -30,6 +30,7 @@ public class TaskRequests extends _DoForm {
     public void doGET(_Session session, _WebFormData formData) {
         String taskId = formData.getValueSilently("taskId");
         if (taskId.isEmpty()) {
+            addContent("error", "taskId empty");
             setBadRequest();
             return;
         }
@@ -48,6 +49,7 @@ public class TaskRequests extends _DoForm {
         String taskId = formData.getValueSilently("taskId");
         String requestTypeId = formData.getValueSilently("requestTypeId");
         if (taskId.isEmpty() || requestTypeId.isEmpty()) {
+            addContent("error", "taskId or requestTypeId empty");
             setBadRequest();
             return;
         }
@@ -62,6 +64,7 @@ public class TaskRequests extends _DoForm {
         ResolutionType resolutionType = ResolutionType.valueOf(resolution);
 
         if (resolutionType == ResolutionType.UNKNOWN) {
+            addContent("error", "unknown resolutionType");
             setBadRequest();
             return;
         }
@@ -73,6 +76,7 @@ public class TaskRequests extends _DoForm {
     public void doDELETE(_Session session, _WebFormData formData) {
         String requestId = formData.getValueSilently("requestId");
         if (requestId.isEmpty()) {
+            addContent("error", "requestId empty");
             setBadRequest();
             return;
         }
@@ -91,11 +95,13 @@ public class TaskRequests extends _DoForm {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(taskId);
             if (task == null) {
+                addContent("error", "task not found");
                 setBadRequest();
                 return;
             }
 
             if (requestDAO.findUnResolvedRequest(task) != null) {
+                addContent("error", "task has unresolved request");
                 setBadRequest();
                 return;
             }
@@ -146,11 +152,18 @@ public class TaskRequests extends _DoForm {
             Request request = requestDAO.findById(requestId);
 
             if (request == null || resolutionType == ResolutionType.UNKNOWN) {
+                if (request == null) {
+                    addContent("error", "request not found");
+                }
+                if (resolutionType == ResolutionType.UNKNOWN) {
+                    addContent("error", "ResolutionType.UNKNOWN");
+                }
                 setBadRequest();
                 return;
             }
 
             if (!request.getTask().getEditors().contains(session.getUser().getId())) {
+                addContent("error", "task: has no editor access");
                 setBadRequest();
                 return;
             }
@@ -193,6 +206,7 @@ public class TaskRequests extends _DoForm {
         Request request = requestDAO.findById(requestId);
 
         if (!request.getTask().getEditors().contains(session.getUser().getId()) || !request.getEditors().contains(request.getAuthorId())) {
+            addContent("error", "(task|request): has no editor access");
             setBadRequest();
             return;
         }
@@ -210,6 +224,7 @@ public class TaskRequests extends _DoForm {
             Request request = requestDAO.findById(requestId);
 
             if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(session.getUser().getId())) {
+                addContent("error", "(task|request): has no editor access");
                 setBadRequest();
                 return;
             }
