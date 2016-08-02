@@ -115,6 +115,7 @@ public class TaskForm extends _DoForm {
                     parentTask = dao.findById(parentTaskId);
                     task.setParent(parentTask);
                     task.setTaskType(parentTask.getTaskType());
+                    task.setProject(parentTask.getProject());
                 }
                 task.setStatus(TaskStatusType.WAITING);
             } else {

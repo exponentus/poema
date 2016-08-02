@@ -55,7 +55,7 @@ export class TaskComponent {
     isEditable = true;
     isSubtask = false;
     parentTask: Task;
-    subTasks: Task[];
+    subTasks: Task[] = [];
     task: Task;
     acl: any = {};
     rights: any = {
@@ -70,7 +70,8 @@ export class TaskComponent {
         comments: true
     };
     form: ControlGroup;
-    showRequest: boolean = false;
+    showSubtasks: boolean = false;
+    showRequests: boolean = false;
     hasUnResolvedRequest: boolean = true;
     hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
@@ -123,6 +124,8 @@ export class TaskComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
+            this.showSubtasks = false;
+            this.showRequests = false;
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
 
@@ -174,6 +177,20 @@ export class TaskComponent {
             return 'sub_task';
         } else {
             return 'task';
+        }
+    }
+
+    toggleShowSubtasks() {
+        this.showSubtasks = !this.showSubtasks;
+        if (this.showSubtasks) {
+            this.showRequests = false;
+        }
+    }
+
+    toggleShowRequests() {
+        this.showRequests = !this.showRequests;
+        if (this.showRequests) {
+            this.showSubtasks = false;
         }
     }
 
@@ -308,7 +325,7 @@ export class TaskComponent {
         this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
     }
 
-    requestSendEventHandler({requestSendSuccess}) {
+    onSendRequest({requestSendSuccess}) {
         if (requestSendSuccess) {
             this.close();
         }

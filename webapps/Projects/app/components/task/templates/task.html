@@ -44,131 +44,145 @@
         </div>
     </header>
     <section class="content-body">
-        <tabs>
-            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
-                <fieldset class="fieldset">
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'task_title' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.title.valid">
-                            <input class="span8" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+        <div class="task-tabs" *ngIf="hasSubTasks() || hasRequests()">
+            <div class="task-tab__title pinned">{{'properties' | translate}}</div>
+            <div class="task-tab__title" [class.active]="showSubtasks" [class.hidden]="!hasSubTasks()" (click)="toggleShowSubtasks()">
+                {{'subtasks' | translate}}
+            </div>
+            <div class="task-tab__title" [class.active]="showRequests" [class.hidden]="!hasRequests()" (click)="toggleShowRequests()">
+                {{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}
+            </div>
+        </div>
+        <div class="task-tab" [class.active]="showSubtasks">
+            <task-list [tasks]="subTasks"></task-list>
+        </div>
+        <div class="task-tab" [class.active]="showRequests">
+            <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
+        </div>
+        <div class="task-tab pinned">
+            <fieldset class="fieldset">
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'task_title' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.title.valid">
+                        <input class="span8" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="!isSubtask">
+                    <div class="control-label">
+                        {{'project' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.projectId.valid">
+                        <div class="span8">
+                            <project-input [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="!isSubtask">
-                        <div class="control-label">
-                            {{'project' | translate}}
+                    <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
+                        {{'required' | translate}}
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="!isSubtask">
+                    <div class="control-label">
+                        {{'task_type' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
+                        <div class="span8">
+                            <task-type-input [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
                         </div>
-                        <div class="controls" [class.has-error]="!form.controls.projectId.valid">
-                            <div class="span8">
-                                <project-input [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
-                            </div>
-                        </div>
-                        <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
+                        <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
                             {{'required' | translate}}
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="!isSubtask">
-                        <div class="control-label">
-                            {{'task_type' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
-                            <div class="span8">
-                                <task-type-input [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
-                            </div>
-                            <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
-                                {{'required' | translate}}
-                            </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'priority' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.priority.valid">
+                        <switch-button [disabled]="!isEditable" [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
+                        <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
+                            {{'required' | translate}}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'priority' | translate}}
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'assignee_user' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
+                        <div class="span8">
+                            <user-input [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
                         </div>
-                        <div class="controls" [class.has-error]="!form.controls.priority.valid">
-                            <switch-button [disabled]="!isEditable" [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
-                            <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
-                                {{'required' | translate}}
-                            </div>
+                        <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
+                            {{'required' | translate}}
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'assignee_user' | translate}}
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'start_date' | translate}}
+                    </div>
+                    <div class="controls">
+                        <div class="span2" *ngIf="!isEditable">
+                            <span class="input">{{task.startDate}}</span>
                         </div>
-                        <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
-                            <div class="span8">
-                                <user-input [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
-                            </div>
-                            <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
-                                {{'required' | translate}}
-                            </div>
+                        <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'due_date' | translate}}
+                    </div>
+                    <div class="controls">
+                        <div class="span2" *ngIf="!isEditable">
+                            <span class="input">{{task.dueDate}}</span>
+                        </div>
+                        <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'tags' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
+                        <div class="span8">
+                            <tags-input [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'start_date' | translate}}
-                        </div>
-                        <div class="controls">
-                            <div class="span2" *ngIf="!isEditable">
-                                <span class="input">{{task.startDate}}</span>
-                            </div>
-                            <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
+                </div>
+                <div class="form-group">
+                    <div class="control-label"></div>
+                    <div class="controls">
+                        <label class="input" [class.disabled]="!isEditable">
+                            <input type="checkbox" name="customerObservation" value="1" [disabled]="!isEditable" [(ngModel)]="task.customerObservation" />
+                            <span>{{'publish_to_customer' | translate}}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'body' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="!form.controls.body.valid">
+                        <div class="span8">
+                            <markdown-editor [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'due_date' | translate}}
-                        </div>
-                        <div class="controls">
-                            <div class="span2" *ngIf="!isEditable">
-                                <span class="input">{{task.dueDate}}</span>
-                            </div>
-                            <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'tags' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
-                            <div class="span8">
-                                <tags-input [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label"></div>
-                        <div class="controls">
-                            <label class="input">
-                                <input type="checkbox" name="customerObservation" value="1" [(ngModel)]="task.customerObservation" />
-                                <span>{{'publish_to_customer' | translate}}</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'body' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="!form.controls.body.valid">
-                            <div class="span8">
-                                <markdown-editor [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <attachments [editable]="isEditable" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
-            </tab>
-            <tab *ngIf="!isNew && hasSubTasks()" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
+                </div>
+            </fieldset>
+            <attachments [editable]="isEditable" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        </div>
+        <!-- <tab *ngIf="!isNew && hasSubTasks()" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
                 <task-list [tasks]="subTasks"></task-list>
-            </tab>
-            <tab *ngIf="!isNew && FEATURE_FLAGS.comments" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
+            </tab> -->
+        <!-- <tab *ngIf="!isNew && FEATURE_FLAGS.comments" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
                 <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
-            </tab>
-            <tab *ngIf="!isNew && hasRequests()" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
+            </tab> -->
+        <!-- <tab *ngIf="!isNew && hasRequests()" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
                 <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
-            </tab>
-        </tabs>
+            </tab> -->
+        <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
     </section>
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">
@@ -178,4 +192,4 @@
         </div>
     </footer>
 </form>
-<request (send)="requestSendEventHandler($event)"></request>
+<request (send)="onSendRequest($event)"></request>

@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 @Component({
     selector: 'tab',
     template: `
-      <div [hidden]="!active">
+      <div [hidden]="!active && !pinned">
         <ng-content></ng-content>
       </div>
     `
@@ -11,6 +11,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class Tab {
     @Input('tabTitle') title: string;
-    @Input() active = false;
+    @Input() active: boolean = false;
+    @Input() pinned: boolean = false;
     @Output() select = new EventEmitter<any>();
 }

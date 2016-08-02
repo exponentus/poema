@@ -22,7 +22,7 @@ const logger = storeLogger({
 });
 
 export const APP_STORE = provideStore(
-    compose(logger, combineReducers)({
+    compose(/*logger,*/ combineReducers)({
         environment,
         authed,
         projects,
