@@ -852,10 +852,6 @@ webpackJsonp([0],[
 	            _this.isSearchOpen = state.isSearchOpen;
 	            _this.isNavCollapsed = !state.isNavOpen;
 	        }));
-	        this.appService.fetchUserProfile().subscribe(function (data) {
-	            _this.store.dispatch(_this.appActions.fetchUserProfileFulfilled(data));
-	            _this.isReady = true;
-	        });
 	    }
 	    AppComponent.prototype.resize = function (window) { this.onResize(window); };
 	    ;
@@ -879,6 +875,10 @@ webpackJsonp([0],[
 	    ;
 	    AppComponent.prototype.ngOnInit = function () {
 	        var _this = this;
+	        this.appService.fetchUserProfile().subscribe(function (data) {
+	            _this.store.dispatch(_this.appActions.fetchUserProfileFulfilled(data));
+	            _this.isReady = true;
+	        });
 	        this.referenceService.fetchTags().subscribe(function (payload) {
 	            _this.store.dispatch(_this.referenceActions.fetchTags(payload.tags));
 	        });
@@ -8863,7 +8863,6 @@ webpackJsonp([0],[
 	var keys_pipe_1 = __webpack_require__(601);
 	var app_service_1 = __webpack_require__(461);
 	var translate_service_1 = __webpack_require__(463);
-	var user_1 = __webpack_require__(466);
 	var utils_1 = __webpack_require__(462);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -8880,7 +8879,7 @@ webpackJsonp([0],[
 	        this.appService = appService;
 	        this.translateService = translateService;
 	        this.notifyService = notifyService;
-	        this.user = new user_1.User();
+	        this.user = null;
 	        this.changePassword = false;
 	        this.language = 'RUS';
 	        this.pageSizes = [10, 20, 30, 40, 50];
@@ -8890,13 +8889,15 @@ webpackJsonp([0],[
 	            _this.pageSize = state.pageSize;
 	            _this.language = state.language;
 	            _this.languages = state.languages;
-	            _this.form = formBuilder.group({
-	                login: [_this.user.name],
-	                pwd: [],
-	                pwd_new: [],
-	                pwd_confirm: [],
-	                email: [_this.user.email]
-	            });
+	            if (_this.user) {
+	                _this.form = formBuilder.group({
+	                    login: [_this.user.name],
+	                    pwd: [],
+	                    pwd_new: [],
+	                    pwd_confirm: [],
+	                    email: [_this.user.email]
+	                });
+	            }
 	        });
 	    }
 	    UserProfileComponent.prototype.ngOnDestroy = function () {
@@ -9024,7 +9025,7 @@ webpackJsonp([0],[
 	    duration: true,
 	    timestamp: true
 	});
-	exports.APP_STORE = store_1.provideStore(compose_1.compose(store_1.combineReducers)({
+	exports.APP_STORE = store_1.provideStore(compose_1.compose(logger, store_1.combineReducers)({
 	    environment: environment_reducer_1.environmentReducer,
 	    authed: authed_reducer_1.authedReducer,
 	    projects: projects_reducer_1.projectsReducer,

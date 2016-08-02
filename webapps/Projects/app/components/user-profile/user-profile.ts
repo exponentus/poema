@@ -29,7 +29,7 @@ const HEADERS = new Headers({
 
 export class UserProfileComponent {
     private sub: any;
-    user: User = new User();
+    user: User = null;
     form: ControlGroup;
     changePassword: boolean = false;
     pageSize: number;
@@ -54,13 +54,15 @@ export class UserProfileComponent {
             this.language = state.language;
             this.languages = state.languages;
 
-            this.form = formBuilder.group({
-                login: [this.user.name],
-                pwd: [],
-                pwd_new: [],
-                pwd_confirm: [],
-                email: [this.user.email]
-            });
+            if (this.user) {
+                this.form = formBuilder.group({
+                    login: [this.user.name],
+                    pwd: [],
+                    pwd_new: [],
+                    pwd_confirm: [],
+                    email: [this.user.email]
+                });
+            }
         });
     }
 

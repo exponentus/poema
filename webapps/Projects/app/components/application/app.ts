@@ -56,14 +56,14 @@ export class AppComponent {
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;
         }));
+    }
 
+    ngOnInit() {
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
             this.isReady = true;
         });
-    }
 
-    ngOnInit() {
         this.referenceService.fetchTags().subscribe(payload => {
             this.store.dispatch(this.referenceActions.fetchTags(payload.tags));
         });
