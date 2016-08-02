@@ -107,7 +107,7 @@ export class TaskComponent {
         }));
 
         this.form = formBuilder.group({
-            title: [''],
+            title: ['', Validators.required],
             projectId: [''],
             taskTypeId: [''],
             status: [''],
@@ -185,8 +185,8 @@ export class TaskComponent {
                 this.close();
             },
             error => {
-                noty.set({ type: 'error', message: error.message }).remove(1500);
-                this.errorSaveTask(error);
+                noty.remove();
+                this.handleXhrError(error);
             }
         );
     }
@@ -199,8 +199,8 @@ export class TaskComponent {
                 this.close();
             },
             error => {
-                noty.set({ type: 'error', message: error.message }).remove(1500);
-                this.errorSaveTask(error);
+                noty.remove();
+                this.handleXhrError(error);
             }
         );
     }
@@ -211,7 +211,7 @@ export class TaskComponent {
                 this.close();
             },
             error => {
-                this.errorSaveTask(error);
+                this.handleXhrError(error);
             });
     }
 
@@ -279,11 +279,6 @@ export class TaskComponent {
     }
 
     //
-    errorSaveTask(errorResponse) {
-        console.log(errorResponse);
-        this.notifyService.error(errorResponse.message).show().remove(2000);
-    }
-
     close() {
         this.router.navigate(['/tasks']);
     }
@@ -291,6 +286,8 @@ export class TaskComponent {
     handleXhrError(errorResponse) {
         if (errorResponse.status === 401) {
             this.router.navigate(['/login']);
+        } else {
+            this.notifyService.error(errorResponse.message).show().remove(3000);
         }
     }
 

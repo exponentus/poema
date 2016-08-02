@@ -48,14 +48,11 @@ export class UserProfileComponent {
         private translateService: translateService,
         private notifyService: NotificationService
     ) {
-        let ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
-        if (ck) {
-            this.language = ck[2];
-        }
-        this.sub = this.store.select('authed').subscribe((data: IAuthedState) => {
-            this.user = data.userProfile;
-            this.pageSize = data.pageSize;
-            this.languages = data.languages;
+        this.sub = this.store.select('authed').subscribe((state: IAuthedState) => {
+            this.user = state.userProfile;
+            this.pageSize = state.pageSize;
+            this.language = state.language;
+            this.languages = state.languages;
 
             this.form = formBuilder.group({
                 login: [this.user.name],
@@ -109,8 +106,7 @@ export class UserProfileComponent {
             });
     }
 
-    close(event) {
-        event.preventDefault();
+    close() {
         window.history.back();
     }
 }

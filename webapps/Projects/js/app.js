@@ -8127,7 +8127,7 @@ webpackJsonp([0],[
 	            }
 	        }));
 	        this.form = formBuilder.group({
-	            title: [''],
+	            title: ['', common_1.Validators.required],
 	            projectId: [''],
 	            taskTypeId: [''],
 	            status: [''],
@@ -8203,8 +8203,8 @@ webpackJsonp([0],[
 	            noty.set({ type: 'success', message: response.message }).remove(1500);
 	            _this.close();
 	        }, function (error) {
-	            noty.set({ type: 'error', message: error.message }).remove(1500);
-	            _this.errorSaveTask(error);
+	            noty.remove();
+	            _this.handleXhrError(error);
 	        });
 	    };
 	    TaskComponent.prototype.completeTask = function () {
@@ -8214,8 +8214,8 @@ webpackJsonp([0],[
 	            noty.set({ type: 'success', message: response.message }).remove(1500);
 	            _this.close();
 	        }, function (error) {
-	            noty.set({ type: 'error', message: error.message }).remove(1500);
-	            _this.errorSaveTask(error);
+	            noty.remove();
+	            _this.handleXhrError(error);
 	        });
 	    };
 	    TaskComponent.prototype.deleteTask = function () {
@@ -8223,7 +8223,7 @@ webpackJsonp([0],[
 	        this.taskService.deleteTask([this.task]).subscribe(function (data) {
 	            _this.close();
 	        }, function (error) {
-	            _this.errorSaveTask(error);
+	            _this.handleXhrError(error);
 	        });
 	    };
 	    TaskComponent.prototype.addSubtask = function () {
@@ -8284,16 +8284,15 @@ webpackJsonp([0],[
 	    TaskComponent.prototype.hasSubTasks = function () {
 	        return this.subTasks && this.subTasks.length;
 	    };
-	    TaskComponent.prototype.errorSaveTask = function (errorResponse) {
-	        console.log(errorResponse);
-	        this.notifyService.error(errorResponse.message).show().remove(2000);
-	    };
 	    TaskComponent.prototype.close = function () {
 	        this.router.navigate(['/tasks']);
 	    };
 	    TaskComponent.prototype.handleXhrError = function (errorResponse) {
 	        if (errorResponse.status === 401) {
 	            this.router.navigate(['/login']);
+	        }
+	        else {
+	            this.notifyService.error(errorResponse.message).show().remove(3000);
 	        }
 	    };
 	    TaskComponent.prototype.canSaveTask = function () {
@@ -8865,14 +8864,11 @@ webpackJsonp([0],[
 	        this.language = 'RUS';
 	        this.pageSizes = [10, 20, 30, 40, 50];
 	        this.errors = {};
-	        var ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
-	        if (ck) {
-	            this.language = ck[2];
-	        }
-	        this.sub = this.store.select('authed').subscribe(function (data) {
-	            _this.user = data.userProfile;
-	            _this.pageSize = data.pageSize;
-	            _this.languages = data.languages;
+	        this.sub = this.store.select('authed').subscribe(function (state) {
+	            _this.user = state.userProfile;
+	            _this.pageSize = state.pageSize;
+	            _this.language = state.language;
+	            _this.languages = state.languages;
 	            _this.form = formBuilder.group({
 	                login: [_this.user.name],
 	                pwd: [],
@@ -8920,8 +8916,7 @@ webpackJsonp([0],[
 	            window.location.reload();
 	        });
 	    };
-	    UserProfileComponent.prototype.close = function (event) {
-	        event.preventDefault();
+	    UserProfileComponent.prototype.close = function () {
 	        window.history.back();
 	    };
 	    UserProfileComponent = __decorate([
