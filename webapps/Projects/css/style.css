@@ -10,8 +10,6 @@
 @import 'rt-editor.css';
 
 body {
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
 }
 
@@ -72,7 +70,7 @@ body:not(.side-nav-toggle) .aside + .content {
 
 .header-title.header-title-flex,
 .task-header-title {
-    padding: 6px 16px;
+    padding: 6px 8px;
 }
 
 .header-title-flex {
@@ -82,8 +80,14 @@ body:not(.side-nav-toggle) .aside + .content {
 
 .header-title-flex > label {
     color: #666;
+    margin: 0;
     padding: 7px;
     white-space: nowrap;
+}
+
+.header-title-flex > input:not(:focus):not(:hover),
+.header-title-flex > input[readonly] {
+    border-color: transparent;
 }
 
 pagination:empty {
