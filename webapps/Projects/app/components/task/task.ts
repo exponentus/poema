@@ -124,6 +124,8 @@ export class TaskComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
+            this.isReady = false;
+            this.task = null;
             this.showSubtasks = false;
             this.showRequests = false;
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')

@@ -57,6 +57,12 @@ public class TaskView extends _DoPage {
             String taskId = formData.getValue("taskId");
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(taskId);
+
+            if (task == null) {
+                addContent("message", "task not found");
+                return;
+            }
+
             List<Task> subTasks = task.getSubtasks();
             List<Request> requests = task.getRequests();
 

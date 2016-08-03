@@ -8139,6 +8139,8 @@ webpackJsonp([0],[
 	    TaskComponent.prototype.ngOnInit = function () {
 	        var _this = this;
 	        this.subs.push(this.route.params.subscribe(function (params) {
+	            _this.isReady = false;
+	            _this.task = null;
 	            _this.showSubtasks = false;
 	            _this.showRequests = false;
 	            _this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new');
