@@ -114,7 +114,10 @@ public class TaskRequests extends _DoForm {
             request.setRequestType(requestType);
             request.setComment(comment);
             request.setAttachments(getActualAttachments(request.getAttachments()));
+
+            request.setEditors(task.getEditors());
             request.addReaderEditor(session.getUser());
+
             requestDAO.add(request);
 
             // Notify task author about request
@@ -128,7 +131,7 @@ public class TaskRequests extends _DoForm {
             MailAgent ma = new MailAgent();
             Memo memo = new Memo(getLocalizedWord("notify_about_task_request", lang), getLocalizedEmailTemplate("newrequest", lang));
             memo.addVar("taskTitle", task.getTitle());
-            memo.addVar("requestType", request.getRequestType().getName());
+            memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
             memo.addVar("comment", request.getComment());
             memo.addVar("author", session.getUser().getUserName());
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());

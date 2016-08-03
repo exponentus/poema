@@ -26,7 +26,7 @@ export class Task {
     startDate: Date;
     dueDate: Date;
     tagIds: string[];
-    customerObservation: boolean;
+    customerObservation: boolean = false;
     hasAttachments: boolean;
     attachmentIds: string[];
 

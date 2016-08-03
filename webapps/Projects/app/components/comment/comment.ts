@@ -4,6 +4,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { MarkdownEditorComponent, MarkedPipe } from '../../shared/markdown';
 import { AttachmentsComponent } from '../attachment/attachments';
+import { UserInputComponent } from '../shared';
 import { DateFormatPipe } from '../../pipes';
 import { Comment } from '../../models';
 
@@ -13,7 +14,9 @@ import { Comment } from '../../models';
         <div class="comment" [class.edit]="edit" [class.saving]="saving">
             <div class="comment__avatar"></div>
             <div class="comment__details">
-                <span class="comment__author">{{comment.authorId}}</span>
+                <span class="comment__author">
+                    <user-input [editable]="false" [userIds]="[comment.authorId]"></user-input>
+                </span>
                 <span class="comment__time">{{comment.regDate}}</span>
                 <p class="comment__text" *ngIf="!edit" innerHTML="{{comment.comment | marked}}"></p>
                 <div class="comment__editor" *ngIf="edit">
@@ -42,7 +45,7 @@ import { Comment } from '../../models';
             </div>
         </div>
     `,
-    directives: [AttachmentsComponent, MarkdownEditorComponent],
+    directives: [AttachmentsComponent, MarkdownEditorComponent, UserInputComponent],
     pipes: [DateFormatPipe, TranslatePipe, MarkedPipe]
 })
 

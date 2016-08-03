@@ -128,7 +128,10 @@ public class Comments extends _DoForm {
             }
 
             MailAgent ma = new MailAgent();
-            Memo memo = new Memo(getLocalizedWord("notify_about_comment", lang), getLocalizedWord("notify_about_comment", lang));
+            Memo memo = new Memo(getLocalizedWord("notify_comment_subject", lang), getLocalizedEmailTemplate("comment", lang));
+            memo.addVar("taskTitle", task.getTitle());
+            memo.addVar("comment", comment.getComment());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
             if (!ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }

@@ -25,10 +25,8 @@ import reference.dao.TagDAO;
 import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TaskForm extends _DoForm {
 
@@ -88,6 +86,7 @@ public class TaskForm extends _DoForm {
 
     @Override
     public void doPOST(_Session session, _WebFormData formData) {
+        devPrint(formData);
         LanguageCode lang = session.getLang();
         try {
             String parentTaskId = formData.getValueSilently("parentTaskId");
@@ -130,7 +129,7 @@ public class TaskForm extends _DoForm {
             task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
             task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
             task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
-            task.setBody(formData.getValue("body"));
+            task.setBody(formData.getValueSilently("body"));
             IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
             task.setAssignee(assigneeUser.getId());
             task.setAttachments(getActualAttachments(task.getAttachments()));
@@ -139,16 +138,9 @@ public class TaskForm extends _DoForm {
             if (formData.containsField("tagIds")) {
                 String[] tagIds = formData.getValueSilently("tagIds").split(",");
                 if (tagIds.length > 0) {
-                    List<Tag> tags = new ArrayList<>();
                     TagDAO tagDAO = new TagDAO(session);
-                    for (String tagId : tagIds) {
-                        if (!tagId.isEmpty()) {
-                            Tag tag = tagDAO.findById(UUID.fromString(tagId));
-                            if (tag != null) {
-                                tags.add(tag);
-                            }
-                        }
-                    }
+                    List<UUID> tagUIds = Arrays.stream(tagIds).map(UUID::fromString).collect(Collectors.toList());
+                    List<Tag> tags = tagDAO.findAllByIds(tagUIds, 0, 0).getResult();
                     task.setTags(tags);
                 }
             }

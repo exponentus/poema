@@ -51,7 +51,8 @@
                 {{'subtasks' | translate}}
             </div>
             <div class="task-tab__title" [class.active]="showRequests" [class.hidden]="!hasRequests()" (click)="toggleShowRequests()">
-                {{'requests' | translate}} {{hasUnResolvedRequest ? '1' : ''}}
+                {{'requests' | translate}}
+                <i class="fa fa-exclamation-circle" *ngIf="hasUnResolvedRequest"></i>
             </div>
         </div>
         <div class="task-tab" [class.active]="showSubtasks">
