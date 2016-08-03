@@ -35,7 +35,7 @@ export class SwitchButtonComponent {
 
     ngAfterContentInit() {
         [].concat(this.items).forEach(it => {
-            if (this.checkDefault && it.value == this.model[this.value]) {
+            if (this.checkDefault && it && it.value == this.model[this.value]) {
                 this.checkDefault = false;
             }
         });

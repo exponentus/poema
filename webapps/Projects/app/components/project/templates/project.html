@@ -8,9 +8,6 @@
             <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
                 {{'save_close' | translate}}
             </button>
-            <!-- <button class="btn" type="button" (click)="close($event)">
-                {{'close' | translate}}
-            </button> -->
             <div *ngIf="!isNew && isEditable" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
@@ -26,21 +23,11 @@
         </div>
         <h1 class="header-title header-title-flex">
             <label>{{title | translate}}</label>
-            <input placeholder="{{'name' | translate}}" [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
+            <input autofocus placeholder="{{'name' | translate}}" [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
         </h1>
     </header>
     <section class="content-body">
         <fieldset class="fieldset">
-            <!-- <div class="form-group">
-                <div class="control-label">
-                    {{'name' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="!form.controls.name.valid">
-                    <div class="span8">
-                        <input [readonly]="!isEditable" [(ngModel)]="project.name" ngControl="name" />
-                    </div>
-                </div>
-            </div> -->
             <div class="form-group">
                 <div class="control-label">
                     {{'customer' | translate}}

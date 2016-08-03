@@ -9,9 +9,6 @@
                 <span *ngIf="isNew">{{'send_task' | translate}}</span>
                 <span *ngIf="!isNew">{{'save_close' | translate}}</span>
             </button>
-            <!-- <button class="btn" type="button" (click)="close($event)">
-                {{'close' | translate}}
-            </button> -->
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
@@ -43,7 +40,7 @@
                     {{title | translate}}<br/>
                     <small class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</small>
                 </label>
-                <input placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+                <input autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
             </div>
         </h1>
     </header>
@@ -54,7 +51,7 @@
                 {{'subtasks' | translate}}
             </div>
             <div class="task-tab__title" [class.active]="showRequests" [class.hidden]="!hasRequests()" (click)="toggleShowRequests()">
-                {{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}
+                {{'requests' | translate}} {{hasUnResolvedRequest ? '1' : ''}}
             </div>
         </div>
         <div class="task-tab" [class.active]="showSubtasks">
@@ -65,14 +62,6 @@
         </div>
         <div class="task-tab pinned">
             <fieldset class="fieldset">
-                <!-- <div class="form-group">
-                    <div class="control-label">
-                        {{'task_title' | translate}}
-                    </div>
-                    <div class="controls" [class.has-error]="!form.controls.title.valid">
-                        <input class="span8" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
-                    </div>
-                </div> -->
                 <div class="form-group" *ngIf="!isSubtask">
                     <div class="control-label">
                         {{'project' | translate}}
@@ -165,27 +154,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="control-label">
-                        {{'body' | translate}}
-                    </div>
-                    <div class="controls" [class.has-error]="!form.controls.body.valid">
-                        <div class="span8">
-                            <markdown-editor [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
-                        </div>
-                    </div>
+                    <markdown-editor placeHolder="{{'body' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
                 </div>
             </fieldset>
             <attachments [editable]="isEditable" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
         </div>
-        <!-- <tab *ngIf="!isNew && hasSubTasks()" class="tab-pane" tabTitle="{{'subtasks' | translate}}" (select)="loadSubtasks()">
-                <task-list [tasks]="subTasks"></task-list>
-            </tab> -->
-        <!-- <tab *ngIf="!isNew && FEATURE_FLAGS.comments" class="tab-pane" tabTitle="{{'comments' | translate}}" (select)="loadComments()">
-                <comments [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
-            </tab> -->
-        <!-- <tab *ngIf="!isNew && hasRequests()" class="tab-pane" tabTitle="{{'requests' | translate}} {{hasUnResolvedRequest ? '1' : '0'}}" (select)="loadRequests()">
-                <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
-            </tab> -->
         <comments *ngIf="!isNew" [comments]="comments" (add)="saveComment($event)" (update)="saveComment($event)" (delete)="deleteComment($event)"></comments>
     </section>
     <footer class="content-footer">

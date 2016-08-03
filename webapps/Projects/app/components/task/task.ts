@@ -152,8 +152,6 @@ export class TaskComponent {
                     }
                     this.isEditable = this.isNew || this.task.editable;
                     this.isReady = true;
-                    // this.store.dispatch(this.taskActions.fetchTaskFulfilled(this.task));
-                    console.log(this.task);
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );

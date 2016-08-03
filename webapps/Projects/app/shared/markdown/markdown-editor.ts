@@ -42,7 +42,7 @@ export class MarkdownEditorComponent {
     }
 
     updateValue($el) {
-        this.hasValue = $el.innerHTML.length > 0;
+        this.hasValue = $el.innerText.trim().length > 0;
         clearTimeout(this.to);
         this.to = setTimeout(() => {
             this.update.emit(this.mdc.toMarkdown($el.innerHTML));
