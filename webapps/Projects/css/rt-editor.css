@@ -1,10 +1,14 @@
 /* .rt-editor */
 .rt-editor {
     margin: 0;
-    min-height: 30px;
+    min-height: 34px;
     overflow: hidden;
     padding: 0;
     position: relative;
+}
+
+.rt-editor.edit {
+    background: #fff;
 }
 
 .rt-editor__area {
@@ -26,18 +30,17 @@
     width: 100%;
 }
 
-.rt-editor__area.edit {
-    background: #fff;
+.rt-editor.edit .rt-editor__area {
     border: 1px solid #d9d9d9;
     border-radius: 2px;
     border-top: 1px solid silver;
 }
 
-.rt-editor__area.edit:hover {
+.rt-editor.edit .rt-editor__area:hover {
     border-color: #888;
 }
 
-.rt-editor__area.edit:focus {
+.rt-editor.edit .rt-editor__area:focus {
     border-color: #4d90fe;
     box-shadow: 0 0 1px rgba(39,128,248,.196);
 }
@@ -45,7 +48,7 @@
 .rt-editor__placeholder {
     color: #888;
     left: 0;
-    padding: 6px;
+    padding: 7px;
     position: absolute;
     top: 0;
 }

@@ -759,8 +759,7 @@ webpackJsonp([0],[
 	    MarkdownEditorComponent = __decorate([
 	        core_1.Component({
 	            selector: 'markdown-editor',
-	            template: "\n        <div class=\"rt-editor\">\n            <div class=\"rt-editor__area {{klass}}\"\n                [class.edit]=\"editable\"\n                [contentEditable]=\"editable\"\n                (keyup)=\"updateValue($event.target)\"\n                (focus)=\"focus.emit($event)\"\n                (blur)=\"blur.emit($event)\"\n                innerHTML=\"{{html}}\">\n            </div>\n            <span class=\"rt-editor__placeholder\" *ngIf=\"placeHolder && !hasValue\">{{placeHolder}}</span>\n        </div>\n    ",
-	            providers: [markdown_converter_1.MarkdownConverter]
+	            template: "\n        <div class=\"rt-editor {{klass}}\" [class.edit]=\"editable\">\n            <div class=\"rt-editor__placeholder\" *ngIf=\"placeHolder && !hasValue\">{{placeHolder}}</div>\n            <div class=\"rt-editor__area\"\n                [contentEditable]=\"editable\"\n                (keyup)=\"updateValue($event.target)\"\n                (focus)=\"focus.emit($event)\"\n                (blur)=\"blur.emit($event)\"\n                innerHTML=\"{{html}}\">\n            </div>\n        </div>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [markdown_converter_1.MarkdownConverter])
 	    ], MarkdownEditorComponent);

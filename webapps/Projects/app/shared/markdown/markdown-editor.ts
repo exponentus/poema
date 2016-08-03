@@ -4,19 +4,17 @@ import { MarkdownConverter } from './markdown-converter';
 @Component({
     selector: 'markdown-editor',
     template: `
-        <div class="rt-editor">
-            <div class="rt-editor__area {{klass}}"
-                [class.edit]="editable"
+        <div class="rt-editor {{klass}}" [class.edit]="editable">
+            <div class="rt-editor__placeholder" *ngIf="placeHolder && !hasValue">{{placeHolder}}</div>
+            <div class="rt-editor__area"
                 [contentEditable]="editable"
                 (keyup)="updateValue($event.target)"
                 (focus)="focus.emit($event)"
                 (blur)="blur.emit($event)"
                 innerHTML="{{html}}">
             </div>
-            <span class="rt-editor__placeholder" *ngIf="placeHolder && !hasValue">{{placeHolder}}</span>
         </div>
-    `,
-    providers: [MarkdownConverter]
+    `
 })
 
 export class MarkdownEditorComponent {
