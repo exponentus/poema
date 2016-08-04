@@ -4,7 +4,7 @@ package projects.model.constants;
  * @author Kayra created 21-04-2016
  */
 public enum TaskStatusType {
-    UNKNOWN(0), DRAFT(453), WAITING(454), PROCESSED(455), WAIT_DECISION(456), FINISHED(457);
+    UNKNOWN(0), DRAFT(453), WAITING(454), PROCESSED(455), FINISHED(456);
 
     private int code;
 

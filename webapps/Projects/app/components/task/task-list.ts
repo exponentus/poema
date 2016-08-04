@@ -32,6 +32,7 @@ export class TaskListComponent {
         }
     }
     @Input() showHeader: boolean = true;
+    @Input() showSelect: boolean = true;
     private sub: any;
     private tasks: Task[];
     private selectedIds: string[] = [];

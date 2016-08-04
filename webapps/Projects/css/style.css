@@ -79,7 +79,8 @@ body:not(.side-nav-toggle) .aside + .content {
 }
 
 .header-title-flex > label {
-    color: #666;
+    color: #777;
+    font-size: .8em;
     margin: 0;
     padding: 7px;
     white-space: nowrap;

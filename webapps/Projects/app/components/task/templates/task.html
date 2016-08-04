@@ -18,6 +18,12 @@
             <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
                 <span>{{'complete_task' | translate}}</span>
             </button>
+            <!-- <button class="btn" type="button" *ngIf="canDoStatusWaiting()" (click)="setStatusWaiting()">
+                <span>{{'waiting' | translate}}</span>
+            </button>
+            <button class="btn" type="button" *ngIf="canDoStatusProcessed()" (click)="setStatusProcessed()">
+                <span>{{'processed' | translate}}</span>
+            </button> -->
             <div *ngIf="!isNew && isEditable" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
@@ -38,25 +44,27 @@
             <div class="header-title-flex">
                 <label>
                     {{title | translate}}<br/>
-                    <small class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</small>
+                    <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
                 </label>
                 <input autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
             </div>
         </h1>
     </header>
     <section class="content-body">
-        <div class="task-tabs" *ngIf="hasSubTasks() || hasRequests()">
+        <div class="task-tabs noselect" *ngIf="hasSubTasks() || hasRequests()">
             <div class="task-tab__title pinned">{{'properties' | translate}}</div>
             <div class="task-tab__title" [class.active]="showSubtasks" [class.hidden]="!hasSubTasks()" (click)="toggleShowSubtasks()">
-                {{'subtasks' | translate}}
+                <i class="fa fa-sitemap"></i>
+                <span>{{'subtasks' | translate}}</span>
             </div>
             <div class="task-tab__title" [class.active]="showRequests" [class.hidden]="!hasRequests()" (click)="toggleShowRequests()">
-                {{'requests' | translate}}
+                <i class="fa fa-flag-checkered"></i>
+                <span>{{'requests' | translate}}</span>
                 <i class="fa fa-exclamation-circle" *ngIf="hasUnResolvedRequest"></i>
             </div>
         </div>
         <div class="task-tab" [class.active]="showSubtasks">
-            <task-list [tasks]="subTasks"></task-list>
+            <task-list [showSelect]="false" [tasks]="subTasks"></task-list>
         </div>
         <div class="task-tab" [class.active]="showRequests">
             <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>

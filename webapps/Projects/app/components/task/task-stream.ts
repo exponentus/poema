@@ -25,6 +25,7 @@ export class TaskStreamComponent {
         this.level = 1 + level;
     };
     @Input() task: Task;
+    @Input() showSelect: boolean = true;
     @Output() toggleStream = new EventEmitter<any>();
     @Output() loadStreamLevel = new EventEmitter<any>();
     private sub: any;

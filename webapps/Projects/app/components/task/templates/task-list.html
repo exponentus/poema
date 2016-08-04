@@ -1,7 +1,7 @@
 <div class="view task-list">
     <header class="entries-head" *ngIf="showHeader">
         <div class="head-wrap">
-            <label class="entry-select">
+            <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
             </label>
             <div class="entry-captions">
@@ -20,7 +20,7 @@
         <div *ngFor="let task of tasks">
             <div class="entry-wrap">
                 <div class="entry" [class.active]="isSelected(task.id)">
-                    <label class="entry-select">
+                    <label class="entry-select" *ngIf="showSelect">
                         <input type="checkbox" name="task-id" value="{{task.id}}" [checked]="isSelected(task.id)" (change)="toggleSelected(task.id)" />
                     </label>
                     <a class="entry-link" [routerLink]="['/task', task.id]">
@@ -52,7 +52,7 @@
                     </a>
                 </div>
             </div>
-            <task-stream [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+            <task-stream [showSelect]="showSelect" [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
         </div>
     </div>
 </div>

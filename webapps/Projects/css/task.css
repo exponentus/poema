@@ -1,3 +1,8 @@
+.task-header-title .task-status {
+    font-size: .85em;
+    line-height: 1.3;
+}
+
 .parent-task-link {
     display: inline-block;
     font-size: 1.4rem;
@@ -36,7 +41,7 @@
     cursor: pointer;
     display: inline-block;
     font-size: 1.3rem;
-    margin: 0 2px;
+    margin: 0;
     padding: 10px;
 }
 
@@ -57,15 +62,24 @@
     background: #e6e6e6;
 }
 
-.task-tab {}
+.task-tab {
+    overflow: hidden;
+    transition: max-height .15s;
+}
 
 .task-tab:not(.pinned) {
     display: none;
+    /*max-height: 0;*/
+}
+
+.task-tab.active {
+    border-bottom: 1px solid #ccc;
+    box-shadow: inset 0 -1px 3px rgba(0, 0, 0, 0.1);
+    /*max-height: 600px;*/
+    padding-bottom: 8px;
 }
 
 .task-tab.active,
 .task-tab.pinned {
-    border-bottom: 1px solid #ccc;
     display: block;
-    padding-bottom: 8px;
 }

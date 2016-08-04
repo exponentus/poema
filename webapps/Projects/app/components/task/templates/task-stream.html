@@ -1,7 +1,7 @@
 <div *ngFor="let m of stream">
     <div class="entry-wrap level-{{level}}">
         <div class="entry" *ngIf="m.kind == 'task'">
-            <label class="entry-select">
+            <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" name="task-id" value="{{m.id}}" (change)="toggleSelected(m.id)" />
             </label>
             <a class="entry-link" [routerLink]="['/task', m.id]">
@@ -33,7 +33,7 @@
             </a>
         </div>
         <div class="entry" *ngIf="m.kind == 'request'">
-            <label class="entry-select">
+            <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
             </label>
             <a class="entry-link" [routerLink]="['/task', task.id]">
@@ -72,5 +72,5 @@
             </div>
         </div>
     </div>
-    <task-stream *ngIf="m.kind == 'task'" [level]="level" [task]="m" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+    <task-stream *ngIf="m.kind == 'task'" [level]="level" [showSelect]="showSelect" [task]="m" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
 </div>

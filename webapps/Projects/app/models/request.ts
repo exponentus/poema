@@ -8,7 +8,7 @@ export class Request {
     requestTypeId: string;
     resolution: string;
     resolutionTime: Date;
-    comment: string;
+    comment: string = '';
     hasAttachments: boolean;
     attachments: Attachment[];
 }

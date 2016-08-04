@@ -317,6 +317,14 @@ export class TaskComponent {
         return this.isEditable;
     }
 
+    canDoStatusWaiting() {
+        return true;
+    }
+
+    canDoStatusProcessed() {
+        return true;
+    }
+
     canCompleteTask() {
         return !this.isNew && this.isEditable && this.task.status != 'FINISHED';
     }

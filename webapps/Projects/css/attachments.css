@@ -1,8 +1,14 @@
 .attachments {
+    align-items: flex-start;
     border-bottom: 1px dotted #ccc;
     border-top: 1px dotted #ccc;
-    display: block;
+    display: flex;
+    flex-wrap: wrap;
     margin: 0;
+}
+
+.attachments > .fa-paperclip {
+    padding: 7px;
 }
 
 .attachment-list {
