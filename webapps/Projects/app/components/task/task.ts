@@ -128,6 +128,8 @@ export class TaskComponent {
             this.task = null;
             this.showSubtasks = false;
             this.showRequests = false;
+            this.hasUnResolvedRequest = true;
+            this.hasAcceptedRequestResolution = false;
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
 

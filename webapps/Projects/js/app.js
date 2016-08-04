@@ -8154,6 +8154,8 @@ webpackJsonp([0],[
 	            _this.task = null;
 	            _this.showSubtasks = false;
 	            _this.showRequests = false;
+	            _this.hasUnResolvedRequest = true;
+	            _this.hasAcceptedRequestResolution = false;
 	            _this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new');
 	            _this.isSubtask = params['taskId'] && params['new'] === 'new';
 	            _this.taskService.fetchTaskById(params['taskId']).subscribe(function (task) {
