@@ -136,12 +136,16 @@ public class TaskForm extends _DoForm {
             task.setCustomerObservation(Boolean.valueOf(formData.getValue("customerObservation")));
 
             if (formData.containsField("tagIds")) {
-                String[] tagIds = formData.getValueSilently("tagIds").split(",");
-                if (tagIds.length > 0) {
-                    TagDAO tagDAO = new TagDAO(session);
-                    List<UUID> tagUIds = Arrays.stream(tagIds).map(UUID::fromString).collect(Collectors.toList());
-                    List<Tag> tags = tagDAO.findAllByIds(tagUIds, 0, 0).getResult();
-                    task.setTags(tags);
+                if (formData.getValueSilently("tagIds").isEmpty()) {
+                    task.setTags(new ArrayList<>());
+                } else {
+                    String[] tagIds = formData.getValueSilently("tagIds").split(",");
+                    if (tagIds.length > 0) {
+                        TagDAO tagDAO = new TagDAO(session);
+                        List<UUID> tagUIds = Arrays.stream(tagIds).map(UUID::fromString).collect(Collectors.toList());
+                        List<Tag> tags = tagDAO.findAllByIds(tagUIds, 0, 0).getResult();
+                        task.setTags(tags);
+                    }
                 }
             }
 
