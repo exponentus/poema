@@ -81,7 +81,7 @@ body:not(.side-nav-toggle) .aside + .content {
 .header-title-flex > label {
     color: #777;
     font-size: .8em;
-    margin: 0;
+    margin: 0 8px 0 0;
     padding: 7px;
     white-space: nowrap;
 }

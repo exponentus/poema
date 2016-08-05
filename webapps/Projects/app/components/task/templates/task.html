@@ -38,9 +38,7 @@
             </div>
         </div>
         <h1 class="header-title task-header-title">
-            <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">
-                {{parentTask.title}}
-            </a>
+            <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>
                     {{title | translate}}<br/>
