@@ -39,10 +39,10 @@ div.task-list__title {
 .priority-medium,
 .priority-normal,
 .priority-urgent,
+.status-canceled,
 .status-draft,
 .status-finished,
 .status-processed,
-.status-wait_decision,
 .status-waiting {
     display: inline-block;
     border-radius: 2px;
@@ -63,9 +63,9 @@ div.task-list__title {
     color: white;
 }
 
-.status-wait_decision {
-    background: #FFEB3B;
-    color: #585757;
+.status-canceled {
+    background: #9E9E9E;
+    color: #ffffff;
 }
 
 .status-finished {
