@@ -9,6 +9,10 @@
 @import 'pikaday.css';
 @import 'rt-editor.css';
 
+[tabindex='-1'] {
+    outline: 0;
+}
+
 body {
     min-height: 100vh;
 }

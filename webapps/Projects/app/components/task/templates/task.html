@@ -18,7 +18,7 @@
             <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
                 <span>{{'complete_task' | translate}}</span>
             </button>
-            <div *ngIf="!isNew && isEditable" dropdown class="buttons">
+            <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
                 </div>

@@ -8,7 +8,7 @@
             <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
                 {{'save_close' | translate}}
             </button>
-            <div *ngIf="!isNew && isEditable" dropdown class="buttons">
+            <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
                 </div>
