@@ -12,12 +12,13 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
-import org.eclipse.persistence.exceptions.DatabaseException;
+import com.exponentus.util.TimeUtil;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
+import projects.model.constants.TaskStatusType;
 import reference.model.RequestType;
 
 import java.util.ArrayList;
@@ -104,6 +105,10 @@ public class TaskRequests extends _DoForm {
                 addContent("error", "task has unresolved request");
                 setBadRequest();
                 return;
+            } else if (task.getRequests() != null && task.getRequests().size() > 42) {
+                addContent("error", "task: too more request?! Bad game bro");
+                setBadRequest();
+                return;
             }
 
             RequestType requestType = new RequestType();
@@ -138,13 +143,11 @@ public class TaskRequests extends _DoForm {
             if (ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
-        } catch (DatabaseException e) {
-            logError(e);
-            setBadRequest();
         } catch (SecureException e) {
             logError(e);
             setBadRequest();
         } catch (MsgException e) {
+            setBadRequest();
             logError(e);
         }
     }
@@ -171,6 +174,24 @@ public class TaskRequests extends _DoForm {
                 return;
             }
 
+            if (resolutionType == ResolutionType.ACCEPT) {
+                TaskDAO taskDAO = new TaskDAO(session);
+                Task task = request.getTask();
+                if ("implement".equals(request.getRequestType().getName())) {
+                    task.setStatus(TaskStatusType.FINISHED);
+                } else if ("prolong".equals(request.getRequestType().getName())) {
+                    // prolong new due date
+                    task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
+                } else if ("cancel".equals(request.getRequestType().getName())) {
+                    task.setStatus(TaskStatusType.CANCELED);
+                } else {
+                    setBadRequest();
+                    addContent("error", "I don't know what you want. Unknown requestType");
+                    return;
+                }
+                taskDAO.update(task);
+            }
+
             request.setResolution(resolutionType);
             requestDAO.update(request);
 
@@ -193,13 +214,11 @@ public class TaskRequests extends _DoForm {
             if (ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
-        } catch (DatabaseException e) {
-            logError(e);
-            setBadRequest();
         } catch (SecureException e) {
-            logError(e);
             setBadRequest();
+            logError(e);
         } catch (MsgException e) {
+            setBadRequest();
             logError(e);
         }
     }
@@ -208,7 +227,8 @@ public class TaskRequests extends _DoForm {
         RequestDAO requestDAO = new RequestDAO(session);
         Request request = requestDAO.findById(requestId);
 
-        if (!request.getTask().getEditors().contains(session.getUser().getId()) || !request.getEditors().contains(request.getAuthorId())) {
+        if (!request.getTask().getEditors().contains(session.getUser().getId())
+                || !request.getEditors().contains(request.getAuthorId())) {
             addContent("error", "(task|request): has no editor access");
             setBadRequest();
             return;
@@ -217,7 +237,8 @@ public class TaskRequests extends _DoForm {
         try {
             requestDAO.delete(request);
         } catch (SecureException e) {
-            setError(e);
+            setBadRequest();
+            logError(e);
         }
     }
 
@@ -226,7 +247,8 @@ public class TaskRequests extends _DoForm {
             RequestDAO requestDAO = new RequestDAO(session);
             Request request = requestDAO.findById(requestId);
 
-            if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(session.getUser().getId())) {
+            if (!request.getTask().getEditors().contains(session.getUser().getId())
+                    && !request.getEditors().contains(session.getUser().getId())) {
                 addContent("error", "(task|request): has no editor access");
                 setBadRequest();
                 return;
@@ -237,12 +259,9 @@ public class TaskRequests extends _DoForm {
             request.getAttachments().remove(attachment);
 
             requestDAO.update(request);
-        } catch (DatabaseException e) {
-            logError(e);
-            setBadRequest();
         } catch (SecureException e) {
-            logError(e);
             setBadRequest();
+            logError(e);
         }
     }
 }

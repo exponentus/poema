@@ -136,10 +136,11 @@ public class Comments extends _DoForm {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {
-            setError(e);
-        } catch (MsgException e) {
+            setBadRequest();
             logError(e);
-            setError(e);
+        } catch (MsgException e) {
+            setBadRequest();
+            logError(e);
         }
     }
 
@@ -156,7 +157,7 @@ public class Comments extends _DoForm {
         try {
             commentDAO.delete(comment);
         } catch (SecureException e) {
-            setError(e);
+            setBadRequest();
             logError(e);
         }
     }
@@ -182,8 +183,8 @@ public class Comments extends _DoForm {
         try {
             commentDAO.update(comment);
         } catch (SecureException e) {
-            setError(e);
             logError(e);
+            setBadRequest();
         }
     }
 

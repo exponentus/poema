@@ -18,12 +18,6 @@
             <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
                 <span>{{'complete_task' | translate}}</span>
             </button>
-            <!-- <button class="btn" type="button" *ngIf="canDoStatusWaiting()" (click)="setStatusWaiting()">
-                <span>{{'waiting' | translate}}</span>
-            </button>
-            <button class="btn" type="button" *ngIf="canDoStatusProcessed()" (click)="setStatusProcessed()">
-                <span>{{'processed' | translate}}</span>
-            </button> -->
             <div *ngIf="!isNew && isEditable" dropdown class="buttons">
                 <div dropdown-toggle>
                     <span class="btn">...</span>

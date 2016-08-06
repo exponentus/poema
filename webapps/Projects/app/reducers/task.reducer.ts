@@ -7,6 +7,7 @@ export interface ITaskState {
     request: Request,
     requests: Request[],
     showRequest: boolean,
+    isResolveAction: boolean,
     comments: Comment[]
 };
 
@@ -15,6 +16,7 @@ const initialState: ITaskState = {
     request: null,
     requests: [],
     showRequest: false,
+    isResolveAction: false,
     comments: []
 };
 
@@ -24,10 +26,19 @@ export const taskReducer = (state = initialState, {type, payload}): ITaskState =
             return Object.assign({}, state, {
                 requests: payload.requests
             });
+        case TaskActions.TASK_REQUEST_ACCEPTANCE:
+            return Object.assign({}, state, {
+                task: payload.task,
+                request: payload.request,
+                showRequest: true,
+                isResolveAction: true
+            });
         case TaskActions.TASK_REQUEST_NEW:
             return Object.assign({}, state, {
                 task: payload,
-                showRequest: true
+                request: null,
+                showRequest: true,
+                isResolveAction: false
             });
         case TaskActions.TASK_REQUEST_CANCEL:
             return Object.assign({}, state, {
@@ -38,13 +49,7 @@ export const taskReducer = (state = initialState, {type, payload}): ITaskState =
                 comments: payload.comments
             });
         case TaskActions.TASK_UNLOAD:
-            return {
-                task: null,
-                request: null,
-                requests: [],
-                showRequest: false,
-                comments: []
-            };
+            return initialState;
         default:
             return state;
     }

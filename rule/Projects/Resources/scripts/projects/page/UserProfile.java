@@ -55,6 +55,7 @@ public class UserProfile extends _DoPage {
             }
             dao.update(entity);
         } catch (_Exception e) {
+            setBadRequest();
             logError(e);
         }
     }

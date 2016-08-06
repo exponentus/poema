@@ -164,9 +164,10 @@ public class ProjectForm extends _DoForm {
         } catch (SecureException e) {
             setError(e);
         } catch (_Exception | DatabaseException e) {
-            logError(e);
             setBadRequest();
+            logError(e);
         } catch (MsgException e) {
+            setBadRequest();
             logError(e);
         }
     }
@@ -191,7 +192,8 @@ public class ProjectForm extends _DoForm {
         try {
             dao.update(project);
         } catch (SecureException e) {
-            setError(e);
+            setBadRequest();
+            logError(e);
         }
     }
 

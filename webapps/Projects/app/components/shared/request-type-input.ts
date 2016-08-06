@@ -5,7 +5,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { LocalizedNamePipe } from '../../pipes';
 import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IReferenceState } from '../../reducers/reference.reducer';
-import { Request } from '../../models';
+import { Request, RequestType } from '../../models';
 
 @Component({
     selector: 'request-type-input',
@@ -43,14 +43,13 @@ import { Request } from '../../models';
 })
 
 export class RequestTypeInputComponent {
-    @Input() requestTypeId: string;
+    @Input() requestType: RequestType;
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private requestTypes: any;
-    private requestType: any;
     private sub: any;
 
     constructor(
@@ -60,7 +59,6 @@ export class RequestTypeInputComponent {
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.requestTypes = state.requestTypes;
-            this.requestType = state.requestTypes.filter(it => it.id == this.requestTypeId)[0];
             this.searchable = this.requestTypes.length > 13;
         });
     }

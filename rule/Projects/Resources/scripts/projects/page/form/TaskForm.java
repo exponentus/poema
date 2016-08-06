@@ -176,11 +176,13 @@ public class TaskForm extends _DoForm {
                 }
             }
         } catch (SecureException e) {
-            setError(e);
-        } catch (_Exception | DatabaseException e) {
-            logError(e);
             setBadRequest();
+            logError(e);
+        } catch (_Exception | DatabaseException e) {
+            setBadRequest();
+            logError(e);
         } catch (MsgException e) {
+            setBadRequest();
             logError(e);
         }
     }
@@ -221,7 +223,8 @@ public class TaskForm extends _DoForm {
         try {
             dao.update(task);
         } catch (SecureException e) {
-            setError(e);
+            setBadRequest();
+            logError(e);
         }
     }
 
@@ -292,11 +295,13 @@ public class TaskForm extends _DoForm {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {
-            setError(e);
-        } catch (DatabaseException e) {
-            logError(e);
             setBadRequest();
+            logError(e);
+        } catch (DatabaseException e) {
+            setBadRequest();
+            logError(e);
         } catch (MsgException e) {
+            setBadRequest();
             logError(e);
         }
     }

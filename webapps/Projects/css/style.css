@@ -86,6 +86,10 @@ body:not(.side-nav-toggle) .aside + .content {
     white-space: nowrap;
 }
 
+.header-title-flex > input {
+    font-size: .9em;
+}
+
 .header-title-flex > input:not(:focus):not(:hover),
 .header-title-flex > input[readonly] {
     border-color: transparent;

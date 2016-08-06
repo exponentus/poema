@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
+import { DatepickerDirective } from '../../shared/datepicker/datepicker';
 import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { MarkdownEditorComponent } from '../../shared/markdown';
@@ -19,11 +20,13 @@ import { Task, Request, RequestType, Attachment } from '../../models';
             <header>{{'task_request' | translate}}</header>
             <section>
                 <request-type-input
-                    editable="true"
+                    [editable]="editable"
                     placeHolder="{{'request_type' | translate}}"
+                    [requestType]="requestType"
                     (select)="setRequestType($event)">
                 </request-type-input>
-                <textarea class="rt-editor" placeholder="{{'comment' | translate}}" [(ngModel)]="comment"></textarea>
+                <p *ngIf="!editable"></p>
+                <textarea class="rt-editor" placeholder="{{'comment' | translate}}" *ngIf="editable" [(ngModel)]="comment"></textarea>
                 <!-- <markdown-editor
                     [markdown]="''"
                     editable="true"
@@ -31,11 +34,18 @@ import { Task, Request, RequestType, Attachment } from '../../models';
                     updateTimeout="100"
                     (update)="setComment($event)">
                 </markdown-editor> -->
-                <attachments [model]="request" editable="true" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+            </section>
+            <section *ngIf="isResolveAction">
+                <b>{{'new_due_date' | translate}}</b>
+                <input datepicker class="span2" (select)="setDueDate($event)" />
             </section>
             <footer>
                 <button class="btn btn-cancel" type="button" (click)="cancel()">{{'cancel' | translate}}</button>
-                <button class="btn btn-primary" type="submit" [disabled]="!requestType">{{'send_request' | translate}}</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!requestType || (isResolveAction && !dueDate)">
+                    <span *ngIf="!isResolveAction">{{'send_request' | translate}}</span>
+                    <span *ngIf="isResolveAction">{{'accept' | translate}}</span>
+                </button>
             </footer>
         </form>
     `,
@@ -44,7 +54,7 @@ import { Task, Request, RequestType, Attachment } from '../../models';
         '[class.open]': 'isOpen',
         '(keyup.escape)': 'cancel()'
     },
-    directives: [AttachmentsComponent, RequestTypeInputComponent, MarkdownEditorComponent],
+    directives: [AttachmentsComponent, RequestTypeInputComponent, MarkdownEditorComponent, DatepickerDirective],
     pipes: [TranslatePipe]
 })
 
@@ -52,11 +62,15 @@ export class RequestComponent {
     @Output() send = new EventEmitter<any>();
     private subs: any = [];
 
+    private task: Task;
     private request: Request;
     private isOpen = false;
     private requestTypes: RequestType[];
     private requestType: RequestType;
     private comment: string;
+    private dueDate: string;
+    private editable: boolean = true;
+    private isResolveAction: boolean = false;
 
     constructor(
         private store: Store<any>,
@@ -70,8 +84,13 @@ export class RequestComponent {
 
         this.subs.push(store.select('task').subscribe((state: ITaskState) => {
             if (state) {
+                this.task = state.task;
                 this.request = state.request || new Request();
+                this.requestType = this.request.requestType;
+                this.comment = this.request.comment;
                 this.isOpen = state.showRequest;
+                this.editable = !state.isResolveAction;
+                this.isResolveAction = state.isResolveAction;
 
                 if (state.task) {
                     this.request.taskId = state.task.id;
@@ -97,16 +116,26 @@ export class RequestComponent {
     sendRequest($event) {
         $event.preventDefault();
 
-        this.request.comment = this.comment;
-        this.request.requestTypeId = this.requestType.id;
-
-        this.taskService.sendTaskRequest(this.request).subscribe(response => {
-            this.notifyService.info(this.translate.instant('request_send_success')).show().remove(3000);
-            this.cancel();
-            this.send.emit({
-                requestSendSuccess: true
+        if (this.isResolveAction) {
+            this.taskService.doRequestResolution(this.request, 'ACCEPT', { dueDate: this.dueDate }).subscribe(action => {
+                this.store.dispatch(action);
+                this.cancel();
+                this.send.emit({
+                    requestSendSuccess: true
+                });
             });
-        });
+        } else {
+            this.request.comment = this.comment;
+            this.request.requestTypeId = this.requestType.id;
+
+            this.taskService.sendTaskRequest(this.request).subscribe(response => {
+                this.notifyService.info(this.translate.instant('request_send_success')).show().remove(3000);
+                this.cancel();
+                this.send.emit({
+                    requestSendSuccess: true
+                });
+            });
+        }
     }
 
     setRequestType(requestType: RequestType) {
@@ -115,6 +144,10 @@ export class RequestComponent {
 
     setComment(comment: string) {
         this.comment = comment;
+    }
+
+    setDueDate(date) {
+        this.dueDate = date;
     }
 
     addAttachment(file) {

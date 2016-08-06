@@ -1,4 +1,5 @@
 import { Attachment } from './attachment';
+import { RequestType } from './request-type';
 
 export class Request {
     id: string = '';
@@ -6,6 +7,7 @@ export class Request {
     regDate: Date;
     taskId: string;
     requestTypeId: string;
+    requestType: RequestType;
     resolution: string;
     resolutionTime: Date;
     comment: string = '';

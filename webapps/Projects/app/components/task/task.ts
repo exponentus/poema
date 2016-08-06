@@ -261,10 +261,6 @@ export class TaskComponent {
         });
     }
 
-    hasComments() {
-        return this.comments && this.comments.length;
-    }
-
     //
     loadRequests(page = 1) {
         this.taskService.fetchTaskRequests(this.task, page).subscribe(payload => {
@@ -273,10 +269,20 @@ export class TaskComponent {
     }
 
     acceptRequest(request: Request) {
-        this.taskService.doRequestResolution(request, 'ACCEPT').subscribe(action => {
-            this.store.dispatch(action);
-            this.loadRequests(1);
-        });
+        if (request.requestType.name == 'prolong') {
+            this.store.dispatch({
+                type: TaskActions.TASK_REQUEST_ACCEPTANCE,
+                payload: {
+                    task: this.task,
+                    request: request
+                }
+            });
+        } else {
+            this.taskService.doRequestResolution(request, 'ACCEPT').subscribe(action => {
+                this.store.dispatch(action);
+                this.loadRequests(1);
+            });
+        }
     }
 
     declineRequest(request: Request) {
@@ -287,7 +293,7 @@ export class TaskComponent {
     }
 
     hasRequests() {
-        return this.requests && this.requests.length;
+        return this.task.hasRequests;
     }
 
     // loadSubtasks

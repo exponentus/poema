@@ -34,10 +34,10 @@ import { Request } from '../../models';
                         </span>
                         <div class="request__resolution_time">{{request.resolutionTime}}</div>
                         <div class="request__buttons" *ngIf="request.resolution == 'UNKNOWN'">
-                            <button type="button" class="btn btn-primary" [disabled]="disabled" (click)="doAccept(request)">
+                            <button type="button" class="btn btn-primary" (click)="doAccept(request)">
                                 {{'accept' | translate}}
                             </button>
-                            <button type="button" class="btn" [disabled]="disabled" (click)="doDecline(request)">
+                            <button type="button" class="btn" (click)="doDecline(request)">
                                 {{'decline' | translate}}
                             </button>
                         </div>
@@ -54,15 +54,12 @@ export class RequestListComponent {
     @Input() requests: Request[];
     @Output() accept = new EventEmitter<any>();
     @Output() decline = new EventEmitter<any>();
-    private disabled = false;
 
     doAccept(request: Request) {
-        this.disabled = true;
         this.accept.emit(request);
     }
 
     doDecline(request: Request) {
-        this.disabled = true;
         this.decline.emit(request);
     }
 }

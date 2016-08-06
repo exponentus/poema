@@ -55,6 +55,7 @@ public class DashboardPage extends _DoPage {
             dashboardDAO.update(dashboard);
         } catch (SecureException e) {
             setBadRequest();
+            logError(e);
         }
     }
 
@@ -80,6 +81,7 @@ public class DashboardPage extends _DoPage {
             dashboardDAO.update(dashboard);
         } catch (SecureException e) {
             setBadRequest();
+            logError(e);
         }
     }
 }

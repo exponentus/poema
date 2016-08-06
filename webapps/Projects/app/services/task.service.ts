@@ -140,8 +140,8 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    doRequestResolution(request: Request, resolution: string) {
-        let url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution;
+    doRequestResolution(request: Request, resolution: string, data?: any) {
+        let url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution + '&' + serializeObj(data);
         return this.http.put(url, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
