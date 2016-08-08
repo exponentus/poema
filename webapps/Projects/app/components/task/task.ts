@@ -98,6 +98,9 @@ export class TaskComponent {
             if (!this.requests) {
                 this.hasUnResolvedRequest = false;
             } else {
+                this.hasUnResolvedRequest = false;
+                this.hasAcceptedRequestResolution = false;
+
                 this.requests.forEach(it => {
                     if (it.resolution == 'UNKNOWN') {
                         this.hasUnResolvedRequest = true;
@@ -246,7 +249,7 @@ export class TaskComponent {
     }
 
     canAddSubTask() {
-        return !this.isNew && !this.isSubtask && this.FEATURE_FLAGS.subTask;
+        return this.FEATURE_FLAGS.subTask && !this.isNew && !this.isSubtask && this.task.status != 'FINISHED';
     }
 
     addSubtask() {
@@ -357,7 +360,7 @@ export class TaskComponent {
     }
 
     canRequestAction() {
-        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest && !this.hasAcceptedRequestResolution;
+        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest; // && !this.hasAcceptedRequestResolution;
     }
 
     newRequest() {
