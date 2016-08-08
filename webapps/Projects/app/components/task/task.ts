@@ -67,9 +67,11 @@ export class TaskComponent {
     };
     FEATURE_FLAGS: any = {
         subTask: true,
-        comments: true
+        comments: false
     };
     form: ControlGroup;
+    showPropertyTabTitle: boolean = true;
+    showProperty: boolean = true;
     showSubtasks: boolean = false;
     showRequests: boolean = false;
     hasUnResolvedRequest: boolean = true;
@@ -126,6 +128,7 @@ export class TaskComponent {
         this.subs.push(this.route.params.subscribe(params => {
             this.isReady = false;
             this.task = null;
+            this.showProperty = true;
             this.showSubtasks = false;
             this.showRequests = false;
             this.hasUnResolvedRequest = true;
@@ -182,18 +185,26 @@ export class TaskComponent {
         }
     }
 
+    toggleShowProperty() {
+        this.showProperty = true;
+        this.showRequests = false;
+        this.showSubtasks = false;
+    }
+
     toggleShowSubtasks() {
-        this.showSubtasks = !this.showSubtasks;
-        if (this.showSubtasks) {
-            this.showRequests = false;
-        }
+        this.showSubtasks = true; // !this.showSubtasks;
+        // if (this.showSubtasks) {
+        this.showRequests = false;
+        this.showProperty = false;
+        // }
     }
 
     toggleShowRequests() {
-        this.showRequests = !this.showRequests;
-        if (this.showRequests) {
-            this.showSubtasks = false;
-        }
+        this.showRequests = true; // !this.showRequests;
+        // if (this.showRequests) {
+        this.showSubtasks = false;
+        this.showProperty = false;
+        // }
     }
 
     saveTask() {
@@ -243,6 +254,14 @@ export class TaskComponent {
     }
 
     //
+    showComments() {
+        return this.hasFutureComments() && !this.isNew;
+    }
+
+    hasFutureComments() {
+        return this.FEATURE_FLAGS.comments;
+    }
+
     loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(payload => {
             this.store.dispatch({ type: TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });

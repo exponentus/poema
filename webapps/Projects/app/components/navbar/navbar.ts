@@ -1,5 +1,7 @@
-import { Component, Input, HostBinding, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy } from '@angular/core';
 import { ROUTER_DIRECTIVES }  from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
@@ -16,6 +18,7 @@ import { User } from '../../models/user';
 
 export class NavbarComponent {
     @Input() user: User;
+    keyup$ = new Subject<KeyboardEvent>();
     headerTitle: string = 'Projects';
     workspaceUrl: string = 'Logout'; // '/Workspace/p?id=workspace';
     logoUrl: string = 'img/logo.png';
@@ -25,6 +28,14 @@ export class NavbarComponent {
         private environmentActions: EnvironmentActions
     ) { }
 
+    ngOnInit() {
+        this.keyup$
+            .debounceTime(300)
+            .map(event => (event.target as HTMLInputElement).value)
+            .distinctUntilChanged()
+            .subscribe(value => this.search(value));
+    }
+
     searchFocus() {
         this.store.dispatch(this.environmentActions.toggleSearch());
     }
@@ -33,8 +44,8 @@ export class NavbarComponent {
         this.store.dispatch(this.environmentActions.hideNav());
     }
 
-    search(keyWordInput) {
-        this.store.dispatch(this.environmentActions.search(keyWordInput.value));
+    search(value) {
+        this.store.dispatch(this.environmentActions.search(value));
     }
 
     toggleNav() {

@@ -24,8 +24,8 @@
                     <div class="task-list__assignee">
                         <user-input [userIds]="[m.assigneeUserId]"></user-input>
                     </div>
-                    <div class="task-list__start_date">{{m.startDate | dateFmt}}</div>
-                    <div class="task-list__due_date">{{m.dueDate | dateFmt}}</div>
+                    <div class="task-list__start_date">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>
+                    <div class="task-list__due_date">{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</div>
                     <div class="task-list__tags">
                         <tags-input [tagIds]="m.tagIds"></tags-input>
                     </div>
@@ -57,7 +57,7 @@
                         <i class="fa fa-times"></i>
                         {{'declined' | translate}}
                     </span>
-                    <div class="request__resolution_time">{{m.resolutionTime}}</div>
+                    <div class="request__resolution_time">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</div>
                 </div>
             </a>
         </div>

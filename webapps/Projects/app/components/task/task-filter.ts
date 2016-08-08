@@ -1,9 +1,7 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { TaskTypeInputComponent, UserInputComponent, TagsInputComponent } from '../shared';
-import { DateFormatPipe } from '../../pipes';
-import { SET_FILTER } from '../../reducers/tasks.reducer';
 import { Task, TaskType, User, Tag } from '../../models';
 
 @Component({
@@ -17,7 +15,7 @@ import { Task, TaskType, User, Tag } from '../../models';
         <tags-input [tagIds]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
     `,
     directives: [TaskTypeInputComponent, UserInputComponent, TagsInputComponent],
-    pipes: [DateFormatPipe, TranslatePipe]
+    pipes: [TranslatePipe]
 })
 
 export class TaskFilterComponent {

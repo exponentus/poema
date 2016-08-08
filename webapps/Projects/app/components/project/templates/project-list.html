@@ -43,7 +43,7 @@
                         <span class="project-list__tester">
                             <user-input [userIds]="[project.testerUserId]"></user-input>
                         </span>
-                        <span class="project-list__finish_date">{{project.finishDate | dateFmt}}</span>
+                        <span class="project-list__finish_date">{{project.finishDate | dateFmt:'DD.MM.YYYY'}}</span>
                     </div>
                 </a>
             </div>
