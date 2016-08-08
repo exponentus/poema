@@ -6,8 +6,9 @@
                 <span>{{'close' | translate}}</span>
             </button>
             <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask()">
-                <span *ngIf="isNew">{{'send_task' | translate}}</span>
-                <span *ngIf="!isNew">{{'save_close' | translate}}</span>
+                <!-- <span *ngIf="isNew">{{'send_task' | translate}}</span>
+                <span *ngIf="!isNew">{{'save_close' | translate}}</span> -->
+                {{'save_close' | translate}}
             </button>
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
                 {{'new_request' | translate}}
@@ -34,11 +35,9 @@
         <h1 class="header-title task-header-title">
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
-                <label>
-                    {{title | translate}}<br/>
-                    <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
-                </label>
+                <label>{{title | translate}}</label>
                 <input autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+                <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
     </header>

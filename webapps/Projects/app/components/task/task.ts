@@ -249,7 +249,7 @@ export class TaskComponent {
     }
 
     canAddSubTask() {
-        return this.FEATURE_FLAGS.subTask && !this.isNew && !this.isSubtask && this.task.status != 'FINISHED';
+        return this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED'; //  && !this.isSubtask
     }
 
     addSubtask() {
