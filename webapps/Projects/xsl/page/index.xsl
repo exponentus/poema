@@ -4,46 +4,68 @@
     <xsl:output method="html" encoding="utf-8" indent="no"/>
 
     <xsl:template match="/request">
-        <xsl:call-template name="layout"/>
-    </xsl:template>
-
-    <xsl:template name="layout">
-        <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
+        <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text
+            disable-output-escaping="yes">&gt;</xsl:text>
         <html>
-            <head>
-                <base href=""/>
-                <meta charset="utf-8"/>
-                <title></title>
-                <link rel="shortcut icon" href="img/favicon.png" />
-                <meta name="format-detection" content="telephone=no" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-                <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css" />
-                <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css" />
-                <link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css" />
-                <link rel="stylesheet" href="css/style.css" />
-                <style>
-                    /* fix: fieldset content overflow */
-                    fieldset {
-                        display: block;
-                        min-width: inherit; /* chrome */
-                    }
-                    @-moz-document url-prefix() {
-                        fieldset {
-                            display: table-column !important;
-                        }
-                    }
-                </style>
-            </head>
-            <body>
-                <app class="body">
-                    <div class="app-loading">
-                        <img class="brand-logo" alt="logo" src="img/logo.png" />Loading...
-                    </div>
-                </app>
-                <script src="js/vendor.js"></script>
-                <script src="js/app.js"></script>
-            </body>
+            <xsl:choose>
+                <xsl:when test="//document[@entity='task' or @entity='project']">
+                    <head>
+                        <script>
+                            <xsl:apply-templates select="//document[@entity='task' or @entity='project']"/>
+                        </script>
+                    </head>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="layout"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </html>
     </xsl:template>
 
+    <xsl:template name="layout">
+        <head>
+            <base href=""/>
+            <meta charset="utf-8"/>
+            <title></title>
+            <link rel="shortcut icon" href="img/favicon.png"/>
+            <meta name="format-detection" content="telephone=no"/>
+            <meta name="viewport"
+                  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+            <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css"/>
+            <link rel="stylesheet" href="css/style.css"/>
+            <style>
+                /* fix: fieldset content overflow */
+                fieldset {
+                    display: block;
+                    min-width: inherit; /* chrome */
+                }
+                @-moz-document url-prefix() {
+                    fieldset {
+                        display: table-column !important;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <app class="body">
+                <div class="app-loading">
+                    <img class="brand-logo" alt="logo" src="img/logo.png"/>Loading...
+                </div>
+            </app>
+            <script src="js/vendor.js"></script>
+            <script src="js/app.js"></script>
+        </body>
+    </xsl:template>
+
+    <xsl:template match="document[@entity='task']">
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/task/<xsl:value-of
+            select="@docid"/>';
+    </xsl:template>
+
+    <xsl:template match="document[@entity='project']">
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/<xsl:value-of
+            select="@docid"/>';
+    </xsl:template>
 </xsl:stylesheet>
