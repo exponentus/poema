@@ -14,7 +14,7 @@ webpackJsonp([0],[
 	var app_routes_1 = __webpack_require__(591);
 	var translate_service_1 = __webpack_require__(463);
 	var services_1 = __webpack_require__(460);
-	var store_1 = __webpack_require__(641);
+	var store_1 = __webpack_require__(640);
 	var actions_1 = __webpack_require__(453);
 	if (false) {
 	    core_1.enableProdMode();
@@ -5812,8 +5812,8 @@ webpackJsonp([0],[
 	var project_1 = __webpack_require__(614);
 	var tasks_1 = __webpack_require__(621);
 	var task_1 = __webpack_require__(628);
-	var user_profile_1 = __webpack_require__(638);
-	var login_1 = __webpack_require__(640);
+	var user_profile_1 = __webpack_require__(637);
+	var login_1 = __webpack_require__(639);
 	var routes = [
 	    { path: '', component: tasks_1.TasksComponent, canActivate: [redirect_guard_1.RedirectGuard, auth_guard_1.AuthGuard] },
 	    { path: 'dashboard', component: dashboard_1.DashboardComponent, canActivate: [auth_guard_1.AuthGuard] },
@@ -8104,16 +8104,16 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var notification_1 = __webpack_require__(376);
 	var datepicker_1 = __webpack_require__(615);
-	var tabs_1 = __webpack_require__(630);
+	var tabs_1 = __webpack_require__(629);
 	var dropdown_1 = __webpack_require__(583);
 	var markdown_1 = __webpack_require__(380);
 	var switch_button_1 = __webpack_require__(617);
 	var shared_1 = __webpack_require__(606);
 	var task_list_1 = __webpack_require__(623);
-	var request_list_1 = __webpack_require__(633);
-	var request_1 = __webpack_require__(634);
+	var request_list_1 = __webpack_require__(632);
+	var request_1 = __webpack_require__(633);
 	var attachments_1 = __webpack_require__(619);
-	var comments_1 = __webpack_require__(635);
+	var comments_1 = __webpack_require__(634);
 	var pipes_1 = __webpack_require__(597);
 	var actions_1 = __webpack_require__(453);
 	var services_1 = __webpack_require__(460);
@@ -8450,7 +8450,7 @@ webpackJsonp([0],[
 	    TaskComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task',
-	            template: __webpack_require__(637),
+	            template: __webpack_require__(636),
 	            directives: [
 	                router_1.ROUTER_DIRECTIVES,
 	                common_1.FORM_DIRECTIVES,
@@ -8480,18 +8480,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 629 */,
-/* 630 */
+/* 629 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var tabs_1 = __webpack_require__(631);
-	var tab_1 = __webpack_require__(632);
+	var tabs_1 = __webpack_require__(630);
+	var tab_1 = __webpack_require__(631);
 	exports.TAB_DIRECTIVES = [tabs_1.Tabs, tab_1.Tab];
 
 
 /***/ },
-/* 631 */
+/* 630 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8505,7 +8504,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(5);
-	var tab_1 = __webpack_require__(632);
+	var tab_1 = __webpack_require__(631);
 	var Tabs = (function () {
 	    function Tabs() {
 	    }
@@ -8537,7 +8536,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 632 */
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8586,7 +8585,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 633 */
+/* 632 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8643,7 +8642,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 634 */
+/* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8775,7 +8774,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 635 */
+/* 634 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8792,7 +8791,7 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(350);
 	var markdown_editor_1 = __webpack_require__(391);
 	var models_1 = __webpack_require__(465);
-	var comment_1 = __webpack_require__(636);
+	var comment_1 = __webpack_require__(635);
 	var CommentsComponent = (function () {
 	    function CommentsComponent() {
 	        this.add = new core_1.EventEmitter();
@@ -8852,7 +8851,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 636 */
+/* 635 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8928,13 +8927,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 637 */
+/* 636 */
 /***/ function(module, exports) {
 
 	module.exports = "<form class=\"form\" [ngFormModel]=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!form.valid\" (click)=\"saveTask()\">\r\n                <!-- <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span> -->\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canAddSubTask()\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canCompleteTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew && isEditable\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <h1 class=\"header-title task-header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">{{parentTask.title}}</a>\r\n            <div class=\"header-title-flex\">\r\n                <label>{{title | translate}}</label>\r\n                <input autofocus placeholder=\"{{'task_title' | translate}}\" [readonly]=\"!isEditable\" [(ngModel)]=\"task.title\" ngControl=\"title\" />\r\n                <span class=\"task-status status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n            </div>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <div class=\"task-tabs noselect\" *ngIf=\"hasSubTasks() || hasRequests()\">\r\n            <div class=\"task-tab__title\" [class.active]=\"showProperty\" [class.hidden]=\"!showPropertyTabTitle\" (click)=\"toggleShowProperty()\">{{'properties' | translate}}</div>\r\n            <div class=\"task-tab__title\" [class.active]=\"showSubtasks\" [class.hidden]=\"!hasSubTasks()\" (click)=\"toggleShowSubtasks()\">\r\n                <i class=\"fa fa-sitemap\"></i>\r\n                <span>{{'subtasks' | translate}}</span>\r\n            </div>\r\n            <div class=\"task-tab__title\" [class.active]=\"showRequests\" [class.hidden]=\"!hasRequests()\" (click)=\"toggleShowRequests()\">\r\n                <!-- <i class=\"fa fa-flag-checkered\"></i> -->\r\n                <span>{{'requests' | translate}}</span>\r\n                <!-- <i class=\"fa fa-exclamation-circle\" *ngIf=\"hasUnResolvedRequest\"></i> -->\r\n            </div>\r\n        </div>\r\n        <div class=\"task-tab\" [class.active]=\"showSubtasks\">\r\n            <task-list [showSelect]=\"false\" [tasks]=\"subTasks\"></task-list>\r\n        </div>\r\n        <div class=\"task-tab\" [class.active]=\"showRequests\">\r\n            <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n        </div>\r\n        <div class=\"task-tab\" [class.active]=\"showProperty\">\r\n            <fieldset class=\"fieldset\">\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'project' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"!form.controls.projectId.valid\">\r\n                        <div class=\"span8\">\r\n                            <project-input [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                        </div>\r\n                    </div>\r\n                    <div [hidden]=\"form.controls.projectId.valid || form.controls.projectId.pristine\" class=\"error-message\">\r\n                        {{'required' | translate}}\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'task_type' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"!form.controls.taskTypeId.valid\">\r\n                        <div class=\"span8\">\r\n                            <task-type-input [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'priority' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"!form.controls.priority.valid\">\r\n                        <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                        <div [hidden]=\"form.controls.priority.valid || form.controls.priority.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'assignee_user' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"!form.controls.assigneeUserId.valid\">\r\n                        <div class=\"span8\">\r\n                            <user-input [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                        </div>\r\n                        <div [hidden]=\"form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine\" class=\"error-message\">\r\n                            {{'required' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'start_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.startDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" ngControl=\"startDate\" />\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'due_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.dueDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" ngControl=\"dueDate\" />\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'tags' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"!form.controls.tagIds.valid\">\r\n                        <div class=\"span8\">\r\n                            <tags-input [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\"></div>\r\n                    <div class=\"controls\">\r\n                        <label class=\"input\" [class.disabled]=\"!isEditable\">\r\n                            <input type=\"checkbox\" name=\"customerObservation\" value=\"1\" [disabled]=\"!isEditable\" [(ngModel)]=\"task.customerObservation\" />\r\n                            <span>{{'publish_to_customer' | translate}}</span>\r\n                        </label>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <markdown-editor placeHolder=\"{{'body' | translate}}\" [markdown]=\"task.body || ''\" [editable]=\"isEditable\" updateTimeout=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                </div>\r\n            </fieldset>\r\n            <attachments [editable]=\"isEditable\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n        <comments *ngIf=\"showComments()\" [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"task.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [editable]=\"false\" [userIds]=\"[task.authorId]\"></user-input>\r\n            <time>{{task.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n<request (send)=\"onSendRequest($event)\"></request>\r\n"
 
 /***/ },
-/* 638 */
+/* 637 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8954,7 +8953,7 @@ webpackJsonp([0],[
 	var store_1 = __webpack_require__(437);
 	var ng2_translate_1 = __webpack_require__(350);
 	var notification_1 = __webpack_require__(376);
-	var tabs_1 = __webpack_require__(630);
+	var tabs_1 = __webpack_require__(629);
 	var keys_pipe_1 = __webpack_require__(601);
 	var app_service_1 = __webpack_require__(461);
 	var translate_service_1 = __webpack_require__(463);
@@ -9039,7 +9038,7 @@ webpackJsonp([0],[
 	    UserProfileComponent = __decorate([
 	        core_1.Component({
 	            selector: '[user-profile]',
-	            template: __webpack_require__(639),
+	            template: __webpack_require__(638),
 	            directives: [common_1.FORM_DIRECTIVES, tabs_1.TAB_DIRECTIVES],
 	            providers: [common_1.FormBuilder],
 	            pipes: [ng2_translate_1.TranslatePipe, keys_pipe_1.KeysPipe]
@@ -9052,13 +9051,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 639 */
+/* 638 */
 /***/ function(module, exports) {
 
 	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} / {{user.name}}\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div> -->\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_new' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_new\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_new\" ngControl=\"pwd_new\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_confirm\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_confirm\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.email\">\r\n                            <input type=\"email\" class=\"span4\" [class.invalid]=\"errors.email\" ngControl=\"email\" />\r\n                            <div class=\"error-message\">{{errors.email | translate}}</div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.organization\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.department\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.position\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.roles\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
 
 /***/ },
-/* 640 */
+/* 639 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9089,31 +9088,31 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 641 */
+/* 640 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(642));
+	__export(__webpack_require__(641));
 
 
 /***/ },
-/* 642 */
+/* 641 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var compose_1 = __webpack_require__(643);
+	var compose_1 = __webpack_require__(642);
 	var store_1 = __webpack_require__(437);
-	var ngrx_store_logger_1 = __webpack_require__(644);
-	var environment_reducer_1 = __webpack_require__(645);
-	var authed_reducer_1 = __webpack_require__(646);
-	var projects_reducer_1 = __webpack_require__(647);
-	var tasks_reducer_1 = __webpack_require__(648);
-	var task_reducer_1 = __webpack_require__(649);
-	var staff_reducer_1 = __webpack_require__(650);
-	var reference_reducer_1 = __webpack_require__(651);
+	var ngrx_store_logger_1 = __webpack_require__(643);
+	var environment_reducer_1 = __webpack_require__(644);
+	var authed_reducer_1 = __webpack_require__(645);
+	var projects_reducer_1 = __webpack_require__(646);
+	var tasks_reducer_1 = __webpack_require__(647);
+	var task_reducer_1 = __webpack_require__(648);
+	var staff_reducer_1 = __webpack_require__(649);
+	var reference_reducer_1 = __webpack_require__(650);
 	var logger = ngrx_store_logger_1.storeLogger({
 	    level: 'log',
 	    collapsed: false,
@@ -9132,7 +9131,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 643 */
+/* 642 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9153,7 +9152,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=compose.js.map
 
 /***/ },
-/* 644 */
+/* 643 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9297,7 +9296,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 645 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9337,7 +9336,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 646 */
+/* 645 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9367,7 +9366,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 647 */
+/* 646 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9404,7 +9403,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 648 */
+/* 647 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9460,7 +9459,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 649 */
+/* 648 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9513,7 +9512,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 650 */
+/* 649 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9542,7 +9541,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 651 */
+/* 650 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
