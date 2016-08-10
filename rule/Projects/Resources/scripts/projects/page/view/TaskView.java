@@ -89,7 +89,7 @@ public class TaskView extends _DoPage {
         filter.setDueDate(formData.getDateSilently("dueDate"));
 
         String parentOnly = formData.getValueSilently("parentOnly");
-        if (!parentOnly.equals("false")) {
+        if (!filter.hasSearch() && !parentOnly.equals("false")) {
             filter.setParentOnly(true);
         } else {
             filter.setParentOnly(false);
