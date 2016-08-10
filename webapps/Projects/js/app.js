@@ -7399,7 +7399,7 @@ webpackJsonp([0],[
 	var DatepickerDirective = (function () {
 	    function DatepickerDirective(elementRef) {
 	        this.elementRef = elementRef;
-	        this.format = 'DD.MM.YYYY HH:mm';
+	        this.format = 'DD.MM.YYYY';
 	        this.select = new core_1.EventEmitter();
 	    }
 	    DatepickerDirective.prototype.ngOnInit = function () {

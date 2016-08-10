@@ -7,7 +7,7 @@ const Pikaday = require('pikaday');
 })
 
 export class DatepickerDirective {
-    @Input() format: string = 'DD.MM.YYYY HH:mm';
+    @Input() format: string = 'DD.MM.YYYY';
     @Output() select = new EventEmitter<any>();
     private picker;
 
