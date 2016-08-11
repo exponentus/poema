@@ -36,7 +36,7 @@
             <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
             </label>
-            <a class="entry-link" [routerLink]="['/task', task.id]">
+            <a class="entry-link" [routerLink]="['/requests', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__request_type expandable-level">
                         <div class="entry-expander">

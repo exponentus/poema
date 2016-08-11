@@ -29,6 +29,20 @@ public class TaskRequests extends _DoForm {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
+        RequestDAO requestDAO = new RequestDAO(session);
+
+        String requestId = formData.getValueSilently("requestId");
+        if (!requestId.isEmpty()) {
+            Request request = requestDAO.findById(requestId);
+            if (request == null) {
+                setBadRequest();
+                return;
+            }
+
+            addContent(request);
+            return;
+        }
+
         String taskId = formData.getValueSilently("taskId");
         if (taskId.isEmpty()) {
             addContent("error", "taskId empty");
@@ -39,7 +53,6 @@ public class TaskRequests extends _DoForm {
         Task task = new Task();
         task.setId(UUID.fromString(taskId));
 
-        RequestDAO requestDAO = new RequestDAO(session);
         int page = formData.getNumberValueSilently("page", 1);
         List<Request> requests = requestDAO.findTaskRequests(task, page, 20);
         addContent(requests);

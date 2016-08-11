@@ -364,7 +364,8 @@ export class TaskComponent {
     }
 
     newRequest() {
-        this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
+        // this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
+        this.router.navigate(['/requests', 'new', { task: this.task.id }]);
     }
 
     onSendRequest({requestSendSuccess}) {

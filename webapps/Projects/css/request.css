@@ -79,6 +79,20 @@
     color: red;
 }
 
+.header-title .request-resolution {}
+
+.request-resolution.accept,
+.request-resolution.accept .fa {
+    color: green;
+    font-size: 13px;
+}
+
+.request-resolution.decline,
+.request-resolution.decline .fa {
+    color: red;
+    font-size: 13px;
+}
+
 .request__buttons {
     display: inline-block;
 }

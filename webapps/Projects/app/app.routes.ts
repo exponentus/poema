@@ -7,6 +7,7 @@ import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
 import { TasksComponent } from './components/task/tasks';
 import { TaskComponent } from './components/task/task';
+import { RequestComponent } from './components/request/request';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { User } from './models/user';
@@ -26,6 +27,7 @@ const routes: RouterConfig = [
     { path: 'tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'task/:taskId/:new', component: TaskComponent, canActivate: [AuthGuard] },
     { path: 'task/:taskId', component: TaskComponent, canActivate: [AuthGuard] },
+    { path: 'requests/:requestId', component: RequestComponent, canActivate: [AuthGuard] },
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: '**', component: TasksComponent, canActivate: [AuthGuard] }

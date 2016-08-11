@@ -133,6 +133,25 @@ export class TaskService {
             });
     }
 
+    fetchRequestById(requestId: string) {
+        if (requestId === 'new') {
+            return Observable.of(new Request());
+        }
+
+        return this.http.get('p?id=task-requests&requestId=' + requestId, { headers: HEADERS })
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                let request = <Request>data.request;
+                if (data.fsid) {
+                    request.fsid = data.fsid;
+                }
+                if (data.attachment) {
+                    request.attachments = <Attachment[]>data.attachment.list;
+                }
+                return <Request>request
+            });
+    }
+
     sendTaskRequest(request: Request) {
         let url = 'p?id=task-requests&taskId=' + request.taskId;
         return this.http.post(url, serializeObj(request), { headers: HEADERS })

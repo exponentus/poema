@@ -1,0 +1,82 @@
+<form class="form" *ngIf="isReady">
+    <header class="content-header">
+        <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
+            <!-- <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
+                {{'save_close' | translate}}
+            </button> -->
+            <button type="button" class="btn btn-primary" *ngIf="isNew" [disabled]="!request.requestTypeId || (isResolveAction && !dueDate)" (click)="sendRequest()">
+                {{'send_request' | translate}}
+            </button>
+            <div class="request__buttons" *ngIf="task.editable && request.resolution == 'UNKNOWN'">
+                <button type="button" class="btn btn-primary" (click)="doAccept(request)">
+                    {{'accept' | translate}}
+                </button>
+                <button type="button" class="btn" (click)="doDecline(request)">
+                    {{'decline' | translate}}
+                </button>
+            </div>
+        </div>
+        <h1 class="header-title">
+            {{'task_request' | translate}}
+            <span class="request-resolution {{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPT'">
+                <i class="fa fa-check"></i>
+                {{'accepted' | translate}}
+            </span>
+            <span class="request-resolution {{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINE'">
+                <i class="fa fa-times"></i>
+                {{'declined' | translate}}
+            </span>
+        </h1>
+    </header>
+    <section class="content-body">
+        <fieldset class="fieldset">
+            <div class="form-group">
+                <div class="control-label">
+                    {{'task' | translate}}
+                </div>
+                <div class="controls">
+                    <a class="input-placeholder" [routerLink]="['/task', task.id]">{{task.title}}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    {{'request_type' | translate}}
+                </div>
+                <div class="controls">
+                    <div class="span8">
+                        <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (select)="setRequestType($event)"></request-type-input>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    {{'comment' | translate}}
+                </div>
+                <div class="controls">
+                    <div class="span8">
+                        <textarea [disabled]="!editable" [(ngModel)]="comment"></textarea>
+                        <!-- <markdown-editor
+                            [markdown]="''"
+                            editable="true"
+                            placeHolder="{{'comment' | translate}}"
+                            updateTimeout="100"
+                            (update)="setComment($event)">
+                        </markdown-editor> -->
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="request.authorId">
+            <span>{{'author' | translate}}</span>
+            <user-input [userIds]="[request.authorId]"></user-input>
+            <time>{{request.regDate}}</time>
+        </div>
+    </footer>
+</form>

@@ -26,6 +26,7 @@ export class TaskStreamComponent {
     };
     @Input() task: Task;
     @Input() showSelect: boolean = true;
+    @Input() expandRoot: boolean = false;
     @Output() toggleStream = new EventEmitter<any>();
     @Output() loadStreamLevel = new EventEmitter<any>();
     private sub: any;
@@ -44,7 +45,7 @@ export class TaskStreamComponent {
         this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
             this.expandedIds = state.expandedIds;
 
-            if (this.expandedIds.indexOf(this.task.id) != -1) {
+            if (this.expandRoot || this.expandedIds.indexOf(this.task.id) != -1) {
                 if (!this.stream.length) {
                     this.loadStream(this.task);
                 } else {

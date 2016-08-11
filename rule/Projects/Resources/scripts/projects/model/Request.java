@@ -58,6 +58,10 @@ public class Request extends SecureAppEntity<UUID> {
         return task;
     }
 
+    public String getTaskId() {
+        return task != null ? task.getIdentifier() : "";
+    }
+
     public void setTask(Task task) {
         this.task = task;
     }

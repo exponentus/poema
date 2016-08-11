@@ -18,7 +18,7 @@
     </header>
     <div class="entries" [class.hidden]="loading">
         <div *ngFor="let task of tasks">
-            <div class="entry-wrap">
+            <div class="entry-wrap" *ngIf="!streamMode">
                 <div class="entry" [class.active]="isSelected(task.id)">
                     <label class="entry-select" *ngIf="showSelect">
                         <input type="checkbox" name="task-id" value="{{task.id}}" [checked]="isSelected(task.id)" (change)="toggleSelected(task.id)" />
@@ -52,7 +52,7 @@
                     </a>
                 </div>
             </div>
-            <task-stream [showSelect]="showSelect" [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+            <task-stream [expandRoot]="streamMode" [showSelect]="showSelect" [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
         </div>
     </div>
 </div>
