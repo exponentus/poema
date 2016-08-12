@@ -1,5 +1,5 @@
 <div *ngFor="let m of stream">
-    <div class="entry-wrap level-{{level}}">
+    <div class="entry-wrap level-{{level}}" *ngIf="m">
         <div class="entry" *ngIf="m.kind == 'task'">
             <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" name="task-id" value="{{m.id}}" (change)="toggleSelected(m.id)" />
@@ -72,5 +72,5 @@
             </div>
         </div>
     </div>
-    <task-stream *ngIf="m.kind == 'task'" [level]="level" [showSelect]="showSelect" [task]="m" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+    <task-stream *ngIf="m && m.kind == 'task'" [level]="level" [showSelect]="showSelect" [task]="m" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
 </div>

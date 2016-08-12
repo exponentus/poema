@@ -49,18 +49,22 @@ export class RequestTypeInputComponent {
     @Input() searchable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
-    private requestTypes: any;
+    private requestTypes: RequestType[];
     private sub: any;
 
     constructor(
         private store: Store<any>
-    ) { }
-
-    ngOnInit() {
+    ) {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.requestTypes = state.requestTypes;
             this.searchable = this.requestTypes.length > 13;
         });
+    }
+
+    ngOnInit() {
+        if (!this.requestType) {
+            this.requestType = this.requestTypes.filter(it => it.name == 'implement')[0];
+        }
     }
 
     ngOnDestroy() {
