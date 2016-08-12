@@ -105,4 +105,9 @@ public class Request extends SecureAppEntity<UUID> {
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
     }
+
+    @Override
+    public String getURL() {
+        return "p?id=task-requests&requestId=" + getIdentifier();
+    }
 }

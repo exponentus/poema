@@ -8,10 +8,11 @@
             disable-output-escaping="yes">&gt;</xsl:text>
         <html>
             <xsl:choose>
-                <xsl:when test="//document[@entity='task' or @entity='project']">
+                <xsl:when test="//document[@entity='project' or @entity='task' or @entity='request']">
                     <head>
                         <script>
-                            <xsl:apply-templates select="//document[@entity='task' or @entity='project']"/>
+                            <xsl:apply-templates
+                                    select="//document[@entity='project' or @entity='task' or @entity='request']"/>
                         </script>
                     </head>
                 </xsl:when>
@@ -36,6 +37,7 @@
             <link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css"/>
             <link rel="stylesheet" href="css/style.css"/>
             <style>
+                <![CDATA[
                 /* fix: fieldset content overflow */
                 fieldset {
                     display: block;
@@ -46,6 +48,7 @@
                         display: table-column !important;
                     }
                 }
+                ]]>
             </style>
         </head>
         <body>
@@ -59,13 +62,19 @@
         </body>
     </xsl:template>
 
+    <xsl:template match="document[@entity='project']">
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/<xsl:value-of
+            select="@docid"/>';
+    </xsl:template>
+
     <xsl:template match="document[@entity='task']">
         location.href = location.protocol + '//' + location.host + location.pathname + '#/task/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
-    <xsl:template match="document[@entity='project']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/<xsl:value-of
+    <xsl:template match="document[@entity='request']">
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/requests/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
+
 </xsl:stylesheet>

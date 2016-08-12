@@ -154,7 +154,7 @@ public class TaskRequests extends _DoForm {
             memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
             memo.addVar("comment", request.getComment());
             memo.addVar("author", session.getUser().getUserName());
-            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
             if (ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
@@ -233,7 +233,7 @@ public class TaskRequests extends _DoForm {
             memo.addVar("requestType", request.getRequestType().getName());
             memo.addVar("requestComment", request.getComment());
             memo.addVar("requestResolution", request.getResolution().name());
-            memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getTask().getURL());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
             if (ma.sendMеssage(memo, recipients)) {
                 addValue("notify", "ok");
             }
