@@ -9,6 +9,7 @@ import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
@@ -22,6 +23,7 @@ import projects.model.constants.TaskStatusType;
 import reference.model.RequestType;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -194,7 +196,15 @@ public class TaskRequests extends _DoForm {
                     task.setStatus(TaskStatusType.FINISHED);
                 } else if ("prolong".equals(request.getRequestType().getName())) {
                     // prolong new due date
-                    task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
+                    Date newDueDate = TimeUtil.convertStringToDate(formData.getValueSilently("dueDate"));
+                    if (newDueDate == null) {
+                        _Validation ve = new _Validation();
+                        ve.addError("dueDate", "date", getLocalizedWord("field_is_empty", session.getLang()));
+                        setValidation(ve);
+                        setBadRequest();
+                        return;
+                    }
+                    task.setDueDate(newDueDate);
                 } else if ("cancel".equals(request.getRequestType().getName())) {
                     task.setStatus(TaskStatusType.CANCELED);
                 } else {

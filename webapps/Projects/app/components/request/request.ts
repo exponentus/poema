@@ -36,7 +36,7 @@ export class RequestComponent {
     private request: Request;
     private isReady = false;
     private isNew = true;
-    private dueDate: string;
+    private dueDate: string = '';
     private editable: boolean = true;
     private isResolveAction: boolean = false;
 
