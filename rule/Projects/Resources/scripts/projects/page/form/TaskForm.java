@@ -4,6 +4,7 @@ import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
@@ -56,7 +57,9 @@ public class TaskForm extends _DoForm {
             task.setAuthor(user);
             TaskTypeDAO tDao = new TaskTypeDAO(session);
             task.setTaskType(tDao.findByName("Programming"));
+            task.setStatus(TaskStatusType.DRAFT);
             task.setStartDate(new Date());
+            task.setDueDate(task.getStartDate());
             String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
             List<String> formFiles = null;
@@ -64,7 +67,9 @@ public class TaskForm extends _DoForm {
             if (obj == null) {
                 formFiles = new ArrayList<>();
             } else {
-                formFiles = (List<String>) obj;
+                // formFiles = (List<String>) obj;
+                _FormAttachments fAtts = (_FormAttachments) obj;
+                formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
             }
 
             List<IPOJOObject> filesToPublish = new ArrayList<>();

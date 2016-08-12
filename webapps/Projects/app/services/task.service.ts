@@ -77,7 +77,8 @@ export class TaskService {
 
     fetchTaskById(taskId: string) {
         if (taskId === 'new') {
-            return Observable.of(new Task());
+            // return Observable.of(new Task());
+            taskId = '';
         }
 
         return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })

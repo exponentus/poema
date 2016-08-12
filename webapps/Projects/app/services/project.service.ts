@@ -43,7 +43,8 @@ export class ProjectService {
 
     fetchProjectById(projectId: string) {
         if (projectId === 'new') {
-            return Observable.of(new Project());
+            // return Observable.of(new Project());
+            projectId = '';
         }
 
         return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })

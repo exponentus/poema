@@ -3,6 +3,7 @@ package projects.page.form;
 import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
@@ -55,7 +56,8 @@ public class ProjectForm extends _DoForm {
             if (obj == null) {
                 formFiles = new ArrayList<>();
             } else {
-                formFiles = (List<String>) obj;
+                _FormAttachments fAtts = (_FormAttachments) obj;
+                formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
             }
 
             List<IPOJOObject> filesToPublish = new ArrayList<>();

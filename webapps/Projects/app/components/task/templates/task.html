@@ -55,7 +55,7 @@
                 <i class="fa fa-exclamation-circle" *ngIf="hasUnResolvedRequest"></i>
             </div> -->
         </div>
-        <div class="task-tab" [class.active]="showSubtasks">
+        <div class="task-tab" [class.active]="showSubtasks" *ngIf="!isNew">
             <task-list [executionMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
         </div>
         <!-- <div class="task-tab" [class.active]="showRequests">
