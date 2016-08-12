@@ -12,6 +12,7 @@ import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { OrganizationInputComponent, UserInputComponent } from '../shared';
 import { AttachmentsComponent } from '../attachment/attachments';
+import { ErrorMessageComponent } from '../error-message';
 import { TextTransformPipe } from '../../pipes';
 import { ProjectService } from '../../services';
 import { Project, Organization, User, Attachment } from '../../models';
@@ -28,7 +29,8 @@ import { Project, Organization, User, Attachment } from '../../models';
         UserInputComponent,
         AttachmentsComponent,
         MarkdownEditorComponent,
-        DatepickerDirective
+        DatepickerDirective,
+        ErrorMessageComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -39,9 +41,10 @@ export class ProjectComponent {
     isReady = false;
     isNew = true;
     isEditable = true;
+    isValid = true;
     project: Project;
-    form: ControlGroup;
     projectStatusTypes: any;
+    errors: any = {};
 
     constructor(
         private store: Store<any>,
@@ -51,20 +54,7 @@ export class ProjectComponent {
         private translate: TranslateService,
         private projectService: ProjectService,
         private notifyService: NotificationService
-    ) {
-        this.form = this.formBuilder.group({
-            name: ['', Validators.required],
-            status: [''],
-            customerUserId: [''],
-            managerUserId: [''],
-            programmerUserId: [''],
-            testerUserId: [''],
-            observerUserIds: [''],
-            comment: [''],
-            finishDate: [''],
-            attachments: ['']
-        });
-    }
+    ) { }
 
     ngOnInit() {
         this.sub = this.route.params.subscribe(params => {
@@ -74,6 +64,7 @@ export class ProjectComponent {
                     this.isNew = this.project.id == '';
                     this.isEditable = this.isNew || this.project.editable;
                     this.isReady = true;
+                    this.isValid = true;
                     this.loadData();
                 },
                 error => this.handleXhrError(error)
@@ -108,6 +99,7 @@ export class ProjectComponent {
             error => {
                 noty.remove();
                 this.handleXhrError(error);
+                this.handleValidationError(error);
                 return error;
             },
             () => noty.remove(1500)
@@ -125,6 +117,22 @@ export class ProjectComponent {
         this.router.navigate(['/projects']);
     }
 
+    handleValidationError(error: any) {
+        let errors = {};
+
+        if (error.validation) {
+            this.isValid = false;
+            for (let err of error.validation.errors) {
+                errors[err.field] = {
+                    message: err.message,
+                    error: err.error
+                };
+            }
+        }
+
+        this.errors = errors;
+    }
+
     handleXhrError(errorResponse) {
         console.log(errorResponse);
         if (errorResponse.status === 401) {
@@ -134,28 +142,36 @@ export class ProjectComponent {
         }
     }
 
+    // ===
+
     setStatus(value) {
         this.project.status = value;
+        this.validateForm('status');
     }
 
     setCustomer(customer: Organization) {
         this.project.customerId = customer.id;
+        this.validateForm('customerId');
     }
 
     setManager(user: User[]) {
         this.project.managerUserId = user[0].id;
+        this.validateForm('managerUserId');
     }
 
     setProgrammer(user: User[]) {
         this.project.programmerUserId = user[0].id;
+        this.validateForm('programmerUserId');
     }
 
     setTester(user: User[]) {
         this.project.testerUserId = user[0].id;
+        this.validateForm('testerUserId');
     }
 
     setObserver(observers: User[]) {
         this.project.observerUserIds = observers.map(it => it.id);
+        this.validateForm('observerUserIds');
     }
 
     removeObserver(observer: User, $event) {
@@ -170,10 +186,12 @@ export class ProjectComponent {
 
     setFinishDate(date) {
         this.project.finishDate = date;
+        this.validateForm('finishDate');
     }
 
     setProjectComment(text: string) {
         this.project.comment = text;
+        this.validateForm('comment');
     }
 
     addAttachment(file) {
@@ -192,5 +210,31 @@ export class ProjectComponent {
         this.projectService.deleteProjectAttachment(this.project, attachment).subscribe(r => {
             this.project.attachments = this.project.attachments.filter(it => it.id != attachment.id);
         });
+    }
+
+    // ===
+    // validate
+    validateForm(field?: string) {
+        // if (field && this.errors[field]) {
+        //     if (this.project[field]) {
+        //         this.errors[field] = false;
+        //     }
+        // } else {
+        //
+        // }
+        for (let errField in this.errors) {
+            if (this.project[errField]) {
+                this.errors[errField] = false;
+            }
+        }
+
+        let isValid = true;
+        for (let errField in this.errors) {
+            if (this.errors[errField] !== false) {
+                isValid = false;
+                break;
+            }
+        }
+        this.isValid = isValid;
     }
 }

@@ -12,6 +12,7 @@ import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { MarkdownEditorComponent } from '../../shared/markdown';
 import { SwitchButtonComponent } from '../../shared/switch-button';
 import { ProjectInputComponent, UserInputComponent, TaskTypeInputComponent, TagsInputComponent } from '../shared';
+import { ErrorMessageComponent } from '../error-message';
 import { TaskListComponent } from './task-list';
 import { RequestListComponent } from '../request/request-list';
 import { RequestComponent } from '../request/request';
@@ -42,7 +43,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
         AttachmentsComponent,
         CommentsComponent,
         MarkdownEditorComponent,
-        DatepickerDirective
+        DatepickerDirective,
+        ErrorMessageComponent
     ],
     providers: [FormBuilder],
     pipes: [TranslatePipe, TextTransformPipe]
@@ -53,6 +55,7 @@ export class TaskComponent {
     isReady = false;
     isNew = true;
     isEditable = true;
+    isValid = true;
     isSubtask = false;
     parentTask: Task;
     subTasks: Task[] = [];
@@ -80,6 +83,7 @@ export class TaskComponent {
     taskStatusTypes: any;
     comments: Comment[];
     requests: Request[];
+    errors: any = {};
 
     constructor(
         private store: Store<any>,
@@ -111,20 +115,6 @@ export class TaskComponent {
                 });
             }
         }));
-
-        this.form = formBuilder.group({
-            title: ['', Validators.required],
-            projectId: [''],
-            taskTypeId: [''],
-            status: [''],
-            priority: [''],
-            body: [''/*, Validators.required*/],
-            assigneeUserId: [''],
-            startDate: [''],
-            dueDate: [''],
-            tagIds: [''],
-            attachments: ['']
-        });
     }
 
     ngOnInit() {
@@ -168,6 +158,7 @@ export class TaskComponent {
                         this.isReady = true;
                     }
                     this.isEditable = this.isNew || this.task.editable;
+                    this.isValid = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -234,6 +225,7 @@ export class TaskComponent {
             error => {
                 noty.remove();
                 this.handleXhrError(error);
+                this.handleValidationError(error);
             }
         );
     }
@@ -348,6 +340,22 @@ export class TaskComponent {
         this.router.navigate(['/tasks']);
     }
 
+    handleValidationError(error: any) {
+        let errors = {};
+
+        if (error.validation) {
+            this.isValid = false;
+            for (let err of error.validation.errors) {
+                errors[err.field] = {
+                    message: err.message,
+                    error: err.error
+                };
+            }
+        }
+
+        this.errors = errors;
+    }
+
     handleXhrError(errorResponse) {
         if (errorResponse.status === 401) {
             this.router.navigate(['/login']);
@@ -388,41 +396,51 @@ export class TaskComponent {
         }
     }
 
-    //
+    // ===
+
     setStatus(value) {
         this.task.status = value;
+        this.validateForm();
     }
 
     setPriority(value) {
         this.task.priority = value;
+        this.validateForm();
     }
 
     setProject(project: Project) {
         this.task.projectId = project.id;
+        this.validateForm();
     }
 
     setTaskType(taskType: TaskType) {
         this.task.taskTypeId = taskType.id;
+        this.validateForm();
     }
 
     setAssigneeUser(assigneeUser: User[]) {
         this.task.assigneeUserId = assigneeUser[0].id;
+        this.validateForm();
     }
 
     setStartDate(date) {
         this.task.startDate = date;
+        this.validateForm();
     }
 
     setDueDate(date) {
         this.task.dueDate = date;
+        this.validateForm();
     }
 
     updateTaskBody(text: string) {
         this.task.body = text;
+        this.validateForm();
     }
 
     setTags(tags: Tag[]) {
         this.task.tagIds = tags.map(it => it.id);
+        this.validateForm();
     }
 
     addAttachment(file) {
@@ -441,5 +459,31 @@ export class TaskComponent {
         this.taskService.deleteTaskAttachment(this.task, attachment).subscribe(r => {
             this.task.attachments = this.task.attachments.filter(it => it.id != attachment.id);
         });
+    }
+
+    // ===
+    // validate
+    validateForm(field?: string) {
+        // if (field && this.errors[field]) {
+        //     if (this.project[field]) {
+        //         this.errors[field] = false;
+        //     }
+        // } else {
+        //
+        // }
+        for (let errField in this.errors) {
+            if (this.task[errField]) {
+                this.errors[errField] = false;
+            }
+        }
+
+        let isValid = true;
+        for (let errField in this.errors) {
+            if (this.errors[errField] !== false) {
+                isValid = false;
+                break;
+            }
+        }
+        this.isValid = isValid;
     }
 }

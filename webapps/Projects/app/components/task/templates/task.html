@@ -1,11 +1,11 @@
-<form class="form" [ngFormModel]="form" *ngIf="isReady">
+<form class="form" *ngIf="isReady">
     <header class="content-header">
         <div class="content-actions">
             <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!form.valid" (click)="saveTask()">
+            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!isValid" (click)="saveTask()">
                 <!-- <span *ngIf="isNew">{{'send_task' | translate}}</span>
                 <span *ngIf="!isNew">{{'save_close' | translate}}</span> -->
                 {{'save_close' | translate}}
@@ -36,7 +36,7 @@
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>{{title | translate}}</label>
-                <input autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" [(ngModel)]="task.title" ngControl="title" />
+                <input [class.invalid]="errors.title" autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
                 <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
@@ -67,82 +67,69 @@
                     <div class="control-label">
                         {{'project' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="!form.controls.projectId.valid">
-                        <div class="span8">
-                            <project-input [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
-                        </div>
-                    </div>
-                    <div [hidden]="form.controls.projectId.valid || form.controls.projectId.pristine" class="error-message">
-                        {{'required' | translate}}
+                    <div class="controls" [class.has-error]="errors.projectId">
+                        <project-input class="span8" [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
+                        <error-message [error]="errors.projectId"></error-message>
                     </div>
                 </div>
                 <div class="form-group" *ngIf="!isSubtask">
                     <div class="control-label">
                         {{'task_type' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="!form.controls.taskTypeId.valid">
-                        <div class="span8">
-                            <task-type-input [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
-                        </div>
-                        <div [hidden]="form.controls.taskTypeId.valid || form.controls.taskTypeId.pristine" class="error-message">
-                            {{'required' | translate}}
-                        </div>
+                    <div class="controls" [class.has-error]="errors.taskTypeId">
+                        <task-type-input class="span8" [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
+                        <error-message [error]="errors.taskTypeId"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="control-label">
                         {{'priority' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="!form.controls.priority.valid">
+                    <div class="controls" [class.has-error]="errors.priority">
                         <switch-button [disabled]="!isEditable" [model]="task" value="priority" [items]="taskPriorityTypes"></switch-button>
-                        <div [hidden]="form.controls.priority.valid || form.controls.priority.pristine" class="error-message">
-                            {{'required' | translate}}
-                        </div>
+                        <error-message [error]="errors.priority"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="control-label">
                         {{'assignee_user' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="!form.controls.assigneeUserId.valid">
-                        <div class="span8">
-                            <user-input [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
-                        </div>
-                        <div [hidden]="form.controls.assigneeUserId.valid || form.controls.assigneeUserId.pristine" class="error-message">
-                            {{'required' | translate}}
-                        </div>
+                    <div class="controls" [class.has-error]="errors.assigneeUserId">
+                        <user-input class="span8" [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
+                        <error-message [error]="errors.assigneeUserId"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="control-label">
                         {{'start_date' | translate}}
                     </div>
-                    <div class="controls">
+                    <div class="controls" [class.has-error]="errors.startDate">
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.startDate}}</span>
                         </div>
                         <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
+                        <error-message [error]="errors.startDate"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="control-label">
                         {{'due_date' | translate}}
                     </div>
-                    <div class="controls">
+                    <div class="controls" [class.has-error]="errors.dueDate">
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.dueDate}}</span>
                         </div>
                         <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                        <error-message [error]="errors.dueDate"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="control-label">
                         {{'tags' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="!form.controls.tagIds.valid">
-                        <div class="span8">
-                            <tags-input [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
-                        </div>
+                    <div class="controls" [class.has-error]="errors.tagIds">
+                        <tags-input class="span8" [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
+                        <error-message [error]="errors.tagIds"></error-message>
                     </div>
                 </div>
                 <div class="form-group">
@@ -154,8 +141,9 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" [class.has-error]="errors.body">
                     <markdown-editor placeHolder="{{'body' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
+                    <error-message [error]="errors.body"></error-message>
                 </div>
             </fieldset>
             <attachments [editable]="isEditable" [model]="task" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
@@ -170,4 +158,3 @@
         </div>
     </footer>
 </form>
-<!-- <request (send)="onSendRequest($event)"></request> -->

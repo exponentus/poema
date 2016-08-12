@@ -78,12 +78,12 @@ export class UserProfileComponent {
         let noty = this.notifyService.process(this.ng2Translate.instant('wait_while_document_save')).show();
         this.appService.updateUserProfile(this.form.value).subscribe(
             data => {
-                this.errors = [];
+                this.errors = {};
                 noty.remove();
                 this.router.navigate(['/tasks']);
             },
             error => {
-                this.errors = [];
+                this.errors = {};
                 noty.remove()
                 if (error.validation) {
                     for (let err of error.validation.errors) {

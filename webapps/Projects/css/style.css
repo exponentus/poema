@@ -95,7 +95,6 @@ body:not(.side-nav-toggle) .aside + .content {
     font-family: 'Segoe UI';
     line-height: 1.4;
     min-height: auto;
-    padding: 2px 4px;
 }
 
 .header-title-flex > input:not(:focus):not(:hover),

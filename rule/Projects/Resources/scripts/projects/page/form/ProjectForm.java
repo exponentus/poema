@@ -101,7 +101,10 @@ public class ProjectForm extends _DoForm {
 
             IUser<Long> managerUser = userDAO.findById(formData.getNumberValueSilently("managerUserId", 0));
             IUser<Long> programmerUser = userDAO.findById(formData.getNumberValueSilently("programmerUserId", 0));
-            IUser<Long> testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
+            IUser<Long> testerUser = null;
+            if (!formData.getValueSilently("testerUserId").isEmpty()) {
+                testerUser = userDAO.findById(formData.getNumberValueSilently("testerUserId", 0));
+            }
 
             List<Long> ouIds = new ArrayList<>();
             if (!formData.getValueSilently("observerUserIds").isEmpty()) {
@@ -120,9 +123,9 @@ public class ProjectForm extends _DoForm {
             project.setCustomer(organizationDAO.findById(formData.getValue("customerId")));
             project.setManager(managerUser.getId());
             project.setProgrammer(programmerUser.getId());
-            project.setTester(testerUser.getId());
+            project.setTester(testerUser != null ? testerUser.getId() : 0);
             project.setObservers(ouIds);
-            project.setComment(formData.getValue("comment"));
+            project.setComment(formData.getValueSilently("comment"));
             project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
             project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
             project.setAttachments(getActualAttachments(project.getAttachments()));
@@ -130,7 +133,9 @@ public class ProjectForm extends _DoForm {
             Set<Long> readers = new HashSet<>();
             readers.add(managerUser.getId());
             readers.add(programmerUser.getId());
-            readers.add(testerUser.getId());
+            if (testerUser != null) {
+                readers.add(testerUser.getId());
+            }
             readers.add(session.getUser().getId());
             readers.addAll(ouIds);
 
@@ -145,13 +150,17 @@ public class ProjectForm extends _DoForm {
                 List<String> recipients = new ArrayList<>();
                 recipients.add(managerUser.getEmail());
                 recipients.add(programmerUser.getEmail());
-                recipients.add(testerUser.getEmail());
+                if (testerUser != null) {
+                    recipients.add(testerUser.getEmail());
+                }
 
                 MailAgent ma = new MailAgent();
                 Memo memo = new Memo(getLocalizedWord("notify_about_new_project_short", lang), getLocalizedEmailTemplate("newproject", lang));
                 memo.addVar("manager", managerUser.getUserName());
                 memo.addVar("programmer", programmerUser.getUserName());
-                memo.addVar("tester", testerUser.getUserName());
+                if (testerUser != null) {
+                    memo.addVar("tester", testerUser.getUserName());
+                }
                 memo.addVar("projectName", project.getName());
                 memo.addVar("author", project.getAuthor().getUserName());
                 memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
@@ -204,7 +213,7 @@ public class ProjectForm extends _DoForm {
             ve.addError("name", "required", getLocalizedWord("field_is_empty", lang));
         }
         if (formData.getValueSilently("customerId").isEmpty()) {
-            ve.addError("customerUserId", "required", getLocalizedWord("field_is_empty", lang));
+            ve.addError("customerId", "required", getLocalizedWord("field_is_empty", lang));
         }
         if (formData.getNumberValueSilently("managerUserId", 0) == 0) {
             ve.addError("managerUserId", "required", getLocalizedWord("field_is_empty", lang));
@@ -212,17 +221,15 @@ public class ProjectForm extends _DoForm {
         if (formData.getNumberValueSilently("programmerUserId", 0) == 0) {
             ve.addError("programmerUserId", "required", getLocalizedWord("field_is_empty", lang));
         }
-        if (formData.getNumberValueSilently("testerUserId", 0) == 0) {
+        /*if (formData.getNumberValueSilently("testerUserId", 0) == 0) {
             ve.addError("testerUserId", "required", getLocalizedWord("field_is_empty", lang));
-        }
+        }*/
         if (formData.getValueSilently("status").isEmpty()) {
             ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
         }
 
         String fDate = formData.getValueSilently("finishDate");
-        if (fDate.isEmpty()) {
-            ve.addError("finishDate", "required", getLocalizedWord("field_is_empty", lang));
-        } else if (TimeUtil.convertStringToDate(fDate) == null) {
+        if (!fDate.isEmpty() && TimeUtil.convertStringToDate(fDate) == null) {
             ve.addError("finishDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
         }
 
