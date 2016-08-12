@@ -5,23 +5,12 @@
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <!-- <button class="btn btn-primary" type="button" *ngIf="isEditable" [disabled]="!form.valid" (click)="saveProject()">
-                {{'save_close' | translate}}
-            </button> -->
             <button type="button" class="btn btn-primary" *ngIf="isNew" [disabled]="!request.requestTypeId || (isResolveAction && !dueDate)" (click)="sendRequest()">
                 {{'send_request' | translate}}
             </button>
-            <div class="request__buttons" *ngIf="task.editable && request.resolution == 'UNKNOWN'">
-                <button type="button" class="btn btn-primary" (click)="doAccept(request)">
-                    {{'accept' | translate}}
-                </button>
-                <button type="button" class="btn" (click)="doDecline(request)">
-                    {{'decline' | translate}}
-                </button>
-            </div>
         </div>
         <h1 class="header-title">
-            {{'task_request' | translate}}
+            <span>{{'task_request' | translate}}</span>
             <span class="request-resolution {{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPT'">
                 <i class="fa fa-check"></i>
                 {{'accepted' | translate}}
@@ -70,7 +59,34 @@
                 </div>
             </div>
         </fieldset>
-        <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        <div *ngIf="!editable && !request.attachments">
+            <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+        </div>
+    </section>
+    <section class="request__resol" *ngIf="task.editable && request.resolution == 'UNKNOWN'">
+        <fieldset class="fieldset" *ngIf="isResolveAction">
+            <div class="form-group">
+                <div class="control-label">
+                    {{'due_date' | translate}}
+                </div>
+                <div class="controls">
+                    <div class="span8">
+                        <input datepicker class="span2" (select)="setDueDate($event)" />
+                        <div class="help">
+                            {{'new_due_date_help' | translate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="request__buttons">
+            <button type="button" class="btn" (click)="doDecline(request)">
+                {{'decline' | translate}}
+            </button>
+            <button type="button" class="btn btn-primary" (click)="doAccept(request)">
+                {{'accept' | translate}}
+            </button>
+        </div>
     </section>
     <footer class="content-footer">
         <div class="record-author" *ngIf="request.authorId">

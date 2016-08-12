@@ -54,12 +54,15 @@ export class RequestComponent {
             this.isReady = false;
             this.isNew = params['requestId'] === 'new';
             this.editable = this.isNew;
+            this.isResolveAction = false;
 
             this.taskService.fetchRequestById(params['requestId']).subscribe(
                 request => {
                     this.request = request;
                     if (this.isNew) {
                         this.request.taskId = params['task'];
+                    } else {
+                        this.isResolveAction = this.request.resolution == 'UNKNOWN' && this.request.requestType.name === 'prolong';
                     }
                     //
                     this.taskService.fetchTaskById(this.request.taskId).subscribe(task => {

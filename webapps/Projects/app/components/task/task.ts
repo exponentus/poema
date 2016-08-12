@@ -158,10 +158,16 @@ export class TaskComponent {
                     if (this.task.parentTaskId && !this.task.parentTask) {
                         this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(parentTask => {
                             this.parentTask = parentTask;
+
+                            if (this.isNew && this.isSubtask) {
+                                this.copyValueFromTask(this.parentTask);
+                            }
+                            this.isReady = true;
                         });
+                    } else {
+                        this.isReady = true;
                     }
                     this.isEditable = this.isNew || this.task.editable;
-                    this.isReady = true;
                 },
                 errorResponse => this.handleXhrError(errorResponse)
             );
@@ -186,6 +192,14 @@ export class TaskComponent {
         } else {
             return 'task';
         }
+    }
+
+    copyValueFromTask(task: Task) {
+        this.task.title = task.title;
+        this.task.priority = task.priority;
+        this.task.startDate = task.startDate;
+        this.task.dueDate = task.dueDate;
+        this.task.tagIds = task.tagIds;
     }
 
     toggleShowProperty() {

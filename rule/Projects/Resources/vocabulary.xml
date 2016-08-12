@@ -92,12 +92,16 @@
         <entry lang="RUS">Дата окончания</entry>
         <entry lang="ENG">Due date</entry>
     </sentence>
+    <sentence mode="on" keyword="new_due_date_help">
+        <entry lang="RUS">Новая дата окончания</entry>
+        <entry lang="ENG">New due date</entry>
+    </sentence>
     <sentence mode="on" keyword="finish_date">
         <entry lang="RUS">Дата завершения</entry>
         <entry lang="ENG">Completion date</entry>
     </sentence>
     <sentence mode="on" keyword="body">
-        <entry lang="RUS">Содержание</entry>
+        <entry lang="RUS">Описание</entry>
         <entry lang="ENG">Body</entry>
     </sentence>
     <sentence mode="on" keyword="tags">
@@ -199,6 +203,10 @@
     <sentence mode="on" keyword="requests">
         <entry lang="RUS">Запросы</entry>
         <entry lang="ENG">Requests</entry>
+    </sentence>
+    <sentence mode="on" keyword="execution">
+        <entry lang="RUS">Выполнение</entry>
+        <entry lang="ENG">Execution</entry>
     </sentence>
     <sentence mode="on" keyword="request_type">
         <entry lang="RUS">Тип запроса</entry>

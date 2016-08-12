@@ -79,6 +79,7 @@
     <caption name="subtasks"/>
     <caption name="comments"/>
     <caption name="requests"/>
+    <caption name="execution"/>
 
     <caption name="request_time"/>
 
@@ -116,6 +117,7 @@
     <caption name="assignee_user"/>
     <caption name="start_date"/>
     <caption name="due_date"/>
+    <caption name="new_due_date_help"/>
     <caption name="finish_date"/>
 
     <caption name="unknown"/>
