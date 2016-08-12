@@ -6798,7 +6798,7 @@ webpackJsonp([0],[
 	    }
 	    RequestTypeInputComponent.prototype.ngOnInit = function () {
 	        if (!this.requestType) {
-	            this.requestType = this.requestTypes.filter(function (it) { return it.name == 'implement'; })[0];
+	            this.onSelect(this.requestTypes.filter(function (it) { return it.name == 'implement'; })[0]);
 	        }
 	    };
 	    RequestTypeInputComponent.prototype.ngOnDestroy = function () {

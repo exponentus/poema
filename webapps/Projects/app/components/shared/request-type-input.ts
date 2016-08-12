@@ -63,7 +63,7 @@ export class RequestTypeInputComponent {
 
     ngOnInit() {
         if (!this.requestType) {
-            this.requestType = this.requestTypes.filter(it => it.name == 'implement')[0];
+            this.onSelect(this.requestTypes.filter(it => it.name == 'implement')[0]);
         }
     }
 
