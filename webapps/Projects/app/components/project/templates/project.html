@@ -23,7 +23,7 @@
         </div>
         <h1 class="header-title header-title-flex">
             <label>{{title | translate}}</label>
-            <input [class.invalid]="errors.name" autofocus required placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
+            <input [class.invalid]="errors.name" autofocus required maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
         </h1>
     </header>
     <section class="content-body">
@@ -90,7 +90,7 @@
                     <div class="span2" *ngIf="!isEditable">
                         <span class="input">{{project.finishDate}}</span>
                     </div>
-                    <input class="span2" datepicker *ngIf="isEditable" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" ngControl="finishDate" />
+                    <input class="span2" datepicker *ngIf="isEditable" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" />
                     <error-message [error]="errors.finishDate"></error-message>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                     {{'comment' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.comment">
-                    <markdown-editor class="span8" [markdown]="project.comment || ''" [editable]="isEditable" updateTimeout="300" (update)="setProjectComment($event)"></markdown-editor>
+                    <markdown-editor class="span8" [markdown]="project.comment || ''" [editable]="isEditable" [updateTimeout]="300" (update)="setProjectComment($event)"></markdown-editor>
                     <error-message [error]="errors.comment"></error-message>
                 </div>
             </div>

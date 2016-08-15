@@ -18,7 +18,7 @@ export class DatepickerDirective {
             field: this.elementRef.nativeElement,
             format: this.format,
             onSelect: () => {
-                // this.elementRef.nativeElement.change();
+                this.elementRef.nativeElement.value = this.picker.toString();
                 this.select.emit(this.picker.toString(this.format));
             }
         });

@@ -22,6 +22,7 @@ import java.util.UUID;
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
 public class Project extends SecureAppEntity<UUID> {
 
+    @Column(length = 140)
     private String name;
 
     @Enumerated(EnumType.STRING)

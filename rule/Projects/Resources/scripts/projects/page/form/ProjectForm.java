@@ -214,6 +214,8 @@ public class ProjectForm extends _DoForm {
 
         if (formData.getValueSilently("name").isEmpty()) {
             ve.addError("name", "required", getLocalizedWord("field_is_empty", lang));
+        } else if (formData.getValueSilently("name").length() > 140) {
+            ve.addError("name", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
         }
         if (formData.getValueSilently("customerId").isEmpty()) {
             ve.addError("customerId", "required", getLocalizedWord("field_is_empty", lang));
@@ -234,6 +236,9 @@ public class ProjectForm extends _DoForm {
         String fDate = formData.getValueSilently("finishDate");
         if (!fDate.isEmpty() && TimeUtil.convertStringToDate(fDate) == null) {
             ve.addError("finishDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
+        }
+        if (formData.getValueSilently("comment").length() > 512) {
+            ve.addError("comment", "maxlen_512", getLocalizedWord("field_is_too_long", lang));
         }
 
         return ve;

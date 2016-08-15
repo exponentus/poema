@@ -36,7 +36,7 @@
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>{{title | translate}}</label>
-                <input [class.invalid]="errors.title" autofocus required placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
+                <input [class.invalid]="errors.title" autofocus required maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
                 <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
@@ -107,7 +107,7 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.startDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" ngControl="startDate" />
+                        <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" />
                         <error-message [error]="errors.startDate"></error-message>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.dueDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" ngControl="dueDate" />
+                        <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
                         <error-message [error]="errors.dueDate"></error-message>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                     </div>
                 </div>
                 <div class="form-group" [class.has-error]="errors.body">
-                    <markdown-editor placeHolder="{{'body' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" updateTimeout="300" (update)="updateTaskBody($event)"></markdown-editor>
+                    <markdown-editor placeHolder="{{'body' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" [updateTimeout]="300" (update)="updateTaskBody($event)"></markdown-editor>
                     <error-message [error]="errors.body"></error-message>
                 </div>
             </fieldset>
