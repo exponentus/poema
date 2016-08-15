@@ -462,6 +462,9 @@ webpackJsonp([0],[
 	    };
 	    return CustomTranslateLoader;
 	}());
+	if (false) {
+	    core_2.enableProdMode();
+	}
 
 
 /***/ },
@@ -1571,8 +1574,7 @@ webpackJsonp([0],[
 	    project_service_1.ProjectService,
 	    task_service_1.TaskService,
 	    reference_service_1.ReferenceService,
-	    staff_service_1.StaffService,
-	    upload_service_1.UploadService
+	    staff_service_1.StaffService
 	];
 
 
@@ -8037,7 +8039,7 @@ webpackJsonp([0],[
 	        return this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED';
 	    };
 	    TaskComponent.prototype.addSubtask = function () {
-	        this.router.navigate(['/task', this.task.id, '/new']);
+	        this.router.navigate(['/task', this.task.id, 'new']);
 	    };
 	    TaskComponent.prototype.showComments = function () {
 	        return this.hasFutureComments() && !this.isNew;

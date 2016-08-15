@@ -33,9 +33,4 @@ const routes: Routes = [
     { path: '**', component: TasksComponent, canActivate: [AuthGuard] }
 ];
 
-// export const APP_ROUTER_PROVIDERS = [
-//     AuthGuard,
-//     RedirectGuard
-// ];
-
 export const APP_ROUTING = RouterModule.forRoot(routes);

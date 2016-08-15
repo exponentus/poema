@@ -233,7 +233,7 @@ export class TaskComponent {
     }
 
     addSubtask() {
-        this.router.navigate(['/task', this.task.id, '/new']);
+        this.router.navigate(['/task', this.task.id, 'new']);
     }
 
     //

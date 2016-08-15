@@ -110,3 +110,7 @@ class CustomTranslateLoader implements TranslateLoader {
         return this.translateService.fetchTranslations();
     }
 }
+
+if (webpack.ENV === 'production') {
+    enableProdMode();
+}

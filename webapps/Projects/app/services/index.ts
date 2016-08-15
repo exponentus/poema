@@ -20,6 +20,5 @@ export const APP_SERVICES = [
     ProjectService,
     TaskService,
     ReferenceService,
-    StaffService,
-    UploadService
+    StaffService
 ];
