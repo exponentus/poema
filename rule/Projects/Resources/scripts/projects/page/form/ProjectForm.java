@@ -237,7 +237,7 @@ public class ProjectForm extends _DoForm {
         if (!fDate.isEmpty() && TimeUtil.convertStringToDate(fDate) == null) {
             ve.addError("finishDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
         }
-        if (formData.getValueSilently("comment").length() > 512) {
+        if (formData.getValueSilently("comment").length() > 2048) {
             ve.addError("comment", "maxlen_512", getLocalizedWord("field_is_too_long", lang));
         }
 

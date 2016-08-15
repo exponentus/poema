@@ -49,7 +49,7 @@ public class Project extends SecureAppEntity<UUID> {
     @Temporal(TemporalType.TIMESTAMP)
     private Date finishDate;
 
-    @Column(length = 512)
+    @Column(length = 2048)
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
