@@ -4766,7 +4766,7 @@ webpackJsonp([0],[
 	            .map(function (response) {
 	            var data = utils_1.parseResponseObjects(response.json().objects);
 	            var project = data.project;
-	            if (!data.id) {
+	            if (!project.id) {
 	                project.id = '';
 	            }
 	            if (data.fsid) {
@@ -4886,6 +4886,9 @@ webpackJsonp([0],[
 	            .map(function (response) {
 	            var data = utils_1.parseResponseObjects(response.json().objects);
 	            var task = data.task;
+	            if (!task.id) {
+	                task.id = '';
+	            }
 	            if (data.fsid) {
 	                task.fsid = data.fsid;
 	            }
@@ -7256,7 +7259,7 @@ webpackJsonp([0],[
 	        this.notifyService = notifyService;
 	        this.isReady = false;
 	        this.isNew = true;
-	        this.isEditable = true;
+	        this.isEditable = false;
 	        this.isValid = true;
 	        this.errors = {};
 	    }

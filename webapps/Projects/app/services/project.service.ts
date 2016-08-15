@@ -51,7 +51,7 @@ export class ProjectService {
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let project = <Project>data.project;
-                if (!data.id) {
+                if (!project.id) {
                     project.id = '';
                 }
                 if (data.fsid) {

@@ -85,6 +85,9 @@ export class TaskService {
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let task = <Task>data.task;
+                if (!task.id) {
+                    task.id = '';
+                }
                 if (data.fsid) {
                     task.fsid = data.fsid;
                 }

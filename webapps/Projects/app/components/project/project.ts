@@ -40,7 +40,7 @@ export class ProjectComponent {
     private sub: any;
     isReady = false;
     isNew = true;
-    isEditable = true;
+    isEditable = false;
     isValid = true;
     project: Project;
     projectStatusTypes: any;
