@@ -78,10 +78,10 @@ export class TaskService {
     fetchTaskById(taskId: string) {
         if (taskId === 'new') {
             // return Observable.of(new Task());
-            taskId = '';
         }
 
-        return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
+        let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
+        return this.http.get(url, { headers: HEADERS })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let task = <Task>data.task;
@@ -96,7 +96,7 @@ export class TaskService {
     }
 
     saveTask(task: Task) {
-        let url = 'p?id=task-form' + (task.id ? '&taskId=' + task.id : '');
+        let url = 'p?id=task-form&taskId=' + (task.id ? task.id : '');
         return this.http.post(url, serializeObj(task), { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));

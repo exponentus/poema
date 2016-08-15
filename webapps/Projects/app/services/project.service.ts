@@ -44,13 +44,16 @@ export class ProjectService {
     fetchProjectById(projectId: string) {
         if (projectId === 'new') {
             // return Observable.of(new Project());
-            projectId = '';
         }
 
-        return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
+        let url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
+        return this.http.get(url, { headers: HEADERS })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let project = <Project>data.project;
+                if (!data.id) {
+                    project.id = '';
+                }
                 if (data.fsid) {
                     project.fsid = data.fsid;
                 }
@@ -62,7 +65,7 @@ export class ProjectService {
     }
 
     saveProject(project: Project) {
-        let url = 'p?id=project-form&projectId=' + project.id;
+        let url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
         return this.http.post(url, serializeObj(project), { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));

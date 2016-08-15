@@ -4760,12 +4760,15 @@ webpackJsonp([0],[
 	    };
 	    ProjectService.prototype.fetchProjectById = function (projectId) {
 	        if (projectId === 'new') {
-	            projectId = '';
 	        }
-	        return this.http.get('p?id=project-form&projectId=' + projectId, { headers: HEADERS })
+	        var url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
+	        return this.http.get(url, { headers: HEADERS })
 	            .map(function (response) {
 	            var data = utils_1.parseResponseObjects(response.json().objects);
 	            var project = data.project;
+	            if (!data.id) {
+	                project.id = '';
+	            }
 	            if (data.fsid) {
 	                project.fsid = data.fsid;
 	            }
@@ -4776,7 +4779,7 @@ webpackJsonp([0],[
 	        });
 	    };
 	    ProjectService.prototype.saveProject = function (project) {
-	        var url = 'p?id=project-form&projectId=' + project.id;
+	        var url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
 	        return this.http.post(url, utils_1.serializeObj(project), { headers: HEADERS })
 	            .map(function (response) { return utils_1.transformPostResponse(response); })
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
@@ -4877,9 +4880,9 @@ webpackJsonp([0],[
 	    };
 	    TaskService.prototype.fetchTaskById = function (taskId) {
 	        if (taskId === 'new') {
-	            taskId = '';
 	        }
-	        return this.http.get('p?id=task-form&taskId=' + taskId, { headers: HEADERS })
+	        var url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
+	        return this.http.get(url, { headers: HEADERS })
 	            .map(function (response) {
 	            var data = utils_1.parseResponseObjects(response.json().objects);
 	            var task = data.task;
@@ -4893,7 +4896,7 @@ webpackJsonp([0],[
 	        });
 	    };
 	    TaskService.prototype.saveTask = function (task) {
-	        var url = 'p?id=task-form' + (task.id ? '&taskId=' + task.id : '');
+	        var url = 'p?id=task-form&taskId=' + (task.id ? task.id : '');
 	        return this.http.post(url, utils_1.serializeObj(task), { headers: HEADERS })
 	            .map(function (response) { return utils_1.transformPostResponse(response); })
 	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
