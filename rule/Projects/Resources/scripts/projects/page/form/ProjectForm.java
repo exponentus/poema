@@ -50,6 +50,7 @@ public class ProjectForm extends _DoForm {
             project = new Project();
             project.setAuthor(user);
             project.setComment("");
+            project.setStatus(ProjectStatusType.DRAFT);
             String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
             List<String> formFiles = null;
             Object obj = session.getAttribute(fsId);

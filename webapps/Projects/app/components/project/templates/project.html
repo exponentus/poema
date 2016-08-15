@@ -23,7 +23,7 @@
         </div>
         <h1 class="header-title header-title-flex">
             <label>{{title | translate}}</label>
-            <input [class.invalid]="errors.name" autofocus placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
+            <input [class.invalid]="errors.name" autofocus required placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
         </h1>
     </header>
     <section class="content-body">

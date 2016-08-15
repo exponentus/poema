@@ -36,7 +36,7 @@
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>{{title | translate}}</label>
-                <input [class.invalid]="errors.title" autofocus placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
+                <input [class.invalid]="errors.title" autofocus required placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
                 <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
