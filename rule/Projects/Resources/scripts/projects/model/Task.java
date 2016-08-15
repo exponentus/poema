@@ -67,12 +67,12 @@ public class Task extends SecureAppEntity<UUID> {
     private List<Tag> tags;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "task_id")
     private List<Comment> comments;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "task_id")
     private List<Request> requests;
 

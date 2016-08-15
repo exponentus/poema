@@ -54,7 +54,7 @@ export class TaskComponent {
     private subs: any = [];
     isReady = false;
     isNew = true;
-    isEditable = true;
+    isEditable = false;
     isValid = true;
     isSubtask = false;
     parentTask: Task;

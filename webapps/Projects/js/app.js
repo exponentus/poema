@@ -8242,7 +8242,7 @@ webpackJsonp([0],[
 	        this.subs = [];
 	        this.isReady = false;
 	        this.isNew = true;
-	        this.isEditable = true;
+	        this.isEditable = false;
 	        this.isValid = true;
 	        this.isSubtask = false;
 	        this.subTasks = [];
