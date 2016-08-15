@@ -1,8 +1,6 @@
 import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IProjectsState } from '../../reducers/projects.reducer';
 import { Project } from '../../models';
 
@@ -34,9 +32,7 @@ import { Project } from '../../models';
                 </ul>
             </div>
         </div>
-    `,
-    directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    `
 })
 
 export class ProjectInputComponent {

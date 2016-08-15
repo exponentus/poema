@@ -1,10 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { LocalizedNamePipe } from '../../pipes';
 import { MarkedPipe } from '../../shared/markdown';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
-import { AttachmentsComponent } from '../attachment/attachments';
 import { Request } from '../../models';
 
 @Component({
@@ -46,8 +42,7 @@ import { Request } from '../../models';
             </li>
         </ul>
     `,
-    directives: [AttachmentsComponent],
-    pipes: [TranslatePipe, MarkedPipe, TextTransformPipe, DateFormatPipe, LocalizedNamePipe]
+    pipes: [MarkedPipe]
 })
 
 export class RequestListComponent {

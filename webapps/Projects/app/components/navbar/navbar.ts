@@ -1,19 +1,14 @@
 import { Component, Input, Output, OnInit, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { EnvironmentActions } from '../../actions/environment.actions';
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { User } from '../../models/user';
 
 @Component({
     selector: 'navbar',
-    template: require('./navbar.html'),
-    directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    template: require('./navbar.html')
 })
 
 export class NavbarComponent {

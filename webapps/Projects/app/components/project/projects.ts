@@ -1,29 +1,18 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
-import { PaginationComponent } from '../../shared/pagination';
 import { StaffService } from '../../services/staff.service';
-import { Project } from '../../models/project';
 import { ProjectService } from '../../services/project.service';
-import { ProjectListComponent } from './project-list';
-import { ProjectComponent } from './project';
 import { ProjectActions } from '../../actions/project.actions';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { IProjectsState } from '../../reducers/projects.reducer';
+import { Project } from '../../models/project';
 
 @Component({
-    selector: 'project-list',
+    selector: 'projects',
     template: require('./templates/projects.html'),
-    // changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [
-        ROUTER_DIRECTIVES,
-        PaginationComponent,
-        ProjectListComponent
-    ],
-    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ProjectsComponent {

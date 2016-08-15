@@ -1,4 +1,5 @@
 import { Pipe } from '@angular/core';
+
 import { MarkdownConverter } from './markdown-converter';
 
 @Pipe({ name: 'marked' })

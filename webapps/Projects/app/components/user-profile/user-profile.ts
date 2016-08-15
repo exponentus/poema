@@ -3,15 +3,14 @@ import { Http, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { TAB_DIRECTIVES } from '../../shared/tabs';
 import { KeysPipe } from '../../pipes/keys.pipe';
 import { AppService } from '../../services/app.service';
 import { TranslateService as translateService } from '../../services/translate.service';
-import { User } from '../../models/user';
 import { IAuthedState } from '../../reducers/authed.reducer';
+import { User } from '../../models/user';
 import { createCookie } from '../../utils/utils';
 
 const HEADERS = new Headers({
@@ -22,9 +21,9 @@ const HEADERS = new Headers({
 @Component({
     selector: '[user-profile]',
     template: require('./user-profile.html'),
-    directives: [FORM_DIRECTIVES, TAB_DIRECTIVES],
+    directives: [FORM_DIRECTIVES],
     providers: [FormBuilder],
-    pipes: [TranslatePipe, KeysPipe]
+    pipes: [KeysPipe]
 })
 
 export class UserProfileComponent {

@@ -1,26 +1,17 @@
 import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { NotificationService } from '../../shared/notification';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
-import { PaginationComponent } from '../../shared/pagination';
-import { TaskFilterComponent } from './task-filter';
-import { Task } from '../../models/task';
 import { TaskService } from '../../services/task.service';
-import { TaskListComponent } from './task-list';
-import { TaskComponent } from './task';
 import { TaskActions } from '../../actions';
 import { ITasksState } from '../../reducers/tasks.reducer';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
+import { Task } from '../../models/task';
 
 @Component({
     selector: 'tasks',
     template: require('./templates/tasks.html'),
-    // changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [ROUTER_DIRECTIVES, PaginationComponent, TaskListComponent, TaskFilterComponent],
-    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
+    // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TasksComponent {
@@ -37,8 +28,7 @@ export class TasksComponent {
         private router: Router,
         private route: ActivatedRoute,
         private taskActions: TaskActions,
-        private taskService: TaskService,
-        private notifyService: NotificationService
+        private taskService: TaskService
     ) { }
 
     ngOnInit() {

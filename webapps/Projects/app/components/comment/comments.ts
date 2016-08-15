@@ -1,13 +1,12 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
+import { CommentComponent } from './comment';
 import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
 import { NotificationService } from '../../shared/notification';
-import { Task, Comment } from '../../models';
 import { TaskService } from '../../services';
 import { ITaskState } from '../../reducers/task.reducer';
-import { CommentComponent } from './comment';
+import { Task, Comment } from '../../models';
 
 @Component({
     selector: 'comments',
@@ -39,8 +38,7 @@ import { CommentComponent } from './comment';
             </section>
         </div>
     `,
-    directives: [CommentComponent, MarkdownEditorComponent],
-    pipes: [TranslatePipe]
+    directives: [CommentComponent, MarkdownEditorComponent]
 })
 
 export class CommentsComponent {

@@ -1,7 +1,5 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { StaffService } from '../../services/staff.service';
 import { Organization } from '../../models';
 
@@ -33,9 +31,7 @@ import { Organization } from '../../models';
                 </ul>
             </div>
         </div>
-    `,
-    directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    `
 })
 
 export class OrganizationInputComponent {

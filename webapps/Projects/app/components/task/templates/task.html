@@ -56,7 +56,7 @@
             </div> -->
         </div>
         <div class="task-tab" [class.active]="showSubtasks" *ngIf="!isNew">
-            <task-list [executionMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
+            <task-list [streamMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
         </div>
         <!-- <div class="task-tab" [class.active]="showRequests">
             <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>

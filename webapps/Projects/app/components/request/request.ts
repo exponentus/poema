@@ -1,16 +1,12 @@
 import { Component, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { MarkdownEditorComponent } from '../../shared/markdown';
 import { NotificationService } from '../../shared/notification';
-import { DatepickerDirective } from '../../shared/datepicker/datepicker';
 import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
-import { MarkdownEditorComponent } from '../../shared/markdown';
-import { AttachmentsComponent } from '../attachment/attachments';
-import { RequestTypeInputComponent } from '../shared/request-type-input';
-import { TextTransformPipe } from '../../pipes';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
@@ -19,13 +15,8 @@ import { Task, Request, RequestType, Attachment } from '../../models';
     selector: 'request',
     template: require('./request.html'),
     directives: [
-        ROUTER_DIRECTIVES,
-        AttachmentsComponent,
-        RequestTypeInputComponent,
-        MarkdownEditorComponent,
-        DatepickerDirective
-    ],
-    pipes: [TranslatePipe, TextTransformPipe]
+        MarkdownEditorComponent
+    ]
 })
 
 export class RequestComponent {

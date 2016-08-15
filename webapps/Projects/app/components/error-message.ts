@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 @Component({
     selector: 'error-message',
@@ -11,8 +10,7 @@ import { TranslatePipe } from 'ng2-translate/ng2-translate';
     host: {
         '[class.error-message]': 'true',
         '[class.show]': 'error'
-    },
-    pipes: [TranslatePipe]
+    }
 })
 
 export class ErrorMessageComponent {

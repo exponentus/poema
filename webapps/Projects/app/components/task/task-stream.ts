@@ -1,19 +1,13 @@
 import { Component, Input, Output, OnInit, OnDestroy, HostBinding, EventEmitter } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
 
-import { UserInputComponent, TagsInputComponent } from '../shared';
-import { TextTransformPipe, DateFormatPipe, LocalizedNamePipe } from '../../pipes';
 import { TaskService } from '../../services';
 import { ITasksState } from '../../reducers/tasks.reducer';
 import { Task } from '../../models';
 
 @Component({
     selector: 'task-stream',
-    template: require('./templates/task-stream.html'),
-    directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent, TaskStreamComponent],
-    pipes: [DateFormatPipe, TextTransformPipe, TranslatePipe, LocalizedNamePipe]
+    template: require('./templates/task-stream.html')
 })
 
 export class TaskStreamComponent {

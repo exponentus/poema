@@ -1,8 +1,6 @@
 import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IStaffState } from '../../reducers/staff.reducer';
 import { User } from '../../models';
 
@@ -38,9 +36,7 @@ import { User } from '../../models';
                 </ul>
             </div>
         </div>
-    `,
-    directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe]
+    `
 })
 
 export class UserInputComponent {

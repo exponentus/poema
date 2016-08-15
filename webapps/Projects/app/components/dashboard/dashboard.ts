@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { ProjectInputComponent } from '../shared/project-input';
 import { Project } from '../../models';
 import { parseResponseObjects, serializeObj, transformPostResponse } from '../../utils/utils';
 
@@ -35,9 +33,7 @@ const HEADERS = new Headers({
                 <button class="btn" type="button" (click)="addProjectToDashboard()">{{'dashboard_add_project' | translate}}</button>
             </div> -->
         </div>
-    `,
-    directives: [ProjectInputComponent],
-    pipes: [TranslatePipe]
+    `
 })
 
 export class DashboardComponent {

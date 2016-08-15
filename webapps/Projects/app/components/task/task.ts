@@ -1,25 +1,14 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { NotificationService } from '../../shared/notification';
-import { DatepickerDirective } from '../../shared/datepicker/datepicker';
-import { TAB_DIRECTIVES } from '../../shared/tabs';
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
-import { MarkdownEditorComponent } from '../../shared/markdown';
-import { SwitchButtonComponent } from '../../shared/switch-button';
-import { ProjectInputComponent, UserInputComponent, TaskTypeInputComponent, TagsInputComponent } from '../shared';
-import { ErrorMessageComponent } from '../error-message';
-import { TaskListComponent } from './task-list';
-import { RequestListComponent } from '../request/request-list';
-import { RequestComponent } from '../request/request';
-import { AttachmentsComponent } from '../attachment/attachments';
 import { CommentsComponent } from '../comment/comments';
+import { NotificationService } from '../../shared/notification';
+import { MarkdownEditorComponent } from '../../shared/markdown';
 import { ITaskState } from '../../reducers/task.reducer';
-import { TextTransformPipe } from '../../pipes';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from '../../models';
@@ -28,26 +17,11 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
     selector: 'task',
     template: require('./templates/task.html'),
     directives: [
-        ROUTER_DIRECTIVES,
         FORM_DIRECTIVES,
-        SwitchButtonComponent,
-        DROPDOWN_DIRECTIVES,
-        TAB_DIRECTIVES,
-        UserInputComponent,
-        ProjectInputComponent,
-        TaskTypeInputComponent,
-        TagsInputComponent,
-        TaskListComponent,
-        RequestListComponent,
-        RequestComponent,
-        AttachmentsComponent,
-        CommentsComponent,
         MarkdownEditorComponent,
-        DatepickerDirective,
-        ErrorMessageComponent
+        CommentsComponent
     ],
-    providers: [FormBuilder],
-    pipes: [TranslatePipe, TextTransformPipe]
+    providers: [FormBuilder]
 })
 
 export class TaskComponent {

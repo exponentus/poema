@@ -1,16 +1,10 @@
 import { Component, Input, Output } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { OrganizationInputComponent, UserInputComponent } from '../shared';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
 import { Project } from '../../models';
 
 @Component({
     selector: 'project-list',
-    template: require('./templates/project-list.html'),
-    directives: [ROUTER_DIRECTIVES, OrganizationInputComponent, UserInputComponent],
-    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
+    template: require('./templates/project-list.html')
 })
 
 export class ProjectListComponent {

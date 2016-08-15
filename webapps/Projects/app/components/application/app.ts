@@ -1,24 +1,20 @@
 import { Component, HostBinding, HostListener, OnInit, OnDestroy } from '@angular/core';
-import { ROUTER_DIRECTIVES }  from '@angular/router';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/ng2-translate';
+
+import { NavbarComponent } from '../navbar/navbar';
+import { NavComponent } from '../nav/nav';
 
 import { EnvironmentActions, AppActions, ReferenceActions, StaffActions } from '../../actions';
 import { AppService, ReferenceService, StaffService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { IAuthedState } from '../../reducers/authed.reducer';
-import { NotificationService, NotificationComponent } from '../../shared/notification';
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
-import { NavbarComponent } from '../navbar/navbar';
-import { NavComponent } from '../nav/nav';
 import { Tag, User } from '../../models';
 
 @Component({
     selector: 'app',
     template: require('./app.html'),
-    directives: [ROUTER_DIRECTIVES, DROPDOWN_DIRECTIVES, NotificationComponent, NavbarComponent, NavComponent],
-    providers: [NotificationService],
-    pipes: [TranslatePipe]
+    directives: [NavbarComponent, NavComponent],
 })
 
 export class AppComponent {

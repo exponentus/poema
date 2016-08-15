@@ -1,11 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { MarkdownEditorComponent, MarkedPipe } from '../../shared/markdown';
-import { AttachmentsComponent } from '../attachment/attachments';
-import { UserInputComponent } from '../shared';
-import { DateFormatPipe } from '../../pipes';
 import { Comment } from '../../models';
 
 @Component({
@@ -45,8 +41,8 @@ import { Comment } from '../../models';
             </div>
         </div>
     `,
-    directives: [AttachmentsComponent, MarkdownEditorComponent, UserInputComponent],
-    pipes: [DateFormatPipe, TranslatePipe, MarkedPipe]
+    directives: [MarkdownEditorComponent],
+    pipes: [MarkedPipe]
 })
 
 export class CommentComponent {

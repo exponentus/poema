@@ -1,20 +1,13 @@
 import { Component, Input, OnInit, OnDestroy, HostBinding } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 import { Store } from '@ngrx/store';
 
-import { UserInputComponent, TagsInputComponent } from '../shared';
-import { TextTransformPipe, DateFormatPipe } from '../../pipes';
-import { TaskStreamComponent } from './task-stream';
 import { TaskActions } from '../../actions';
 import { ITasksState } from '../../reducers/tasks.reducer';
 import { Task } from '../../models';
 
 @Component({
     selector: 'task-list',
-    template: require('./templates/task-list.html'),
-    directives: [ROUTER_DIRECTIVES, UserInputComponent, TagsInputComponent, TaskStreamComponent],
-    pipes: [DateFormatPipe, TranslatePipe, TextTransformPipe]
+    template: require('./templates/task-list.html')
 })
 
 export class TaskListComponent {

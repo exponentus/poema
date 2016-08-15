@@ -1,9 +1,6 @@
 import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
-import { LocalizedNamePipe } from '../../pipes';
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskType } from '../../models';
 
@@ -35,9 +32,7 @@ import { TaskType } from '../../models';
                 </ul>
             </div>
         </div>
-    `,
-    directives: [DROPDOWN_DIRECTIVES],
-    pipes: [TranslatePipe, LocalizedNamePipe]
+    `
 })
 
 export class TaskTypeInputComponent {

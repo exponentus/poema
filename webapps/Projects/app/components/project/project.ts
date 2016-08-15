@@ -1,19 +1,12 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { TranslatePipe, TranslateService } from 'ng2-translate/ng2-translate';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { DatepickerDirective } from '../../shared/datepicker/datepicker';
-import { DROPDOWN_DIRECTIVES } from '../../shared/dropdown';
 import { MarkdownEditorComponent } from '../../shared/markdown';
-import { SwitchButtonComponent } from '../../shared/switch-button';
-import { OrganizationInputComponent, UserInputComponent } from '../shared';
-import { AttachmentsComponent } from '../attachment/attachments';
-import { ErrorMessageComponent } from '../error-message';
-import { TextTransformPipe } from '../../pipes';
 import { ProjectService } from '../../services';
 import { Project, Organization, User, Attachment } from '../../models';
 
@@ -21,19 +14,9 @@ import { Project, Organization, User, Attachment } from '../../models';
     selector: 'project',
     template: require('./templates/project.html'),
     directives: [
-        ROUTER_DIRECTIVES,
-        FORM_DIRECTIVES,
-        DROPDOWN_DIRECTIVES,
-        SwitchButtonComponent,
-        OrganizationInputComponent,
-        UserInputComponent,
-        AttachmentsComponent,
-        MarkdownEditorComponent,
-        DatepickerDirective,
-        ErrorMessageComponent
+        FORM_DIRECTIVES
     ],
-    providers: [FormBuilder],
-    pipes: [TranslatePipe, TextTransformPipe]
+    providers: [FormBuilder]
 })
 
 export class ProjectComponent {

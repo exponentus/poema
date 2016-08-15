@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
 
 import { UploadService } from '../../services';
 import { Attachment } from '../../models';
@@ -29,7 +28,6 @@ import { Attachment } from '../../models';
         </div>
     `,
     providers: [UploadService],
-    pipes: [TranslatePipe],
     host: {
         '[class.hidden]': 'isHidden'
     }

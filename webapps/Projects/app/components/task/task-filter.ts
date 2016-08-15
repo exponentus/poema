@@ -1,7 +1,5 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 
-import { TranslatePipe } from 'ng2-translate/ng2-translate';
-import { TaskTypeInputComponent, UserInputComponent, TagsInputComponent } from '../shared';
 import { Task, TaskType, User, Tag } from '../../models';
 
 @Component({
@@ -11,11 +9,9 @@ import { Task, TaskType, User, Tag } from '../../models';
             <i class="fa fa-filter"></i>
         </div>
         <task-type-input [taskTypeId]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (select)="setTaskType($event)"></task-type-input>
-        <user-input [assigneeUserId]="assigneeUserId" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></user-input>
+        <user-input editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></user-input>
         <tags-input [tagIds]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
-    `,
-    directives: [TaskTypeInputComponent, UserInputComponent, TagsInputComponent],
-    pipes: [TranslatePipe]
+    `
 })
 
 export class TaskFilterComponent {
