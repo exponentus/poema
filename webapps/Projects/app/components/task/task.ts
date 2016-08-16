@@ -7,7 +7,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
-import { MarkdownEditorComponent } from '../../shared/markdown';
 import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
@@ -18,7 +17,6 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
     template: require('./templates/task.html'),
     directives: [
         FORM_DIRECTIVES,
-        MarkdownEditorComponent,
         CommentsComponent
     ],
     providers: [FormBuilder]

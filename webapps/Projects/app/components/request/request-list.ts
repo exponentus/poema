@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-import { MarkedPipe } from '../../shared/markdown';
 import { Request } from '../../models';
 
 @Component({
@@ -41,8 +40,7 @@ import { Request } from '../../models';
                 </div>
             </li>
         </ul>
-    `,
-    pipes: [MarkedPipe]
+    `
 })
 
 export class RequestListComponent {

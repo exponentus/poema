@@ -66,6 +66,7 @@
 }
 
 .request__resolution_time {
+    color: #666;
     display: inline-block;
 }
 

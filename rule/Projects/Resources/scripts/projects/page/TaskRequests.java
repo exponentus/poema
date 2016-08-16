@@ -216,6 +216,7 @@ public class TaskRequests extends _DoForm {
             }
 
             request.setResolution(resolutionType);
+            request.setResolutionTime(new Date());
             requestDAO.update(request);
 
             // Notify assigneeUser about resolution

@@ -29,21 +29,19 @@ import {
     TagsInputComponent,
     RequestTypeInputComponent
 } from './components/shared';
-
-import { NotificationService, NotificationComponent } from './shared/notification';
-import { MarkdownConverter } from './shared/markdown';
+import { AttachmentsComponent } from './components/attachment/attachments';
 import { ErrorMessageComponent } from './components/error-message';
 
-import { AttachmentsComponent } from './components/attachment/attachments';
-
 import { PaginationComponent } from './shared/pagination';
-import { DateFormatPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
-
 import { DatepickerDirective } from './shared/datepicker/datepicker';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { TAB_DIRECTIVES } from './shared/tabs';
-import { MarkdownEditorComponent } from './shared/markdown';
 import { SwitchButtonComponent } from './shared/switch-button';
+
+import { DateFormatPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
+
+import { NotificationService, NotificationComponent } from './shared/notification';
+import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './shared/markdown';
 
 import { APP_ROUTING } from './app.routing';
 import { TranslateService as translateService } from './services/translate.service';
@@ -57,8 +55,6 @@ import { RedirectGuard } from './redirect.guard';
 @NgModule({
     declarations: [
         AppComponent,
-        TranslatePipe,
-        NotificationComponent,
         DashboardComponent,
         ProjectsComponent,
         ProjectComponent,
@@ -73,13 +69,15 @@ import { RedirectGuard } from './redirect.guard';
         LoginComponent,
         ErrorMessageComponent,
         AttachmentsComponent,
-        PaginationComponent,
         OrganizationInputComponent, ProjectInputComponent, UserInputComponent, TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent,
+        PaginationComponent,
+        NotificationComponent,
         DatepickerDirective,
         TAB_DIRECTIVES,
         DROPDOWN_DIRECTIVES,
-        MarkdownEditorComponent,
+        MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
+        TranslatePipe,
         DateFormatPipe, TextTransformPipe, LocalizedNamePipe
     ],
     imports: [BrowserModule, HttpModule, APP_ROUTING],

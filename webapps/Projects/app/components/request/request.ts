@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { MarkdownEditorComponent } from '../../shared/markdown';
 import { NotificationService } from '../../shared/notification';
 import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
@@ -13,10 +12,7 @@ import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
     selector: 'request',
-    template: require('./request.html'),
-    directives: [
-        MarkdownEditorComponent
-    ]
+    template: require('./request.html')
 })
 
 export class RequestComponent {

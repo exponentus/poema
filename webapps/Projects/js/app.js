@@ -379,17 +379,16 @@ webpackJsonp([0],[
 	var user_profile_1 = __webpack_require__(625);
 	var login_1 = __webpack_require__(628);
 	var shared_1 = __webpack_require__(629);
-	var notification_1 = __webpack_require__(592);
-	var markdown_1 = __webpack_require__(602);
-	var error_message_1 = __webpack_require__(636);
-	var attachments_1 = __webpack_require__(637);
+	var attachments_1 = __webpack_require__(636);
+	var error_message_1 = __webpack_require__(637);
 	var pagination_1 = __webpack_require__(638);
-	var pipes_1 = __webpack_require__(640);
-	var datepicker_1 = __webpack_require__(645);
-	var dropdown_1 = __webpack_require__(647);
-	var tabs_1 = __webpack_require__(650);
-	var markdown_2 = __webpack_require__(602);
-	var switch_button_1 = __webpack_require__(653);
+	var datepicker_1 = __webpack_require__(640);
+	var dropdown_1 = __webpack_require__(642);
+	var tabs_1 = __webpack_require__(645);
+	var switch_button_1 = __webpack_require__(648);
+	var pipes_1 = __webpack_require__(650);
+	var notification_1 = __webpack_require__(592);
+	var markdown_1 = __webpack_require__(604);
 	var app_routing_1 = __webpack_require__(655);
 	var translate_service_1 = __webpack_require__(423);
 	var services_1 = __webpack_require__(421);
@@ -404,8 +403,6 @@ webpackJsonp([0],[
 	        core_1.NgModule({
 	            declarations: [
 	                app_1.AppComponent,
-	                ng2_translate_1.TranslatePipe,
-	                notification_1.NotificationComponent,
 	                dashboard_1.DashboardComponent,
 	                projects_1.ProjectsComponent,
 	                project_1.ProjectComponent,
@@ -420,13 +417,15 @@ webpackJsonp([0],[
 	                login_1.LoginComponent,
 	                error_message_1.ErrorMessageComponent,
 	                attachments_1.AttachmentsComponent,
-	                pagination_1.PaginationComponent,
 	                shared_1.OrganizationInputComponent, shared_1.ProjectInputComponent, shared_1.UserInputComponent, shared_1.TaskTypeInputComponent, shared_1.TagsInputComponent, shared_1.RequestTypeInputComponent,
+	                pagination_1.PaginationComponent,
+	                notification_1.NotificationComponent,
 	                datepicker_1.DatepickerDirective,
 	                tabs_1.TAB_DIRECTIVES,
 	                dropdown_1.DROPDOWN_DIRECTIVES,
-	                markdown_2.MarkdownEditorComponent,
+	                markdown_1.MarkdownEditorComponent, markdown_1.MarkedPipe,
 	                switch_button_1.SwitchButtonComponent,
+	                ng2_translate_1.TranslatePipe,
 	                pipes_1.DateFormatPipe, pipes_1.TextTransformPipe, pipes_1.LocalizedNamePipe
 	            ],
 	            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, app_routing_1.APP_ROUTING],
@@ -7850,9 +7849,8 @@ webpackJsonp([0],[
 	var common_1 = __webpack_require__(206);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var comments_1 = __webpack_require__(615);
+	var comments_1 = __webpack_require__(602);
 	var notification_1 = __webpack_require__(592);
-	var markdown_1 = __webpack_require__(602);
 	var actions_1 = __webpack_require__(416);
 	var services_1 = __webpack_require__(421);
 	var models_1 = __webpack_require__(528);
@@ -8233,7 +8231,6 @@ webpackJsonp([0],[
 	            template: __webpack_require__(617),
 	            directives: [
 	                common_1.FORM_DIRECTIVES,
-	                markdown_1.MarkdownEditorComponent,
 	                comments_1.CommentsComponent
 	            ],
 	            providers: [common_1.FormBuilder]
@@ -8250,12 +8247,74 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var markdown_converter_1 = __webpack_require__(603);
-	exports.MarkdownConverter = markdown_converter_1.MarkdownConverter;
-	var markdown_editor_1 = __webpack_require__(613);
-	exports.MarkdownEditorComponent = markdown_editor_1.MarkdownEditorComponent;
-	var marked_pipe_1 = __webpack_require__(614);
-	exports.MarkedPipe = marked_pipe_1.MarkedPipe;
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var comment_1 = __webpack_require__(603);
+	var markdown_editor_1 = __webpack_require__(615);
+	var models_1 = __webpack_require__(528);
+	var CommentsComponent = (function () {
+	    function CommentsComponent() {
+	        this.add = new core_1.EventEmitter();
+	        this.update = new core_1.EventEmitter();
+	        this.delete = new core_1.EventEmitter();
+	        this.commentText = '';
+	    }
+	    CommentsComponent.prototype.onEditorFocus = function () {
+	        this.isEdit = true;
+	    };
+	    CommentsComponent.prototype.onEditorBlur = function () {
+	        this.isEdit = this.commentText.length > 0;
+	    };
+	    CommentsComponent.prototype.setCommentText = function (text) {
+	        this.commentText = text;
+	    };
+	    CommentsComponent.prototype.addComment = function () {
+	        var comment = new models_1.Comment();
+	        comment.comment = this.commentText;
+	        this.add.emit(comment);
+	        this.commentText = '';
+	    };
+	    CommentsComponent.prototype.updateComment = function (comment) {
+	        this.update.emit(comment);
+	    };
+	    CommentsComponent.prototype.deleteComment = function (comment) {
+	        this.delete.emit(comment);
+	    };
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Array)
+	    ], CommentsComponent.prototype, "comments", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], CommentsComponent.prototype, "add", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], CommentsComponent.prototype, "update", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], CommentsComponent.prototype, "delete", void 0);
+	    CommentsComponent = __decorate([
+	        core_1.Component({
+	            selector: 'comments',
+	            template: "\n        <div class=\"comments-wrap\">\n            <section class=\"comments\">\n                <comment *ngFor=\"let comment of comments\"\n                    [comment]=\"comment\"\n                    [editable]=\"true\"\n                    (save)=\"updateComment($event)\"\n                    (delete)=\"deleteComment($event)\">\n                </comment>\n            </section>\n            <section class=\"comment-composer\" [class.edit]=\"isEdit\">\n                <div class=\"comment-composer__editor\">\n                    <markdown-editor\n                        editable=\"true\"\n                        placeHolder=\"{{'comment' | translate}}\"\n                        (update)=\"setCommentText($event)\"\n                        (focus)=\"onEditorFocus($event)\"\n                        (blur)=\"onEditorBlur($event)\">\n                    </markdown-editor>\n                </div>\n                <button class=\"btn btn-add-comment\"\n                    (click)=\"addComment()\"\n                    [disabled]=\"!commentText\">\n                    {{ 'add_comment' | translate }}\n                </button>\n            </section>\n        </div>\n    ",
+	            directives: [comment_1.CommentComponent, markdown_editor_1.MarkdownEditorComponent]
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], CommentsComponent);
+	    return CommentsComponent;
+	}());
+	exports.CommentsComponent = CommentsComponent;
 
 
 /***/ },
@@ -8273,8 +8332,93 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var marked = __webpack_require__(604);
-	var toMarkdown = __webpack_require__(605);
+	var markdown_1 = __webpack_require__(604);
+	var models_1 = __webpack_require__(528);
+	var CommentComponent = (function () {
+	    function CommentComponent() {
+	        this.editable = false;
+	        this.save = new core_1.EventEmitter();
+	        this.delete = new core_1.EventEmitter();
+	        this.saving = false;
+	        this.edit = false;
+	    }
+	    CommentComponent.prototype.toggleEdit = function () {
+	        this.edit = this.editable && !this.edit;
+	        if (this.edit) {
+	            this.commentText = this.comment.comment;
+	        }
+	        else {
+	            this.commentText = '';
+	        }
+	    };
+	    CommentComponent.prototype.setCommentText = function (text) {
+	        this.commentText = text;
+	    };
+	    CommentComponent.prototype.saveComment = function () {
+	        this.comment.comment = this.commentText;
+	        this.saving = true;
+	        this.save.emit(this.comment);
+	    };
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', models_1.Comment)
+	    ], CommentComponent.prototype, "comment", void 0);
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Boolean)
+	    ], CommentComponent.prototype, "editable", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], CommentComponent.prototype, "save", void 0);
+	    __decorate([
+	        core_1.Output(), 
+	        __metadata('design:type', Object)
+	    ], CommentComponent.prototype, "delete", void 0);
+	    CommentComponent = __decorate([
+	        core_1.Component({
+	            selector: 'comment',
+	            template: "\n        <div class=\"comment\" [class.edit]=\"edit\" [class.saving]=\"saving\">\n            <div class=\"comment__avatar\"></div>\n            <div class=\"comment__details\">\n                <span class=\"comment__author\">\n                    <user-input [editable]=\"false\" [userIds]=\"[comment.authorId]\"></user-input>\n                </span>\n                <span class=\"comment__time\">{{comment.regDate}}</span>\n                <p class=\"comment__text\" *ngIf=\"!edit\" innerHTML=\"{{comment.comment | marked}}\"></p>\n                <div class=\"comment__editor\" *ngIf=\"edit\">\n                    <markdown-editor\n                        markdown=\"{{comment.comment}}\"\n                        editable=\"true\"\n                        placeHolder=\"{{'add_comment' | translate}}\"\n                        (update)=\"setCommentText($event)\">\n                    </markdown-editor>\n                    <button type=\"button\" class=\"btn btn-cancel\" [disabled]=\"saving\" (click)=\"toggleEdit()\">{{'cancel' | translate}}</button>\n                    <button type=\"button\" class=\"btn btn-primary btn-save\" [disabled]=\"saving\" (click)=\"saveComment()\">{{'save' | translate}}</button>\n                </div>\n                <!-- <attachments\n                    [model]=\"comment\"\n                    (upload)=\"addAttachment($event)\"\n                    (delete)=\"deleteAttachment($event)\">\n                </attachments> -->\n            </div>\n            <div class=\"comment__buttons\" *ngIf=\"editable\">\n                <button type=\"button\" class=\"btn btn-sm\" *ngIf=\"!edit\" (click)=\"toggleEdit()\">\n                    <i class=\"fa fa-pencil\"></i>{{'edit' | translate}}\n                </button>\n                <button type=\"button\" class=\"btn btn-sm\" title=\"{{'delete' | translate}}\" (click)=\"delete.emit(comment)\">\n                    <i class=\"fa fa-remove\"></i>\n                </button>\n            </div>\n        </div>\n    ",
+	            directives: [markdown_1.MarkdownEditorComponent],
+	            pipes: [markdown_1.MarkedPipe]
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], CommentComponent);
+	    return CommentComponent;
+	}());
+	exports.CommentComponent = CommentComponent;
+
+
+/***/ },
+/* 604 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var markdown_converter_1 = __webpack_require__(605);
+	exports.MarkdownConverter = markdown_converter_1.MarkdownConverter;
+	var markdown_editor_1 = __webpack_require__(615);
+	exports.MarkdownEditorComponent = markdown_editor_1.MarkdownEditorComponent;
+	var marked_pipe_1 = __webpack_require__(616);
+	exports.MarkedPipe = marked_pipe_1.MarkedPipe;
+
+
+/***/ },
+/* 605 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var marked = __webpack_require__(606);
+	var toMarkdown = __webpack_require__(607);
 	var MarkdownConverter = (function () {
 	    function MarkdownConverter() {
 	    }
@@ -8294,8 +8438,6 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 604 */,
-/* 605 */,
 /* 606 */,
 /* 607 */,
 /* 608 */,
@@ -8303,7 +8445,9 @@ webpackJsonp([0],[
 /* 610 */,
 /* 611 */,
 /* 612 */,
-/* 613 */
+/* 613 */,
+/* 614 */,
+/* 615 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8317,7 +8461,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(603);
+	var markdown_converter_1 = __webpack_require__(605);
 	var MarkdownEditorComponent = (function () {
 	    function MarkdownEditorComponent(mdc) {
 	        this.mdc = mdc;
@@ -8387,113 +8531,6 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 614 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(603);
-	var MarkedPipe = (function () {
-	    function MarkedPipe(mdc) {
-	        this.mdc = mdc;
-	    }
-	    MarkedPipe.prototype.transform = function (text) {
-	        return this.mdc.toHtml(text);
-	    };
-	    MarkedPipe = __decorate([
-	        core_1.Pipe({ name: 'marked' }), 
-	        __metadata('design:paramtypes', [markdown_converter_1.MarkdownConverter])
-	    ], MarkedPipe);
-	    return MarkedPipe;
-	}());
-	exports.MarkedPipe = MarkedPipe;
-
-
-/***/ },
-/* 615 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var comment_1 = __webpack_require__(616);
-	var markdown_editor_1 = __webpack_require__(613);
-	var models_1 = __webpack_require__(528);
-	var CommentsComponent = (function () {
-	    function CommentsComponent() {
-	        this.add = new core_1.EventEmitter();
-	        this.update = new core_1.EventEmitter();
-	        this.delete = new core_1.EventEmitter();
-	        this.commentText = '';
-	    }
-	    CommentsComponent.prototype.onEditorFocus = function () {
-	        this.isEdit = true;
-	    };
-	    CommentsComponent.prototype.onEditorBlur = function () {
-	        this.isEdit = this.commentText.length > 0;
-	    };
-	    CommentsComponent.prototype.setCommentText = function (text) {
-	        this.commentText = text;
-	    };
-	    CommentsComponent.prototype.addComment = function () {
-	        var comment = new models_1.Comment();
-	        comment.comment = this.commentText;
-	        this.add.emit(comment);
-	        this.commentText = '';
-	    };
-	    CommentsComponent.prototype.updateComment = function (comment) {
-	        this.update.emit(comment);
-	    };
-	    CommentsComponent.prototype.deleteComment = function (comment) {
-	        this.delete.emit(comment);
-	    };
-	    __decorate([
-	        core_1.Input(), 
-	        __metadata('design:type', Array)
-	    ], CommentsComponent.prototype, "comments", void 0);
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], CommentsComponent.prototype, "add", void 0);
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], CommentsComponent.prototype, "update", void 0);
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], CommentsComponent.prototype, "delete", void 0);
-	    CommentsComponent = __decorate([
-	        core_1.Component({
-	            selector: 'comments',
-	            template: "\n        <div class=\"comments-wrap\">\n            <section class=\"comments\">\n                <comment *ngFor=\"let comment of comments\"\n                    [comment]=\"comment\"\n                    [editable]=\"true\"\n                    (save)=\"updateComment($event)\"\n                    (delete)=\"deleteComment($event)\">\n                </comment>\n            </section>\n            <section class=\"comment-composer\" [class.edit]=\"isEdit\">\n                <div class=\"comment-composer__editor\">\n                    <markdown-editor\n                        editable=\"true\"\n                        placeHolder=\"{{'comment' | translate}}\"\n                        (update)=\"setCommentText($event)\"\n                        (focus)=\"onEditorFocus($event)\"\n                        (blur)=\"onEditorBlur($event)\">\n                    </markdown-editor>\n                </div>\n                <button class=\"btn btn-add-comment\"\n                    (click)=\"addComment()\"\n                    [disabled]=\"!commentText\">\n                    {{ 'add_comment' | translate }}\n                </button>\n            </section>\n        </div>\n    ",
-	            directives: [comment_1.CommentComponent, markdown_editor_1.MarkdownEditorComponent]
-	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], CommentsComponent);
-	    return CommentsComponent;
-	}());
-	exports.CommentsComponent = CommentsComponent;
-
-
-/***/ },
 /* 616 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -8508,61 +8545,21 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_1 = __webpack_require__(602);
-	var models_1 = __webpack_require__(528);
-	var CommentComponent = (function () {
-	    function CommentComponent() {
-	        this.editable = false;
-	        this.save = new core_1.EventEmitter();
-	        this.delete = new core_1.EventEmitter();
-	        this.saving = false;
-	        this.edit = false;
+	var markdown_converter_1 = __webpack_require__(605);
+	var MarkedPipe = (function () {
+	    function MarkedPipe(mdc) {
+	        this.mdc = mdc;
 	    }
-	    CommentComponent.prototype.toggleEdit = function () {
-	        this.edit = this.editable && !this.edit;
-	        if (this.edit) {
-	            this.commentText = this.comment.comment;
-	        }
-	        else {
-	            this.commentText = '';
-	        }
+	    MarkedPipe.prototype.transform = function (text) {
+	        return this.mdc.toHtml(text);
 	    };
-	    CommentComponent.prototype.setCommentText = function (text) {
-	        this.commentText = text;
-	    };
-	    CommentComponent.prototype.saveComment = function () {
-	        this.comment.comment = this.commentText;
-	        this.saving = true;
-	        this.save.emit(this.comment);
-	    };
-	    __decorate([
-	        core_1.Input(), 
-	        __metadata('design:type', models_1.Comment)
-	    ], CommentComponent.prototype, "comment", void 0);
-	    __decorate([
-	        core_1.Input(), 
-	        __metadata('design:type', Boolean)
-	    ], CommentComponent.prototype, "editable", void 0);
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], CommentComponent.prototype, "save", void 0);
-	    __decorate([
-	        core_1.Output(), 
-	        __metadata('design:type', Object)
-	    ], CommentComponent.prototype, "delete", void 0);
-	    CommentComponent = __decorate([
-	        core_1.Component({
-	            selector: 'comment',
-	            template: "\n        <div class=\"comment\" [class.edit]=\"edit\" [class.saving]=\"saving\">\n            <div class=\"comment__avatar\"></div>\n            <div class=\"comment__details\">\n                <span class=\"comment__author\">\n                    <user-input [editable]=\"false\" [userIds]=\"[comment.authorId]\"></user-input>\n                </span>\n                <span class=\"comment__time\">{{comment.regDate}}</span>\n                <p class=\"comment__text\" *ngIf=\"!edit\" innerHTML=\"{{comment.comment | marked}}\"></p>\n                <div class=\"comment__editor\" *ngIf=\"edit\">\n                    <markdown-editor\n                        markdown=\"{{comment.comment}}\"\n                        editable=\"true\"\n                        placeHolder=\"{{'add_comment' | translate}}\"\n                        (update)=\"setCommentText($event)\">\n                    </markdown-editor>\n                    <button type=\"button\" class=\"btn btn-cancel\" [disabled]=\"saving\" (click)=\"toggleEdit()\">{{'cancel' | translate}}</button>\n                    <button type=\"button\" class=\"btn btn-primary btn-save\" [disabled]=\"saving\" (click)=\"saveComment()\">{{'save' | translate}}</button>\n                </div>\n                <!-- <attachments\n                    [model]=\"comment\"\n                    (upload)=\"addAttachment($event)\"\n                    (delete)=\"deleteAttachment($event)\">\n                </attachments> -->\n            </div>\n            <div class=\"comment__buttons\" *ngIf=\"editable\">\n                <button type=\"button\" class=\"btn btn-sm\" *ngIf=\"!edit\" (click)=\"toggleEdit()\">\n                    <i class=\"fa fa-pencil\"></i>{{'edit' | translate}}\n                </button>\n                <button type=\"button\" class=\"btn btn-sm\" title=\"{{'delete' | translate}}\" (click)=\"delete.emit(comment)\">\n                    <i class=\"fa fa-remove\"></i>\n                </button>\n            </div>\n        </div>\n    ",
-	            directives: [markdown_1.MarkdownEditorComponent],
-	            pipes: [markdown_1.MarkedPipe]
-	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], CommentComponent);
-	    return CommentComponent;
+	    MarkedPipe = __decorate([
+	        core_1.Pipe({ name: 'marked' }), 
+	        __metadata('design:paramtypes', [markdown_converter_1.MarkdownConverter])
+	    ], MarkedPipe);
+	    return MarkedPipe;
 	}());
-	exports.CommentComponent = CommentComponent;
+	exports.MarkedPipe = MarkedPipe;
 
 
 /***/ },
@@ -8929,7 +8926,6 @@ webpackJsonp([0],[
 	var router_1 = __webpack_require__(544);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var markdown_1 = __webpack_require__(602);
 	var notification_1 = __webpack_require__(592);
 	var actions_1 = __webpack_require__(416);
 	var services_1 = __webpack_require__(421);
@@ -9039,10 +9035,7 @@ webpackJsonp([0],[
 	    RequestComponent = __decorate([
 	        core_1.Component({
 	            selector: 'request',
-	            template: __webpack_require__(624),
-	            directives: [
-	                markdown_1.MarkdownEditorComponent
-	            ]
+	            template: __webpack_require__(624)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, ng2_translate_1.TranslateService, notification_1.NotificationService, services_1.TaskService])
 	    ], RequestComponent);
@@ -9055,7 +9048,7 @@ webpackJsonp([0],[
 /* 624 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"isNew\" [disabled]=\"!request.requestTypeId || (isResolveAction && !dueDate)\" (click)=\"sendRequest()\">\r\n                {{'send_request' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            <span>{{'task_request' | translate}}</span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'ACCEPT'\">\r\n                <i class=\"fa fa-check\"></i>\r\n                {{'accepted' | translate}}\r\n            </span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'DECLINE'\">\r\n                <i class=\"fa fa-times\"></i>\r\n                {{'declined' | translate}}\r\n            </span>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <fieldset class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'task' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <a class=\"input-placeholder\" [routerLink]=\"['/task', task.id]\">{{task.title}}</a>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'request_type' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <request-type-input [editable]=\"editable\" placeHolder=\"{{'request_type' | translate}}\" [requestType]=\"request.requestType\" (select)=\"setRequestType($event)\"></request-type-input>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <textarea [disabled]=\"!editable\" [(ngModel)]=\"comment\"></textarea>\r\n                        <!-- <markdown-editor\r\n                            [markdown]=\"''\"\r\n                            editable=\"true\"\r\n                            placeHolder=\"{{'comment' | translate}}\"\r\n                            updateTimeout=\"100\"\r\n                            (update)=\"setComment($event)\">\r\n                        </markdown-editor> -->\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div *ngIf=\"!editable && !request.attachments\">\r\n            <attachments [model]=\"request\" [editable]=\"editable\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n    </section>\r\n    <section class=\"request__resol\" *ngIf=\"task.editable && request.resolution == 'UNKNOWN'\">\r\n        <fieldset class=\"fieldset\" *ngIf=\"isResolveAction\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'due_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" />\r\n                        <div class=\"help\">\r\n                            {{'new_due_date_help' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div class=\"request__buttons\">\r\n            <button type=\"button\" class=\"btn\" (click)=\"doDecline(request)\">\r\n                {{'decline' | translate}}\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"request.requestType.name == 'prolong' && !dueDate\" (click)=\"doAccept(request)\">\r\n                {{'accept' | translate}}\r\n            </button>\r\n        </div>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"request.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [userIds]=\"[request.authorId]\"></user-input>\r\n            <time>{{request.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
+	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"isNew\" [disabled]=\"!request.requestTypeId || (isResolveAction && !dueDate)\" (click)=\"sendRequest()\">\r\n                {{'send_request' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            <span>{{'task_request' | translate}}</span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'ACCEPT'\">\r\n                <i class=\"fa fa-check\"></i>\r\n                {{'accepted' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'DECLINE'\">\r\n                <i class=\"fa fa-times\"></i>\r\n                {{'declined' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <fieldset class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'task' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <a class=\"input-placeholder\" [routerLink]=\"['/task', task.id]\">{{task.title}}</a>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'request_type' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <request-type-input [editable]=\"editable\" placeHolder=\"{{'request_type' | translate}}\" [requestType]=\"request.requestType\" (select)=\"setRequestType($event)\"></request-type-input>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <textarea [disabled]=\"!editable\" [(ngModel)]=\"comment\"></textarea>\r\n                        <!-- <markdown-editor\r\n                            [markdown]=\"''\"\r\n                            editable=\"true\"\r\n                            placeHolder=\"{{'comment' | translate}}\"\r\n                            updateTimeout=\"100\"\r\n                            (update)=\"setComment($event)\">\r\n                        </markdown-editor> -->\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div *ngIf=\"!editable && !request.attachments\">\r\n            <attachments [model]=\"request\" [editable]=\"editable\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n    </section>\r\n    <section class=\"request__resol\" *ngIf=\"task.editable && request.resolution == 'UNKNOWN'\">\r\n        <fieldset class=\"fieldset\" *ngIf=\"isResolveAction\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'due_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" />\r\n                        <div class=\"help\">\r\n                            {{'new_due_date_help' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div class=\"request__buttons\">\r\n            <button type=\"button\" class=\"btn\" (click)=\"doDecline(request)\">\r\n                {{'decline' | translate}}\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"request.requestType.name == 'prolong' && !dueDate\" (click)=\"doAccept(request)\">\r\n                {{'accept' | translate}}\r\n            </button>\r\n        </div>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"request.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [userIds]=\"[request.authorId]\"></user-input>\r\n            <time>{{request.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
 
 /***/ },
 /* 625 */
@@ -9923,45 +9916,6 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var ErrorMessageComponent = (function () {
-	    function ErrorMessageComponent() {
-	        this.error = {};
-	    }
-	    __decorate([
-	        core_1.Input(), 
-	        __metadata('design:type', Object)
-	    ], ErrorMessageComponent.prototype, "error", void 0);
-	    ErrorMessageComponent = __decorate([
-	        core_1.Component({
-	            selector: 'error-message',
-	            template: "\n        <div class=\"error-message__message\" *ngIf=\"error\">\n            {{error.message | translate}}\n        </div>\n    ",
-	            host: {
-	                '[class.error-message]': 'true',
-	                '[class.show]': 'error'
-	            }
-	        }), 
-	        __metadata('design:paramtypes', [])
-	    ], ErrorMessageComponent);
-	    return ErrorMessageComponent;
-	}());
-	exports.ErrorMessageComponent = ErrorMessageComponent;
-
-
-/***/ },
-/* 637 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
 	var http_1 = __webpack_require__(339);
 	var services_1 = __webpack_require__(421);
 	var AttachmentsComponent = (function () {
@@ -10030,6 +9984,45 @@ webpackJsonp([0],[
 	    return AttachmentsComponent;
 	}());
 	exports.AttachmentsComponent = AttachmentsComponent;
+
+
+/***/ },
+/* 637 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var ErrorMessageComponent = (function () {
+	    function ErrorMessageComponent() {
+	        this.error = {};
+	    }
+	    __decorate([
+	        core_1.Input(), 
+	        __metadata('design:type', Object)
+	    ], ErrorMessageComponent.prototype, "error", void 0);
+	    ErrorMessageComponent = __decorate([
+	        core_1.Component({
+	            selector: 'error-message',
+	            template: "\n        <div class=\"error-message__message\" *ngIf=\"error\">\n            {{error.message | translate}}\n        </div>\n    ",
+	            host: {
+	                '[class.error-message]': 'true',
+	                '[class.show]': 'error'
+	            }
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], ErrorMessageComponent);
+	    return ErrorMessageComponent;
+	}());
+	exports.ErrorMessageComponent = ErrorMessageComponent;
 
 
 /***/ },
@@ -10162,23 +10155,6 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var date_format_pipe_1 = __webpack_require__(641);
-	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
-	var text_transform_pipe_1 = __webpack_require__(642);
-	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
-	var values_pipe_1 = __webpack_require__(643);
-	exports.ValuesPipe = values_pipe_1.ValuesPipe;
-	var keys_pipe_1 = __webpack_require__(626);
-	exports.KeysPipe = keys_pipe_1.KeysPipe;
-	var localizedName_pipe_1 = __webpack_require__(644);
-	exports.LocalizedNamePipe = localizedName_pipe_1.LocalizedNamePipe;
-
-
-/***/ },
-/* 641 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
 	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
 	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
 	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10189,147 +10165,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var moment = __webpack_require__(425);
-	var DateFormatPipe = (function () {
-	    function DateFormatPipe() {
-	    }
-	    DateFormatPipe.prototype.transform = function (date, format) {
-	        if (!date) {
-	            return '';
-	        }
-	        if (!format) {
-	            format = 'DD.MM.YYYY HH:mm';
-	        }
-	        var md = moment(date, format);
-	        if (md.isValid()) {
-	            return md.format(format);
-	        }
-	        return '';
-	    };
-	    DateFormatPipe = __decorate([
-	        core_1.Pipe({ name: 'dateFmt' }), 
-	        __metadata('design:paramtypes', [])
-	    ], DateFormatPipe);
-	    return DateFormatPipe;
-	}());
-	exports.DateFormatPipe = DateFormatPipe;
-
-
-/***/ },
-/* 642 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var TextTransformPipe = (function () {
-	    function TextTransformPipe() {
-	    }
-	    TextTransformPipe.prototype.transform = function (text, transform) {
-	        switch (transform) {
-	            case 'L':
-	                return text.toLowerCase();
-	            case 'U':
-	                return text.toUpperCase();
-	            default:
-	                return text;
-	        }
-	    };
-	    TextTransformPipe = __decorate([
-	        core_1.Pipe({ name: 'text' }), 
-	        __metadata('design:paramtypes', [])
-	    ], TextTransformPipe);
-	    return TextTransformPipe;
-	}());
-	exports.TextTransformPipe = TextTransformPipe;
-
-
-/***/ },
-/* 643 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var ValuesPipe = (function () {
-	    function ValuesPipe() {
-	    }
-	    ValuesPipe.prototype.transform = function (values, args) {
-	        return Object.keys(values).map(function (key) { return values[key]; });
-	    };
-	    ValuesPipe = __decorate([
-	        core_1.Pipe({ name: 'values' }), 
-	        __metadata('design:paramtypes', [])
-	    ], ValuesPipe);
-	    return ValuesPipe;
-	}());
-	exports.ValuesPipe = ValuesPipe;
-
-
-/***/ },
-/* 644 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var services_1 = __webpack_require__(421);
-	var LocalizedNamePipe = (function () {
-	    function LocalizedNamePipe(appService) {
-	        this.appService = appService;
-	    }
-	    LocalizedNamePipe.prototype.transform = function (model, field, locale) {
-	        return model ? model.localizedName[locale || this.appService.language] || model[field || 'name'] : '';
-	    };
-	    LocalizedNamePipe = __decorate([
-	        core_1.Pipe({ name: 'localizedName' }), 
-	        __metadata('design:paramtypes', [services_1.AppService])
-	    ], LocalizedNamePipe);
-	    return LocalizedNamePipe;
-	}());
-	exports.LocalizedNamePipe = LocalizedNamePipe;
-
-
-/***/ },
-/* 645 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var Pikaday = __webpack_require__(646);
+	var Pikaday = __webpack_require__(641);
 	var DatepickerDirective = (function () {
 	    function DatepickerDirective(elementRef) {
 	        this.elementRef = elementRef;
@@ -10370,18 +10206,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 646 */,
-/* 647 */
+/* 641 */,
+/* 642 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var dropdown_component_1 = __webpack_require__(648);
-	var dropdown_toggle_component_1 = __webpack_require__(649);
+	var dropdown_component_1 = __webpack_require__(643);
+	var dropdown_toggle_component_1 = __webpack_require__(644);
 	exports.DROPDOWN_DIRECTIVES = [dropdown_component_1.DropdownComponent, dropdown_toggle_component_1.DropdownToggleComponent];
 
 
 /***/ },
-/* 648 */
+/* 643 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10395,7 +10231,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var dropdown_toggle_component_1 = __webpack_require__(649);
+	var dropdown_toggle_component_1 = __webpack_require__(644);
 	var DropdownComponent = (function () {
 	    function DropdownComponent(renderer) {
 	        var _this = this;
@@ -10536,7 +10372,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 649 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10581,17 +10417,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 650 */
+/* 645 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var tabs_1 = __webpack_require__(651);
-	var tab_1 = __webpack_require__(652);
+	var tabs_1 = __webpack_require__(646);
+	var tab_1 = __webpack_require__(647);
 	exports.TAB_DIRECTIVES = [tabs_1.Tabs, tab_1.Tab];
 
 
 /***/ },
-/* 651 */
+/* 646 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10605,7 +10441,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var tab_1 = __webpack_require__(652);
+	var tab_1 = __webpack_require__(647);
 	var Tabs = (function () {
 	    function Tabs() {
 	    }
@@ -10637,7 +10473,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 652 */
+/* 647 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10686,18 +10522,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 653 */
+/* 648 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(654));
+	__export(__webpack_require__(649));
 
 
 /***/ },
-/* 654 */
+/* 649 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10775,6 +10611,163 @@ webpackJsonp([0],[
 	    return SwitchButtonComponent;
 	}());
 	exports.SwitchButtonComponent = SwitchButtonComponent;
+
+
+/***/ },
+/* 650 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var date_format_pipe_1 = __webpack_require__(651);
+	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
+	var text_transform_pipe_1 = __webpack_require__(652);
+	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
+	var values_pipe_1 = __webpack_require__(653);
+	exports.ValuesPipe = values_pipe_1.ValuesPipe;
+	var keys_pipe_1 = __webpack_require__(626);
+	exports.KeysPipe = keys_pipe_1.KeysPipe;
+	var localizedName_pipe_1 = __webpack_require__(654);
+	exports.LocalizedNamePipe = localizedName_pipe_1.LocalizedNamePipe;
+
+
+/***/ },
+/* 651 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var moment = __webpack_require__(425);
+	var DateFormatPipe = (function () {
+	    function DateFormatPipe() {
+	    }
+	    DateFormatPipe.prototype.transform = function (date, format) {
+	        if (!date) {
+	            return '';
+	        }
+	        if (!format) {
+	            format = 'DD.MM.YYYY HH:mm';
+	        }
+	        var md = moment(date, format);
+	        if (md.isValid()) {
+	            return md.format(format);
+	        }
+	        return '';
+	    };
+	    DateFormatPipe = __decorate([
+	        core_1.Pipe({ name: 'dateFmt' }), 
+	        __metadata('design:paramtypes', [])
+	    ], DateFormatPipe);
+	    return DateFormatPipe;
+	}());
+	exports.DateFormatPipe = DateFormatPipe;
+
+
+/***/ },
+/* 652 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var TextTransformPipe = (function () {
+	    function TextTransformPipe() {
+	    }
+	    TextTransformPipe.prototype.transform = function (text, transform) {
+	        switch (transform) {
+	            case 'L':
+	                return text.toLowerCase();
+	            case 'U':
+	                return text.toUpperCase();
+	            default:
+	                return text;
+	        }
+	    };
+	    TextTransformPipe = __decorate([
+	        core_1.Pipe({ name: 'text' }), 
+	        __metadata('design:paramtypes', [])
+	    ], TextTransformPipe);
+	    return TextTransformPipe;
+	}());
+	exports.TextTransformPipe = TextTransformPipe;
+
+
+/***/ },
+/* 653 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var ValuesPipe = (function () {
+	    function ValuesPipe() {
+	    }
+	    ValuesPipe.prototype.transform = function (values, args) {
+	        return Object.keys(values).map(function (key) { return values[key]; });
+	    };
+	    ValuesPipe = __decorate([
+	        core_1.Pipe({ name: 'values' }), 
+	        __metadata('design:paramtypes', [])
+	    ], ValuesPipe);
+	    return ValuesPipe;
+	}());
+	exports.ValuesPipe = ValuesPipe;
+
+
+/***/ },
+/* 654 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var services_1 = __webpack_require__(421);
+	var LocalizedNamePipe = (function () {
+	    function LocalizedNamePipe(appService) {
+	        this.appService = appService;
+	    }
+	    LocalizedNamePipe.prototype.transform = function (model, field, locale) {
+	        return model ? model.localizedName[locale || this.appService.language] || model[field || 'name'] : '';
+	    };
+	    LocalizedNamePipe = __decorate([
+	        core_1.Pipe({ name: 'localizedName' }), 
+	        __metadata('design:paramtypes', [services_1.AppService])
+	    ], LocalizedNamePipe);
+	    return LocalizedNamePipe;
+	}());
+	exports.LocalizedNamePipe = LocalizedNamePipe;
 
 
 /***/ },

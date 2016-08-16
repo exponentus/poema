@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { MarkdownEditorComponent } from '../../shared/markdown';
 import { ProjectService } from '../../services';
 import { Project, Organization, User, Attachment } from '../../models';
 
