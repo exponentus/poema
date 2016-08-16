@@ -105,8 +105,8 @@
 	__webpack_require__(425);
 	__webpack_require__(361);
 	__webpack_require__(388);
-	__webpack_require__(646);
-	__webpack_require__(647);
+	__webpack_require__(640);
+	__webpack_require__(641);
 	__webpack_require__(629);
 	__webpack_require__(70);
 	__webpack_require__(76);
@@ -71739,13 +71739,7 @@
 /* 637 */,
 /* 638 */,
 /* 639 */,
-/* 640 */,
-/* 641 */,
-/* 642 */,
-/* 643 */,
-/* 644 */,
-/* 645 */,
-/* 646 */
+/* 640 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -73037,7 +73031,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 647 */
+/* 641 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -73052,10 +73046,10 @@
 	
 	var toMarkdown
 	var converters
-	var mdConverters = __webpack_require__(648)
-	var gfmConverters = __webpack_require__(649)
-	var HtmlParser = __webpack_require__(650)
-	var collapse = __webpack_require__(652)
+	var mdConverters = __webpack_require__(642)
+	var gfmConverters = __webpack_require__(643)
+	var HtmlParser = __webpack_require__(644)
+	var collapse = __webpack_require__(646)
 	
 	/*
 	 * Utilities
@@ -73272,7 +73266,7 @@
 
 
 /***/ },
-/* 648 */
+/* 642 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -73429,7 +73423,7 @@
 
 
 /***/ },
-/* 649 */
+/* 643 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -73545,7 +73539,7 @@
 
 
 /***/ },
-/* 650 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -73579,7 +73573,7 @@
 	
 	  // For Node.js environments
 	  if (typeof document === 'undefined') {
-	    var jsdom = __webpack_require__(651)
+	    var jsdom = __webpack_require__(645)
 	    Parser.prototype.parseFromString = function (string) {
 	      return jsdom.jsdom(string, {
 	        features: {
@@ -73627,24 +73621,24 @@
 
 
 /***/ },
-/* 651 */
+/* 645 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 652 */
+/* 646 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var voidElements = __webpack_require__(653);
+	var voidElements = __webpack_require__(647);
 	Object.keys(voidElements).forEach(function (name) {
 	  voidElements[name.toUpperCase()] = 1;
 	});
 	
 	var blockElements = {};
-	__webpack_require__(654).forEach(function (name) {
+	__webpack_require__(648).forEach(function (name) {
 	  blockElements[name.toUpperCase()] = 1;
 	});
 	
@@ -73775,7 +73769,7 @@
 
 
 /***/ },
-/* 653 */
+/* 647 */
 /***/ function(module, exports) {
 
 	/**
@@ -73804,7 +73798,7 @@
 
 
 /***/ },
-/* 654 */
+/* 648 */
 /***/ function(module, exports) {
 
 	/**
@@ -73852,6 +73846,12 @@
 
 
 /***/ },
+/* 649 */,
+/* 650 */,
+/* 651 */,
+/* 652 */,
+/* 653 */,
+/* 654 */,
 /* 655 */,
 /* 656 */,
 /* 657 */,

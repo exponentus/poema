@@ -1,7 +1,6 @@
-import { NgModule }       from '@angular/core';
-import { BrowserModule  } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
-
 import { provide, enableProdMode } from '@angular/core';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
@@ -37,11 +36,10 @@ import { DatepickerDirective } from './shared/datepicker/datepicker';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { TAB_DIRECTIVES } from './shared/tabs';
 import { SwitchButtonComponent } from './shared/switch-button';
-
-import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
-
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './shared/markdown';
+
+import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
 
 import { APP_ROUTING } from './app.routing';
 import { TranslateService as translateService } from './services/translate.service';
@@ -56,14 +54,8 @@ import { RedirectGuard } from './redirect.guard';
     declarations: [
         AppComponent,
         DashboardComponent,
-        ProjectsComponent,
-        ProjectComponent,
-        ProjectListComponent,
-        TasksComponent,
-        TaskComponent,
-        TaskListComponent,
-        TaskStreamComponent,
-        TaskFilterComponent,
+        ProjectsComponent, ProjectComponent, ProjectListComponent,
+        TasksComponent, TaskComponent, TaskListComponent, TaskStreamComponent, TaskFilterComponent,
         RequestComponent,
         UserProfileComponent,
         LoginComponent,

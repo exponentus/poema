@@ -1,4 +1,4 @@
-import { Task, Tag, TaskType, User } from '../models';
+import { Task, Tag, TaskType, Employee } from '../models';
 
 import { TaskActions } from '../actions';
 
@@ -11,7 +11,7 @@ export interface ITasksState {
     loading: boolean,
     filter: {
         taskType: TaskType,
-        assigneeUser: User,
+        assigneeEmployee: Employee,
         tags: Tag[]
     }
 };
@@ -23,7 +23,7 @@ const initialState: ITasksState = {
     loading: false,
     filter: {
         taskType: null,
-        assigneeUser: null,
+        assigneeEmployee: null,
         tags: []
     }
 };

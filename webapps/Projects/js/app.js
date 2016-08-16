@@ -386,9 +386,9 @@ webpackJsonp([0],[
 	var dropdown_1 = __webpack_require__(630);
 	var tabs_1 = __webpack_require__(633);
 	var switch_button_1 = __webpack_require__(636);
-	var pipes_1 = __webpack_require__(638);
 	var notification_1 = __webpack_require__(593);
-	var markdown_1 = __webpack_require__(644);
+	var markdown_1 = __webpack_require__(638);
+	var pipes_1 = __webpack_require__(651);
 	var app_routing_1 = __webpack_require__(657);
 	var translate_service_1 = __webpack_require__(423);
 	var services_1 = __webpack_require__(421);
@@ -404,14 +404,8 @@ webpackJsonp([0],[
 	            declarations: [
 	                app_1.AppComponent,
 	                dashboard_1.DashboardComponent,
-	                projects_1.ProjectsComponent,
-	                project_1.ProjectComponent,
-	                project_list_1.ProjectListComponent,
-	                tasks_1.TasksComponent,
-	                task_1.TaskComponent,
-	                task_list_1.TaskListComponent,
-	                task_stream_1.TaskStreamComponent,
-	                task_filter_1.TaskFilterComponent,
+	                projects_1.ProjectsComponent, project_1.ProjectComponent, project_list_1.ProjectListComponent,
+	                tasks_1.TasksComponent, task_1.TaskComponent, task_list_1.TaskListComponent, task_stream_1.TaskStreamComponent, task_filter_1.TaskFilterComponent,
 	                request_1.RequestComponent,
 	                user_profile_1.UserProfileComponent,
 	                login_1.LoginComponent,
@@ -2352,7 +2346,7 @@ webpackJsonp([0],[
 /* 542 */
 /***/ function(module, exports) {
 
-	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n<div class=\"app-loading\" *ngIf=\"!isReady\">\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"img/logo.png\" />Loading...\r\n</div>\r\n"
+	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n<div class=\"app-loading\" *ngIf=\"!isReady\">\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{'img/logo.png'}}\" />Loading...\r\n</div>\r\n"
 
 /***/ },
 /* 543 */
@@ -8699,7 +8693,7 @@ webpackJsonp([0],[
 	    };
 	    TaskFilterComponent.prototype.setAssigneeUser = function (assigneeUsers) {
 	        if (assigneeUsers.length) {
-	            this.assigneeUserId = assigneeUsers[0].id;
+	            this.assigneeUserId = assigneeUsers[0].userID;
 	        }
 	        else {
 	            this.assigneeUserId = null;
@@ -10447,18 +10441,12 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var date_format_pipe_1 = __webpack_require__(639);
-	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
-	var date_duration_pipe_1 = __webpack_require__(640);
-	exports.DateDurationPipe = date_duration_pipe_1.DateDurationPipe;
-	var text_transform_pipe_1 = __webpack_require__(641);
-	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
-	var values_pipe_1 = __webpack_require__(642);
-	exports.ValuesPipe = values_pipe_1.ValuesPipe;
-	var keys_pipe_1 = __webpack_require__(614);
-	exports.KeysPipe = keys_pipe_1.KeysPipe;
-	var localized_name_pipe_1 = __webpack_require__(643);
-	exports.LocalizedNamePipe = localized_name_pipe_1.LocalizedNamePipe;
+	var markdown_converter_1 = __webpack_require__(639);
+	exports.MarkdownConverter = markdown_converter_1.MarkdownConverter;
+	var markdown_editor_1 = __webpack_require__(649);
+	exports.MarkdownEditorComponent = markdown_editor_1.MarkdownEditorComponent;
+	var marked_pipe_1 = __webpack_require__(650);
+	exports.MarkedPipe = marked_pipe_1.MarkedPipe;
 
 
 /***/ },
@@ -10476,204 +10464,8 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var moment = __webpack_require__(425);
-	var DateFormatPipe = (function () {
-	    function DateFormatPipe() {
-	    }
-	    DateFormatPipe.prototype.transform = function (date, format) {
-	        if (!date) {
-	            return '';
-	        }
-	        if (!format) {
-	            format = 'DD.MM.YYYY HH:mm';
-	        }
-	        var md = moment(date, format);
-	        if (md.isValid()) {
-	            return md.format(format);
-	        }
-	        return '';
-	    };
-	    DateFormatPipe = __decorate([
-	        core_1.Pipe({ name: 'dateFmt' }), 
-	        __metadata('design:paramtypes', [])
-	    ], DateFormatPipe);
-	    return DateFormatPipe;
-	}());
-	exports.DateFormatPipe = DateFormatPipe;
-
-
-/***/ },
-/* 640 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var moment = __webpack_require__(425);
-	var DateDurationPipe = (function () {
-	    function DateDurationPipe() {
-	    }
-	    DateDurationPipe.prototype.transform = function (dateStart, dateEnd) {
-	        if (!dateStart && !dateEnd) {
-	            return '';
-	        }
-	        var sd, ed, dd;
-	        if (dateStart === 'now') {
-	            sd = moment();
-	        }
-	        else {
-	            sd = moment(dateStart, 'DD.MM.YYYY');
-	        }
-	        ed = moment(dateEnd, 'DD.MM.YYYY');
-	        dd = ed.diff(sd, 'days');
-	        return dd ? "(" + dd.toString() + ")" : '';
-	    };
-	    DateDurationPipe = __decorate([
-	        core_1.Pipe({ name: 'dateDuration' }), 
-	        __metadata('design:paramtypes', [])
-	    ], DateDurationPipe);
-	    return DateDurationPipe;
-	}());
-	exports.DateDurationPipe = DateDurationPipe;
-
-
-/***/ },
-/* 641 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var TextTransformPipe = (function () {
-	    function TextTransformPipe() {
-	    }
-	    TextTransformPipe.prototype.transform = function (text, transform) {
-	        switch (transform) {
-	            case 'L':
-	                return text.toLowerCase();
-	            case 'U':
-	                return text.toUpperCase();
-	            default:
-	                return text;
-	        }
-	    };
-	    TextTransformPipe = __decorate([
-	        core_1.Pipe({ name: 'text' }), 
-	        __metadata('design:paramtypes', [])
-	    ], TextTransformPipe);
-	    return TextTransformPipe;
-	}());
-	exports.TextTransformPipe = TextTransformPipe;
-
-
-/***/ },
-/* 642 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var ValuesPipe = (function () {
-	    function ValuesPipe() {
-	    }
-	    ValuesPipe.prototype.transform = function (values, args) {
-	        return Object.keys(values).map(function (key) { return values[key]; });
-	    };
-	    ValuesPipe = __decorate([
-	        core_1.Pipe({ name: 'values' }), 
-	        __metadata('design:paramtypes', [])
-	    ], ValuesPipe);
-	    return ValuesPipe;
-	}());
-	exports.ValuesPipe = ValuesPipe;
-
-
-/***/ },
-/* 643 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var services_1 = __webpack_require__(421);
-	var LocalizedNamePipe = (function () {
-	    function LocalizedNamePipe(appService) {
-	        this.appService = appService;
-	    }
-	    LocalizedNamePipe.prototype.transform = function (model, field, locale) {
-	        return model ? model.localizedName[locale || this.appService.language] || model[field || 'name'] : '';
-	    };
-	    LocalizedNamePipe = __decorate([
-	        core_1.Pipe({ name: 'localizedName' }), 
-	        __metadata('design:paramtypes', [services_1.AppService])
-	    ], LocalizedNamePipe);
-	    return LocalizedNamePipe;
-	}());
-	exports.LocalizedNamePipe = LocalizedNamePipe;
-
-
-/***/ },
-/* 644 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var markdown_converter_1 = __webpack_require__(645);
-	exports.MarkdownConverter = markdown_converter_1.MarkdownConverter;
-	var markdown_editor_1 = __webpack_require__(655);
-	exports.MarkdownEditorComponent = markdown_editor_1.MarkdownEditorComponent;
-	var marked_pipe_1 = __webpack_require__(656);
-	exports.MarkedPipe = marked_pipe_1.MarkedPipe;
-
-
-/***/ },
-/* 645 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var marked = __webpack_require__(646);
-	var toMarkdown = __webpack_require__(647);
+	var marked = __webpack_require__(640);
+	var toMarkdown = __webpack_require__(641);
 	var MarkdownConverter = (function () {
 	    function MarkdownConverter() {
 	    }
@@ -10693,16 +10485,16 @@ webpackJsonp([0],[
 
 
 /***/ },
+/* 640 */,
+/* 641 */,
+/* 642 */,
+/* 643 */,
+/* 644 */,
+/* 645 */,
 /* 646 */,
 /* 647 */,
 /* 648 */,
-/* 649 */,
-/* 650 */,
-/* 651 */,
-/* 652 */,
-/* 653 */,
-/* 654 */,
-/* 655 */
+/* 649 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10716,7 +10508,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(645);
+	var markdown_converter_1 = __webpack_require__(639);
 	var MarkdownEditorComponent = (function () {
 	    function MarkdownEditorComponent(mdc) {
 	        this.mdc = mdc;
@@ -10786,7 +10578,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 656 */
+/* 650 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10800,7 +10592,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(645);
+	var markdown_converter_1 = __webpack_require__(639);
 	var MarkedPipe = (function () {
 	    function MarkedPipe(mdc) {
 	        this.mdc = mdc;
@@ -10815,6 +10607,208 @@ webpackJsonp([0],[
 	    return MarkedPipe;
 	}());
 	exports.MarkedPipe = MarkedPipe;
+
+
+/***/ },
+/* 651 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var date_format_pipe_1 = __webpack_require__(652);
+	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
+	var date_duration_pipe_1 = __webpack_require__(653);
+	exports.DateDurationPipe = date_duration_pipe_1.DateDurationPipe;
+	var text_transform_pipe_1 = __webpack_require__(654);
+	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
+	var values_pipe_1 = __webpack_require__(655);
+	exports.ValuesPipe = values_pipe_1.ValuesPipe;
+	var keys_pipe_1 = __webpack_require__(614);
+	exports.KeysPipe = keys_pipe_1.KeysPipe;
+	var localized_name_pipe_1 = __webpack_require__(656);
+	exports.LocalizedNamePipe = localized_name_pipe_1.LocalizedNamePipe;
+
+
+/***/ },
+/* 652 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var moment = __webpack_require__(425);
+	var DateFormatPipe = (function () {
+	    function DateFormatPipe() {
+	    }
+	    DateFormatPipe.prototype.transform = function (date, format) {
+	        if (!date) {
+	            return '';
+	        }
+	        if (!format) {
+	            format = 'DD.MM.YYYY HH:mm';
+	        }
+	        var md = moment(date, format);
+	        if (md.isValid()) {
+	            return md.format(format);
+	        }
+	        return '';
+	    };
+	    DateFormatPipe = __decorate([
+	        core_1.Pipe({ name: 'dateFmt' }), 
+	        __metadata('design:paramtypes', [])
+	    ], DateFormatPipe);
+	    return DateFormatPipe;
+	}());
+	exports.DateFormatPipe = DateFormatPipe;
+
+
+/***/ },
+/* 653 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var moment = __webpack_require__(425);
+	var DateDurationPipe = (function () {
+	    function DateDurationPipe() {
+	    }
+	    DateDurationPipe.prototype.transform = function (dateStart, dateEnd) {
+	        if (!dateStart && !dateEnd) {
+	            return '';
+	        }
+	        var sd, ed, dd;
+	        if (dateStart === 'now') {
+	            sd = moment();
+	        }
+	        else {
+	            sd = moment(dateStart, 'DD.MM.YYYY');
+	        }
+	        ed = moment(dateEnd, 'DD.MM.YYYY');
+	        dd = ed.diff(sd, 'days');
+	        return dd ? "(" + dd.toString() + ")" : '';
+	    };
+	    DateDurationPipe = __decorate([
+	        core_1.Pipe({ name: 'dateDuration' }), 
+	        __metadata('design:paramtypes', [])
+	    ], DateDurationPipe);
+	    return DateDurationPipe;
+	}());
+	exports.DateDurationPipe = DateDurationPipe;
+
+
+/***/ },
+/* 654 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var TextTransformPipe = (function () {
+	    function TextTransformPipe() {
+	    }
+	    TextTransformPipe.prototype.transform = function (text, transform) {
+	        switch (transform) {
+	            case 'L':
+	                return text.toLowerCase();
+	            case 'U':
+	                return text.toUpperCase();
+	            default:
+	                return text;
+	        }
+	    };
+	    TextTransformPipe = __decorate([
+	        core_1.Pipe({ name: 'text' }), 
+	        __metadata('design:paramtypes', [])
+	    ], TextTransformPipe);
+	    return TextTransformPipe;
+	}());
+	exports.TextTransformPipe = TextTransformPipe;
+
+
+/***/ },
+/* 655 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var ValuesPipe = (function () {
+	    function ValuesPipe() {
+	    }
+	    ValuesPipe.prototype.transform = function (values, args) {
+	        return Object.keys(values).map(function (key) { return values[key]; });
+	    };
+	    ValuesPipe = __decorate([
+	        core_1.Pipe({ name: 'values' }), 
+	        __metadata('design:paramtypes', [])
+	    ], ValuesPipe);
+	    return ValuesPipe;
+	}());
+	exports.ValuesPipe = ValuesPipe;
+
+
+/***/ },
+/* 656 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var services_1 = __webpack_require__(421);
+	var LocalizedNamePipe = (function () {
+	    function LocalizedNamePipe(appService) {
+	        this.appService = appService;
+	    }
+	    LocalizedNamePipe.prototype.transform = function (model, field, locale) {
+	        return model ? model.localizedName[locale || this.appService.language] || model[field || 'name'] : '';
+	    };
+	    LocalizedNamePipe = __decorate([
+	        core_1.Pipe({ name: 'localizedName' }), 
+	        __metadata('design:paramtypes', [services_1.AppService])
+	    ], LocalizedNamePipe);
+	    return LocalizedNamePipe;
+	}());
+	exports.LocalizedNamePipe = LocalizedNamePipe;
 
 
 /***/ },
@@ -11266,7 +11260,7 @@ webpackJsonp([0],[
 	    loading: false,
 	    filter: {
 	        taskType: null,
-	        assigneeUser: null,
+	        assigneeEmployee: null,
 	        tags: []
 	    }
 	};

@@ -1,6 +1,6 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 
-import { Task, TaskType, User, Tag } from '../../models';
+import { Task, TaskType, Employee, Tag } from '../../models';
 
 @Component({
     selector: 'task-filter',
@@ -33,9 +33,9 @@ export class TaskFilterComponent {
         this.updateFilter();
     }
 
-    setAssigneeUser(assigneeUsers: User[]) {
+    setAssigneeUser(assigneeUsers: Employee[]) {
         if (assigneeUsers.length) {
-            this.assigneeUserId = assigneeUsers[0].id;
+            this.assigneeUserId = assigneeUsers[0].userID;
         } else {
             this.assigneeUserId = null;
         }

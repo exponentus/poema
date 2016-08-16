@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { User } from '../models';
 import { parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
