@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -16,10 +15,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from
     selector: 'task',
     template: require('./templates/task.html'),
     directives: [
-        FORM_DIRECTIVES,
         CommentsComponent
-    ],
-    providers: [FormBuilder]
+    ]
 })
 
 export class TaskComponent {
@@ -44,7 +41,6 @@ export class TaskComponent {
         subTask: true,
         comments: false
     };
-    form: ControlGroup;
     showPropertyTabTitle: boolean = true;
     showProperty: boolean = true;
     showSubtasks: boolean = false;
@@ -61,7 +57,6 @@ export class TaskComponent {
         private store: Store<any>,
         private router: Router,
         private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
         private translate: TranslateService,
         private taskActions: TaskActions,
         private taskService: TaskService,

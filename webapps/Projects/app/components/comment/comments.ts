@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { CommentComponent } from './comment';
-import { MarkdownEditorComponent } from '../../shared/markdown/markdown-editor';
 import { NotificationService } from '../../shared/notification';
 import { TaskService } from '../../services';
 import { ITaskState } from '../../reducers/task.reducer';
@@ -38,7 +37,7 @@ import { Task, Comment } from '../../models';
             </section>
         </div>
     `,
-    directives: [CommentComponent, MarkdownEditorComponent]
+    directives: [CommentComponent]
 })
 
 export class CommentsComponent {

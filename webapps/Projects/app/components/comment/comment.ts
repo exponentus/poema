@@ -1,7 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { MarkdownEditorComponent, MarkedPipe } from '../../shared/markdown';
 import { Comment } from '../../models';
 
 @Component({
@@ -40,9 +39,7 @@ import { Comment } from '../../models';
                 </button>
             </div>
         </div>
-    `,
-    directives: [MarkdownEditorComponent],
-    pipes: [MarkedPipe]
+    `
 })
 
 export class CommentComponent {

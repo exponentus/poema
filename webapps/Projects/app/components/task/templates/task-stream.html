@@ -25,7 +25,10 @@
                         <user-input [userIds]="[m.assigneeUserId]"></user-input>
                     </div>
                     <div class="task-list__start_date">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>
-                    <div class="task-list__due_date">{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</div>
+                    <div class="task-list__due_date">
+                        <span>{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</span>
+                        <span>{{m.startDate | dateDuration:m.dueDate}}</span>
+                    </div>
                     <div class="task-list__tags">
                         <tags-input [tagIds]="m.tagIds"></tags-input>
                     </div>

@@ -38,7 +38,7 @@ import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { TAB_DIRECTIVES } from './shared/tabs';
 import { SwitchButtonComponent } from './shared/switch-button';
 
-import { DateFormatPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
+import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe } from './pipes';
 
 import { NotificationService, NotificationComponent } from './shared/notification';
 import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './shared/markdown';
@@ -78,7 +78,7 @@ import { RedirectGuard } from './redirect.guard';
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
         TranslatePipe,
-        DateFormatPipe, TextTransformPipe, LocalizedNamePipe
+        DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe
     ],
     imports: [BrowserModule, HttpModule, APP_ROUTING],
     providers: [

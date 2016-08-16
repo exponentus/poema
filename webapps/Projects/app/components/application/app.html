@@ -1,11 +1,7 @@
 <notification></notification>
 <div class="layout" [class.hidden]="!isReady">
     <div class="content-overlay" (mousedown)="hideNav($event)" (touchstart)="hideNav($event)"></div>
-    <header class="header navbar navbar-fixed-top">
-        <div class="container">
-            <navbar [user]="loggedUser"></navbar>
-        </div>
-    </header>
+    <navbar [user]="loggedUser"></navbar>
     <section class="container">
         <nav data-c="nav" class="aside side-nav"></nav>
         <main class="content">

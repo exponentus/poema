@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -11,11 +10,7 @@ import { Project, Organization, User, Attachment } from '../../models';
 
 @Component({
     selector: 'project',
-    template: require('./templates/project.html'),
-    directives: [
-        FORM_DIRECTIVES
-    ],
-    providers: [FormBuilder]
+    template: require('./templates/project.html')
 })
 
 export class ProjectComponent {
@@ -32,7 +27,6 @@ export class ProjectComponent {
         private store: Store<any>,
         private router: Router,
         private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
         private translate: TranslateService,
         private projectService: ProjectService,
         private notifyService: NotificationService

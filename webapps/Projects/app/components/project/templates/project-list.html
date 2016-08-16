@@ -5,14 +5,14 @@
                 <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
             </label>
             <div class="entry-captions">
-                <span class="project-list__name">{{'name' | translate}}</span>
-                <span class="vw-icon"><i class="fa fa-paperclip"></i></span>
-                <span class="project-list__status">{{'status' | translate}}</span>
-                <span class="project-list__customer">{{'customer' | translate}}</span>
-                <span class="project-list__manager">{{'manager' | translate}}</span>
-                <span class="project-list__programmer">{{'programmer' | translate}}</span>
-                <span class="project-list__tester">{{'tester' | translate}}</span>
-                <span class="project-list__finish_date">{{'finish_date' | translate}}</span>
+                <div class="project-list__name">{{'name' | translate}}</div>
+                <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
+                <div class="project-list__status">{{'status' | translate}}</div>
+                <div class="project-list__customer">{{'customer' | translate}}</div>
+                <div class="project-list__manager">{{'manager' | translate}}</div>
+                <div class="project-list__programmer">{{'programmer' | translate}}</div>
+                <div class="project-list__tester">{{'tester' | translate}}</div>
+                <div class="project-list__finish_date">{{'finish_date' | translate}}</div>
             </div>
         </div>
     </header>
@@ -24,26 +24,29 @@
                 </label>
                 <a class="entry-link" [routerLink]="['./', project.id]">
                     <div class="entry-fields">
-                        <span class="project-list__name">{{project.name}}</span>
-                        <span class="vw-icon">
+                        <div class="project-list__name">{{project.name}}</div>
+                        <div class="vw-icon">
                             <i class="fa fa-paperclip" *ngIf="project.hasAttachments"></i>
-                        </span>
-                        <span class="project-list__status">
+                        </div>
+                        <div class="project-list__status">
                             <span class="status-{{project.status | text:'L'}}">{{project.status | text:'L' | translate}}</span>
-                        </span>
-                        <span class="project-list__customer">
+                        </div>
+                        <div class="project-list__customer">
                             <organization-input [org]="project.customer"></organization-input>
-                        </span>
-                        <span class="project-list__manager">
+                        </div>
+                        <div class="project-list__manager">
                             <user-input [userIds]="[project.managerUserId]"></user-input>
-                        </span>
-                        <span class="project-list__programmer">
+                        </div>
+                        <div class="project-list__programmer">
                             <user-input [userIds]="[project.programmerUserId]"></user-input>
-                        </span>
-                        <span class="project-list__tester">
+                        </div>
+                        <div class="project-list__tester">
                             <user-input [userIds]="[project.testerUserId]"></user-input>
-                        </span>
-                        <span class="project-list__finish_date">{{project.finishDate | dateFmt:'DD.MM.YYYY'}}</span>
+                        </div>
+                        <div class="project-list__finish_date">
+                            {{project.finishDate | dateFmt:'DD.MM.YYYY'}}
+                            <span>{{'now' | dateDuration:project.finishDate}}</span>
+                        </div>
                     </div>
                 </a>
             </div>

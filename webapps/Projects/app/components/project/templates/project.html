@@ -91,6 +91,7 @@
                         <span class="input">{{project.finishDate}}</span>
                     </div>
                     <input class="span2" datepicker *ngIf="isEditable" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" />
+                    <span>{{'now' | dateDuration:project.finishDate}}</span>
                     <error-message [error]="errors.finishDate"></error-message>
                 </div>
             </div>

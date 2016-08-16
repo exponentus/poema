@@ -120,6 +120,7 @@
                             <span class="input">{{task.dueDate}}</span>
                         </div>
                         <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
+                        <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                         <error-message [error]="errors.dueDate"></error-message>
                     </div>
                 </div>

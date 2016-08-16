@@ -11,8 +11,7 @@ import { Project } from '../../models/project';
 
 @Component({
     selector: 'projects',
-    template: require('./templates/projects.html'),
-    changeDetection: ChangeDetectionStrategy.OnPush
+    template: require('./templates/projects.html')
 })
 
 export class ProjectsComponent {
