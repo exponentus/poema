@@ -9,7 +9,7 @@ import { NotificationService } from '../../shared/notification';
 import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
-import { Project, Task, Tag, TaskType, Request, Comment, User, Attachment } from '../../models';
+import { Project, Task, Tag, TaskType, Request, Comment, Employee, Attachment } from '../../models';
 
 @Component({
     selector: 'task',
@@ -385,8 +385,8 @@ export class TaskComponent {
         this.validateForm();
     }
 
-    setAssigneeUser(assigneeUser: User[]) {
-        this.task.assigneeUserId = assigneeUser[0].id;
+    setAssigneeUser(assigneeUser: Employee[]) {
+        this.task.assigneeUserId = assigneeUser[0].userID;
         this.validateForm();
     }
 

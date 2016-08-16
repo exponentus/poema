@@ -33,7 +33,7 @@
                     {{'customer' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.customerId">
-                    <organization-input class="span8" [editable]="isEditable" [orgId]="project.customerId" (select)="setCustomer($event)"></organization-input>
+                    <organization-input class="span8" [editable]="isEditable" [id]="project.customerId" (select)="setCustomer($event)"></organization-input>
                     <error-message [error]="errors.customerId"></error-message>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                     {{'manager' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.managerUserId">
-                    <user-input class="span8" [editable]="isEditable" [userIds]="[project.managerUserId]" (select)="setManager($event)"></user-input>
+                    <employee-input class="span8" [editable]="isEditable" [ids]="[project.managerUserId]" (select)="setManager($event)"></employee-input>
                     <error-message [error]="errors.managerUserId"></error-message>
                 </div>
             </div>
@@ -51,7 +51,7 @@
                     {{'programmer' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.programmerUserId">
-                    <user-input class="span8" [editable]="isEditable" [userIds]="[project.programmerUserId]" (select)="setProgrammer($event)"></user-input>
+                    <employee-input class="span8" [editable]="isEditable" [ids]="[project.programmerUserId]" (select)="setProgrammer($event)"></employee-input>
                     <error-message [error]="errors.programmerUserId"></error-message>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                     {{'tester' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.testerUserId">
-                    <user-input class="span8" [editable]="isEditable" [userIds]="[project.testerUserId]" (select)="setTester($event)"></user-input>
+                    <employee-input class="span8" [editable]="isEditable" [ids]="[project.testerUserId]" (select)="setTester($event)"></employee-input>
                     <error-message [error]="errors.testerUserId"></error-message>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     {{'observers' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.observerUserIds">
-                    <user-input class="span8" [editable]="isEditable" [multiple]="true" [userIds]="project.observerUserIds" (select)="setObserver($event)"></user-input>
+                    <employee-input class="span8" [editable]="isEditable" [multiple]="true" [ids]="project.observerUserIds" (select)="setObserver($event)"></employee-input>
                     <error-message [error]="errors.observerUserIds"></error-message>
                 </div>
             </div>
@@ -110,7 +110,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
-            <user-input [userIds]="[project.authorId]"></user-input>
+            <employee-input [ids]="[project.authorId]"></employee-input>
             <time>{{project.regDate}}</time>
         </div>
     </footer>

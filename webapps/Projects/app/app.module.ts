@@ -24,7 +24,7 @@ import { LoginComponent } from './components/login';
 import {
     OrganizationInputComponent,
     ProjectInputComponent,
-    UserInputComponent,
+    EmployeeInputComponent,
     TaskTypeInputComponent,
     TagsInputComponent,
     RequestTypeInputComponent
@@ -69,7 +69,7 @@ import { RedirectGuard } from './redirect.guard';
         LoginComponent,
         ErrorMessageComponent,
         AttachmentsComponent,
-        OrganizationInputComponent, ProjectInputComponent, UserInputComponent, TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent,
+        OrganizationInputComponent, EmployeeInputComponent, ProjectInputComponent, TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent,
         PaginationComponent,
         NotificationComponent,
         DatepickerDirective,

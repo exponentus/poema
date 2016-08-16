@@ -36,7 +36,7 @@ import { Project } from '../../models';
 })
 
 export class ProjectInputComponent {
-    @Input() projectId: string;
+    @Input() id: string;
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
@@ -52,7 +52,7 @@ export class ProjectInputComponent {
     ngOnInit() {
         this.sub = this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
-            this.project = state.projects.filter(it => it.id == this.projectId)[0];
+            this.project = state.projects.filter(it => it.id == this.id)[0];
             this.searchable = this.projects.length > 13;
         });
     }

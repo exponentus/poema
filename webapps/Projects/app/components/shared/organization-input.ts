@@ -35,7 +35,7 @@ import { Organization } from '../../models';
 })
 
 export class OrganizationInputComponent {
-    @Input() orgId: string;
+    @Input() id: string;
     @Input() org: Organization;
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
@@ -51,8 +51,8 @@ export class OrganizationInputComponent {
     constructor(private staffService: StaffService) { }
 
     ngOnInit() {
-        if (!this.org && this.orgId) {
-            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(payload => {
+        if (!this.org && this.id) {
+            this.staffService.fetchOrganizations({ ids: this.id }).subscribe(payload => {
                 this.org = payload.organizations[0];
             })
         }

@@ -26,7 +26,7 @@ import { TaskType } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="taskTypeId == m.id" *ngFor="let m of taskTypes" (click)="onSelect(m)">
+                    <li class="select-option" [class.selected]="id == m.id" *ngFor="let m of taskTypes" (click)="onSelect(m)">
                         {{m | localizedName}}
                     </li>
                 </ul>
@@ -36,7 +36,7 @@ import { TaskType } from '../../models';
 })
 
 export class TaskTypeInputComponent {
-    @Input() taskTypeId: string;
+    @Input() id: string;
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
@@ -53,7 +53,7 @@ export class TaskTypeInputComponent {
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.taskTypes = state.taskTypes;
-            this.taskType = state.taskTypes.filter(it => it.id == this.taskTypeId)[0];
+            this.taskType = state.taskTypes.filter(it => it.id == this.id)[0];
             this.searchable = this.taskTypes.length > 13;
         });
     }

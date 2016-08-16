@@ -41,7 +41,7 @@
                                 <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
                             </div>
                             <div class="task-list__assignee">
-                                <user-input [userIds]="[task.assigneeUserId]"></user-input>
+                                <employee-input [ids]="[task.assigneeUserId]"></employee-input>
                             </div>
                             <div class="task-list__start_date">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>
                             <div class="task-list__due_date">
@@ -49,7 +49,7 @@
                                 <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                             </div>
                             <div class="task-list__tags">
-                                <tags-input [tagIds]="task.tagIds"></tags-input>
+                                <tags-input [ids]="task.tagIds"></tags-input>
                             </div>
                         </div>
                     </a>

@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Organization, User } from '../models';
+import { Organization, Employee } from '../models';
 
 @Injectable()
 export class StaffActions {
 
     static FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
-    static FETCH_USERS = 'FETCH_USERS';
+    static FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
 
 
     //===================================
@@ -21,10 +21,10 @@ export class StaffActions {
         };
     }
 
-    fetchUsers(users: User[]): Action {
+    fetchEmployees(employees: Employee[]): Action {
         return {
-            type: StaffActions.FETCH_USERS,
-            payload: { users }
+            type: StaffActions.FETCH_EMPLOYEES,
+            payload: { employees }
         };
     }
 }

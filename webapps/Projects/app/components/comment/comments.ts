@@ -32,7 +32,7 @@ import { Task, Comment } from '../../models';
                 <button class="btn btn-add-comment"
                     (click)="addComment()"
                     [disabled]="!commentText">
-                    {{ 'add_comment' | translate }}
+                    {{'add_comment' | translate}}
                 </button>
             </section>
         </div>

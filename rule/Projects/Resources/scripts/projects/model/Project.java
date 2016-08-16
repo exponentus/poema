@@ -81,6 +81,10 @@ public class Project extends SecureAppEntity<UUID> {
         return customer;
     }
 
+    public String getCustomerId() {
+        return customer != null ? customer.getIdentifier() : null;
+    }
+
     public void setCustomer(Organization customer) {
         this.customer = customer;
     }
@@ -152,10 +156,6 @@ public class Project extends SecureAppEntity<UUID> {
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
-    }
-
-    public String getCustomerId() {
-        return customer != null ? customer.getIdentifier() : null;
     }
 
     @Override

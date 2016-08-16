@@ -6,7 +6,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import { ProjectService } from '../../services';
-import { Project, Organization, User, Attachment } from '../../models';
+import { Project, Organization, Employee, Attachment } from '../../models';
 
 @Component({
     selector: 'project',
@@ -130,27 +130,27 @@ export class ProjectComponent {
         this.validateForm('customerId');
     }
 
-    setManager(user: User[]) {
-        this.project.managerUserId = user[0].id;
+    setManager(employee: Employee[]) {
+        this.project.managerUserId = employee[0].userID;
         this.validateForm('managerUserId');
     }
 
-    setProgrammer(user: User[]) {
-        this.project.programmerUserId = user[0].id;
+    setProgrammer(employee: Employee[]) {
+        this.project.programmerUserId = employee[0].userID;
         this.validateForm('programmerUserId');
     }
 
-    setTester(user: User[]) {
-        this.project.testerUserId = user[0].id;
+    setTester(employee: Employee[]) {
+        this.project.testerUserId = employee[0].userID;
         this.validateForm('testerUserId');
     }
 
-    setObserver(observers: User[]) {
-        this.project.observerUserIds = observers.map(it => it.id);
+    setObserver(observers: Employee[]) {
+        this.project.observerUserIds = observers.map(it => it.userID);
         this.validateForm('observerUserIds');
     }
 
-    removeObserver(observer: User, $event) {
+    removeObserver(observer: Employee, $event) {
         this.project.observerUserIds.forEach((id, index) => {
             if (id === observer.id) {
                 this.project.observerUserIds.splice(index, 1);

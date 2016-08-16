@@ -68,7 +68,7 @@
                         {{'project' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.projectId">
-                        <project-input class="span8" [editable]="isEditable" [projectId]="task.projectId" (select)="setProject($event)"></project-input>
+                        <project-input class="span8" [editable]="isEditable" [id]="task.projectId" (select)="setProject($event)"></project-input>
                         <error-message [error]="errors.projectId"></error-message>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         {{'task_type' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.taskTypeId">
-                        <task-type-input class="span8" [editable]="isEditable" [taskTypeId]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
+                        <task-type-input class="span8" [editable]="isEditable" [id]="task.taskTypeId" (select)="setTaskType($event)"></task-type-input>
                         <error-message [error]="errors.taskTypeId"></error-message>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
                         {{'assignee_user' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.assigneeUserId">
-                        <user-input class="span8" [editable]="isEditable" [userIds]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></user-input>
+                        <employee-input class="span8" [editable]="isEditable" [ids]="[task.assigneeUserId]" (select)="setAssigneeUser($event)"></employee-input>
                         <error-message [error]="errors.assigneeUserId"></error-message>
                     </div>
                 </div>
@@ -129,7 +129,7 @@
                         {{'tags' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.tagIds">
-                        <tags-input class="span8" [editable]="isEditable" [tagIds]="task.tagIds" (select)="setTags($event)"></tags-input>
+                        <tags-input class="span8" [editable]="isEditable" [ids]="task.tagIds" (select)="setTags($event)"></tags-input>
                         <error-message [error]="errors.tagIds"></error-message>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">
             <span>{{'author' | translate}}</span>
-            <user-input [editable]="false" [userIds]="[task.authorId]"></user-input>
+            <employee-input [editable]="false" [ids]="[task.authorId]"></employee-input>
             <time>{{task.regDate}}</time>
         </div>
     </footer>

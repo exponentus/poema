@@ -1,5 +1,5 @@
-export { User } from './user';
 export { Organization } from './organization';
+export { Employee } from './employee';
 export { Attachment } from './attachment';
 export { Project } from './project';
 export { Task } from './task';
@@ -8,3 +8,4 @@ export { TaskType } from './task-type';
 export { Comment } from './comment';
 export { Request } from './request';
 export { RequestType } from './request-type';
+export { User } from './user';

@@ -76,8 +76,8 @@ export class AppComponent {
             this.store.dispatch(this.staffActions.fetchOrganizations(payload.organizations));
         });
 
-        this.staffService.fetchUsers().subscribe(payload => {
-            this.store.dispatch(this.staffActions.fetchUsers(payload.users));
+        this.staffService.fetchEmployees().subscribe(payload => {
+            this.store.dispatch(this.staffActions.fetchEmployees(payload.employees));
         });
 
         this.isMobileDevice = this.isMobile();

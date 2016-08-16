@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { Organization, User } from '../models';
+import { Organization, Employee } from '../models';
 import { createURLSearchParams } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -30,12 +30,12 @@ export class StaffService {
             });
     }
 
-    fetchUsers() {
-        return this.http.get('p?id=users', { headers: HEADERS })
+    fetchEmployees() {
+        return this.http.get('/Staff/p?id=employees', { headers: HEADERS })
             .map(response => response.json().objects[0])
             .map(data => {
                 return {
-                    users: <User[]>data.list
+                    employees: <Employee[]>data.list
                 }
             });
     }

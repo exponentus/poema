@@ -49,7 +49,7 @@ import { Tag } from '../../models';
 })
 
 export class TagsInputComponent {
-    @Input() tagIds: string[] = [];
+    @Input() ids: string[] = [];
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
@@ -66,8 +66,8 @@ export class TagsInputComponent {
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.tags = state.tags;
-            if (this.tagIds) {
-                this.selectedTags = state.tags.filter(it => this.tagIds.indexOf(it.id) != -1);
+            if (this.ids) {
+                this.selectedTags = state.tags.filter(it => this.ids.indexOf(it.id) != -1);
             }
             this.searchable = this.tags.length > 13;
         });
@@ -78,8 +78,8 @@ export class TagsInputComponent {
     }
 
     getTags() {
-        if (this.tagIds) {
-            return this.tags.filter(it => this.tagIds.indexOf(it.id) == -1);
+        if (this.ids) {
+            return this.tags.filter(it => this.ids.indexOf(it.id) == -1);
         } else {
             return this.tags;
         }
@@ -92,20 +92,20 @@ export class TagsInputComponent {
     clear($event) {
         $event.stopPropagation();
         this.selectedTags = [];
-        this.tagIds = [];
+        this.ids = [];
         this.select.emit(this.selectedTags);
     }
 
     add(tag: Tag) {
         this.selectedTags.push(tag);
-        this.tagIds = this.selectedTags.map(it => it.id);
+        this.ids = this.selectedTags.map(it => it.id);
         this.select.emit(this.selectedTags);
     }
 
     remove(tag: Tag, $event) {
         $event.stopPropagation();
         this.selectedTags = this.selectedTags.filter(it => it.id != tag.id);
-        this.tagIds = this.selectedTags.map(it => it.id);
+        this.ids = this.selectedTags.map(it => it.id);
         this.select.emit(this.selectedTags);
     }
 

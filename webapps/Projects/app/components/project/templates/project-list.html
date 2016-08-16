@@ -35,13 +35,13 @@
                             <organization-input [org]="project.customer"></organization-input>
                         </div>
                         <div class="project-list__manager">
-                            <user-input [userIds]="[project.managerUserId]"></user-input>
+                            <employee-input [ids]="[project.managerUserId]"></employee-input>
                         </div>
                         <div class="project-list__programmer">
-                            <user-input [userIds]="[project.programmerUserId]"></user-input>
+                            <employee-input [ids]="[project.programmerUserId]"></employee-input>
                         </div>
                         <div class="project-list__tester">
-                            <user-input [userIds]="[project.testerUserId]"></user-input>
+                            <employee-input [ids]="[project.testerUserId]"></employee-input>
                         </div>
                         <div class="project-list__finish_date">
                             {{project.finishDate | dateFmt:'DD.MM.YYYY'}}

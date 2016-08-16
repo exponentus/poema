@@ -1,15 +1,15 @@
-import { Organization, User } from '../models';
+import { Organization, Employee } from '../models';
 
 import { StaffActions } from '../actions';
 
 export interface IStaffState {
     organizations: Organization[],
-    users: User[]
+    employees: Employee[]
 };
 
 const initialState: IStaffState = {
     organizations: [],
-    users: []
+    employees: []
 };
 
 export const staffReducer = (state = initialState, {type, payload}): IStaffState => {
@@ -18,9 +18,9 @@ export const staffReducer = (state = initialState, {type, payload}): IStaffState
             return Object.assign({}, state, {
                 organizations: payload.organizations
             });
-        case StaffActions.FETCH_USERS:
+        case StaffActions.FETCH_EMPLOYEES:
             return Object.assign({}, state, {
-                users: payload.users
+                employees: payload.employees
             });
         default:
             return state;

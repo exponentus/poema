@@ -366,36 +366,36 @@ webpackJsonp([0],[
 	var common_1 = __webpack_require__(206);
 	var ng2_translate_1 = __webpack_require__(361);
 	var app_1 = __webpack_require__(387);
-	var dashboard_1 = __webpack_require__(542);
-	var projects_1 = __webpack_require__(543);
-	var project_1 = __webpack_require__(591);
-	var project_list_1 = __webpack_require__(597);
-	var tasks_1 = __webpack_require__(599);
-	var task_1 = __webpack_require__(601);
-	var task_list_1 = __webpack_require__(605);
-	var task_stream_1 = __webpack_require__(607);
-	var task_filter_1 = __webpack_require__(609);
-	var request_1 = __webpack_require__(610);
-	var user_profile_1 = __webpack_require__(612);
-	var login_1 = __webpack_require__(615);
-	var shared_1 = __webpack_require__(616);
-	var attachments_1 = __webpack_require__(623);
-	var error_message_1 = __webpack_require__(624);
-	var pagination_1 = __webpack_require__(625);
-	var datepicker_1 = __webpack_require__(627);
-	var dropdown_1 = __webpack_require__(629);
-	var tabs_1 = __webpack_require__(632);
-	var switch_button_1 = __webpack_require__(635);
-	var pipes_1 = __webpack_require__(637);
-	var notification_1 = __webpack_require__(592);
-	var markdown_1 = __webpack_require__(643);
-	var app_routing_1 = __webpack_require__(656);
+	var dashboard_1 = __webpack_require__(543);
+	var projects_1 = __webpack_require__(544);
+	var project_1 = __webpack_require__(592);
+	var project_list_1 = __webpack_require__(598);
+	var tasks_1 = __webpack_require__(600);
+	var task_1 = __webpack_require__(602);
+	var task_list_1 = __webpack_require__(606);
+	var task_stream_1 = __webpack_require__(608);
+	var task_filter_1 = __webpack_require__(610);
+	var request_1 = __webpack_require__(611);
+	var user_profile_1 = __webpack_require__(613);
+	var login_1 = __webpack_require__(616);
+	var shared_1 = __webpack_require__(617);
+	var attachments_1 = __webpack_require__(624);
+	var error_message_1 = __webpack_require__(625);
+	var pagination_1 = __webpack_require__(626);
+	var datepicker_1 = __webpack_require__(628);
+	var dropdown_1 = __webpack_require__(630);
+	var tabs_1 = __webpack_require__(633);
+	var switch_button_1 = __webpack_require__(636);
+	var pipes_1 = __webpack_require__(638);
+	var notification_1 = __webpack_require__(593);
+	var markdown_1 = __webpack_require__(644);
+	var app_routing_1 = __webpack_require__(657);
 	var translate_service_1 = __webpack_require__(423);
 	var services_1 = __webpack_require__(421);
-	var store_1 = __webpack_require__(659);
+	var store_1 = __webpack_require__(660);
 	var actions_1 = __webpack_require__(416);
-	var auth_guard_1 = __webpack_require__(657);
-	var redirect_guard_1 = __webpack_require__(658);
+	var auth_guard_1 = __webpack_require__(658);
+	var redirect_guard_1 = __webpack_require__(659);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
@@ -417,7 +417,7 @@ webpackJsonp([0],[
 	                login_1.LoginComponent,
 	                error_message_1.ErrorMessageComponent,
 	                attachments_1.AttachmentsComponent,
-	                shared_1.OrganizationInputComponent, shared_1.ProjectInputComponent, shared_1.UserInputComponent, shared_1.TaskTypeInputComponent, shared_1.TagsInputComponent, shared_1.RequestTypeInputComponent,
+	                shared_1.OrganizationInputComponent, shared_1.EmployeeInputComponent, shared_1.ProjectInputComponent, shared_1.TaskTypeInputComponent, shared_1.TagsInputComponent, shared_1.RequestTypeInputComponent,
 	                pagination_1.PaginationComponent,
 	                notification_1.NotificationComponent,
 	                datepicker_1.DatepickerDirective,
@@ -601,8 +601,8 @@ webpackJsonp([0],[
 	        this.staffService.fetchOrganizations().subscribe(function (payload) {
 	            _this.store.dispatch(_this.staffActions.fetchOrganizations(payload.organizations));
 	        });
-	        this.staffService.fetchUsers().subscribe(function (payload) {
-	            _this.store.dispatch(_this.staffActions.fetchUsers(payload.users));
+	        this.staffService.fetchEmployees().subscribe(function (payload) {
+	            _this.store.dispatch(_this.staffActions.fetchEmployees(payload.employees));
 	        });
 	        this.isMobileDevice = this.isMobile();
 	        var userLang = navigator.language.split('-')[0];
@@ -645,7 +645,7 @@ webpackJsonp([0],[
 	    AppComponent = __decorate([
 	        core_1.Component({
 	            selector: 'app',
-	            template: __webpack_require__(541),
+	            template: __webpack_require__(542),
 	            directives: [navbar_1.NavbarComponent, nav_1.NavComponent],
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, actions_1.AppActions, actions_1.ReferenceActions, actions_1.StaffActions, services_1.AppService, services_1.ReferenceService, services_1.StaffService, ng2_translate_1.TranslateService])
@@ -1531,14 +1531,14 @@ webpackJsonp([0],[
 	            payload: { organizations: organizations }
 	        };
 	    };
-	    StaffActions.prototype.fetchUsers = function (users) {
+	    StaffActions.prototype.fetchEmployees = function (employees) {
 	        return {
-	            type: StaffActions.FETCH_USERS,
-	            payload: { users: users }
+	            type: StaffActions.FETCH_EMPLOYEES,
+	            payload: { employees: employees }
 	        };
 	    };
 	    StaffActions.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
-	    StaffActions.FETCH_USERS = 'FETCH_USERS';
+	    StaffActions.FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
 	    StaffActions = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [])
@@ -1561,11 +1561,11 @@ webpackJsonp([0],[
 	exports.ProjectService = project_service_1.ProjectService;
 	var task_service_1 = __webpack_require__(424);
 	exports.TaskService = task_service_1.TaskService;
-	var reference_service_1 = __webpack_require__(538);
+	var reference_service_1 = __webpack_require__(539);
 	exports.ReferenceService = reference_service_1.ReferenceService;
-	var staff_service_1 = __webpack_require__(539);
+	var staff_service_1 = __webpack_require__(540);
 	exports.StaffService = staff_service_1.StaffService;
-	var upload_service_1 = __webpack_require__(540);
+	var upload_service_1 = __webpack_require__(541);
 	exports.UploadService = upload_service_1.UploadService;
 	exports.APP_SERVICES = [
 	    app_service_1.AppService,
@@ -1989,26 +1989,28 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var user_1 = __webpack_require__(409);
-	exports.User = user_1.User;
 	var organization_1 = __webpack_require__(529);
 	exports.Organization = organization_1.Organization;
-	var attachment_1 = __webpack_require__(530);
+	var employee_1 = __webpack_require__(530);
+	exports.Employee = employee_1.Employee;
+	var attachment_1 = __webpack_require__(531);
 	exports.Attachment = attachment_1.Attachment;
-	var project_1 = __webpack_require__(531);
+	var project_1 = __webpack_require__(532);
 	exports.Project = project_1.Project;
-	var task_1 = __webpack_require__(532);
+	var task_1 = __webpack_require__(533);
 	exports.Task = task_1.Task;
-	var tag_1 = __webpack_require__(533);
+	var tag_1 = __webpack_require__(534);
 	exports.Tag = tag_1.Tag;
-	var task_type_1 = __webpack_require__(534);
+	var task_type_1 = __webpack_require__(535);
 	exports.TaskType = task_type_1.TaskType;
-	var comment_1 = __webpack_require__(535);
+	var comment_1 = __webpack_require__(536);
 	exports.Comment = comment_1.Comment;
-	var request_1 = __webpack_require__(536);
+	var request_1 = __webpack_require__(537);
 	exports.Request = request_1.Request;
-	var request_type_1 = __webpack_require__(537);
+	var request_type_1 = __webpack_require__(538);
 	exports.RequestType = request_type_1.RequestType;
+	var user_1 = __webpack_require__(409);
+	exports.User = user_1.User;
 
 
 /***/ },
@@ -2030,6 +2032,21 @@ webpackJsonp([0],[
 /***/ function(module, exports) {
 
 	"use strict";
+	var Employee = (function () {
+	    function Employee() {
+	        this.id = '';
+	        this.name = '@anonymous';
+	    }
+	    return Employee;
+	}());
+	exports.Employee = Employee;
+
+
+/***/ },
+/* 531 */
+/***/ function(module, exports) {
+
+	"use strict";
 	var Attachment = (function () {
 	    function Attachment() {
 	        this.id = '';
@@ -2040,7 +2057,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 531 */
+/* 532 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2057,7 +2074,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 532 */
+/* 533 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2076,7 +2093,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 533 */
+/* 534 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2090,7 +2107,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 534 */
+/* 535 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2104,7 +2121,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 535 */
+/* 536 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2119,7 +2136,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 536 */
+/* 537 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2135,7 +2152,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 537 */
+/* 538 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2149,7 +2166,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 538 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2212,7 +2229,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 539 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2250,12 +2267,12 @@ webpackJsonp([0],[
 	            };
 	        });
 	    };
-	    StaffService.prototype.fetchUsers = function () {
-	        return this.http.get('p?id=users', { headers: HEADERS })
+	    StaffService.prototype.fetchEmployees = function () {
+	        return this.http.get('/Staff/p?id=employees', { headers: HEADERS })
 	            .map(function (response) { return response.json().objects[0]; })
 	            .map(function (data) {
 	            return {
-	                users: data.list
+	                employees: data.list
 	            };
 	        });
 	    };
@@ -2269,7 +2286,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 540 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2332,13 +2349,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 541 */
+/* 542 */
 /***/ function(module, exports) {
 
-	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n"
+	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n<div class=\"app-loading\" *ngIf=\"!isReady\">\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"img/logo.png\" />Loading...\r\n</div>\r\n"
 
 /***/ },
-/* 542 */
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2404,7 +2421,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 543 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2418,9 +2435,9 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var store_1 = __webpack_require__(388);
-	var staff_service_1 = __webpack_require__(539);
+	var staff_service_1 = __webpack_require__(540);
 	var project_service_1 = __webpack_require__(413);
 	var project_actions_1 = __webpack_require__(412);
 	var ProjectsComponent = (function () {
@@ -2488,7 +2505,7 @@ webpackJsonp([0],[
 	    ProjectsComponent = __decorate([
 	        core_1.Component({
 	            selector: 'projects',
-	            template: __webpack_require__(590)
+	            template: __webpack_require__(591)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService])
 	    ], ProjectsComponent);
@@ -2496,56 +2513,6 @@ webpackJsonp([0],[
 	}());
 	exports.ProjectsComponent = ProjectsComponent;
 
-
-/***/ },
-/* 544 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * @license
-	 * Copyright Google Inc. All Rights Reserved.
-	 *
-	 * Use of this source code is governed by an MIT-style license that can be
-	 * found in the LICENSE file at https://angular.io/license
-	 */
-	"use strict";
-	var common_router_providers_1 = __webpack_require__(545);
-	exports.provideRouterConfig = common_router_providers_1.provideRouterConfig;
-	exports.provideRoutes = common_router_providers_1.provideRoutes;
-	var router_link_1 = __webpack_require__(585);
-	exports.RouterLink = router_link_1.RouterLink;
-	exports.RouterLinkWithHref = router_link_1.RouterLinkWithHref;
-	var router_link_active_1 = __webpack_require__(586);
-	exports.RouterLinkActive = router_link_active_1.RouterLinkActive;
-	var router_outlet_1 = __webpack_require__(587);
-	exports.RouterOutlet = router_outlet_1.RouterOutlet;
-	var router_1 = __webpack_require__(546);
-	exports.NavigationCancel = router_1.NavigationCancel;
-	exports.NavigationEnd = router_1.NavigationEnd;
-	exports.NavigationError = router_1.NavigationError;
-	exports.NavigationStart = router_1.NavigationStart;
-	exports.Router = router_1.Router;
-	exports.RoutesRecognized = router_1.RoutesRecognized;
-	var router_module_1 = __webpack_require__(588);
-	exports.ROUTER_DIRECTIVES = router_module_1.ROUTER_DIRECTIVES;
-	exports.RouterModule = router_module_1.RouterModule;
-	var router_outlet_map_1 = __webpack_require__(584);
-	exports.RouterOutletMap = router_outlet_map_1.RouterOutletMap;
-	var router_providers_1 = __webpack_require__(589);
-	exports.provideRouter = router_providers_1.provideRouter;
-	var router_state_1 = __webpack_require__(576);
-	exports.ActivatedRoute = router_state_1.ActivatedRoute;
-	exports.ActivatedRouteSnapshot = router_state_1.ActivatedRouteSnapshot;
-	exports.RouterState = router_state_1.RouterState;
-	exports.RouterStateSnapshot = router_state_1.RouterStateSnapshot;
-	var shared_1 = __webpack_require__(571);
-	exports.PRIMARY_OUTLET = shared_1.PRIMARY_OUTLET;
-	var url_tree_1 = __webpack_require__(572);
-	exports.DefaultUrlSerializer = url_tree_1.DefaultUrlSerializer;
-	exports.UrlSegment = url_tree_1.UrlSegment;
-	exports.UrlSerializer = url_tree_1.UrlSerializer;
-	exports.UrlTree = url_tree_1.UrlTree;
-	//# sourceMappingURL=index.js.map
 
 /***/ },
 /* 545 */
@@ -2559,14 +2526,64 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
+	var common_router_providers_1 = __webpack_require__(546);
+	exports.provideRouterConfig = common_router_providers_1.provideRouterConfig;
+	exports.provideRoutes = common_router_providers_1.provideRoutes;
+	var router_link_1 = __webpack_require__(586);
+	exports.RouterLink = router_link_1.RouterLink;
+	exports.RouterLinkWithHref = router_link_1.RouterLinkWithHref;
+	var router_link_active_1 = __webpack_require__(587);
+	exports.RouterLinkActive = router_link_active_1.RouterLinkActive;
+	var router_outlet_1 = __webpack_require__(588);
+	exports.RouterOutlet = router_outlet_1.RouterOutlet;
+	var router_1 = __webpack_require__(547);
+	exports.NavigationCancel = router_1.NavigationCancel;
+	exports.NavigationEnd = router_1.NavigationEnd;
+	exports.NavigationError = router_1.NavigationError;
+	exports.NavigationStart = router_1.NavigationStart;
+	exports.Router = router_1.Router;
+	exports.RoutesRecognized = router_1.RoutesRecognized;
+	var router_module_1 = __webpack_require__(589);
+	exports.ROUTER_DIRECTIVES = router_module_1.ROUTER_DIRECTIVES;
+	exports.RouterModule = router_module_1.RouterModule;
+	var router_outlet_map_1 = __webpack_require__(585);
+	exports.RouterOutletMap = router_outlet_map_1.RouterOutletMap;
+	var router_providers_1 = __webpack_require__(590);
+	exports.provideRouter = router_providers_1.provideRouter;
+	var router_state_1 = __webpack_require__(577);
+	exports.ActivatedRoute = router_state_1.ActivatedRoute;
+	exports.ActivatedRouteSnapshot = router_state_1.ActivatedRouteSnapshot;
+	exports.RouterState = router_state_1.RouterState;
+	exports.RouterStateSnapshot = router_state_1.RouterStateSnapshot;
+	var shared_1 = __webpack_require__(572);
+	exports.PRIMARY_OUTLET = shared_1.PRIMARY_OUTLET;
+	var url_tree_1 = __webpack_require__(573);
+	exports.DefaultUrlSerializer = url_tree_1.DefaultUrlSerializer;
+	exports.UrlSegment = url_tree_1.UrlSegment;
+	exports.UrlSerializer = url_tree_1.UrlSerializer;
+	exports.UrlTree = url_tree_1.UrlTree;
+	//# sourceMappingURL=index.js.map
+
+/***/ },
+/* 546 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license
+	 * Copyright Google Inc. All Rights Reserved.
+	 *
+	 * Use of this source code is governed by an MIT-style license that can be
+	 * found in the LICENSE file at https://angular.io/license
+	 */
+	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(546);
-	var router_config_loader_1 = __webpack_require__(566);
-	var router_outlet_map_1 = __webpack_require__(584);
-	var router_state_1 = __webpack_require__(576);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
+	var router_1 = __webpack_require__(547);
+	var router_config_loader_1 = __webpack_require__(567);
+	var router_outlet_map_1 = __webpack_require__(585);
+	var router_state_1 = __webpack_require__(577);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
 	exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
 	function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
 	    if (opts === void 0) { opts = {}; }
@@ -2690,7 +2707,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=common_router_providers.js.map
 
 /***/ },
-/* 546 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2702,26 +2719,26 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	__webpack_require__(374);
-	__webpack_require__(547);
-	__webpack_require__(549);
+	__webpack_require__(548);
 	__webpack_require__(550);
-	__webpack_require__(552);
+	__webpack_require__(551);
+	__webpack_require__(553);
 	var core_1 = __webpack_require__(11);
 	var Subject_1 = __webpack_require__(69);
-	var from_1 = __webpack_require__(554);
+	var from_1 = __webpack_require__(555);
 	var of_1 = __webpack_require__(365);
-	var apply_redirects_1 = __webpack_require__(558);
-	var config_1 = __webpack_require__(573);
-	var create_router_state_1 = __webpack_require__(574);
-	var create_url_tree_1 = __webpack_require__(578);
-	var recognize_1 = __webpack_require__(579);
-	var resolve_1 = __webpack_require__(580);
-	var router_config_loader_1 = __webpack_require__(566);
-	var router_outlet_map_1 = __webpack_require__(584);
-	var router_state_1 = __webpack_require__(576);
-	var shared_1 = __webpack_require__(571);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
+	var apply_redirects_1 = __webpack_require__(559);
+	var config_1 = __webpack_require__(574);
+	var create_router_state_1 = __webpack_require__(575);
+	var create_url_tree_1 = __webpack_require__(579);
+	var recognize_1 = __webpack_require__(580);
+	var resolve_1 = __webpack_require__(581);
+	var router_config_loader_1 = __webpack_require__(567);
+	var router_outlet_map_1 = __webpack_require__(585);
+	var router_state_1 = __webpack_require__(577);
+	var shared_1 = __webpack_require__(572);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
 	/**
 	 * An event triggered when a navigation starts
 	 *
@@ -3436,9 +3453,9 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 547 */,
 /* 548 */,
-/* 549 */
+/* 549 */,
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3448,17 +3465,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=mergeAll.js.map
 
 /***/ },
-/* 550 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var reduce_1 = __webpack_require__(551);
+	var reduce_1 = __webpack_require__(552);
 	Observable_1.Observable.prototype.reduce = reduce_1.reduce;
 	//# sourceMappingURL=reduce.js.map
 
 /***/ },
-/* 551 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3547,17 +3564,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=reduce.js.map
 
 /***/ },
-/* 552 */
+/* 553 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var every_1 = __webpack_require__(553);
+	var every_1 = __webpack_require__(554);
 	Observable_1.Observable.prototype.every = every_1.every;
 	//# sourceMappingURL=every.js.map
 
 /***/ },
-/* 553 */
+/* 554 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3630,16 +3647,16 @@ webpackJsonp([0],[
 	//# sourceMappingURL=every.js.map
 
 /***/ },
-/* 554 */
+/* 555 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var FromObservable_1 = __webpack_require__(555);
+	var FromObservable_1 = __webpack_require__(556);
 	exports.from = FromObservable_1.FromObservable.create;
 	//# sourceMappingURL=from.js.map
 
 /***/ },
-/* 555 */
+/* 556 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3653,9 +3670,9 @@ webpackJsonp([0],[
 	var isPromise_1 = __webpack_require__(381);
 	var isScheduler_1 = __webpack_require__(369);
 	var PromiseObservable_1 = __webpack_require__(259);
-	var IteratorObservable_1 = __webpack_require__(556);
+	var IteratorObservable_1 = __webpack_require__(557);
 	var ArrayObservable_1 = __webpack_require__(366);
-	var ArrayLikeObservable_1 = __webpack_require__(557);
+	var ArrayLikeObservable_1 = __webpack_require__(558);
 	var iterator_1 = __webpack_require__(382);
 	var Observable_1 = __webpack_require__(70);
 	var observeOn_1 = __webpack_require__(400);
@@ -3776,7 +3793,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=FromObservable.js.map
 
 /***/ },
-/* 556 */
+/* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3974,7 +3991,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=IteratorObservable.js.map
 
 /***/ },
-/* 557 */
+/* 558 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4054,7 +4071,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=ArrayLikeObservable.js.map
 
 /***/ },
-/* 558 */
+/* 559 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4065,17 +4082,17 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	__webpack_require__(559);
-	__webpack_require__(562);
-	__webpack_require__(564);
+	__webpack_require__(560);
+	__webpack_require__(563);
+	__webpack_require__(565);
 	var Observable_1 = __webpack_require__(70);
-	var from_1 = __webpack_require__(554);
+	var from_1 = __webpack_require__(555);
 	var of_1 = __webpack_require__(365);
-	var EmptyError_1 = __webpack_require__(561);
-	var router_config_loader_1 = __webpack_require__(566);
-	var shared_1 = __webpack_require__(571);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
+	var EmptyError_1 = __webpack_require__(562);
+	var router_config_loader_1 = __webpack_require__(567);
+	var shared_1 = __webpack_require__(572);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
 	var NoMatch = (function () {
 	    function NoMatch(segmentGroup) {
 	        if (segmentGroup === void 0) { segmentGroup = null; }
@@ -4432,17 +4449,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=apply_redirects.js.map
 
 /***/ },
-/* 559 */
+/* 560 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var first_1 = __webpack_require__(560);
+	var first_1 = __webpack_require__(561);
 	Observable_1.Observable.prototype.first = first_1.first;
 	//# sourceMappingURL=first.js.map
 
 /***/ },
-/* 560 */
+/* 561 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4452,7 +4469,7 @@ webpackJsonp([0],[
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(74);
-	var EmptyError_1 = __webpack_require__(561);
+	var EmptyError_1 = __webpack_require__(562);
 	/**
 	 * Emits only the first value (or the first value that meets some condition)
 	 * emitted by the source Observable.
@@ -4595,7 +4612,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=first.js.map
 
 /***/ },
-/* 561 */
+/* 562 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4626,19 +4643,19 @@ webpackJsonp([0],[
 	//# sourceMappingURL=EmptyError.js.map
 
 /***/ },
-/* 562 */,
 /* 563 */,
-/* 564 */
+/* 564 */,
+/* 565 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var concatAll_1 = __webpack_require__(565);
+	var concatAll_1 = __webpack_require__(566);
 	Observable_1.Observable.prototype.concatAll = concatAll_1.concatAll;
 	//# sourceMappingURL=concatAll.js.map
 
 /***/ },
-/* 565 */
+/* 566 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4692,7 +4709,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=concatAll.js.map
 
 /***/ },
-/* 566 */
+/* 567 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4704,8 +4721,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var fromPromise_1 = __webpack_require__(567);
-	var collection_1 = __webpack_require__(568);
+	var fromPromise_1 = __webpack_require__(568);
+	var collection_1 = __webpack_require__(569);
 	/**
 	 * @deprecated use Routes
 	 */
@@ -4736,7 +4753,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_config_loader.js.map
 
 /***/ },
-/* 567 */
+/* 568 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4745,7 +4762,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=fromPromise.js.map
 
 /***/ },
-/* 568 */
+/* 569 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4756,12 +4773,12 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	__webpack_require__(564);
-	__webpack_require__(569);
+	__webpack_require__(565);
+	__webpack_require__(570);
 	var Observable_1 = __webpack_require__(70);
-	var fromPromise_1 = __webpack_require__(567);
+	var fromPromise_1 = __webpack_require__(568);
 	var of_1 = __webpack_require__(365);
-	var shared_1 = __webpack_require__(571);
+	var shared_1 = __webpack_require__(572);
 	function shallowEqualArrays(a, b) {
 	    if (a.length !== b.length)
 	        return false;
@@ -4879,17 +4896,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=collection.js.map
 
 /***/ },
-/* 569 */
+/* 570 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var last_1 = __webpack_require__(570);
+	var last_1 = __webpack_require__(571);
 	Observable_1.Observable.prototype.last = last_1.last;
 	//# sourceMappingURL=last.js.map
 
 /***/ },
-/* 570 */
+/* 571 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4899,7 +4916,7 @@ webpackJsonp([0],[
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(74);
-	var EmptyError_1 = __webpack_require__(561);
+	var EmptyError_1 = __webpack_require__(562);
 	/**
 	 * Returns an Observable that emits only the last item emitted by the source Observable.
 	 * It optionally takes a predicate function as a parameter, in which case, rather than emitting
@@ -5012,7 +5029,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=last.js.map
 
 /***/ },
-/* 571 */
+/* 572 */
 /***/ function(module, exports) {
 
 	/**
@@ -5033,7 +5050,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=shared.js.map
 
 /***/ },
-/* 572 */
+/* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5044,8 +5061,8 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var shared_1 = __webpack_require__(571);
-	var collection_1 = __webpack_require__(568);
+	var shared_1 = __webpack_require__(572);
+	var collection_1 = __webpack_require__(569);
 	function createEmptyUrlTree() {
 	    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 	}
@@ -5484,7 +5501,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=url_tree.js.map
 
 /***/ },
-/* 573 */
+/* 574 */
 /***/ function(module, exports) {
 
 	/**
@@ -5537,7 +5554,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=config.js.map
 
 /***/ },
-/* 574 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5548,9 +5565,9 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var BehaviorSubject_1 = __webpack_require__(575);
-	var router_state_1 = __webpack_require__(576);
-	var tree_1 = __webpack_require__(577);
+	var BehaviorSubject_1 = __webpack_require__(576);
+	var router_state_1 = __webpack_require__(577);
+	var tree_1 = __webpack_require__(578);
 	function createRouterState(curr, prevState) {
 	    var root = createNode(curr._root, prevState ? prevState._root : undefined);
 	    return new router_state_1.RouterState(root, curr);
@@ -5589,7 +5606,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=create_router_state.js.map
 
 /***/ },
-/* 575 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5648,7 +5665,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=BehaviorSubject.js.map
 
 /***/ },
-/* 576 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5664,11 +5681,11 @@ webpackJsonp([0],[
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var BehaviorSubject_1 = __webpack_require__(575);
-	var shared_1 = __webpack_require__(571);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
-	var tree_1 = __webpack_require__(577);
+	var BehaviorSubject_1 = __webpack_require__(576);
+	var shared_1 = __webpack_require__(572);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
+	var tree_1 = __webpack_require__(578);
 	/**
 	 * The state of the router.
 	 *
@@ -5990,7 +6007,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_state.js.map
 
 /***/ },
-/* 577 */
+/* 578 */
 /***/ function(module, exports) {
 
 	/**
@@ -6084,7 +6101,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=tree.js.map
 
 /***/ },
-/* 578 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6095,9 +6112,9 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var shared_1 = __webpack_require__(571);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
+	var shared_1 = __webpack_require__(572);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
 	function createUrlTree(route, urlTree, commands, queryParams, fragment) {
 	    if (commands.length === 0) {
 	        return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
@@ -6362,7 +6379,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=create_url_tree.js.map
 
 /***/ },
-/* 579 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6375,11 +6392,11 @@ webpackJsonp([0],[
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
 	var of_1 = __webpack_require__(365);
-	var router_state_1 = __webpack_require__(576);
-	var shared_1 = __webpack_require__(571);
-	var url_tree_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(568);
-	var tree_1 = __webpack_require__(577);
+	var router_state_1 = __webpack_require__(577);
+	var shared_1 = __webpack_require__(572);
+	var url_tree_1 = __webpack_require__(573);
+	var collection_1 = __webpack_require__(569);
+	var tree_1 = __webpack_require__(578);
 	var NoMatch = (function () {
 	    function NoMatch() {
 	    }
@@ -6657,7 +6674,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=recognize.js.map
 
 /***/ },
-/* 580 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6669,9 +6686,9 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	__webpack_require__(374);
-	__webpack_require__(581);
-	var forkJoin_1 = __webpack_require__(582);
-	var fromPromise_1 = __webpack_require__(567);
+	__webpack_require__(582);
+	var forkJoin_1 = __webpack_require__(583);
+	var fromPromise_1 = __webpack_require__(568);
 	function resolve(resolver, state) {
 	    return resolveNode(resolver, state._root).map(function (_) { return state; });
 	}
@@ -6702,7 +6719,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=resolve.js.map
 
 /***/ },
-/* 581 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6712,9 +6729,9 @@ webpackJsonp([0],[
 	//# sourceMappingURL=toPromise.js.map
 
 /***/ },
-/* 582 */,
 /* 583 */,
-/* 584 */
+/* 584 */,
+/* 585 */
 /***/ function(module, exports) {
 
 	/**
@@ -6741,7 +6758,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_outlet_map.js.map
 
 /***/ },
-/* 585 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6754,8 +6771,8 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(546);
-	var router_state_1 = __webpack_require__(576);
+	var router_1 = __webpack_require__(547);
+	var router_state_1 = __webpack_require__(577);
 	var RouterLink = (function () {
 	    function RouterLink(router, route, locationStrategy) {
 	        this.router = router;
@@ -6899,7 +6916,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_link.js.map
 
 /***/ },
-/* 586 */
+/* 587 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6911,8 +6928,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(546);
-	var router_link_1 = __webpack_require__(585);
+	var router_1 = __webpack_require__(547);
+	var router_link_1 = __webpack_require__(586);
 	var RouterLinkActive = (function () {
 	    function RouterLinkActive(router, element, renderer) {
 	        var _this = this;
@@ -6984,7 +7001,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_link_active.js.map
 
 /***/ },
-/* 587 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6996,8 +7013,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var router_outlet_map_1 = __webpack_require__(584);
-	var shared_1 = __webpack_require__(571);
+	var router_outlet_map_1 = __webpack_require__(585);
+	var shared_1 = __webpack_require__(572);
 	var RouterOutlet = (function () {
 	    function RouterOutlet(parentOutletMap, location, resolver, name) {
 	        this.parentOutletMap = parentOutletMap;
@@ -7092,7 +7109,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_outlet.js.map
 
 /***/ },
-/* 588 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7105,15 +7122,15 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var common_router_providers_1 = __webpack_require__(545);
-	var router_link_1 = __webpack_require__(585);
-	var router_link_active_1 = __webpack_require__(586);
-	var router_outlet_1 = __webpack_require__(587);
-	var router_1 = __webpack_require__(546);
-	var router_config_loader_1 = __webpack_require__(566);
-	var router_outlet_map_1 = __webpack_require__(584);
-	var router_state_1 = __webpack_require__(576);
-	var url_tree_1 = __webpack_require__(572);
+	var common_router_providers_1 = __webpack_require__(546);
+	var router_link_1 = __webpack_require__(586);
+	var router_link_active_1 = __webpack_require__(587);
+	var router_outlet_1 = __webpack_require__(588);
+	var router_1 = __webpack_require__(547);
+	var router_config_loader_1 = __webpack_require__(567);
+	var router_outlet_map_1 = __webpack_require__(585);
+	var router_state_1 = __webpack_require__(577);
+	var url_tree_1 = __webpack_require__(573);
 	/**
 	 * @stable
 	 */
@@ -7177,7 +7194,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_module.js.map
 
 /***/ },
-/* 589 */
+/* 590 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7190,7 +7207,7 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var platform_browser_1 = __webpack_require__(204);
-	var common_router_providers_1 = __webpack_require__(545);
+	var common_router_providers_1 = __webpack_require__(546);
 	/**
 	 * A list of {@link Provider}s. To use the router, you must add this to your application.
 	 *
@@ -7221,13 +7238,13 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_providers.js.map
 
 /***/ },
-/* 590 */
+/* 591 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newProject()\">\r\n            {{'new_project' | translate}}\r\n        </button>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\">\r\n    <project-list [projects]=\"projects\"></project-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ },
-/* 591 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7241,10 +7258,10 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var notification_1 = __webpack_require__(592);
+	var notification_1 = __webpack_require__(593);
 	var services_1 = __webpack_require__(421);
 	var models_1 = __webpack_require__(528);
 	var ProjectComponent = (function () {
@@ -7345,20 +7362,20 @@ webpackJsonp([0],[
 	        this.project.customerId = customer.id;
 	        this.validateForm('customerId');
 	    };
-	    ProjectComponent.prototype.setManager = function (user) {
-	        this.project.managerUserId = user[0].id;
+	    ProjectComponent.prototype.setManager = function (employee) {
+	        this.project.managerUserId = employee[0].userID;
 	        this.validateForm('managerUserId');
 	    };
-	    ProjectComponent.prototype.setProgrammer = function (user) {
-	        this.project.programmerUserId = user[0].id;
+	    ProjectComponent.prototype.setProgrammer = function (employee) {
+	        this.project.programmerUserId = employee[0].userID;
 	        this.validateForm('programmerUserId');
 	    };
-	    ProjectComponent.prototype.setTester = function (user) {
-	        this.project.testerUserId = user[0].id;
+	    ProjectComponent.prototype.setTester = function (employee) {
+	        this.project.testerUserId = employee[0].userID;
 	        this.validateForm('testerUserId');
 	    };
 	    ProjectComponent.prototype.setObserver = function (observers) {
-	        this.project.observerUserIds = observers.map(function (it) { return it.id; });
+	        this.project.observerUserIds = observers.map(function (it) { return it.userID; });
 	        this.validateForm('observerUserIds');
 	    };
 	    ProjectComponent.prototype.removeObserver = function (observer, $event) {
@@ -7413,7 +7430,7 @@ webpackJsonp([0],[
 	    ProjectComponent = __decorate([
 	        core_1.Component({
 	            selector: 'project',
-	            template: __webpack_require__(596)
+	            template: __webpack_require__(597)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, ng2_translate_1.TranslateService, services_1.ProjectService, notification_1.NotificationService])
 	    ], ProjectComponent);
@@ -7423,20 +7440,20 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 592 */
+/* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(593));
-	__export(__webpack_require__(595));
 	__export(__webpack_require__(594));
+	__export(__webpack_require__(596));
+	__export(__webpack_require__(595));
 
 
 /***/ },
-/* 593 */
+/* 594 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7450,7 +7467,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var notification_1 = __webpack_require__(594);
+	var notification_1 = __webpack_require__(595);
 	var NotificationService = (function () {
 	    function NotificationService() {
 	        this.emitter = new core_1.EventEmitter();
@@ -7488,7 +7505,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 594 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7549,7 +7566,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 595 */
+/* 596 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7563,7 +7580,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var notification_service_1 = __webpack_require__(593);
+	var notification_service_1 = __webpack_require__(594);
 	var NotificationComponent = (function () {
 	    function NotificationComponent(notifyService) {
 	        this.notifyService = notifyService;
@@ -7629,13 +7646,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 596 */
+/* 597 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"isEditable\" [disabled]=\"!isValid\" (click)=\"saveProject()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <div *ngIf=\"!isNew && isEditable\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteProject()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <h1 class=\"header-title header-title-flex\">\r\n            <label>{{title | translate}}</label>\r\n            <input [class.invalid]=\"errors.name\" autofocus required maxlength=\"140\" placeholder=\"{{'name' | translate}}\" [readonly]=\"!isEditable\" (keyup)=\"validateForm()\" [(ngModel)]=\"project.name\" />\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <div class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'customer' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.customerId\">\r\n                    <organization-input class=\"span8\" [editable]=\"isEditable\" [orgId]=\"project.customerId\" (select)=\"setCustomer($event)\"></organization-input>\r\n                    <error-message [error]=\"errors.customerId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'manager' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.managerUserId\">\r\n                    <user-input class=\"span8\" [editable]=\"isEditable\" [userIds]=\"[project.managerUserId]\" (select)=\"setManager($event)\"></user-input>\r\n                    <error-message [error]=\"errors.managerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'programmer' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.programmerUserId\">\r\n                    <user-input class=\"span8\" [editable]=\"isEditable\" [userIds]=\"[project.programmerUserId]\" (select)=\"setProgrammer($event)\"></user-input>\r\n                    <error-message [error]=\"errors.programmerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'tester' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.testerUserId\">\r\n                    <user-input class=\"span8\" [editable]=\"isEditable\" [userIds]=\"[project.testerUserId]\" (select)=\"setTester($event)\"></user-input>\r\n                    <error-message [error]=\"errors.testerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'observers' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.observerUserIds\">\r\n                    <user-input class=\"span8\" [editable]=\"isEditable\" [multiple]=\"true\" [userIds]=\"project.observerUserIds\" (select)=\"setObserver($event)\"></user-input>\r\n                    <error-message [error]=\"errors.observerUserIds\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'status' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.status\">\r\n                    <switch-button [disabled]=\"!isEditable\" [model]=\"project\" value=\"status\" [items]=\"projectStatusTypes\"></switch-button>\r\n                    <error-message [error]=\"errors.status\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'finish_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.finishDate\">\r\n                    <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                        <span class=\"input\">{{project.finishDate}}</span>\r\n                    </div>\r\n                    <input class=\"span2\" datepicker *ngIf=\"isEditable\" (select)=\"setFinishDate($event)\" [(ngModel)]=\"project.finishDate\" />\r\n                    <span>{{'now' | dateDuration:project.finishDate}}</span>\r\n                    <error-message [error]=\"errors.finishDate\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.comment\">\r\n                    <markdown-editor class=\"span8\" [markdown]=\"project.comment || ''\" [editable]=\"isEditable\" [updateTimeout]=\"300\" (update)=\"setProjectComment($event)\"></markdown-editor>\r\n                    <error-message [error]=\"errors.comment\"></error-message>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <attachments [editable]=\"isEditable\" [model]=\"project\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"project.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [userIds]=\"[project.authorId]\"></user-input>\r\n            <time>{{project.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
+	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"isEditable\" [disabled]=\"!isValid\" (click)=\"saveProject()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <div *ngIf=\"!isNew && isEditable\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteProject()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <h1 class=\"header-title header-title-flex\">\r\n            <label>{{title | translate}}</label>\r\n            <input [class.invalid]=\"errors.name\" autofocus required maxlength=\"140\" placeholder=\"{{'name' | translate}}\" [readonly]=\"!isEditable\" (keyup)=\"validateForm()\" [(ngModel)]=\"project.name\" />\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <div class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'customer' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.customerId\">\r\n                    <organization-input class=\"span8\" [editable]=\"isEditable\" [id]=\"project.customerId\" (select)=\"setCustomer($event)\"></organization-input>\r\n                    <error-message [error]=\"errors.customerId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'manager' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.managerUserId\">\r\n                    <employee-input class=\"span8\" [editable]=\"isEditable\" [ids]=\"[project.managerUserId]\" (select)=\"setManager($event)\"></employee-input>\r\n                    <error-message [error]=\"errors.managerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'programmer' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.programmerUserId\">\r\n                    <employee-input class=\"span8\" [editable]=\"isEditable\" [ids]=\"[project.programmerUserId]\" (select)=\"setProgrammer($event)\"></employee-input>\r\n                    <error-message [error]=\"errors.programmerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'tester' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.testerUserId\">\r\n                    <employee-input class=\"span8\" [editable]=\"isEditable\" [ids]=\"[project.testerUserId]\" (select)=\"setTester($event)\"></employee-input>\r\n                    <error-message [error]=\"errors.testerUserId\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'observers' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.observerUserIds\">\r\n                    <employee-input class=\"span8\" [editable]=\"isEditable\" [multiple]=\"true\" [ids]=\"project.observerUserIds\" (select)=\"setObserver($event)\"></employee-input>\r\n                    <error-message [error]=\"errors.observerUserIds\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'status' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.status\">\r\n                    <switch-button [disabled]=\"!isEditable\" [model]=\"project\" value=\"status\" [items]=\"projectStatusTypes\"></switch-button>\r\n                    <error-message [error]=\"errors.status\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'finish_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.finishDate\">\r\n                    <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                        <span class=\"input\">{{project.finishDate}}</span>\r\n                    </div>\r\n                    <input class=\"span2\" datepicker *ngIf=\"isEditable\" (select)=\"setFinishDate($event)\" [(ngModel)]=\"project.finishDate\" />\r\n                    <span>{{'now' | dateDuration:project.finishDate}}</span>\r\n                    <error-message [error]=\"errors.finishDate\"></error-message>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\" [class.has-error]=\"errors.comment\">\r\n                    <markdown-editor class=\"span8\" [markdown]=\"project.comment || ''\" [editable]=\"isEditable\" [updateTimeout]=\"300\" (update)=\"setProjectComment($event)\"></markdown-editor>\r\n                    <error-message [error]=\"errors.comment\"></error-message>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <attachments [editable]=\"isEditable\" [model]=\"project\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"project.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <employee-input [ids]=\"[project.authorId]\"></employee-input>\r\n            <time>{{project.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
 
 /***/ },
-/* 597 */
+/* 598 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7701,7 +7718,7 @@ webpackJsonp([0],[
 	    ProjectListComponent = __decorate([
 	        core_1.Component({
 	            selector: 'project-list',
-	            template: __webpack_require__(598)
+	            template: __webpack_require__(599)
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], ProjectListComponent);
@@ -7711,13 +7728,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 598 */
+/* 599 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"project-list__name\">{{'name' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"project-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"project-list__customer\">{{'customer' | translate}}</div>\r\n                <div class=\"project-list__manager\">{{'manager' | translate}}</div>\r\n                <div class=\"project-list__programmer\">{{'programmer' | translate}}</div>\r\n                <div class=\"project-list__tester\">{{'tester' | translate}}</div>\r\n                <div class=\"project-list__finish_date\">{{'finish_date' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <div class=\"project-list__name\">{{project.name}}</div>\r\n                        <div class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </div>\r\n                        <div class=\"project-list__status\">\r\n                            <span class=\"status-{{project.status | text:'L'}}\">{{project.status | text:'L' | translate}}</span>\r\n                        </div>\r\n                        <div class=\"project-list__customer\">\r\n                            <organization-input [org]=\"project.customer\"></organization-input>\r\n                        </div>\r\n                        <div class=\"project-list__manager\">\r\n                            <user-input [userIds]=\"[project.managerUserId]\"></user-input>\r\n                        </div>\r\n                        <div class=\"project-list__programmer\">\r\n                            <user-input [userIds]=\"[project.programmerUserId]\"></user-input>\r\n                        </div>\r\n                        <div class=\"project-list__tester\">\r\n                            <user-input [userIds]=\"[project.testerUserId]\"></user-input>\r\n                        </div>\r\n                        <div class=\"project-list__finish_date\">\r\n                            {{project.finishDate | dateFmt:'DD.MM.YYYY'}}\r\n                            <span>{{'now' | dateDuration:project.finishDate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view project-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"project-list__name\">{{'name' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"project-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"project-list__customer\">{{'customer' | translate}}</div>\r\n                <div class=\"project-list__manager\">{{'manager' | translate}}</div>\r\n                <div class=\"project-list__programmer\">{{'programmer' | translate}}</div>\r\n                <div class=\"project-list__tester\">{{'tester' | translate}}</div>\r\n                <div class=\"project-list__finish_date\">{{'finish_date' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\">\r\n        <div class=\"entry-wrap\" *ngFor=\"let project of projects\" [class.active]=\"isSelected(project.id)\">\r\n            <div class=\"entry\">\r\n                <label class=\"entry-select\">\r\n                    <input type=\"checkbox\" name=\"project-id\" value=\"{{project.id}}\" [checked]=\"isSelected(project.id)\" (change)=\"toggleSelected(project.id)\" />\r\n                </label>\r\n                <a class=\"entry-link\" [routerLink]=\"['./', project.id]\">\r\n                    <div class=\"entry-fields\">\r\n                        <div class=\"project-list__name\">{{project.name}}</div>\r\n                        <div class=\"vw-icon\">\r\n                            <i class=\"fa fa-paperclip\" *ngIf=\"project.hasAttachments\"></i>\r\n                        </div>\r\n                        <div class=\"project-list__status\">\r\n                            <span class=\"status-{{project.status | text:'L'}}\">{{project.status | text:'L' | translate}}</span>\r\n                        </div>\r\n                        <div class=\"project-list__customer\">\r\n                            <organization-input [org]=\"project.customer\"></organization-input>\r\n                        </div>\r\n                        <div class=\"project-list__manager\">\r\n                            <employee-input [ids]=\"[project.managerUserId]\"></employee-input>\r\n                        </div>\r\n                        <div class=\"project-list__programmer\">\r\n                            <employee-input [ids]=\"[project.programmerUserId]\"></employee-input>\r\n                        </div>\r\n                        <div class=\"project-list__tester\">\r\n                            <employee-input [ids]=\"[project.testerUserId]\"></employee-input>\r\n                        </div>\r\n                        <div class=\"project-list__finish_date\">\r\n                            {{project.finishDate | dateFmt:'DD.MM.YYYY'}}\r\n                            <span>{{'now' | dateDuration:project.finishDate}}</span>\r\n                        </div>\r\n                    </div>\r\n                </a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
-/* 599 */
+/* 600 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7731,7 +7748,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var store_1 = __webpack_require__(388);
 	var task_service_1 = __webpack_require__(424);
 	var actions_1 = __webpack_require__(416);
@@ -7808,7 +7825,7 @@ webpackJsonp([0],[
 	    TasksComponent = __decorate([
 	        core_1.Component({
 	            selector: 'tasks',
-	            template: __webpack_require__(600),
+	            template: __webpack_require__(601),
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, actions_1.TaskActions, task_service_1.TaskService])
 	    ], TasksComponent);
@@ -7818,13 +7835,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 600 */
+/* 601 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"content-header\">\r\n    <h1 class=\"header-title\">\r\n        {{title | translate}}\r\n    </h1>\r\n    <div class=\"content-actions\">\r\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\r\n            {{'new_task' | translate}}\r\n        </button>\r\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\r\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\r\n    </div>\r\n</div>\r\n<div class=\"content-body\" [class.load]=\"loading\">\r\n    <task-list [tasks]=\"tasks\" (toggleStream)=\"onToggleStream($event)\"></task-list>\r\n</div>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ },
-/* 601 */
+/* 602 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -7838,11 +7855,11 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var comments_1 = __webpack_require__(602);
-	var notification_1 = __webpack_require__(592);
+	var comments_1 = __webpack_require__(603);
+	var notification_1 = __webpack_require__(593);
 	var actions_1 = __webpack_require__(416);
 	var services_1 = __webpack_require__(421);
 	var models_1 = __webpack_require__(528);
@@ -8165,7 +8182,7 @@ webpackJsonp([0],[
 	        this.validateForm();
 	    };
 	    TaskComponent.prototype.setAssigneeUser = function (assigneeUser) {
-	        this.task.assigneeUserId = assigneeUser[0].id;
+	        this.task.assigneeUserId = assigneeUser[0].userID;
 	        this.validateForm();
 	    };
 	    TaskComponent.prototype.setStartDate = function (date) {
@@ -8219,7 +8236,7 @@ webpackJsonp([0],[
 	    TaskComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task',
-	            template: __webpack_require__(604),
+	            template: __webpack_require__(605),
 	            directives: [
 	                comments_1.CommentsComponent
 	            ]
@@ -8232,7 +8249,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 602 */
+/* 603 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8246,7 +8263,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var comment_1 = __webpack_require__(603);
+	var comment_1 = __webpack_require__(604);
 	var models_1 = __webpack_require__(528);
 	var CommentsComponent = (function () {
 	    function CommentsComponent() {
@@ -8295,7 +8312,7 @@ webpackJsonp([0],[
 	    CommentsComponent = __decorate([
 	        core_1.Component({
 	            selector: 'comments',
-	            template: "\n        <div class=\"comments-wrap\">\n            <section class=\"comments\">\n                <comment *ngFor=\"let comment of comments\"\n                    [comment]=\"comment\"\n                    [editable]=\"true\"\n                    (save)=\"updateComment($event)\"\n                    (delete)=\"deleteComment($event)\">\n                </comment>\n            </section>\n            <section class=\"comment-composer\" [class.edit]=\"isEdit\">\n                <div class=\"comment-composer__editor\">\n                    <markdown-editor\n                        editable=\"true\"\n                        placeHolder=\"{{'comment' | translate}}\"\n                        (update)=\"setCommentText($event)\"\n                        (focus)=\"onEditorFocus($event)\"\n                        (blur)=\"onEditorBlur($event)\">\n                    </markdown-editor>\n                </div>\n                <button class=\"btn btn-add-comment\"\n                    (click)=\"addComment()\"\n                    [disabled]=\"!commentText\">\n                    {{ 'add_comment' | translate }}\n                </button>\n            </section>\n        </div>\n    ",
+	            template: "\n        <div class=\"comments-wrap\">\n            <section class=\"comments\">\n                <comment *ngFor=\"let comment of comments\"\n                    [comment]=\"comment\"\n                    [editable]=\"true\"\n                    (save)=\"updateComment($event)\"\n                    (delete)=\"deleteComment($event)\">\n                </comment>\n            </section>\n            <section class=\"comment-composer\" [class.edit]=\"isEdit\">\n                <div class=\"comment-composer__editor\">\n                    <markdown-editor\n                        editable=\"true\"\n                        placeHolder=\"{{'comment' | translate}}\"\n                        (update)=\"setCommentText($event)\"\n                        (focus)=\"onEditorFocus($event)\"\n                        (blur)=\"onEditorBlur($event)\">\n                    </markdown-editor>\n                </div>\n                <button class=\"btn btn-add-comment\"\n                    (click)=\"addComment()\"\n                    [disabled]=\"!commentText\">\n                    {{'add_comment' | translate}}\n                </button>\n            </section>\n        </div>\n    ",
 	            directives: [comment_1.CommentComponent]
 	        }), 
 	        __metadata('design:paramtypes', [])
@@ -8306,7 +8323,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 603 */
+/* 604 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8365,7 +8382,7 @@ webpackJsonp([0],[
 	    CommentComponent = __decorate([
 	        core_1.Component({
 	            selector: 'comment',
-	            template: "\n        <div class=\"comment\" [class.edit]=\"edit\" [class.saving]=\"saving\">\n            <div class=\"comment__avatar\"></div>\n            <div class=\"comment__details\">\n                <span class=\"comment__author\">\n                    <user-input [editable]=\"false\" [userIds]=\"[comment.authorId]\"></user-input>\n                </span>\n                <span class=\"comment__time\">{{comment.regDate}}</span>\n                <p class=\"comment__text\" *ngIf=\"!edit\" innerHTML=\"{{comment.comment | marked}}\"></p>\n                <div class=\"comment__editor\" *ngIf=\"edit\">\n                    <markdown-editor\n                        markdown=\"{{comment.comment}}\"\n                        editable=\"true\"\n                        placeHolder=\"{{'add_comment' | translate}}\"\n                        (update)=\"setCommentText($event)\">\n                    </markdown-editor>\n                    <button type=\"button\" class=\"btn btn-cancel\" [disabled]=\"saving\" (click)=\"toggleEdit()\">{{'cancel' | translate}}</button>\n                    <button type=\"button\" class=\"btn btn-primary btn-save\" [disabled]=\"saving\" (click)=\"saveComment()\">{{'save' | translate}}</button>\n                </div>\n                <!-- <attachments\n                    [model]=\"comment\"\n                    (upload)=\"addAttachment($event)\"\n                    (delete)=\"deleteAttachment($event)\">\n                </attachments> -->\n            </div>\n            <div class=\"comment__buttons\" *ngIf=\"editable\">\n                <button type=\"button\" class=\"btn btn-sm\" *ngIf=\"!edit\" (click)=\"toggleEdit()\">\n                    <i class=\"fa fa-pencil\"></i>{{'edit' | translate}}\n                </button>\n                <button type=\"button\" class=\"btn btn-sm\" title=\"{{'delete' | translate}}\" (click)=\"delete.emit(comment)\">\n                    <i class=\"fa fa-remove\"></i>\n                </button>\n            </div>\n        </div>\n    "
+	            template: "\n        <div class=\"comment\" [class.edit]=\"edit\" [class.saving]=\"saving\">\n            <div class=\"comment__avatar\"></div>\n            <div class=\"comment__details\">\n                <span class=\"comment__author\">\n                    <employee-input [editable]=\"false\" [ids]=\"[comment.authorId]\"></employee-input>\n                </span>\n                <span class=\"comment__time\">{{comment.regDate}}</span>\n                <p class=\"comment__text\" *ngIf=\"!edit\" innerHTML=\"{{comment.comment | marked}}\"></p>\n                <div class=\"comment__editor\" *ngIf=\"edit\">\n                    <markdown-editor\n                        markdown=\"{{comment.comment}}\"\n                        editable=\"true\"\n                        placeHolder=\"{{'add_comment' | translate}}\"\n                        (update)=\"setCommentText($event)\">\n                    </markdown-editor>\n                    <button type=\"button\" class=\"btn btn-cancel\" [disabled]=\"saving\" (click)=\"toggleEdit()\">{{'cancel' | translate}}</button>\n                    <button type=\"button\" class=\"btn btn-primary btn-save\" [disabled]=\"saving\" (click)=\"saveComment()\">{{'save' | translate}}</button>\n                </div>\n                <!-- <attachments\n                    [model]=\"comment\"\n                    (upload)=\"addAttachment($event)\"\n                    (delete)=\"deleteAttachment($event)\">\n                </attachments> -->\n            </div>\n            <div class=\"comment__buttons\" *ngIf=\"editable\">\n                <button type=\"button\" class=\"btn btn-sm\" *ngIf=\"!edit\" (click)=\"toggleEdit()\">\n                    <i class=\"fa fa-pencil\"></i>{{'edit' | translate}}\n                </button>\n                <button type=\"button\" class=\"btn btn-sm\" title=\"{{'delete' | translate}}\" (click)=\"delete.emit(comment)\">\n                    <i class=\"fa fa-remove\"></i>\n                </button>\n            </div>\n        </div>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], CommentComponent);
@@ -8375,13 +8392,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 604 */
+/* 605 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!isValid\" (click)=\"saveTask()\">\r\n                <!-- <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span> -->\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canAddSubTask()\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canCompleteTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew && isEditable\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <h1 class=\"header-title task-header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">{{parentTask.title}}</a>\r\n            <div class=\"header-title-flex\">\r\n                <label>{{title | translate}}</label>\r\n                <input [class.invalid]=\"errors.title\" autofocus required maxlength=\"140\" placeholder=\"{{'task_title' | translate}}\" [readonly]=\"!isEditable\" (keyup)=\"validateForm()\" [(ngModel)]=\"task.title\" ngControl=\"title\" />\r\n                <span class=\"task-status status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n            </div>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <div class=\"task-tabs noselect\" *ngIf=\"hasSubTasks() || hasRequests()\">\r\n            <div class=\"task-tab__title\" [class.active]=\"showProperty\" [class.hidden]=\"!showPropertyTabTitle\" (click)=\"toggleShowProperty()\">{{'properties' | translate}}</div>\r\n            <div class=\"task-tab__title\" [class.active]=\"showSubtasks\" [class.hidden]=\"!hasSubTasks() && !hasRequests()\" (click)=\"toggleShowSubtasks()\">\r\n                <i class=\"fa fa-align-left\"></i>\r\n                <!-- <span>{{'subtasks' | translate}}</span> -->\r\n                <span>{{'execution' | translate}}</span>\r\n            </div>\r\n            <!-- <div class=\"task-tab__title\" [class.active]=\"showRequests\" [class.hidden]=\"!hasRequests()\" (click)=\"toggleShowRequests()\">\r\n                <i class=\"fa fa-flag-checkered\"></i>\r\n                <span>{{'requests' | translate}}</span>\r\n                <i class=\"fa fa-exclamation-circle\" *ngIf=\"hasUnResolvedRequest\"></i>\r\n            </div> -->\r\n        </div>\r\n        <div class=\"task-tab\" [class.active]=\"showSubtasks\" *ngIf=\"!isNew\">\r\n            <task-list [streamMode]=\"true\" [showSelect]=\"false\" [tasks]=\"[task]\"></task-list>\r\n        </div>\r\n        <!-- <div class=\"task-tab\" [class.active]=\"showRequests\">\r\n            <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n        </div> -->\r\n        <div class=\"task-tab\" [class.active]=\"showProperty\">\r\n            <fieldset class=\"fieldset\">\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'project' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.projectId\">\r\n                        <project-input class=\"span8\" [editable]=\"isEditable\" [projectId]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                        <error-message [error]=\"errors.projectId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'task_type' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.taskTypeId\">\r\n                        <task-type-input class=\"span8\" [editable]=\"isEditable\" [taskTypeId]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                        <error-message [error]=\"errors.taskTypeId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'priority' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.priority\">\r\n                        <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                        <error-message [error]=\"errors.priority\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'assignee_user' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.assigneeUserId\">\r\n                        <user-input class=\"span8\" [editable]=\"isEditable\" [userIds]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></user-input>\r\n                        <error-message [error]=\"errors.assigneeUserId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'start_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.startDate\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.startDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" />\r\n                        <error-message [error]=\"errors.startDate\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'due_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.dueDate\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.dueDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" />\r\n                        <span>{{task.startDate | dateDuration:task.dueDate}}</span>\r\n                        <error-message [error]=\"errors.dueDate\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'tags' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.tagIds\">\r\n                        <tags-input class=\"span8\" [editable]=\"isEditable\" [tagIds]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                        <error-message [error]=\"errors.tagIds\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\"></div>\r\n                    <div class=\"controls\">\r\n                        <label class=\"input\" [class.disabled]=\"!isEditable\">\r\n                            <input type=\"checkbox\" name=\"customerObservation\" value=\"1\" [disabled]=\"!isEditable\" [(ngModel)]=\"task.customerObservation\" />\r\n                            <span>{{'publish_to_customer' | translate}}</span>\r\n                        </label>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\" [class.has-error]=\"errors.body\">\r\n                    <markdown-editor placeHolder=\"{{'body' | translate}}\" [markdown]=\"task.body || ''\" [editable]=\"isEditable\" [updateTimeout]=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                    <error-message [error]=\"errors.body\"></error-message>\r\n                </div>\r\n            </fieldset>\r\n            <attachments [editable]=\"isEditable\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n        <comments *ngIf=\"showComments()\" [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"task.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [editable]=\"false\" [userIds]=\"[task.authorId]\"></user-input>\r\n            <time>{{task.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
+	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSaveTask()\" [disabled]=\"!isValid\" (click)=\"saveTask()\">\r\n                <!-- <span *ngIf=\"isNew\">{{'send_task' | translate}}</span>\r\n                <span *ngIf=\"!isNew\">{{'save_close' | translate}}</span> -->\r\n                {{'save_close' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canRequestAction()\" (click)=\"newRequest($event)\">\r\n                {{'new_request' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canAddSubTask()\" (click)=\"addSubtask($event)\">\r\n                {{'add_subtask' | translate}}\r\n            </button>\r\n            <button class=\"btn\" type=\"button\" *ngIf=\"canCompleteTask()\" (click)=\"completeTask()\">\r\n                <span>{{'complete_task' | translate}}</span>\r\n            </button>\r\n            <div *ngIf=\"!isNew && isEditable\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\r\n                <div dropdown-toggle>\r\n                    <span class=\"btn\">...</span>\r\n                </div>\r\n                <div class=\"dropdown-menu\">\r\n                    <ul class=\"menu\">\r\n                        <li>\r\n                            <a class=\"menu-item\" (click)=\"deleteTask()\">{{'delete' | translate}}</a>\r\n                        </li>\r\n                    </ul>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <h1 class=\"header-title task-header-title\">\r\n            <a *ngIf=\"parentTask\" [routerLink]=\"['/task', parentTask.id]\" class=\"parent-task-link\">{{parentTask.title}}</a>\r\n            <div class=\"header-title-flex\">\r\n                <label>{{title | translate}}</label>\r\n                <input [class.invalid]=\"errors.title\" autofocus required maxlength=\"140\" placeholder=\"{{'task_title' | translate}}\" [readonly]=\"!isEditable\" (keyup)=\"validateForm()\" [(ngModel)]=\"task.title\" ngControl=\"title\" />\r\n                <span class=\"task-status status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n            </div>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <div class=\"task-tabs noselect\" *ngIf=\"hasSubTasks() || hasRequests()\">\r\n            <div class=\"task-tab__title\" [class.active]=\"showProperty\" [class.hidden]=\"!showPropertyTabTitle\" (click)=\"toggleShowProperty()\">{{'properties' | translate}}</div>\r\n            <div class=\"task-tab__title\" [class.active]=\"showSubtasks\" [class.hidden]=\"!hasSubTasks() && !hasRequests()\" (click)=\"toggleShowSubtasks()\">\r\n                <i class=\"fa fa-align-left\"></i>\r\n                <!-- <span>{{'subtasks' | translate}}</span> -->\r\n                <span>{{'execution' | translate}}</span>\r\n            </div>\r\n            <!-- <div class=\"task-tab__title\" [class.active]=\"showRequests\" [class.hidden]=\"!hasRequests()\" (click)=\"toggleShowRequests()\">\r\n                <i class=\"fa fa-flag-checkered\"></i>\r\n                <span>{{'requests' | translate}}</span>\r\n                <i class=\"fa fa-exclamation-circle\" *ngIf=\"hasUnResolvedRequest\"></i>\r\n            </div> -->\r\n        </div>\r\n        <div class=\"task-tab\" [class.active]=\"showSubtasks\" *ngIf=\"!isNew\">\r\n            <task-list [streamMode]=\"true\" [showSelect]=\"false\" [tasks]=\"[task]\"></task-list>\r\n        </div>\r\n        <!-- <div class=\"task-tab\" [class.active]=\"showRequests\">\r\n            <request-list [requests]=\"requests\" (accept)=\"acceptRequest($event)\" (decline)=\"declineRequest($event)\"></request-list>\r\n        </div> -->\r\n        <div class=\"task-tab\" [class.active]=\"showProperty\">\r\n            <fieldset class=\"fieldset\">\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'project' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.projectId\">\r\n                        <project-input class=\"span8\" [editable]=\"isEditable\" [id]=\"task.projectId\" (select)=\"setProject($event)\"></project-input>\r\n                        <error-message [error]=\"errors.projectId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\" *ngIf=\"!isSubtask\">\r\n                    <div class=\"control-label\">\r\n                        {{'task_type' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.taskTypeId\">\r\n                        <task-type-input class=\"span8\" [editable]=\"isEditable\" [id]=\"task.taskTypeId\" (select)=\"setTaskType($event)\"></task-type-input>\r\n                        <error-message [error]=\"errors.taskTypeId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'priority' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.priority\">\r\n                        <switch-button [disabled]=\"!isEditable\" [model]=\"task\" value=\"priority\" [items]=\"taskPriorityTypes\"></switch-button>\r\n                        <error-message [error]=\"errors.priority\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'assignee_user' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.assigneeUserId\">\r\n                        <employee-input class=\"span8\" [editable]=\"isEditable\" [ids]=\"[task.assigneeUserId]\" (select)=\"setAssigneeUser($event)\"></employee-input>\r\n                        <error-message [error]=\"errors.assigneeUserId\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'start_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.startDate\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.startDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setStartDate($event)\" [(ngModel)]=\"task.startDate\" />\r\n                        <error-message [error]=\"errors.startDate\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'due_date' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.dueDate\">\r\n                        <div class=\"span2\" *ngIf=\"!isEditable\">\r\n                            <span class=\"input\">{{task.dueDate}}</span>\r\n                        </div>\r\n                        <input datepicker class=\"span2\" *ngIf=\"isEditable\" (select)=\"setDueDate($event)\" [(ngModel)]=\"task.dueDate\" />\r\n                        <span>{{task.startDate | dateDuration:task.dueDate}}</span>\r\n                        <error-message [error]=\"errors.dueDate\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\">\r\n                        {{'tags' | translate}}\r\n                    </div>\r\n                    <div class=\"controls\" [class.has-error]=\"errors.tagIds\">\r\n                        <tags-input class=\"span8\" [editable]=\"isEditable\" [ids]=\"task.tagIds\" (select)=\"setTags($event)\"></tags-input>\r\n                        <error-message [error]=\"errors.tagIds\"></error-message>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\">\r\n                    <div class=\"control-label\"></div>\r\n                    <div class=\"controls\">\r\n                        <label class=\"input\" [class.disabled]=\"!isEditable\">\r\n                            <input type=\"checkbox\" name=\"customerObservation\" value=\"1\" [disabled]=\"!isEditable\" [(ngModel)]=\"task.customerObservation\" />\r\n                            <span>{{'publish_to_customer' | translate}}</span>\r\n                        </label>\r\n                    </div>\r\n                </div>\r\n                <div class=\"form-group\" [class.has-error]=\"errors.body\">\r\n                    <markdown-editor placeHolder=\"{{'body' | translate}}\" [markdown]=\"task.body || ''\" [editable]=\"isEditable\" [updateTimeout]=\"300\" (update)=\"updateTaskBody($event)\"></markdown-editor>\r\n                    <error-message [error]=\"errors.body\"></error-message>\r\n                </div>\r\n            </fieldset>\r\n            <attachments [editable]=\"isEditable\" [model]=\"task\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n        <comments *ngIf=\"showComments()\" [comments]=\"comments\" (add)=\"saveComment($event)\" (update)=\"saveComment($event)\" (delete)=\"deleteComment($event)\"></comments>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"task.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <employee-input [editable]=\"false\" [ids]=\"[task.authorId]\"></employee-input>\r\n            <time>{{task.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
 
 /***/ },
-/* 605 */
+/* 606 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8496,7 +8513,7 @@ webpackJsonp([0],[
 	    TaskListComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-list',
-	            template: __webpack_require__(606)
+	            template: __webpack_require__(607)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, actions_1.TaskActions])
 	    ], TaskListComponent);
@@ -8506,13 +8523,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 606 */
+/* 607 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"task-list__title\">{{'task_title' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"task-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"task-list__priority\">{{'priority' | translate}}</div>\r\n                <div class=\"task-list__assignee\">{{'assignee_user' | translate}}</div>\r\n                <div class=\"task-list__start_date\">{{'start_date' | translate}}</div>\r\n                <div class=\"task-list__due_date\">{{'due_date' | translate}}</div>\r\n                <div class=\"task-list__tags\">{{'tags' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\" [class.hidden]=\"loading\">\r\n        <div *ngFor=\"let task of tasks\">\r\n            <div class=\"entry-wrap\" *ngIf=\"!streamMode\">\r\n                <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                    <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                        <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                    </label>\r\n                    <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                        <div class=\"entry-fields\">\r\n                            <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"task.hasSubtasks || task.hasRequests\">\r\n                                <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(task.id) != -1\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                    <i class=\"entry-expander_icon fa\"></i>\r\n                                </div>\r\n                                <span>{{task.title}}</span>\r\n                            </div>\r\n                            <div class=\"vw-icon\">\r\n                                <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                            </div>\r\n                            <div class=\"task-list__status\">\r\n                                <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__priority\">\r\n                                <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__assignee\">\r\n                                <user-input [userIds]=\"[task.assigneeUserId]\"></user-input>\r\n                            </div>\r\n                            <div class=\"task-list__start_date\">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>\r\n                            <div class=\"task-list__due_date\">\r\n                                <span>{{task.dueDate | dateFmt:'DD.MM.YYYY'}}</span>\r\n                                <span>{{task.startDate | dateDuration:task.dueDate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__tags\">\r\n                                <tags-input [tagIds]=\"task.tagIds\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <task-stream [expandRoot]=\"streamMode\" [showSelect]=\"showSelect\" [task]=\"task\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
+	module.exports = "<div class=\"view task-list\">\r\n    <header class=\"entries-head\" *ngIf=\"showHeader\">\r\n        <div class=\"head-wrap\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" class=\"all\" [checked]=\"isSelectedAll\" (change)=\"toggleSelectAll()\" />\r\n            </label>\r\n            <div class=\"entry-captions\">\r\n                <div class=\"task-list__title\">{{'task_title' | translate}}</div>\r\n                <div class=\"vw-icon\"><i class=\"fa fa-paperclip\"></i></div>\r\n                <div class=\"task-list__status\">{{'status' | translate}}</div>\r\n                <div class=\"task-list__priority\">{{'priority' | translate}}</div>\r\n                <div class=\"task-list__assignee\">{{'assignee_user' | translate}}</div>\r\n                <div class=\"task-list__start_date\">{{'start_date' | translate}}</div>\r\n                <div class=\"task-list__due_date\">{{'due_date' | translate}}</div>\r\n                <div class=\"task-list__tags\">{{'tags' | translate}}</div>\r\n            </div>\r\n        </div>\r\n    </header>\r\n    <div class=\"entries\" [class.hidden]=\"loading\">\r\n        <div *ngFor=\"let task of tasks\">\r\n            <div class=\"entry-wrap\" *ngIf=\"!streamMode\">\r\n                <div class=\"entry\" [class.active]=\"isSelected(task.id)\">\r\n                    <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                        <input type=\"checkbox\" name=\"task-id\" value=\"{{task.id}}\" [checked]=\"isSelected(task.id)\" (change)=\"toggleSelected(task.id)\" />\r\n                    </label>\r\n                    <a class=\"entry-link\" [routerLink]=\"['/task', task.id]\">\r\n                        <div class=\"entry-fields\">\r\n                            <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"task.hasSubtasks || task.hasRequests\">\r\n                                <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(task.id) != -1\" (click)=\"toggleExpandable(task.id, $event)\">\r\n                                    <i class=\"entry-expander_icon fa\"></i>\r\n                                </div>\r\n                                <span>{{task.title}}</span>\r\n                            </div>\r\n                            <div class=\"vw-icon\">\r\n                                <i class=\"fa fa-paperclip\" *ngIf=\"task.hasAttachments\"></i>\r\n                            </div>\r\n                            <div class=\"task-list__status\">\r\n                                <span class=\"status-{{task.status | text:'L'}}\">{{task.status | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__priority\">\r\n                                <span class=\"priority-{{task.priority | text:'L'}}\">{{task.priority | text:'L' | translate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__assignee\">\r\n                                <employee-input [ids]=\"[task.assigneeUserId]\"></employee-input>\r\n                            </div>\r\n                            <div class=\"task-list__start_date\">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>\r\n                            <div class=\"task-list__due_date\">\r\n                                <span>{{task.dueDate | dateFmt:'DD.MM.YYYY'}}</span>\r\n                                <span>{{task.startDate | dateDuration:task.dueDate}}</span>\r\n                            </div>\r\n                            <div class=\"task-list__tags\">\r\n                                <tags-input [ids]=\"task.tagIds\"></tags-input>\r\n                            </div>\r\n                        </div>\r\n                    </a>\r\n                </div>\r\n            </div>\r\n            <task-stream [expandRoot]=\"streamMode\" [showSelect]=\"showSelect\" [task]=\"task\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n        </div>\r\n    </div>\r\n</div>\r\n"
 
 /***/ },
-/* 607 */
+/* 608 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8636,7 +8653,7 @@ webpackJsonp([0],[
 	    TaskStreamComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-stream',
-	            template: __webpack_require__(608)
+	            template: __webpack_require__(609)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, services_1.TaskService])
 	    ], TaskStreamComponent);
@@ -8646,13 +8663,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 608 */
+/* 609 */
 /***/ function(module, exports) {
 
-	module.exports = "<div *ngFor=\"let m of stream\">\r\n    <div class=\"entry-wrap level-{{level}}\" *ngIf=\"m\">\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"m.hasSubtasks || m.hasRequests\">\r\n                        <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(m.id) != -1\" (click)=\"toggleExpandable(m.id, $event)\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        <span>{{m.title}}</span>\r\n                    </div>\r\n                    <div class=\"vw-icon\">\r\n                        <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                    </div>\r\n                    <div class=\"task-list__status\">\r\n                        <span class=\"status-{{m.status | text:'L'}}\">{{m.status | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__priority\">\r\n                        <span class=\"priority-{{m.priority | text:'L'}}\">{{m.priority | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__assignee\">\r\n                        <user-input [userIds]=\"[m.assigneeUserId]\"></user-input>\r\n                    </div>\r\n                    <div class=\"task-list__start_date\">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>\r\n                    <div class=\"task-list__due_date\">\r\n                        <span>{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</span>\r\n                        <span>{{m.startDate | dateDuration:m.dueDate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__tags\">\r\n                        <tags-input [tagIds]=\"m.tagIds\"></tags-input>\r\n                    </div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/requests', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__request_type expandable-level\">\r\n                        <div class=\"entry-expander\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        {{m.requestType | localizedName}}\r\n                    </div>\r\n                    <div class=\"request__time\">{{m.regDate}}</div>\r\n                    <div class=\"request__comment\">{{m.comment}}</div>\r\n                    <div class=\"request__attachments\" *ngIf=\"m.attachments && m.attachments.length\">\r\n                        <i class=\"fa fa-paperclip\"></i>\r\n                    </div>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'ACCEPT'\">\r\n                        <i class=\"fa fa-check\"></i>\r\n                        {{'accepted' | translate}}\r\n                    </span>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'DECLINE'\">\r\n                        <i class=\"fa fa-times\"></i>\r\n                        {{'declined' | translate}}\r\n                    </span>\r\n                    <div class=\"request__resolution_time\">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__comment_comment\">{{m.comment}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m && m.kind == 'task'\" [level]=\"level\" [showSelect]=\"showSelect\" [task]=\"m\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n</div>\r\n"
+	module.exports = "<div *ngFor=\"let m of stream\">\r\n    <div class=\"entry-wrap level-{{level}}\" *ngIf=\"m\">\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'task'\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" name=\"task-id\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/task', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__title expandable-level\" [class.has-expandable]=\"m.hasSubtasks || m.hasRequests\">\r\n                        <div class=\"entry-expander\" [class.is-expanded]=\"expandedIds.indexOf(m.id) != -1\" (click)=\"toggleExpandable(m.id, $event)\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        <span>{{m.title}}</span>\r\n                    </div>\r\n                    <div class=\"vw-icon\">\r\n                        <i class=\"fa fa-paperclip\" *ngIf=\"m.hasAttachments\"></i>\r\n                    </div>\r\n                    <div class=\"task-list__status\">\r\n                        <span class=\"status-{{m.status | text:'L'}}\">{{m.status | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__priority\">\r\n                        <span class=\"priority-{{m.priority | text:'L'}}\">{{m.priority | text:'L' | translate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__assignee\">\r\n                        <employee-input [ids]=\"[m.assigneeUserId]\"></employee-input>\r\n                    </div>\r\n                    <div class=\"task-list__start_date\">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>\r\n                    <div class=\"task-list__due_date\">\r\n                        <span>{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</span>\r\n                        <span>{{m.startDate | dateDuration:m.dueDate}}</span>\r\n                    </div>\r\n                    <div class=\"task-list__tags\">\r\n                        <tags-input [ids]=\"m.tagIds\"></tags-input>\r\n                    </div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'request'\">\r\n            <label class=\"entry-select\" *ngIf=\"showSelect\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <a class=\"entry-link\" [routerLink]=\"['/requests', m.id]\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__request_type expandable-level\">\r\n                        <div class=\"entry-expander\">\r\n                            <i class=\"entry-expander_icon fa\"></i>\r\n                        </div>\r\n                        {{m.requestType | localizedName}}\r\n                    </div>\r\n                    <div class=\"request__time\">{{m.regDate}}</div>\r\n                    <div class=\"request__comment\">{{m.comment}}</div>\r\n                    <div class=\"request__attachments\" *ngIf=\"m.attachments && m.attachments.length\">\r\n                        <i class=\"fa fa-paperclip\"></i>\r\n                    </div>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'ACCEPT'\">\r\n                        <i class=\"fa fa-check\"></i>\r\n                        {{'accepted' | translate}}\r\n                    </span>\r\n                    <span class=\"{{m.resolution | text:'L'}}\" *ngIf=\"m.resolution == 'DECLINE'\">\r\n                        <i class=\"fa fa-times\"></i>\r\n                        {{'declined' | translate}}\r\n                    </span>\r\n                    <div class=\"request__resolution_time\">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</div>\r\n                </div>\r\n            </a>\r\n        </div>\r\n        <div class=\"entry\" *ngIf=\"m.kind == 'comment'\">\r\n            <label class=\"entry-select\">\r\n                <input type=\"checkbox\" value=\"{{m.id}}\" (change)=\"toggleSelected(m.id)\" />\r\n            </label>\r\n            <div class=\"entry-link\">\r\n                <div class=\"entry-fields\">\r\n                    <div class=\"task-list__comment_comment\">{{m.comment}}</div>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    </div>\r\n    <task-stream *ngIf=\"m && m.kind == 'task'\" [level]=\"level\" [showSelect]=\"showSelect\" [task]=\"m\" (toggleStream)=\"onToggleStream($event)\" (loadStreamLevel)=\"onLoadStreamLevel($event)\"></task-stream>\r\n</div>\r\n"
 
 /***/ },
-/* 609 */
+/* 610 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8711,7 +8728,7 @@ webpackJsonp([0],[
 	    TaskFilterComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-filter',
-	            template: "\n        <div class=\"task-filter__icon\">\n            <i class=\"fa fa-filter\"></i>\n        </div>\n        <task-type-input [taskTypeId]=\"taskTypeId\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'task_type' | translate}}\" (select)=\"setTaskType($event)\"></task-type-input>\n        <user-input editable=\"true\" allowClear=\"true\" placeHolder=\"{{'assignee_user' | translate}}\" (select)=\"setAssigneeUser($event)\"></user-input>\n        <tags-input [tagIds]=\"tagIds\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'tags' | translate}}\" (select)=\"setTags($event)\"></tags-input>\n    "
+	            template: "\n        <div class=\"task-filter__icon\">\n            <i class=\"fa fa-filter\"></i>\n        </div>\n        <task-type-input [id]=\"taskTypeId\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'task_type' | translate}}\" (select)=\"setTaskType($event)\"></task-type-input>\n        <employee-input editable=\"true\" allowClear=\"true\" placeHolder=\"{{'assignee_user' | translate}}\" (select)=\"setAssigneeUser($event)\"></employee-input>\n        <tags-input [ids]=\"tagIds\" editable=\"true\" allowClear=\"true\" placeHolder=\"{{'tags' | translate}}\" (select)=\"setTags($event)\"></tags-input>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [])
 	    ], TaskFilterComponent);
@@ -8721,7 +8738,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 610 */
+/* 611 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8735,10 +8752,10 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var notification_1 = __webpack_require__(592);
+	var notification_1 = __webpack_require__(593);
 	var actions_1 = __webpack_require__(416);
 	var services_1 = __webpack_require__(421);
 	var models_1 = __webpack_require__(528);
@@ -8847,7 +8864,7 @@ webpackJsonp([0],[
 	    RequestComponent = __decorate([
 	        core_1.Component({
 	            selector: 'request',
-	            template: __webpack_require__(611)
+	            template: __webpack_require__(612)
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, router_1.ActivatedRoute, ng2_translate_1.TranslateService, notification_1.NotificationService, services_1.TaskService])
 	    ], RequestComponent);
@@ -8857,13 +8874,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 611 */
+/* 612 */
 /***/ function(module, exports) {
 
-	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"isNew\" [disabled]=\"!request.requestTypeId || (isResolveAction && !dueDate)\" (click)=\"sendRequest()\">\r\n                {{'send_request' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            <span>{{'task_request' | translate}}</span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'ACCEPT'\">\r\n                <i class=\"fa fa-check\"></i>\r\n                {{'accepted' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'DECLINE'\">\r\n                <i class=\"fa fa-times\"></i>\r\n                {{'declined' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <fieldset class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'task' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <a class=\"input-placeholder\" [routerLink]=\"['/task', task.id]\">{{task.title}}</a>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'request_type' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <request-type-input [editable]=\"editable\" placeHolder=\"{{'request_type' | translate}}\" [requestType]=\"request.requestType\" (select)=\"setRequestType($event)\"></request-type-input>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <textarea [disabled]=\"!editable\" [(ngModel)]=\"comment\"></textarea>\r\n                        <!-- <markdown-editor\r\n                            [markdown]=\"''\"\r\n                            editable=\"true\"\r\n                            placeHolder=\"{{'comment' | translate}}\"\r\n                            updateTimeout=\"100\"\r\n                            (update)=\"setComment($event)\">\r\n                        </markdown-editor> -->\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div *ngIf=\"!editable && !request.attachments\">\r\n            <attachments [model]=\"request\" [editable]=\"editable\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n    </section>\r\n    <section class=\"request__resol\" *ngIf=\"task.editable && request.resolution == 'UNKNOWN'\">\r\n        <fieldset class=\"fieldset\" *ngIf=\"isResolveAction\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'due_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" />\r\n                        <div class=\"help\">\r\n                            {{'new_due_date_help' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div class=\"request__buttons\">\r\n            <button type=\"button\" class=\"btn\" (click)=\"doDecline(request)\">\r\n                {{'decline' | translate}}\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"request.requestType.name == 'prolong' && !dueDate\" (click)=\"doAccept(request)\">\r\n                {{'accept' | translate}}\r\n            </button>\r\n        </div>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"request.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <user-input [userIds]=\"[request.authorId]\"></user-input>\r\n            <time>{{request.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
+	module.exports = "<form class=\"form\" *ngIf=\"isReady\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" *ngIf=\"isNew\" [disabled]=\"!request.requestTypeId || (isResolveAction && !dueDate)\" (click)=\"sendRequest()\">\r\n                {{'send_request' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            <span>{{'task_request' | translate}}</span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'ACCEPT'\">\r\n                <i class=\"fa fa-check\"></i>\r\n                {{'accepted' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n            <span class=\"request-resolution {{request.resolution | text:'L'}}\" *ngIf=\"request.resolution == 'DECLINE'\">\r\n                <i class=\"fa fa-times\"></i>\r\n                {{'declined' | translate}}\r\n                <time class=\"request__resolution_time\">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>\r\n            </span>\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <fieldset class=\"fieldset\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'task' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <a class=\"input-placeholder\" [routerLink]=\"['/task', task.id]\">{{task.title}}</a>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'request_type' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <request-type-input [editable]=\"editable\" placeHolder=\"{{'request_type' | translate}}\" [requestType]=\"request.requestType\" (select)=\"setRequestType($event)\"></request-type-input>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'comment' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <textarea [disabled]=\"!editable\" [(ngModel)]=\"comment\"></textarea>\r\n                        <!-- <markdown-editor\r\n                            [markdown]=\"''\"\r\n                            editable=\"true\"\r\n                            placeHolder=\"{{'comment' | translate}}\"\r\n                            updateTimeout=\"100\"\r\n                            (update)=\"setComment($event)\">\r\n                        </markdown-editor> -->\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div *ngIf=\"!editable && !request.attachments\">\r\n            <attachments [model]=\"request\" [editable]=\"editable\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\r\n        </div>\r\n    </section>\r\n    <section class=\"request__resol\" *ngIf=\"task.editable && request.resolution == 'UNKNOWN'\">\r\n        <fieldset class=\"fieldset\" *ngIf=\"isResolveAction\">\r\n            <div class=\"form-group\">\r\n                <div class=\"control-label\">\r\n                    {{'due_date' | translate}}\r\n                </div>\r\n                <div class=\"controls\">\r\n                    <div class=\"span8\">\r\n                        <input datepicker class=\"span2\" (select)=\"setDueDate($event)\" />\r\n                        <div class=\"help\">\r\n                            {{'new_due_date_help' | translate}}\r\n                        </div>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n        </fieldset>\r\n        <div class=\"request__buttons\">\r\n            <button type=\"button\" class=\"btn\" (click)=\"doDecline(request)\">\r\n                {{'decline' | translate}}\r\n            </button>\r\n            <button type=\"button\" class=\"btn btn-primary\" [disabled]=\"request.requestType.name == 'prolong' && !dueDate\" (click)=\"doAccept(request)\">\r\n                {{'accept' | translate}}\r\n            </button>\r\n        </div>\r\n    </section>\r\n    <footer class=\"content-footer\">\r\n        <div class=\"record-author\" *ngIf=\"request.authorId\">\r\n            <span>{{'author' | translate}}</span>\r\n            <employee-input [ids]=\"[request.authorId]\"></employee-input>\r\n            <time>{{request.regDate}}</time>\r\n        </div>\r\n    </footer>\r\n</form>\r\n"
 
 /***/ },
-/* 612 */
+/* 613 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -8878,12 +8895,12 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var http_1 = __webpack_require__(339);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var common_1 = __webpack_require__(206);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
-	var notification_1 = __webpack_require__(592);
-	var keys_pipe_1 = __webpack_require__(613);
+	var notification_1 = __webpack_require__(593);
+	var keys_pipe_1 = __webpack_require__(614);
 	var app_service_1 = __webpack_require__(422);
 	var translate_service_1 = __webpack_require__(423);
 	var utils_1 = __webpack_require__(414);
@@ -8967,7 +8984,7 @@ webpackJsonp([0],[
 	    UserProfileComponent = __decorate([
 	        core_1.Component({
 	            selector: '[user-profile]',
-	            template: __webpack_require__(614),
+	            template: __webpack_require__(615),
 	            directives: [common_1.FORM_DIRECTIVES],
 	            providers: [common_1.FormBuilder],
 	            pipes: [keys_pipe_1.KeysPipe]
@@ -8980,7 +8997,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 613 */
+/* 614 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9014,13 +9031,13 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 614 */
+/* 615 */
 /***/ function(module, exports) {
 
 	module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" [ngFormModel]=\"form\" *ngIf=\"user\">\r\n    <header class=\"content-header\">\r\n        <div class=\"content-actions\">\r\n            <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\r\n                <i class=\"fa fa-chevron-left\"></i>\r\n                <span>{{'close' | translate}}</span>\r\n            </button>\r\n            <button class=\"btn btn-primary\" type=\"button\" [disabled]=\"!form.valid\" (click)=\"updateUserProfile()\">\r\n                {{'save_close' | translate}}\r\n            </button>\r\n        </div>\r\n        <h1 class=\"header-title\">\r\n            {{'employee' | translate}} / {{user.name}}\r\n        </h1>\r\n    </header>\r\n    <section class=\"content-body\">\r\n        <tabs>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\r\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\r\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\r\n                </fieldset>-->\r\n                <fieldset class=\"fieldset fieldset-user-fields\">\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'user_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.name}}\r\n                            </span>\r\n                        </div>\r\n                    </div> -->\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'login_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <input type=\"text\" class=\"span4\" ngControl=\"login\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd\" ngControl=\"pwd\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_new' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_new\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_new\" ngControl=\"pwd_new\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\r\n                        <div class=\"control-label\">\r\n                            {{'password_confirm' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_confirm\">\r\n                            <input type=\"password\" class=\"span4\" [class.invalid]=\"errors.pwd_confirm\" ngControl=\"pwd_confirm\" />\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'email' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\" [class.has-error]=\"errors.email\">\r\n                            <input type=\"email\" class=\"span4\" [class.invalid]=\"errors.email\" ngControl=\"email\" />\r\n                            <div class=\"error-message\">{{errors.email | translate}}</div>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.organization\">\r\n                        <div class=\"control-label\">\r\n                            {{'org_name' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.organization}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.department\">\r\n                        <div class=\"control-label\">\r\n                            {{'department' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.department}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.position\">\r\n                        <div class=\"control-label\">\r\n                            {{'position' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <span class=\"input-placeholder\">\r\n                                {{user.position}}\r\n                            </span>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\" *ngIf=\"user.roles\">\r\n                        <div class=\"control-label\">\r\n                            {{'roles' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <ul class=\"input-placeholder list-style-none\">\r\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\r\n                            </ul>\r\n                        </div>\r\n                    </div>\r\n                </fieldset>\r\n            </tab>\r\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\r\n                <fieldset class=\"fieldset\">\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'limit_view' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\r\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <div class=\"form-group\">\r\n                        <div class=\"control-label\">\r\n                            {{'interface_lang' | translate}}\r\n                        </div>\r\n                        <div class=\"controls\">\r\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\r\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\r\n                                    {{languages[langCode]}}\r\n                                </option>\r\n                            </select>\r\n                        </div>\r\n                    </div>\r\n                    <!-- <div class=\"form-group\">\r\n                        <div class=\"control-label\"></div>\r\n                        <div class=\"controls\">\r\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\r\n                                {{'change_skin' | translate}}\r\n                            </a>\r\n                        </div>\r\n                    </div> -->\r\n                </fieldset>\r\n            </tab>\r\n        </tabs>\r\n    </section>\r\n</form>\r\n"
 
 /***/ },
-/* 615 */
+/* 616 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9051,23 +9068,23 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 616 */
+/* 617 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(617));
 	__export(__webpack_require__(618));
 	__export(__webpack_require__(619));
 	__export(__webpack_require__(620));
 	__export(__webpack_require__(621));
 	__export(__webpack_require__(622));
+	__export(__webpack_require__(623));
 
 
 /***/ },
-/* 617 */
+/* 618 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9081,7 +9098,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var staff_service_1 = __webpack_require__(539);
+	var staff_service_1 = __webpack_require__(540);
 	var models_1 = __webpack_require__(528);
 	var OrganizationInputComponent = (function () {
 	    function OrganizationInputComponent(staffService) {
@@ -9098,8 +9115,8 @@ webpackJsonp([0],[
 	    }
 	    OrganizationInputComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        if (!this.org && this.orgId) {
-	            this.staffService.fetchOrganizations({ ids: this.orgId }).subscribe(function (payload) {
+	        if (!this.org && this.id) {
+	            this.staffService.fetchOrganizations({ ids: this.id }).subscribe(function (payload) {
 	                _this.org = payload.organizations[0];
 	            });
 	        }
@@ -9157,7 +9174,7 @@ webpackJsonp([0],[
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
-	    ], OrganizationInputComponent.prototype, "orgId", void 0);
+	    ], OrganizationInputComponent.prototype, "id", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', models_1.Organization)
@@ -9195,7 +9212,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 618 */
+/* 619 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9225,7 +9242,7 @@ webpackJsonp([0],[
 	        var _this = this;
 	        this.sub = this.store.select('projects').subscribe(function (state) {
 	            _this.projects = state.projects;
-	            _this.project = state.projects.filter(function (it) { return it.id == _this.projectId; })[0];
+	            _this.project = state.projects.filter(function (it) { return it.id == _this.id; })[0];
 	            _this.searchable = _this.projects.length > 13;
 	        });
 	    };
@@ -9260,7 +9277,7 @@ webpackJsonp([0],[
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
-	    ], ProjectInputComponent.prototype, "projectId", void 0);
+	    ], ProjectInputComponent.prototype, "id", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
@@ -9294,7 +9311,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 619 */
+/* 620 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9387,7 +9404,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 620 */
+/* 621 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9405,7 +9422,7 @@ webpackJsonp([0],[
 	var TagsInputComponent = (function () {
 	    function TagsInputComponent(store) {
 	        this.store = store;
-	        this.tagIds = [];
+	        this.ids = [];
 	        this.placeHolder = '';
 	        this.editable = false;
 	        this.searchable = false;
@@ -9418,8 +9435,8 @@ webpackJsonp([0],[
 	        var _this = this;
 	        this.sub = this.store.select('reference').subscribe(function (state) {
 	            _this.tags = state.tags;
-	            if (_this.tagIds) {
-	                _this.selectedTags = state.tags.filter(function (it) { return _this.tagIds.indexOf(it.id) != -1; });
+	            if (_this.ids) {
+	                _this.selectedTags = state.tags.filter(function (it) { return _this.ids.indexOf(it.id) != -1; });
 	            }
 	            _this.searchable = _this.tags.length > 13;
 	        });
@@ -9429,8 +9446,8 @@ webpackJsonp([0],[
 	    };
 	    TagsInputComponent.prototype.getTags = function () {
 	        var _this = this;
-	        if (this.tagIds) {
-	            return this.tags.filter(function (it) { return _this.tagIds.indexOf(it.id) == -1; });
+	        if (this.ids) {
+	            return this.tags.filter(function (it) { return _this.ids.indexOf(it.id) == -1; });
 	        }
 	        else {
 	            return this.tags;
@@ -9442,18 +9459,18 @@ webpackJsonp([0],[
 	    TagsInputComponent.prototype.clear = function ($event) {
 	        $event.stopPropagation();
 	        this.selectedTags = [];
-	        this.tagIds = [];
+	        this.ids = [];
 	        this.select.emit(this.selectedTags);
 	    };
 	    TagsInputComponent.prototype.add = function (tag) {
 	        this.selectedTags.push(tag);
-	        this.tagIds = this.selectedTags.map(function (it) { return it.id; });
+	        this.ids = this.selectedTags.map(function (it) { return it.id; });
 	        this.select.emit(this.selectedTags);
 	    };
 	    TagsInputComponent.prototype.remove = function (tag, $event) {
 	        $event.stopPropagation();
 	        this.selectedTags = this.selectedTags.filter(function (it) { return it.id != tag.id; });
-	        this.tagIds = this.selectedTags.map(function (it) { return it.id; });
+	        this.ids = this.selectedTags.map(function (it) { return it.id; });
 	        this.select.emit(this.selectedTags);
 	    };
 	    TagsInputComponent.prototype.onScroll = function ($event) {
@@ -9465,7 +9482,7 @@ webpackJsonp([0],[
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Array)
-	    ], TagsInputComponent.prototype, "tagIds", void 0);
+	    ], TagsInputComponent.prototype, "ids", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
@@ -9499,7 +9516,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 621 */
+/* 622 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9527,7 +9544,7 @@ webpackJsonp([0],[
 	        var _this = this;
 	        this.sub = this.store.select('reference').subscribe(function (state) {
 	            _this.taskTypes = state.taskTypes;
-	            _this.taskType = state.taskTypes.filter(function (it) { return it.id == _this.taskTypeId; })[0];
+	            _this.taskType = state.taskTypes.filter(function (it) { return it.id == _this.id; })[0];
 	            _this.searchable = _this.taskTypes.length > 13;
 	        });
 	    };
@@ -9555,7 +9572,7 @@ webpackJsonp([0],[
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
-	    ], TaskTypeInputComponent.prototype, "taskTypeId", void 0);
+	    ], TaskTypeInputComponent.prototype, "id", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
@@ -9579,7 +9596,7 @@ webpackJsonp([0],[
 	    TaskTypeInputComponent = __decorate([
 	        core_1.Component({
 	            selector: 'task-type-input',
-	            template: "\n        <span class=\"input task-type-input\" *ngIf=\"!editable\">\n            {{taskType | localizedName}}\n        </span>\n        <div dropdown class=\"select task-type-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"taskType\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{taskType | localizedName}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && taskType\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"taskTypeId == m.id\" *ngFor=\"let m of taskTypes\" (click)=\"onSelect(m)\">\n                        {{m | localizedName}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    "
+	            template: "\n        <span class=\"input task-type-input\" *ngIf=\"!editable\">\n            {{taskType | localizedName}}\n        </span>\n        <div dropdown class=\"select task-type-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"taskType\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span>{{taskType | localizedName}}</span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && taskType\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"id == m.id\" *ngFor=\"let m of taskTypes\" (click)=\"onSelect(m)\">\n                        {{m | localizedName}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store])
 	    ], TaskTypeInputComponent);
@@ -9589,7 +9606,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 622 */
+/* 623 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9604,8 +9621,8 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var store_1 = __webpack_require__(388);
-	var UserInputComponent = (function () {
-	    function UserInputComponent(store) {
+	var EmployeeInputComponent = (function () {
+	    function EmployeeInputComponent(store) {
 	        this.store = store;
 	        this.placeHolder = '';
 	        this.multiple = false;
@@ -9613,61 +9630,61 @@ webpackJsonp([0],[
 	        this.searchable = false;
 	        this.allowClear = false;
 	        this.select = new core_1.EventEmitter();
-	        this.users = [];
-	        this.selectedUsers = [];
+	        this.employees = [];
+	        this.selectedEmps = [];
 	    }
-	    UserInputComponent.prototype.ngOnInit = function () {
+	    EmployeeInputComponent.prototype.ngOnInit = function () {
 	        var _this = this;
 	        this.sub = this.store.select('staff').subscribe(function (state) {
-	            _this.users = state.users;
-	            if (_this.userIds) {
-	                _this.selectedUsers = state.users.filter(function (it) { return _this.userIds.indexOf(it.id) != -1; });
+	            _this.employees = state.employees;
+	            if (_this.ids) {
+	                _this.selectedEmps = state.employees.filter(function (it) { return _this.ids.indexOf(it.userID) != -1; });
 	            }
-	            _this.searchable = _this.users.length > 13;
+	            _this.searchable = _this.employees.length > 13;
 	        });
 	    };
-	    UserInputComponent.prototype.ngOnDestroy = function () {
+	    EmployeeInputComponent.prototype.ngOnDestroy = function () {
 	        this.sub.unsubscribe();
 	    };
-	    UserInputComponent.prototype.getUsers = function () {
+	    EmployeeInputComponent.prototype.getEmps = function () {
 	        var _this = this;
-	        if (this.multiple && this.userIds) {
-	            return this.users.filter(function (it) { return _this.userIds.indexOf(it.id) == -1; });
+	        if (this.multiple && this.ids) {
+	            return this.employees.filter(function (it) { return _this.ids.indexOf(it.userID) == -1; });
 	        }
 	        else {
-	            return this.users;
+	            return this.employees;
 	        }
 	    };
-	    UserInputComponent.prototype.search = function (keyWord) {
+	    EmployeeInputComponent.prototype.search = function (keyWord) {
 	        console.log(keyWord);
 	    };
-	    UserInputComponent.prototype.clear = function ($event) {
+	    EmployeeInputComponent.prototype.clear = function ($event) {
 	        $event.stopPropagation();
-	        this.selectedUsers = [];
-	        this.userIds = [];
-	        this.select.emit(this.selectedUsers);
+	        this.selectedEmps = [];
+	        this.ids = [];
+	        this.select.emit(this.selectedEmps);
 	    };
-	    UserInputComponent.prototype.add = function (user) {
+	    EmployeeInputComponent.prototype.add = function (employee) {
 	        if (this.multiple) {
-	            this.selectedUsers.push(user);
-	            this.userIds = this.selectedUsers.map(function (it) { return it.id; });
+	            this.selectedEmps.push(employee);
+	            this.ids = this.selectedEmps.map(function (it) { return it.userID; });
 	        }
 	        else {
-	            this.selectedUsers = [user];
-	            this.userIds = [user.id];
+	            this.selectedEmps = [employee];
+	            this.ids = [employee.id];
 	            document.body.click();
 	        }
-	        this.select.emit(this.selectedUsers);
+	        this.select.emit(this.selectedEmps);
 	    };
-	    UserInputComponent.prototype.remove = function (user, $event) {
+	    EmployeeInputComponent.prototype.remove = function (employee, $event) {
 	        if (this.multiple) {
 	            $event.stopPropagation();
-	            this.selectedUsers = this.selectedUsers.filter(function (it) { return it.id != user.id; });
-	            this.userIds = this.selectedUsers.map(function (it) { return it.id; });
-	            this.select.emit(this.selectedUsers);
+	            this.selectedEmps = this.selectedEmps.filter(function (it) { return it.id != employee.userID; });
+	            this.ids = this.selectedEmps.map(function (it) { return it.userID; });
+	            this.select.emit(this.selectedEmps);
 	        }
 	    };
-	    UserInputComponent.prototype.onScroll = function ($event) {
+	    EmployeeInputComponent.prototype.onScroll = function ($event) {
 	        var _a = $event.target, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight, scrollTop = _a.scrollTop;
 	        if ((scrollHeight - clientHeight) == scrollTop) {
 	            console.log('scroll end');
@@ -9676,45 +9693,45 @@ webpackJsonp([0],[
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Array)
-	    ], UserInputComponent.prototype, "userIds", void 0);
+	    ], EmployeeInputComponent.prototype, "ids", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', String)
-	    ], UserInputComponent.prototype, "placeHolder", void 0);
+	    ], EmployeeInputComponent.prototype, "placeHolder", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
-	    ], UserInputComponent.prototype, "multiple", void 0);
+	    ], EmployeeInputComponent.prototype, "multiple", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
-	    ], UserInputComponent.prototype, "editable", void 0);
+	    ], EmployeeInputComponent.prototype, "editable", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
-	    ], UserInputComponent.prototype, "searchable", void 0);
+	    ], EmployeeInputComponent.prototype, "searchable", void 0);
 	    __decorate([
 	        core_1.Input(), 
 	        __metadata('design:type', Boolean)
-	    ], UserInputComponent.prototype, "allowClear", void 0);
+	    ], EmployeeInputComponent.prototype, "allowClear", void 0);
 	    __decorate([
 	        core_1.Output(), 
 	        __metadata('design:type', core_1.EventEmitter)
-	    ], UserInputComponent.prototype, "select", void 0);
-	    UserInputComponent = __decorate([
+	    ], EmployeeInputComponent.prototype, "select", void 0);
+	    EmployeeInputComponent = __decorate([
 	        core_1.Component({
-	            selector: 'user-input',
-	            template: "\n        <span class=\"input user-input\" *ngIf=\"!editable\">\n            <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\">\n                {{m?.userName || m?.login}}\n            </span>\n        </span>\n        <div dropdown class=\"select user-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"selectedUsers.length\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedUsers\" (click)=\"remove(m, $event)\">\n                    {{m?.userName || m?.login}}\n                </span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && selectedUsers.length\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"userIds && userIds.indexOf(m.id) !=- 1\" *ngFor=\"let m of getUsers()\" (click)=\"add(m)\">\n                        {{m.userName || m.login}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    "
+	            selector: 'employee-input',
+	            template: "\n        <span class=\"input employee-input\" *ngIf=\"!editable\">\n            <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedEmps\">\n                {{m?.name}}\n            </span>\n        </span>\n        <div dropdown class=\"select employee-input\" [class.allow-clear]=\"allowClear\" [class.has-selected]=\"selectedEmps.length\" *ngIf=\"editable\">\n            <div dropdown-toggle class=\"select-selection input\">\n                <span [class.tag]=\"multiple\" *ngFor=\"let m of selectedEmps\" (click)=\"remove(m, $event)\">\n                    {{m?.name}}\n                </span>\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <div class=\"clear\" *ngIf=\"allowClear && selectedEmps.length\" (click)=\"clear($event)\">\n                    <i class=\"fa fa-times\"></i>\n                </div>\n            </div>\n            <div class=\"dropdown-menu select-dropdown\">\n                <div class=\"select-search\" *ngIf=\"searchable\">\n                    <input placeholder=\"{{'search' | translate}}\" #searchInput (keyup)=\"search($event.target.value)\" />\n                    <button type=\"button\" class=\"btn select-search-reset\" *ngIf=\"searchInput.value\" (click)=\"searchInput.value = '' && search('')\">\n                        <i class=\"fa fa-times\"></i>\n                    </button>\n                </div>\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\" [class.selected]=\"ids && ids.indexOf(m.id) !=- 1\" *ngFor=\"let m of getEmps()\" (click)=\"add(m)\">\n                        {{m.name}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n    "
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store])
-	    ], UserInputComponent);
-	    return UserInputComponent;
+	    ], EmployeeInputComponent);
+	    return EmployeeInputComponent;
 	}());
-	exports.UserInputComponent = UserInputComponent;
+	exports.EmployeeInputComponent = EmployeeInputComponent;
 
 
 /***/ },
-/* 623 */
+/* 624 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9799,7 +9816,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 624 */
+/* 625 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9838,18 +9855,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 625 */
+/* 626 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(626));
+	__export(__webpack_require__(627));
 
 
 /***/ },
-/* 626 */
+/* 627 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9963,7 +9980,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 627 */
+/* 628 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9977,7 +9994,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var Pikaday = __webpack_require__(628);
+	var Pikaday = __webpack_require__(629);
 	var DatepickerDirective = (function () {
 	    function DatepickerDirective(elementRef) {
 	        this.elementRef = elementRef;
@@ -10018,18 +10035,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 628 */,
-/* 629 */
+/* 629 */,
+/* 630 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var dropdown_component_1 = __webpack_require__(630);
-	var dropdown_toggle_component_1 = __webpack_require__(631);
+	var dropdown_component_1 = __webpack_require__(631);
+	var dropdown_toggle_component_1 = __webpack_require__(632);
 	exports.DROPDOWN_DIRECTIVES = [dropdown_component_1.DropdownComponent, dropdown_toggle_component_1.DropdownToggleComponent];
 
 
 /***/ },
-/* 630 */
+/* 631 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10043,7 +10060,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var dropdown_toggle_component_1 = __webpack_require__(631);
+	var dropdown_toggle_component_1 = __webpack_require__(632);
 	var DropdownComponent = (function () {
 	    function DropdownComponent(renderer) {
 	        var _this = this;
@@ -10184,7 +10201,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 631 */
+/* 632 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10229,17 +10246,17 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 632 */
+/* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var tabs_1 = __webpack_require__(633);
-	var tab_1 = __webpack_require__(634);
+	var tabs_1 = __webpack_require__(634);
+	var tab_1 = __webpack_require__(635);
 	exports.TAB_DIRECTIVES = [tabs_1.Tabs, tab_1.Tab];
 
 
 /***/ },
-/* 633 */
+/* 634 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10253,7 +10270,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var tab_1 = __webpack_require__(634);
+	var tab_1 = __webpack_require__(635);
 	var Tabs = (function () {
 	    function Tabs() {
 	    }
@@ -10285,7 +10302,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 634 */
+/* 635 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10334,18 +10351,18 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 635 */
+/* 636 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(636));
+	__export(__webpack_require__(637));
 
 
 /***/ },
-/* 636 */
+/* 637 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10426,26 +10443,26 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 637 */
+/* 638 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var date_format_pipe_1 = __webpack_require__(638);
+	var date_format_pipe_1 = __webpack_require__(639);
 	exports.DateFormatPipe = date_format_pipe_1.DateFormatPipe;
-	var date_duration_pipe_1 = __webpack_require__(639);
+	var date_duration_pipe_1 = __webpack_require__(640);
 	exports.DateDurationPipe = date_duration_pipe_1.DateDurationPipe;
-	var text_transform_pipe_1 = __webpack_require__(640);
+	var text_transform_pipe_1 = __webpack_require__(641);
 	exports.TextTransformPipe = text_transform_pipe_1.TextTransformPipe;
-	var values_pipe_1 = __webpack_require__(641);
+	var values_pipe_1 = __webpack_require__(642);
 	exports.ValuesPipe = values_pipe_1.ValuesPipe;
-	var keys_pipe_1 = __webpack_require__(613);
+	var keys_pipe_1 = __webpack_require__(614);
 	exports.KeysPipe = keys_pipe_1.KeysPipe;
-	var localized_name_pipe_1 = __webpack_require__(642);
+	var localized_name_pipe_1 = __webpack_require__(643);
 	exports.LocalizedNamePipe = localized_name_pipe_1.LocalizedNamePipe;
 
 
 /***/ },
-/* 638 */
+/* 639 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10486,7 +10503,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 639 */
+/* 640 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10529,7 +10546,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 640 */
+/* 641 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10566,7 +10583,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 641 */
+/* 642 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10596,7 +10613,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 642 */
+/* 643 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10628,20 +10645,20 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 643 */
+/* 644 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var markdown_converter_1 = __webpack_require__(644);
+	var markdown_converter_1 = __webpack_require__(645);
 	exports.MarkdownConverter = markdown_converter_1.MarkdownConverter;
-	var markdown_editor_1 = __webpack_require__(654);
+	var markdown_editor_1 = __webpack_require__(655);
 	exports.MarkdownEditorComponent = markdown_editor_1.MarkdownEditorComponent;
-	var marked_pipe_1 = __webpack_require__(655);
+	var marked_pipe_1 = __webpack_require__(656);
 	exports.MarkedPipe = marked_pipe_1.MarkedPipe;
 
 
 /***/ },
-/* 644 */
+/* 645 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10655,8 +10672,8 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var marked = __webpack_require__(645);
-	var toMarkdown = __webpack_require__(646);
+	var marked = __webpack_require__(646);
+	var toMarkdown = __webpack_require__(647);
 	var MarkdownConverter = (function () {
 	    function MarkdownConverter() {
 	    }
@@ -10676,7 +10693,6 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 645 */,
 /* 646 */,
 /* 647 */,
 /* 648 */,
@@ -10685,7 +10701,8 @@ webpackJsonp([0],[
 /* 651 */,
 /* 652 */,
 /* 653 */,
-/* 654 */
+/* 654 */,
+/* 655 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10699,7 +10716,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(644);
+	var markdown_converter_1 = __webpack_require__(645);
 	var MarkdownEditorComponent = (function () {
 	    function MarkdownEditorComponent(mdc) {
 	        this.mdc = mdc;
@@ -10769,7 +10786,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 655 */
+/* 656 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10783,7 +10800,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var markdown_converter_1 = __webpack_require__(644);
+	var markdown_converter_1 = __webpack_require__(645);
 	var MarkedPipe = (function () {
 	    function MarkedPipe(mdc) {
 	        this.mdc = mdc;
@@ -10801,21 +10818,21 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 656 */
+/* 657 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var router_1 = __webpack_require__(544);
-	var auth_guard_1 = __webpack_require__(657);
-	var redirect_guard_1 = __webpack_require__(658);
-	var dashboard_1 = __webpack_require__(542);
-	var projects_1 = __webpack_require__(543);
-	var project_1 = __webpack_require__(591);
-	var tasks_1 = __webpack_require__(599);
-	var task_1 = __webpack_require__(601);
-	var request_1 = __webpack_require__(610);
-	var user_profile_1 = __webpack_require__(612);
-	var login_1 = __webpack_require__(615);
+	var router_1 = __webpack_require__(545);
+	var auth_guard_1 = __webpack_require__(658);
+	var redirect_guard_1 = __webpack_require__(659);
+	var dashboard_1 = __webpack_require__(543);
+	var projects_1 = __webpack_require__(544);
+	var project_1 = __webpack_require__(592);
+	var tasks_1 = __webpack_require__(600);
+	var task_1 = __webpack_require__(602);
+	var request_1 = __webpack_require__(611);
+	var user_profile_1 = __webpack_require__(613);
+	var login_1 = __webpack_require__(616);
 	var routes = [
 	    { path: '', component: tasks_1.TasksComponent, canActivate: [redirect_guard_1.RedirectGuard, auth_guard_1.AuthGuard] },
 	    { path: 'dashboard', component: dashboard_1.DashboardComponent, canActivate: [auth_guard_1.AuthGuard] },
@@ -10835,7 +10852,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 657 */
+/* 658 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10849,7 +10866,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var services_1 = __webpack_require__(421);
 	var AuthGuard = (function () {
 	    function AuthGuard(appService, router) {
@@ -10872,7 +10889,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 658 */
+/* 659 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -10886,7 +10903,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(544);
+	var router_1 = __webpack_require__(545);
 	var RedirectGuard = (function () {
 	    function RedirectGuard(router) {
 	        this.router = router;
@@ -10920,31 +10937,31 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 659 */
+/* 660 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(660));
+	__export(__webpack_require__(661));
 
 
 /***/ },
-/* 660 */
+/* 661 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var compose_1 = __webpack_require__(661);
+	var compose_1 = __webpack_require__(662);
 	var store_1 = __webpack_require__(388);
-	var ngrx_store_logger_1 = __webpack_require__(662);
-	var environment_reducer_1 = __webpack_require__(663);
-	var authed_reducer_1 = __webpack_require__(664);
-	var projects_reducer_1 = __webpack_require__(665);
-	var tasks_reducer_1 = __webpack_require__(666);
-	var task_reducer_1 = __webpack_require__(667);
-	var staff_reducer_1 = __webpack_require__(668);
-	var reference_reducer_1 = __webpack_require__(669);
+	var ngrx_store_logger_1 = __webpack_require__(663);
+	var environment_reducer_1 = __webpack_require__(664);
+	var authed_reducer_1 = __webpack_require__(665);
+	var projects_reducer_1 = __webpack_require__(666);
+	var tasks_reducer_1 = __webpack_require__(667);
+	var task_reducer_1 = __webpack_require__(668);
+	var staff_reducer_1 = __webpack_require__(669);
+	var reference_reducer_1 = __webpack_require__(670);
 	var logger = ngrx_store_logger_1.storeLogger({
 	    level: 'log',
 	    collapsed: false,
@@ -10963,7 +10980,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 661 */
+/* 662 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -10984,7 +11001,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=compose.js.map
 
 /***/ },
-/* 662 */
+/* 663 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -11128,7 +11145,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 663 */
+/* 664 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11168,7 +11185,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 664 */
+/* 665 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11198,7 +11215,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 665 */
+/* 666 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11235,7 +11252,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 666 */
+/* 667 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11291,7 +11308,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 667 */
+/* 668 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11344,7 +11361,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 668 */
+/* 669 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -11352,7 +11369,7 @@ webpackJsonp([0],[
 	;
 	var initialState = {
 	    organizations: [],
-	    users: []
+	    employees: []
 	};
 	exports.staffReducer = function (state, _a) {
 	    if (state === void 0) { state = initialState; }
@@ -11362,9 +11379,9 @@ webpackJsonp([0],[
 	            return Object.assign({}, state, {
 	                organizations: payload.organizations
 	            });
-	        case actions_1.StaffActions.FETCH_USERS:
+	        case actions_1.StaffActions.FETCH_EMPLOYEES:
 	            return Object.assign({}, state, {
-	                users: payload.users
+	                employees: payload.employees
 	            });
 	        default:
 	            return state;
@@ -11373,7 +11390,7 @@ webpackJsonp([0],[
 
 
 /***/ },
-/* 669 */
+/* 670 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

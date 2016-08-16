@@ -2,23 +2,23 @@ import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core
 import { Store } from '@ngrx/store';
 
 import { IStaffState } from '../../reducers/staff.reducer';
-import { User } from '../../models';
+import { Employee } from '../../models';
 
 @Component({
-    selector: 'user-input',
+    selector: 'employee-input',
     template: `
-        <span class="input user-input" *ngIf="!editable">
-            <span [class.tag]="multiple" *ngFor="let m of selectedUsers">
-                {{m?.userName || m?.login}}
+        <span class="input employee-input" *ngIf="!editable">
+            <span [class.tag]="multiple" *ngFor="let m of selectedEmps">
+                {{m?.name}}
             </span>
         </span>
-        <div dropdown class="select user-input" [class.allow-clear]="allowClear" [class.has-selected]="selectedUsers.length" *ngIf="editable">
+        <div dropdown class="select employee-input" [class.allow-clear]="allowClear" [class.has-selected]="selectedEmps.length" *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
-                <span [class.tag]="multiple" *ngFor="let m of selectedUsers" (click)="remove(m, $event)">
-                    {{m?.userName || m?.login}}
+                <span [class.tag]="multiple" *ngFor="let m of selectedEmps" (click)="remove(m, $event)">
+                    {{m?.name}}
                 </span>
                 <span class="placeholder">{{placeHolder}}</span>
-                <div class="clear" *ngIf="allowClear && selectedUsers.length" (click)="clear($event)">
+                <div class="clear" *ngIf="allowClear && selectedEmps.length" (click)="clear($event)">
                     <i class="fa fa-times"></i>
                 </div>
             </div>
@@ -30,8 +30,8 @@ import { User } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="userIds && userIds.indexOf(m.id) !=- 1" *ngFor="let m of getUsers()" (click)="add(m)">
-                        {{m.userName || m.login}}
+                    <li class="select-option" [class.selected]="ids && ids.indexOf(m.id) !=- 1" *ngFor="let m of getEmps()" (click)="add(m)">
+                        {{m.name}}
                     </li>
                 </ul>
             </div>
@@ -39,27 +39,27 @@ import { User } from '../../models';
     `
 })
 
-export class UserInputComponent {
-    @Input() userIds: string[];
+export class EmployeeInputComponent {
+    @Input() ids: string[];
     @Input() placeHolder: string = '';
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
-    private users: User[] = [];
-    private selectedUsers: User[] = [];
+    private employees: Employee[] = [];
+    private selectedEmps: Employee[] = [];
     private sub: any;
 
     constructor(private store: Store<any>) { }
 
     ngOnInit() {
         this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
-            this.users = state.users;
-            if (this.userIds) {
-                this.selectedUsers = state.users.filter(it => this.userIds.indexOf(it.id) != -1);
+            this.employees = state.employees;
+            if (this.ids) {
+                this.selectedEmps = state.employees.filter(it => this.ids.indexOf(it.userID) != -1);
             }
-            this.searchable = this.users.length > 13;
+            this.searchable = this.employees.length > 13;
         });
     }
 
@@ -67,11 +67,11 @@ export class UserInputComponent {
         this.sub.unsubscribe();
     }
 
-    getUsers() {
-        if (this.multiple && this.userIds) {
-            return this.users.filter(it => this.userIds.indexOf(it.id) == -1);
+    getEmps() {
+        if (this.multiple && this.ids) {
+            return this.employees.filter(it => this.ids.indexOf(it.userID) == -1);
         } else {
-            return this.users;
+            return this.employees;
         }
     }
 
@@ -81,29 +81,29 @@ export class UserInputComponent {
 
     clear($event) {
         $event.stopPropagation();
-        this.selectedUsers = [];
-        this.userIds = [];
-        this.select.emit(this.selectedUsers);
+        this.selectedEmps = [];
+        this.ids = [];
+        this.select.emit(this.selectedEmps);
     }
 
-    add(user: User) {
+    add(employee: Employee) {
         if (this.multiple) {
-            this.selectedUsers.push(user);
-            this.userIds = this.selectedUsers.map(it => it.id);
+            this.selectedEmps.push(employee);
+            this.ids = this.selectedEmps.map(it => it.userID);
         } else {
-            this.selectedUsers = [user];
-            this.userIds = [user.id];
+            this.selectedEmps = [employee];
+            this.ids = [employee.id];
             document.body.click();
         }
-        this.select.emit(this.selectedUsers);
+        this.select.emit(this.selectedEmps);
     }
 
-    remove(user: User, $event) {
+    remove(employee: Employee, $event) {
         if (this.multiple) {
             $event.stopPropagation();
-            this.selectedUsers = this.selectedUsers.filter(it => it.id != user.id);
-            this.userIds = this.selectedUsers.map(it => it.id);
-            this.select.emit(this.selectedUsers);
+            this.selectedEmps = this.selectedEmps.filter(it => it.id != employee.userID);
+            this.ids = this.selectedEmps.map(it => it.userID);
+            this.select.emit(this.selectedEmps);
         }
     }
 

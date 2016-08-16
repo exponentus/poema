@@ -2,10 +2,6 @@ import { compose } from '@ngrx/core/compose';
 import { combineReducers, provideStore } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
 
-// models
-import { Project, Task, TaskType, Tag, User, Attachment, Organization } from '../models';
-
-// reducers
 import { environmentReducer as environment } from '../reducers/environment.reducer';
 import { authedReducer as authed } from '../reducers/authed.reducer';
 import { projectsReducer as projects } from '../reducers/projects.reducer';
