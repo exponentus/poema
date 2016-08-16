@@ -152,7 +152,7 @@ export class ProjectComponent {
 
     removeObserver(observer: Employee, $event) {
         this.project.observerUserIds.forEach((id, index) => {
-            if (id === observer.id) {
+            if (id === observer.userID) {
                 this.project.observerUserIds.splice(index, 1);
             }
         });

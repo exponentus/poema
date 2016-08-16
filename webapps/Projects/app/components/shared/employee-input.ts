@@ -92,7 +92,7 @@ export class EmployeeInputComponent {
             this.ids = this.selectedEmps.map(it => it.userID);
         } else {
             this.selectedEmps = [employee];
-            this.ids = [employee.id];
+            this.ids = [employee.userID];
             document.body.click();
         }
         this.select.emit(this.selectedEmps);
@@ -101,7 +101,7 @@ export class EmployeeInputComponent {
     remove(employee: Employee, $event) {
         if (this.multiple) {
             $event.stopPropagation();
-            this.selectedEmps = this.selectedEmps.filter(it => it.id != employee.userID);
+            this.selectedEmps = this.selectedEmps.filter(it => it.userID != employee.userID);
             this.ids = this.selectedEmps.map(it => it.userID);
             this.select.emit(this.selectedEmps);
         }

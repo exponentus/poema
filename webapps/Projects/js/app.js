@@ -7375,7 +7375,7 @@ webpackJsonp([0],[
 	    ProjectComponent.prototype.removeObserver = function (observer, $event) {
 	        var _this = this;
 	        this.project.observerUserIds.forEach(function (id, index) {
-	            if (id === observer.id) {
+	            if (id === observer.userID) {
 	                _this.project.observerUserIds.splice(index, 1);
 	            }
 	        });
@@ -9665,7 +9665,7 @@ webpackJsonp([0],[
 	        }
 	        else {
 	            this.selectedEmps = [employee];
-	            this.ids = [employee.id];
+	            this.ids = [employee.userID];
 	            document.body.click();
 	        }
 	        this.select.emit(this.selectedEmps);
@@ -9673,7 +9673,7 @@ webpackJsonp([0],[
 	    EmployeeInputComponent.prototype.remove = function (employee, $event) {
 	        if (this.multiple) {
 	            $event.stopPropagation();
-	            this.selectedEmps = this.selectedEmps.filter(function (it) { return it.id != employee.userID; });
+	            this.selectedEmps = this.selectedEmps.filter(function (it) { return it.userID != employee.userID; });
 	            this.ids = this.selectedEmps.map(function (it) { return it.userID; });
 	            this.select.emit(this.selectedEmps);
 	        }
