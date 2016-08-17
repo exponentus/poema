@@ -304,7 +304,8 @@ export class TaskComponent {
 
     //
     close() {
-        this.router.navigate(['/tasks']);
+        // this.router.navigate(['/tasks']);
+        window.history.back();
     }
 
     handleValidationError(error: any) {

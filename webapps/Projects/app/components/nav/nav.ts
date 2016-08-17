@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -13,24 +14,35 @@ import { Project } from '../../models/project';
 })
 
 export class NavComponent {
-    private sub: Subscription;
+    private subs: Subscription[] = [];
     private projects: Project[];
 
     constructor(
+        private router: Router,
+        private route: ActivatedRoute,
         private store: Store<any>,
         private projectActions: ProjectActions,
         private projectService: ProjectService
     ) { }
 
     ngOnInit() {
-        this.sub = this.store.select('projects').subscribe((state: IProjectsState) => {
+        this.subs.push(this.route.params.subscribe(params => {
+            console.log('nav', params);
+        }));
+
+        this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
-        });
+        }));
+
         this.loadNavProjects();
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
+    }
+
+    isActive(instruction: any[]): boolean {
+        return this.router.isActive(this.router.createUrlTree(instruction), true);
     }
 
     loadNavProjects() {

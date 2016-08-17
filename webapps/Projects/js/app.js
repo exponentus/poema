@@ -366,8 +366,8 @@ webpackJsonp([0],[
 	var common_1 = __webpack_require__(206);
 	var ng2_translate_1 = __webpack_require__(361);
 	var app_1 = __webpack_require__(387);
-	var dashboard_1 = __webpack_require__(543);
-	var projects_1 = __webpack_require__(544);
+	var dashboard_1 = __webpack_require__(589);
+	var projects_1 = __webpack_require__(590);
 	var project_1 = __webpack_require__(592);
 	var project_list_1 = __webpack_require__(598);
 	var tasks_1 = __webpack_require__(600);
@@ -390,10 +390,10 @@ webpackJsonp([0],[
 	var markdown_1 = __webpack_require__(638);
 	var pipes_1 = __webpack_require__(651);
 	var app_routing_1 = __webpack_require__(657);
-	var translate_service_1 = __webpack_require__(423);
-	var services_1 = __webpack_require__(421);
+	var translate_service_1 = __webpack_require__(469);
+	var services_1 = __webpack_require__(467);
 	var store_1 = __webpack_require__(660);
-	var actions_1 = __webpack_require__(416);
+	var actions_1 = __webpack_require__(462);
 	var auth_guard_1 = __webpack_require__(658);
 	var redirect_guard_1 = __webpack_require__(659);
 	var AppModule = (function () {
@@ -527,9 +527,9 @@ webpackJsonp([0],[
 	var ng2_translate_1 = __webpack_require__(361);
 	var navbar_1 = __webpack_require__(407);
 	var nav_1 = __webpack_require__(411);
-	var actions_1 = __webpack_require__(416);
-	var services_1 = __webpack_require__(421);
-	var models_1 = __webpack_require__(528);
+	var actions_1 = __webpack_require__(462);
+	var services_1 = __webpack_require__(467);
+	var models_1 = __webpack_require__(574);
 	var AppComponent = (function () {
 	    function AppComponent(store, appActions, referenceActions, staffActions, appService, referenceService, staffService, translate) {
 	        var _this = this;
@@ -639,7 +639,7 @@ webpackJsonp([0],[
 	    AppComponent = __decorate([
 	        core_1.Component({
 	            selector: 'app',
-	            template: __webpack_require__(542),
+	            template: __webpack_require__(588),
 	            directives: [navbar_1.NavbarComponent, nav_1.NavComponent],
 	        }), 
 	        __metadata('design:paramtypes', [store_1.Store, actions_1.AppActions, actions_1.ReferenceActions, actions_1.StaffActions, services_1.AppService, services_1.ReferenceService, services_1.StaffService, ng2_translate_1.TranslateService])
@@ -824,24 +824,34 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
+	var router_1 = __webpack_require__(412);
 	var store_1 = __webpack_require__(388);
-	var project_actions_1 = __webpack_require__(412);
-	var project_service_1 = __webpack_require__(413);
+	var project_actions_1 = __webpack_require__(458);
+	var project_service_1 = __webpack_require__(459);
 	var NavComponent = (function () {
-	    function NavComponent(store, projectActions, projectService) {
+	    function NavComponent(router, route, store, projectActions, projectService) {
+	        this.router = router;
+	        this.route = route;
 	        this.store = store;
 	        this.projectActions = projectActions;
 	        this.projectService = projectService;
+	        this.subs = [];
 	    }
 	    NavComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.sub = this.store.select('projects').subscribe(function (state) {
+	        this.subs.push(this.route.params.subscribe(function (params) {
+	            console.log('nav', params);
+	        }));
+	        this.subs.push(this.store.select('projects').subscribe(function (state) {
 	            _this.projects = state.projects;
-	        });
+	        }));
 	        this.loadNavProjects();
 	    };
 	    NavComponent.prototype.ngOnDestroy = function () {
-	        this.sub.unsubscribe();
+	        this.subs.map(function (s) { return s.unsubscribe(); });
+	    };
+	    NavComponent.prototype.isActive = function (instruction) {
+	        return this.router.isActive(this.router.createUrlTree(instruction), true);
 	    };
 	    NavComponent.prototype.loadNavProjects = function () {
 	        var _this = this;
@@ -852,9 +862,9 @@ webpackJsonp([0],[
 	    NavComponent = __decorate([
 	        core_1.Component({
 	            selector: '[data-c=nav]',
-	            template: __webpack_require__(415)
+	            template: __webpack_require__(461)
 	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, project_actions_1.ProjectActions, project_service_1.ProjectService])
+	        __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute, store_1.Store, project_actions_1.ProjectActions, project_service_1.ProjectService])
 	    ], NavComponent);
 	    return NavComponent;
 	}());
@@ -865,1653 +875,6 @@ webpackJsonp([0],[
 /* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var ProjectActions = (function () {
-	    function ProjectActions() {
-	    }
-	    ProjectActions.prototype.createProject = function (project) {
-	        return {
-	            type: ProjectActions.CREATE_PROJECT,
-	            payload: {
-	                project: project
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.createProjectFailed = function (error) {
-	        return {
-	            type: ProjectActions.CREATE_PROJECT_FAILED,
-	            payload: error
-	        };
-	    };
-	    ProjectActions.prototype.createProjectFulfilled = function (project) {
-	        return {
-	            type: ProjectActions.CREATE_PROJECT_FULFILLED,
-	            payload: {
-	                project: project
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.fetchProjects = function () {
-	        return {
-	            type: ProjectActions.FETCH_PROJECTS
-	        };
-	    };
-	    ProjectActions.prototype.fetchProjectsFailed = function (error) {
-	        return {
-	            type: ProjectActions.FETCH_PROJECTS_FAILED,
-	            payload: error
-	        };
-	    };
-	    ProjectActions.prototype.fetchProjectsFulfilled = function (projects, meta) {
-	        return {
-	            type: ProjectActions.FETCH_PROJECTS_FULFILLED,
-	            payload: {
-	                projects: projects,
-	                meta: meta
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.updateProject = function (projectId, changes) {
-	        return {
-	            type: ProjectActions.UPDATE_PROJECT,
-	            payload: {
-	                changes: changes,
-	                projectId: projectId
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.updateProjectFailed = function (error) {
-	        return {
-	            type: ProjectActions.UPDATE_PROJECT_FAILED,
-	            payload: error
-	        };
-	    };
-	    ProjectActions.prototype.updateProjectFulfilled = function (project) {
-	        return {
-	            type: ProjectActions.UPDATE_PROJECT_FULFILLED,
-	            payload: {
-	                project: project
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.deleteProject = function (projectId) {
-	        return {
-	            type: ProjectActions.DELETE_PROJECT,
-	            payload: {
-	                projectId: projectId
-	            }
-	        };
-	    };
-	    ProjectActions.prototype.deleteProjectFailed = function (error) {
-	        return {
-	            type: ProjectActions.DELETE_PROJECT_FAILED,
-	            payload: error
-	        };
-	    };
-	    ProjectActions.prototype.deleteProjectFulfilled = function (project) {
-	        return {
-	            type: ProjectActions.DELETE_PROJECT_FULFILLED,
-	            payload: {
-	                project: project
-	            }
-	        };
-	    };
-	    ProjectActions.CREATE_PROJECT = 'CREATE_PROJECT';
-	    ProjectActions.CREATE_PROJECT_FAILED = 'CREATE_PROJECT_FAILED';
-	    ProjectActions.CREATE_PROJECT_FULFILLED = 'CREATE_PROJECT_FULFILLED';
-	    ProjectActions.FETCH_PROJECTS = 'FETCH_PROJECTS';
-	    ProjectActions.FETCH_PROJECTS_FAILED = 'FETCH_PROJECTS_FAILED';
-	    ProjectActions.FETCH_PROJECTS_FULFILLED = 'FETCH_PROJECTS_FULFILLED';
-	    ProjectActions.UPDATE_PROJECT = 'UPDATE_PROJECT';
-	    ProjectActions.UPDATE_PROJECT_FAILED = 'UPDATE_PROJECT_FAILED';
-	    ProjectActions.UPDATE_PROJECT_FULFILLED = 'UPDATE_PROJECT_FULFILLED';
-	    ProjectActions.DELETE_PROJECT = 'DELETE_PROJECT';
-	    ProjectActions.DELETE_PROJECT_FAILED = 'DELETE_PROJECT_FAILED';
-	    ProjectActions.DELETE_PROJECT_FULFILLED = 'DELETE_PROJECT_FULFILLED';
-	    ProjectActions = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], ProjectActions);
-	    return ProjectActions;
-	}());
-	exports.ProjectActions = ProjectActions;
-
-
-/***/ },
-/* 413 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var Observable_1 = __webpack_require__(70);
-	var ng2_translate_1 = __webpack_require__(361);
-	var utils_1 = __webpack_require__(414);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var ProjectService = (function () {
-	    function ProjectService(http, translate) {
-	        this.http = http;
-	        this.translate = translate;
-	    }
-	    ProjectService.prototype.getProjectStatusTypes = function () {
-	        return this.translate.get(['draft', 'processed', 'finished']).map(function (t) { return [
-	            { value: 'DRAFT', text: t.draft, default: true },
-	            { value: 'PROCESSED', text: t.processed },
-	            { value: 'FINISHED', text: t.finished }
-	        ]; });
-	    };
-	    ProjectService.prototype.fetchProjects = function (queryParams) {
-	        if (queryParams === void 0) { queryParams = {}; }
-	        return this.http.get('p?id=project-view', {
-	            headers: HEADERS,
-	            search: utils_1.createURLSearchParams(queryParams)
-	        })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                projects: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    ProjectService.prototype.fetchProjectById = function (projectId) {
-	        if (projectId === 'new') {
-	        }
-	        var url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
-	        return this.http.get(url, { headers: HEADERS })
-	            .map(function (response) {
-	            var data = utils_1.parseResponseObjects(response.json().objects);
-	            var project = data.project;
-	            if (!project.id) {
-	                project.id = '';
-	            }
-	            if (data.fsid) {
-	                project.fsid = data.fsid;
-	            }
-	            if (data.attachment) {
-	                project.attachments = data.attachment.list;
-	            }
-	            return project;
-	        });
-	    };
-	    ProjectService.prototype.saveProject = function (project) {
-	        var url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
-	        return this.http.post(url, utils_1.serializeObj(project), { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    ProjectService.prototype.deleteProject = function (projects) {
-	        return this.http.delete('p?id=project-view&projectIds=' + projects.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    ProjectService.prototype.deleteProjectAttachment = function (project, attachment) {
-	        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    ProjectService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http, ng2_translate_1.TranslateService])
-	    ], ProjectService);
-	    return ProjectService;
-	}());
-	exports.ProjectService = ProjectService;
-
-
-/***/ },
-/* 414 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var http_1 = __webpack_require__(339);
-	function createURLSearchParams(_params) {
-	    var params = new http_1.URLSearchParams();
-	    for (var p in _params) {
-	        if (_params[p] instanceof Array) {
-	            for (var t in _params[p]) {
-	                params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
-	            }
-	        }
-	        else {
-	            if (typeof (_params[p]) != 'undefined') {
-	                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
-	            }
-	        }
-	    }
-	    return params;
-	}
-	exports.createURLSearchParams = createURLSearchParams;
-	function serializeObj(obj) {
-	    var result = [];
-	    for (var property in obj) {
-	        result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
-	    }
-	    return result.join('&');
-	}
-	exports.serializeObj = serializeObj;
-	function parseResponseObjects(objects) {
-	    var result = [];
-	    for (var _i = 0, objects_1 = objects; _i < objects_1.length; _i++) {
-	        var obj = objects_1[_i];
-	        if (obj.kind) {
-	            result[obj.kind] = obj;
-	        }
-	        else if (obj.list && obj.meta && obj.type) {
-	            result[obj.type] = obj;
-	        }
-	        else if (obj.name && obj.value) {
-	            result[obj.name] = obj.value;
-	        }
-	        else {
-	            result.push(obj);
-	        }
-	    }
-	    return result;
-	}
-	exports.parseResponseObjects = parseResponseObjects;
-	function parseListObjectsToKeyValue(list) {
-	    var result = [];
-	    if (list) {
-	        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
-	            var it = list_1[_i];
-	            result[it.id] = it;
-	        }
-	    }
-	    return result;
-	}
-	exports.parseListObjectsToKeyValue = parseListObjectsToKeyValue;
-	function transformPostResponse(response) {
-	    var json = response.json();
-	    return Object.assign(json, {
-	        ok: json.type === 'DOCUMENT_SAVED',
-	        message: json.captions ? json.captions.type : json.message
-	    });
-	}
-	exports.transformPostResponse = transformPostResponse;
-	function createCookie(name, value, days) {
-	    var expires;
-	    if (days) {
-	        var date = new Date();
-	        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-	        expires = '; expires=' + date.toUTCString();
-	    }
-	    else {
-	        expires = '';
-	    }
-	    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expires + '; path=/';
-	}
-	exports.createCookie = createCookie;
-
-
-/***/ },
-/* 415 */
-/***/ function(module, exports) {
-
-	module.exports = "<ul>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'my']\" class=\"nav-link\">\r\n            <i class=\"fa fa-pencil\"></i>\r\n            <span>{{'my_tasks' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'inbox']\" class=\"nav-link\">\r\n            <i class=\"fa fa-inbox\"></i>\r\n            <span>{{'tasks_assigned_to_me' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <!-- <li>\r\n        <a [routerLink]=\"['/']\" class=\"nav-link\">\r\n            <i class=\"fa fa-dashboard\"></i>\r\n            <span>{{'dashboard' | translate}}</span>\r\n        </a>\r\n    </li> -->\r\n    <li class=\"divider\"></li>\r\n    <li>\r\n        <a [routerLink]=\"['/projects']\" class=\"nav-link\">\r\n            <i class=\"fa fa-puzzle-piece\"></i>\r\n            <span>{{'projects' | translate}}</span>\r\n        </a>\r\n        <ul>\r\n            <li *ngFor=\"let project of projects\">\r\n                <a [routerLink]=\"['/projects', project.id, 'tasks']\" class=\"nav-link\">\r\n                    <i class=\"fa fa-file-text-o\"></i>\r\n                    <span>{{project.name}}</span>\r\n                </a>\r\n            </li>\r\n        </ul>\r\n    </li>\r\n</ul>\r\n"
-
-/***/ },
-/* 416 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var environment_actions_1 = __webpack_require__(408);
-	exports.EnvironmentActions = environment_actions_1.EnvironmentActions;
-	var app_actions_1 = __webpack_require__(417);
-	exports.AppActions = app_actions_1.AppActions;
-	var project_actions_1 = __webpack_require__(412);
-	exports.ProjectActions = project_actions_1.ProjectActions;
-	var task_actions_1 = __webpack_require__(418);
-	exports.TaskActions = task_actions_1.TaskActions;
-	var reference_actions_1 = __webpack_require__(419);
-	exports.ReferenceActions = reference_actions_1.ReferenceActions;
-	var staff_actions_1 = __webpack_require__(420);
-	exports.StaffActions = staff_actions_1.StaffActions;
-	exports.APP_STORE_ACTIONS = [
-	    environment_actions_1.EnvironmentActions,
-	    app_actions_1.AppActions,
-	    project_actions_1.ProjectActions,
-	    task_actions_1.TaskActions,
-	    reference_actions_1.ReferenceActions,
-	    staff_actions_1.StaffActions
-	];
-
-
-/***/ },
-/* 417 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var AppActions = (function () {
-	    function AppActions() {
-	    }
-	    AppActions.prototype.fetchUserProfile = function () {
-	        return {
-	            type: AppActions.FETCH_USER_PROFILE
-	        };
-	    };
-	    AppActions.prototype.fetchUserProfileFailed = function (error) {
-	        return {
-	            type: AppActions.FETCH_USER_PROFILE_FAILED,
-	            payload: error
-	        };
-	    };
-	    AppActions.prototype.fetchUserProfileFulfilled = function (payload) {
-	        return {
-	            type: AppActions.FETCH_USER_PROFILE_FULFILLED,
-	            payload: payload
-	        };
-	    };
-	    AppActions.prototype.updateUserProfile = function (userProfile) {
-	        return {
-	            type: AppActions.UPDATE_USER_PROFILE,
-	            payload: {
-	                userProfile: userProfile
-	            }
-	        };
-	    };
-	    AppActions.prototype.updateUserProfileFailed = function (error) {
-	        return {
-	            type: AppActions.UPDATE_USER_PROFILE_FAILED,
-	            payload: error
-	        };
-	    };
-	    AppActions.prototype.updateUserProfileFulfilled = function (userProfile) {
-	        return {
-	            type: AppActions.UPDATE_USER_PROFILE_FULFILLED,
-	            payload: {
-	                userProfile: userProfile
-	            }
-	        };
-	    };
-	    AppActions.FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
-	    AppActions.FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
-	    AppActions.FETCH_USER_PROFILE_FULFILLED = 'FETCH_USER_PROFILE_FULFILLED';
-	    AppActions.UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
-	    AppActions.UPDATE_USER_PROFILE_FAILED = 'UPDATE_USER_PROFILE_FAILED';
-	    AppActions.UPDATE_USER_PROFILE_FULFILLED = 'UPDATE_USER_PROFILE_FULFILLED';
-	    AppActions = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], AppActions);
-	    return AppActions;
-	}());
-	exports.AppActions = AppActions;
-
-
-/***/ },
-/* 418 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var TaskActions = (function () {
-	    function TaskActions() {
-	    }
-	    TaskActions.prototype.createTask = function (task) {
-	        return {
-	            type: TaskActions.CREATE_TASK,
-	            payload: {
-	                task: task
-	            }
-	        };
-	    };
-	    TaskActions.prototype.createTaskFailed = function (error) {
-	        return {
-	            type: TaskActions.CREATE_TASK_FAILED,
-	            payload: error
-	        };
-	    };
-	    TaskActions.prototype.createTaskFulfilled = function (task) {
-	        return {
-	            type: TaskActions.CREATE_TASK_FULFILLED,
-	            payload: {
-	                task: task
-	            }
-	        };
-	    };
-	    TaskActions.prototype.fetchTasks = function () {
-	        return {
-	            type: TaskActions.FETCH_TASKS
-	        };
-	    };
-	    TaskActions.prototype.fetchTasksFailed = function (error) {
-	        return {
-	            type: TaskActions.FETCH_TASKS_FAILED,
-	            payload: error
-	        };
-	    };
-	    TaskActions.prototype.fetchTasksFulfilled = function (tasks, meta) {
-	        return {
-	            type: TaskActions.FETCH_TASKS_FULFILLED,
-	            payload: {
-	                tasks: tasks,
-	                meta: meta
-	            }
-	        };
-	    };
-	    TaskActions.prototype.fetchTask = function (taskId) {
-	        return {
-	            type: TaskActions.FETCH_TASK
-	        };
-	    };
-	    TaskActions.prototype.fetchTaskFailed = function (error) {
-	        return {
-	            type: TaskActions.FETCH_TASK_FAILED,
-	            payload: error
-	        };
-	    };
-	    TaskActions.prototype.fetchTaskFulfilled = function (task) {
-	        return {
-	            type: TaskActions.FETCH_TASK_FULFILLED,
-	            payload: {
-	                task: task
-	            }
-	        };
-	    };
-	    TaskActions.prototype.updateTask = function (taskId, changes) {
-	        return {
-	            type: TaskActions.UPDATE_TASK,
-	            payload: {
-	                changes: changes,
-	                taskId: taskId
-	            }
-	        };
-	    };
-	    TaskActions.prototype.updateTaskFailed = function (error) {
-	        return {
-	            type: TaskActions.UPDATE_TASK_FAILED,
-	            payload: error
-	        };
-	    };
-	    TaskActions.prototype.updateTaskFulfilled = function (task) {
-	        return {
-	            type: TaskActions.UPDATE_TASK_FULFILLED,
-	            payload: {
-	                task: task
-	            }
-	        };
-	    };
-	    TaskActions.prototype.deleteTask = function (taskId) {
-	        return {
-	            type: TaskActions.DELETE_TASK,
-	            payload: {
-	                taskId: taskId
-	            }
-	        };
-	    };
-	    TaskActions.prototype.deleteTaskFailed = function (error) {
-	        return {
-	            type: TaskActions.DELETE_TASK_FAILED,
-	            payload: error
-	        };
-	    };
-	    TaskActions.prototype.deleteTaskFulfilled = function (task) {
-	        return {
-	            type: TaskActions.DELETE_TASK_FULFILLED,
-	            payload: {
-	                task: task
-	            }
-	        };
-	    };
-	    TaskActions.prototype.toggleStreamExpand = function (id) {
-	        return {
-	            type: TaskActions.TOGGLE_STREAM_EXPAND,
-	            payload: id
-	        };
-	    };
-	    TaskActions.CREATE_TASK = 'CREATE_TASK';
-	    TaskActions.CREATE_TASK_FAILED = 'CREATE_TASK_FAILED';
-	    TaskActions.CREATE_TASK_FULFILLED = 'CREATE_TASK_FULFILLED';
-	    TaskActions.TASK_UNLOAD = 'TASK_UNLOAD';
-	    TaskActions.FETCH_TASKS = 'FETCH_TASKS';
-	    TaskActions.FETCH_TASKS_FAILED = 'FETCH_TASKS_FAILED';
-	    TaskActions.FETCH_TASKS_FULFILLED = 'FETCH_TASKS_FULFILLED';
-	    TaskActions.FETCH_TASK = 'FETCH_TASK';
-	    TaskActions.FETCH_TASK_FAILED = 'FETCH_TASK_FAILED';
-	    TaskActions.FETCH_TASK_FULFILLED = 'FETCH_TASK_FULFILLED';
-	    TaskActions.UPDATE_TASK = 'UPDATE_TASK';
-	    TaskActions.UPDATE_TASK_FAILED = 'UPDATE_TASK_FAILED';
-	    TaskActions.UPDATE_TASK_FULFILLED = 'UPDATE_TASK_FULFILLED';
-	    TaskActions.DELETE_TASK = 'DELETE_TASK';
-	    TaskActions.DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
-	    TaskActions.DELETE_TASK_FULFILLED = 'DELETE_TASK_FULFILLED';
-	    TaskActions.TOGGLE_STREAM_EXPAND = 'TOGGLE_STREAM_EXPAND';
-	    TaskActions.CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
-	    TaskActions.CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
-	    TaskActions.CREATE_TASK_COMMENT_FULFILLED = 'CREATE_TASK_COMMENT_FULFILLED';
-	    TaskActions.FETCH_TASK_COMMENTS = 'FETCH_TASK_COMMENTS';
-	    TaskActions.FETCH_TASK_COMMENTS_FAILED = 'FETCH_TASK_COMMENTS_FAILED';
-	    TaskActions.FETCH_TASK_COMMENTS_FULFILLED = 'FETCH_TASK_COMMENTS_FULFILLED';
-	    TaskActions.UPDATE_TASK_COMMENT = 'UPDATE_TASK_COMMENT';
-	    TaskActions.UPDATE_TASK_COMMENT_FAILED = 'UPDATE_TASK_COMMENT_FAILED';
-	    TaskActions.UPDATE_TASK_COMMENT_FULFILLED = 'UPDATE_TASK_COMMENT_FULFILLED';
-	    TaskActions.DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
-	    TaskActions.DELETE_TASK_COMMENT_FAILED = 'DELETE_TASK_COMMENT_FAILED';
-	    TaskActions.DELETE_TASK_COMMENT_FULFILLED = 'DELETE_TASK_COMMENT_FULFILLED';
-	    TaskActions.TASK_REQUEST_ACCEPTANCE = 'TASK_REQUEST_ACCEPTANCE';
-	    TaskActions.TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
-	    TaskActions.TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
-	    TaskActions.CREATE_TASK_REQUEST = 'CREATE_REQUEST_TASK';
-	    TaskActions.CREATE_TASK_REQUEST_FAILED = 'CREATE_TASK_REQUEST_FAILED';
-	    TaskActions.CREATE_TASK_REQUEST_FULFILLED = 'CREATE_TASK_REQUEST_FULFILLED';
-	    TaskActions.FETCH_TASK_REQUESTS = 'FETCH_TASK_REQUESTS';
-	    TaskActions.FETCH_TASK_REQUESTS_FAILED = 'FETCH_TASK_REQUESTS_FAILED';
-	    TaskActions.FETCH_TASK_REQUESTS_FULFILLED = 'FETCH_TASK_REQUESTS_FULFILLED';
-	    TaskActions = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], TaskActions);
-	    return TaskActions;
-	}());
-	exports.TaskActions = TaskActions;
-
-
-/***/ },
-/* 419 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var ReferenceActions = (function () {
-	    function ReferenceActions() {
-	    }
-	    ReferenceActions.prototype.fetchTaskTypes = function (taskTypes) {
-	        return {
-	            type: ReferenceActions.FETCH_TASK_TYPES,
-	            payload: { taskTypes: taskTypes }
-	        };
-	    };
-	    ReferenceActions.prototype.fetchRequestTypes = function (requestTypes) {
-	        return {
-	            type: ReferenceActions.FETCH_REQUEST_TYPES,
-	            payload: { requestTypes: requestTypes }
-	        };
-	    };
-	    ReferenceActions.prototype.fetchTags = function (tags) {
-	        return {
-	            type: ReferenceActions.FETCH_TAGS,
-	            payload: { tags: tags }
-	        };
-	    };
-	    ReferenceActions.prototype.fetchReferenceFailed = function (error) {
-	        return {
-	            type: ReferenceActions.FETCH_REFERENCE_FAILED,
-	            payload: error
-	        };
-	    };
-	    ReferenceActions.FETCH_TASK_TYPES = 'FETCH_TASK_TYPES';
-	    ReferenceActions.FETCH_REQUEST_TYPES = 'FETCH_REQUEST_TYPES';
-	    ReferenceActions.FETCH_TAGS = 'FETCH_TAGS';
-	    ReferenceActions.FETCH_REFERENCE_FAILED = 'FETCH_REFERENCE_FAILED';
-	    ReferenceActions = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], ReferenceActions);
-	    return ReferenceActions;
-	}());
-	exports.ReferenceActions = ReferenceActions;
-
-
-/***/ },
-/* 420 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var StaffActions = (function () {
-	    function StaffActions() {
-	    }
-	    StaffActions.prototype.fetchOrganizations = function (organizations) {
-	        return {
-	            type: StaffActions.FETCH_ORGANIZATIONS,
-	            payload: { organizations: organizations }
-	        };
-	    };
-	    StaffActions.prototype.fetchEmployees = function (employees) {
-	        return {
-	            type: StaffActions.FETCH_EMPLOYEES,
-	            payload: { employees: employees }
-	        };
-	    };
-	    StaffActions.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
-	    StaffActions.FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
-	    StaffActions = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], StaffActions);
-	    return StaffActions;
-	}());
-	exports.StaffActions = StaffActions;
-
-
-/***/ },
-/* 421 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var app_service_1 = __webpack_require__(422);
-	exports.AppService = app_service_1.AppService;
-	var translate_service_1 = __webpack_require__(423);
-	exports.TranslateService = translate_service_1.TranslateService;
-	var project_service_1 = __webpack_require__(413);
-	exports.ProjectService = project_service_1.ProjectService;
-	var task_service_1 = __webpack_require__(424);
-	exports.TaskService = task_service_1.TaskService;
-	var reference_service_1 = __webpack_require__(539);
-	exports.ReferenceService = reference_service_1.ReferenceService;
-	var staff_service_1 = __webpack_require__(540);
-	exports.StaffService = staff_service_1.StaffService;
-	var upload_service_1 = __webpack_require__(541);
-	exports.UploadService = upload_service_1.UploadService;
-	exports.APP_SERVICES = [
-	    app_service_1.AppService,
-	    translate_service_1.TranslateService,
-	    project_service_1.ProjectService,
-	    task_service_1.TaskService,
-	    reference_service_1.ReferenceService,
-	    staff_service_1.StaffService
-	];
-
-
-/***/ },
-/* 422 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var Observable_1 = __webpack_require__(70);
-	var utils_1 = __webpack_require__(414);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var AppService = (function () {
-	    function AppService(http) {
-	        this.http = http;
-	        this.isLogged = false;
-	        this.language = 'RUS';
-	        var ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
-	        if (ck) {
-	            this.language = ck[2];
-	        }
-	    }
-	    AppService.prototype.fetchUserProfile = function () {
-	        var _this = this;
-	        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(function (response) {
-	            var res = utils_1.parseResponseObjects(response.json().objects);
-	            var pageSize = 20;
-	            if (res[0].pagesize) {
-	                pageSize = res[0].pagesize;
-	            }
-	            _this.isLogged = true;
-	            return {
-	                userProfile: res.employee,
-	                languages: res.language.list[0].localizedName,
-	                pageSize: pageSize,
-	                language: _this.language
-	            };
-	        }, function (error) {
-	            _this.isLogged = false;
-	        });
-	    };
-	    AppService.prototype.updateUserProfile = function (userForm) {
-	        return this.http.post('p?id=userprofile', utils_1.serializeObj(userForm), { headers: HEADERS })
-	            .map(function (response) { return response.json(); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    AppService.prototype.logout = function () {
-	        return this.http.delete('/');
-	    };
-	    AppService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], AppService);
-	    return AppService;
-	}());
-	exports.AppService = AppService;
-
-
-/***/ },
-/* 423 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var TranslateService = (function () {
-	    function TranslateService(http) {
-	        this.http = http;
-	    }
-	    TranslateService.prototype.fetchTranslations = function () {
-	        var headers = new http_1.Headers({
-	            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	            'Accept': 'application/json'
-	        });
-	        return this.http.get('p?id=common-captions', { headers: headers }).map(function (response) {
-	            return response.json().captions;
-	        });
-	    };
-	    TranslateService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], TranslateService);
-	    return TranslateService;
-	}());
-	exports.TranslateService = TranslateService;
-
-
-/***/ },
-/* 424 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var Observable_1 = __webpack_require__(70);
-	var ng2_translate_1 = __webpack_require__(361);
-	var moment = __webpack_require__(425);
-	var models_1 = __webpack_require__(528);
-	var utils_1 = __webpack_require__(414);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var TaskService = (function () {
-	    function TaskService(http, translate) {
-	        this.http = http;
-	        this.translate = translate;
-	    }
-	    TaskService.prototype.getTaskPriorityTypes = function () {
-	        return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(function (t) { return [
-	            { value: 'NORMAL', text: t.normal, default: true },
-	            { value: 'MEDIUM', text: t.medium },
-	            { value: 'HIGH', text: t.high },
-	            { value: 'URGENT', text: t.urgent }
-	        ]; });
-	    };
-	    TaskService.prototype.getTaskStatusTypes = function () {
-	        return this.translate.get(['draft', 'waiting', 'processed', 'finished']).map(function (t) { return [
-	            { value: 'DRAFT', text: t.draft, default: true },
-	            { value: 'WAITING', text: t.waiting },
-	            { value: 'PROCESSED', text: t.processed },
-	            { value: 'FINISHED', text: t.finished }
-	        ]; });
-	    };
-	    TaskService.prototype.fetchTasks = function (queryParams) {
-	        if (queryParams === void 0) { queryParams = {}; }
-	        return this.http.get('p?id=task-view', {
-	            headers: HEADERS,
-	            search: utils_1.createURLSearchParams(queryParams)
-	        })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                tasks: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    TaskService.prototype.fetchTaskStream = function (task) {
-	        return this.http.get('p?id=task-view', {
-	            headers: HEADERS,
-	            search: utils_1.createURLSearchParams({ taskId: task.id, stream: 1 })
-	        })
-	            .map(function (response) { return response.json().objects; })
-	            .map(function (data) {
-	            var list = [];
-	            data.map(function (it) { return list = list.concat(it.list); });
-	            list = list.sort(function (a, b) {
-	                var r1 = moment(a.regDate, 'DD.MM.YYYY HH:mm').valueOf();
-	                var r2 = moment(b.regDate, 'DD.MM.YYYY HH:mm').valueOf();
-	                return r1 - r2;
-	            });
-	            return list;
-	        });
-	    };
-	    TaskService.prototype.fetchTaskById = function (taskId) {
-	        if (taskId === 'new') {
-	        }
-	        var url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
-	        return this.http.get(url, { headers: HEADERS })
-	            .map(function (response) {
-	            var data = utils_1.parseResponseObjects(response.json().objects);
-	            var task = data.task;
-	            if (!task.id) {
-	                task.id = '';
-	            }
-	            if (data.fsid) {
-	                task.fsid = data.fsid;
-	            }
-	            if (data.attachment) {
-	                task.attachments = data.attachment.list;
-	            }
-	            return task;
-	        });
-	    };
-	    TaskService.prototype.saveTask = function (task) {
-	        var url = 'p?id=task-form&taskId=' + (task.id ? task.id : '');
-	        return this.http.post(url, utils_1.serializeObj(task), { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.completeTask = function (task) {
-	        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=complete', '', { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteTask = function (tasks) {
-	        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteTaskAttachment = function (task, attachment) {
-	        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.fetchTaskRequests = function (task, page) {
-	        if (page === void 0) { page = 0; }
-	        return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
-	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).request || {}; })
-	            .map(function (data) {
-	            return {
-	                requests: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    TaskService.prototype.fetchRequestById = function (requestId) {
-	        if (requestId === 'new') {
-	            return Observable_1.Observable.of(new models_1.Request());
-	        }
-	        return this.http.get('p?id=task-requests&requestId=' + requestId, { headers: HEADERS })
-	            .map(function (response) {
-	            var data = utils_1.parseResponseObjects(response.json().objects);
-	            var request = data.request;
-	            if (data.fsid) {
-	                request.fsid = data.fsid;
-	            }
-	            if (data.attachment) {
-	                request.attachments = data.attachment.list;
-	            }
-	            return request;
-	        });
-	    };
-	    TaskService.prototype.sendTaskRequest = function (request) {
-	        var url = 'p?id=task-requests&taskId=' + request.taskId;
-	        return this.http.post(url, utils_1.serializeObj(request), { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.doRequestResolution = function (request, resolution, data) {
-	        var url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution + '&fsid=' + request.fsid + '&' + utils_1.serializeObj(data);
-	        return this.http.put(url, '', { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteRequest = function (request) {
-	        return this.http.delete('p?id=task-requests&requestId=' + request.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteRequestAttachment = function (request, attachment) {
-	        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.fetchComments = function (task, page) {
-	        if (page === void 0) { page = 0; }
-	        return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
-	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).comment || {}; })
-	            .map(function (data) {
-	            return {
-	                comments: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    TaskService.prototype.saveComment = function (task, comment) {
-	        var url = 'p?id=comments&taskId=' + task.id + (comment.id ? '&commentId=' + comment.id : '');
-	        return this.http.post(url, utils_1.serializeObj(comment), { headers: HEADERS })
-	            .map(function (response) { return utils_1.transformPostResponse(response); })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteComment = function (comment) {
-	        return this.http.delete('p?id=comments&commentId=' + comment.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService.prototype.deleteCommentAttachment = function (comment, attachment) {
-	        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
-	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
-	    };
-	    TaskService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http, ng2_translate_1.TranslateService])
-	    ], TaskService);
-	    return TaskService;
-	}());
-	exports.TaskService = TaskService;
-
-
-/***/ },
-/* 425 */,
-/* 426 */,
-/* 427 */,
-/* 428 */,
-/* 429 */,
-/* 430 */,
-/* 431 */,
-/* 432 */,
-/* 433 */,
-/* 434 */,
-/* 435 */,
-/* 436 */,
-/* 437 */,
-/* 438 */,
-/* 439 */,
-/* 440 */,
-/* 441 */,
-/* 442 */,
-/* 443 */,
-/* 444 */,
-/* 445 */,
-/* 446 */,
-/* 447 */,
-/* 448 */,
-/* 449 */,
-/* 450 */,
-/* 451 */,
-/* 452 */,
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */,
-/* 463 */,
-/* 464 */,
-/* 465 */,
-/* 466 */,
-/* 467 */,
-/* 468 */,
-/* 469 */,
-/* 470 */,
-/* 471 */,
-/* 472 */,
-/* 473 */,
-/* 474 */,
-/* 475 */,
-/* 476 */,
-/* 477 */,
-/* 478 */,
-/* 479 */,
-/* 480 */,
-/* 481 */,
-/* 482 */,
-/* 483 */,
-/* 484 */,
-/* 485 */,
-/* 486 */,
-/* 487 */,
-/* 488 */,
-/* 489 */,
-/* 490 */,
-/* 491 */,
-/* 492 */,
-/* 493 */,
-/* 494 */,
-/* 495 */,
-/* 496 */,
-/* 497 */,
-/* 498 */,
-/* 499 */,
-/* 500 */,
-/* 501 */,
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */,
-/* 507 */,
-/* 508 */,
-/* 509 */,
-/* 510 */,
-/* 511 */,
-/* 512 */,
-/* 513 */,
-/* 514 */,
-/* 515 */,
-/* 516 */,
-/* 517 */,
-/* 518 */,
-/* 519 */,
-/* 520 */,
-/* 521 */,
-/* 522 */,
-/* 523 */,
-/* 524 */,
-/* 525 */,
-/* 526 */,
-/* 527 */,
-/* 528 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var organization_1 = __webpack_require__(529);
-	exports.Organization = organization_1.Organization;
-	var employee_1 = __webpack_require__(530);
-	exports.Employee = employee_1.Employee;
-	var attachment_1 = __webpack_require__(531);
-	exports.Attachment = attachment_1.Attachment;
-	var project_1 = __webpack_require__(532);
-	exports.Project = project_1.Project;
-	var task_1 = __webpack_require__(533);
-	exports.Task = task_1.Task;
-	var tag_1 = __webpack_require__(534);
-	exports.Tag = tag_1.Tag;
-	var task_type_1 = __webpack_require__(535);
-	exports.TaskType = task_type_1.TaskType;
-	var comment_1 = __webpack_require__(536);
-	exports.Comment = comment_1.Comment;
-	var request_1 = __webpack_require__(537);
-	exports.Request = request_1.Request;
-	var request_type_1 = __webpack_require__(538);
-	exports.RequestType = request_type_1.RequestType;
-	var user_1 = __webpack_require__(409);
-	exports.User = user_1.User;
-
-
-/***/ },
-/* 529 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Organization = (function () {
-	    function Organization() {
-	        this.id = '';
-	    }
-	    return Organization;
-	}());
-	exports.Organization = Organization;
-
-
-/***/ },
-/* 530 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Employee = (function () {
-	    function Employee() {
-	        this.id = '';
-	        this.name = '@anonymous';
-	    }
-	    return Employee;
-	}());
-	exports.Employee = Employee;
-
-
-/***/ },
-/* 531 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Attachment = (function () {
-	    function Attachment() {
-	        this.id = '';
-	    }
-	    return Attachment;
-	}());
-	exports.Attachment = Attachment;
-
-
-/***/ },
-/* 532 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Project = (function () {
-	    function Project() {
-	        this.id = '';
-	        this.editable = false;
-	        this.fsid = '' + Date.now();
-	        this.status = 'DRAFT';
-	    }
-	    return Project;
-	}());
-	exports.Project = Project;
-
-
-/***/ },
-/* 533 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Task = (function () {
-	    function Task() {
-	        this.id = '';
-	        this.editable = false;
-	        this.fsid = '' + Date.now();
-	        this.status = 'DRAFT';
-	        this.priority = 'NORMAL';
-	        this.customerObservation = false;
-	    }
-	    return Task;
-	}());
-	exports.Task = Task;
-
-
-/***/ },
-/* 534 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Tag = (function () {
-	    function Tag() {
-	        this.id = '';
-	    }
-	    return Tag;
-	}());
-	exports.Tag = Tag;
-
-
-/***/ },
-/* 535 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var TaskType = (function () {
-	    function TaskType() {
-	        this.id = '';
-	    }
-	    return TaskType;
-	}());
-	exports.TaskType = TaskType;
-
-
-/***/ },
-/* 536 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Comment = (function () {
-	    function Comment() {
-	        this.id = '';
-	        this.fsid = '' + Date.now();
-	    }
-	    return Comment;
-	}());
-	exports.Comment = Comment;
-
-
-/***/ },
-/* 537 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var Request = (function () {
-	    function Request() {
-	        this.id = '';
-	        this.fsid = '' + Date.now();
-	        this.comment = '';
-	    }
-	    return Request;
-	}());
-	exports.Request = Request;
-
-
-/***/ },
-/* 538 */
-/***/ function(module, exports) {
-
-	"use strict";
-	var RequestType = (function () {
-	    function RequestType() {
-	        this.id = '';
-	    }
-	    return RequestType;
-	}());
-	exports.RequestType = RequestType;
-
-
-/***/ },
-/* 539 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var ReferenceService = (function () {
-	    function ReferenceService(http) {
-	        this.http = http;
-	    }
-	    ReferenceService.prototype.fetchTags = function () {
-	        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                tags: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    ReferenceService.prototype.fetchTaskTypes = function () {
-	        return this.http.get('/Reference/p?id=tasktypes', { headers: HEADERS })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                taskTypes: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    ReferenceService.prototype.fetchRequestTypes = function () {
-	        return this.http.get('/Reference/p?id=request-types', { headers: HEADERS })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                requestTypes: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    ReferenceService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], ReferenceService);
-	    return ReferenceService;
-	}());
-	exports.ReferenceService = ReferenceService;
-
-
-/***/ },
-/* 540 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var utils_1 = __webpack_require__(414);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var StaffService = (function () {
-	    function StaffService(http) {
-	        this.http = http;
-	    }
-	    StaffService.prototype.fetchOrganizations = function (queryParams) {
-	        if (queryParams === void 0) { queryParams = {}; }
-	        return this.http.get('/Staff/p?id=get-organizations', {
-	            headers: HEADERS,
-	            search: utils_1.createURLSearchParams(queryParams)
-	        })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                organizations: data.list,
-	                meta: data.meta
-	            };
-	        });
-	    };
-	    StaffService.prototype.fetchEmployees = function () {
-	        return this.http.get('/Staff/p?id=employees', { headers: HEADERS })
-	            .map(function (response) { return response.json().objects[0]; })
-	            .map(function (data) {
-	            return {
-	                employees: data.list
-	            };
-	        });
-	    };
-	    StaffService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], StaffService);
-	    return StaffService;
-	}());
-	exports.StaffService = StaffService;
-
-
-/***/ },
-/* 541 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var Observable_1 = __webpack_require__(70);
-	var UploadService = (function () {
-	    function UploadService() {
-	        var _this = this;
-	        this.progress$ = Observable_1.Observable.create(function (observer) {
-	            _this.progressObserver = observer;
-	        }).share();
-	    }
-	    UploadService.prototype.makeFileRequest = function (url, params, files) {
-	        var _this = this;
-	        return Observable_1.Observable.create(function (observer) {
-	            var formData = new FormData(), xhr = new XMLHttpRequest();
-	            for (var i = 0; i < files.length; i++) {
-	                formData.append('uploads[]', files[i], files[i].name);
-	            }
-	            if (params) {
-	                for (var k in params) {
-	                    formData.append(k, params[k]);
-	                }
-	            }
-	            xhr.onreadystatechange = function () {
-	                if (xhr.readyState === 4) {
-	                    if (xhr.status === 200) {
-	                        observer.next(JSON.parse(xhr.response));
-	                        observer.complete();
-	                    }
-	                    else {
-	                        observer.error(xhr.response);
-	                    }
-	                }
-	            };
-	            xhr.upload.onprogress = function (event) {
-	                var progress = Math.round(event.loaded / event.total * 100);
-	                _this.progressObserver.next(progress);
-	            };
-	            xhr.open('POST', url, true);
-	            xhr.send(formData);
-	        });
-	    };
-	    UploadService = __decorate([
-	        core_1.Injectable(), 
-	        __metadata('design:paramtypes', [])
-	    ], UploadService);
-	    return UploadService;
-	}());
-	exports.UploadService = UploadService;
-
-
-/***/ },
-/* 542 */
-/***/ function(module, exports) {
-
-	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n<div class=\"app-loading\" *ngIf=\"!isReady\">\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{'img/logo.png'}}\" />Loading...\r\n</div>\r\n"
-
-/***/ },
-/* 543 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var http_1 = __webpack_require__(339);
-	var utils_1 = __webpack_require__(414);
-	var HEADERS = new http_1.Headers({
-	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-	    'Accept': 'application/json'
-	});
-	var DashboardComponent = (function () {
-	    function DashboardComponent(http) {
-	        this.http = http;
-	        this.fetchDashboardProjects();
-	    }
-	    DashboardComponent.prototype.fetchDashboardProjects = function () {
-	        var _this = this;
-	        this.http.get('p?id=dashboard', { headers: HEADERS })
-	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).project; })
-	            .subscribe(function (data) {
-	            _this.projects = data ? data.list : [];
-	        });
-	    };
-	    DashboardComponent.prototype.addProjectToDashboard = function () {
-	        var _this = this;
-	        this.http.post('p?id=dashboard', "projectId=" + this.projectId, { headers: HEADERS })
-	            .map(function (response) { return response.json(); })
-	            .subscribe(function (data) {
-	            _this.fetchDashboardProjects();
-	        });
-	    };
-	    DashboardComponent.prototype.deleteProjectFromDashboard = function (projectId) {
-	        var _this = this;
-	        this.http.delete("p?id=dashboard&projectId=" + projectId, { headers: HEADERS })
-	            .map(function (response) { return response.json(); })
-	            .subscribe(function (data) {
-	            _this.fetchDashboardProjects();
-	        });
-	    };
-	    DashboardComponent.prototype.selectProject = function (project) {
-	        this.projectId = project.id;
-	        document.body.click();
-	    };
-	    DashboardComponent = __decorate([
-	        core_1.Component({
-	            selector: '[dashboard]',
-	            template: "\n        <div class=\"content-header\">\n            <h1 class=\"header-title\">\n                {{'dashboard' | translate}}\n            </h1>\n        </div>\n        <div class=\"content-body\">\n            \u0417\u0434\u0435\u0441\u044C \u0447\u0442\u043E-\u0442\u043E \u0431\u0443\u0434\u0435\u0442\n            <!-- <div class=\"dashboard\" *ngFor=\"let project of projects\">\n                <header>\n                    <span>{{project.name}}</span>\n                    <button (click)=\"deleteProjectFromDashboard(project.id)\">delete</button>\n                </header>\n                <section>\n                    project data\n                </section>\n            </div>\n            <div class=\"span3\">\n                <project-input editable=\"true\" (select)=\"selectProject($event)\"></project-input>\n                <button class=\"btn\" type=\"button\" (click)=\"addProjectToDashboard()\">{{'dashboard_add_project' | translate}}</button>\n            </div> -->\n        </div>\n    "
-	        }), 
-	        __metadata('design:paramtypes', [http_1.Http])
-	    ], DashboardComponent);
-	    return DashboardComponent;
-	}());
-	exports.DashboardComponent = DashboardComponent;
-
-
-/***/ },
-/* 544 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-	    return c > 3 && r && Object.defineProperty(target, key, r), r;
-	};
-	var __metadata = (this && this.__metadata) || function (k, v) {
-	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-	};
-	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
-	var store_1 = __webpack_require__(388);
-	var staff_service_1 = __webpack_require__(540);
-	var project_service_1 = __webpack_require__(413);
-	var project_actions_1 = __webpack_require__(412);
-	var ProjectsComponent = (function () {
-	    function ProjectsComponent(store, router, projectActions, projectService, staffService) {
-	        this.store = store;
-	        this.router = router;
-	        this.projectActions = projectActions;
-	        this.projectService = projectService;
-	        this.staffService = staffService;
-	        this.subs = [];
-	        this.title = 'projects';
-	        this.meta = {};
-	        this.keyWord = '';
-	        this.loading = true;
-	    }
-	    ProjectsComponent.prototype.ngOnInit = function () {
-	        var _this = this;
-	        this.subs.push(this.store.select('environment').subscribe(function (state) {
-	            if (_this.keyWord != state.keyWord) {
-	                _this.loadData({
-	                    keyWord: state.keyWord
-	                });
-	            }
-	            _this.keyWord = state.keyWord;
-	        }));
-	        this.subs.push(this.store.select('projects').subscribe(function (state) {
-	            if (state) {
-	                _this.projects = state.projects;
-	                _this.meta = state.meta;
-	                _this.loading = state.loading;
-	            }
-	        }));
-	        this.loadData();
-	    };
-	    ProjectsComponent.prototype.ngOnDestroy = function () {
-	        this.subs.map(function (s) { return s.unsubscribe(); });
-	    };
-	    ProjectsComponent.prototype.loadData = function (params) {
-	        var _this = this;
-	        this.store.dispatch(this.projectActions.fetchProjects());
-	        this.projectService.fetchProjects(params).subscribe(function (data) {
-	            var customerIds = data.projects.map(function (it) { return it.customerId; });
-	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (payload) {
-	                var orgs = payload.organizations;
-	                data.projects.map(function (p) {
-	                    if (p.customerId) {
-	                        p.customer = orgs.filter(function (org) { return org.id == p.customerId; })[0];
-	                    }
-	                });
-	                _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
-	            }, function (error) { return _this.store.dispatch(_this.projectActions.fetchProjectsFailed(error)); });
-	        });
-	    };
-	    ProjectsComponent.prototype.goToPage = function (params) {
-	        this.loadData({
-	            page: params.page,
-	            keyWord: this.keyWord
-	        });
-	    };
-	    ProjectsComponent.prototype.newProject = function () {
-	        this.router.navigate(['/projects', 'new']);
-	    };
-	    ProjectsComponent.prototype.deleteProject = function () {
-	    };
-	    ProjectsComponent = __decorate([
-	        core_1.Component({
-	            selector: 'projects',
-	            template: __webpack_require__(591)
-	        }), 
-	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService])
-	    ], ProjectsComponent);
-	    return ProjectsComponent;
-	}());
-	exports.ProjectsComponent = ProjectsComponent;
-
-
-/***/ },
-/* 545 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/**
 	 * @license
 	 * Copyright Google Inc. All Rights Reserved.
@@ -2520,38 +883,38 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var common_router_providers_1 = __webpack_require__(546);
+	var common_router_providers_1 = __webpack_require__(413);
 	exports.provideRouterConfig = common_router_providers_1.provideRouterConfig;
 	exports.provideRoutes = common_router_providers_1.provideRoutes;
-	var router_link_1 = __webpack_require__(586);
+	var router_link_1 = __webpack_require__(453);
 	exports.RouterLink = router_link_1.RouterLink;
 	exports.RouterLinkWithHref = router_link_1.RouterLinkWithHref;
-	var router_link_active_1 = __webpack_require__(587);
+	var router_link_active_1 = __webpack_require__(454);
 	exports.RouterLinkActive = router_link_active_1.RouterLinkActive;
-	var router_outlet_1 = __webpack_require__(588);
+	var router_outlet_1 = __webpack_require__(455);
 	exports.RouterOutlet = router_outlet_1.RouterOutlet;
-	var router_1 = __webpack_require__(547);
+	var router_1 = __webpack_require__(414);
 	exports.NavigationCancel = router_1.NavigationCancel;
 	exports.NavigationEnd = router_1.NavigationEnd;
 	exports.NavigationError = router_1.NavigationError;
 	exports.NavigationStart = router_1.NavigationStart;
 	exports.Router = router_1.Router;
 	exports.RoutesRecognized = router_1.RoutesRecognized;
-	var router_module_1 = __webpack_require__(589);
+	var router_module_1 = __webpack_require__(456);
 	exports.ROUTER_DIRECTIVES = router_module_1.ROUTER_DIRECTIVES;
 	exports.RouterModule = router_module_1.RouterModule;
-	var router_outlet_map_1 = __webpack_require__(585);
+	var router_outlet_map_1 = __webpack_require__(452);
 	exports.RouterOutletMap = router_outlet_map_1.RouterOutletMap;
-	var router_providers_1 = __webpack_require__(590);
+	var router_providers_1 = __webpack_require__(457);
 	exports.provideRouter = router_providers_1.provideRouter;
-	var router_state_1 = __webpack_require__(577);
+	var router_state_1 = __webpack_require__(444);
 	exports.ActivatedRoute = router_state_1.ActivatedRoute;
 	exports.ActivatedRouteSnapshot = router_state_1.ActivatedRouteSnapshot;
 	exports.RouterState = router_state_1.RouterState;
 	exports.RouterStateSnapshot = router_state_1.RouterStateSnapshot;
-	var shared_1 = __webpack_require__(572);
+	var shared_1 = __webpack_require__(439);
 	exports.PRIMARY_OUTLET = shared_1.PRIMARY_OUTLET;
-	var url_tree_1 = __webpack_require__(573);
+	var url_tree_1 = __webpack_require__(440);
 	exports.DefaultUrlSerializer = url_tree_1.DefaultUrlSerializer;
 	exports.UrlSegment = url_tree_1.UrlSegment;
 	exports.UrlSerializer = url_tree_1.UrlSerializer;
@@ -2559,7 +922,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=index.js.map
 
 /***/ },
-/* 546 */
+/* 413 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2572,12 +935,12 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(547);
-	var router_config_loader_1 = __webpack_require__(567);
-	var router_outlet_map_1 = __webpack_require__(585);
-	var router_state_1 = __webpack_require__(577);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
+	var router_1 = __webpack_require__(414);
+	var router_config_loader_1 = __webpack_require__(434);
+	var router_outlet_map_1 = __webpack_require__(452);
+	var router_state_1 = __webpack_require__(444);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
 	exports.ROUTER_CONFIGURATION = new core_1.OpaqueToken('ROUTER_CONFIGURATION');
 	function setupRouter(ref, resolver, urlSerializer, outletMap, location, injector, loader, config, opts) {
 	    if (opts === void 0) { opts = {}; }
@@ -2701,7 +1064,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=common_router_providers.js.map
 
 /***/ },
-/* 547 */
+/* 414 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2713,26 +1076,26 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	__webpack_require__(374);
-	__webpack_require__(548);
-	__webpack_require__(550);
-	__webpack_require__(551);
-	__webpack_require__(553);
+	__webpack_require__(415);
+	__webpack_require__(417);
+	__webpack_require__(418);
+	__webpack_require__(420);
 	var core_1 = __webpack_require__(11);
 	var Subject_1 = __webpack_require__(69);
-	var from_1 = __webpack_require__(555);
+	var from_1 = __webpack_require__(422);
 	var of_1 = __webpack_require__(365);
-	var apply_redirects_1 = __webpack_require__(559);
-	var config_1 = __webpack_require__(574);
-	var create_router_state_1 = __webpack_require__(575);
-	var create_url_tree_1 = __webpack_require__(579);
-	var recognize_1 = __webpack_require__(580);
-	var resolve_1 = __webpack_require__(581);
-	var router_config_loader_1 = __webpack_require__(567);
-	var router_outlet_map_1 = __webpack_require__(585);
-	var router_state_1 = __webpack_require__(577);
-	var shared_1 = __webpack_require__(572);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
+	var apply_redirects_1 = __webpack_require__(426);
+	var config_1 = __webpack_require__(441);
+	var create_router_state_1 = __webpack_require__(442);
+	var create_url_tree_1 = __webpack_require__(446);
+	var recognize_1 = __webpack_require__(447);
+	var resolve_1 = __webpack_require__(448);
+	var router_config_loader_1 = __webpack_require__(434);
+	var router_outlet_map_1 = __webpack_require__(452);
+	var router_state_1 = __webpack_require__(444);
+	var shared_1 = __webpack_require__(439);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
 	/**
 	 * An event triggered when a navigation starts
 	 *
@@ -3447,9 +1810,9 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router.js.map
 
 /***/ },
-/* 548 */,
-/* 549 */,
-/* 550 */
+/* 415 */,
+/* 416 */,
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3459,17 +1822,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=mergeAll.js.map
 
 /***/ },
-/* 551 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var reduce_1 = __webpack_require__(552);
+	var reduce_1 = __webpack_require__(419);
 	Observable_1.Observable.prototype.reduce = reduce_1.reduce;
 	//# sourceMappingURL=reduce.js.map
 
 /***/ },
-/* 552 */
+/* 419 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3558,17 +1921,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=reduce.js.map
 
 /***/ },
-/* 553 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var every_1 = __webpack_require__(554);
+	var every_1 = __webpack_require__(421);
 	Observable_1.Observable.prototype.every = every_1.every;
 	//# sourceMappingURL=every.js.map
 
 /***/ },
-/* 554 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3641,16 +2004,16 @@ webpackJsonp([0],[
 	//# sourceMappingURL=every.js.map
 
 /***/ },
-/* 555 */
+/* 422 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var FromObservable_1 = __webpack_require__(556);
+	var FromObservable_1 = __webpack_require__(423);
 	exports.from = FromObservable_1.FromObservable.create;
 	//# sourceMappingURL=from.js.map
 
 /***/ },
-/* 556 */
+/* 423 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3664,9 +2027,9 @@ webpackJsonp([0],[
 	var isPromise_1 = __webpack_require__(381);
 	var isScheduler_1 = __webpack_require__(369);
 	var PromiseObservable_1 = __webpack_require__(259);
-	var IteratorObservable_1 = __webpack_require__(557);
+	var IteratorObservable_1 = __webpack_require__(424);
 	var ArrayObservable_1 = __webpack_require__(366);
-	var ArrayLikeObservable_1 = __webpack_require__(558);
+	var ArrayLikeObservable_1 = __webpack_require__(425);
 	var iterator_1 = __webpack_require__(382);
 	var Observable_1 = __webpack_require__(70);
 	var observeOn_1 = __webpack_require__(400);
@@ -3787,7 +2150,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=FromObservable.js.map
 
 /***/ },
-/* 557 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3985,7 +2348,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=IteratorObservable.js.map
 
 /***/ },
-/* 558 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4065,7 +2428,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=ArrayLikeObservable.js.map
 
 /***/ },
-/* 559 */
+/* 426 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4076,17 +2439,17 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	__webpack_require__(560);
-	__webpack_require__(563);
-	__webpack_require__(565);
+	__webpack_require__(427);
+	__webpack_require__(430);
+	__webpack_require__(432);
 	var Observable_1 = __webpack_require__(70);
-	var from_1 = __webpack_require__(555);
+	var from_1 = __webpack_require__(422);
 	var of_1 = __webpack_require__(365);
-	var EmptyError_1 = __webpack_require__(562);
-	var router_config_loader_1 = __webpack_require__(567);
-	var shared_1 = __webpack_require__(572);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
+	var EmptyError_1 = __webpack_require__(429);
+	var router_config_loader_1 = __webpack_require__(434);
+	var shared_1 = __webpack_require__(439);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
 	var NoMatch = (function () {
 	    function NoMatch(segmentGroup) {
 	        if (segmentGroup === void 0) { segmentGroup = null; }
@@ -4443,17 +2806,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=apply_redirects.js.map
 
 /***/ },
-/* 560 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var first_1 = __webpack_require__(561);
+	var first_1 = __webpack_require__(428);
 	Observable_1.Observable.prototype.first = first_1.first;
 	//# sourceMappingURL=first.js.map
 
 /***/ },
-/* 561 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4463,7 +2826,7 @@ webpackJsonp([0],[
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(74);
-	var EmptyError_1 = __webpack_require__(562);
+	var EmptyError_1 = __webpack_require__(429);
 	/**
 	 * Emits only the first value (or the first value that meets some condition)
 	 * emitted by the source Observable.
@@ -4606,7 +2969,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=first.js.map
 
 /***/ },
-/* 562 */
+/* 429 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4637,19 +3000,19 @@ webpackJsonp([0],[
 	//# sourceMappingURL=EmptyError.js.map
 
 /***/ },
-/* 563 */,
-/* 564 */,
-/* 565 */
+/* 430 */,
+/* 431 */,
+/* 432 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var concatAll_1 = __webpack_require__(566);
+	var concatAll_1 = __webpack_require__(433);
 	Observable_1.Observable.prototype.concatAll = concatAll_1.concatAll;
 	//# sourceMappingURL=concatAll.js.map
 
 /***/ },
-/* 566 */
+/* 433 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4703,7 +3066,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=concatAll.js.map
 
 /***/ },
-/* 567 */
+/* 434 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4715,8 +3078,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var fromPromise_1 = __webpack_require__(568);
-	var collection_1 = __webpack_require__(569);
+	var fromPromise_1 = __webpack_require__(435);
+	var collection_1 = __webpack_require__(436);
 	/**
 	 * @deprecated use Routes
 	 */
@@ -4747,7 +3110,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_config_loader.js.map
 
 /***/ },
-/* 568 */
+/* 435 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4756,7 +3119,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=fromPromise.js.map
 
 /***/ },
-/* 569 */
+/* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -4767,12 +3130,12 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	__webpack_require__(565);
-	__webpack_require__(570);
+	__webpack_require__(432);
+	__webpack_require__(437);
 	var Observable_1 = __webpack_require__(70);
-	var fromPromise_1 = __webpack_require__(568);
+	var fromPromise_1 = __webpack_require__(435);
 	var of_1 = __webpack_require__(365);
-	var shared_1 = __webpack_require__(572);
+	var shared_1 = __webpack_require__(439);
 	function shallowEqualArrays(a, b) {
 	    if (a.length !== b.length)
 	        return false;
@@ -4890,17 +3253,17 @@ webpackJsonp([0],[
 	//# sourceMappingURL=collection.js.map
 
 /***/ },
-/* 570 */
+/* 437 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
-	var last_1 = __webpack_require__(571);
+	var last_1 = __webpack_require__(438);
 	Observable_1.Observable.prototype.last = last_1.last;
 	//# sourceMappingURL=last.js.map
 
 /***/ },
-/* 571 */
+/* 438 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4910,7 +3273,7 @@ webpackJsonp([0],[
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var Subscriber_1 = __webpack_require__(74);
-	var EmptyError_1 = __webpack_require__(562);
+	var EmptyError_1 = __webpack_require__(429);
 	/**
 	 * Returns an Observable that emits only the last item emitted by the source Observable.
 	 * It optionally takes a predicate function as a parameter, in which case, rather than emitting
@@ -5023,7 +3386,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=last.js.map
 
 /***/ },
-/* 572 */
+/* 439 */
 /***/ function(module, exports) {
 
 	/**
@@ -5044,7 +3407,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=shared.js.map
 
 /***/ },
-/* 573 */
+/* 440 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5055,8 +3418,8 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var shared_1 = __webpack_require__(572);
-	var collection_1 = __webpack_require__(569);
+	var shared_1 = __webpack_require__(439);
+	var collection_1 = __webpack_require__(436);
 	function createEmptyUrlTree() {
 	    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
 	}
@@ -5495,7 +3858,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=url_tree.js.map
 
 /***/ },
-/* 574 */
+/* 441 */
 /***/ function(module, exports) {
 
 	/**
@@ -5548,7 +3911,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=config.js.map
 
 /***/ },
-/* 575 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5559,9 +3922,9 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var BehaviorSubject_1 = __webpack_require__(576);
-	var router_state_1 = __webpack_require__(577);
-	var tree_1 = __webpack_require__(578);
+	var BehaviorSubject_1 = __webpack_require__(443);
+	var router_state_1 = __webpack_require__(444);
+	var tree_1 = __webpack_require__(445);
 	function createRouterState(curr, prevState) {
 	    var root = createNode(curr._root, prevState ? prevState._root : undefined);
 	    return new router_state_1.RouterState(root, curr);
@@ -5600,7 +3963,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=create_router_state.js.map
 
 /***/ },
-/* 576 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -5659,7 +4022,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=BehaviorSubject.js.map
 
 /***/ },
-/* 577 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5675,11 +4038,11 @@ webpackJsonp([0],[
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var BehaviorSubject_1 = __webpack_require__(576);
-	var shared_1 = __webpack_require__(572);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
-	var tree_1 = __webpack_require__(578);
+	var BehaviorSubject_1 = __webpack_require__(443);
+	var shared_1 = __webpack_require__(439);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
+	var tree_1 = __webpack_require__(445);
 	/**
 	 * The state of the router.
 	 *
@@ -6001,7 +4364,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_state.js.map
 
 /***/ },
-/* 578 */
+/* 445 */
 /***/ function(module, exports) {
 
 	/**
@@ -6095,7 +4458,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=tree.js.map
 
 /***/ },
-/* 579 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6106,9 +4469,9 @@ webpackJsonp([0],[
 	 * found in the LICENSE file at https://angular.io/license
 	 */
 	"use strict";
-	var shared_1 = __webpack_require__(572);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
+	var shared_1 = __webpack_require__(439);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
 	function createUrlTree(route, urlTree, commands, queryParams, fragment) {
 	    if (commands.length === 0) {
 	        return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
@@ -6373,7 +4736,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=create_url_tree.js.map
 
 /***/ },
-/* 580 */
+/* 447 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6386,11 +4749,11 @@ webpackJsonp([0],[
 	"use strict";
 	var Observable_1 = __webpack_require__(70);
 	var of_1 = __webpack_require__(365);
-	var router_state_1 = __webpack_require__(577);
-	var shared_1 = __webpack_require__(572);
-	var url_tree_1 = __webpack_require__(573);
-	var collection_1 = __webpack_require__(569);
-	var tree_1 = __webpack_require__(578);
+	var router_state_1 = __webpack_require__(444);
+	var shared_1 = __webpack_require__(439);
+	var url_tree_1 = __webpack_require__(440);
+	var collection_1 = __webpack_require__(436);
+	var tree_1 = __webpack_require__(445);
 	var NoMatch = (function () {
 	    function NoMatch() {
 	    }
@@ -6668,7 +5031,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=recognize.js.map
 
 /***/ },
-/* 581 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6680,9 +5043,9 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	__webpack_require__(374);
-	__webpack_require__(582);
-	var forkJoin_1 = __webpack_require__(583);
-	var fromPromise_1 = __webpack_require__(568);
+	__webpack_require__(449);
+	var forkJoin_1 = __webpack_require__(450);
+	var fromPromise_1 = __webpack_require__(435);
 	function resolve(resolver, state) {
 	    return resolveNode(resolver, state._root).map(function (_) { return state; });
 	}
@@ -6713,7 +5076,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=resolve.js.map
 
 /***/ },
-/* 582 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -6723,9 +5086,9 @@ webpackJsonp([0],[
 	//# sourceMappingURL=toPromise.js.map
 
 /***/ },
-/* 583 */,
-/* 584 */,
-/* 585 */
+/* 450 */,
+/* 451 */,
+/* 452 */
 /***/ function(module, exports) {
 
 	/**
@@ -6752,7 +5115,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_outlet_map.js.map
 
 /***/ },
-/* 586 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6765,8 +5128,8 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(547);
-	var router_state_1 = __webpack_require__(577);
+	var router_1 = __webpack_require__(414);
+	var router_state_1 = __webpack_require__(444);
 	var RouterLink = (function () {
 	    function RouterLink(router, route, locationStrategy) {
 	        this.router = router;
@@ -6910,7 +5273,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_link.js.map
 
 /***/ },
-/* 587 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6922,8 +5285,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(547);
-	var router_link_1 = __webpack_require__(586);
+	var router_1 = __webpack_require__(414);
+	var router_link_1 = __webpack_require__(453);
 	var RouterLinkActive = (function () {
 	    function RouterLinkActive(router, element, renderer) {
 	        var _this = this;
@@ -6995,7 +5358,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_link_active.js.map
 
 /***/ },
-/* 588 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7007,8 +5370,8 @@ webpackJsonp([0],[
 	 */
 	"use strict";
 	var core_1 = __webpack_require__(11);
-	var router_outlet_map_1 = __webpack_require__(585);
-	var shared_1 = __webpack_require__(572);
+	var router_outlet_map_1 = __webpack_require__(452);
+	var shared_1 = __webpack_require__(439);
 	var RouterOutlet = (function () {
 	    function RouterOutlet(parentOutletMap, location, resolver, name) {
 	        this.parentOutletMap = parentOutletMap;
@@ -7103,7 +5466,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_outlet.js.map
 
 /***/ },
-/* 589 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7116,15 +5479,15 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var core_1 = __webpack_require__(11);
-	var common_router_providers_1 = __webpack_require__(546);
-	var router_link_1 = __webpack_require__(586);
-	var router_link_active_1 = __webpack_require__(587);
-	var router_outlet_1 = __webpack_require__(588);
-	var router_1 = __webpack_require__(547);
-	var router_config_loader_1 = __webpack_require__(567);
-	var router_outlet_map_1 = __webpack_require__(585);
-	var router_state_1 = __webpack_require__(577);
-	var url_tree_1 = __webpack_require__(573);
+	var common_router_providers_1 = __webpack_require__(413);
+	var router_link_1 = __webpack_require__(453);
+	var router_link_active_1 = __webpack_require__(454);
+	var router_outlet_1 = __webpack_require__(455);
+	var router_1 = __webpack_require__(414);
+	var router_config_loader_1 = __webpack_require__(434);
+	var router_outlet_map_1 = __webpack_require__(452);
+	var router_state_1 = __webpack_require__(444);
+	var url_tree_1 = __webpack_require__(440);
 	/**
 	 * @stable
 	 */
@@ -7188,7 +5551,7 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_module.js.map
 
 /***/ },
-/* 590 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -7201,7 +5564,7 @@ webpackJsonp([0],[
 	"use strict";
 	var common_1 = __webpack_require__(206);
 	var platform_browser_1 = __webpack_require__(204);
-	var common_router_providers_1 = __webpack_require__(546);
+	var common_router_providers_1 = __webpack_require__(413);
 	/**
 	 * A list of {@link Provider}s. To use the router, you must add this to your application.
 	 *
@@ -7232,6 +5595,1653 @@ webpackJsonp([0],[
 	//# sourceMappingURL=router_providers.js.map
 
 /***/ },
+/* 458 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var ProjectActions = (function () {
+	    function ProjectActions() {
+	    }
+	    ProjectActions.prototype.createProject = function (project) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.createProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.createProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.CREATE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjects = function () {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjectsFailed = function (error) {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.fetchProjectsFulfilled = function (projects, meta) {
+	        return {
+	            type: ProjectActions.FETCH_PROJECTS_FULFILLED,
+	            payload: {
+	                projects: projects,
+	                meta: meta
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.updateProject = function (projectId, changes) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT,
+	            payload: {
+	                changes: changes,
+	                projectId: projectId
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.updateProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.updateProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.UPDATE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.deleteProject = function (projectId) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT,
+	            payload: {
+	                projectId: projectId
+	            }
+	        };
+	    };
+	    ProjectActions.prototype.deleteProjectFailed = function (error) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT_FAILED,
+	            payload: error
+	        };
+	    };
+	    ProjectActions.prototype.deleteProjectFulfilled = function (project) {
+	        return {
+	            type: ProjectActions.DELETE_PROJECT_FULFILLED,
+	            payload: {
+	                project: project
+	            }
+	        };
+	    };
+	    ProjectActions.CREATE_PROJECT = 'CREATE_PROJECT';
+	    ProjectActions.CREATE_PROJECT_FAILED = 'CREATE_PROJECT_FAILED';
+	    ProjectActions.CREATE_PROJECT_FULFILLED = 'CREATE_PROJECT_FULFILLED';
+	    ProjectActions.FETCH_PROJECTS = 'FETCH_PROJECTS';
+	    ProjectActions.FETCH_PROJECTS_FAILED = 'FETCH_PROJECTS_FAILED';
+	    ProjectActions.FETCH_PROJECTS_FULFILLED = 'FETCH_PROJECTS_FULFILLED';
+	    ProjectActions.UPDATE_PROJECT = 'UPDATE_PROJECT';
+	    ProjectActions.UPDATE_PROJECT_FAILED = 'UPDATE_PROJECT_FAILED';
+	    ProjectActions.UPDATE_PROJECT_FULFILLED = 'UPDATE_PROJECT_FULFILLED';
+	    ProjectActions.DELETE_PROJECT = 'DELETE_PROJECT';
+	    ProjectActions.DELETE_PROJECT_FAILED = 'DELETE_PROJECT_FAILED';
+	    ProjectActions.DELETE_PROJECT_FULFILLED = 'DELETE_PROJECT_FULFILLED';
+	    ProjectActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], ProjectActions);
+	    return ProjectActions;
+	}());
+	exports.ProjectActions = ProjectActions;
+
+
+/***/ },
+/* 459 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var Observable_1 = __webpack_require__(70);
+	var ng2_translate_1 = __webpack_require__(361);
+	var utils_1 = __webpack_require__(460);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var ProjectService = (function () {
+	    function ProjectService(http, translate) {
+	        this.http = http;
+	        this.translate = translate;
+	    }
+	    ProjectService.prototype.getProjectStatusTypes = function () {
+	        return this.translate.get(['draft', 'processed', 'finished']).map(function (t) { return [
+	            { value: 'DRAFT', text: t.draft, default: true },
+	            { value: 'PROCESSED', text: t.processed },
+	            { value: 'FINISHED', text: t.finished }
+	        ]; });
+	    };
+	    ProjectService.prototype.fetchProjects = function (queryParams) {
+	        if (queryParams === void 0) { queryParams = {}; }
+	        return this.http.get('p?id=project-view', {
+	            headers: HEADERS,
+	            search: utils_1.createURLSearchParams(queryParams)
+	        })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                projects: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    ProjectService.prototype.fetchProjectById = function (projectId) {
+	        if (projectId === 'new') {
+	        }
+	        var url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
+	        return this.http.get(url, { headers: HEADERS })
+	            .map(function (response) {
+	            var data = utils_1.parseResponseObjects(response.json().objects);
+	            var project = data.project;
+	            if (!project.id) {
+	                project.id = '';
+	            }
+	            if (data.fsid) {
+	                project.fsid = data.fsid;
+	            }
+	            if (data.attachment) {
+	                project.attachments = data.attachment.list;
+	            }
+	            return project;
+	        });
+	    };
+	    ProjectService.prototype.saveProject = function (project) {
+	        var url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
+	        return this.http.post(url, utils_1.serializeObj(project), { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    ProjectService.prototype.deleteProject = function (projects) {
+	        return this.http.delete('p?id=project-view&projectIds=' + projects.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    ProjectService.prototype.deleteProjectAttachment = function (project, attachment) {
+	        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    ProjectService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http, ng2_translate_1.TranslateService])
+	    ], ProjectService);
+	    return ProjectService;
+	}());
+	exports.ProjectService = ProjectService;
+
+
+/***/ },
+/* 460 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var http_1 = __webpack_require__(339);
+	function createURLSearchParams(_params) {
+	    var params = new http_1.URLSearchParams();
+	    for (var p in _params) {
+	        if (_params[p] instanceof Array) {
+	            for (var t in _params[p]) {
+	                params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
+	            }
+	        }
+	        else {
+	            if (typeof (_params[p]) != 'undefined') {
+	                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+	            }
+	        }
+	    }
+	    return params;
+	}
+	exports.createURLSearchParams = createURLSearchParams;
+	function serializeObj(obj) {
+	    var result = [];
+	    for (var property in obj) {
+	        result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
+	    }
+	    return result.join('&');
+	}
+	exports.serializeObj = serializeObj;
+	function parseResponseObjects(objects) {
+	    var result = [];
+	    for (var _i = 0, objects_1 = objects; _i < objects_1.length; _i++) {
+	        var obj = objects_1[_i];
+	        if (obj.kind) {
+	            result[obj.kind] = obj;
+	        }
+	        else if (obj.list && obj.meta && obj.type) {
+	            result[obj.type] = obj;
+	        }
+	        else if (obj.name && obj.value) {
+	            result[obj.name] = obj.value;
+	        }
+	        else {
+	            result.push(obj);
+	        }
+	    }
+	    return result;
+	}
+	exports.parseResponseObjects = parseResponseObjects;
+	function parseListObjectsToKeyValue(list) {
+	    var result = [];
+	    if (list) {
+	        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+	            var it = list_1[_i];
+	            result[it.id] = it;
+	        }
+	    }
+	    return result;
+	}
+	exports.parseListObjectsToKeyValue = parseListObjectsToKeyValue;
+	function transformPostResponse(response) {
+	    var json = response.json();
+	    return Object.assign(json, {
+	        ok: json.type === 'DOCUMENT_SAVED',
+	        message: json.captions ? json.captions.type : json.message
+	    });
+	}
+	exports.transformPostResponse = transformPostResponse;
+	function createCookie(name, value, days) {
+	    var expires;
+	    if (days) {
+	        var date = new Date();
+	        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+	        expires = '; expires=' + date.toUTCString();
+	    }
+	    else {
+	        expires = '';
+	    }
+	    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expires + '; path=/';
+	}
+	exports.createCookie = createCookie;
+
+
+/***/ },
+/* 461 */
+/***/ function(module, exports) {
+
+	module.exports = "<ul>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'my']\" class=\"nav-link\" [class.active]=\"isActive(['/tasks/my'])\">\r\n            <i class=\"fa fa-pencil\"></i>\r\n            <span>{{'my_tasks' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <li>\r\n        <a [routerLink]=\"['/tasks', 'inbox']\" class=\"nav-link\" [class.active]=\"isActive(['/tasks/inbox'])\">\r\n            <i class=\"fa fa-inbox\"></i>\r\n            <span>{{'tasks_assigned_to_me' | translate}}</span>\r\n        </a>\r\n    </li>\r\n    <!-- <li>\r\n        <a [routerLink]=\"['/']\" class=\"nav-link\">\r\n            <i class=\"fa fa-dashboard\"></i>\r\n            <span>{{'dashboard' | translate}}</span>\r\n        </a>\r\n    </li> -->\r\n    <li class=\"divider\"></li>\r\n    <li>\r\n        <a [routerLink]=\"['/projects']\" class=\"nav-link\" [class.active]=\"isActive(['/projects'])\">\r\n            <i class=\"fa fa-puzzle-piece\"></i>\r\n            <span>{{'projects' | translate}}</span>\r\n        </a>\r\n        <ul>\r\n            <li *ngFor=\"let project of projects\">\r\n                <a [routerLink]=\"['/projects', project.id, 'tasks']\" class=\"nav-link\" [class.active]=\"isActive(['/projects/' + project.id + '/tasks'])\">\r\n                    <i class=\"fa fa-file-text-o\"></i>\r\n                    <span>{{project.name}}</span>\r\n                </a>\r\n            </li>\r\n        </ul>\r\n    </li>\r\n</ul>\r\n"
+
+/***/ },
+/* 462 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var environment_actions_1 = __webpack_require__(408);
+	exports.EnvironmentActions = environment_actions_1.EnvironmentActions;
+	var app_actions_1 = __webpack_require__(463);
+	exports.AppActions = app_actions_1.AppActions;
+	var project_actions_1 = __webpack_require__(458);
+	exports.ProjectActions = project_actions_1.ProjectActions;
+	var task_actions_1 = __webpack_require__(464);
+	exports.TaskActions = task_actions_1.TaskActions;
+	var reference_actions_1 = __webpack_require__(465);
+	exports.ReferenceActions = reference_actions_1.ReferenceActions;
+	var staff_actions_1 = __webpack_require__(466);
+	exports.StaffActions = staff_actions_1.StaffActions;
+	exports.APP_STORE_ACTIONS = [
+	    environment_actions_1.EnvironmentActions,
+	    app_actions_1.AppActions,
+	    project_actions_1.ProjectActions,
+	    task_actions_1.TaskActions,
+	    reference_actions_1.ReferenceActions,
+	    staff_actions_1.StaffActions
+	];
+
+
+/***/ },
+/* 463 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var AppActions = (function () {
+	    function AppActions() {
+	    }
+	    AppActions.prototype.fetchUserProfile = function () {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE
+	        };
+	    };
+	    AppActions.prototype.fetchUserProfileFailed = function (error) {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE_FAILED,
+	            payload: error
+	        };
+	    };
+	    AppActions.prototype.fetchUserProfileFulfilled = function (payload) {
+	        return {
+	            type: AppActions.FETCH_USER_PROFILE_FULFILLED,
+	            payload: payload
+	        };
+	    };
+	    AppActions.prototype.updateUserProfile = function (userProfile) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE,
+	            payload: {
+	                userProfile: userProfile
+	            }
+	        };
+	    };
+	    AppActions.prototype.updateUserProfileFailed = function (error) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE_FAILED,
+	            payload: error
+	        };
+	    };
+	    AppActions.prototype.updateUserProfileFulfilled = function (userProfile) {
+	        return {
+	            type: AppActions.UPDATE_USER_PROFILE_FULFILLED,
+	            payload: {
+	                userProfile: userProfile
+	            }
+	        };
+	    };
+	    AppActions.FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
+	    AppActions.FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
+	    AppActions.FETCH_USER_PROFILE_FULFILLED = 'FETCH_USER_PROFILE_FULFILLED';
+	    AppActions.UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+	    AppActions.UPDATE_USER_PROFILE_FAILED = 'UPDATE_USER_PROFILE_FAILED';
+	    AppActions.UPDATE_USER_PROFILE_FULFILLED = 'UPDATE_USER_PROFILE_FULFILLED';
+	    AppActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], AppActions);
+	    return AppActions;
+	}());
+	exports.AppActions = AppActions;
+
+
+/***/ },
+/* 464 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var TaskActions = (function () {
+	    function TaskActions() {
+	    }
+	    TaskActions.prototype.createTask = function (task) {
+	        return {
+	            type: TaskActions.CREATE_TASK,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.createTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.CREATE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.createTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.CREATE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.fetchTasks = function () {
+	        return {
+	            type: TaskActions.FETCH_TASKS
+	        };
+	    };
+	    TaskActions.prototype.fetchTasksFailed = function (error) {
+	        return {
+	            type: TaskActions.FETCH_TASKS_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.fetchTasksFulfilled = function (tasks, meta) {
+	        return {
+	            type: TaskActions.FETCH_TASKS_FULFILLED,
+	            payload: {
+	                tasks: tasks,
+	                meta: meta
+	            }
+	        };
+	    };
+	    TaskActions.prototype.fetchTask = function (taskId) {
+	        return {
+	            type: TaskActions.FETCH_TASK
+	        };
+	    };
+	    TaskActions.prototype.fetchTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.FETCH_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.fetchTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.FETCH_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.updateTask = function (taskId, changes) {
+	        return {
+	            type: TaskActions.UPDATE_TASK,
+	            payload: {
+	                changes: changes,
+	                taskId: taskId
+	            }
+	        };
+	    };
+	    TaskActions.prototype.updateTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.UPDATE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.updateTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.UPDATE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.deleteTask = function (taskId) {
+	        return {
+	            type: TaskActions.DELETE_TASK,
+	            payload: {
+	                taskId: taskId
+	            }
+	        };
+	    };
+	    TaskActions.prototype.deleteTaskFailed = function (error) {
+	        return {
+	            type: TaskActions.DELETE_TASK_FAILED,
+	            payload: error
+	        };
+	    };
+	    TaskActions.prototype.deleteTaskFulfilled = function (task) {
+	        return {
+	            type: TaskActions.DELETE_TASK_FULFILLED,
+	            payload: {
+	                task: task
+	            }
+	        };
+	    };
+	    TaskActions.prototype.toggleStreamExpand = function (id) {
+	        return {
+	            type: TaskActions.TOGGLE_STREAM_EXPAND,
+	            payload: id
+	        };
+	    };
+	    TaskActions.CREATE_TASK = 'CREATE_TASK';
+	    TaskActions.CREATE_TASK_FAILED = 'CREATE_TASK_FAILED';
+	    TaskActions.CREATE_TASK_FULFILLED = 'CREATE_TASK_FULFILLED';
+	    TaskActions.TASK_UNLOAD = 'TASK_UNLOAD';
+	    TaskActions.FETCH_TASKS = 'FETCH_TASKS';
+	    TaskActions.FETCH_TASKS_FAILED = 'FETCH_TASKS_FAILED';
+	    TaskActions.FETCH_TASKS_FULFILLED = 'FETCH_TASKS_FULFILLED';
+	    TaskActions.FETCH_TASK = 'FETCH_TASK';
+	    TaskActions.FETCH_TASK_FAILED = 'FETCH_TASK_FAILED';
+	    TaskActions.FETCH_TASK_FULFILLED = 'FETCH_TASK_FULFILLED';
+	    TaskActions.UPDATE_TASK = 'UPDATE_TASK';
+	    TaskActions.UPDATE_TASK_FAILED = 'UPDATE_TASK_FAILED';
+	    TaskActions.UPDATE_TASK_FULFILLED = 'UPDATE_TASK_FULFILLED';
+	    TaskActions.DELETE_TASK = 'DELETE_TASK';
+	    TaskActions.DELETE_TASK_FAILED = 'DELETE_TASK_FAILED';
+	    TaskActions.DELETE_TASK_FULFILLED = 'DELETE_TASK_FULFILLED';
+	    TaskActions.TOGGLE_STREAM_EXPAND = 'TOGGLE_STREAM_EXPAND';
+	    TaskActions.CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
+	    TaskActions.CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
+	    TaskActions.CREATE_TASK_COMMENT_FULFILLED = 'CREATE_TASK_COMMENT_FULFILLED';
+	    TaskActions.FETCH_TASK_COMMENTS = 'FETCH_TASK_COMMENTS';
+	    TaskActions.FETCH_TASK_COMMENTS_FAILED = 'FETCH_TASK_COMMENTS_FAILED';
+	    TaskActions.FETCH_TASK_COMMENTS_FULFILLED = 'FETCH_TASK_COMMENTS_FULFILLED';
+	    TaskActions.UPDATE_TASK_COMMENT = 'UPDATE_TASK_COMMENT';
+	    TaskActions.UPDATE_TASK_COMMENT_FAILED = 'UPDATE_TASK_COMMENT_FAILED';
+	    TaskActions.UPDATE_TASK_COMMENT_FULFILLED = 'UPDATE_TASK_COMMENT_FULFILLED';
+	    TaskActions.DELETE_TASK_COMMENT = 'DELETE_TASK_COMMENT';
+	    TaskActions.DELETE_TASK_COMMENT_FAILED = 'DELETE_TASK_COMMENT_FAILED';
+	    TaskActions.DELETE_TASK_COMMENT_FULFILLED = 'DELETE_TASK_COMMENT_FULFILLED';
+	    TaskActions.TASK_REQUEST_ACCEPTANCE = 'TASK_REQUEST_ACCEPTANCE';
+	    TaskActions.TASK_REQUEST_NEW = 'TASK_REQUEST_NEW';
+	    TaskActions.TASK_REQUEST_CANCEL = 'TASK_REQUEST_CANCEL';
+	    TaskActions.CREATE_TASK_REQUEST = 'CREATE_REQUEST_TASK';
+	    TaskActions.CREATE_TASK_REQUEST_FAILED = 'CREATE_TASK_REQUEST_FAILED';
+	    TaskActions.CREATE_TASK_REQUEST_FULFILLED = 'CREATE_TASK_REQUEST_FULFILLED';
+	    TaskActions.FETCH_TASK_REQUESTS = 'FETCH_TASK_REQUESTS';
+	    TaskActions.FETCH_TASK_REQUESTS_FAILED = 'FETCH_TASK_REQUESTS_FAILED';
+	    TaskActions.FETCH_TASK_REQUESTS_FULFILLED = 'FETCH_TASK_REQUESTS_FULFILLED';
+	    TaskActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], TaskActions);
+	    return TaskActions;
+	}());
+	exports.TaskActions = TaskActions;
+
+
+/***/ },
+/* 465 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var ReferenceActions = (function () {
+	    function ReferenceActions() {
+	    }
+	    ReferenceActions.prototype.fetchTaskTypes = function (taskTypes) {
+	        return {
+	            type: ReferenceActions.FETCH_TASK_TYPES,
+	            payload: { taskTypes: taskTypes }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchRequestTypes = function (requestTypes) {
+	        return {
+	            type: ReferenceActions.FETCH_REQUEST_TYPES,
+	            payload: { requestTypes: requestTypes }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchTags = function (tags) {
+	        return {
+	            type: ReferenceActions.FETCH_TAGS,
+	            payload: { tags: tags }
+	        };
+	    };
+	    ReferenceActions.prototype.fetchReferenceFailed = function (error) {
+	        return {
+	            type: ReferenceActions.FETCH_REFERENCE_FAILED,
+	            payload: error
+	        };
+	    };
+	    ReferenceActions.FETCH_TASK_TYPES = 'FETCH_TASK_TYPES';
+	    ReferenceActions.FETCH_REQUEST_TYPES = 'FETCH_REQUEST_TYPES';
+	    ReferenceActions.FETCH_TAGS = 'FETCH_TAGS';
+	    ReferenceActions.FETCH_REFERENCE_FAILED = 'FETCH_REFERENCE_FAILED';
+	    ReferenceActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], ReferenceActions);
+	    return ReferenceActions;
+	}());
+	exports.ReferenceActions = ReferenceActions;
+
+
+/***/ },
+/* 466 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var StaffActions = (function () {
+	    function StaffActions() {
+	    }
+	    StaffActions.prototype.fetchOrganizations = function (organizations) {
+	        return {
+	            type: StaffActions.FETCH_ORGANIZATIONS,
+	            payload: { organizations: organizations }
+	        };
+	    };
+	    StaffActions.prototype.fetchEmployees = function (employees) {
+	        return {
+	            type: StaffActions.FETCH_EMPLOYEES,
+	            payload: { employees: employees }
+	        };
+	    };
+	    StaffActions.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
+	    StaffActions.FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
+	    StaffActions = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], StaffActions);
+	    return StaffActions;
+	}());
+	exports.StaffActions = StaffActions;
+
+
+/***/ },
+/* 467 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var app_service_1 = __webpack_require__(468);
+	exports.AppService = app_service_1.AppService;
+	var translate_service_1 = __webpack_require__(469);
+	exports.TranslateService = translate_service_1.TranslateService;
+	var project_service_1 = __webpack_require__(459);
+	exports.ProjectService = project_service_1.ProjectService;
+	var task_service_1 = __webpack_require__(470);
+	exports.TaskService = task_service_1.TaskService;
+	var reference_service_1 = __webpack_require__(585);
+	exports.ReferenceService = reference_service_1.ReferenceService;
+	var staff_service_1 = __webpack_require__(586);
+	exports.StaffService = staff_service_1.StaffService;
+	var upload_service_1 = __webpack_require__(587);
+	exports.UploadService = upload_service_1.UploadService;
+	exports.APP_SERVICES = [
+	    app_service_1.AppService,
+	    translate_service_1.TranslateService,
+	    project_service_1.ProjectService,
+	    task_service_1.TaskService,
+	    reference_service_1.ReferenceService,
+	    staff_service_1.StaffService
+	];
+
+
+/***/ },
+/* 468 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var Observable_1 = __webpack_require__(70);
+	var utils_1 = __webpack_require__(460);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var AppService = (function () {
+	    function AppService(http) {
+	        this.http = http;
+	        this.isLogged = false;
+	        this.language = 'RUS';
+	        var ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
+	        if (ck) {
+	            this.language = ck[2];
+	        }
+	    }
+	    AppService.prototype.fetchUserProfile = function () {
+	        var _this = this;
+	        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(function (response) {
+	            var res = utils_1.parseResponseObjects(response.json().objects);
+	            var pageSize = 20;
+	            if (res[0].pagesize) {
+	                pageSize = res[0].pagesize;
+	            }
+	            _this.isLogged = true;
+	            return {
+	                userProfile: res.employee,
+	                languages: res.language.list[0].localizedName,
+	                pageSize: pageSize,
+	                language: _this.language
+	            };
+	        }, function (error) {
+	            _this.isLogged = false;
+	        });
+	    };
+	    AppService.prototype.updateUserProfile = function (userForm) {
+	        return this.http.post('p?id=userprofile', utils_1.serializeObj(userForm), { headers: HEADERS })
+	            .map(function (response) { return response.json(); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    AppService.prototype.logout = function () {
+	        return this.http.delete('/');
+	    };
+	    AppService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http])
+	    ], AppService);
+	    return AppService;
+	}());
+	exports.AppService = AppService;
+
+
+/***/ },
+/* 469 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var TranslateService = (function () {
+	    function TranslateService(http) {
+	        this.http = http;
+	    }
+	    TranslateService.prototype.fetchTranslations = function () {
+	        var headers = new http_1.Headers({
+	            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	            'Accept': 'application/json'
+	        });
+	        return this.http.get('p?id=common-captions', { headers: headers }).map(function (response) {
+	            return response.json().captions;
+	        });
+	    };
+	    TranslateService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http])
+	    ], TranslateService);
+	    return TranslateService;
+	}());
+	exports.TranslateService = TranslateService;
+
+
+/***/ },
+/* 470 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var Observable_1 = __webpack_require__(70);
+	var ng2_translate_1 = __webpack_require__(361);
+	var moment = __webpack_require__(471);
+	var models_1 = __webpack_require__(574);
+	var utils_1 = __webpack_require__(460);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var TaskService = (function () {
+	    function TaskService(http, translate) {
+	        this.http = http;
+	        this.translate = translate;
+	    }
+	    TaskService.prototype.getTaskPriorityTypes = function () {
+	        return this.translate.get(['urgent', 'high', 'medium', 'normal']).map(function (t) { return [
+	            { value: 'NORMAL', text: t.normal, default: true },
+	            { value: 'MEDIUM', text: t.medium },
+	            { value: 'HIGH', text: t.high },
+	            { value: 'URGENT', text: t.urgent }
+	        ]; });
+	    };
+	    TaskService.prototype.getTaskStatusTypes = function () {
+	        return this.translate.get(['draft', 'waiting', 'processed', 'finished']).map(function (t) { return [
+	            { value: 'DRAFT', text: t.draft, default: true },
+	            { value: 'WAITING', text: t.waiting },
+	            { value: 'PROCESSED', text: t.processed },
+	            { value: 'FINISHED', text: t.finished }
+	        ]; });
+	    };
+	    TaskService.prototype.fetchTasks = function (queryParams) {
+	        if (queryParams === void 0) { queryParams = {}; }
+	        return this.http.get('p?id=task-view', {
+	            headers: HEADERS,
+	            search: utils_1.createURLSearchParams(queryParams)
+	        })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                tasks: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    TaskService.prototype.fetchTaskStream = function (task) {
+	        return this.http.get('p?id=task-view', {
+	            headers: HEADERS,
+	            search: utils_1.createURLSearchParams({ taskId: task.id, stream: 1 })
+	        })
+	            .map(function (response) { return response.json().objects; })
+	            .map(function (data) {
+	            var list = [];
+	            data.map(function (it) { return list = list.concat(it.list); });
+	            list = list.sort(function (a, b) {
+	                var r1 = moment(a.regDate, 'DD.MM.YYYY HH:mm').valueOf();
+	                var r2 = moment(b.regDate, 'DD.MM.YYYY HH:mm').valueOf();
+	                return r1 - r2;
+	            });
+	            return list;
+	        });
+	    };
+	    TaskService.prototype.fetchTaskById = function (taskId) {
+	        if (taskId === 'new') {
+	        }
+	        var url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
+	        return this.http.get(url, { headers: HEADERS })
+	            .map(function (response) {
+	            var data = utils_1.parseResponseObjects(response.json().objects);
+	            var task = data.task;
+	            if (!task.id) {
+	                task.id = '';
+	            }
+	            if (data.fsid) {
+	                task.fsid = data.fsid;
+	            }
+	            if (data.attachment) {
+	                task.attachments = data.attachment.list;
+	            }
+	            return task;
+	        });
+	    };
+	    TaskService.prototype.saveTask = function (task) {
+	        var url = 'p?id=task-form&taskId=' + (task.id ? task.id : '');
+	        return this.http.post(url, utils_1.serializeObj(task), { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.completeTask = function (task) {
+	        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=complete', '', { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteTask = function (tasks) {
+	        return this.http.delete('p?id=task-view&taskIds=' + tasks.map(function (it) { return it.id; }).join(','), { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteTaskAttachment = function (task, attachment) {
+	        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.fetchTaskRequests = function (task, page) {
+	        if (page === void 0) { page = 0; }
+	        return this.http.get('p?id=task-requests&taskId=' + task.id, { headers: HEADERS })
+	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).request || {}; })
+	            .map(function (data) {
+	            return {
+	                requests: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    TaskService.prototype.fetchRequestById = function (requestId) {
+	        if (requestId === 'new') {
+	            return Observable_1.Observable.of(new models_1.Request());
+	        }
+	        return this.http.get('p?id=task-requests&requestId=' + requestId, { headers: HEADERS })
+	            .map(function (response) {
+	            var data = utils_1.parseResponseObjects(response.json().objects);
+	            var request = data.request;
+	            if (data.fsid) {
+	                request.fsid = data.fsid;
+	            }
+	            if (data.attachment) {
+	                request.attachments = data.attachment.list;
+	            }
+	            return request;
+	        });
+	    };
+	    TaskService.prototype.sendTaskRequest = function (request) {
+	        var url = 'p?id=task-requests&taskId=' + request.taskId;
+	        return this.http.post(url, utils_1.serializeObj(request), { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.doRequestResolution = function (request, resolution, data) {
+	        var url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution + '&fsid=' + request.fsid + '&' + utils_1.serializeObj(data);
+	        return this.http.put(url, '', { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteRequest = function (request) {
+	        return this.http.delete('p?id=task-requests&requestId=' + request.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteRequestAttachment = function (request, attachment) {
+	        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.fetchComments = function (task, page) {
+	        if (page === void 0) { page = 0; }
+	        return this.http.get('p?id=comments&taskId=' + task.id, { headers: HEADERS })
+	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).comment || {}; })
+	            .map(function (data) {
+	            return {
+	                comments: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    TaskService.prototype.saveComment = function (task, comment) {
+	        var url = 'p?id=comments&taskId=' + task.id + (comment.id ? '&commentId=' + comment.id : '');
+	        return this.http.post(url, utils_1.serializeObj(comment), { headers: HEADERS })
+	            .map(function (response) { return utils_1.transformPostResponse(response); })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteComment = function (comment) {
+	        return this.http.delete('p?id=comments&commentId=' + comment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService.prototype.deleteCommentAttachment = function (comment, attachment) {
+	        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+	            .catch(function (error) { return Observable_1.Observable.throw(utils_1.transformPostResponse(error)); });
+	    };
+	    TaskService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http, ng2_translate_1.TranslateService])
+	    ], TaskService);
+	    return TaskService;
+	}());
+	exports.TaskService = TaskService;
+
+
+/***/ },
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */,
+/* 483 */,
+/* 484 */,
+/* 485 */,
+/* 486 */,
+/* 487 */,
+/* 488 */,
+/* 489 */,
+/* 490 */,
+/* 491 */,
+/* 492 */,
+/* 493 */,
+/* 494 */,
+/* 495 */,
+/* 496 */,
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */,
+/* 502 */,
+/* 503 */,
+/* 504 */,
+/* 505 */,
+/* 506 */,
+/* 507 */,
+/* 508 */,
+/* 509 */,
+/* 510 */,
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */,
+/* 515 */,
+/* 516 */,
+/* 517 */,
+/* 518 */,
+/* 519 */,
+/* 520 */,
+/* 521 */,
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */,
+/* 543 */,
+/* 544 */,
+/* 545 */,
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */,
+/* 557 */,
+/* 558 */,
+/* 559 */,
+/* 560 */,
+/* 561 */,
+/* 562 */,
+/* 563 */,
+/* 564 */,
+/* 565 */,
+/* 566 */,
+/* 567 */,
+/* 568 */,
+/* 569 */,
+/* 570 */,
+/* 571 */,
+/* 572 */,
+/* 573 */,
+/* 574 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var organization_1 = __webpack_require__(575);
+	exports.Organization = organization_1.Organization;
+	var employee_1 = __webpack_require__(576);
+	exports.Employee = employee_1.Employee;
+	var attachment_1 = __webpack_require__(577);
+	exports.Attachment = attachment_1.Attachment;
+	var project_1 = __webpack_require__(578);
+	exports.Project = project_1.Project;
+	var task_1 = __webpack_require__(579);
+	exports.Task = task_1.Task;
+	var tag_1 = __webpack_require__(580);
+	exports.Tag = tag_1.Tag;
+	var task_type_1 = __webpack_require__(581);
+	exports.TaskType = task_type_1.TaskType;
+	var comment_1 = __webpack_require__(582);
+	exports.Comment = comment_1.Comment;
+	var request_1 = __webpack_require__(583);
+	exports.Request = request_1.Request;
+	var request_type_1 = __webpack_require__(584);
+	exports.RequestType = request_type_1.RequestType;
+	var user_1 = __webpack_require__(409);
+	exports.User = user_1.User;
+
+
+/***/ },
+/* 575 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Organization = (function () {
+	    function Organization() {
+	        this.id = '';
+	    }
+	    return Organization;
+	}());
+	exports.Organization = Organization;
+
+
+/***/ },
+/* 576 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Employee = (function () {
+	    function Employee() {
+	        this.id = '';
+	        this.name = '@anonymous';
+	    }
+	    return Employee;
+	}());
+	exports.Employee = Employee;
+
+
+/***/ },
+/* 577 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Attachment = (function () {
+	    function Attachment() {
+	        this.id = '';
+	    }
+	    return Attachment;
+	}());
+	exports.Attachment = Attachment;
+
+
+/***/ },
+/* 578 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Project = (function () {
+	    function Project() {
+	        this.id = '';
+	        this.editable = false;
+	        this.fsid = '' + Date.now();
+	        this.status = 'DRAFT';
+	    }
+	    return Project;
+	}());
+	exports.Project = Project;
+
+
+/***/ },
+/* 579 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Task = (function () {
+	    function Task() {
+	        this.id = '';
+	        this.editable = false;
+	        this.fsid = '' + Date.now();
+	        this.status = 'DRAFT';
+	        this.priority = 'NORMAL';
+	        this.customerObservation = false;
+	    }
+	    return Task;
+	}());
+	exports.Task = Task;
+
+
+/***/ },
+/* 580 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Tag = (function () {
+	    function Tag() {
+	        this.id = '';
+	    }
+	    return Tag;
+	}());
+	exports.Tag = Tag;
+
+
+/***/ },
+/* 581 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var TaskType = (function () {
+	    function TaskType() {
+	        this.id = '';
+	    }
+	    return TaskType;
+	}());
+	exports.TaskType = TaskType;
+
+
+/***/ },
+/* 582 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Comment = (function () {
+	    function Comment() {
+	        this.id = '';
+	        this.fsid = '' + Date.now();
+	    }
+	    return Comment;
+	}());
+	exports.Comment = Comment;
+
+
+/***/ },
+/* 583 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var Request = (function () {
+	    function Request() {
+	        this.id = '';
+	        this.fsid = '' + Date.now();
+	        this.comment = '';
+	    }
+	    return Request;
+	}());
+	exports.Request = Request;
+
+
+/***/ },
+/* 584 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var RequestType = (function () {
+	    function RequestType() {
+	        this.id = '';
+	    }
+	    return RequestType;
+	}());
+	exports.RequestType = RequestType;
+
+
+/***/ },
+/* 585 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var ReferenceService = (function () {
+	    function ReferenceService(http) {
+	        this.http = http;
+	    }
+	    ReferenceService.prototype.fetchTags = function () {
+	        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                tags: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    ReferenceService.prototype.fetchTaskTypes = function () {
+	        return this.http.get('/Reference/p?id=tasktypes', { headers: HEADERS })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                taskTypes: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    ReferenceService.prototype.fetchRequestTypes = function () {
+	        return this.http.get('/Reference/p?id=request-types', { headers: HEADERS })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                requestTypes: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    ReferenceService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http])
+	    ], ReferenceService);
+	    return ReferenceService;
+	}());
+	exports.ReferenceService = ReferenceService;
+
+
+/***/ },
+/* 586 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var utils_1 = __webpack_require__(460);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var StaffService = (function () {
+	    function StaffService(http) {
+	        this.http = http;
+	    }
+	    StaffService.prototype.fetchOrganizations = function (queryParams) {
+	        if (queryParams === void 0) { queryParams = {}; }
+	        return this.http.get('/Staff/p?id=get-organizations', {
+	            headers: HEADERS,
+	            search: utils_1.createURLSearchParams(queryParams)
+	        })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                organizations: data.list,
+	                meta: data.meta
+	            };
+	        });
+	    };
+	    StaffService.prototype.fetchEmployees = function () {
+	        return this.http.get('/Staff/p?id=employees', { headers: HEADERS })
+	            .map(function (response) { return response.json().objects[0]; })
+	            .map(function (data) {
+	            return {
+	                employees: data.list
+	            };
+	        });
+	    };
+	    StaffService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [http_1.Http])
+	    ], StaffService);
+	    return StaffService;
+	}());
+	exports.StaffService = StaffService;
+
+
+/***/ },
+/* 587 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var Observable_1 = __webpack_require__(70);
+	var UploadService = (function () {
+	    function UploadService() {
+	        var _this = this;
+	        this.progress$ = Observable_1.Observable.create(function (observer) {
+	            _this.progressObserver = observer;
+	        }).share();
+	    }
+	    UploadService.prototype.makeFileRequest = function (url, params, files) {
+	        var _this = this;
+	        return Observable_1.Observable.create(function (observer) {
+	            var formData = new FormData(), xhr = new XMLHttpRequest();
+	            for (var i = 0; i < files.length; i++) {
+	                formData.append('uploads[]', files[i], files[i].name);
+	            }
+	            if (params) {
+	                for (var k in params) {
+	                    formData.append(k, params[k]);
+	                }
+	            }
+	            xhr.onreadystatechange = function () {
+	                if (xhr.readyState === 4) {
+	                    if (xhr.status === 200) {
+	                        observer.next(JSON.parse(xhr.response));
+	                        observer.complete();
+	                    }
+	                    else {
+	                        observer.error(xhr.response);
+	                    }
+	                }
+	            };
+	            xhr.upload.onprogress = function (event) {
+	                var progress = Math.round(event.loaded / event.total * 100);
+	                _this.progressObserver.next(progress);
+	            };
+	            xhr.open('POST', url, true);
+	            xhr.send(formData);
+	        });
+	    };
+	    UploadService = __decorate([
+	        core_1.Injectable(), 
+	        __metadata('design:paramtypes', [])
+	    ], UploadService);
+	    return UploadService;
+	}());
+	exports.UploadService = UploadService;
+
+
+/***/ },
+/* 588 */
+/***/ function(module, exports) {
+
+	module.exports = "<notification></notification>\r\n<div class=\"layout\" [class.hidden]=\"!isReady\">\r\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\r\n    <navbar [user]=\"loggedUser\"></navbar>\r\n    <section class=\"container\">\r\n        <nav data-c=\"nav\" class=\"aside side-nav\"></nav>\r\n        <main class=\"content\">\r\n            <router-outlet></router-outlet>\r\n        </main>\r\n    </section>\r\n</div>\r\n<div class=\"app-loading\" *ngIf=\"!isReady\">\r\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{'img/logo.png'}}\" />Loading...\r\n</div>\r\n"
+
+/***/ },
+/* 589 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var http_1 = __webpack_require__(339);
+	var utils_1 = __webpack_require__(460);
+	var HEADERS = new http_1.Headers({
+	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+	    'Accept': 'application/json'
+	});
+	var DashboardComponent = (function () {
+	    function DashboardComponent(http) {
+	        this.http = http;
+	        this.fetchDashboardProjects();
+	    }
+	    DashboardComponent.prototype.fetchDashboardProjects = function () {
+	        var _this = this;
+	        this.http.get('p?id=dashboard', { headers: HEADERS })
+	            .map(function (response) { return utils_1.parseResponseObjects(response.json().objects).project; })
+	            .subscribe(function (data) {
+	            _this.projects = data ? data.list : [];
+	        });
+	    };
+	    DashboardComponent.prototype.addProjectToDashboard = function () {
+	        var _this = this;
+	        this.http.post('p?id=dashboard', "projectId=" + this.projectId, { headers: HEADERS })
+	            .map(function (response) { return response.json(); })
+	            .subscribe(function (data) {
+	            _this.fetchDashboardProjects();
+	        });
+	    };
+	    DashboardComponent.prototype.deleteProjectFromDashboard = function (projectId) {
+	        var _this = this;
+	        this.http.delete("p?id=dashboard&projectId=" + projectId, { headers: HEADERS })
+	            .map(function (response) { return response.json(); })
+	            .subscribe(function (data) {
+	            _this.fetchDashboardProjects();
+	        });
+	    };
+	    DashboardComponent.prototype.selectProject = function (project) {
+	        this.projectId = project.id;
+	        document.body.click();
+	    };
+	    DashboardComponent = __decorate([
+	        core_1.Component({
+	            selector: '[dashboard]',
+	            template: "\n        <div class=\"content-header\">\n            <h1 class=\"header-title\">\n                {{'dashboard' | translate}}\n            </h1>\n        </div>\n        <div class=\"content-body\">\n            \u0417\u0434\u0435\u0441\u044C \u0447\u0442\u043E-\u0442\u043E \u0431\u0443\u0434\u0435\u0442\n            <!-- <div class=\"dashboard\" *ngFor=\"let project of projects\">\n                <header>\n                    <span>{{project.name}}</span>\n                    <button (click)=\"deleteProjectFromDashboard(project.id)\">delete</button>\n                </header>\n                <section>\n                    project data\n                </section>\n            </div>\n            <div class=\"span3\">\n                <project-input editable=\"true\" (select)=\"selectProject($event)\"></project-input>\n                <button class=\"btn\" type=\"button\" (click)=\"addProjectToDashboard()\">{{'dashboard_add_project' | translate}}</button>\n            </div> -->\n        </div>\n    "
+	        }), 
+	        __metadata('design:paramtypes', [http_1.Http])
+	    ], DashboardComponent);
+	    return DashboardComponent;
+	}());
+	exports.DashboardComponent = DashboardComponent;
+
+
+/***/ },
+/* 590 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(11);
+	var router_1 = __webpack_require__(412);
+	var store_1 = __webpack_require__(388);
+	var staff_service_1 = __webpack_require__(586);
+	var project_service_1 = __webpack_require__(459);
+	var project_actions_1 = __webpack_require__(458);
+	var ProjectsComponent = (function () {
+	    function ProjectsComponent(store, router, projectActions, projectService, staffService) {
+	        this.store = store;
+	        this.router = router;
+	        this.projectActions = projectActions;
+	        this.projectService = projectService;
+	        this.staffService = staffService;
+	        this.subs = [];
+	        this.title = 'projects';
+	        this.meta = {};
+	        this.keyWord = '';
+	        this.loading = true;
+	    }
+	    ProjectsComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        this.subs.push(this.store.select('environment').subscribe(function (state) {
+	            if (_this.keyWord != state.keyWord) {
+	                _this.loadData({
+	                    keyWord: state.keyWord
+	                });
+	            }
+	            _this.keyWord = state.keyWord;
+	        }));
+	        this.subs.push(this.store.select('projects').subscribe(function (state) {
+	            if (state) {
+	                _this.projects = state.projects;
+	                _this.meta = state.meta;
+	                _this.loading = state.loading;
+	            }
+	        }));
+	        this.loadData();
+	    };
+	    ProjectsComponent.prototype.ngOnDestroy = function () {
+	        this.subs.map(function (s) { return s.unsubscribe(); });
+	    };
+	    ProjectsComponent.prototype.loadData = function (params) {
+	        var _this = this;
+	        this.store.dispatch(this.projectActions.fetchProjects());
+	        this.projectService.fetchProjects(params).subscribe(function (data) {
+	            var customerIds = data.projects.map(function (it) { return it.customerId; });
+	            _this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(function (payload) {
+	                var orgs = payload.organizations;
+	                data.projects.map(function (p) {
+	                    if (p.customerId) {
+	                        p.customer = orgs.filter(function (org) { return org.id == p.customerId; })[0];
+	                    }
+	                });
+	                _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
+	            }, function (error) { return _this.store.dispatch(_this.projectActions.fetchProjectsFailed(error)); });
+	        });
+	    };
+	    ProjectsComponent.prototype.goToPage = function (params) {
+	        this.loadData({
+	            page: params.page,
+	            keyWord: this.keyWord
+	        });
+	    };
+	    ProjectsComponent.prototype.newProject = function () {
+	        this.router.navigate(['/projects', 'new']);
+	    };
+	    ProjectsComponent.prototype.deleteProject = function () {
+	    };
+	    ProjectsComponent = __decorate([
+	        core_1.Component({
+	            selector: 'projects',
+	            template: __webpack_require__(591)
+	        }), 
+	        __metadata('design:paramtypes', [store_1.Store, router_1.Router, project_actions_1.ProjectActions, project_service_1.ProjectService, staff_service_1.StaffService])
+	    ], ProjectsComponent);
+	    return ProjectsComponent;
+	}());
+	exports.ProjectsComponent = ProjectsComponent;
+
+
+/***/ },
 /* 591 */
 /***/ function(module, exports) {
 
@@ -7252,12 +7262,12 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
 	var notification_1 = __webpack_require__(593);
-	var services_1 = __webpack_require__(421);
-	var models_1 = __webpack_require__(528);
+	var services_1 = __webpack_require__(467);
+	var models_1 = __webpack_require__(574);
 	var ProjectComponent = (function () {
 	    function ProjectComponent(store, router, route, translate, projectService, notifyService) {
 	        this.store = store;
@@ -7742,10 +7752,10 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var store_1 = __webpack_require__(388);
-	var task_service_1 = __webpack_require__(424);
-	var actions_1 = __webpack_require__(416);
+	var task_service_1 = __webpack_require__(470);
+	var actions_1 = __webpack_require__(462);
 	var TasksComponent = (function () {
 	    function TasksComponent(store, router, route, taskActions, taskService) {
 	        this.store = store;
@@ -7849,14 +7859,14 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
 	var comments_1 = __webpack_require__(603);
 	var notification_1 = __webpack_require__(593);
-	var actions_1 = __webpack_require__(416);
-	var services_1 = __webpack_require__(421);
-	var models_1 = __webpack_require__(528);
+	var actions_1 = __webpack_require__(462);
+	var services_1 = __webpack_require__(467);
+	var models_1 = __webpack_require__(574);
 	var TaskComponent = (function () {
 	    function TaskComponent(store, router, route, translate, taskActions, taskService, notifyService) {
 	        var _this = this;
@@ -8111,7 +8121,7 @@ webpackJsonp([0],[
 	        return this.subTasks && this.subTasks.length;
 	    };
 	    TaskComponent.prototype.close = function () {
-	        this.router.navigate(['/tasks']);
+	        window.history.back();
 	    };
 	    TaskComponent.prototype.handleValidationError = function (error) {
 	        var errors = {};
@@ -8258,7 +8268,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var comment_1 = __webpack_require__(604);
-	var models_1 = __webpack_require__(528);
+	var models_1 = __webpack_require__(574);
 	var CommentsComponent = (function () {
 	    function CommentsComponent() {
 	        this.add = new core_1.EventEmitter();
@@ -8331,7 +8341,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var models_1 = __webpack_require__(528);
+	var models_1 = __webpack_require__(574);
 	var CommentComponent = (function () {
 	    function CommentComponent() {
 	        this.editable = false;
@@ -8407,7 +8417,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var store_1 = __webpack_require__(388);
-	var actions_1 = __webpack_require__(416);
+	var actions_1 = __webpack_require__(462);
 	var TaskListComponent = (function () {
 	    function TaskListComponent(store, taskActions) {
 	        var _this = this;
@@ -8538,8 +8548,8 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var store_1 = __webpack_require__(388);
-	var services_1 = __webpack_require__(421);
-	var models_1 = __webpack_require__(528);
+	var services_1 = __webpack_require__(467);
+	var models_1 = __webpack_require__(574);
 	var TaskStreamComponent = (function () {
 	    function TaskStreamComponent(store, taskService) {
 	        this.store = store;
@@ -8746,13 +8756,13 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
 	var notification_1 = __webpack_require__(593);
-	var actions_1 = __webpack_require__(416);
-	var services_1 = __webpack_require__(421);
-	var models_1 = __webpack_require__(528);
+	var actions_1 = __webpack_require__(462);
+	var services_1 = __webpack_require__(467);
+	var models_1 = __webpack_require__(574);
 	var RequestComponent = (function () {
 	    function RequestComponent(store, router, route, translate, notifyService, taskService) {
 	        this.store = store;
@@ -8889,15 +8899,15 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var http_1 = __webpack_require__(339);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var common_1 = __webpack_require__(206);
 	var store_1 = __webpack_require__(388);
 	var ng2_translate_1 = __webpack_require__(361);
 	var notification_1 = __webpack_require__(593);
 	var keys_pipe_1 = __webpack_require__(614);
-	var app_service_1 = __webpack_require__(422);
-	var translate_service_1 = __webpack_require__(423);
-	var utils_1 = __webpack_require__(414);
+	var app_service_1 = __webpack_require__(468);
+	var translate_service_1 = __webpack_require__(469);
+	var utils_1 = __webpack_require__(460);
 	var HEADERS = new http_1.Headers({
 	    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
 	    'Accept': 'application/json'
@@ -9092,8 +9102,8 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var staff_service_1 = __webpack_require__(540);
-	var models_1 = __webpack_require__(528);
+	var staff_service_1 = __webpack_require__(586);
+	var models_1 = __webpack_require__(574);
 	var OrganizationInputComponent = (function () {
 	    function OrganizationInputComponent(staffService) {
 	        this.staffService = staffService;
@@ -9320,7 +9330,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var store_1 = __webpack_require__(388);
-	var models_1 = __webpack_require__(528);
+	var models_1 = __webpack_require__(574);
 	var RequestTypeInputComponent = (function () {
 	    function RequestTypeInputComponent(store) {
 	        var _this = this;
@@ -9740,7 +9750,7 @@ webpackJsonp([0],[
 	};
 	var core_1 = __webpack_require__(11);
 	var http_1 = __webpack_require__(339);
-	var services_1 = __webpack_require__(421);
+	var services_1 = __webpack_require__(467);
 	var AttachmentsComponent = (function () {
 	    function AttachmentsComponent(http, uploadService) {
 	        this.http = http;
@@ -10643,7 +10653,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var moment = __webpack_require__(425);
+	var moment = __webpack_require__(471);
 	var DateFormatPipe = (function () {
 	    function DateFormatPipe() {
 	    }
@@ -10684,7 +10694,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var moment = __webpack_require__(425);
+	var moment = __webpack_require__(471);
 	var DateDurationPipe = (function () {
 	    function DateDurationPipe() {
 	    }
@@ -10794,7 +10804,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var services_1 = __webpack_require__(421);
+	var services_1 = __webpack_require__(467);
 	var LocalizedNamePipe = (function () {
 	    function LocalizedNamePipe(appService) {
 	        this.appService = appService;
@@ -10816,11 +10826,11 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var auth_guard_1 = __webpack_require__(658);
 	var redirect_guard_1 = __webpack_require__(659);
-	var dashboard_1 = __webpack_require__(543);
-	var projects_1 = __webpack_require__(544);
+	var dashboard_1 = __webpack_require__(589);
+	var projects_1 = __webpack_require__(590);
 	var project_1 = __webpack_require__(592);
 	var tasks_1 = __webpack_require__(600);
 	var task_1 = __webpack_require__(602);
@@ -10860,8 +10870,8 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
-	var services_1 = __webpack_require__(421);
+	var router_1 = __webpack_require__(412);
+	var services_1 = __webpack_require__(467);
 	var AuthGuard = (function () {
 	    function AuthGuard(appService, router) {
 	        this.appService = appService;
@@ -10897,7 +10907,7 @@ webpackJsonp([0],[
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(11);
-	var router_1 = __webpack_require__(545);
+	var router_1 = __webpack_require__(412);
 	var RedirectGuard = (function () {
 	    function RedirectGuard(router) {
 	        this.router = router;
@@ -11183,7 +11193,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var app_actions_1 = __webpack_require__(417);
+	var app_actions_1 = __webpack_require__(463);
 	;
 	var initialState = {
 	    userProfile: null,
@@ -11213,7 +11223,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var project_actions_1 = __webpack_require__(412);
+	var project_actions_1 = __webpack_require__(458);
 	;
 	var initialState = {
 	    meta: {},
@@ -11250,7 +11260,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var actions_1 = __webpack_require__(416);
+	var actions_1 = __webpack_require__(462);
 	exports.SET_FILTER = 'SET_FILTER';
 	;
 	var initialState = {
@@ -11306,7 +11316,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var actions_1 = __webpack_require__(416);
+	var actions_1 = __webpack_require__(462);
 	;
 	var initialState = {
 	    task: null,
@@ -11359,7 +11369,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var actions_1 = __webpack_require__(416);
+	var actions_1 = __webpack_require__(462);
 	;
 	var initialState = {
 	    organizations: [],
@@ -11388,7 +11398,7 @@ webpackJsonp([0],[
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var reference_actions_1 = __webpack_require__(419);
+	var reference_actions_1 = __webpack_require__(465);
 	;
 	var initialState = {
 	    tags: [],
