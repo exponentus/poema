@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,17 +19,12 @@ export class NavComponent {
 
     constructor(
         private router: Router,
-        private route: ActivatedRoute,
         private store: Store<any>,
         private projectActions: ProjectActions,
         private projectService: ProjectService
     ) { }
 
     ngOnInit() {
-        this.subs.push(this.route.params.subscribe(params => {
-            console.log('nav', params);
-        }));
-
         this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
         }));

@@ -829,9 +829,8 @@ webpackJsonp([0],[
 	var project_actions_1 = __webpack_require__(458);
 	var project_service_1 = __webpack_require__(459);
 	var NavComponent = (function () {
-	    function NavComponent(router, route, store, projectActions, projectService) {
+	    function NavComponent(router, store, projectActions, projectService) {
 	        this.router = router;
-	        this.route = route;
 	        this.store = store;
 	        this.projectActions = projectActions;
 	        this.projectService = projectService;
@@ -839,9 +838,6 @@ webpackJsonp([0],[
 	    }
 	    NavComponent.prototype.ngOnInit = function () {
 	        var _this = this;
-	        this.subs.push(this.route.params.subscribe(function (params) {
-	            console.log('nav', params);
-	        }));
 	        this.subs.push(this.store.select('projects').subscribe(function (state) {
 	            _this.projects = state.projects;
 	        }));
@@ -864,7 +860,7 @@ webpackJsonp([0],[
 	            selector: '[data-c=nav]',
 	            template: __webpack_require__(461)
 	        }), 
-	        __metadata('design:paramtypes', [router_1.Router, router_1.ActivatedRoute, store_1.Store, project_actions_1.ProjectActions, project_service_1.ProjectService])
+	        __metadata('design:paramtypes', [router_1.Router, store_1.Store, project_actions_1.ProjectActions, project_service_1.ProjectService])
 	    ], NavComponent);
 	    return NavComponent;
 	}());
