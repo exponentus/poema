@@ -22,6 +22,7 @@ export class TasksComponent {
     keyWord: string = '';
     filter: any = {};
     loading: boolean = true;
+    private params: any = {};
 
     constructor(
         private store: Store<any>,
@@ -74,6 +75,7 @@ export class TasksComponent {
     }
 
     loadData(params) {
+        this.params = params;
         this.store.dispatch(this.taskActions.fetchTasks());
         this.taskService.fetchTasks(params).subscribe(
             payload => {
@@ -81,6 +83,10 @@ export class TasksComponent {
             },
             error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
         );
+    }
+
+    refresh() {
+        this.loadData(this.params);
     }
 
     goToPage(params) {

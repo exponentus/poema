@@ -22,6 +22,7 @@ export class ProjectsComponent {
     meta: any = {};
     keyWord: string = '';
     loading: boolean = true;
+    private params: any = {};
 
     constructor(
         private store: Store<any>,
@@ -56,6 +57,7 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
+        this.params = params;
         this.store.dispatch(this.projectActions.fetchProjects());
         this.projectService.fetchProjects(params).subscribe(data => {
             let customerIds = data.projects.map(it => it.customerId);
@@ -72,6 +74,10 @@ export class ProjectsComponent {
                 error => this.store.dispatch(this.projectActions.fetchProjectsFailed(error))
             );
         });
+    }
+
+    refresh() {
+        this.loadData(this.params);
     }
 
     goToPage(params) {

@@ -6,6 +6,9 @@
         <button class="btn" type="button" (click)="newTask()">
             {{'new_task' | translate}}
         </button>
+        <button class="btn btn-refresh" type="button" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
         <task-filter (change)="changeFilter($event)"></task-filter>
         <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>

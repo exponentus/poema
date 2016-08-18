@@ -7175,6 +7175,7 @@ webpackJsonp([0],[
 	        this.meta = {};
 	        this.keyWord = '';
 	        this.loading = true;
+	        this.params = {};
 	    }
 	    ProjectsComponent.prototype.ngOnInit = function () {
 	        var _this = this;
@@ -7200,6 +7201,7 @@ webpackJsonp([0],[
 	    };
 	    ProjectsComponent.prototype.loadData = function (params) {
 	        var _this = this;
+	        this.params = params;
 	        this.store.dispatch(this.projectActions.fetchProjects());
 	        this.projectService.fetchProjects(params).subscribe(function (data) {
 	            var customerIds = data.projects.map(function (it) { return it.customerId; });
@@ -7213,6 +7215,9 @@ webpackJsonp([0],[
 	                _this.store.dispatch(_this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
 	            }, function (error) { return _this.store.dispatch(_this.projectActions.fetchProjectsFailed(error)); });
 	        });
+	    };
+	    ProjectsComponent.prototype.refresh = function () {
+	        this.loadData(this.params);
 	    };
 	    ProjectsComponent.prototype.goToPage = function (params) {
 	        this.loadData({
@@ -7241,7 +7246,7 @@ webpackJsonp([0],[
 /* 591 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content-header\">\n    <h1 class=\"header-title\">\n        {{title | translate}}\n    </h1>\n    <div class=\"content-actions\">\n        <button class=\"btn\" type=\"button\" (click)=\"newProject()\">\n            {{'new_project' | translate}}\n        </button>\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\n    </div>\n</div>\n<div class=\"content-body\">\n    <project-list [projects]=\"projects\"></project-list>\n</div>\n<router-outlet></router-outlet>\n"
+	module.exports = "<div class=\"content-header\">\n    <h1 class=\"header-title\">\n        {{title | translate}}\n    </h1>\n    <div class=\"content-actions\">\n        <button class=\"btn\" type=\"button\" (click)=\"newProject()\">\n            {{'new_project' | translate}}\n        </button>\n        <button class=\"btn btn-refresh\" type=\"button\" (click)=\"refresh()\">\n            <i class=\"fa fa-refresh\"></i>\n        </button>\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\n    </div>\n</div>\n<div class=\"content-body\">\n    <project-list [projects]=\"projects\"></project-list>\n</div>\n<router-outlet></router-outlet>\n"
 
 /***/ },
 /* 592 */
@@ -7764,6 +7769,7 @@ webpackJsonp([0],[
 	        this.keyWord = '';
 	        this.filter = {};
 	        this.loading = true;
+	        this.params = {};
 	    }
 	    TasksComponent.prototype.ngOnInit = function () {
 	        var _this = this;
@@ -7804,10 +7810,14 @@ webpackJsonp([0],[
 	    };
 	    TasksComponent.prototype.loadData = function (params) {
 	        var _this = this;
+	        this.params = params;
 	        this.store.dispatch(this.taskActions.fetchTasks());
 	        this.taskService.fetchTasks(params).subscribe(function (payload) {
 	            _this.store.dispatch(_this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
 	        }, function (error) { return _this.store.dispatch(_this.taskActions.fetchTasksFailed(error)); });
+	    };
+	    TasksComponent.prototype.refresh = function () {
+	        this.loadData(this.params);
 	    };
 	    TasksComponent.prototype.goToPage = function (params) {
 	        this.loadData(Object.assign({}, params, this.filter));
@@ -7838,7 +7848,7 @@ webpackJsonp([0],[
 /* 601 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"content-header\">\n    <h1 class=\"header-title\">\n        {{title | translate}}\n    </h1>\n    <div class=\"content-actions\">\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\n            {{'new_task' | translate}}\n        </button>\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\n    </div>\n</div>\n<div class=\"content-body\" [class.load]=\"loading\">\n    <task-list [tasks]=\"tasks\" (toggleStream)=\"onToggleStream($event)\"></task-list>\n</div>\n<router-outlet></router-outlet>\n"
+	module.exports = "<div class=\"content-header\">\n    <h1 class=\"header-title\">\n        {{title | translate}}\n    </h1>\n    <div class=\"content-actions\">\n        <button class=\"btn\" type=\"button\" (click)=\"newTask()\">\n            {{'new_task' | translate}}\n        </button>\n        <button class=\"btn btn-refresh\" type=\"button\" (click)=\"refresh()\">\n            <i class=\"fa fa-refresh\"></i>\n        </button>\n        <task-filter (change)=\"changeFilter($event)\"></task-filter>\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"goToPage($event)\"></pagination>\n    </div>\n</div>\n<div class=\"content-body\" [class.load]=\"loading\">\n    <task-list [tasks]=\"tasks\" (toggleStream)=\"onToggleStream($event)\"></task-list>\n</div>\n<router-outlet></router-outlet>\n"
 
 /***/ },
 /* 602 */

@@ -6,6 +6,9 @@
         <button class="btn" type="button" (click)="newProject()">
             {{'new_project' | translate}}
         </button>
+        <button class="btn btn-refresh" type="button" (click)="refresh()">
+            <i class="fa fa-refresh"></i>
+        </button>
         <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>
 </div>
