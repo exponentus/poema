@@ -68,13 +68,28 @@ module.exports = {
         publicPath: '/js/'
     },
     plugins: [
-        new CommonsChunkPlugin({name: 'vendor', filename: 'vendor.js', minChunks: Infinity}),
+        new CommonsChunkPlugin({
+            name: 'vendor',
+            filename: 'vendor.js',
+            minChunks: Infinity
+        }),
         // new CompressionPlugin({regExp: /\.css$|\.html$|\.js$|\.map$/, threshold: 1500}),
         // new CopyWebpackPlugin([{from: './src/index.html', to: 'index.html'}]),
         new DedupePlugin(),
-        new DefinePlugin({'webpack': {'ENV': JSON.stringify(metadata.ENV)}}),
+        new DefinePlugin({
+            'webpack': {
+                'ENV': JSON.stringify(metadata.ENV)
+            }
+        }),
         new OccurenceOrderPlugin(true),
-        new UglifyJsPlugin({compress: {screw_ie8: true}, mangle: {screw_ie8: true}})
+        new UglifyJsPlugin({
+            compress: {
+                screw_ie8: true
+            },
+            mangle: {
+                screw_ie8: true
+            }
+        })
     ],
     resolve: {
         extensions: ['', '.ts', '.js']
