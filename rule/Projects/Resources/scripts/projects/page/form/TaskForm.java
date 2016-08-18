@@ -246,7 +246,7 @@ public class TaskForm extends _DoForm {
 		} else if (formData.getValueSilently("title").length() > 140) {
 			ve.addError("title", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
 		}
-		if (formData.getValueSilently("title").length() > 2048) {
+		if (formData.getValueSilently("body").length() > 2048) {
 			ve.addError("body", "maxlen_2048", getLocalizedWord("field_is_too_long", lang));
 		}
 		if (formData.getValueSilently("status").isEmpty()) {
