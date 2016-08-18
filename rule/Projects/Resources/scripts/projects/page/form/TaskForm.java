@@ -27,7 +27,6 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
-import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
@@ -39,6 +38,7 @@ import projects.dao.TaskDAO;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
+import projects.other.Messages;
 import reference.dao.TagDAO;
 import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
@@ -177,29 +177,8 @@ public class TaskForm extends _DoForm {
 				task = dao.update(task);
 			}
 
-			if (isNew) {
-				List<String> recipients = new ArrayList<>();
-				try {
-					recipients.add(((User) assigneeUser).getEmail());
-
-					String mailTemplate = isSubTask ? "new_subtask" : "newtask";
-
-					MailAgent ma = new MailAgent();
-					Memo memo = new Memo(getLocalizedWord("notify_about_new_task_short", lang), getLocalizedEmailTemplate(mailTemplate, lang));
-					memo.addVar("assignee", assigneeUser.getUserName());
-					memo.addVar("title", task.getTitle());
-					memo.addVar("content", task.getBody());
-					memo.addVar("author", task.getAuthor().getUserName());
-					memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-					if (ma.sendMеssage(memo, recipients)) {
-						addValue("notify", "ok");
-					}
-				} catch (MsgException e) {
-					setBadRequest();
-					logError(e);
-				} catch (Exception e) {
-					Server.logger.errorLogEntry(e);
-				}
+			if (isNew && task.getStatus() == TaskStatusType.PROCESSED) {
+				Messages.sendMessageToAssignee(session, task);
 			}
 		} catch (SecureException e) {
 			setBadRequest();
@@ -207,7 +186,8 @@ public class TaskForm extends _DoForm {
 		} catch (_Exception | DatabaseException e) {
 			setBadRequest();
 			logError(e);
-
+		} catch (MsgException e) {
+			logError(e);
 		}
 	}
 

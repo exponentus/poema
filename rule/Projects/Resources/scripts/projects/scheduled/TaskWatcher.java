@@ -3,6 +3,7 @@ package projects.scheduled;
 import java.util.Date;
 
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduledTask;
@@ -12,6 +13,7 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
+import projects.other.Messages;
 
 public class TaskWatcher extends _DoScheduledTask {
 
@@ -28,8 +30,11 @@ public class TaskWatcher extends _DoScheduledTask {
 				try {
 					tDao.update(task);
 					Server.logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
+					Messages.sendMessageToAssignee(session, task);
 				} catch (SecureException e) {
-					Server.logger.errorLogEntry(e);
+					setError(e);
+				} catch (MsgException e) {
+					setError(e);
 				}
 			}
 		}
