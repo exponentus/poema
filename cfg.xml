@@ -29,11 +29,11 @@
 		<entry>POR</entry>
 	</langs>
 	<mail mode="ON">
-		<smtphost></smtphost>
+		<smtphost>dev.exponentus.com </smtphost>
 		<smtpauth>true</smtpauth>
 		<smtpport>2525</smtpport>
 		<smtpuser>test@exponentus.com</smtpuser>
-		<smtppassword></smtppassword>
+		<smtppassword>test22</smtppassword>
 	</mail>
 	<slack mode="ON">
 		<token>xoxp-23444271154-23444271170-50169425446-bac36b43f2</token>
