@@ -30,7 +30,7 @@ import { Employee } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="ids && ids.indexOf(m.id) !=- 1" *ngFor="let m of getEmps()" (click)="add(m)">
+                    <li class="select-option" [class.selected]="ids && ids.indexOf(m.userID) !=- 1" *ngFor="let m of getEmps()" (click)="add(m)">
                         {{m.name}}
                     </li>
                 </ul>
