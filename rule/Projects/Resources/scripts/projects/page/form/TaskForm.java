@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.eclipse.persistence.exceptions.DatabaseException;
+import org.joda.time.LocalDate;
 
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
@@ -72,7 +73,7 @@ public class TaskForm extends _DoForm {
 			task.setTaskType(tDao.findByName("Programming"));
 			task.setStatus(TaskStatusType.DRAFT);
 			task.setStartDate(new Date());
-			task.setDueDate(task.getStartDate());
+			task.setDueDate(LocalDate.now().plusDays(10).toDate());
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
 			List<String> formFiles = null;
@@ -134,7 +135,7 @@ public class TaskForm extends _DoForm {
 					task.setTaskType(parentTask.getTaskType());
 					task.setProject(parentTask.getProject());
 				}
-				task.setStatus(TaskStatusType.WAITING);
+				task.setStatus(TaskStatusType.DRAFT);
 			} else {
 				task = dao.findById(id);
 			}
@@ -147,6 +148,13 @@ public class TaskForm extends _DoForm {
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
 			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
 			task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
+			if (task.getStatus() == TaskStatusType.DRAFT) {
+				if (new Date().before(task.getStartDate())) {
+					task.setStatus(TaskStatusType.WAITING);
+				} else {
+					task.setStatus(TaskStatusType.PROCESSED);
+				}
+			}
 			task.setBody(formData.getValueSilently("body"));
 			IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
 			task.setAssignee(assigneeUser.getId());
