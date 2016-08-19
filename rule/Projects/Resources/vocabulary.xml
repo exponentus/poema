@@ -112,6 +112,10 @@
         <entry lang="RUS">Опубликовать заказчику</entry>
         <entry lang="ENG">Publish to the customer</entry>
     </sentence>
+    <sentence mode="on" keyword="acl_tab_title">
+        <entry lang="RUS">Доступ</entry>
+        <entry lang="ENG">ACL</entry>
+    </sentence>
 
     <sentence mode="on" keyword="name">
         <entry lang="RUS">Название</entry>
@@ -266,28 +270,27 @@
         <entry lang="RUS">Нормальный</entry>
         <entry lang="ENG">Normal</entry>
     </sentence>
-    
+
     <!-- messaging -->
     <sentence mode="on" keyword="notify_about_new_project_short">
         <entry lang="RUS">Уведомление о новом проекте</entry>
         <entry lang="ENG">Notify about a new project</entry>
         <entry lang="KAZ">Уведомление о новом проекте</entry>
         <entry lang="POR">Notificar sobre um novo projeto</entry>
-        <entry lang="SPA">Notificarle acerca de un nuevo proyecto</entry>        
+        <entry lang="SPA">Notificarle acerca de un nuevo proyecto</entry>
     </sentence>
     <sentence mode="on" keyword="notify_about_new_task_short">
         <entry lang="RUS">Уведомление о новом задании</entry>
         <entry lang="ENG">Notify about a new task</entry>
         <entry lang="KAZ">Уведомление о новом задании</entry>
         <entry lang="POR">Notificar sobre uma nova tarefa</entry>
-        <entry lang="SPA">Notificarle acerca de una nueva tarea</entry>        
+        <entry lang="SPA">Notificarle acerca de una nueva tarea</entry>
     </sentence>
     <sentence mode="on" keyword="notify_about_task_request">
         <entry lang="RUS">Уведомление о новом запросе</entry>
         <entry lang="ENG">Notify about a new request</entry>
         <entry lang="KAZ">Уведомление о новом запросе</entry>
         <entry lang="POR">Notificar sobre um novo pedido</entry>
-        <entry lang="SPA">Notificarle sobre una nueva solicitud</entry>        
+        <entry lang="SPA">Notificarle sobre una nueva solicitud</entry>
     </sentence>
-  
 </vocabulary>

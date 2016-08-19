@@ -18,10 +18,14 @@
     <caption name="loading"/>
     <caption name="required"/>
 
+    <caption name="editors"/>
+    <caption name="readers"/>
+
     <caption name="reg_date"/>
     <caption name="expiry_date"/>
     <caption name="reg_number"/>
 
+    <caption name="acl_tab_title"/>
     <caption name="type"/>
     <caption name="attachments"/>
     <caption name="attach_file"/>
