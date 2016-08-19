@@ -40,6 +40,10 @@
         <entry lang="RUS">Завершенные</entry>
         <entry lang="ENG">Completed</entry>
     </sentence>
+    <sentence mode="on" keyword="tasks_all">
+        <entry lang="RUS">Все задания</entry>
+        <entry lang="ENG">All tasks</entry>
+    </sentence>
     <sentence mode="on" keyword="my_tasks">
         <entry lang="RUS">Мои задания</entry>
         <entry lang="ENG">My tasks</entry>

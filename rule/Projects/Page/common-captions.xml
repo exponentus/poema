@@ -63,6 +63,7 @@
     <caption name="completed"/>
     <caption name="tasks"/>
 
+    <caption name="tasks_all"/>
     <caption name="my_tasks"/>
     <caption name="tasks_assigned_to_me"/>
     <caption name="projects"/>

@@ -1,5 +1,11 @@
 <ul>
     <li>
+        <a [routerLink]="['/tasks']" class="nav-link" [class.active]="isActive(['/']) || isActive(['/tasks'])">
+            <i class="fa fa-list"></i>
+            <span>{{'tasks_all' | translate}}</span>
+        </a>
+    </li>
+    <li>
         <a [routerLink]="['/tasks', 'my']" class="nav-link" [class.active]="isActive(['/tasks/my'])">
             <i class="fa fa-pencil"></i>
             <span>{{'my_tasks' | translate}}</span>
