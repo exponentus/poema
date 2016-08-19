@@ -8,6 +8,8 @@ public class AppConst {
 	public static String NAME_ENG = "Projects";
 	public static String NAME_RUS = "Проекты";
 	public static String NAME_KAZ = "Проект";
+	public static String NAME_POR = "Projetos";
+	public static String NAME_SPA = "Proyectos";
 	public static AppCode CODE = AppCode.CUSTOM;
 	public static String DEFAULT_URL = "p";
 	public static String FT_INDEX_SCOPE = "";

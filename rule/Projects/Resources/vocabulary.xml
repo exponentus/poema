@@ -305,4 +305,11 @@
         <entry lang="POR">Notificar sobre um novo pedido</entry>
         <entry lang="SPA">Notificarle sobre una nueva solicitud</entry>
     </sentence>
+     <sentence mode="on" keyword="notify_about_finish_task">
+        <entry lang="RUS">Уведомление о завершении задачи</entry>
+        <entry lang="ENG">Notify about finishing task</entry>
+        <entry lang="KAZ">Уведомление о завершении задачи</entry>
+        <entry lang="POR">Notificar </entry>
+        <entry lang="SPA">Notificarle </entry>
+    </sentence>
 </vocabulary>
