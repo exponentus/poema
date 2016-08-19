@@ -109,7 +109,7 @@
                 </div>
                 <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" *ngIf="!isNew">
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
                 <div class="fieldset">
                     <div class="form-group">
                         <div class="control-label">

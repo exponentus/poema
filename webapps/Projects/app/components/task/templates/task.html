@@ -54,7 +54,9 @@
                 <span>{{'requests' | translate}}</span>
                 <i class="fa fa-exclamation-circle" *ngIf="hasUnResolvedRequest"></i>
             </div> -->
-            <div class="task-tab__title" [class.active]="showACL" [class.hidden]="!showACLTabTitle" (click)="toggleShowACL()">{{'acl_tab_title' | translate}}</div>
+            <div class="task-tab__title" [class.active]="showACL" [class.hidden]="!showACLTabTitle" (click)="toggleShowACL()">
+                <i class='fa fa-share-alt'></i> {{'acl_tab_title' | translate}}
+            </div>
         </div>
         <div class="task-tab" [class.active]="showSubtasks" *ngIf="!isNew">
             <task-list [streamMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
