@@ -11,6 +11,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class Tab {
     @Input('tabTitle') title: string;
+    @Input() icon: string;
     @Input() active: boolean = false;
     @Input() pinned: boolean = false;
     @Output() select = new EventEmitter<any>();

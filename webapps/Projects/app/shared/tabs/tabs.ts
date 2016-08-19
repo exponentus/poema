@@ -7,7 +7,10 @@ import { Tab } from './tab';
     template: `
         <ul class="nav nav-tabs">
             <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.pinned]="tab.pinned" [class.active]="tab.active">
-                <a href="#" (click)="$event.preventDefault()">{{tab.title}}</a>
+                <a href="#" (click)="$event.preventDefault()">
+                    <i class="{{tab.icon}}" *ngIf="tab.icon"></i>
+                    {{tab.title}}
+                </a>
             </li>
         </ul>
         <ng-content></ng-content>
