@@ -33,11 +33,13 @@ public class Messages {
 		IUser<Long> programmer = userDAO.findById(project.getProgrammer());
 		recipients.add(programmer.getEmail());
 		memo.addVar("programmer", programmer.getUserName());
+		String testerName = "";
 		if (project.getTester() > 0) {
 			IUser<Long> tester = userDAO.findById(project.getTester());
 			recipients.add(tester.getEmail());
-			memo.addVar("tester", tester.getUserName());
+			testerName = tester.getUserName();
 		}
+		memo.addVar("tester", testerName);
 		memo.addVar("projectName", project.getName());
 		memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());

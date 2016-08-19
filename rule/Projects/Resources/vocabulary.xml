@@ -142,11 +142,11 @@
         <entry lang="ENG">Manager</entry>
     </sentence>
     <sentence mode="on" keyword="programmer">
-        <entry lang="RUS">Программист</entry>
-        <entry lang="ENG">Programmer</entry>
+        <entry lang="RUS">Главный программист</entry>
+        <entry lang="ENG">Lead developer</entry>
     </sentence>
     <sentence mode="on" keyword="tester">
-        <entry lang="RUS">Тестировшик</entry>
+        <entry lang="RUS">Тестировщик</entry>
         <entry lang="ENG">Tester</entry>
     </sentence>
     <sentence mode="on" keyword="observers">
@@ -255,7 +255,7 @@
     </sentence>
     <sentence mode="on" keyword="waiting">
         <entry lang="RUS">Ожидание срока</entry>
-        <entry lang="ENG">Waiting for time</entry>
+        <entry lang="ENG">On-hold</entry>
     </sentence>
     <sentence mode="on" keyword="processing">
         <entry lang="RUS">В работе</entry>

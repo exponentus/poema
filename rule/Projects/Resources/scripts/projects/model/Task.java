@@ -51,6 +51,9 @@ public class Task extends SecureAppEntity<UUID> {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task parent;
 
+	@Column(name = "reg_number", length = 140)
+	private String regNumber;
+
 	@OneToMany(mappedBy = "parent")
 	private List<Task> subtasks;
 
@@ -121,6 +124,14 @@ public class Task extends SecureAppEntity<UUID> {
 
 	public void setParent(Task parent) {
 		this.parent = parent;
+	}
+
+	public String getRegNumber() {
+		return regNumber;
+	}
+
+	public void setRegNumber(String regNumber) {
+		this.regNumber = regNumber;
 	}
 
 	@JsonIgnore
