@@ -12,6 +12,14 @@
         <entry lang="RUS">Загрузка</entry>
         <entry lang="ENG">Loading</entry>
     </sentence>
+    <sentence mode="on" keyword="editors">
+        <entry lang="RUS">Редакторы</entry>
+        <entry lang="ENG">Editors</entry>
+    </sentence>
+    <sentence mode="on" keyword="readers">
+        <entry lang="RUS">Читатели</entry>
+        <entry lang="ENG">Readers</entry>
+    </sentence>
     <sentence mode="on" keyword="inbox">
         <entry lang="RUS">Входящие</entry>
         <entry lang="ENG">Inbox</entry>
