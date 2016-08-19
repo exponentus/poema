@@ -71,7 +71,7 @@ public class TaskForm extends _DoForm {
 			task.setAuthor(user);
 			TaskTypeDAO tDao = new TaskTypeDAO(session);
 			task.setTaskType(tDao.findByName("Programming"));
-			task.setStatus(TaskStatusType.DRAFT);
+			task.setStatus(TaskStatusType.OPEN);
 			task.setStartDate(new Date());
 			task.setDueDate(LocalDate.now().plusDays(10).toDate());
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
@@ -135,7 +135,7 @@ public class TaskForm extends _DoForm {
 					task.setTaskType(parentTask.getTaskType());
 					task.setProject(parentTask.getProject());
 				}
-				task.setStatus(TaskStatusType.DRAFT);
+				task.setStatus(TaskStatusType.OPEN);
 			} else {
 				task = dao.findById(id);
 			}
@@ -148,11 +148,11 @@ public class TaskForm extends _DoForm {
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
 			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
 			task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
-			if (task.getStatus() == TaskStatusType.DRAFT) {
+			if (task.getStatus() == TaskStatusType.OPEN) {
 				if (new Date().before(task.getStartDate())) {
 					task.setStatus(TaskStatusType.WAITING);
 				} else {
-					task.setStatus(TaskStatusType.PROCESSED);
+					task.setStatus(TaskStatusType.PROCESSING);
 				}
 			}
 			task.setBody(formData.getValueSilently("body"));
@@ -185,7 +185,7 @@ public class TaskForm extends _DoForm {
 				task = dao.update(task);
 			}
 
-			if (isNew && task.getStatus() == TaskStatusType.PROCESSED) {
+			if (isNew && task.getStatus() == TaskStatusType.PROCESSING) {
 				Messages.sendMessageToAssignee(session, task);
 			}
 		} catch (SecureException e) {
@@ -289,12 +289,12 @@ public class TaskForm extends _DoForm {
 		Task task = dao.findById(taskId);
 
 		try {
-			if (task.getStatus() == TaskStatusType.FINISHED) {
+			if (task.getStatus() == TaskStatusType.COMPLETED) {
 				addContent("info", "task status is finished");
 				return;
 			}
 
-			task.setStatus(TaskStatusType.FINISHED);
+			task.setStatus(TaskStatusType.COMPLETED);
 			dao.update(task);
 
 			LanguageCode lang = session.getLang();

@@ -14,9 +14,38 @@ import com.exponentus.user.IUser;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
+import projects.model.Project;
 import projects.model.Task;
 
 public class Messages {
+
+	public static void sendMessageOfNewProject(_Session session, Project project) throws MsgException {
+		AppEnv appEnv = session.getAppEnv();
+		LanguageCode lang = session.getLang();
+		UserDAO userDAO = new UserDAO(session);
+		List<String> recipients = new ArrayList<>();
+
+		Memo memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
+		        appEnv.templates.getTemplate(MessageType.EMAIL, "newproject", lang));
+		IUser<Long> manager = userDAO.findById(project.getManager());
+		recipients.add(manager.getEmail());
+		memo.addVar("manager", manager.getUserName());
+		IUser<Long> programmer = userDAO.findById(project.getProgrammer());
+		recipients.add(programmer.getEmail());
+		memo.addVar("programmer", programmer.getUserName());
+		if (project.getTester() > 0) {
+			IUser<Long> tester = userDAO.findById(project.getTester());
+			recipients.add(tester.getEmail());
+			memo.addVar("tester", tester.getUserName());
+		}
+		memo.addVar("projectName", project.getName());
+		memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
+		memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
+		MailAgent ma = new MailAgent();
+		ma.sendMеssage(memo, recipients);
+
+	}
+
 	public static void sendMessageToAssignee(_Session session, Task task) throws MsgException {
 		AppEnv appEnv = session.getAppEnv();
 		LanguageCode lang = session.getLang();

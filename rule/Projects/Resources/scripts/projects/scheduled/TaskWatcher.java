@@ -26,7 +26,7 @@ public class TaskWatcher extends _DoScheduledTask {
 		ViewPage<Task> result = tDao.findAllByTaskFilter(filter, 0, 0);
 		for (Task task : result.getResult()) {
 			if (current.after(task.getStartDate())) {
-				task.setStatus(TaskStatusType.PROCESSED);
+				task.setStatus(TaskStatusType.PROCESSING);
 				try {
 					tDao.update(task);
 					Server.logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");

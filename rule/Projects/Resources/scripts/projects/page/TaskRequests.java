@@ -193,7 +193,7 @@ public class TaskRequests extends _DoForm {
                 TaskDAO taskDAO = new TaskDAO(session);
                 Task task = request.getTask();
                 if ("implement".equals(request.getRequestType().getName())) {
-                    task.setStatus(TaskStatusType.FINISHED);
+                    task.setStatus(TaskStatusType.COMPLETED);
                 } else if ("prolong".equals(request.getRequestType().getName())) {
                     // prolong new due date
                     Date newDueDate = TimeUtil.convertStringToDate(formData.getValueSilently("dueDate"));
@@ -206,7 +206,7 @@ public class TaskRequests extends _DoForm {
                     }
                     task.setDueDate(newDueDate);
                 } else if ("cancel".equals(request.getRequestType().getName())) {
-                    task.setStatus(TaskStatusType.CANCELED);
+                    task.setStatus(TaskStatusType.CANCELLED);
                 } else {
                     setBadRequest();
                     addContent("error", "I don't know what you want. Unknown requestType");

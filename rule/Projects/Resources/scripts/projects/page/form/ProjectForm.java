@@ -17,8 +17,6 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.messaging.email.MailAgent;
-import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._FormAttachments;
@@ -35,6 +33,7 @@ import administrator.dao.UserDAO;
 import projects.dao.ProjectDAO;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
+import projects.other.Messages;
 import staff.dao.OrganizationDAO;
 
 public class ProjectForm extends _DoForm {
@@ -161,28 +160,7 @@ public class ProjectForm extends _DoForm {
 				IUser<Long> user = session.getUser();
 				project.addReaderEditor(user);
 				project = dao.add(project);
-
-				LanguageCode lang = session.getLang();
-				List<String> recipients = new ArrayList<>();
-				recipients.add(managerUser.getEmail());
-				recipients.add(programmerUser.getEmail());
-				if (testerUser != null) {
-					recipients.add(testerUser.getEmail());
-				}
-
-				MailAgent ma = new MailAgent();
-				Memo memo = new Memo(getLocalizedWord("notify_about_new_project_short", lang), getLocalizedEmailTemplate("newproject", lang));
-				memo.addVar("manager", managerUser.getUserName());
-				memo.addVar("programmer", programmerUser.getUserName());
-				if (testerUser != null) {
-					memo.addVar("tester", testerUser.getUserName());
-				}
-				memo.addVar("projectName", project.getName());
-				memo.addVar("author", project.getAuthor().getUserName());
-				memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
-				if (!ma.sendMеssage(memo, recipients)) {
-					addContent("notify", "ok");
-				}
+				Messages.sendMessageOfNewProject(session, project);
 			} else {
 				project = dao.update(project);
 			}
@@ -192,7 +170,6 @@ public class ProjectForm extends _DoForm {
 			setBadRequest();
 			logError(e);
 		} catch (MsgException e) {
-			setBadRequest();
 			logError(e);
 		}
 	}

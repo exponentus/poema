@@ -249,21 +249,29 @@
         <entry lang="ENG">Declined</entry>
     </sentence>
 
-    <sentence mode="on" keyword="draft">
+    <sentence mode="on" keyword="open">
         <entry lang="RUS">Черновик</entry>
-        <entry lang="ENG">Draft</entry>
+        <entry lang="ENG">Open</entry>
     </sentence>
     <sentence mode="on" keyword="waiting">
-        <entry lang="RUS">Ожидание</entry>
-        <entry lang="ENG">Waiting</entry>
+        <entry lang="RUS">Ожидание срока</entry>
+        <entry lang="ENG">Waiting for time</entry>
     </sentence>
-    <sentence mode="on" keyword="processed">
+    <sentence mode="on" keyword="processing">
         <entry lang="RUS">В работе</entry>
-        <entry lang="ENG">Processed</entry>
+        <entry lang="ENG">Processing</entry>
     </sentence>
-    <sentence mode="on" keyword="finished">
+    <sentence mode="on" keyword="pending">
+        <entry lang="RUS">Ожидание</entry>
+        <entry lang="ENG">Pending</entry>
+    </sentence>
+    <sentence mode="on" keyword="completed">
         <entry lang="RUS">Завершен</entry>
-        <entry lang="ENG">Finished</entry>
+        <entry lang="ENG">Completed</entry>
+    </sentence>
+     <sentence mode="on" keyword="cancelled">
+        <entry lang="RUS">Отменен</entry>
+        <entry lang="ENG">Cancelled</entry>
     </sentence>
 
     <sentence mode="on" keyword="urgent">
