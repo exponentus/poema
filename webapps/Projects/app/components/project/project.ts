@@ -4,13 +4,15 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { KeysPipe, ValuesPipe } from '../../pipes';
 import { NotificationService } from '../../shared/notification';
 import { ProjectService } from '../../services';
 import { Project, Organization, Employee, Attachment } from '../../models';
 
 @Component({
     selector: 'project',
-    template: require('./templates/project.html')
+    template: require('./templates/project.html'),
+    pipes: [KeysPipe, ValuesPipe]
 })
 
 export class ProjectComponent {

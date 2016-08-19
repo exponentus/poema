@@ -91,6 +91,9 @@ export class TaskService {
                 if (data.fsid) {
                     task.fsid = data.fsid;
                 }
+                if (data.ACL) {
+                    task.acl = data.ACL;
+                }
                 if (data.attachment) {
                     task.attachments = <Attachment[]>data.attachment.list;
                 }

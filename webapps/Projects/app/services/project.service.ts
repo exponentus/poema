@@ -57,6 +57,9 @@ export class ProjectService {
                 if (data.fsid) {
                     project.fsid = data.fsid;
                 }
+                if (data.ACL) {
+                    project.acl = data.ACL;
+                }
                 if (data.attachment) {
                     project.attachments = data.attachment.list;
                 }

@@ -9,6 +9,7 @@ export class Task {
     editable: boolean = false;
     wasRead: boolean;
     fsid: string = '' + Date.now();
+    acl: any = {};
 
     project: Project;
     projectId: string;

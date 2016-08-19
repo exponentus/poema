@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { KeysPipe, ValuesPipe } from '../../pipes';
 import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
 import { ITaskState } from '../../reducers/task.reducer';
@@ -16,7 +17,8 @@ import { Project, Task, Tag, TaskType, Request, Comment, Employee, Attachment } 
     template: require('./templates/task.html'),
     directives: [
         CommentsComponent
-    ]
+    ],
+    pipes: [KeysPipe, ValuesPipe]
 })
 
 export class TaskComponent {
@@ -45,6 +47,8 @@ export class TaskComponent {
     showProperty: boolean = true;
     showSubtasks: boolean = false;
     showRequests: boolean = false;
+    showACLTabTitle: boolean = false;
+    showACL: boolean = false;
     hasUnResolvedRequest: boolean = true;
     hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
@@ -95,6 +99,8 @@ export class TaskComponent {
             this.hasAcceptedRequestResolution = false;
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
+            this.showPropertyTabTitle = !this.isNew;
+            this.showACLTabTitle = this.showPropertyTabTitle;
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
                 task => {
@@ -164,6 +170,7 @@ export class TaskComponent {
         this.showProperty = true;
         this.showRequests = false;
         this.showSubtasks = false;
+        this.showACL = false;
     }
 
     toggleShowSubtasks() {
@@ -171,6 +178,7 @@ export class TaskComponent {
         // if (this.showSubtasks) {
         this.showRequests = false;
         this.showProperty = false;
+        this.showACL = false;
         // }
     }
 
@@ -179,6 +187,16 @@ export class TaskComponent {
         // if (this.showRequests) {
         this.showSubtasks = false;
         this.showProperty = false;
+        this.showACL = false;
+        // }
+    }
+
+    toggleShowACL() {
+        this.showACL = true; // !this.showRequests;
+        // if (this.showRequests) {
+        this.showSubtasks = false;
+        this.showProperty = false;
+        this.showRequests = false;
         // }
     }
 

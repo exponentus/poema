@@ -8,6 +8,7 @@ export class Project {
     editable: boolean = false;
     wasRead: boolean;
     fsid: string = '' + Date.now();
+    acl: any = {};
 
     name: string;
     status: string = 'DRAFT';
