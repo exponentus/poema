@@ -35,7 +35,7 @@ module.exports = {
             exclude: /src/
         }, {
             test: /\.html$/,
-            loader: 'html?caseSensitive=true'
+            loader: 'html?caseSensitive=true&removeAttributeQuotes=false&minimize=true'
         }, {
             test: /\.ts$/,
             loader: 'ts',
@@ -83,12 +83,16 @@ module.exports = {
         }),
         new OccurenceOrderPlugin(true),
         new UglifyJsPlugin({
+            dead_code: true,
+            unused: true,
             compress: {
                 screw_ie8: true
             },
             mangle: {
-                screw_ie8: true
-            }
+                screw_ie8: true,
+                keep_fnames: true
+            },
+            comments: false
         })
     ],
     resolve: {
