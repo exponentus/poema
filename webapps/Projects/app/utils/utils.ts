@@ -35,7 +35,9 @@ export function parseResponseObjects(objects: any): any {
         } else if (obj.name && obj.value) { // fsid?
             result[obj.name] = obj.value;
         } else {
-            result.push(obj);
+            for (let k in obj) {
+                result[k] = obj[k];
+            }
         }
     }
 

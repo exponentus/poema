@@ -8,6 +8,9 @@ export class LocalizedNamePipe {
     constructor(private appService: AppService) { }
 
     transform(model: any, field: string, locale: string): string {
-        return model ? model.localizedName[locale || this.appService.language] || model[field || 'name'] : '';
+        let _field = field || 'name';
+        let _locale = locale || this.appService.language;
+
+        return model ? (model.localizedName[_locale] || model[_field]) : '';
     }
 }

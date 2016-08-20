@@ -30,11 +30,16 @@ export class TaskService {
     }
 
     getTaskStatusTypes() {
-        return this.translate.get(['draft', 'waiting', 'processed', 'finished']).map(t => [
+        return this.translate.get(['draft', 'waiting', 'processing', 'cancelled', 'open', 'pending', 'processed', 'finished']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
             { value: 'WAITING', text: t.waiting },
-            { value: 'PROCESSED', text: t.processed },
-            { value: 'FINISHED', text: t.finished }
+            { value: 'PROCESSING', text: t.processing },
+            { value: 'COMPLETED', text: t.finished },
+            { value: 'CANCELLED', text: t.cancelled },
+            { value: 'OPEN', text: t.open },
+            { value: 'PENDING', text: t.pending },
+            { value: 'PROCESSED', text: t.processed, disabled: true },
+            { value: 'FINISHED', text: t.finished, disabled: true },
         ]);
     }
 
@@ -109,7 +114,7 @@ export class TaskService {
     }
 
     completeTask(task: Task) {
-        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=complete', '', { headers: HEADERS })
+        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=complete&fsid=' + task.fsid, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
     }

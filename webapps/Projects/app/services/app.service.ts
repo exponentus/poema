@@ -27,15 +27,16 @@ export class AppService {
             response => {
                 let res = parseResponseObjects(response.json().objects);
                 let pageSize = 20;
-                if (res[0].pagesize) {
-                    pageSize = res[0].pagesize
+                if (res.pagesize) {
+                    pageSize = res.pagesize
                 }
                 this.isLogged = true;
+                this.language = res.currentLang;
                 return {
                     userProfile: res.employee,
                     languages: res.language.list[0].localizedName,
                     pageSize: pageSize,
-                    language: this.language
+                    language: res.currentLang || this.language
                 }
             },
             error => {
