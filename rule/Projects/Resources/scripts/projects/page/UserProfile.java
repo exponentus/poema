@@ -31,6 +31,7 @@ public class UserProfile extends _DoPage {
         }
         addContent(emp);
         addContent(new LanguageDAO(session).findAll());
+        addContent("currentLang", session.getLang().name());
         addContent("pagesize", String.valueOf(session.getPageSize()));
     }
 
