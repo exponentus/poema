@@ -65,6 +65,8 @@ public class Task extends SecureAppEntity<UUID> {
 	@Column(length = 16)
 	private TaskStatusType status = TaskStatusType.UNKNOWN;
 
+	private Date statusDate;
+
 	@Enumerated(EnumType.STRING)
 	@Column(length = 10)
 	private TaskPriorityType priority = TaskPriorityType.NORMAL;
@@ -158,6 +160,15 @@ public class Task extends SecureAppEntity<UUID> {
 
 	public void setStatus(TaskStatusType status) {
 		this.status = status;
+		statusDate = new Date();
+	}
+
+	public Date getStatusDate() {
+		return statusDate;
+	}
+
+	public void setStatusDate(Date statusDate) {
+		this.statusDate = statusDate;
 	}
 
 	public TaskPriorityType getPriority() {

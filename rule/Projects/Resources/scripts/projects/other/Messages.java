@@ -15,6 +15,7 @@ import com.exponentus.user.IUser;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import projects.model.Project;
+import projects.model.Request;
 import projects.model.Task;
 
 public class Messages {
@@ -67,6 +68,24 @@ public class Messages {
 		memo.addVar("content", task.getBody());
 		memo.addVar("author", task.getAuthor().getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+		ma.sendMеssage(memo, recipients);
+
+	}
+
+	public static void sendMessageOfNewRequest(_Session session, Request request, Task task) throws MsgException {
+		AppEnv appEnv = session.getAppEnv();
+		LanguageCode lang = session.getLang();
+		List<String> recipients = new ArrayList<>();
+
+		Memo memo = new Memo(appEnv.vocabulary.getWord("notify_about_task_request", lang),
+		        appEnv.templates.getTemplate(MessageType.EMAIL, "newrequest", lang));
+		memo.addVar("taskTitle", task.getTitle());
+		memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
+		memo.addVar("comment", request.getComment());
+		memo.addVar("author", session.getUser().getUserName());
+		memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
+
+		MailAgent ma = new MailAgent();
 		ma.sendMеssage(memo, recipients);
 
 	}

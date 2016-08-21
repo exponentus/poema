@@ -257,7 +257,7 @@
         <entry lang="RUS">Ожидание срока</entry>
         <entry lang="ENG">On-hold</entry>
     </sentence>
-    <sentence mode="on" keyword="processing">
+    <sentence mode="on" keyword="processing">                                
         <entry lang="RUS">В работе</entry>
         <entry lang="ENG">Processing</entry>
     </sentence>
@@ -287,7 +287,7 @@
         <entry lang="ENG">Medium</entry>
     </sentence>
     <sentence mode="on" keyword="normal">
-        <entry lang="RUS">Нормальный</entry>
+        <entry lang="RUS">Обычный</entry>
         <entry lang="ENG">Normal</entry>
     </sentence>
 
