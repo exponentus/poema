@@ -1,6 +1,7 @@
 <div class="content-header">
     <h1 class="header-title">
         {{title | translate}}
+        <sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
     <div class="content-actions">
         <button class="btn" type="button" (click)="newTask()">
