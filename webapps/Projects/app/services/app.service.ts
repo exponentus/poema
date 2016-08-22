@@ -23,9 +23,10 @@ export class AppService {
     }
 
     fetchUserProfile() {
-        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
+        return this.http.get('/Staff/p?id=userprofile', { headers: HEADERS }).map(
             response => {
                 let res = parseResponseObjects(response.json().objects);
+                console.log(res);
                 let pageSize = 20;
                 if (res.pagesize) {
                     pageSize = res.pagesize
@@ -46,7 +47,7 @@ export class AppService {
     }
 
     updateUserProfile(userForm: any) {
-        return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: HEADERS })
+        return this.http.post('/Staff/p?id=userprofile', serializeObj(userForm), { headers: HEADERS })
             .map(response => response.json())
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
