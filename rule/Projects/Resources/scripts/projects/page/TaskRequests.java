@@ -178,9 +178,9 @@ public class TaskRequests extends _DoForm {
 				return;
 			}
 
+			TaskDAO taskDAO = new TaskDAO(session);
+			Task task = request.getTask();
 			if (resolutionType == ResolutionType.ACCEPT) {
-				TaskDAO taskDAO = new TaskDAO(session);
-				Task task = request.getTask();
 				if ("implement".equals(request.getRequestType().getName())) {
 					task.setStatus(TaskStatusType.COMPLETED);
 				} else if ("prolong".equals(request.getRequestType().getName())) {
@@ -201,8 +201,13 @@ public class TaskRequests extends _DoForm {
 					addContent("error", "I don't know what you want. Unknown requestType");
 					return;
 				}
-				taskDAO.update(task);
+
+			} else {
+				if ("implement".equals(request.getRequestType().getName())) {
+					task.setStatus(TaskStatusType.PROCESSING);
+				}
 			}
+			taskDAO.update(task);
 
 			request.setResolution(resolutionType);
 			request.setResolutionTime(new Date());

@@ -13,7 +13,6 @@ import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
 import administrator.dao.UserDAO;
-import administrator.model.User;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
@@ -56,7 +55,7 @@ public class Messages {
 		IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 		List<String> recipients = new ArrayList<>();
 
-		recipients.add(((User) assigneeUser).getEmail());
+		recipients.add(assigneeUser.getEmail());
 
 		String mailTemplate = task.getParent() != null ? "new_subtask" : "newtask";
 
