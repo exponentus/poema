@@ -249,6 +249,10 @@
         <entry lang="ENG">Declined</entry>
     </sentence>
 
+    <sentence mode="on" keyword="draft">
+        <entry lang="RUS">Черновик</entry>
+        <entry lang="ENG">Draft</entry>
+    </sentence>
     <sentence mode="on" keyword="open">
         <entry lang="RUS">Черновик</entry>
         <entry lang="ENG">Open</entry>
@@ -257,7 +261,7 @@
         <entry lang="RUS">Ожидание срока</entry>
         <entry lang="ENG">On-hold</entry>
     </sentence>
-    <sentence mode="on" keyword="processing">                                
+    <sentence mode="on" keyword="processing">
         <entry lang="RUS">В работе</entry>
         <entry lang="ENG">Processing</entry>
     </sentence>
@@ -269,10 +273,21 @@
         <entry lang="RUS">Завершен</entry>
         <entry lang="ENG">Completed</entry>
     </sentence>
-     <sentence mode="on" keyword="cancelled">
+    <sentence mode="on" keyword="cancelled">
         <entry lang="RUS">Отменен</entry>
         <entry lang="ENG">Cancelled</entry>
     </sentence>
+
+    <!-- remove -->
+    <sentence mode="on" keyword="processed">
+        <entry lang="RUS">В работе</entry>
+        <entry lang="ENG">Processing</entry>
+    </sentence>
+    <sentence mode="on" keyword="finished">
+        <entry lang="RUS">Завершен</entry>
+        <entry lang="ENG">Completed</entry>
+    </sentence>
+    <!-- /remove -->
 
     <sentence mode="on" keyword="urgent">
         <entry lang="RUS">Срочный</entry>
@@ -313,11 +328,11 @@
         <entry lang="POR">Notificar sobre um novo pedido</entry>
         <entry lang="SPA">Notificarle sobre una nueva solicitud</entry>
     </sentence>
-     <sentence mode="on" keyword="notify_about_finish_task">
+    <sentence mode="on" keyword="notify_about_finish_task">
         <entry lang="RUS">Уведомление о завершении задачи</entry>
         <entry lang="ENG">Notify about finishing task</entry>
         <entry lang="KAZ">Уведомление о завершении задачи</entry>
-        <entry lang="POR">Notificar </entry>
-        <entry lang="SPA">Notificarle </entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
     </sentence>
 </vocabulary>

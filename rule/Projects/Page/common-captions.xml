@@ -129,8 +129,16 @@
 
     <caption name="draft"/>
     <caption name="waiting"/>
+    <caption name="processing"/>
+    <caption name="completed"/>
+    <caption name="cancelled"/>
+    <caption name="open"/>
+    <caption name="pending"/>
+
+    <!-- remove -->
     <caption name="processed"/>
     <caption name="finished"/>
+    <!-- /remove -->
 
     <caption name="urgent"/>
     <caption name="high"/>

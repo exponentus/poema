@@ -30,16 +30,16 @@ export class TaskService {
     }
 
     getTaskStatusTypes() {
-        return this.translate.get(['draft', 'waiting', 'processing', 'cancelled', 'open', 'pending', 'processed', 'finished']).map(t => [
+        return this.translate.get(['draft', 'waiting', 'processing', 'cancelled', 'open', 'pending', 'completed']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
             { value: 'WAITING', text: t.waiting },
             { value: 'PROCESSING', text: t.processing },
-            { value: 'COMPLETED', text: t.finished },
+            { value: 'COMPLETED', text: t.completed },
             { value: 'CANCELLED', text: t.cancelled },
             { value: 'OPEN', text: t.open },
             { value: 'PENDING', text: t.pending },
-            { value: 'PROCESSED', text: t.processed, disabled: true },
-            { value: 'FINISHED', text: t.finished, disabled: true },
+            { value: 'PROCESSED', text: t.processing, disabled: true },
+            { value: 'FINISHED', text: t.completed, disabled: true },
         ]);
     }
 
