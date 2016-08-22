@@ -6,10 +6,13 @@
             </label>
             <a class="entry-link" [routerLink]="['/task', m.id]">
                 <div class="entry-fields">
-                    <div class="task-list__title expandable-level" [class.has-expandable]="m.hasSubtasks || m.hasRequests">
+                    <div class="task-list__reg-number expandable-level" [class.has-expandable]="m.hasSubtasks || m.hasRequests">
                         <div class="entry-expander" [class.is-expanded]="expandedIds.indexOf(m.id) != -1" (click)="toggleExpandable(m.id, $event)">
                             <i class="entry-expander_icon fa"></i>
                         </div>
+                        <span>{{m.regNumber}}</span>
+                    </div>
+                    <div class="task-list__title">
                         <span>{{m.title}}</span>
                     </div>
                     <div class="vw-icon">

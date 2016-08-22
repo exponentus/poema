@@ -36,7 +36,7 @@
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>{{title | translate}}</label>
-                <input [class.invalid]="errors.title" autofocus required maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" ngControl="title" />
+                <input [class.invalid]="errors.title" autofocus required maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
                 <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
@@ -95,7 +95,7 @@
                         {{'reg_number' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.regNumber">
-                        <input class="span8" [class.invalid]="errors.regNumber" required maxlength="140" [readonly]="!isEditable" (blur)="validateRegNumber()" [(ngModel)]="task.regNumber" />
+                        <input class="span8" [class.invalid]="errors.regNumber" required maxlength="140" [readonly]="!isEditable" (keyup)="validateRegNumber($event)" [(ngModel)]="task.regNumber" />
                         <error-message [error]="errors.regNumber"></error-message>
                     </div>
                 </div>

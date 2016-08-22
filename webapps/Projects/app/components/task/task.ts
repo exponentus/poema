@@ -447,6 +447,10 @@ export class TaskComponent {
         });
     }
 
+    validateRegNumber($event) {
+        this.validateForm();
+    }
+
     // ===
     // validate
     validateForm(field?: string) {

@@ -5,6 +5,7 @@
                 <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
             </label>
             <div class="entry-captions">
+                <div class="task-list__reg-number">{{'reg_number' | translate}}</div>
                 <div class="task-list__title">{{'task_title' | translate}}</div>
                 <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
                 <div class="task-list__status">{{'status' | translate}}</div>
@@ -25,10 +26,13 @@
                     </label>
                     <a class="entry-link" [routerLink]="['/task', task.id]">
                         <div class="entry-fields">
-                            <div class="task-list__title expandable-level" [class.has-expandable]="task.hasSubtasks || task.hasRequests">
+                            <div class="task-list__reg-number expandable-level" [class.has-expandable]="task.hasSubtasks || task.hasRequests">
                                 <div class="entry-expander" [class.is-expanded]="expandedIds.indexOf(task.id) != -1" (click)="toggleExpandable(task.id, $event)">
                                     <i class="entry-expander_icon fa"></i>
                                 </div>
+                                <span>{{task.regNumber}}</span>
+                            </div>
+                            <div class="task-list__title">
                                 <span>{{task.title}}</span>
                             </div>
                             <div class="vw-icon">

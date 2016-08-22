@@ -21,6 +21,7 @@ export class Task {
     taskTypeId: string;
     status: string = 'DRAFT';
     priority: string = 'NORMAL';
+    regNumber: string;
     title: string;
     body: string;
     assigneeUserId: string;

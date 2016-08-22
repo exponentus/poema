@@ -2,8 +2,12 @@
 
 .task-list {}
 
-div.task-list__title {
+div.task-list__reg-number {
     padding-left: 20px;
+    width: 160px;
+}
+
+div.task-list__title {
     width: 20%;
 }
 
