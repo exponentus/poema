@@ -1,4 +1,5 @@
 /* .task-list */
+
 .task-list {}
 
 div.task-list__title {
@@ -34,7 +35,9 @@ div.task-list__title {
     padding: 0 4px;
 }
 
+
 /* DRAFT(453), WAITING(454), PROCESSED(455), WAIT_DECISION(456), FINISHED */
+
 .priority-high,
 .priority-medium,
 .priority-normal,
@@ -42,7 +45,9 @@ div.task-list__title {
 .status-canceled,
 .status-draft,
 .status-finished,
+.status-completed,
 .status-processed,
+.status-processing,
 .status-waiting {
     display: inline-block;
     border-radius: 2px;
@@ -58,7 +63,8 @@ div.task-list__title {
     color: #eaeaea;
 }
 
-.status-processed {
+.status-processed,
+.status-processing {
     background: #8BC34A;
     color: white;
 }
@@ -68,10 +74,12 @@ div.task-list__title {
     color: #ffffff;
 }
 
-.status-finished {
+.status-finished,
+.status-completed {
     background: #fd918a;
     color: #ffffff;
 }
+
 
 /* URGENT(1), HIGH(2), MEDIUM(3), NORMAL */
 
@@ -91,7 +99,9 @@ div.task-list__title {
     background: transparent;
 }
 
+
 /* .stream-level */
+
 .stream-level {
     display: block;
     transition: max-height .15s;
