@@ -1,6 +1,6 @@
 import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
 
-import { Task, TaskType, Employee, Tag } from '../../models';
+import { TaskType, Employee, Tag } from '../../models';
 
 @Component({
     selector: 'task-filter',
@@ -8,6 +8,7 @@ import { Task, TaskType, Employee, Tag } from '../../models';
         <div class="task-filter__icon">
             <i class="fa fa-filter"></i>
         </div>
+        <task-status-input editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (select)="setTaskStatus($event)"></task-status-input>
         <task-type-input [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (select)="setTaskType($event)"></task-type-input>
         <employee-input editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></employee-input>
         <tags-input [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
@@ -18,11 +19,17 @@ export class TaskFilterComponent {
     @HostBinding('class.task-filter') true;
     @Output() change = new EventEmitter<any>();
 
+    private taskStatus: string;
     private taskTypeId: string;
     private assigneeUserId: string;
     private tagIds: string[] = [];
 
     constructor() { }
+
+    setTaskStatus(taskStatus: string) {
+        this.taskStatus = taskStatus;
+        this.updateFilter();
+    }
 
     setTaskType(taskType: TaskType) {
         if (taskType) {
@@ -49,6 +56,7 @@ export class TaskFilterComponent {
 
     updateFilter() {
         this.change.emit({
+            taskStatus: this.taskStatus,
             taskTypeId: this.taskTypeId,
             assigneeUserId: this.assigneeUserId,
             tagIds: this.tagIds

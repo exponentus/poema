@@ -26,7 +26,8 @@ import {
     EmployeeInputComponent,
     TaskTypeInputComponent,
     TagsInputComponent,
-    RequestTypeInputComponent
+    RequestTypeInputComponent,
+    TaskStatusInputComponent
 } from './components/shared';
 import { AttachmentsComponent } from './components/attachment/attachments';
 import { ErrorMessageComponent } from './components/error-message';
@@ -61,7 +62,8 @@ import { RedirectGuard } from './redirect.guard';
         LoginComponent,
         ErrorMessageComponent,
         AttachmentsComponent,
-        OrganizationInputComponent, EmployeeInputComponent, ProjectInputComponent, TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent,
+        OrganizationInputComponent, EmployeeInputComponent, ProjectInputComponent,
+        TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent, TaskStatusInputComponent,
         PaginationComponent,
         NotificationComponent,
         DatepickerDirective,

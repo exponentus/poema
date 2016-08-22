@@ -10,12 +10,14 @@
     padding: 7px 8px;
 }
 
+.task-filter .task-status-input,
 .task-filter .tags-input,
 .task-filter .task-type-input,
 .task-filter .user-input {
     margin: 0;
 }
 
+.task-filter .task-status-input:hover,
 .task-filter .tags-input:hover,
 .task-filter .task-type-input:hover,
 .task-filter .user-input:hover {
@@ -30,4 +32,24 @@
 
 .task-filter .tags-input .tag {
     padding: 0 2px;
+}
+
+.task-filter .task-status-input li {
+    border: 0;
+    border-radius: 0;
+    display: block;
+    padding: 0;
+    width: 100%;
+}
+
+.task-filter .task-status {
+    border: 0;
+    border-radius: 0;
+    display: block;
+    padding: .6em .6em .6em 1.2em;
+    transition: padding .15s;
+}
+
+.task-filter .task-status:hover {
+    padding-left: 1.5em;
 }
