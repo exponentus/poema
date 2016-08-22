@@ -36,19 +36,17 @@ div.task-list__title {
 }
 
 
-/* DRAFT(453), WAITING(454), PROCESSED(455), WAIT_DECISION(456), FINISHED */
+/* UNKNOWN, DRAFT, WAITING, @Deprecated PROCESSED, @Deprecated FINISHED, PROCESSING, COMPLETED, CANCELLED, OPEN, PENDING; */
 
-.priority-high,
-.priority-medium,
-.priority-normal,
-.priority-urgent,
-.status-canceled,
 .status-draft,
-.status-finished,
-.status-completed,
+.status-waiting,
 .status-processed,
+.status-finished,
 .status-processing,
-.status-waiting {
+.status-completed,
+.status-cancelled,
+.status-open,
+.status-pending {
     display: inline-block;
     border-radius: 2px;
     padding: 1px 3px;
@@ -69,19 +67,37 @@ div.task-list__title {
     color: white;
 }
 
-.status-canceled {
-    background: #9E9E9E;
-    color: #ffffff;
-}
-
 .status-finished,
 .status-completed {
     background: #fd918a;
     color: #ffffff;
 }
 
+.status-cancelled {
+    background: #9E9E9E;
+    color: #ffffff;
+}
+
+.status-open {
+    color: #3F51B5;
+}
+
+.status-pending {
+    background: #FFEB3B;
+    color: #444444;
+}
+
 
 /* URGENT(1), HIGH(2), MEDIUM(3), NORMAL */
+
+.priority-high,
+.priority-medium,
+.priority-normal,
+.priority-urgent {
+    display: inline-block;
+    border-radius: 2px;
+    padding: 1px 3px;
+}
 
 .priority-urgent {
     background: #ffabab;
