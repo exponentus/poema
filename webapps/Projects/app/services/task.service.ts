@@ -37,9 +37,9 @@ export class TaskService {
             { value: 'COMPLETED', text: t.completed },
             { value: 'CANCELLED', text: t.cancelled },
             { value: 'OPEN', text: t.open },
-            { value: 'PENDING', text: t.pending },
+            { value: 'PENDING', text: t.pending }/*,
             { value: 'PROCESSED', text: t.processing, disabled: true },
-            { value: 'FINISHED', text: t.completed, disabled: true },
+            { value: 'FINISHED', text: t.completed, disabled: true },*/
         ]);
     }
 

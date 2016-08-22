@@ -35,6 +35,11 @@
 }
 
 .task-filter .task-status-input li {
+    padding: .6em .6em .6em 1.2em
+}
+
+
+/*.task-filter .task-status-input li {
     border: 0;
     border-radius: 0;
     display: block;
@@ -52,4 +57,4 @@
 
 .task-filter .task-status:hover {
     padding-left: 1.5em;
-}
+}*/
