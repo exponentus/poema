@@ -55,7 +55,7 @@ export class UserProfileComponent {
 
             if (this.user) {
                 this.form = formBuilder.group({
-                    login: [this.user.name],
+                    login: [this.user.login],
                     pwd: [],
                     pwd_new: [],
                     pwd_confirm: [],
