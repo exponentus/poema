@@ -133,7 +133,7 @@ public class TaskForm extends _DoForm {
                 task.setTaskType(taskTypeDAO.findById(formData.getValue("taskTypeId")));
             }
             task.setTitle(formData.getValue("title"));
-            task.setRegNumber(formData.getValue("regNumber"));
+            // task.setRegNumber(formData.getValue("regNumber"));
             task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
             task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
             task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
@@ -243,11 +243,11 @@ public class TaskForm extends _DoForm {
         } else if (formData.getValueSilently("title").length() > 140) {
             ve.addError("title", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
         }
-        if (formData.getValueSilently("regNumber").isEmpty()) {
-            ve.addError("regNumber", "required", getLocalizedWord("field_is_empty", lang));
-        } else if (formData.getValueSilently("regNumber").length() > 140) {
-            ve.addError("regNumber", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
-        }
+//        if (formData.getValueSilently("regNumber").isEmpty()) {
+//            ve.addError("regNumber", "required", getLocalizedWord("field_is_empty", lang));
+//        } else if (formData.getValueSilently("regNumber").length() > 140) {
+//            ve.addError("regNumber", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
+//        }
         if (formData.getValueSilently("body").length() > 2048) {
             ve.addError("body", "maxlen_2048", getLocalizedWord("field_is_too_long", lang));
         }

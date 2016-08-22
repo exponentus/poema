@@ -90,13 +90,14 @@
         </div>
         <div class="task-tab" [class.active]="showProperty">
             <div class="fieldset">
-                <div class="form-group">
+                <div class="form-group" *ngIf="task.regNumber">
                     <div class="control-label">
                         {{'reg_number' | translate}}
                     </div>
-                    <div class="controls" [class.has-error]="errors.regNumber">
-                        <input class="span8" [class.invalid]="errors.regNumber" required maxlength="140" [readonly]="!isEditable" (keyup)="validateRegNumber($event)" [(ngModel)]="task.regNumber" />
-                        <error-message [error]="errors.regNumber"></error-message>
+                    <div class="controls">
+                        <div class="span8">
+                            <div class="task-reg-number input">{{task.regNumber}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group" *ngIf="!isSubtask">

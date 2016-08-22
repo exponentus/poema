@@ -447,9 +447,9 @@ export class TaskComponent {
         });
     }
 
-    validateRegNumber($event) {
-        this.validateForm();
-    }
+    // validateRegNumber($event) {
+    //     this.validateForm();
+    // }
 
     // ===
     // validate
