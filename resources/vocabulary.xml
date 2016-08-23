@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- common vocabulary file -->
-<vocabulary primary="ENG">
+<vocabulary>
+   <sentence mode="on" keyword="authorization_was_failed">
+        <entry lang="ENG">Authorization was failed</entry>
+        <entry lang="RUS">Авторизация неудачна</entry>
+    </sentence>
+     <sentence mode="on" keyword="session_was_lost">
+        <entry lang="ENG">User session was expired</entry>
+        <entry lang="RUS">Сессия была сброшена сервером</entry>
+    </sentence>
     <sentence mode="on" keyword="action_completed_successfully">
         <entry lang="RUS">Действие выполнено успешно</entry>
         <entry lang="KAZ">Действие выполнено успешно</entry>
