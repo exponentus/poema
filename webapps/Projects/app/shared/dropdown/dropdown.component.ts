@@ -22,6 +22,7 @@ import { DropdownToggleComponent } from './dropdown-toggle.component';
 export class DropdownComponent {
     @HostBinding('class.dropdown') true;
     @HostBinding('class.open') get isOpen() { return this.open };
+    @HostBinding('class.focus') get isFocused() { return this.focused };
     @HostBinding('tabIndex') get _tabIndex() { return this.tabIndex; };
 
     @HostListener('mouseenter', ['$event']) public onMouseEnter($event: MouseEvent): void {
@@ -44,12 +45,12 @@ export class DropdownComponent {
 
     @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
         $event.preventDefault();
-        this.selfClick = true;
+        this.focused = true;
     }
 
     @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
         $event.preventDefault();
-        this.selfClick = false;
+        this.focused = false;
         this.open = false;
     }
 
@@ -71,6 +72,7 @@ export class DropdownComponent {
     private documentClickListener;
     private documentKeyupListener;
     private selfClick: boolean = false;
+    private focused: boolean = false;
     private time;
     private delay = 500;
 

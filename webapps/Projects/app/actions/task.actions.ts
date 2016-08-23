@@ -31,6 +31,8 @@ export class TaskActions {
 
     static TOGGLE_STREAM_EXPAND = 'TOGGLE_STREAM_EXPAND';
 
+    static SET_FILTER = 'SET_FILTER';
+
     // TASK COMMENT
     static CREATE_TASK_COMMENT = 'CREATE_COMMENT_TASK';
     static CREATE_TASK_COMMENT_FAILED = 'CREATE_TASK_COMMENT_FAILED';
@@ -211,10 +213,23 @@ export class TaskActions {
     //===================================
     //  TASK STREAM ACTIONS
     //-----------------------------------
+
     toggleStreamExpand(id: string) {
         return {
             type: TaskActions.TOGGLE_STREAM_EXPAND,
             payload: id
+        };
+    }
+
+
+    //===================================
+    //  TASK FILTER ACTIONS
+    //-----------------------------------
+
+    setFilter(filter: any) {
+        return {
+            type: TaskActions.SET_FILTER,
+            payload: filter
         };
     }
 }

@@ -1,16 +1,16 @@
-import { Component, Input, Output, HostBinding, EventEmitter } from '@angular/core';
+import { Component, Output, OnInit, OnDestroy, HostBinding, EventEmitter } from '@angular/core';
+import { Store } from '@ngrx/store';
 
+import { ITasksState } from '../../reducers/tasks.reducer';
 import { TaskType, Employee, Tag } from '../../models';
 
 @Component({
     selector: 'task-filter',
     template: `
-        <div class="task-filter__icon">
-            <i class="fa fa-filter"></i>
-        </div>
-        <task-status-input editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (select)="setTaskStatus($event)"></task-status-input>
+        <div class="task-filter__icon"><i class="fa fa-filter"></i></div>
+        <task-status-input [status]="taskStatus" editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (select)="setTaskStatus($event)"></task-status-input>
         <task-type-input [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (select)="setTaskType($event)"></task-type-input>
-        <employee-input editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></employee-input>
+        <employee-input [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></employee-input>
         <tags-input [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
     `
 })
@@ -19,12 +19,29 @@ export class TaskFilterComponent {
     @HostBinding('class.task-filter') true;
     @Output() change = new EventEmitter<any>();
 
-    private taskStatus: string;
+    private taskStatus: string = '';
     private taskTypeId: string;
     private assigneeUserId: string;
     private tagIds: string[] = [];
 
-    constructor() { }
+    private subs: any = [];
+
+    constructor(
+        private store: Store<any>
+    ) {
+        this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
+            if (state) {
+                this.taskStatus = state.filter.taskStatus;
+                this.taskTypeId = state.filter.taskTypeId;
+                this.assigneeUserId = state.filter.assigneeUserId;
+                this.tagIds = state.filter.tagIds;
+            }
+        }));
+    }
+
+    ngOnDestroy() {
+        this.subs.map(s => s.unsubscribe());
+    }
 
     setTaskStatus(taskStatus: string) {
         this.taskStatus = taskStatus;

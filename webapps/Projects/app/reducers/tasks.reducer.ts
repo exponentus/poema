@@ -2,17 +2,16 @@ import { Task, Tag, TaskType, Employee } from '../models';
 
 import { TaskActions } from '../actions';
 
-export const SET_FILTER = 'SET_FILTER';
-
 export interface ITasksState {
     meta: {},
     tasks: Task[],
     expandedIds: string[],
     loading: boolean,
     filter: {
-        taskType: TaskType,
-        assigneeEmployee: Employee,
-        tags: Tag[]
+        taskStatus: string,
+        taskTypeId: string,
+        assigneeUserId: string,
+        tagIds: string[]
     }
 };
 
@@ -22,9 +21,10 @@ const initialState: ITasksState = {
     expandedIds: [] = [],
     loading: false,
     filter: {
-        taskType: null,
-        assigneeEmployee: null,
-        tags: []
+        taskStatus: '',
+        taskTypeId: null,
+        assigneeUserId: null,
+        tagIds: []
     }
 };
 
@@ -52,7 +52,7 @@ export const tasksReducer = (state = initialState, {type, payload}): ITasksState
                     expandedIds: state.expandedIds.filter(it => it != payload)
                 });
             }
-        case SET_FILTER:
+        case TaskActions.SET_FILTER:
             return Object.assign({}, state, {
                 filter: payload
             });

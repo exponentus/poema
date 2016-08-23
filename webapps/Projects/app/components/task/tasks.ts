@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -10,8 +10,7 @@ import { Task } from '../../models/task';
 
 @Component({
     selector: 'tasks',
-    template: require('./templates/tasks.html'),
-    // changeDetection: ChangeDetectionStrategy.OnPush
+    template: require('./templates/tasks.html')
 })
 
 export class TasksComponent {
@@ -46,7 +45,7 @@ export class TasksComponent {
             if (state) {
                 this.tasks = state.tasks;
                 this.meta = state.meta;
-                // this.filter = state.filter
+                this.filter = state.filter
                 this.loading = state.loading;
             }
         }));
@@ -95,6 +94,7 @@ export class TasksComponent {
 
     changeFilter(filter) {
         this.filter = filter;
+        this.store.dispatch(this.taskActions.setFilter(filter));
         this.loadData(filter);
     }
 
