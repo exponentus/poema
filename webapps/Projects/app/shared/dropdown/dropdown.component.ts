@@ -47,6 +47,22 @@ export class DropdownComponent {
         this.selfClick = true;
     }
 
+    @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
+        $event.preventDefault();
+        this.selfClick = false;
+        this.open = false;
+    }
+
+    @HostListener('keydown', ['$event']) public onKeyDown($event: KeyboardEvent): void {
+        if ($event.key === 'Enter') {
+            this.open = true;
+        } else if ($event.key === 'ArrowUp') {
+            console.log('ArrowUp');
+        } else if ($event.key === 'ArrowDown') {
+            console.log('ArrowDown');
+        }
+    }
+
     @ContentChildren(DropdownToggleComponent) toggleComponent: QueryList<DropdownToggleComponent>;
     @Input() open = false;
     @Input() mouseEvent = false;

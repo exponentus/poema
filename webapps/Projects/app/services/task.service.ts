@@ -29,7 +29,7 @@ export class TaskService {
         ]);
     }
 
-    getTaskStatusTypes() {
+    /*getTaskStatusTypes() {
         return this.translate.get(['draft', 'waiting', 'processing', 'cancelled', 'open', 'pending', 'completed']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
             { value: 'WAITING', text: t.waiting },
@@ -37,11 +37,11 @@ export class TaskService {
             { value: 'COMPLETED', text: t.completed },
             { value: 'CANCELLED', text: t.cancelled },
             { value: 'OPEN', text: t.open },
-            { value: 'PENDING', text: t.pending }/*,
-            { value: 'PROCESSED', text: t.processing, disabled: true },
-            { value: 'FINISHED', text: t.completed, disabled: true },*/
+            { value: 'PENDING', text: t.pending },
+            // { value: 'PROCESSED', text: t.processing, disabled: true },
+            // { value: 'FINISHED', text: t.completed, disabled: true }
         ]);
-    }
+    }*/
 
 
     //===================================
@@ -81,10 +81,6 @@ export class TaskService {
     }
 
     fetchTaskById(taskId: string) {
-        if (taskId === 'new') {
-            // return Observable.of(new Task());
-        }
-
         let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
         return this.http.get(url, { headers: HEADERS })
             .map(response => {

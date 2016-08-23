@@ -33,6 +33,7 @@ import { AttachmentsComponent } from './components/attachment/attachments';
 import { ErrorMessageComponent } from './components/error-message';
 
 import { PaginationComponent } from './shared/pagination';
+import { AutofocusDirective } from './shared/directives/autofocus.directive';
 import { DatepickerDirective } from './shared/datepicker/datepicker';
 import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
 import { TAB_DIRECTIVES } from './shared/tabs';
@@ -66,6 +67,7 @@ import { RedirectGuard } from './redirect.guard';
         TaskTypeInputComponent, TagsInputComponent, RequestTypeInputComponent, TaskStatusInputComponent,
         PaginationComponent,
         NotificationComponent,
+        AutofocusDirective,
         DatepickerDirective,
         TAB_DIRECTIVES,
         DROPDOWN_DIRECTIVES,

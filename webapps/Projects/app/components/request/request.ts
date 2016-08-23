@@ -47,7 +47,7 @@ export class RequestComponent {
                 request => {
                     this.request = request;
                     if (this.isNew) {
-                        this.request.taskId = params['task'];
+                        this.request.taskId = this.route.snapshot.queryParams['task'];
                     } else {
                         this.isResolveAction = this.request.resolution == 'UNKNOWN' && this.request.requestType.name === 'prolong';
                     }

@@ -13,14 +13,14 @@
 .task-filter .task-status-input,
 .task-filter .tags-input,
 .task-filter .task-type-input,
-.task-filter .user-input {
+.task-filter .employee-input {
     margin: 0;
 }
 
 .task-filter .task-status-input:hover,
 .task-filter .tags-input:hover,
 .task-filter .task-type-input:hover,
-.task-filter .user-input:hover {
+.task-filter .employee-input:hover {
     background: #f5f5f5;
 }
 

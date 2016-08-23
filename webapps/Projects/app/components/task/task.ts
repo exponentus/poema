@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -52,7 +52,6 @@ export class TaskComponent {
     hasUnResolvedRequest: boolean = true;
     hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
-    taskStatusTypes: any;
     comments: Comment[];
     requests: Request[];
     errors: any = {};
@@ -137,7 +136,6 @@ export class TaskComponent {
             );
         }));
 
-        this.taskService.getTaskStatusTypes().subscribe(tst => this.taskStatusTypes = tst);
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
     }
 
@@ -372,8 +370,11 @@ export class TaskComponent {
     }
 
     newRequest() {
+        let navigationExtras: NavigationExtras = {
+            queryParams: { 'task': this.task.id }
+        };
         // this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
-        this.router.navigate(['/requests', 'new', { task: this.task.id }]);
+        this.router.navigate(['/requests', 'new'], navigationExtras);
     }
 
     onSendRequest({requestSendSuccess}) {

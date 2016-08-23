@@ -23,9 +23,7 @@ export class ProjectService {
         return this.translate.get(['draft', 'processing', 'completed']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
             { value: 'PROCESSING', text: t.processing },
-            { value: 'COMPLETED', text: t.completed }/*,
-            { value: 'PROCESSED', text: t.processing, disabled: true },
-            { value: 'FINISHED', text: t.completed, disabled: true }*/
+            { value: 'COMPLETED', text: t.completed }
         ]);
     }
 
@@ -44,10 +42,6 @@ export class ProjectService {
     }
 
     fetchProjectById(projectId: string) {
-        if (projectId === 'new') {
-            // return Observable.of(new Project());
-        }
-
         let url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
         return this.http.get(url, { headers: HEADERS })
             .map(response => {
