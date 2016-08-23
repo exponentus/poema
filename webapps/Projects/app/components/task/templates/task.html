@@ -49,11 +49,6 @@
                 <!-- <span>{{'subtasks' | translate}}</span> -->
                 <span>{{'execution' | translate}}</span>
             </div>
-            <!-- <div class="task-tab__title" [class.active]="showRequests" [class.hidden]="!hasRequests()" (click)="toggleShowRequests()">
-                <i class="fa fa-flag-checkered"></i>
-                <span>{{'requests' | translate}}</span>
-                <i class="fa fa-exclamation-circle" *ngIf="hasUnResolvedRequest"></i>
-            </div> -->
             <div class="task-tab__title" [class.active]="showACL" [class.hidden]="!showACLTabTitle" (click)="toggleShowACL()">
                 <i class='fa fa-share-alt'></i> {{'acl_tab_title' | translate}}
             </div>
@@ -61,9 +56,6 @@
         <div class="task-tab" [class.active]="showSubtasks" *ngIf="!isNew">
             <task-list [streamMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
         </div>
-        <!-- <div class="task-tab" [class.active]="showRequests">
-            <request-list [requests]="requests" (accept)="acceptRequest($event)" (decline)="declineRequest($event)"></request-list>
-        </div> -->
         <div class="task-tab" [class.active]="showACL" *ngIf="!isNew">
             <div class="fieldset">
                 <div class="form-group">
@@ -93,7 +85,7 @@
                 <div class="form-group" *ngIf="task.regNumber">
                     <div class="control-label">№</div>
                     <div class="controls">
-                        <div class="span4">
+                        <div class="span2">
                             <div class="task-reg-number input">{{task.regNumber}}</div>
                         </div>
                     </div>
