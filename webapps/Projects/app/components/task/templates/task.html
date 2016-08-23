@@ -91,11 +91,9 @@
         <div class="task-tab" [class.active]="showProperty">
             <div class="fieldset">
                 <div class="form-group" *ngIf="task.regNumber">
-                    <div class="control-label">
-                        {{'reg_number' | translate}}
-                    </div>
+                    <div class="control-label">№</div>
                     <div class="controls">
-                        <div class="span8">
+                        <div class="span4">
                             <div class="task-reg-number input">{{task.regNumber}}</div>
                         </div>
                     </div>
