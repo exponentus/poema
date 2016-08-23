@@ -184,7 +184,7 @@ public class TaskForm extends _DoForm {
 				task.addReader(assigneeUser);
 				task.addReaders(task.getProject().getObservers());
 				RegNum rn = new RegNum();
-				task.setRegNumber(taskType.getPrefix() + "-" + rn.getRegNumber(taskType.prefix));
+				task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.prefix));
 				task = dao.add(task);
 				rn.post();
 			} else {
