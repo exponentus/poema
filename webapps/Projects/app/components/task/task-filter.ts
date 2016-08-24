@@ -20,8 +20,8 @@ export class TaskFilterComponent {
     @Output() change = new EventEmitter<any>();
 
     private taskStatus: string = '';
-    private taskTypeId: string;
-    private assigneeUserId: string;
+    private taskTypeId: string = '';
+    private assigneeUserId: string = '';
     private tagIds: string[] = [];
 
     private subs: any = [];
@@ -52,7 +52,7 @@ export class TaskFilterComponent {
         if (taskType) {
             this.taskTypeId = taskType.id;
         } else {
-            this.taskTypeId = null;
+            this.taskTypeId = '';
         }
         this.updateFilter();
     }
@@ -61,7 +61,7 @@ export class TaskFilterComponent {
         if (assigneeUsers.length) {
             this.assigneeUserId = assigneeUsers[0].userID;
         } else {
-            this.assigneeUserId = null;
+            this.assigneeUserId = '';
         }
         this.updateFilter();
     }

@@ -4,6 +4,7 @@ import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../actions/environment.actions';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { User } from '../../models/user';
 
 @Component({
@@ -17,18 +18,28 @@ export class NavbarComponent {
     headerTitle: string = 'Projects';
     workspaceUrl: string = 'Logout'; // '/Workspace/p?id=workspace';
     logoUrl: string = 'img/logo.png';
+    keyWord: string = '';
+    private subs: any = [];
 
     constructor(
         private store: Store<any>,
         private environmentActions: EnvironmentActions
-    ) { }
+    ) {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.keyWord = state.keyWord;
+        }));
+    }
 
     ngOnInit() {
         this.keyup$
-            .debounceTime(300)
+            .debounceTime(250)
             .map(event => (event.target as HTMLInputElement).value)
             .distinctUntilChanged()
             .subscribe(value => this.search(value));
+    }
+
+    ngOnDestroy() {
+        this.subs.map(s => s.unsubscribe());
     }
 
     searchFocus() {

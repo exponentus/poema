@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { TaskService } from '../../services/task.service';
 import { TaskActions } from '../../actions';
 import { ITasksState } from '../../reducers/tasks.reducer';
+import { EnvironmentActions } from '../../actions/environment.actions';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { Task } from '../../models/task';
 
@@ -22,23 +23,30 @@ export class TasksComponent {
     filter: any = {};
     loading: boolean = true;
     private params: any = {};
+    private init: boolean = false;
 
     constructor(
         private store: Store<any>,
         private router: Router,
         private route: ActivatedRoute,
+        private envActions: EnvironmentActions,
         private taskActions: TaskActions,
         private taskService: TaskService
     ) { }
 
     ngOnInit() {
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
-            if (this.keyWord != state.keyWord) {
-                this.loadData({
-                    keyWord: state.keyWord
-                });
+            if (this.init) {
+                if (this.keyWord != state.keyWord) {
+                    this.loadData({
+                        keyWord: state.keyWord
+                    });
+                }
+                this.keyWord = state.keyWord;
+            } else {
+                this.store.dispatch(this.envActions.resetSearch());
+                this.init = true;
             }
-            this.keyWord = state.keyWord;
         }));
 
         this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {

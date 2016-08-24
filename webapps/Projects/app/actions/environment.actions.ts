@@ -5,6 +5,7 @@ import { Action } from '@ngrx/store';
 export class EnvironmentActions {
 
     static SEARCH = 'SEARCH';
+    static RESET_SEARCH = 'RESET_SEARCH';
     static TOGGLE_NAV = 'TOGGLE_NAV';
     static TOGGLE_SEARCH = 'TOGGLE_SEARCH';
     static HIDE_NAV = 'HIDE_NAV';
@@ -14,6 +15,12 @@ export class EnvironmentActions {
         return {
             type: EnvironmentActions.SEARCH,
             payload: { keyWord }
+        };
+    }
+
+    resetSearch(): Action {
+        return {
+            type: EnvironmentActions.RESET_SEARCH
         };
     }
 

@@ -22,8 +22,8 @@ const initialState: ITasksState = {
     loading: false,
     filter: {
         taskStatus: '',
-        taskTypeId: null,
-        assigneeUserId: null,
+        taskTypeId: '',
+        assigneeUserId: '',
         tagIds: []
     }
 };

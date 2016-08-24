@@ -20,6 +20,10 @@ export const environmentReducer = (state = initialState, {type, payload}): IEnvi
             return Object.assign({}, state, {
                 keyWord: payload.keyWord
             });
+        case EnvironmentActions.RESET_SEARCH:
+            return Object.assign({}, state, {
+                keyWord: ''
+            });
         case EnvironmentActions.TOGGLE_NAV:
             return Object.assign({}, state, {
                 isNavOpen: !state.isNavOpen
