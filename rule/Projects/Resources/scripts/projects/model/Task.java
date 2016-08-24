@@ -110,6 +110,9 @@ public class Task extends SecureAppEntity<UUID> {
 	@Column(name = "customer_observation")
 	private boolean customerObservation;
 
+	@JsonProperty("observerUserIds")
+	private List<Long> observers;
+
 	@JsonIgnore
 	public Project getProject() {
 		return project;
@@ -285,6 +288,14 @@ public class Task extends SecureAppEntity<UUID> {
 
 	public void setCustomerObservation(boolean customerObservation) {
 		this.customerObservation = customerObservation;
+	}
+
+	public List<Long> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
 	}
 
 	@Override
