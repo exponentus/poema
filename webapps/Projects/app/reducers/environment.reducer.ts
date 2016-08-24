@@ -4,7 +4,7 @@ export interface IEnvironmentState {
     isMobile: boolean,
     isNavOpen: boolean,
     isSearchOpen: boolean,
-    redirectUrl: string,
+    redirectUrl: any,
     keyWord: string
 };
 

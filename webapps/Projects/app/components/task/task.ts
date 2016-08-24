@@ -7,6 +7,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { KeysPipe, ValuesPipe } from '../../pipes';
 import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
@@ -56,6 +57,8 @@ export class TaskComponent {
     requests: Request[];
     errors: any = {};
 
+    redirectUrl: any;
+
     constructor(
         private store: Store<any>,
         private router: Router,
@@ -84,6 +87,10 @@ export class TaskComponent {
                     }
                 });
             }
+        }));
+
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.redirectUrl = state.redirectUrl;
         }));
     }
 
@@ -321,7 +328,8 @@ export class TaskComponent {
     //
     close() {
         // this.router.navigate(['/tasks']);
-        window.history.back();
+        // window.history.back();
+        this.router.navigateByUrl(this.redirectUrl);
     }
 
     handleValidationError(error: any) {

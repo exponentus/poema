@@ -43,9 +43,9 @@ export class EnvironmentActions {
         };
     }
 
-    setRedirectUrl(redirectUrl: string): Action {
+    setRedirectUrl(redirectUrl: any): Action {
         return {
-            type: EnvironmentActions.SEARCH,
+            type: EnvironmentActions.SET_REDIRECT_URL,
             payload: { redirectUrl }
         };
     }

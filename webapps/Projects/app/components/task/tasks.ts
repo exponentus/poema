@@ -73,6 +73,16 @@ export class TasksComponent {
                     break;
             }
 
+            let r_url = '';
+            if (projectId) {
+                r_url = `/projects/${projectId}/tasks`;
+            } else if (taskFor) {
+                r_url = `/tasks/${taskFor}`;
+            } else {
+                r_url = '/tasks';
+            }
+            this.store.dispatch(this.envActions.setRedirectUrl(r_url));
+
             this.loadData(Object.assign({}, params, this.filter));
         }));
     }

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { KeysPipe, ValuesPipe } from '../../pipes';
 import { NotificationService } from '../../shared/notification';
 import { ProjectService } from '../../services';
@@ -16,7 +17,7 @@ import { Project, Organization, Employee, Attachment } from '../../models';
 })
 
 export class ProjectComponent {
-    private sub: any;
+    private subs: any = [];
     isReady = false;
     isNew = true;
     isEditable = false;
@@ -24,6 +25,7 @@ export class ProjectComponent {
     project: Project;
     projectStatusTypes: any;
     errors: any = {};
+    redirectUrl: any;
 
     constructor(
         private store: Store<any>,
@@ -35,7 +37,11 @@ export class ProjectComponent {
     ) { }
 
     ngOnInit() {
-        this.sub = this.route.params.subscribe(params => {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.redirectUrl = state.redirectUrl;
+        }));
+
+        this.subs.push(this.route.params.subscribe(params => {
             this.projectService.fetchProjectById(params['projectId']).subscribe(
                 project => {
                     this.project = project;
@@ -47,11 +53,11 @@ export class ProjectComponent {
                 },
                 error => this.handleXhrError(error)
             );
-        });
+        }));
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
+        this.subs.map(s => s.unsubscribe());
     }
 
     get title() {
@@ -92,7 +98,8 @@ export class ProjectComponent {
     }
 
     close() {
-        this.router.navigate(['/projects']);
+        // this.router.navigate(['/projects']);
+        this.router.navigateByUrl(this.redirectUrl);
     }
 
     handleValidationError(error: any) {

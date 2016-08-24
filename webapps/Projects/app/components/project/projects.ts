@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
+import { EnvironmentActions } from '../../actions/environment.actions';
 import { StaffService } from '../../services/staff.service';
 import { ProjectService } from '../../services/project.service';
 import { ProjectActions } from '../../actions/project.actions';
@@ -27,6 +28,7 @@ export class ProjectsComponent {
     constructor(
         private store: Store<any>,
         private router: Router,
+        private envActions: EnvironmentActions,
         private projectActions: ProjectActions,
         private projectService: ProjectService,
         private staffService: StaffService
@@ -57,6 +59,8 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
+        this.store.dispatch(this.envActions.setRedirectUrl('/projects'));
+
         this.params = params;
         this.store.dispatch(this.projectActions.fetchProjects());
         this.projectService.fetchProjects(params).subscribe(data => {

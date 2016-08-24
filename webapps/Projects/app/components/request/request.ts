@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
+import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskActions } from '../../actions';
@@ -27,6 +28,8 @@ export class RequestComponent {
     private editable: boolean = true;
     private isResolveAction: boolean = false;
 
+    redirectUrl: any;
+
     constructor(
         private store: Store<any>,
         private router: Router,
@@ -37,6 +40,10 @@ export class RequestComponent {
     ) { }
 
     ngOnInit() {
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.redirectUrl = state.redirectUrl;
+        }));
+
         this.subs.push(this.route.params.subscribe(params => {
             this.isReady = false;
             this.isNew = params['requestId'] === 'new';
@@ -75,8 +82,9 @@ export class RequestComponent {
     }
 
     close() {
-        window.history.back();
+        // window.history.back();
         // this.router.navigate(['/tasks']);
+        this.router.navigateByUrl(this.redirectUrl);
     }
 
     cancel() {
