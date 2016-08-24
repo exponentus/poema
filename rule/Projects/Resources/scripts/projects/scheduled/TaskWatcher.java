@@ -7,7 +7,6 @@ import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduledTask;
-import com.exponentus.server.Server;
 
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
@@ -19,6 +18,11 @@ public class TaskWatcher extends _DoScheduledTask {
 
 	@Override
 	public void doEvery5Min(_Session session) {
+
+	}
+
+	@Override
+	public void doEvery1Hour(_Session session) {
 		Date current = new Date();
 		TaskDAO tDao = new TaskDAO(session);
 		TaskFilter filter = new TaskFilter();
@@ -29,7 +33,7 @@ public class TaskWatcher extends _DoScheduledTask {
 				task.setStatus(TaskStatusType.PROCESSING);
 				try {
 					tDao.update(task);
-					Server.logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
+					logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
 					Messages.sendMessageToAssignee(session, task);
 				} catch (SecureException e) {
 					setError(e);
@@ -38,11 +42,6 @@ public class TaskWatcher extends _DoScheduledTask {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void doEvery1Hour(_Session session) {
-
 	}
 
 	@Override
