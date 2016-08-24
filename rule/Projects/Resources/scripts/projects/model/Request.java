@@ -49,7 +49,7 @@ public class Request extends SecureAppEntity<UUID> {
 	private reference.model.RequestType requestType;
 
 	@Enumerated(EnumType.STRING)
-	@Column(length = 7)
+	@Column(length = 8)
 	private ResolutionType resolution = ResolutionType.UNKNOWN;
 
 	@Temporal(TemporalType.TIMESTAMP)
