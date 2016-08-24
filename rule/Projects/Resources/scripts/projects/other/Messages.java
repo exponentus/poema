@@ -91,7 +91,7 @@ public class Messages {
 			memo.addVar("content", task.getBody());
 			memo.addVar("author", task.getAuthor().getUserName());
 			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-			sa.sendMessage(slackAddr, memo.getPlainBody());
+			sa.sendMеssage(slackAddr, memo.getPlainBody());
 		}
 
 	}
