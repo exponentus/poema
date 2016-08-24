@@ -1,18 +1,35 @@
 package projects.model;
 
-import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import projects.model.constants.ResolutionType;
-import reference.model.RequestType;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+import projects.model.constants.ResolutionType;
+import reference.model.RequestType;
 
 @JsonRootName("request")
 @Entity
@@ -20,94 +37,107 @@ import java.util.UUID;
 @NamedQuery(name = "Request.findAll", query = "SELECT m FROM Request AS m ORDER BY m.regDate")
 public class Request extends SecureAppEntity<UUID> {
 
-    @JsonIgnore
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false, nullable = false)
-    private Task task;
+	@JsonIgnore
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(updatable = false, nullable = false)
+	private Task task;
 
-    @NotNull
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "request_type")
-    private reference.model.RequestType requestType;
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "request_type")
+	private reference.model.RequestType requestType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 7)
-    private ResolutionType resolution = ResolutionType.UNKNOWN;
+	@Enumerated(EnumType.STRING)
+	@Column(length = 7)
+	private ResolutionType resolution = ResolutionType.UNKNOWN;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "resolution_time")
-    private Date resolutionTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "resolution_time")
+	private Date resolutionTime;
 
-    @Column(length = 2048)
-    private String comment;
+	@Column(length = 2048)
+	private String decisionComment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "request_attachments",
-            joinColumns = {@JoinColumn(name = "request_id")},
-            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
-            indexes = {@Index(columnList = "request_id, attachment_id")},
-            uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
-    private List<Attachment> attachments = new ArrayList<>();
+	@Column(length = 2048)
+	private String comment;
 
-    public long getAuthorId() {
-        return author;
-    }
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "request_attachments", joinColumns = { @JoinColumn(name = "request_id") }, inverseJoinColumns = {
+	        @JoinColumn(name = "attachment_id") }, indexes = {
+	                @Index(columnList = "request_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "request_id",
+	                        "attachment_id" }) )
+	private List<Attachment> attachments = new ArrayList<>();
 
-    public Task getTask() {
-        return task;
-    }
+	@Override
+	public long getAuthorId() {
+		return author;
+	}
 
-    public String getTaskId() {
-        return task != null ? task.getIdentifier() : "";
-    }
+	public Task getTask() {
+		return task;
+	}
 
-    public void setTask(Task task) {
-        this.task = task;
-    }
+	public String getTaskId() {
+		return task != null ? task.getIdentifier() : "";
+	}
 
-    public RequestType getRequestType() {
-        return requestType;
-    }
+	public void setTask(Task task) {
+		this.task = task;
+	}
 
-    public void setRequestType(RequestType requestType) {
-        this.requestType = requestType;
-    }
+	public RequestType getRequestType() {
+		return requestType;
+	}
 
-    public ResolutionType getResolution() {
-        return resolution;
-    }
+	public void setRequestType(RequestType requestType) {
+		this.requestType = requestType;
+	}
 
-    public void setResolution(ResolutionType resolution) {
-        this.resolution = resolution;
-    }
+	public ResolutionType getResolution() {
+		return resolution;
+	}
 
-    public Date getResolutionTime() {
-        return resolutionTime;
-    }
+	public void setResolution(ResolutionType resolution) {
+		this.resolution = resolution;
+	}
 
-    public void setResolutionTime(Date resolutionTime) {
-        this.resolutionTime = resolutionTime;
-    }
+	public Date getResolutionTime() {
+		return resolutionTime;
+	}
 
-    public String getComment() {
-        return comment;
-    }
+	public void setResolutionTime(Date resolutionTime) {
+		this.resolutionTime = resolutionTime;
+	}
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+	public String getDecisionComment() {
+		return decisionComment;
+	}
 
-    public List<Attachment> getAttachments() {
-        return attachments;
-    }
+	public void setDecisionComment(String decisionComment) {
+		this.decisionComment = decisionComment;
+	}
 
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
-    }
+	public String getComment() {
+		return comment;
+	}
 
-    @Override
-    public String getURL() {
-        return "p?id=task-requests&requestId=" + getIdentifier();
-    }
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	@Override
+	public List<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	@Override
+	public void setAttachments(List<Attachment> attachments) {
+		this.attachments = attachments;
+	}
+
+	@Override
+	public String getURL() {
+		return "p?id=task-requests&requestId=" + getIdentifier();
+	}
 }

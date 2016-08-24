@@ -339,4 +339,12 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
+     <sentence mode="on" keyword="notify_about_request_resolution">
+        <entry lang="RUS">Уведомление о решении по запросу</entry>
+        <entry lang="ENG">Notify about a request decision</entry>
+        <entry lang="KAZ">Уведомление о решении по запросу</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+    
 </vocabulary>

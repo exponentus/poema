@@ -1,6 +1,5 @@
 package projects.page;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,17 +8,12 @@ import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
-import com.exponentus.localization.LanguageCode;
-import com.exponentus.messaging.email.MailAgent;
-import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoForm;
-import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
 
-import administrator.dao.UserDAO;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.model.Request;
@@ -180,7 +174,7 @@ public class TaskRequests extends _DoForm {
 
 			TaskDAO taskDAO = new TaskDAO(session);
 			Task task = request.getTask();
-			if (resolutionType == ResolutionType.ACCEPT) {
+			if (resolutionType == ResolutionType.ACCEPTED) {
 				if ("implement".equals(request.getRequestType().getName())) {
 					task.setStatus(TaskStatusType.COMPLETED);
 				} else if ("prolong".equals(request.getRequestType().getName())) {
@@ -213,25 +207,8 @@ public class TaskRequests extends _DoForm {
 			request.setResolutionTime(new Date());
 			requestDAO.update(request);
 
-			// Notify assigneeUser about resolution
-			LanguageCode lang = session.getLang();
-			List<String> recipients = new ArrayList<>();
+			Messages.sendMessageOfRequestDecision(session, request);
 
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
-			recipients.add(assigneeUser.getEmail());
-
-			MailAgent ma = new MailAgent();
-			Memo memo = new Memo(getLocalizedWord("notify_about_request_resolution", lang), getLocalizedEmailTemplate("request_resolution", lang));
-			memo.addVar("taskTitle", request.getTask().getTitle());
-			memo.addVar("taskAuthor", request.getTask().getAuthor().getUserName());
-			memo.addVar("requestType", request.getRequestType().getName());
-			memo.addVar("requestComment", request.getComment());
-			memo.addVar("requestResolution", request.getResolution().name());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
-			if (ma.sendMеssage(memo, recipients)) {
-				addValue("notify", "ok");
-			}
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);

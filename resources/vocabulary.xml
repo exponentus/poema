@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- common vocabulary file -->
 <vocabulary>
+    <sentence mode="on" keyword="ACCEPTED">
+        <entry lang="ENG">Accepted</entry>
+        <entry lang="RUS">Принято</entry>
+        <entry lang="KAZ">Кабылданған</entry>
+        <entry lang="SPA">Aceptado</entry>
+        <entry lang="POR">Aceitaram</entry>
+        <entry lang="BUL">Признат</entry>
+    </sentence>
+    <sentence mode="on" keyword="DECLINE">
+        <entry lang="ENG">Decline</entry>
+        <entry lang="RUS">Отклонено</entry>
+        <entry lang="KAZ">Құлдырау</entry>
+        <entry lang="SPA">Declínio</entry>
+        <entry lang="POR">Disminución</entry>
+        <entry lang="BUL">Упадък</entry>
+    </sentence>
+    <sentence mode="on" keyword="UNKNOWN">
+        <entry lang="ENG">Unknown</entry>
+        <entry lang="RUS">Не определено</entry>
+        <entry lang="KAZ">Белгісіз</entry>
+        <entry lang="SPA">Desconocido</entry>
+        <entry lang="POR">Desconhecido</entry>
+        <entry lang="BUL">Неизвестен</entry>
+    </sentence>
    <sentence mode="on" keyword="authorization_was_failed">
         <entry lang="ENG">Authorization was failed</entry>
         <entry lang="RUS">Авторизация неудачна</entry>
@@ -180,107 +204,12 @@
         <entry lang="ENG">No selected</entry>
         <entry lang="CHI">No selected</entry>
     </sentence>
-    <sentence mode="on" keyword="Документ сохранен">
-        <entry lang="KAZ">Құжат сақталды</entry>
-        <entry lang="ENG">The document is saved</entry>
-        <entry lang="CHI">該文件被保存</entry>
-    </sentence>
-    <sentence mode="on" keyword="От">
-        <entry lang="KAZ">Бастап</entry>
-        <entry lang="ENG">From</entry>
-        <entry lang="CHI">從</entry>
-    </sentence>
-    <sentence mode="on" keyword="с">
-        <entry lang="KAZ">күні</entry>
-        <entry lang="ENG">from</entry>
-        <entry lang="CHI">的,</entry>
-    </sentence>
-    <sentence mode="on" keyword="по">
-        <entry lang="KAZ">дейін</entry>
-        <entry lang="ENG">to</entry>
-        <entry lang="CHI">關於</entry>
-    </sentence>
-    <sentence mode="on" keyword="Очистить">
-        <entry lang="KAZ">Тазалау</entry>
-        <entry lang="ENG">Clear</entry>
-        <entry lang="CHI">清潔</entry>
-    </sentence>
-    <sentence mode="on" keyword="Очистить корзину">
-        <entry lang="KAZ">Кәрзеңкені тазалау</entry>
-        <entry lang="ENG">Clear Recycle Bin</entry>
-        <entry lang="CHI">清空回收站</entry>
-    </sentence>
-    <sentence mode="on" keyword="Группы">
-        <entry lang="KAZ">Топтар</entry>
-        <entry lang="ENG">Groups</entry>
-        <entry lang="CHI">工作組</entry>
-    </sentence>
-    <sentence mode="on" keyword="Группы пользователей">
-        <entry lang="KAZ">Қолданушылардың топтары</entry>
-        <entry lang="ENG">Groups of users</entry>
-        <entry lang="CHI">該組的用戶</entry>
-    </sentence>
-    <sentence mode="on" keyword="Новый департамент">
-        <entry lang="KAZ">Жаңа департамент</entry>
-        <entry lang="ENG">New department</entry>
-        <entry lang="CHI">新部</entry>
-    </sentence>
-    <sentence mode="on" keyword="Новый сотрудник">
-        <entry lang="KAZ">Жаңа қызметкер</entry>
-        <entry lang="ENG">New employee</entry>
-        <entry lang="CHI">一個新的工作人員</entry>
-    </sentence>
-    <sentence mode="on" keyword="Восстановить">
-        <entry lang="KAZ">Қалпына келтіру</entry>
-        <entry lang="ENG">Recover</entry>
-        <entry lang="CHI">恢復</entry>
-    </sentence>
-    <sentence mode="on" keyword="Помощь">
-        <entry lang="KAZ">Көмек</entry>
-        <entry lang="ENG">Help</entry>
-        <entry lang="CHI">援助</entry>
-    </sentence>
-    <sentence mode="on" keyword="Избранные">
-        <entry lang="KAZ">Таңдалғандар</entry>
-        <entry lang="ENG">Favorites</entry>
-        <entry lang="CHI">收藏</entry>
-    </sentence>
-    <sentence mode="on" keyword="Роль пользователя">
-        <entry lang="KAZ">Қолданушының рөлi</entry>
-        <entry lang="ENG">Role of the user</entry>
-        <entry lang="CHI">用户角色</entry>
-    </sentence>
     <sentence mode="on" keyword="cancel">
         <entry lang="RUS">Отмена</entry>
         <entry lang="KAZ">Болдырмау</entry>
         <entry lang="ENG">Cancel</entry>
         <entry lang="CHI">廢除</entry>
-    </sentence>
-    <sentence mode="on" keyword="Предупреждение">
-        <entry lang="KAZ">Ескерту</entry>
-        <entry lang="ENG">Warning</entry>
-        <entry lang="CHI">預防</entry>
-    </sentence>
-    <sentence mode="on" keyword="Внимание">
-        <entry lang="KAZ">Назар аударыңыз</entry>
-        <entry lang="ENG">Attention</entry>
-        <entry lang="CHI">預防</entry>
-    </sentence>
-    <sentence mode="on" keyword="Оставить комментарий ответа?">
-        <entry lang="KAZ">Жауаптың түсiнiктемесін қалдырасыз ма?</entry>
-        <entry lang="ENG">To leave the answer comment?</entry>
-        <entry lang="CHI">評論答覆?</entry>
-    </sentence>
-    <sentence mode="on" keyword="нет">
-        <entry lang="KAZ">жоқ</entry>
-        <entry lang="ENG">no</entry>
-        <entry lang="CHI">無</entry>
-    </sentence>
-    <sentence mode="on" keyword="да">
-        <entry lang="KAZ">иә</entry>
-        <entry lang="ENG">yes</entry>
-        <entry lang="CHI">是否</entry>
-    </sentence>
+    </sentence>    
     <sentence mode="on" keyword="часов">
         <entry lang="KAZ">сағат</entry>
         <entry lang="ENG">hours</entry>
@@ -297,32 +226,7 @@
         <entry lang="KAZ">Көрінетін құжаттардың саны</entry>
         <entry lang="ENG">An amount of documents is in a kind</entry>
         <entry lang="CHI">表单中的文件数量</entry>
-    </sentence>
-    <sentence mode="on" keyword="Cтраница">
-        <entry lang="KAZ">Бет</entry>
-        <entry lang="ENG">Pages</entry>
-        <entry lang="CHI">页面</entry>
-    </sentence>
-    <sentence mode="on" keyword="Документов">
-        <entry lang="KAZ">Құжаттар саны</entry>
-        <entry lang="ENG">Documents</entry>
-        <entry lang="CHI">文件</entry>
-    </sentence>
-    <sentence mode="on" keyword="Обновлено">
-        <entry lang="KAZ">Жаңартылды</entry>
-        <entry lang="ENG">Updated</entry>
-        <entry lang="CHI">更新</entry>
-    </sentence>
-    <sentence mode="on" keyword="Запомнить пароль">
-        <entry lang="KAZ">Құпия сөзді есте сақтау</entry>
-        <entry lang="ENG">Remember password</entry>
-        <entry lang="CHI">记住密码</entry>
-    </sentence>
-    <sentence mode="on" keyword="Пользователь">
-        <entry lang="KAZ">Қолданушы</entry>
-        <entry lang="ENG">Username</entry>
-        <entry lang="CHI">用户</entry>
-    </sentence>
+    </sentence>    
     <sentence mode="on" keyword="password">
         <entry lang="RUS">Пароль</entry>
         <entry lang="KAZ">Құпия сөз</entry>
@@ -351,17 +255,7 @@
     <sentence mode="on" keyword="change_password">
         <entry lang="RUS">Изменить пароль</entry>
         <entry lang="ENG">Change password</entry>
-    </sentence>
-    <sentence mode="on" keyword="Войти">
-        <entry lang="KAZ">Кіру</entry>
-        <entry lang="ENG">Login</entry>
-        <entry lang="CHI">进入</entry>
-    </sentence>
-    <sentence mode="on" keyword="Сохраненный">
-        <entry lang="KAZ">Сақталған құжат</entry>
-        <entry lang="ENG">Saved document</entry>
-        <entry lang="CHI">保存</entry>
-    </sentence>
+    </sentence>   
     <sentence mode="on" keyword="edit">
         <entry lang="RUS">Редактирование</entry>
         <entry lang="KAZ">Өңдеу</entry>
@@ -430,12 +324,7 @@
         <entry lang="RUS">Описание</entry>
         <entry lang="KAZ">Сипаттама</entry>
         <entry lang="ENG">Description</entry>
-    </sentence>
-    <sentence mode="on" keyword="Подписал ">
-        <entry lang="KAZ">Қол қойды</entry>
-        <entry lang="ENG">Signed by</entry>
-        <entry lang="CHI">签署</entry>
-    </sentence>
+    </sentence>   
     <sentence mode="on" keyword="files">
         <entry lang="RUS">Вложения</entry>
         <entry lang="KAZ">Тіркемелер</entry>
@@ -453,12 +342,7 @@
         <entry lang="KAZ">Тіркеу</entry>
         <entry lang="ENG">Attach file</entry>
         <entry lang="CHI">附上</entry>
-    </sentence>
-    <sentence mode="on" keyword="Ход исполнения">
-        <entry lang="KAZ">Орындалу барысы</entry>
-        <entry lang="ENG">Implementing progress</entry>
-        <entry lang="CHI">当然，执行</entry>
-    </sentence>
+    </sentence>   
     <sentence mode="on" keyword="author">
         <entry lang="RUS">Автор</entry>
         <entry lang="KAZ">Автор</entry>
@@ -476,43 +360,14 @@
         <entry lang="KAZ">бет</entry>
         <entry lang="ENG">page</entry>
         <entry lang="CHI">首页</entry>
-    </sentence>
-    <sentence mode="on" keyword="из">
-        <entry lang="KAZ">ішінен</entry>
-        <entry lang="ENG">of</entry>
-        <entry lang="CHI">的</entry>
-    </sentence>
+    </sentence>    
     <sentence mode="on" keyword="additional">
         <entry lang="RUS">Дополнительно</entry>
         <entry lang="KAZ">Қосымша</entry>
         <entry lang="ENG">More</entry>
         <entry lang="CHI">此外</entry>
     </sentence>
-    <sentence mode="on" keyword="Состояние документа">
-        <entry lang="KAZ">Құжаттың күйі</entry>
-        <entry lang="ENG">Status of document</entry>
-        <entry lang="CHI">文件的状态</entry>
-    </sentence>
-    <sentence mode="on" keyword="Информация о прочтении">
-        <entry lang="KAZ">Оқу туралы мәлiмет</entry>
-        <entry lang="ENG">Information of read</entry>
-        <entry lang="CHI">信息就讀</entry>
-    </sentence>
-    <sentence mode="on" keyword="Права доступа">
-        <entry lang="KAZ">Рұқсат алудың құқықтары</entry>
-        <entry lang="ENG">Permissions</entry>
-        <entry lang="CHI">权限</entry>
-    </sentence>
-    <sentence mode="on" keyword="Выберите файл">
-        <entry lang="KAZ">Файлды таңдаңыз</entry>
-        <entry lang="ENG">Select file</entry>
-        <entry lang="CHI">选择文件</entry>
-    </sentence>
-    <sentence mode="on" keyword="Файл не выбран">
-        <entry lang="KAZ">Файл таңдалмады</entry>
-        <entry lang="ENG">File is not selected</entry>
-        <entry lang="CHI">该文件未被选中</entry>
-    </sentence>
+   
     <sentence mode="on" keyword="new_">
         <entry lang="RUS">Добавить</entry>
         <entry lang="KAZ">Қосу</entry>
@@ -540,12 +395,7 @@
         <entry lang="KAZ">Шолу</entry>
         <entry lang="ENG">Review</entry>
         <entry lang="CHI">檢討</entry>
-    </sentence>
-    <sentence mode="on" keyword="Коментарий">
-        <entry lang="KAZ">Түсініктеме</entry>
-        <entry lang="ENG">Comment</entry>
-        <entry lang="CHI">评论</entry>
-    </sentence>
+    </sentence>   
     <sentence mode="on" keyword="Только для чтения">
         <entry lang="KAZ">Тек оқу үшін</entry>
         <entry lang="ENG">Reading only</entry>
@@ -638,17 +488,7 @@
         <entry lang="ENG">Color</entry>
         <entry lang="RUS">Цвет</entry>
         <entry lang="KAZ">Түс</entry>
-    </sentence>
-    <sentence mode="on" keyword="Сокращенное имя">
-        <entry lang="KAZ">Қысқартылған есімі</entry>
-        <entry lang="ENG">Short name</entry>
-        <entry lang="CHI">简称</entry>
-    </sentence>
-    <sentence mode="on" keyword="Полное имя">
-        <entry lang="KAZ">Толық есімі</entry>
-        <entry lang="ENG">Full name</entry>
-        <entry lang="CHI">全名</entry>
-    </sentence>
+    </sentence>  
     <sentence mode="on" keyword="interface_lang">
         <entry lang="RUS">Язык интерфейса</entry>
         <entry lang="KAZ">Интерфейс тілі</entry>
