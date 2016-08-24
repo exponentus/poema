@@ -311,7 +311,7 @@ public class TaskForm extends _DoForm {
             Memo memo = new Memo(getLocalizedWord("notify_about_finish_task", lang), getLocalizedEmailTemplate("task_finish", lang));
             memo.addVar("taskTitle", task.getTitle());
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-            if (ma.sendMеssage(memo, recipients)) {
+            if (ma.sendMеssage(recipients, memo)) {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {
@@ -350,7 +350,7 @@ public class TaskForm extends _DoForm {
             Memo memo = new Memo(getLocalizedWord("notify_about_cancel_task", lang), getLocalizedEmailTemplate("task_cancel", lang));
             memo.addVar("taskTitle", task.getTitle());
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-            if (ma.sendMеssage(memo, recipients)) {
+            if (ma.sendMеssage(recipients, memo)) {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {

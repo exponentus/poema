@@ -9,10 +9,12 @@ import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
+import com.exponentus.messaging.slack.SlackAgent;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
 import administrator.dao.UserDAO;
+import administrator.model.User;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
@@ -44,7 +46,7 @@ public class Messages {
 		memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
 		MailAgent ma = new MailAgent();
-		ma.sendMеssage(memo, recipients);
+		ma.sendMеssage(recipients, memo);
 
 	}
 
@@ -57,17 +59,40 @@ public class Messages {
 
 		recipients.add(assigneeUser.getEmail());
 
-		String mailTemplate = task.getParent() != null ? "new_subtask" : "newtask";
+		String msgTemplate = task.getParent() != null ? "new_subtask" : "newtask";
 
 		MailAgent ma = new MailAgent();
 		Memo memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
-		        appEnv.templates.getTemplate(MessageType.EMAIL, mailTemplate, lang));
+		        appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang));
 		memo.addVar("assignee", assigneeUser.getUserName());
 		memo.addVar("title", task.getTitle());
 		memo.addVar("content", task.getBody());
 		memo.addVar("author", task.getAuthor().getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-		ma.sendMеssage(memo, recipients);
+		ma.sendMеssage(recipients, memo);
+
+		User user = null;
+		try {
+			user = (User) assigneeUser;
+		} catch (ClassCastException e) {
+			return;
+		}
+
+		String slackAddr = user.getSlack();
+		if (slackAddr != null && !slackAddr.equals("")) {
+			recipients.clear();
+			recipients.add(slackAddr);
+
+			SlackAgent sa = new SlackAgent();
+			memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
+			        appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang));
+			memo.addVar("assignee", assigneeUser.getUserName());
+			memo.addVar("title", task.getTitle());
+			memo.addVar("content", task.getBody());
+			memo.addVar("author", task.getAuthor().getUserName());
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+			sa.sendMessage(slackAddr, memo.getPlainBody());
+		}
 
 	}
 
@@ -87,7 +112,7 @@ public class Messages {
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
 
 		MailAgent ma = new MailAgent();
-		ma.sendMеssage(memo, recipients);
+		ma.sendMеssage(recipients, memo);
 
 	}
 
@@ -110,7 +135,7 @@ public class Messages {
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
 
 		MailAgent ma = new MailAgent();
-		ma.sendMеssage(memo, recipients);
+		ma.sendMеssage(recipients, memo);
 
 	}
 }

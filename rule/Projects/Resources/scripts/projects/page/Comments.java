@@ -132,7 +132,7 @@ public class Comments extends _DoForm {
             memo.addVar("taskTitle", task.getTitle());
             memo.addVar("comment", comment.getComment());
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-            if (!ma.sendMеssage(memo, recipients)) {
+            if (!ma.sendMеssage(recipients, memo)) {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {
