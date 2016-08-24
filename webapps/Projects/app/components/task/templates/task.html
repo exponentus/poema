@@ -16,7 +16,12 @@
             <button class="btn" type="button" *ngIf="canAddSubTask()" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
             </button>
+            <button class="btn" type="button" *ngIf="canCancelTask()" (click)="cancelTask()">
+                <i class="fa fa-ban"></i>
+                <span>{{'cancel_task' | translate}}</span>
+            </button>
             <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
+                <i class="fa fa-check-square-o"></i>
                 <span>{{'complete_task' | translate}}</span>
             </button>
             <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">

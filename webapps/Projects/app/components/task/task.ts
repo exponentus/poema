@@ -234,6 +234,20 @@ export class TaskComponent {
         );
     }
 
+    cancelTask() {
+        let noty = this.notifyService.process(this.translate.instant('wait_while_process')).show();
+        this.taskService.cancelTask(this.task).subscribe(
+            response => {
+                noty.set({ type: 'success', message: response.message }).remove(1500);
+                this.close();
+            },
+            error => {
+                noty.remove();
+                this.handleXhrError(error);
+            }
+        );
+    }
+
     deleteTask() {
         this.taskService.deleteTask([this.task]).subscribe(
             data => {
@@ -245,7 +259,7 @@ export class TaskComponent {
     }
 
     canAddSubTask() {
-        return this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED'; //  && !this.isSubtask
+        return this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED'; //  && !this.isSubtask
     }
 
     addSubtask() {
@@ -369,12 +383,16 @@ export class TaskComponent {
         return true;
     }
 
+    canCancelTask() {
+        return !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
+    }
+
     canCompleteTask() {
-        return !this.isNew && this.isEditable && this.task.status != 'FINISHED';
+        return !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
     }
 
     canRequestAction() {
-        return (this.task && this.task.id && this.task.status != 'FINISHED') && !this.hasUnResolvedRequest; // && !this.hasAcceptedRequestResolution;
+        return (this.task && this.task.id && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED') && !this.hasUnResolvedRequest; // && !this.hasAcceptedRequestResolution;
     }
 
     newRequest() {

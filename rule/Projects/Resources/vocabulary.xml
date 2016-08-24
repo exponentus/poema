@@ -188,6 +188,10 @@
         <entry lang="RUS">Завершить задачу</entry>
         <entry lang="ENG">Complete task</entry>
     </sentence>
+    <sentence mode="on" keyword="cancel_task">
+        <entry lang="RUS">Отменить задачу</entry>
+        <entry lang="ENG">Cancel task</entry>
+    </sentence>
     <sentence mode="on" keyword="send_task">
         <entry lang="RUS">Отправить задачу</entry>
         <entry lang="ENG">Send task</entry>

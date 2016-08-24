@@ -115,6 +115,12 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
+    cancelTask(task: Task) {
+        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=cancel&fsid=' + task.fsid, '', { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
     deleteTask(tasks: Task[]) {
         return this.http.delete('p?id=task-view&taskIds=' + tasks.map(it => it.id).join(','), { headers: HEADERS })
             .catch(error => Observable.throw(transformPostResponse(error)));
