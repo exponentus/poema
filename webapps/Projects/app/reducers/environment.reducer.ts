@@ -4,6 +4,7 @@ export interface IEnvironmentState {
     isMobile: boolean,
     isNavOpen: boolean,
     isSearchOpen: boolean,
+    redirectUrl: string,
     keyWord: string
 };
 
@@ -11,6 +12,7 @@ const initialState: IEnvironmentState = {
     isMobile: false,
     isNavOpen: true,
     isSearchOpen: false,
+    redirectUrl: '/tasks',
     keyWord: ''
 };
 
@@ -36,6 +38,10 @@ export const environmentReducer = (state = initialState, {type, payload}): IEnvi
             return Object.assign({}, state, {
                 isNavOpen: true,
                 isSearchOpen: false
+            });
+        case EnvironmentActions.SET_REDIRECT_URL:
+            return Object.assign({}, state, {
+                redirectUrl: payload.redirectUrl
             });
         default:
             return state;

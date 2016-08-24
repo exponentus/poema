@@ -9,6 +9,7 @@ export class EnvironmentActions {
     static TOGGLE_NAV = 'TOGGLE_NAV';
     static TOGGLE_SEARCH = 'TOGGLE_SEARCH';
     static HIDE_NAV = 'HIDE_NAV';
+    static SET_REDIRECT_URL = 'SET_REDIRECT_URL';
 
 
     search(keyWord): Action {
@@ -39,6 +40,13 @@ export class EnvironmentActions {
     hideNav(): Action {
         return {
             type: EnvironmentActions.HIDE_NAV
+        };
+    }
+
+    setRedirectUrl(redirectUrl: string): Action {
+        return {
+            type: EnvironmentActions.SEARCH,
+            payload: { redirectUrl }
         };
     }
 }

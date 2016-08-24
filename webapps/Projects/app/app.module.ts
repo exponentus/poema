@@ -105,6 +105,10 @@ class CustomTranslateLoader implements TranslateLoader {
     }
 }
 
+declare const webpack: {
+    ENV: string
+};
+
 if (webpack.ENV === 'production') {
     enableProdMode();
 }
