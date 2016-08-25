@@ -174,14 +174,14 @@ export class TaskService {
     }
 
     doAcceptRequest(request: Request, data?: any) {
-        let url = 'p?id=task-requests&requestId=' + request.id + '&action=accept&fsid=' + request.fsid + '&' + serializeObj(data);
+        let url = 'p?id=task-requests&requestId=' + request.id + '&_action=accept&fsid=' + request.fsid + '&' + serializeObj(data);
         return this.http.put(url, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
     doDeclineRequest(request: Request) {
-        let url = 'p?id=task-requests&requestId=' + request.id + '&action=decline&fsid=' + request.fsid;
+        let url = 'p?id=task-requests&requestId=' + request.id + '&_action=decline&fsid=' + request.fsid;
         return this.http.put(url, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
