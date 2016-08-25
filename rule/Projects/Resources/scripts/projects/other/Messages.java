@@ -80,9 +80,6 @@ public class Messages {
 
 		String slackAddr = user.getSlack();
 		if (slackAddr != null && !slackAddr.equals("")) {
-			recipients.clear();
-			recipients.add(slackAddr);
-
 			SlackAgent sa = new SlackAgent();
 			memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
 			        appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang));
