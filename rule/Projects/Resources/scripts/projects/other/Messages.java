@@ -72,6 +72,7 @@ public class Messages {
 				memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
 				        appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang));
 				memo.addVar("assignee", assigneeUser.getUserName());
+				memo.addVar("regNumber", task.getRegNumber());
 				memo.addVar("title", task.getTitle());
 				memo.addVar("content", task.getBody());
 				memo.addVar("author", task.getAuthor().getUserName());
@@ -88,6 +89,7 @@ public class Messages {
 		memo = new Memo(appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
 		        appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang));
 		memo.addVar("assignee", assigneeUser.getUserName());
+		memo.addVar("regNumber", task.getRegNumber());
 		memo.addVar("title", task.getTitle());
 		memo.addVar("content", task.getBody());
 		memo.addVar("author", task.getAuthor().getUserName());
@@ -117,6 +119,7 @@ public class Messages {
 				memo = new Memo(appEnv.vocabulary.getWord("notify_about_task_request", lang),
 				        appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang));
 				memo.addVar("taskTitle", task.getTitle());
+				memo.addVar("regNumber", task.getRegNumber());
 				memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 				memo.addVar("comment", request.getComment());
 				memo.addVar("author", request.getAuthor().getUserName());
@@ -134,6 +137,7 @@ public class Messages {
 		memo = new Memo(appEnv.vocabulary.getWord("notify_about_task_request", lang),
 		        appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang));
 		memo.addVar("taskTitle", task.getTitle());
+		memo.addVar("regNumber", task.getRegNumber());
 		memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 		memo.addVar("comment", request.getComment());
 		memo.addVar("author", request.getAuthor().getUserName());
