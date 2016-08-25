@@ -70,26 +70,26 @@
     display: inline-block;
 }
 
-.request__resolution .accept,
-.request__resolution .accept .fa {
+.request__resolution .accepted,
+.request__resolution .accepted .fa {
     color: green;
 }
 
-.request__resolution .decline,
-.request__resolution .decline .fa {
+.request__resolution .declined,
+.request__resolution .declined .fa {
     color: red;
 }
 
 .header-title .request-resolution {}
 
-.request-resolution.accept,
-.request-resolution.accept .fa {
+.request-resolution.accepted,
+.request-resolution.accepted .fa {
     color: green;
     font-size: 13px;
 }
 
-.request-resolution.decline,
-.request-resolution.decline .fa {
+.request-resolution.declined,
+.request-resolution.declined .fa {
     color: red;
     font-size: 13px;
 }

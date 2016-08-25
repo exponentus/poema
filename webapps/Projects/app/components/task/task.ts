@@ -310,7 +310,7 @@ export class TaskComponent {
                 }
             });
         } else {
-            this.taskService.doRequestResolution(request, 'ACCEPT').subscribe(action => {
+            this.taskService.doAcceptRequest(request).subscribe(action => {
                 this.store.dispatch(action);
                 this.loadRequests(1);
             });
@@ -318,7 +318,7 @@ export class TaskComponent {
     }
 
     declineRequest(request: Request) {
-        this.taskService.doRequestResolution(request, 'DECLINE').subscribe(action => {
+        this.taskService.doDeclineRequest(request).subscribe(action => {
             this.store.dispatch(action);
             this.loadRequests(1);
         });

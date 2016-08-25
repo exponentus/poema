@@ -55,11 +55,11 @@
                     <div class="request__attachments" *ngIf="m.attachments && m.attachments.length">
                         <i class="fa fa-paperclip"></i>
                     </div>
-                    <span class="{{m.resolution | text:'L'}}" *ngIf="m.resolution == 'ACCEPT'">
+                    <span class="accepted" *ngIf="m.resolution == 'ACCEPTED'">
                         <i class="fa fa-check"></i>
                         {{'accepted' | translate}}
                     </span>
-                    <span class="{{m.resolution | text:'L'}}" *ngIf="m.resolution == 'DECLINE'">
+                    <span class="declined" *ngIf="m.resolution == 'DECLINED'">
                         <i class="fa fa-times"></i>
                         {{'declined' | translate}}
                     </span>

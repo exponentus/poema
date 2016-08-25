@@ -102,14 +102,14 @@ export class RequestComponent {
     }
 
     doAccept(request: Request) {
-        this.taskService.doRequestResolution(request, 'ACCEPT', { dueDate: this.dueDate }).subscribe(action => {
+        this.taskService.doAcceptRequest(request, { dueDate: this.dueDate }).subscribe(action => {
             this.store.dispatch(action);
             this.close();
         });
     }
 
     doDecline(request: Request) {
-        this.taskService.doRequestResolution(request, 'DECLINE').subscribe(action => {
+        this.taskService.doDeclineRequest(request).subscribe(action => {
             // this.store.dispatch(action);
             this.close();
         });

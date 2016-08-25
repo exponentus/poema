@@ -19,11 +19,11 @@ import { Request } from '../../models';
                         </div>
                     </section>
                     <div class="request__resolution">
-                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPT'">
+                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPTED'">
                             <i class="fa fa-check"></i>
                             {{'accepted' | translate}}
                         </span>
-                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINE'">
+                        <span class="{{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINED'">
                             <i class="fa fa-times"></i>
                             {{'declined' | translate}}
                         </span>

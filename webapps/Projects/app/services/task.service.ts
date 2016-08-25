@@ -173,8 +173,15 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    doRequestResolution(request: Request, resolution: string, data?: any) {
-        let url = 'p?id=task-requests&requestId=' + request.id + '&resolution=' + resolution + '&fsid=' + request.fsid + '&' + serializeObj(data);
+    doAcceptRequest(request: Request, data?: any) {
+        let url = 'p?id=task-requests&requestId=' + request.id + '&action=accept&fsid=' + request.fsid + '&' + serializeObj(data);
+        return this.http.put(url, '', { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
+    doDeclineRequest(request: Request) {
+        let url = 'p?id=task-requests&requestId=' + request.id + '&action=decline&fsid=' + request.fsid;
         return this.http.put(url, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
