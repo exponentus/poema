@@ -46,7 +46,14 @@ public class TaskForm extends _DoForm {
             task = dao.findById(id);
 
             if (formData.containsField("attachment")) {
-                if (showAttachment(formData.getValueSilently("attachment"), task)) {
+                // TODO refactoring
+                String attachmentId = formData.getValueSilently("attachment");
+                Attachment att = task.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
+                boolean getThumbnail = formData.containsField("_thumbnail");
+                if (getThumbnail && att.isHasThumbnail()) {
+                    showFile("./thumbnails/" + att.getIdentifier() + ".jpg", att.getRealFileName());
+                    return;
+                } else if (showAttachment(attachmentId, task)) {
                     return;
                 } else {
                     setBadRequest();
