@@ -74,6 +74,9 @@ public class Task extends SecureAppEntity<UUID> {
 	@Column(length = 140)
 	private String title;
 
+	@Column(length = 1024, name = "cancel_comment")
+	private String cancellationComment;
+
 	@Column(length = 2048)
 	private String body;
 
@@ -188,6 +191,14 @@ public class Task extends SecureAppEntity<UUID> {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getCancellationComment() {
+		return cancellationComment;
+	}
+
+	public void setCancellationComment(String cancellationComment) {
+		this.cancellationComment = cancellationComment;
 	}
 
 	public String getBody() {
