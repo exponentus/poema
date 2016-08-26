@@ -4,7 +4,10 @@ import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduledTask;
+import com.exponentus.util.ImageUtil;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.List;
 
 public class AttachmentThumbnailCreateJob extends _DoScheduledTask {
@@ -17,15 +20,15 @@ public class AttachmentThumbnailCreateJob extends _DoScheduledTask {
 
         try {
             // TODO refactoring
-//            File dir = new File("./thumbnails/");
-//            dir.mkdirs();
-//            for (Attachment att : attList) {
-//                ByteArrayInputStream bis = new ByteArrayInputStream(att.getFile());
-//                String outFile = "./thumbnails/" + att.getIdentifier() + ".jpg";
-//                ImageUtil.createJpegThumbnail(bis, outFile);
-//                att.setHasThumbnail(true);
-//                attachmentDAO.update(att);
-//            }
+            File dir = new File("./thumbnails/");
+            dir.mkdirs();
+            for (Attachment att : attList) {
+                ByteArrayInputStream bis = new ByteArrayInputStream(att.getFile());
+                String outFile = "./thumbnails/" + att.getIdentifier() + ".jpg";
+                ImageUtil.createJpegThumbnail(bis, outFile);
+                att.setHasThumbnail(true);
+                attachmentDAO.update(att);
+            }
 
             System.out.println("AttachmentThumbnailCreateJob: do every 5 min; atts: " + attList.size());
         } catch (Exception e) {

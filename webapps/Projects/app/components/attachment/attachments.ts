@@ -18,7 +18,9 @@ import { Attachment } from '../../models';
                 <div class="attachment-list__item" *ngFor="let att of model.attachments">
                     <div class="attachment">
                         <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
-                        <span class="attachment__size"></span>
+                        <img img-view *ngIf="att.hasThumbnail" url="{{model.url}}&attachment={{att.id}}"
+                            src="{{model.url}}&attachment={{att.id}}&_thumbnail" />
+                        <span class="attachment__size">{{model.size}}</span>
                         <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
                             <i class="fa fa-times"></i>
                         </button>

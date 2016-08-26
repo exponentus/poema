@@ -32,6 +32,9 @@ import {
 import { AttachmentsComponent } from './components/attachment/attachments';
 import { ErrorMessageComponent } from './components/error-message';
 
+import { ImgViewDirective } from './shared/img-view/img-view.directive';
+import { ImgViewComponent } from './shared/img-view/img-view.component';
+import { ImgViewService } from './shared/img-view/img-view.service';
 import { PaginationComponent } from './shared/pagination';
 import { AutofocusDirective } from './shared/directives/autofocus.directive';
 import { DatepickerDirective } from './shared/datepicker/datepicker';
@@ -73,6 +76,7 @@ import { RedirectGuard } from './redirect.guard';
         DROPDOWN_DIRECTIVES,
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
+        ImgViewDirective, ImgViewComponent,
         TranslatePipe,
         DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe
     ],
@@ -86,6 +90,7 @@ import { RedirectGuard } from './redirect.guard';
             deps: [translateService]
         }),
         NotificationService,
+        ImgViewService,
         MarkdownConverter,
         APP_SERVICES,
         APP_STORE,
