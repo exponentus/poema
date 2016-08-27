@@ -4,6 +4,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.AppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,12 +27,13 @@ public class Comment extends AppEntity<UUID> {
     @Column(nullable = false, length = 512)
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(name = "comment_attachments",
             joinColumns = {@JoinColumn(name = "comment_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "comment_id, attachment_id")},
             uniqueConstraints = @UniqueConstraint(columnNames = {"comment_id", "attachment_id"}))
+    @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
     public long getAuthorId() {

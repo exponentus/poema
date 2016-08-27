@@ -182,27 +182,30 @@ public class TaskRequests extends _DoForm {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task = request.getTask();
             if (resolutionType == ResolutionType.ACCEPTED) {
-                if ("implement".equals(request.getRequestType().getName())) {
-                    task.setStatus(TaskStatusType.COMPLETED);
-                } else if ("prolong".equals(request.getRequestType().getName())) {
-                    // prolong new due date
-                    Date newDueDate = TimeUtil.convertStringToDate(formData.getValueSilently("dueDate"));
-                    if (newDueDate == null) {
-                        _Validation ve = new _Validation();
-                        ve.addError("dueDate", "date", getLocalizedWord("field_is_empty", session.getLang()));
-                        setValidation(ve);
+                switch (request.getRequestType().getName()) {
+                    case "implement":
+                        task.setStatus(TaskStatusType.COMPLETED);
+                        break;
+                    case "prolong":
+                        // prolong new due date
+                        Date newDueDate = TimeUtil.convertStringToDate(formData.getValueSilently("dueDate"));
+                        if (newDueDate == null) {
+                            _Validation ve = new _Validation();
+                            ve.addError("dueDate", "date", getLocalizedWord("field_is_empty", session.getLang()));
+                            setValidation(ve);
+                            setBadRequest();
+                            return;
+                        }
+                        task.setDueDate(newDueDate);
+                        break;
+                    case "cancel":
+                        task.setStatus(TaskStatusType.CANCELLED);
+                        break;
+                    default:
                         setBadRequest();
+                        addContent("error", "I don't know what you want. Unknown requestType.name: " + request.getRequestType().getName());
                         return;
-                    }
-                    task.setDueDate(newDueDate);
-                } else if ("cancel".equals(request.getRequestType().getName())) {
-                    task.setStatus(TaskStatusType.CANCELLED);
-                } else {
-                    setBadRequest();
-                    addContent("error", "I don't know what you want. Unknown requestType");
-                    return;
                 }
-
             } else {
                 if ("implement".equals(request.getRequestType().getName())) {
                     task.setStatus(TaskStatusType.PROCESSING);

@@ -4,6 +4,7 @@ import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.common.service.AttachmentThumbnailService;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
@@ -21,6 +22,7 @@ import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
 import staff.dao.OrganizationDAO;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,18 +39,8 @@ public class ProjectForm extends _DoForm {
             project = dao.findById(projectId);
 
             if (formData.containsField("attachment")) {
-                // TODO refactoring
-                String attachmentId = formData.getValueSilently("attachment");
-                Attachment att = project.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-                boolean getThumbnail = formData.containsField("_thumbnail");
-                if (getThumbnail && att.isHasThumbnail()) {
-                    showFile("./thumbnails/" + att.getIdentifier() + ".jpg", att.getRealFileName());
-                    return;
-                } else if (showAttachment(attachmentId, project)) {
-                    return;
-                } else {
-                    setBadRequest();
-                }
+                doGetAttachment(session, formData, project);
+                return;
             }
 
             addContent(project.getAttachments());
@@ -212,7 +204,7 @@ public class ProjectForm extends _DoForm {
             ve.addError("programmerUserId", "required", getLocalizedWord("field_is_empty", lang));
         }
         /*
-		 * if (formData.getNumberValueSilently("testerUserId", 0) == 0) {
+         * if (formData.getNumberValueSilently("testerUserId", 0) == 0) {
 		 * ve.addError("testerUserId", "required",
 		 * getLocalizedWord("field_is_empty", lang)); }
 		 */
@@ -229,5 +221,24 @@ public class ProjectForm extends _DoForm {
         }
 
         return ve;
+    }
+
+    private void doGetAttachment(_Session session, _WebFormData formData, Project project) {
+        String attachmentId = formData.getValueSilently("attachment");
+        Attachment att = project.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
+
+        if (formData.containsField("_thumbnail")) {
+            File tf = AttachmentThumbnailService.createThumbnailFileIfSupported(session, att);
+            if (tf != null) {
+                showFile(tf.getAbsolutePath(), att.getRealFileName());
+            } else {
+                setBadRequest();
+                addContent("error", "Unsupported format, try without _thumbnail");
+            }
+        } else if (showAttachment(attachmentId, project)) {
+            //
+        } else {
+            setBadRequest();
+        }
     }
 }

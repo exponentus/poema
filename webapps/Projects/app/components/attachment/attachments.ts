@@ -18,7 +18,7 @@ import { Attachment } from '../../models';
                 <div class="attachment-list__item" *ngFor="let att of model.attachments">
                     <div class="attachment">
                         <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
-                        <img img-view *ngIf="att.hasThumbnail" url="{{model.url}}&attachment={{att.id}}"
+                        <img img-view *ngIf="isThumbnailSupported(att)" url="{{model.url}}&attachment={{att.id}}"
                             src="{{model.url}}&attachment={{att.id}}&_thumbnail" />
                         <span class="attachment__size">{{model.size}}</span>
                         <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
@@ -61,6 +61,14 @@ export class AttachmentsComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    isThumbnailSupported(att: Attachment): boolean {
+        if (att.extension) {
+            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.extension) != -1;
+        } else {
+            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.realFileName.split('.').pop()) != -1;
+        }
     }
 
     get isHidden() {
