@@ -13,6 +13,8 @@
 /rule/*/global.dat
 /webapps/*/reports/templates/*.jasper
 *.sql
+*.crt
+*.key
 # Idea resources #
 ##################
 .idea
@@ -30,4 +32,3 @@ cfg.xml
 /.project
 #
 node_modules/
-
