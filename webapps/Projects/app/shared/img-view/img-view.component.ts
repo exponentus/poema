@@ -27,7 +27,6 @@ export class ImgViewComponent {
         private imgViewService: ImgViewService
     ) {
         this.sub = this.imgViewService.getEmitter().subscribe(item => {
-            console.log(item);
             this.url = item.url;
             this.show = true;
         });
@@ -38,7 +37,6 @@ export class ImgViewComponent {
     }
 
     hide($event) {
-        console.log(this.url, $event);
         this.show = false;
     }
 }

@@ -5,7 +5,7 @@ import { ImgViewService } from './img-view.service';
 @Directive({
     selector: '[img-view]',
     host: {
-        '(click)': 'onClick($event)'
+        '(click)': 'show($event)'
     }
 })
 
@@ -16,7 +16,7 @@ export class ImgViewDirective {
         private imgViewService: ImgViewService
     ) { }
 
-    onClick($event) {
-        this.imgViewService.showUrl(this.url);
+    show($event) {
+        this.imgViewService.show(this.url);
     }
 }

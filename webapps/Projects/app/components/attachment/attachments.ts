@@ -11,13 +11,13 @@ import { Attachment } from '../../models';
             <i class="fa fa-paperclip" *ngIf="!editable"></i>
             <label class="btn btn-upload" title="{{'attach_file' | translate}}" *ngIf="editable">
                 <i class="fa fa-paperclip"></i>
-                <span>{{ 'attach_file' | translate }}</span>
+                <span>{{'attach_file' | translate}}</span>
                 <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>
             </label>
             <div class="attachment-list" *ngIf="!isHidden">
                 <div class="attachment-list__item" *ngFor="let att of model.attachments">
                     <div class="attachment">
-                        <a class="attachment__link" href="{{model.url}}&attachment={{att.id}}">{{ att.realFileName }}</a>
+                        <a class="attachment__link" title="{{att.realFileName}}" href="{{model.url}}&attachment={{att.id}}">{{att.realFileName}}</a>
                         <img img-view *ngIf="isThumbnailSupported(att)" url="{{model.url}}&attachment={{att.id}}"
                             src="{{model.url}}&attachment={{att.id}}&_thumbnail" />
                         <span class="attachment__size">{{model.size}}</span>
@@ -67,7 +67,7 @@ export class AttachmentsComponent {
         if (att.extension) {
             return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.extension) != -1;
         } else {
-            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.realFileName.split('.').pop()) != -1;
+            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.realFileName.toLowerCase().split('.').pop()) != -1;
         }
     }
 

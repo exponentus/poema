@@ -57,7 +57,7 @@ public class Project extends SecureAppEntity<UUID> {
     @Column(length = 2048)
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "project_attachments",
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},

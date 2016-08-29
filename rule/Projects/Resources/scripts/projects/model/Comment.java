@@ -27,7 +27,7 @@ public class Comment extends AppEntity<UUID> {
     @Column(nullable = false, length = 512)
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "comment_attachments",
             joinColumns = {@JoinColumn(name = "comment_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},

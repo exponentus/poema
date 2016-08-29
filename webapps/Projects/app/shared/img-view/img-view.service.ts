@@ -10,7 +10,7 @@ export class ImgViewService {
         return this.emitter;
     }
 
-    showUrl(url: string) {
+    show(url: string) {
         this.emitter.emit({ url: url });
     }
 }
