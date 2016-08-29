@@ -27,6 +27,7 @@ public class ProjectView extends _DoPage {
         for (String id : formData.getListOfValuesSilently("projectIds")) {
             Project m = projectDAO.findById(id);
             try {
+                m.setAttachments(null); // if no on delete cascade
                 projectDAO.delete(m);
             } catch (SecureException e) {
                 setError(e);

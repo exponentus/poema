@@ -36,6 +36,7 @@ public class TaskView extends _DoPage {
         for (String id : formData.getListOfValuesSilently("taskIds")) {
             Task m = taskDAO.findById(id);
             try {
+                m.setAttachments(null); // if no on delete cascade
                 taskDAO.delete(m);
             } catch (SecureException e) {
                 setError(e);

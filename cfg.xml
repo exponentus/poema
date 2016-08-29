@@ -30,12 +30,12 @@
 		<entry>BUL</entry>
 	</langs>
 	<mail mode="ON">
-		<smtphost></smtphost>
-		<smtpauth>true</smtpauth>
-		<smtpport></smtpport>
-		<smtpuser></smtpuser>
-		<smtppassword></smtppassword>
-		<smtpusername></smtpusername>
+		<smtphost>smtp.mail.ru</smtphost>
+		<defaultsender>mynameis.m@mail.ru</defaultsender>
+		<auth>true</auth>
+		<smtpport>465</smtpport>
+		<smtpuser>mynameis.m@mail.ru</smtpuser>
+		<smtppassword>mynameis.mmynameis.m</smtppassword>
 	</mail>
 	<slack mode="ON">
 		<token></token>

@@ -127,7 +127,7 @@ export class TaskService {
     }
 
     deleteTaskAttachment(task: Task, attachment: Attachment) {
-        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+        return this.http.delete('p?id=task-form&taskId=' + task.id + '&attachmentId=' + attachment.id + '&fsid=' + task.fsid, { headers: HEADERS })
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
@@ -193,7 +193,7 @@ export class TaskService {
     }
 
     deleteRequestAttachment(request: Request, attachment: Attachment) {
-        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+        return this.http.delete('p?id=task-requests&requestId=' + request.id + '&attachmentId=' + attachment.id + '&fsid=' + request.fsid, { headers: HEADERS })
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
@@ -226,7 +226,7 @@ export class TaskService {
     }
 
     deleteCommentAttachment(comment: Comment, attachment: Attachment) {
-        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+        return this.http.delete('p?id=comments&commentId=' + comment.id + '&attachmentId=' + attachment.id + '&fsid=' + comment.fsid, { headers: HEADERS })
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 }

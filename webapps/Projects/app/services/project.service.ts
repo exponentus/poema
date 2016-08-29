@@ -76,7 +76,7 @@ export class ProjectService {
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {
-        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id, { headers: HEADERS })
+        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid, { headers: HEADERS })
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 }
