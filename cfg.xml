@@ -18,6 +18,13 @@
 		</app>
 		<app>
 			<name mode="on">Projects</name>
+			 <rest mode="on">
+                <urlmapping>/rest/*</urlmapping>
+                <allowcors>*</allowcors>
+                <services>
+                    
+                </services>
+            </rest>
 		</app>
 	</applications>
 	<langs>
