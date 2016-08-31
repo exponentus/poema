@@ -1,6 +1,13 @@
 $orgname$ 
-Hello *$assignee$*, there is new issue for you: 
+Dear *$assignee$*, 
+A new task has been assigned to you.
+
+*Task details*
+
 `$regNumber$` $title$
 _Click >_ $url$
-Yours respectfully
+
+Thank you.
+
+Kind regards,
 *$author$*
