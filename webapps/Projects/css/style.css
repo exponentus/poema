@@ -8,7 +8,6 @@
 @import 'dashboard.css';
 @import 'pikaday.css';
 @import 'rt-editor.css';
-@import 'img-view.css';
 
 [tabindex='-1'] {
     outline: 0;

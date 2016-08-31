@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
+import { Employee } from '../models';
 import { parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 const HEADERS = new Headers({
@@ -12,8 +13,10 @@ const HEADERS = new Headers({
 @Injectable()
 export class AppService {
 
+    thumbnailSupportedFormat: string[] = ['jpeg', 'jpg', 'png', 'gif']
     isLogged: boolean = false;
     language: string = 'RUS';
+    employee: Employee;
 
     constructor(private http: Http) {
         let ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
@@ -33,6 +36,7 @@ export class AppService {
                 }
                 this.isLogged = true;
                 this.language = res.currentLang;
+                this.employee = res.employee as Employee;
                 return {
                     userProfile: res.employee,
                     languages: res.language.list[0].localizedName,

@@ -7,11 +7,13 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { KeysPipe, ValuesPipe } from '../../pipes';
 import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
+import { AppService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Project, Task, Tag, TaskType, Request, Comment, Employee, Attachment } from '../../models';
+import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'task',
@@ -56,7 +58,6 @@ export class TaskComponent {
     comments: Comment[];
     requests: Request[];
     errors: any = {};
-
     redirectUrl: any;
 
     constructor(
@@ -66,7 +67,8 @@ export class TaskComponent {
         private translate: TranslateService,
         private taskActions: TaskActions,
         private taskService: TaskService,
-        private notifyService: NotificationService
+        private notifyService: NotificationService,
+        private appService: AppService
     ) {
         this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
             this.comments = state.comments;
@@ -248,6 +250,20 @@ export class TaskComponent {
         );
     }
 
+    acknowledgedTask() {
+        let noty = this.notifyService.process(this.translate.instant('wait_while_process')).show();
+        this.taskService.acknowledgedTask(this.task).subscribe(
+            response => {
+                noty.set({ type: 'success', message: response.message }).remove(1500);
+                this.close();
+            },
+            error => {
+                noty.remove();
+                this.handleXhrError(error);
+            }
+        );
+    }
+
     deleteTask() {
         this.taskService.deleteTask([this.task]).subscribe(
             data => {
@@ -391,6 +407,10 @@ export class TaskComponent {
         return !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
     }
 
+    canAcknowledgedTask() {
+        return !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && this.task.status == 'OPEN';
+    }
+
     canRequestAction() {
         return (this.task && this.task.id && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED') && !this.hasUnResolvedRequest; // && !this.hasAcceptedRequestResolution;
     }
@@ -456,16 +476,23 @@ export class TaskComponent {
         this.validateForm();
     }
 
-    addAttachment(file) {
+    addAttachment(data) {
         let att: Attachment = new Attachment();
-        att.realFileName = file.files[0];
+        att.realFileName = data.response.files[0];
         if (!this.task.attachments) {
             this.task.attachments = [];
         }
         if (!this.task.fsid) {
             this.task.fsid = '' + Date.now();
         }
-        this.task.attachments.push(att);
+        if (!data.files[0].type.match('image.*')) {
+            this.task.attachments.push(att);
+        } else {
+            imgToBase64(data.files[0], (e2) => {
+                att.base64 = e2.target.result;
+                this.task.attachments.push(att);
+            });
+        }
     }
 
     deleteAttachment(attachment: Attachment) {

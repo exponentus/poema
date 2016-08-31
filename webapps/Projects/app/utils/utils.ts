@@ -74,3 +74,9 @@ export function createCookie(name, value, days): void {
     }
     document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expires + '; path=/';
 }
+
+export function imgToBase64(file, callback) {
+    var fr = new FileReader();
+    fr.onload = callback;
+    fr.readAsDataURL(file);
+}

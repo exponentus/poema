@@ -4,6 +4,7 @@ export class Attachment {
     realFileName: string;
     extension: string;
     size: number;
+    base64: string;
     author: string;
     regDate: Date;
 }

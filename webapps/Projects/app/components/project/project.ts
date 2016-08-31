@@ -9,6 +9,7 @@ import { KeysPipe, ValuesPipe } from '../../pipes';
 import { NotificationService } from '../../shared/notification';
 import { ProjectService } from '../../services';
 import { Project, Organization, Employee, Attachment } from '../../models';
+import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'project',
@@ -179,16 +180,23 @@ export class ProjectComponent {
         this.validateForm('comment');
     }
 
-    addAttachment(file) {
+    addAttachment(data) {
         let att: Attachment = new Attachment();
-        att.realFileName = file.files[0];
+        att.realFileName = data.response.files[0];
         if (!this.project.attachments) {
             this.project.attachments = [];
         }
         if (!this.project.fsid) {
             this.project.fsid = '' + Date.now();
         }
-        this.project.attachments.push(att);
+        if (!data.files[0].type.match('image.*')) {
+            this.project.attachments.push(att);
+        } else {
+            imgToBase64(data.files[0], (e2) => {
+                att.base64 = e2.target.result;
+                this.project.attachments.push(att);
+            });
+        }
     }
 
     deleteAttachment(attachment: Attachment) {

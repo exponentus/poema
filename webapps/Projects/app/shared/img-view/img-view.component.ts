@@ -6,10 +6,10 @@ import { ImgViewService } from './img-view.service';
     selector: 'img-view',
     template: `
         <div class="img-view-overlay" (click)="hide($event)">
-            <div class="img-view-close">x</div>
+            <div class="img-view-close">&times;</div>
         </div>
         <div class="img-view-content">
-            <img src="{{url}}" />
+            <img class="img-view-content-img" [src]="url" />
         </div>
     `,
     host: {

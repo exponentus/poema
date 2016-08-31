@@ -142,7 +142,7 @@ public class TaskForm extends _DoForm {
                 if (new Date().before(task.getStartDate())) {
                     task.setStatus(TaskStatusType.WAITING);
                 } else {
-                    task.setStatus(TaskStatusType.PROCESSING);
+                    // task.setStatus(TaskStatusType.PROCESSING);
                 }
             }
             task.setBody(formData.getValueSilently("body"));
@@ -209,6 +209,9 @@ public class TaskForm extends _DoForm {
                 break;
             case "cancel":
                 doTaskCancel(session, taskId);
+                break;
+            case "acknowledged":
+                doAcknowledged(session, taskId);
                 break;
             default:
                 addValue("error", "unknown action");
@@ -351,7 +354,7 @@ public class TaskForm extends _DoForm {
 
         try {
             if (task.getStatus() == TaskStatusType.CANCELLED) {
-                addContent("info", "task status is completed");
+                addContent("info", "task status is cancelled");
                 return;
             }
 
@@ -371,6 +374,51 @@ public class TaskForm extends _DoForm {
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
             if (ma.sendMеssage(recipients, getLocalizedWord("notify_about_cancel_task", lang),
                     memo.getBody(getLocalizedEmailTemplate("task_cancel", lang)))) {
+                addValue("notify", "ok");
+            }
+        } catch (SecureException e) {
+            setBadRequest();
+            logError(e);
+        } catch (DatabaseException e) {
+            setBadRequest();
+            logError(e);
+        } catch (MsgException e) {
+            setBadRequest();
+            logError(e);
+        }
+    }
+
+    private void doAcknowledged(_Session session, String taskId) {
+        TaskDAO dao = new TaskDAO(session);
+        Task task = dao.findById(taskId);
+
+        try {
+            if (!task.getAssignee().equals(session.getUser().getId())) {
+                addContent("error", "not_assignee_user");
+                setBadRequest();
+                return;
+            } else if (task.getStatus() != TaskStatusType.OPEN) {
+                addContent("error", "task_status_is_not_open");
+                setBadRequest();
+                return;
+            }
+
+            task.setStatus(TaskStatusType.PROCESSING);
+            dao.update(task);
+
+            LanguageCode lang = session.getLang();
+            UserDAO userDAO = new UserDAO(session);
+            IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+
+            List<String> recipients = new ArrayList<>();
+            recipients.add(((User) assigneeUser).getEmail());
+
+            MailAgent ma = new MailAgent();
+            Memo memo = new Memo();
+            memo.addVar("taskTitle", task.getTitle());
+            memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+            if (ma.sendMеssage(recipients, getLocalizedWord("notify_about_task_acknowledged", lang),
+                    memo.getBody(getLocalizedEmailTemplate("task_acknowledged", lang)))) {
                 addValue("notify", "ok");
             }
         } catch (SecureException e) {

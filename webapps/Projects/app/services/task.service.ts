@@ -29,20 +29,6 @@ export class TaskService {
         ]);
     }
 
-    /*getTaskStatusTypes() {
-        return this.translate.get(['draft', 'waiting', 'processing', 'cancelled', 'open', 'pending', 'completed']).map(t => [
-            { value: 'DRAFT', text: t.draft, default: true },
-            { value: 'WAITING', text: t.waiting },
-            { value: 'PROCESSING', text: t.processing },
-            { value: 'COMPLETED', text: t.completed },
-            { value: 'CANCELLED', text: t.cancelled },
-            { value: 'OPEN', text: t.open },
-            { value: 'PENDING', text: t.pending },
-            // { value: 'PROCESSED', text: t.processing, disabled: true },
-            // { value: 'FINISHED', text: t.completed, disabled: true }
-        ]);
-    }*/
-
 
     //===================================
     //  TASK
@@ -117,6 +103,12 @@ export class TaskService {
 
     cancelTask(task: Task) {
         return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=cancel&fsid=' + task.fsid, '', { headers: HEADERS })
+            .map(response => transformPostResponse(response))
+            .catch(error => Observable.throw(transformPostResponse(error)));
+    }
+
+    acknowledgedTask(task: Task) {
+        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=acknowledged&fsid=' + task.fsid, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
     }

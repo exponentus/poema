@@ -71,6 +71,7 @@
     <caption name="request_type"/>
     <caption name="complete_task"/>
     <caption name="cancel_task"/>
+    <caption name="acknowledged_task"/>
     <caption name="send_task"/>
     <caption name="send_request"/>
     <caption name="new_request"/>

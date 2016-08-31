@@ -6,8 +6,6 @@
                 <span>{{'close' | translate}}</span>
             </button>
             <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!isValid" (click)="saveTask()">
-                <!-- <span *ngIf="isNew">{{'send_task' | translate}}</span>
-                <span *ngIf="!isNew">{{'save_close' | translate}}</span> -->
                 {{'save_close' | translate}}
             </button>
             <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
@@ -24,6 +22,9 @@
                 <i class="fa fa-check-square-o"></i>
                 <span>{{'complete_task' | translate}}</span>
             </button>
+            <!-- <button class="btn" type="button" *ngIf="canAcknowledgedTask()" (click)="acknowledgedTask()">
+                <span>{{'acknowledged_task' | translate}}</span>
+            </button> -->
             <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
@@ -51,7 +52,6 @@
             <div class="task-tab__title" [class.active]="showProperty" [class.hidden]="!showPropertyTabTitle" (click)="toggleShowProperty()">{{'properties' | translate}}</div>
             <div class="task-tab__title" [class.active]="showSubtasks" [class.hidden]="!hasSubTasks() && !hasRequests()" (click)="toggleShowSubtasks()">
                 <i class="fa fa-align-left"></i>
-                <!-- <span>{{'subtasks' | translate}}</span> -->
                 <span>{{'execution' | translate}}</span>
             </div>
             <div class="task-tab__title" [class.active]="showACL" [class.hidden]="!showACLTabTitle" (click)="toggleShowACL()">

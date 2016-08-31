@@ -18,8 +18,9 @@ import { Attachment } from '../../models';
                 <div class="attachment-list__item" *ngFor="let att of model.attachments">
                     <div class="attachment">
                         <a class="attachment__link" title="{{att.realFileName}}" href="{{model.url}}&attachment={{att.id}}">{{att.realFileName}}</a>
-                        <img img-view *ngIf="isThumbnailSupported(att)" url="{{model.url}}&attachment={{att.id}}"
-                            src="{{model.url}}&attachment={{att.id}}&_thumbnail" />
+                        <img img-view *ngIf="isThumbnailSupported(att)"
+                            [url]="att.base64 || model.url + '&attachment=' + att.id"
+                            [src]="att.base64 || model.url + '&attachment=' + att.id + '&_thumbnail'" />
                         <span class="attachment__size">{{model.size}}</span>
                         <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
                             <i class="fa fa-times"></i>
@@ -77,7 +78,7 @@ export class AttachmentsComponent {
 
     uploadFile(files: File[]) {
         this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.model.fsid }, files).subscribe(response => {
-            this.upload.emit(response);
+            this.upload.emit({ response, files });
         });
     }
 }
