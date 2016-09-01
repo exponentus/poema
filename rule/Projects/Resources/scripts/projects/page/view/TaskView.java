@@ -79,7 +79,7 @@ public class TaskView extends _DoPage {
 		}
 	}
 
-	private static TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
+	public static TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
 		TaskFilter filter = new TaskFilter();
 
 		filter.setProject(formData.getValueSilently("projectId"));

@@ -22,7 +22,7 @@
                 <urlmapping>/rest/*</urlmapping>
                 <allowcors>*</allowcors>
                 <services>
-                    
+                    <class>projects.services.ProjectsService</class>
                 </services>
             </rest>
 		</app>
