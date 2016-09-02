@@ -171,15 +171,16 @@ public class Task extends SecureAppEntity<UUID> {
 
 	public void setStatus(TaskStatusType status) {
 		this.status = status;
+		if (status != TaskStatusType.OPEN) {
+			resetEditors();
+		} else {
+			addReaderEditor(author);
+		}
 		statusDate = new Date();
 	}
 
 	public Date getStatusDate() {
 		return statusDate;
-	}
-
-	public void setStatusDate(Date statusDate) {
-		this.statusDate = statusDate;
 	}
 
 	public TaskPriorityType getPriority() {
