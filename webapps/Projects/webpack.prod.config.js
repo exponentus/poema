@@ -6,7 +6,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 // const CopyWebpackPlugin = require('copy-webpack-plugin');
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
-const OccurenceOrderPlugin = require('webpack/lib/optimize/OccurenceOrderPlugin');
+// const OccurenceOrderPlugin = require('webpack/lib/optimize/OccurenceOrderPlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
@@ -45,6 +45,12 @@ module.exports = {
                 }
             }
         }, {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loaders: [
+                'babel-loader'
+            ]
+        }, {
             test: /\.woff$/,
             loader: "url?limit=10000&minetype=application/font-woff"
         }, {
@@ -81,7 +87,7 @@ module.exports = {
                 'ENV': JSON.stringify(metadata.ENV)
             }
         }),
-        new OccurenceOrderPlugin(true),
+        // new OccurenceOrderPlugin(true),
         new UglifyJsPlugin({
             dead_code: true,
             unused: true,
@@ -93,9 +99,16 @@ module.exports = {
                 keep_fnames: true
             },
             comments: false
+        }),
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
         })
     ],
     resolve: {
         extensions: ['', '.ts', '.js']
+    },
+    stats: {
+        colors: true
     }
 };
