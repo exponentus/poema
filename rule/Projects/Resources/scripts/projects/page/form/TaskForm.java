@@ -124,6 +124,7 @@ public class TaskForm extends _DoForm {
                     taskType = parentTask.getTaskType();
                     task.setProject(parentTask.getProject());
                 }
+                task.setAuthor(session.getUser());
                 task.setStatus(TaskStatusType.OPEN);
             } else {
                 task = dao.findById(id);
