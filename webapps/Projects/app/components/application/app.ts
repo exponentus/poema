@@ -2,9 +2,6 @@ import { Component, HostBinding, HostListener, OnInit, OnDestroy } from '@angula
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { NavbarComponent } from '../navbar/navbar';
-import { NavComponent } from '../nav/nav';
-
 import { EnvironmentActions, AppActions, ReferenceActions, StaffActions } from '../../actions';
 import { AppService, ReferenceService, StaffService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
@@ -13,8 +10,7 @@ import { Tag, User } from '../../models';
 
 @Component({
     selector: 'app',
-    template: require('./app.html'),
-    directives: [NavbarComponent, NavComponent],
+    template: require('./app.html')
 })
 
 export class AppComponent {

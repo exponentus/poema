@@ -36,8 +36,7 @@ import { Task, Comment } from '../../models';
                 </button>
             </section>
         </div>
-    `,
-    directives: [CommentComponent]
+    `
 })
 
 export class CommentsComponent {

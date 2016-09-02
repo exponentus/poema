@@ -42,7 +42,7 @@
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
             <div class="header-title-flex">
                 <label>{{title | translate}}</label>
-                <input [class.invalid]="errors.title" autofocus required maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
+                <input [class.invalid]="errors.title" autofocus required name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
                 <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
             </div>
         </h1>
@@ -139,7 +139,7 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.startDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" (select)="setStartDate($event)" [(ngModel)]="task.startDate" />
+                        <input datepicker class="span2" *ngIf="isEditable" name="startDate" (select)="setStartDate($event)" [(ngModel)]="task.startDate" />
                         <error-message [error]="errors.startDate"></error-message>
                     </div>
                 </div>
@@ -151,7 +151,7 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.dueDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
+                        <input datepicker class="span2" *ngIf="isEditable" name="dueDate" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
                         <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                         <error-message [error]="errors.dueDate"></error-message>
                     </div>
@@ -187,7 +187,7 @@
         <div class="record-author" *ngIf="task.authorId">
             <span>{{'author' | translate}}</span>
             <employee-input [editable]="false" [ids]="[task.authorId]"></employee-input>
-            <time>{{task.regDate}}</time>
+            <span>{{task.regDate}}</span>
         </div>
     </footer>
 </form>

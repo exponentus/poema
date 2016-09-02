@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { KeysPipe, ValuesPipe } from '../../pipes';
 import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
 import { AppService } from '../../services';
@@ -17,11 +16,7 @@ import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'task',
-    template: require('./templates/task.html'),
-    directives: [
-        CommentsComponent
-    ],
-    pipes: [KeysPipe, ValuesPipe]
+    template: require('./templates/task.html')
 })
 
 export class TaskComponent {
@@ -184,15 +179,6 @@ export class TaskComponent {
         this.showSubtasks = true; // !this.showSubtasks;
         // if (this.showSubtasks) {
         this.showRequests = false;
-        this.showProperty = false;
-        this.showACL = false;
-        // }
-    }
-
-    toggleShowRequests() {
-        this.showRequests = true; // !this.showRequests;
-        // if (this.showRequests) {
-        this.showSubtasks = false;
         this.showProperty = false;
         this.showACL = false;
         // }

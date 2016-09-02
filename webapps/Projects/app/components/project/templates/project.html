@@ -23,7 +23,7 @@
         </div>
         <h1 class="header-title header-title-flex">
             <label>{{title | translate}}</label>
-            <input [class.invalid]="errors.name" autofocus required maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
+            <input [class.invalid]="errors.name" autofocus required name="name" maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
         </h1>
     </header>
     <section class="content-body">
@@ -92,7 +92,7 @@
                             <div class="span2" *ngIf="!isEditable">
                                 <span class="input">{{project.finishDate}}</span>
                             </div>
-                            <input class="span2" datepicker *ngIf="isEditable" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" />
+                            <input class="span2" datepicker *ngIf="isEditable" name="finishDate" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" />
                             <span>{{'now' | dateDuration:project.finishDate}}</span>
                             <error-message [error]="errors.finishDate"></error-message>
                         </div>
@@ -139,7 +139,7 @@
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
             <employee-input [ids]="[project.authorId]"></employee-input>
-            <time>{{project.regDate}}</time>
+            <span>{{project.regDate}}</span>
         </div>
     </footer>
 </form>

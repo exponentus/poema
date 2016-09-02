@@ -14,12 +14,12 @@
             <span class="request-resolution {{request.resolution | text:'L'}}" *ngIf="request.resolution == 'ACCEPTED'">
                 <i class="fa fa-check"></i>
                 {{'accepted' | translate}}
-                <time class="request__resolution_time">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>
+                <span class="request__resolution_time">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
             </span>
             <span class="request-resolution {{request.resolution | text:'L'}}" *ngIf="request.resolution == 'DECLINED'">
                 <i class="fa fa-times"></i>
                 {{'declined' | translate}}
-                <time class="request__resolution_time">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</time>
+                <span class="request__resolution_time">{{request.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
             </span>
         </h1>
     </header>
@@ -49,7 +49,7 @@
                 </div>
                 <div class="controls">
                     <div class="span8">
-                        <textarea [disabled]="!editable" [(ngModel)]="comment"></textarea>
+                        <textarea name="comment" [disabled]="!editable" [(ngModel)]="comment"></textarea>
                         <!-- <markdown-editor
                             [markdown]="''"
                             editable="true"
@@ -73,7 +73,7 @@
                 </div>
                 <div class="controls">
                     <div class="span8">
-                        <input datepicker class="span2" (select)="setDueDate($event)" />
+                        <input datepicker class="span2" name="dueDate" (select)="setDueDate($event)" />
                         <div class="help">
                             {{'new_due_date_help' | translate}}
                         </div>
@@ -94,7 +94,7 @@
         <div class="record-author" *ngIf="request.authorId">
             <span>{{'author' | translate}}</span>
             <employee-input [ids]="[request.authorId]"></employee-input>
-            <time>{{request.regDate}}</time>
+            <span>{{request.regDate}}</span>
         </div>
     </footer>
 </form>

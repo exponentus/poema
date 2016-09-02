@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { IEnvironmentState } from '../../reducers/environment.reducer';
-import { KeysPipe, ValuesPipe } from '../../pipes';
 import { NotificationService } from '../../shared/notification';
 import { ProjectService } from '../../services';
 import { Project, Organization, Employee, Attachment } from '../../models';
@@ -13,8 +12,7 @@ import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'project',
-    template: require('./templates/project.html'),
-    pipes: [KeysPipe, ValuesPipe]
+    template: require('./templates/project.html')
 })
 
 export class ProjectComponent {

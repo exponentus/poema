@@ -1,12 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Router } from '@angular/router';
-import { FormBuilder, Validators, ControlGroup, Control, FORM_DIRECTIVES } from '@angular/common';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { KeysPipe } from '../../pipes/keys.pipe';
 import { AppService } from '../../services/app.service';
 import { TranslateService as translateService } from '../../services/translate.service';
 import { IAuthedState } from '../../reducers/authed.reducer';
@@ -21,15 +20,13 @@ const HEADERS = new Headers({
 @Component({
     selector: '[user-profile]',
     template: require('./user-profile.html'),
-    directives: [FORM_DIRECTIVES],
-    providers: [FormBuilder],
-    pipes: [KeysPipe]
+    providers: [FormBuilder]
 })
 
 export class UserProfileComponent {
     private sub: any;
     user: User = null;
-    form: ControlGroup;
+    form: FormGroup;
     changePassword: boolean = false;
     pageSize: number;
     language: string = 'RUS';
@@ -103,7 +100,7 @@ export class UserProfileComponent {
                     this.ng2Translate.use(langCode);
                 });
                 createCookie('lang', langCode, 365);
-                window.location.reload();
+                // window.location.reload();
             });
     }
 

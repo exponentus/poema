@@ -1,4 +1,4 @@
-import 'es6-shim';
+import 'core-js/es6';
 import 'reflect-metadata';
 import 'zone.js/dist/zone';
 import 'moment';
@@ -36,5 +36,6 @@ import 'rxjs/add/observable/combineLatest';
 import '@angular/core';
 import '@angular/common';
 import '@angular/http';
+import '@angular/forms';
 import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';

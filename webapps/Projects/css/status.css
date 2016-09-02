@@ -8,6 +8,7 @@ Cancelled = Red
 Pending = Orange
 */
 
+.status-active,
 .status-cancelled,
 .status-completed,
 .status-draft,
@@ -27,6 +28,11 @@ Pending = Orange
 .status-open {
     background: #ecedff;
     color: blue;
+}
+
+.status-active {
+    background: #FFEB3B;
+    color: #444444;
 }
 
 .status-processing {

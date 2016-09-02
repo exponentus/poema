@@ -20,9 +20,9 @@ export class ProjectService {
     ) { }
 
     getProjectStatusTypes() {
-        return this.translate.get(['draft', 'processing', 'completed']).map(t => [
+        return this.translate.get(['draft', 'active', 'completed']).map(t => [
             { value: 'DRAFT', text: t.draft, default: true },
-            { value: 'PROCESSING', text: t.processing },
+            { value: 'ACTIVE', text: t.active },
             { value: 'COMPLETED', text: t.completed }
         ]);
     }
