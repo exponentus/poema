@@ -6,7 +6,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
         <div class="dialog__container">
             <header class="dialog__head">{{'cancel_task' | translate}}?</header>
             <section class="dialog__body">
-                <textarea name="comment" placeholder="{{'comment' | translate}}" [(ngModel)]="comment"></textarea>
+                <textarea name="comment" placeholder="{{'cancel_reason' | translate}}" [(ngModel)]="comment"></textarea>
             </section>
             <footer class="dialog__footer">
                 <button type="button" class="btn" (click)="cancel.emit(true)">
