@@ -265,6 +265,10 @@
         <entry lang="RUS">Open</entry>
         <entry lang="ENG">Open</entry>
     </sentence>
+    <sentence mode="on" keyword="active">
+        <entry lang="RUS">Активный</entry>
+        <entry lang="ENG">Active</entry>
+    </sentence>
     <sentence mode="on" keyword="waiting">
         <entry lang="RUS">Ожидание срока</entry>
         <entry lang="ENG">On-hold</entry>
@@ -285,17 +289,6 @@
         <entry lang="RUS">Отменен</entry>
         <entry lang="ENG">Cancelled</entry>
     </sentence>
-
-    <!-- remove -->
-    <sentence mode="on" keyword="processed">
-        <entry lang="RUS">В работе</entry>
-        <entry lang="ENG">Processing</entry>
-    </sentence>
-    <sentence mode="on" keyword="finished">
-        <entry lang="RUS">Завершен</entry>
-        <entry lang="ENG">Completed</entry>
-    </sentence>
-    <!-- /remove -->
 
     <sentence mode="on" keyword="urgent">
         <entry lang="RUS">Срочный</entry>
@@ -343,12 +336,11 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
-     <sentence mode="on" keyword="notify_about_request_resolution">
+    <sentence mode="on" keyword="notify_about_request_resolution">
         <entry lang="RUS">Уведомление о решении по запросу</entry>
         <entry lang="ENG">Notify about a request decision</entry>
         <entry lang="KAZ">Уведомление о решении по запросу</entry>
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
-    
 </vocabulary>

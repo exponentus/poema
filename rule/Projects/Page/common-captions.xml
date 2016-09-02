@@ -136,11 +136,7 @@
     <caption name="cancelled"/>
     <caption name="open"/>
     <caption name="pending"/>
-
-    <!-- remove -->
-    <caption name="processed"/>
-    <caption name="finished"/>
-    <!-- /remove -->
+    <caption name="active"/>
 
     <caption name="urgent"/>
     <caption name="high"/>
