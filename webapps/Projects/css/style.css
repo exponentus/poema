@@ -8,6 +8,8 @@
 @import 'dashboard.css';
 @import 'pikaday.css';
 @import 'rt-editor.css';
+@import 'status.css';
+@import 'priority.css';
 
 [tabindex='-1'] {
     outline: 0;
