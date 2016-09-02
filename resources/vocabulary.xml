@@ -81,6 +81,11 @@
         <entry lang="KAZ">Поле не заполнено</entry>
         <entry lang="ENG">The field is empty</entry>
     </sentence>
+     <sentence mode="on" keyword="field_is_too_long">
+        <entry lang="RUS">Содержимое поля слишком большое</entry>
+        <entry lang="KAZ">Содержимое поля слишком большое</entry>
+        <entry lang="ENG">The field is too long</entry>
+    </sentence>
     <sentence mode="on" keyword="date_format_does_not_match_to">
         <entry lang="RUS">Формат даты не соответствует шаблону</entry>
         <entry lang="KAZ">Формат даты не соответствует шаблону</entry>
