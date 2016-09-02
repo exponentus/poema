@@ -150,11 +150,11 @@ public class TaskForm extends _DoForm {
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
 			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
 			task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
-			if (task.getStatus() == TaskStatusType.OPEN) {
+			if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
 				if (new Date().before(task.getStartDate())) {
 					task.setStatus(TaskStatusType.WAITING);
 				} else {
-					// task.setStatus(TaskStatusType.PROCESSING);
+					task.setStatus(TaskStatusType.PROCESSING);
 				}
 			}
 			task.setBody(formData.getValueSilently("body"));
