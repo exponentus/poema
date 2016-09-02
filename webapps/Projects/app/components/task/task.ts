@@ -47,6 +47,7 @@ export class TaskComponent {
     showRequests: boolean = false;
     showACLTabTitle: boolean = false;
     showACL: boolean = false;
+    showTaskCancelDialog = false;
     hasUnResolvedRequest: boolean = true;
     hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
@@ -104,6 +105,7 @@ export class TaskComponent {
             this.isSubtask = params['taskId'] && params['new'] === 'new';
             this.showPropertyTabTitle = !this.isNew;
             this.showACLTabTitle = this.showPropertyTabTitle;
+            this.showTaskCancelDialog = false;
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
                 task => {
@@ -223,8 +225,12 @@ export class TaskComponent {
     }
 
     cancelTask() {
+        this.showTaskCancelDialog = true;
+    }
+
+    doCancelTaskRequest(cancelComment?: string) {
         let noty = this.notifyService.process(this.translate.instant('wait_while_process')).show();
-        this.taskService.cancelTask(this.task).subscribe(
+        this.taskService.cancelTask(this.task, cancelComment).subscribe(
             response => {
                 noty.set({ type: 'success', message: response.message }).remove(1500);
                 this.close();
@@ -320,7 +326,7 @@ export class TaskComponent {
     }
 
     declineRequest(request: Request) {
-        this.taskService.doDeclineRequest(request).subscribe(action => {
+        this.taskService.doDeclineRequest(request, '').subscribe(action => {
             this.store.dispatch(action);
             this.loadRequests(1);
         });
@@ -339,6 +345,15 @@ export class TaskComponent {
 
     hasSubTasks() {
         return this.subTasks && this.subTasks.length;
+    }
+
+    onConfirmTaskCancelDialog(cancelComment) {
+        this.doCancelTaskRequest(cancelComment);
+        // this.showTaskCancelDialog = false;
+    }
+
+    onCancelTaskCancelDialog() {
+        this.showTaskCancelDialog = false;
     }
 
     //

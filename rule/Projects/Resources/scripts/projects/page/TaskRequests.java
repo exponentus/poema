@@ -81,10 +81,10 @@ public class TaskRequests extends _DoForm {
 
         switch (action) {
             case "accept":
-                doResolution(session, requestId, ResolutionType.ACCEPTED);
+                doResolution(session, requestId, ResolutionType.ACCEPTED, formData.getValueSilently("comment"));
                 break;
             case "decline":
-                doResolution(session, requestId, ResolutionType.DECLINED);
+                doResolution(session, requestId, ResolutionType.DECLINED, formData.getValueSilently("comment"));
                 break;
             default:
                 addValue("error", "unknown resolutionType");
@@ -157,7 +157,7 @@ public class TaskRequests extends _DoForm {
         }
     }
 
-    private void doResolution(_Session session, String requestId, ResolutionType resolutionType) {
+    private void doResolution(_Session session, String requestId, ResolutionType resolutionType, String comment) {
         try {
             RequestDAO requestDAO = new RequestDAO(session);
             Request request = requestDAO.findById(requestId);
@@ -215,6 +215,7 @@ public class TaskRequests extends _DoForm {
 
             request.setResolution(resolutionType);
             request.setResolutionTime(new Date());
+            request.setDecisionComment(comment);
             requestDAO.update(request);
 
             Messages.sendMessageOfRequestDecision(session, request);

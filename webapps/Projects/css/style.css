@@ -10,6 +10,7 @@
 @import 'rt-editor.css';
 @import 'status.css';
 @import 'priority.css';
+@import 'task-cancel-dialog.css';
 
 [tabindex='-1'] {
     outline: 0;

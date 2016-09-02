@@ -29,6 +29,7 @@ export class Task {
     dueDate: Date;
     tagIds: string[];
     customerObservation: boolean = false;
+    cancellationComment: string;
     hasAttachments: boolean;
     attachmentIds: string[];
 

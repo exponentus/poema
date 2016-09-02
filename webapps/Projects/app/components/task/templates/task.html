@@ -48,6 +48,9 @@
         </h1>
     </header>
     <section class="content-body">
+        <section *ngIf="task.status == 'CANCELLED' && task.cancellationComment" class="task-cancel-info">
+            <span>{{'cancel_reason' | translate}}:&nbsp;</span><span>{{task.cancellationComment}}</span>
+        </section>
         <div class="task-tabs noselect" *ngIf="hasSubTasks() || hasRequests() || showACLTabTitle">
             <div class="task-tab__title" [class.active]="showProperty" [class.hidden]="!showPropertyTabTitle" (click)="toggleShowProperty()">{{'properties' | translate}}</div>
             <div class="task-tab__title" [class.active]="showSubtasks" [class.hidden]="!hasSubTasks() && !hasRequests()" (click)="toggleShowSubtasks()">
@@ -191,3 +194,4 @@
         </div>
     </footer>
 </form>
+<task-cancel-dialog *ngIf="showTaskCancelDialog" (confirm)="onConfirmTaskCancelDialog($event)" (cancel)="onCancelTaskCancelDialog()"></task-cancel-dialog>

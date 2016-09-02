@@ -208,7 +208,7 @@ public class TaskForm extends _DoForm {
                 doTaskComplete(session, taskId);
                 break;
             case "cancel":
-                doTaskCancel(session, taskId);
+                doTaskCancel(session, taskId, formData.getValueSilently("comment"));
                 break;
             case "acknowledged":
                 doAcknowledged(session, taskId);
@@ -348,7 +348,7 @@ public class TaskForm extends _DoForm {
         }
     }
 
-    private void doTaskCancel(_Session session, String taskId) {
+    private void doTaskCancel(_Session session, String taskId, String comment) {
         TaskDAO dao = new TaskDAO(session);
         Task task = dao.findById(taskId);
 
@@ -359,6 +359,7 @@ public class TaskForm extends _DoForm {
             }
 
             task.setStatus(TaskStatusType.CANCELLED);
+            task.setCancellationComment(comment);
             dao.update(task);
 
             LanguageCode lang = session.getLang();

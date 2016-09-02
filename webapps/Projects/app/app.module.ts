@@ -30,7 +30,9 @@ import { TaskComponent } from './components/task/task';
 import { TaskListComponent } from './components/task/task-list';
 import { TaskStreamComponent } from './components/task/task-stream';
 import { TaskFilterComponent } from './components/task/task-filter';
+import { TaskCancelDialogComponent } from './components/task/task-cancel-dialog';
 import { RequestComponent } from './components/request/request';
+import { RequestDeclineDialogComponent } from './components/request/request-decline-dialog';
 import { CommentsComponent } from './components/comment/comments';
 import { CommentComponent } from './components/comment/comment';
 import { UserProfileComponent } from './components/user-profile/user-profile';
@@ -63,7 +65,6 @@ import { APP_STORE_ACTIONS } from './actions';
 import { TranslateService as translateService } from './services/translate.service';
 
 import { AuthGuard } from './auth.guard';
-import { RedirectGuard } from './redirect.guard';
 
 @NgModule({
     declarations: [
@@ -79,7 +80,9 @@ import { RedirectGuard } from './redirect.guard';
         TaskListComponent,
         TaskStreamComponent,
         TaskFilterComponent,
+        TaskCancelDialogComponent,
         RequestComponent,
+        RequestDeclineDialogComponent,
         CommentsComponent,
         CommentComponent,
         UserProfileComponent,
@@ -123,8 +126,7 @@ import { RedirectGuard } from './redirect.guard';
         APP_SERVICES,
         APP_STORE,
         APP_STORE_ACTIONS,
-        AuthGuard,
-        RedirectGuard
+        AuthGuard
     ],
     bootstrap: [AppComponent]
 })

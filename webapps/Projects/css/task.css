@@ -33,6 +33,15 @@
     padding: 0;
 }
 
+.task-cancel-info {
+    background: #ffdbd9;
+    border-color: #ebccd1;
+    border-radius: 2px;
+    color: #a94442;
+    font-size: 1.2em;
+    margin: 1px;
+    padding: 6px 20px;
+}
 
 /* .task-tabs */
 

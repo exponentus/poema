@@ -232,6 +232,14 @@
         <entry lang="RUS">Выполнение</entry>
         <entry lang="ENG">Execution</entry>
     </sentence>
+    <sentence mode="on" keyword="cancel_reason">
+        <entry lang="RUS">Причина отмены</entry>
+        <entry lang="ENG">Cancel reason</entry>
+    </sentence>
+    <sentence mode="on" keyword="decline_reason">
+        <entry lang="RUS">Причина отклонения</entry>
+        <entry lang="ENG">Decline reason</entry>
+    </sentence>
     <sentence mode="on" keyword="request_type">
         <entry lang="RUS">Тип запроса</entry>
         <entry lang="ENG">Request type</entry>

@@ -27,6 +27,7 @@ export class RequestComponent {
     private dueDate: string = '';
     private editable: boolean = true;
     private isResolveAction: boolean = false;
+    private showDeclineDialog: boolean = false;
 
     redirectUrl: any;
 
@@ -87,6 +88,18 @@ export class RequestComponent {
         this.router.navigateByUrl(this.redirectUrl);
     }
 
+    onConfirmDeclineDialog(comment: string) {
+        this.doDecline(this.request, comment);
+    }
+
+    onCancelDeclineDialog() {
+        this.showDeclineDialog = false;
+    }
+
+    decline() {
+        this.showDeclineDialog = true;
+    }
+
     cancel() {
         this.store.dispatch({ type: TaskActions.TASK_REQUEST_CANCEL });
     }
@@ -108,8 +121,8 @@ export class RequestComponent {
         });
     }
 
-    doDecline(request: Request) {
-        this.taskService.doDeclineRequest(request).subscribe(action => {
+    doDecline(request: Request, comment: string) {
+        this.taskService.doDeclineRequest(request, comment).subscribe(action => {
             // this.store.dispatch(action);
             this.close();
         });

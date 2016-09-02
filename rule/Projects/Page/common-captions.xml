@@ -87,6 +87,8 @@
     <caption name="comments"/>
     <caption name="requests"/>
     <caption name="execution"/>
+    <caption name="cancel_reason"/>
+    <caption name="decline_reason"/>
 
     <caption name="request_time"/>
 

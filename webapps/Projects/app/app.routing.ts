@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
-import { RedirectGuard } from './redirect.guard';
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
@@ -13,7 +12,7 @@ import { LoginComponent } from './components/login';
 import { User } from './models/user';
 
 const routes: Routes = [
-    { path: '', component: TasksComponent, canActivate: [RedirectGuard, AuthGuard] },
+    { path: '', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId', component: ProjectComponent, canActivate: [AuthGuard] },

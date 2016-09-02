@@ -101,8 +101,8 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    cancelTask(task: Task) {
-        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=cancel&fsid=' + task.fsid, '', { headers: HEADERS })
+    cancelTask(task: Task, comment: string) {
+        return this.http.put('p?id=task-form&taskId=' + task.id + '&_action=cancel&fsid=' + task.fsid + '&comment=' + comment, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
@@ -172,8 +172,8 @@ export class TaskService {
             .catch(error => Observable.throw(transformPostResponse(error)));
     }
 
-    doDeclineRequest(request: Request) {
-        let url = 'p?id=task-requests&requestId=' + request.id + '&_action=decline&fsid=' + request.fsid;
+    doDeclineRequest(request: Request, comment: string) {
+        let url = 'p?id=task-requests&requestId=' + request.id + '&comment=' + comment + '&_action=decline&fsid=' + request.fsid;
         return this.http.put(url, '', { headers: HEADERS })
             .map(response => transformPostResponse(response))
             .catch(error => Observable.throw(transformPostResponse(error)));

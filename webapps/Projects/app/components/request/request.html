@@ -24,6 +24,9 @@
         </h1>
     </header>
     <section class="content-body">
+        <section *ngIf="request.resolution == 'DECLINED' && request.decisionComment" class="task-cancel-info">
+            <span>{{'decline_reason' | translate}}:&nbsp;</span><span>{{request.decisionComment}}</span>
+        </section>
         <fieldset class="fieldset">
             <div class="form-group">
                 <div class="control-label">
@@ -82,7 +85,7 @@
             </div>
         </fieldset>
         <div class="request__buttons">
-            <button type="button" class="btn" (click)="doDecline(request)">
+            <button type="button" class="btn" (click)="decline(request)">
                 {{'decline' | translate}}
             </button>
             <button type="button" class="btn btn-primary" [disabled]="request.requestType.name == 'prolong' && !dueDate" (click)="doAccept(request)">
@@ -98,3 +101,4 @@
         </div>
     </footer>
 </form>
+<request-decline-dialog *ngIf="showDeclineDialog" (confirm)="onConfirmDeclineDialog($event)" (cancel)="onCancelDeclineDialog()"></request-decline-dialog>
