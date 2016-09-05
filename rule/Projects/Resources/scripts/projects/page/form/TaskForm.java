@@ -363,7 +363,7 @@ public class TaskForm extends _DoForm {
 	}
 
 	private void doTaskCancel(_Session session, String taskId, String comment) {
-		TaskDAO dao = new TaskDAO(session);
+		TaskDAO dao = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
 		Task task = dao.findById(taskId);
 
 		try {
