@@ -149,7 +149,7 @@ public class TaskRequests extends _DoForm {
 			task.setStatus(TaskStatusType.PENDING);
 			taskDAO.update(task);
 
-			Messages.sendMessageOfNewRequest(session, request, task);
+			Messages.sendOfNewRequest(session, request, task);
 		} catch (SecureException e) {
 			logError(e);
 			setBadRequest();

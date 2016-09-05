@@ -34,7 +34,7 @@ public class TaskWatcher extends _DoScheduledTask {
 				try {
 					tDao.update(task);
 					logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
-					Messages.sendMessageToAssignee(session, task);
+					Messages.sendToAssignee(session, task);
 				} catch (SecureException e) {
 					setError(e);
 				} catch (MsgException e) {

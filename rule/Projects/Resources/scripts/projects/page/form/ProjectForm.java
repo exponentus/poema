@@ -147,7 +147,7 @@ public class ProjectForm extends _DoForm {
                 IUser<Long> user = session.getUser();
                 project.addReaderEditor(user);
                 project = dao.add(project);
-                Messages.sendMessageOfNewProject(session, project);
+                Messages.sendOfNewProject(session, project);
             } else {
                 project = dao.update(project);
             }

@@ -193,7 +193,7 @@ public class TaskForm extends _DoForm {
 			}
 
 			if (isNew && task.getStatus() == TaskStatusType.PROCESSING) {
-				Messages.sendMessageToAssignee(session, task);
+				Messages.sendToAssignee(session, task);
 			}
 		} catch (SecureException e) {
 			setBadRequest();
@@ -335,21 +335,8 @@ public class TaskForm extends _DoForm {
 			task.setStatus(TaskStatusType.COMPLETED);
 			dao.update(task);
 
-			LanguageCode lang = session.getLang();
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			Messages.sendOfTaskCompleted(session, task);
 
-			List<String> recipients = new ArrayList<>();
-			recipients.add(((User) assigneeUser).getEmail());
-
-			MailAgent ma = new MailAgent();
-			Memo memo = new Memo();
-			memo.addVar("taskTitle", task.getTitle());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-			if (ma.sendMеssage(recipients, getLocalizedWord("notify_about_finish_task", lang),
-			        memo.getBody(getLocalizedEmailTemplate("task_finish", lang)))) {
-				addValue("notify", "ok");
-			}
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
