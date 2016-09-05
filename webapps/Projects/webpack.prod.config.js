@@ -81,7 +81,7 @@ module.exports = {
         }),
         // new CompressionPlugin({regExp: /\.css$|\.html$|\.js$|\.map$/, threshold: 1500}),
         // new CopyWebpackPlugin([{from: './src/index.html', to: 'index.html'}]),
-        new DedupePlugin(),
+        // new DedupePlugin(),
         new DefinePlugin({
             'webpack': {
                 'ENV': JSON.stringify(metadata.ENV)
