@@ -16,6 +16,7 @@ import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting.*;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
+import com.exponentus.user.SuperUser;
 import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -259,10 +260,9 @@ public class TaskForm extends _DoForm {
         } else if (formData.getValueSilently("title").length() > 140) {
             ve.addError("title", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
         }
-        // if (formData.getValueSilently("body").length() > 2048) {
-        // ve.addError("body", "maxlen_2048",
-        // getLocalizedWord("field_is_too_long", lang));
-        // }
+        if (formData.getValueSilently("body").length() > 10000) {
+            ve.addError("body", "maxlen_10000", getLocalizedWord("field_is_too_long", lang));
+        }
         if (formData.getValueSilently("status").isEmpty()) {
             ve.addError("status", "required", getLocalizedWord("field_is_empty", lang));
         }
@@ -392,7 +392,7 @@ public class TaskForm extends _DoForm {
     }
 
     private void doAcknowledged(_Session session, String taskId) {
-        TaskDAO dao = new TaskDAO(session);
+        TaskDAO dao = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
         Task task = dao.findById(taskId);
 
         try {
@@ -400,7 +400,7 @@ public class TaskForm extends _DoForm {
                 addContent("error", "not_assignee_user");
                 setBadRequest();
                 return;
-            } else if (task.getStatus() != TaskStatusType.OPEN) {
+            } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
                 addContent("error", "task_status_is_not_open");
                 setBadRequest();
                 return;
@@ -419,6 +419,7 @@ public class TaskForm extends _DoForm {
             MailAgent ma = new MailAgent();
             Memo memo = new Memo();
             memo.addVar("taskTitle", task.getTitle());
+            memo.addVar("taskAssignee", assigneeUser.getUserName());
             memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
             if (ma.sendMеssage(recipients, getLocalizedWord("notify_about_task_acknowledged", lang),
                     memo.getBody(getLocalizedEmailTemplate("task_acknowledged", lang)))) {

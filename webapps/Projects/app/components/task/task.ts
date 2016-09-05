@@ -409,7 +409,7 @@ export class TaskComponent {
     }
 
     canAcknowledgedTask() {
-        return !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && this.task.status == 'OPEN';
+        return !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && (this.task.status == 'OPEN' || this.task.status == 'WAITING');
     }
 
     canRequestAction() {

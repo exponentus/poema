@@ -41,8 +41,8 @@ Pending = Orange
 }
 
 .status-waiting {
-    background: #03a9f4;
-    color: #fff;
+    background: #c5c9ff;
+    color: #000;
 }
 
 .status-completed {

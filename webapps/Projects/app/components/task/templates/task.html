@@ -22,9 +22,9 @@
                 <i class="fa fa-check-square-o"></i>
                 <span>{{'complete_task' | translate}}</span>
             </button>
-            <!-- <button class="btn" type="button" *ngIf="canAcknowledgedTask()" (click)="acknowledgedTask()">
+            <button class="btn" type="button" *ngIf="canAcknowledgedTask()" (click)="acknowledgedTask()">
                 <span>{{'acknowledged_task' | translate}}</span>
-            </button> -->
+            </button>
             <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
