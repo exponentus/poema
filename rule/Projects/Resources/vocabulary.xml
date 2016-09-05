@@ -351,4 +351,11 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
+     <sentence mode="on" keyword="notify_about_task_acknowledged">
+        <entry lang="RUS">Уведомление о принятии задания</entry>
+        <entry lang="ENG">Notify about a task  acknowledging</entry>
+        <entry lang="KAZ">Уведомление о принятии задания</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
 </vocabulary>

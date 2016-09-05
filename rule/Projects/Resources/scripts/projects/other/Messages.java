@@ -168,4 +168,44 @@ public class Messages {
 		        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 
 	}
+
+	public static void sendOfNewAcknowledging(_Session session, Task task) throws MsgException {
+		AppEnv appEnv = session.getAppEnv();
+		LanguageCode lang = session.getLang();
+		String msgTemplate = "task_acknowledged";
+		UserDAO userDAO = new UserDAO(session);
+
+		Memo memo = new Memo();
+		memo.addVar("regNumber", task.getRegNumber());
+		memo.addVar("title", task.getTitle());
+		IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+		memo.addVar("assignee", assigneeUser.getUserName());
+		memo.addVar("author", task.getAuthor().getUserName());
+		memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+
+		User user = null;
+
+		try {
+			user = (User) task.getAuthor();
+		} catch (ClassCastException e) {
+
+		}
+
+		if (user != null) {
+			String slackAddr = user.getSlack();
+			if (slackAddr != null && !slackAddr.equals("")) {
+				SlackAgent sa = new SlackAgent();
+				if (sa.sendMеssage(slackAddr, memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang)))) {
+					return;
+				}
+			}
+		}
+
+		List<String> recipients = new ArrayList<>();
+		recipients.add(task.getAuthor().getEmail());
+		MailAgent ma = new MailAgent();
+		ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_acknowledged", lang),
+		        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
+
+	}
 }
