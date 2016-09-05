@@ -358,4 +358,11 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
+    <sentence mode="on" keyword="notify_about_cancel_task">
+        <entry lang="RUS">Уведомление о отмене задания</entry>
+        <entry lang="ENG">Notify about a task cancellation</entry>
+        <entry lang="KAZ">Уведомление о отмене задания</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
 </vocabulary>

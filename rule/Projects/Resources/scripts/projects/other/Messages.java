@@ -23,30 +23,53 @@ public class Messages {
 
 	public static void sendOfNewProject(_Session session, Project project) throws MsgException {
 		AppEnv appEnv = session.getAppEnv();
-		LanguageCode lang = session.getLang();
 		UserDAO userDAO = new UserDAO(session);
-		List<String> recipients = new ArrayList<>();
+		List<IUser<Long>> recipients = new ArrayList<>();
+		String msgTemplate = "new_project";
 
 		Memo memo = new Memo();
 		IUser<Long> manager = userDAO.findById(project.getManager());
-		recipients.add(manager.getEmail());
+		recipients.add(manager);
 		memo.addVar("manager", manager.getUserName());
 		IUser<Long> programmer = userDAO.findById(project.getProgrammer());
-		recipients.add(programmer.getEmail());
+		recipients.add(programmer);
 		memo.addVar("programmer", programmer.getUserName());
 		String testerName = "";
 		if (project.getTester() > 0) {
 			IUser<Long> tester = userDAO.findById(project.getTester());
-			recipients.add(tester.getEmail());
+			recipients.add(tester);
 			testerName = tester.getUserName();
 		}
 		memo.addVar("tester", testerName);
 		memo.addVar("projectName", project.getName());
 		memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
-		MailAgent ma = new MailAgent();
-		ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
-		        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, "new_project", lang)));
+
+		for (IUser<Long> u : recipients) {
+			User user = null;
+			try {
+				user = (User) u;
+			} catch (ClassCastException e) {
+
+			}
+
+			if (user != null) {
+				String slackAddr = user.getSlack();
+				if (slackAddr != null && !slackAddr.equals("")) {
+					SlackAgent sa = new SlackAgent();
+					if (sa.sendMеssage(slackAddr,
+					        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+						break;
+					}
+				}
+
+				List<String> mailRecipients = new ArrayList<>();
+				mailRecipients.add(user.getEmail());
+				MailAgent ma = new MailAgent();
+				ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", user.getDefaultLang()),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+			}
+		}
 
 	}
 
@@ -245,6 +268,45 @@ public class Messages {
 			recipients.add(user.getEmail());
 			MailAgent ma = new MailAgent();
 			ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_finish_task", user.getDefaultLang()),
+			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+		}
+	}
+
+	public static void sendOfTaskCancelled(_Session session, Task task) throws MsgException {
+		AppEnv appEnv = session.getAppEnv();
+		String msgTemplate = "task_cancelled";
+		UserDAO userDAO = new UserDAO(session);
+
+		Memo memo = new Memo();
+		memo.addVar("regNumber", task.getRegNumber());
+		memo.addVar("title", task.getTitle());
+		IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+		memo.addVar("assignee", assigneeUser.getUserName());
+		memo.addVar("author", task.getAuthor().getUserName());
+		memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
+
+		User user = null;
+
+		try {
+			user = (User) task.getAuthor();
+		} catch (ClassCastException e) {
+
+		}
+
+		if (user != null) {
+			String slackAddr = user.getSlack();
+			if (slackAddr != null && !slackAddr.equals("")) {
+				SlackAgent sa = new SlackAgent();
+				if (sa.sendMеssage(slackAddr,
+				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+					return;
+				}
+			}
+
+			List<String> recipients = new ArrayList<>();
+			recipients.add(user.getEmail());
+			MailAgent ma = new MailAgent();
+			ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", user.getDefaultLang()),
 			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
 		}
 	}

@@ -20,8 +20,6 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.messaging.email.MailAgent;
-import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._FormAttachments;
@@ -36,7 +34,6 @@ import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
 
 import administrator.dao.UserDAO;
-import administrator.model.User;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.model.Task;
@@ -363,21 +360,8 @@ public class TaskForm extends _DoForm {
 			task.setCancellationComment(comment);
 			dao.update(task);
 
-			LanguageCode lang = session.getLang();
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			Messages.sendOfTaskCancelled(session, task);
 
-			List<String> recipients = new ArrayList<>();
-			recipients.add(((User) assigneeUser).getEmail());
-
-			MailAgent ma = new MailAgent();
-			Memo memo = new Memo();
-			memo.addVar("taskTitle", task.getTitle());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-			if (ma.sendMеssage(recipients, getLocalizedWord("notify_about_cancel_task", lang),
-			        memo.getBody(getLocalizedEmailTemplate("task_cancel", lang)))) {
-				addValue("notify", "ok");
-			}
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
