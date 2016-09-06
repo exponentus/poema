@@ -1,22 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, enableProdMode } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TranslateModule, TranslateLoader } from 'ng2-translate/ng2-translate';
 import { Observable } from 'rxjs/Observable'
 
-import { ImgViewDirective } from './shared/img-view/img-view.directive';
-import { ImgViewComponent } from './shared/img-view/img-view.component';
-import { ImgViewService } from './shared/img-view/img-view.service';
-import { PaginationComponent } from './shared/pagination';
-import { AutofocusDirective } from './shared/directives/autofocus.directive';
-import { DatepickerDirective } from './shared/datepicker/datepicker';
-import { DROPDOWN_DIRECTIVES } from './shared/dropdown';
-import { TAB_DIRECTIVES } from './shared/tabs';
-import { SwitchButtonComponent } from './shared/switch-button';
-import { NotificationService, NotificationComponent } from './shared/notification';
-import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './shared/markdown';
+import { SharedModule } from './shared/shared.module';
 
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
@@ -58,7 +49,7 @@ import {
     ValuesPipe
 } from './pipes';
 
-import { APP_ROUTING } from './app.routing';
+import { APP_ROUTES } from './app.routes';
 import { APP_SERVICES } from './services';
 import { APP_STORE } from './store';
 import { APP_STORE_ACTIONS } from './actions';
@@ -67,6 +58,7 @@ import { TranslateService as translateService } from './services/translate.servi
 import { AuthGuard } from './auth.guard';
 
 @NgModule({
+    bootstrap: [AppComponent],
     declarations: [
         AppComponent,
         NavbarComponent,
@@ -96,39 +88,27 @@ import { AuthGuard } from './auth.guard';
         TagsInputComponent,
         RequestTypeInputComponent,
         TaskStatusInputComponent,
-        PaginationComponent,
-        NotificationComponent,
-        AutofocusDirective,
-        DatepickerDirective,
-        TAB_DIRECTIVES,
-        DROPDOWN_DIRECTIVES,
-        MarkdownEditorComponent, MarkedPipe,
-        SwitchButtonComponent,
-        ImgViewDirective, ImgViewComponent,
         DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe
     ],
     imports: [
         BrowserModule,
         HttpModule,
-        APP_ROUTING,
+        RouterModule.forRoot(APP_ROUTES, { useHash: true }),
         ReactiveFormsModule,
         FormsModule,
         TranslateModule.forRoot({
             provide: TranslateLoader,
             useFactory: (trs: translateService) => new CustomTranslateLoader(trs),
             deps: [translateService]
-        })
+        }),
+        SharedModule
     ],
     providers: [
-        NotificationService,
-        ImgViewService,
-        MarkdownConverter,
         APP_SERVICES,
         APP_STORE,
         APP_STORE_ACTIONS,
         AuthGuard
-    ],
-    bootstrap: [AppComponent]
+    ]
 })
 
 export class AppModule { }

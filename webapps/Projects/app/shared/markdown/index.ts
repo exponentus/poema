@@ -1,3 +1,3 @@
-export { MarkdownConverter } from './markdown-converter';
-export { MarkdownEditorComponent } from './markdown-editor';
-export { MarkedPipe } from './marked.pipe';
+export * from './markdown-converter';
+export * from './markdown-editor';
+export * from './marked.pipe';

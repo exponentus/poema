@@ -4,7 +4,7 @@ import { Project } from '../../models';
 
 @Component({
     selector: 'project-list',
-    template: require('./templates/project-list.html')
+    template: require('./project-list.html')
 })
 
 export class ProjectListComponent {

@@ -7,7 +7,7 @@ import { Task } from '../../models';
 
 @Component({
     selector: 'task-stream',
-    template: require('./templates/task-stream.html')
+    template: require('./task-stream.html')
 })
 
 export class TaskStreamComponent {

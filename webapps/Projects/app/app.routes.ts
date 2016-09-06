@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard';
@@ -11,7 +11,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { User } from './models/user';
 
-const routes: Routes = [
+export const APP_ROUTES: Routes = [
     { path: '', component: TasksComponent, canActivate: [AuthGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'projects/:projectId/tasks', component: TasksComponent, canActivate: [AuthGuard] },
@@ -31,5 +31,3 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: '**', component: TasksComponent, canActivate: [AuthGuard] }
 ];
-
-export const APP_ROUTING = RouterModule.forRoot(routes, { useHash: true });

@@ -11,7 +11,7 @@ import { Task } from '../../models/task';
 
 @Component({
     selector: 'tasks',
-    template: require('./templates/tasks.html')
+    template: require('./tasks.html')
 })
 
 export class TasksComponent {
