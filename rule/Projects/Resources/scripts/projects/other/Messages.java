@@ -249,7 +249,7 @@ public class Messages {
 		User user = null;
 
 		try {
-			user = (User) task.getAuthor();
+			user = (User) assigneeUser;
 		} catch (ClassCastException e) {
 
 		}
@@ -288,7 +288,7 @@ public class Messages {
 		User user = null;
 
 		try {
-			user = (User) task.getAuthor();
+			user = (User) assigneeUser;
 		} catch (ClassCastException e) {
 
 		}

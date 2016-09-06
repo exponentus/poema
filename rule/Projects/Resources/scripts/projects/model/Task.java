@@ -319,4 +319,5 @@ public class Task extends SecureAppEntity<UUID> {
 	public String getURL() {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&taskId=" + getIdentifier();
 	}
+
 }

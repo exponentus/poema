@@ -133,6 +133,7 @@ public class TaskForm extends _DoForm {
 					task.setParent(parentTask);
 					taskType = parentTask.getTaskType();
 					task.setProject(parentTask.getProject());
+					task.addReaders(parentTask.getReaders());
 				}
 				task.setAuthor(session.getUser());
 				task.setStatus(TaskStatusType.OPEN);
