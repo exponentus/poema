@@ -71,7 +71,7 @@ public class TaskForm extends _DoForm {
 			task.setTaskType(tDao.findByName("Programming"));
 			task.setStatus(TaskStatusType.OPEN);
 			task.setStartDate(new Date());
-			task.setDueDate(LocalDate.now().plusDays(10).toDate());
+			task.setDueDate(new LocalDate(task.getStartDate()).plusDays(10).toDate());
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
 			List<String> formFiles = null;
@@ -148,8 +148,8 @@ public class TaskForm extends _DoForm {
 			task.setTitle(formData.getValue("title"));
 			task.setTaskType(taskType);
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
-			task.setStartDate(TimeUtil.convertStringToDate(formData.getValueSilently("startDate")));
-			task.setDueDate(TimeUtil.convertStringToDate(formData.getValueSilently("dueDate")));
+			task.setStartDate(TimeUtil.stringToDate(formData.getValueSilently("startDate")));
+			task.setDueDate(TimeUtil.stringToDate(formData.getValueSilently("dueDate")));
 			if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
 				if (new Date().before(task.getStartDate())) {
 					task.setStatus(TaskStatusType.WAITING);
@@ -283,14 +283,14 @@ public class TaskForm extends _DoForm {
 		String sDate = formData.getValueSilently("startDate");
 		if (sDate.isEmpty()) {
 			ve.addError("startDate", "required", getLocalizedWord("field_is_empty", lang));
-		} else if (TimeUtil.convertStringToDate(sDate) == null) {
+		} else if (TimeUtil.stringToDate(sDate) == null) {
 			ve.addError("startDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
 
-		String dDate = formData.getValueSilently("startDate");
+		String dDate = formData.getValueSilently("dueDate");
 		if (dDate.isEmpty()) {
 			ve.addError("dueDate", "required", getLocalizedWord("field_is_empty", lang));
-		} else if (TimeUtil.convertStringToDate(dDate) == null) {
+		} else if (TimeUtil.stringToDate(dDate) == null) {
 			ve.addError("dueDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
 

@@ -161,42 +161,8 @@
         <entry lang="KAZ">Комментарий</entry>
         <entry lang="ENG">Comment</entry>
         <entry lang="CHN">Comment</entry>
-    </sentence>
-    <sentence mode="on" keyword="Свойства пользователя">
-        <entry lang="KAZ">Қолданушының қасиеттерi</entry>
-        <entry lang="ENG">Properties of the user</entry>
-        <entry lang="CHI">該物業的用戶。</entry>
-    </sentence>
-    <sentence mode="on" keyword="Удалено успешно">
-        <entry lang="KAZ">Жазба өшірілді</entry>
-        <entry lang="ENG">Removed successfully</entry>
-        <entry lang="CHI">成功删除</entry>
-    </sentence>
-    <sentence mode="on" keyword="Ошибка удаления">
-        <entry lang="KAZ">Жою қателігі</entry>
-        <entry lang="ENG">Failure to remove</entry>
-        <entry lang="CHI">如果不及时取出</entry>
-    </sentence>
-    <sentence mode="on" keyword="Удалено">
-        <entry lang="KAZ">Өшірілді</entry>
-        <entry lang="ENG">Removed</entry>
-        <entry lang="CHI">成功删除</entry>
-    </sentence>
-    <sentence mode="on" keyword="Не удалено">
-        <entry lang="KAZ">Өшірілмеді</entry>
-        <entry lang="ENG">Not removed</entry>
-        <entry lang="CHI">未刪除</entry>
-    </sentence>
-    <sentence mode="on" keyword="Документ отмечен как прочтенный">
-        <entry lang="KAZ">Құжат оқылған болып белгіленді</entry>
-        <entry lang="ENG">Document is marked as read</entry>
-        <entry lang="CHI">文件標記為</entry>
-    </sentence>
-    <sentence mode="on" keyword="Идет сохранение документа...">
-        <entry lang="KAZ">Құжаттың сақталуы жүріп жатыр...</entry>
-        <entry lang="ENG">Saving document...</entry>
-        <entry lang="CHI">這份文件已獲救</entry>
-    </sentence>
+    </sentence>  
+ 
     <sentence mode="on" keyword="wait_while_document_save">
         <entry lang="KAZ">Күте тұрыңыз... Құжаттың сақталуы жүріп жатыр</entry>
         <entry lang="RUS">Пожалуйста ждите... Идет сохранение документа</entry>
@@ -439,17 +405,7 @@
         <entry lang="KAZ">Ескерту</entry>
         <entry lang="ENG">Notes</entry>
         <entry lang="CHI">注意：</entry>
-    </sentence>
-    <sentence mode="on" keyword="дата">
-        <entry lang="KAZ">дата</entry>
-        <entry lang="ENG">date</entry>
-        <entry lang="CHI">日期</entry>
-    </sentence>
-    <sentence mode="on" keyword="Дата">
-        <entry lang="KAZ">Дата</entry>
-        <entry lang="ENG">Date</entry>
-        <entry lang="CHI">日期</entry>
-    </sentence>
+    </sentence> 
     <sentence mode="on" keyword="employee">
         <entry lang="RUS">Сотрудник</entry>
         <entry lang="KAZ">Қызметкер</entry>

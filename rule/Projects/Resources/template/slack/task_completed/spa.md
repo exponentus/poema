@@ -1,6 +1,6 @@
 $orgname$ 
 Dear $assignee$, 
-the task *$regNumber$* was completed
+the task `$regNumber$` was completed
 Title: $title$
 Author: $author$
 _Click >_ $url$

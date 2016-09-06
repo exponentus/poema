@@ -115,13 +115,10 @@ public class Messages {
 
 	public static void sendOfNewRequest(_Session session, Request request, Task task) throws MsgException {
 		AppEnv appEnv = session.getAppEnv();
-		LanguageCode lang = session.getLang();
 		String msgTemplate = "new_request";
-
 		Memo memo = new Memo();
 		memo.addVar("taskTitle", task.getTitle());
 		memo.addVar("regNumber", task.getRegNumber());
-		memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 		memo.addVar("comment", request.getComment());
 		memo.addVar("author", request.getAuthor().getUserName());
 		memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
@@ -133,13 +130,14 @@ public class Messages {
 		} catch (ClassCastException e) {
 
 		}
+		LanguageCode lang = user.getDefaultLang();
+		memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 
 		if (user != null) {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				if (sa.sendMеssage(slackAddr, memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang)))) {
 					return;
 				}
 			}
@@ -147,8 +145,8 @@ public class Messages {
 			List<String> recipients = new ArrayList<>();
 			recipients.add(task.getAuthor().getEmail());
 			MailAgent ma = new MailAgent();
-			ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_request", user.getDefaultLang()),
-			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+			ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_request", lang),
+			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 		}
 
 	}

@@ -129,7 +129,7 @@ public class ProjectForm extends _DoForm {
             project.setObservers(ouIds);
             project.setComment(formData.getValueSilently("comment"));
             project.setStatus(ProjectStatusType.valueOf(formData.getValueSilently("status")));
-            project.setFinishDate(TimeUtil.convertStringToDate(formData.getValueSilently("finishDate")));
+            project.setFinishDate(TimeUtil.stringToDate(formData.getValueSilently("finishDate")));
             project.setAttachments(getActualAttachments(project.getAttachments()));
 
             Set<Long> readers = new HashSet<>();
@@ -213,7 +213,7 @@ public class ProjectForm extends _DoForm {
         }
 
         String fDate = formData.getValueSilently("finishDate");
-        if (!fDate.isEmpty() && TimeUtil.convertStringToDate(fDate) == null) {
+        if (!fDate.isEmpty() && TimeUtil.stringToDate(fDate) == null) {
             ve.addError("finishDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
         }
         if (formData.getValueSilently("comment").length() > 2048) {

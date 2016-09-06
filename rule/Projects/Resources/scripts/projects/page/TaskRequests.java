@@ -190,7 +190,7 @@ public class TaskRequests extends _DoForm {
 					break;
 				case "prolong":
 					// prolong new due date
-					Date newDueDate = TimeUtil.convertStringToDate(formData.getValueSilently("dueDate"));
+					Date newDueDate = TimeUtil.stringToDate(formData.getValueSilently("dueDate"));
 					if (newDueDate == null) {
 						_Validation ve = new _Validation();
 						ve.addError("dueDate", "date", getLocalizedWord("field_is_empty", session.getLang()));
