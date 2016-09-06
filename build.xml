@@ -7,19 +7,13 @@
     <property name="vendor" value="exponentus.com" />
 	
     <!-- Source directory (usually it is IDE workspace path) -->
-    <property name="workspace.dir" value="." />
+    <property name="workspace.dir" value="c:\workspace" />
     <!-- Application path -->
-    <property name="application.dir" value="run" />
+    <property name="application.dir" value="e:\poema" />
     <!-- Temporary folder path -->
-    <property name="tmp.dir" value="tmp" />
+    <property name="tmp.dir" value="e:\tmp" />
     <!-- Directory for backup  -->
     <property name="backup.dir" value="backup" />
-
-    <!-- temporary repository folders   -->
-    <property name="app_temp_repo.dir" value="tmp_repository" />
-    <property name="nb_repo.dir" value="${app_temp_repo.dir}/nb" />
-    <property name="officeframe_repo.dir" value="${app_temp_repo.dir}/officeframe" />
-    <property name="poema_repo.dir" value="${app_temp_repo.dir}/poema" />
 
 
     <!-- application folders   -->
@@ -32,7 +26,7 @@
 
     <!-- NextBase core source   -->
     <property name="app_nb_jar.name" value="nb" />
-    <property name="nb_prj.dir" value="${app_temp_repo.dir}/nb/trunk" />
+	<property name="nb_prj.dir" value="${workspace.dir}/nb" />
     <property name="src_nb.dir" value="${nb_prj.dir}/src" />
     <property name="libs_nb.dir" value="${nb_prj.dir}/libs" />
     <property name="rule_nb.dir" value="${nb_prj.dir}/rule" />
@@ -42,9 +36,8 @@
     <property name="jpa_xml_nb.dir" value="${src_nb.dir}" />
 
     <!-- Officeframe module source   -->
-    <property name="app_officeframe_jar.name" value="officeframe" />
-    <!--<property name="officeframe_prj.dir" value="${workspace.dir}/officeframe" />-->
-    <property name="officeframe_prj.dir" value="${app_temp_repo.dir}/officeframe/trunk" />
+	<property name="app_officeframe_jar.name" value="officeframe" />
+    <property name="officeframe_prj.dir" value="${workspace.dir}/officeframe" />
     <property name="resources_officeframe.dir" value="${officeframe_prj.dir}/resources" />
     <property name="rule_officeframe.dir" value="${officeframe_prj.dir}/rule" />
     <property name="webapps_officeframe.dir" value="${officeframe_prj.dir}/webapps" />
@@ -55,8 +48,7 @@
 
     <!-- Poema module source   -->
     <property name="app_poema_jar.name" value="poema" />
-    <!--<property name="poema_prj.dir" value="${workspace.dir}/poema" />-->
-    <property name="poema_prj.dir" value="${app_temp_repo.dir}/poema/trunk" />
+    <property name="poema_prj.dir" value="${workspace.dir}/poema" />
     <property name="resources_poema.dir" value="${poema_prj.dir}/resources" />
     <property name="rule_poema.dir" value="${poema_prj.dir}/rule" />
     <property name="webapps_poema.dir" value="${poema_prj.dir}/webapps" />
@@ -130,27 +122,9 @@
         <mkdir dir="${tmp_jar_poema.dir}" />
     </target>
 
-    <path id="svnant.classpath">
-        <fileset dir="/usr/share/ant/lib1">
-            <include name="**/*.jar" />
-        </fileset>
-    </path>
+  
 
-    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
-
-    <svnSetting svnkit="true" javahl="false" username="" password="" failonerror="true" id="svn.settings" />
-
-
-    <target name="get_from_repo" description="Getting from the repository">
-        <echo>Check out from GitHub</echo>
-        <svn refid="svn.settings">
-            <checkout url="https://github.com/exponentus/nb" revision="HEAD" destPath="${nb_repo.dir}" />
-            <checkout url="https://github.com/exponentus/officeframe" revision="HEAD" destPath="${officeframe_repo.dir}" />
-            <checkout url="https://github.com/exponentus/poema" revision="HEAD" destPath="${poema_repo.dir}" />
-        </svn>
-    </target>
-
-    <target name="compile_nb" depends="backup, clean, prepare,get_from_repo" unless="full"  description="Compile Java sources">
+    <target name="compile_nb" depends="backup, clean, prepare" unless="full"  description="Compile Java sources">
         <echo>Compiling NextBase core</echo>
         <javac srcdir="${src_nb.dir}:${administrator_src.dir}" destdir="${tmp_classes_nb.dir}" debug="${compile.debug}" nowarn="true" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}" >
             <classpath refid="compile_nb.classpath" />
@@ -163,7 +137,8 @@
             <format property="TODAY" pattern="HH:mm d-MMMM-yyyy" locale="en,RU" />
         </tstamp>
         <pathconvert property="manifest_nb.classpath" pathsep=" " refid="compile_nb.classpath">         
-            <map from='/var/lib/jenkins/jobs/poema/workspace/${libs_nb.dir}/' to='' />          
+            <map from='c:\workspace\nb\libs\' to='' />    
+        	
         </pathconvert>
         <jar destfile="${tmp_jar_nb.dir}/${app_nb_jar.name}.jar">
             <fileset dir="${tmp_classes_nb.dir}" />
