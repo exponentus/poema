@@ -153,7 +153,7 @@ public class TaskForm extends _DoForm {
 				if (new Date().before(task.getStartDate())) {
 					task.setStatus(TaskStatusType.WAITING);
 				} else {
-					task.setStatus(TaskStatusType.PROCESSING);
+					task.setStatus(TaskStatusType.OPEN);
 				}
 			}
 			task.setBody(formData.getValueSilently("body"));
@@ -180,7 +180,7 @@ public class TaskForm extends _DoForm {
 				IUser<Long> user = session.getUser();
 				task.addReaderEditor(user);
 				task.addReader(assigneeUser);
-				task.addReaders(task.getProject().getObservers());
+				// task.addReaders(task.getProject().getObservers());
 				RegNum rn = new RegNum();
 				task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.prefix));
 				task = dao.add(task);
