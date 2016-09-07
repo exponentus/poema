@@ -8,7 +8,7 @@ import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { ITaskState } from '../../reducers/task.reducer';
 import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskActions } from '../../actions';
-import { TaskService } from '../../services';
+import { AppService, TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
@@ -36,6 +36,7 @@ export class RequestComponent {
         private router: Router,
         private route: ActivatedRoute,
         private translate: TranslateService,
+        private appService: AppService,
         private notifyService: NotificationService,
         private taskService: TaskService
     ) { }
