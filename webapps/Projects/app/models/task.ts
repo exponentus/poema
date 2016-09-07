@@ -5,6 +5,7 @@ import { Request } from './request';
 export class Task {
     id: string = '';
     author: string;
+    authorId: string;
     regDate: Date;
     editable: boolean = false;
     wasRead: boolean;

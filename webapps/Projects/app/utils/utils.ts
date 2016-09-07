@@ -26,14 +26,18 @@ export function serializeObj(obj): string {
 
 export function parseResponseObjects(objects: any): any {
     let result: any = [];
-
     for (let obj of objects) {
         if (obj.kind || obj.entityKind) {
             result[obj.kind || obj.entityKind] = obj;
         } else if (obj.list && obj.meta && obj.type) {
             result[obj.type] = obj;
-        } else if (obj.name && obj.value) { // fsid?
+        } else if (obj.name && obj.value) {
             result[obj.name] = obj.value;
+        } else if (obj.actions) {
+            result['actions'] = {};
+            for (let action of obj.actions) {
+                result['actions'][action.customID] = action.url ? { url: action.url } : true;
+            }
         } else {
             for (let k in obj) {
                 result[k] = obj[k];

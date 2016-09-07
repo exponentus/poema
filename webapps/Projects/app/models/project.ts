@@ -4,6 +4,7 @@ import { Attachment } from './attachment';
 export class Project {
     id: string = '';
     author: string;
+    authorId: string;
     regDate: Date;
     editable: boolean = false;
     wasRead: boolean;

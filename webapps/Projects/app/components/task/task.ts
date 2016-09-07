@@ -30,6 +30,7 @@ export class TaskComponent {
     subTasks: Task[] = [];
     task: Task;
     acl: any = {};
+    actions: any = {};
     rights: any = {
         addSubtask: false,
         doRequest: false,
@@ -108,7 +109,9 @@ export class TaskComponent {
             this.showTaskCancelDialog = false;
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
-                task => {
+                ({task, actions}) => {
+                    this.actions = actions || {};
+
                     if (this.isSubtask) {
                         this.parentTask = task;
                         this.task = new Task();
@@ -124,8 +127,8 @@ export class TaskComponent {
                     }
                     this.parentTask = null;
                     if (this.task.parentTaskId && !this.task.parentTask) {
-                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(parentTask => {
-                            this.parentTask = parentTask;
+                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(({task, actions}) => {
+                            this.parentTask = task;
 
                             if (this.isNew && this.isSubtask) {
                                 this.copyValueFromTask(this.parentTask);
@@ -138,7 +141,7 @@ export class TaskComponent {
                     this.isEditable = this.isNew || this.task.editable;
                     this.isValid = true;
                 },
-                errorResponse => this.handleXhrError(errorResponse)
+                error => this.handleXhrError(error)
             );
         }));
 
@@ -150,6 +153,7 @@ export class TaskComponent {
         this.subs.map(s => s.unsubscribe());
     }
 
+    // === task title
     get title() {
         if (this.isNew && this.isSubtask) {
             return 'new_subtask';
@@ -162,6 +166,36 @@ export class TaskComponent {
         }
     }
 
+    // === actions
+    get canSave() {
+        return this.actions['save_and_close'] === true;;
+    }
+
+    get canCancelTask() {
+        return this.actions['task_cancel'] === true; // !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
+    }
+
+    get canCompleteTask() {
+        return this.actions['task_complete'] === true; // !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
+    }
+
+    get canAcknowledgedTask() {
+        return this.actions['task_acknowledged'] === true; // !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && (this.task.status == 'OPEN' || this.task.status == 'WAITING');
+    }
+
+    get canRequestAction() {
+        return this.actions['add_request'] === true; // (this.task && this.task.id && this.task.authorId != this.appService.employee.userID && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED') && !this.hasUnResolvedRequest;
+    }
+
+    get canAddSubTask() {
+        return this.actions['add_subtask'] === true; // this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED'; //  && !this.isSubtask
+    }
+
+    get canDelete() {
+        return this.actions['delete_document'] === true;
+    }
+    // =====
+
     copyValueFromTask(task: Task) {
         this.task.title = task.title;
         this.task.priority = task.priority;
@@ -170,6 +204,7 @@ export class TaskComponent {
         this.task.tagIds = task.tagIds;
     }
 
+    // === tab toggle actions
     toggleShowProperty() {
         this.showProperty = true;
         this.showRequests = false;
@@ -194,6 +229,7 @@ export class TaskComponent {
         this.showRequests = false;
         // }
     }
+    // =====
 
     saveTask() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
@@ -263,11 +299,8 @@ export class TaskComponent {
             },
             error => {
                 this.handleXhrError(error);
-            });
-    }
-
-    canAddSubTask() {
-        return this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED'; //  && !this.isSubtask
+            }
+        );
     }
 
     addSubtask() {
@@ -308,30 +341,6 @@ export class TaskComponent {
         });
     }
 
-    acceptRequest(request: Request) {
-        if (request.requestType.name == 'prolong') {
-            this.store.dispatch({
-                type: TaskActions.TASK_REQUEST_ACCEPTANCE,
-                payload: {
-                    task: this.task,
-                    request: request
-                }
-            });
-        } else {
-            this.taskService.doAcceptRequest(request).subscribe(action => {
-                this.store.dispatch(action);
-                this.loadRequests(1);
-            });
-        }
-    }
-
-    declineRequest(request: Request) {
-        this.taskService.doDeclineRequest(request, '').subscribe(action => {
-            this.store.dispatch(action);
-            this.loadRequests(1);
-        });
-    }
-
     hasRequests() {
         return this.task.hasRequests;
     }
@@ -358,8 +367,6 @@ export class TaskComponent {
 
     //
     close() {
-        // this.router.navigate(['/tasks']);
-        // window.history.back();
         this.router.navigateByUrl(this.redirectUrl);
     }
 
@@ -387,40 +394,10 @@ export class TaskComponent {
         }
     }
 
-    // check rights
-    canSaveTask() {
-        return this.isEditable;
-    }
-
-    canDoStatusWaiting() {
-        return true;
-    }
-
-    canDoStatusProcessed() {
-        return true;
-    }
-
-    canCancelTask() {
-        return !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
-    }
-
-    canCompleteTask() {
-        return !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
-    }
-
-    canAcknowledgedTask() {
-        return !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && (this.task.status == 'OPEN' || this.task.status == 'WAITING');
-    }
-
-    canRequestAction() {
-        return (this.task && this.task.id && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED') && !this.hasUnResolvedRequest; // && !this.hasAcceptedRequestResolution;
-    }
-
     newRequest() {
         let navigationExtras: NavigationExtras = {
             queryParams: { 'task': this.task.id }
         };
-        // this.store.dispatch({ type: TaskActions.TASK_REQUEST_NEW, payload: this.task });
         this.router.navigate(['/requests', 'new'], navigationExtras);
     }
 
@@ -502,20 +479,9 @@ export class TaskComponent {
         });
     }
 
-    // validateRegNumber($event) {
-    //     this.validateForm();
-    // }
-
     // ===
     // validate
     validateForm(field?: string) {
-        // if (field && this.errors[field]) {
-        //     if (this.project[field]) {
-        //         this.errors[field] = false;
-        //     }
-        // } else {
-        //
-        // }
         for (let errField in this.errors) {
             if (this.task[errField]) {
                 this.errors[errField] = false;

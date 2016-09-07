@@ -59,7 +59,10 @@ export class ProjectService {
                 if (data.attachment) {
                     project.attachments = data.attachment.list;
                 }
-                return <Project>project;
+                return {
+                    project: <Project>project,
+                    actions: data.actions
+                }
             });
     }
 

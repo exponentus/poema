@@ -28,6 +28,7 @@ export class RequestComponent {
     private editable: boolean = true;
     private isResolveAction: boolean = false;
     private showDeclineDialog: boolean = false;
+    actions: any = {};
 
     redirectUrl: any;
 
@@ -53,20 +54,21 @@ export class RequestComponent {
             this.isResolveAction = false;
 
             this.taskService.fetchRequestById(params['requestId']).subscribe(
-                request => {
+                ({request, actions}) => {
                     this.request = request;
+                    this.actions = actions || {};
                     if (this.isNew) {
                         this.request.taskId = this.route.snapshot.queryParams['task'];
                     } else {
                         this.isResolveAction = this.request.resolution == 'UNKNOWN' && this.request.requestType.name === 'prolong';
                     }
                     //
-                    this.taskService.fetchTaskById(this.request.taskId).subscribe(task => {
+                    this.taskService.fetchTaskById(this.request.taskId).subscribe(({task, actions}) => {
                         this.task = task;
                         this.isReady = true;
                     });
                 },
-                errorResponse => this.handleXhrError(errorResponse)
+                error => this.handleXhrError(error)
             );
         }));
     }

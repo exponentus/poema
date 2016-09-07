@@ -23,6 +23,7 @@ export class ProjectComponent {
     isValid = true;
     project: Project;
     projectStatusTypes: any;
+    actions: any = {};
     errors: any = {};
     redirectUrl: any;
 
@@ -41,30 +42,47 @@ export class ProjectComponent {
         }));
 
         this.subs.push(this.route.params.subscribe(params => {
-            this.projectService.fetchProjectById(params['projectId']).subscribe(
-                project => {
-                    this.project = project;
-                    this.isNew = this.project.id == '';
-                    this.isEditable = this.isNew || this.project.editable;
-                    this.isReady = true;
-                    this.isValid = true;
-                    this.loadData();
-                },
-                error => this.handleXhrError(error)
-            );
+            this.loadProject(params['projectId']);
         }));
+
+        this.loadData();
     }
 
     ngOnDestroy() {
         this.subs.map(s => s.unsubscribe());
     }
 
+    // === title
     get title() {
         if (this.isNew) {
             return 'new_project';
         } else {
             return 'project';
         }
+    }
+
+    // === check available actions
+    get canSave() {
+        return this.actions['save_and_close'] === true;;
+    }
+
+    get canDelete() {
+        return this.actions['delete_document'] === true;;
+    }
+    // =====
+
+    loadProject(projectId: string) {
+        this.projectService.fetchProjectById(projectId).subscribe(
+            ({project, actions}) => {
+                this.project = project;
+                this.actions = actions || {};
+                this.isNew = this.project.id == '';
+                this.isEditable = this.isNew || this.project.editable;
+                this.isReady = true;
+                this.isValid = true;
+            },
+            error => this.handleXhrError(error)
+        );
     }
 
     loadData() {
@@ -97,7 +115,6 @@ export class ProjectComponent {
     }
 
     close() {
-        // this.router.navigate(['/projects']);
         this.router.navigateByUrl(this.redirectUrl);
     }
 
@@ -206,13 +223,6 @@ export class ProjectComponent {
     // ===
     // validate
     validateForm(field?: string) {
-        // if (field && this.errors[field]) {
-        //     if (this.project[field]) {
-        //         this.errors[field] = false;
-        //     }
-        // } else {
-        //
-        // }
         for (let errField in this.errors) {
             if (this.project[errField]) {
                 this.errors[errField] = false;

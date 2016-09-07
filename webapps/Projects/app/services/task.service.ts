@@ -84,7 +84,10 @@ export class TaskService {
                 if (data.attachment) {
                     task.attachments = <Attachment[]>data.attachment.list;
                 }
-                return <Task>task
+                return {
+                    task: <Task>task,
+                    actions: data.actions
+                }
             });
     }
 
@@ -141,7 +144,10 @@ export class TaskService {
 
     fetchRequestById(requestId: string) {
         if (requestId === 'new') {
-            return Observable.of(new Request());
+            return Observable.of({
+                request: new Request(),
+                actions: {}
+            });
         }
 
         return this.http.get('p?id=task-requests&requestId=' + requestId, { headers: HEADERS })
@@ -154,7 +160,10 @@ export class TaskService {
                 if (data.attachment) {
                     request.attachments = <Attachment[]>data.attachment.list;
                 }
-                return <Request>request
+                return {
+                    request: <Request>request,
+                    actions: data.actions
+                }
             });
     }
 

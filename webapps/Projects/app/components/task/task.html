@@ -5,27 +5,27 @@
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <button class="btn btn-primary" type="button" *ngIf="canSaveTask()" [disabled]="!isValid" (click)="saveTask()">
+            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="saveTask()">
                 {{'save_close' | translate}}
             </button>
-            <button class="btn" type="button" *ngIf="canRequestAction()" (click)="newRequest($event)">
+            <button class="btn" type="button" *ngIf="canRequestAction" (click)="newRequest($event)">
                 {{'new_request' | translate}}
             </button>
-            <button class="btn" type="button" *ngIf="canAddSubTask()" (click)="addSubtask($event)">
+            <button class="btn" type="button" *ngIf="canAddSubTask" (click)="addSubtask($event)">
                 {{'add_subtask' | translate}}
             </button>
-            <button class="btn" type="button" *ngIf="canCancelTask()" (click)="cancelTask()">
+            <button class="btn" type="button" *ngIf="canCancelTask" (click)="cancelTask()">
                 <i class="fa fa-ban"></i>
                 <span>{{'cancel_task' | translate}}</span>
             </button>
-            <button class="btn" type="button" *ngIf="canCompleteTask()" (click)="completeTask()">
+            <button class="btn" type="button" *ngIf="canCompleteTask" (click)="completeTask()">
                 <i class="fa fa-check-square-o"></i>
                 <span>{{'complete_task' | translate}}</span>
             </button>
-            <button class="btn" type="button" *ngIf="canAcknowledgedTask()" (click)="acknowledgedTask()">
+            <button class="btn" type="button" *ngIf="canAcknowledgedTask" (click)="acknowledgedTask()">
                 <span>{{'acknowledged_task' | translate}}</span>
             </button>
-            <div *ngIf="!isNew && isEditable" dropdown class="buttons" [tabIndex]="-1">
+            <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
                 <div dropdown-toggle>
                     <span class="btn">...</span>
                 </div>
