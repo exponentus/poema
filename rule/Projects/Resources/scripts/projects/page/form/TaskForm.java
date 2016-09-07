@@ -270,7 +270,7 @@ public class TaskForm extends _DoForm {
                 actionBar.addAction(new _Action("", "", "task_complete"));
                 actionBar.addAction(new _Action("", "", "task_cancel"));
             }
-            if (task.getAuthor().getId().equals(session.getUser().getId())
+            if (!task.getAuthor().getId().equals(session.getUser().getId())
                     && (task.getStatus() != TaskStatusType.FINISHED && task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)
                     && requestDAO.findUnResolvedRequest(task) == null) {
                 actionBar.addAction(new _Action("", "", "add_request"));
