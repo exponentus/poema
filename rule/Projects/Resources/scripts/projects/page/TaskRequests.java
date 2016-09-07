@@ -215,6 +215,7 @@ public class TaskRequests extends _DoForm {
 			requestDAO.update(request);
 
 			Messages.sendMessageOfRequestDecision(session, request);
+
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);

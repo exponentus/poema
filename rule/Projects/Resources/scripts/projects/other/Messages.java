@@ -57,8 +57,8 @@ public class Messages {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					if (sa.sendMеssage(slackAddr,
-					        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						break;
 					}
 				}
@@ -98,8 +98,8 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
 			}
@@ -137,7 +137,8 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr, memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang)))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
 			}
@@ -176,10 +177,11 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
+
 			}
 
 			List<String> recipients = new ArrayList<>();
@@ -216,8 +218,8 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
 			}
@@ -256,8 +258,8 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
 			}
@@ -295,8 +297,8 @@ public class Messages {
 			String slackAddr = user.getSlack();
 			if (slackAddr != null && !slackAddr.equals("")) {
 				SlackAgent sa = new SlackAgent();
-				if (sa.sendMеssage(slackAddr,
-				        memo.getPlainBody(appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang())))) {
+				String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+				if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 					return;
 				}
 			}
