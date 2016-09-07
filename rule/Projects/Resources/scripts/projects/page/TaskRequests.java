@@ -175,12 +175,6 @@ public class TaskRequests extends _DoForm {
 				return;
 			}
 
-			if (!request.getTask().getEditors().contains(session.getUser().getId())) {
-				addContent("error", "task: has no editor access");
-				setBadRequest();
-				return;
-			}
-
 			TaskDAO taskDAO = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
 			Task task = request.getTask();
 			if (resolutionType == ResolutionType.ACCEPTED) {
@@ -234,12 +228,14 @@ public class TaskRequests extends _DoForm {
 		RequestDAO requestDAO = new RequestDAO(session);
 		Request request = requestDAO.findById(requestId);
 
-		if (!request.getTask().getEditors().contains(session.getUser().getId()) || !request.getEditors().contains(request.getAuthorId())) {
-			addContent("error", "(task|request): has no editor access");
-			setBadRequest();
-			return;
-		}
-
+		/** it is checked in DAO **/
+		/*
+		 * if
+		 * (!request.getTask().getEditors().contains(session.getUser().getId())
+		 * || !request.getEditors().contains(request.getAuthorId())) {
+		 * addContent("error", "(task|request): has no editor access");
+		 * setBadRequest(); return; }
+		 */
 		try {
 			requestDAO.delete(request);
 		} catch (SecureException e) {
@@ -252,12 +248,13 @@ public class TaskRequests extends _DoForm {
 		try {
 			RequestDAO requestDAO = new RequestDAO(session);
 			Request request = requestDAO.findById(requestId);
-
-			if (!request.getTask().getEditors().contains(session.getUser().getId()) && !request.getEditors().contains(session.getUser().getId())) {
-				addContent("error", "(task|request): has no editor access");
-				setBadRequest();
-				return;
-			}
+			/*
+			 * if
+			 * (!request.getTask().getEditors().contains(session.getUser().getId
+			 * ()) && !request.getEditors().contains(session.getUser().getId()))
+			 * { addContent("error", "(task|request): has no editor access");
+			 * setBadRequest(); return; }
+			 */
 
 			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
 			Attachment attachment = attachmentDAO.findById(attachmentId);
