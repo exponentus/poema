@@ -11,6 +11,9 @@ import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.*;
+import com.exponentus.scripting.actions._Action;
+import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
@@ -75,6 +78,7 @@ public class ProjectForm extends _DoForm {
         }
 
         addContent(project);
+        addContent(getActionBar(session, project));
     }
 
     @Override
@@ -184,6 +188,15 @@ public class ProjectForm extends _DoForm {
             setBadRequest();
             logError(e);
         }
+    }
+
+    private _ActionBar getActionBar(_Session session, Project project) {
+        _ActionBar actionBar = new _ActionBar(session);
+        if (project.isEditable()) {
+            actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+        }
+        return actionBar;
     }
 
     private _Validation validate(_WebFormData formData, LanguageCode lang) {

@@ -22,6 +22,7 @@ import com.exponentus.webserver.servlet.UploadedFile;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.joda.time.LocalDate;
 import projects.dao.ProjectDAO;
+import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -90,7 +91,7 @@ public class TaskForm extends _DoForm {
         }
 
         addContent(task);
-        addContent(getSimpleActionBar(session, task));
+        addContent(getActionBar(session, task));
     }
 
     @Override
@@ -248,15 +249,36 @@ public class TaskForm extends _DoForm {
         }
     }
 
-    private _ActionBar getSimpleActionBar(_Session session, Task task) {
+    private _ActionBar getActionBar(_Session session, Task task) {
         _ActionBar actionBar = new _ActionBar(session);
         if (task.isEditable()) {
             actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+            if (!task.isNew()) {
+                actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            }
         }
-        actionBar.addAction(new _Action("", "", "add_request"));
-        actionBar.addAction(new _Action("", "", "task_complete"));
-        actionBar.addAction(new _Action("", "", "task_cancel"));
-        actionBar.addAction(new _Action("", "", _ActionType.CLOSE));
+
+        if (!task.isNew()) {
+            RequestDAO requestDAO = new RequestDAO(session);
+
+            if (task.getAssignee().equals(session.getUser().getId())
+                    && (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING)) {
+                actionBar.addAction(new _Action("", "", "task_acknowledged"));
+            }
+            if (task.getAuthor().getId().equals(session.getUser().getId())
+                    && (task.getStatus() != TaskStatusType.FINISHED && task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)) {
+                actionBar.addAction(new _Action("", "", "task_complete"));
+                actionBar.addAction(new _Action("", "", "task_cancel"));
+            }
+            if (task.getAuthor().getId().equals(session.getUser().getId())
+                    && (task.getStatus() != TaskStatusType.FINISHED && task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)
+                    && requestDAO.findUnResolvedRequest(task) == null) {
+                actionBar.addAction(new _Action("", "", "add_request"));
+            }
+            if (task.getStatus() != TaskStatusType.FINISHED && task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
+                actionBar.addAction(new _Action("", "", "add_subtask"));
+            }
+        }
         return actionBar;
     }
 
