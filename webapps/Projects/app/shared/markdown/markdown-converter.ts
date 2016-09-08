@@ -6,6 +6,14 @@ const toMarkdown = require('to-markdown');
 @Injectable()
 export class MarkdownConverter {
 
+    constructor() {
+        marked.setOptions({
+            gfm: true,
+            tables: true,
+            breaks: true
+        });
+    }
+
     toMarkdown(html) {
         return toMarkdown(html, { gfm: true });
     }

@@ -102,7 +102,7 @@
                             {{'comment' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.comment">
-                            <markdown-editor class="span8" [markdown]="project.comment || ''" [editable]="isEditable" [updateTimeout]="300" (update)="setProjectComment($event)"></markdown-editor>
+                            <markdown-editor [markdown]="project.comment || ''" [editable]="isEditable" [updateTimeout]="300" (update)="setProjectComment($event)"></markdown-editor>
                             <error-message [error]="errors.comment"></error-message>
                         </div>
                     </div>
