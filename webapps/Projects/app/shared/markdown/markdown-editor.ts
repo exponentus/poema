@@ -41,6 +41,52 @@ import { MarkdownConverter } from './markdown-converter';
             <div class="md-editor__help" [class.show]="helpVisible">
                 <a href="https://daringfireball.net/projects/markdown/basics" target="blank" rel="noreferrer">Markdown</a>
                 <a href="https://en.wikipedia.org/wiki/Markdown" target="blank" rel="noreferrer">wiki/Markdown</a>
+                <div class="md-editor__help-list">
+                    <div class="md-editor__help-item">
+                        <h1 class="md-editor__help-item-h"># H1</h1>
+                        <h2 class="md-editor__help-item-h">## H2</h2>
+                        <h3 class="md-editor__help-item-h">### H3</h3>
+                    </div>
+                    <div class="md-editor__help-item">
+                        <em>_italic_</em><br/>
+                        <em>*italic*</em><br/>
+                        <strong>__bold__</strong><br/>
+                        <strong>**bold**</strong><br/>
+                        <code>\`monospace\`</code>
+                    </div>
+                    <div class="md-editor__help-item">
+                        ---
+                        <hr/>
+                    </div>
+                    <div class="md-editor__help-item">
+                        <div class="md-editor__help-item-md">
+                            - 1<br/>- 2<br/>- 3
+                        </div>
+                        <div class="md-editor__help-item-html">
+                            <ul>
+                                <li>1</li>
+                                <li>2</li>
+                                <li>3</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md-editor__help-item">
+                        <div class="md-editor__help-item-md">
+                            1. n1<br/>2. n2<br/>3. n3
+                        </div>
+                        <div class="md-editor__help-item-html">
+                            <ol>
+                                <li>n1</li>
+                                <li>n2</li>
+                                <li>n3</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="md-editor__help-item">
+                        [link](http://google.com)<br/>
+                        <a href="http://google.com">link</a>
+                    </div>
+                </div>
             </div>
         </div>
     `,
