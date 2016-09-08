@@ -41,7 +41,7 @@ public class ExpiredTracking extends _DoScheduledTask {
 						task.setTags(tags);
 						try {
 							tDao.update(task);
-							logger.infoLogEntry("The task \"" + task.getTitle() + "\" was marked as \"" + tag.getName() + "\"");
+							logger.infoLogEntry("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
 						} catch (SecureException e) {
 							setError(e);
 						}
@@ -53,7 +53,7 @@ public class ExpiredTracking extends _DoScheduledTask {
 						task.setTags(tags);
 						try {
 							tDao.update(task);
-							logger.infoLogEntry("The task \"" + task.getTitle() + "\" was unmarked as \"" + tag.getName() + "\"");
+							logger.infoLogEntry("The task \"" + task.getRegNumber() + "\" was unmarked as \"" + tag.getName() + "\"");
 						} catch (SecureException e) {
 							setError(e);
 						}
