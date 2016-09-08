@@ -1,6 +1,7 @@
 package projects.page;
 
 import com.exponentus.common.dao.AttachmentDAO;
+import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
@@ -42,6 +43,7 @@ public class TaskRequests extends _DoForm {
 
             addContent(request);
             addContent(getActionBar(session, request));
+            addContent(new ACL(request));
             return;
         } else if (formData.containsField("requestId")) {
             Request request = new Request();

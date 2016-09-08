@@ -39,33 +39,8 @@ import { MarkdownConverter } from './markdown-converter';
                 </div>
             </div>
             <div class="md-editor__help" [class.show]="helpVisible">
-                <ul>
-                    <li></li>
-                </ul>
-                # H1
-                ## H2
-                ### H3
-                #### H4
-                **bold**
-                _italic_
-                > quote
-
-                \`code\`
-
-                - list1
-                - list2
-
-
-                1. numeric list1
-                2. numeric list2
-
-                [link text](google.com)
-
-                | table caption1 | c2 |
-                | ---  | --- |
-                | 1.1 | 1.2 |
-                | 2.1 | 2.2 |
-                | 3.1 | 3.2 |
+                <a href="https://daringfireball.net/projects/markdown/basics" target="blank" rel="noreferrer">Markdown</a>
+                <a href="https://en.wikipedia.org/wiki/Markdown" target="blank" rel="noreferrer">wiki/Markdown</a>
             </div>
         </div>
     `,
@@ -105,6 +80,10 @@ export class MarkdownEditorComponent {
         this.html = this.mdc.toHtml(this.markdown);
         this.hasValue = this.markdown.length > 0;
         this._markdown = this.markdown;
+
+        if (this.editable && !this.markdown.trim().length) {
+            this.setActiveMdMode();
+        }
     }
 
     setActiveMdMode() {
