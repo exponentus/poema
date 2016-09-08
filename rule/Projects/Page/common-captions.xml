@@ -17,6 +17,8 @@
     <caption name="wait_while_document_save"/>
     <caption name="loading"/>
     <caption name="required"/>
+    <caption name="markdown_write"/>
+    <caption name="markdown_preview"/>
 
     <caption name="editors"/>
     <caption name="readers"/>

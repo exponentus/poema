@@ -178,7 +178,7 @@
                     </div>
                 </div>
                 <div class="form-group" [class.has-error]="errors.body">
-                    <markdown-editor placeHolder="{{'body' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" [updateTimeout]="300" (update)="updateTaskBody($event)"></markdown-editor>
+                    <markdown-editor placeHolder="{{'body' | translate}}" writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}" [markdown]="task.body || ''" [editable]="isEditable" [updateTimeout]="300" (update)="updateTaskBody($event)"></markdown-editor>
                     <error-message [error]="errors.body"></error-message>
                 </div>
             </div>

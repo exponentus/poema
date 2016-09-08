@@ -25,11 +25,11 @@
         <entry lang="POR">Desconhecido</entry>
         <entry lang="BUL">Неизвестен</entry>
     </sentence>
-   <sentence mode="on" keyword="authorization_was_failed">
+    <sentence mode="on" keyword="authorization_was_failed">
         <entry lang="ENG">Authorization was failed</entry>
         <entry lang="RUS">Авторизация неудачна</entry>
     </sentence>
-     <sentence mode="on" keyword="session_was_lost">
+    <sentence mode="on" keyword="session_was_lost">
         <entry lang="ENG">User session was expired</entry>
         <entry lang="RUS">Сессия была сброшена сервером</entry>
     </sentence>
@@ -81,7 +81,7 @@
         <entry lang="KAZ">Поле не заполнено</entry>
         <entry lang="ENG">The field is empty</entry>
     </sentence>
-     <sentence mode="on" keyword="field_is_too_long">
+    <sentence mode="on" keyword="field_is_too_long">
         <entry lang="RUS">Содержимое поля слишком большое</entry>
         <entry lang="KAZ">Содержимое поля слишком большое</entry>
         <entry lang="ENG">The field is too long</entry>
@@ -95,6 +95,16 @@
         <entry lang="RUS">Обязательноe</entry>
         <entry lang="KAZ">Обязательноe</entry>
         <entry lang="ENG">Required</entry>
+    </sentence>
+    <sentence mode="on" keyword="markdown_write">
+        <entry lang="RUS">Редактор</entry>
+        <entry lang="KAZ">Редактор</entry>
+        <entry lang="ENG">Write</entry>
+    </sentence>
+    <sentence mode="on" keyword="markdown_preview">
+        <entry lang="RUS">Просмотр</entry>
+        <entry lang="KAZ">Просмотр</entry>
+        <entry lang="ENG">Preview</entry>
     </sentence>
 
     <sentence mode="on" keyword="the_field">
@@ -161,8 +171,8 @@
         <entry lang="KAZ">Комментарий</entry>
         <entry lang="ENG">Comment</entry>
         <entry lang="CHN">Comment</entry>
-    </sentence>  
- 
+    </sentence>
+
     <sentence mode="on" keyword="wait_while_document_save">
         <entry lang="KAZ">Күте тұрыңыз... Құжаттың сақталуы жүріп жатыр</entry>
         <entry lang="RUS">Пожалуйста ждите... Идет сохранение документа</entry>
@@ -180,7 +190,7 @@
         <entry lang="KAZ">Болдырмау</entry>
         <entry lang="ENG">Cancel</entry>
         <entry lang="CHI">廢除</entry>
-    </sentence>    
+    </sentence>
     <sentence mode="on" keyword="часов">
         <entry lang="KAZ">сағат</entry>
         <entry lang="ENG">hours</entry>
@@ -197,7 +207,7 @@
         <entry lang="KAZ">Көрінетін құжаттардың саны</entry>
         <entry lang="ENG">An amount of documents is in a kind</entry>
         <entry lang="CHI">表单中的文件数量</entry>
-    </sentence>    
+    </sentence>
     <sentence mode="on" keyword="password">
         <entry lang="RUS">Пароль</entry>
         <entry lang="KAZ">Құпия сөз</entry>
@@ -226,7 +236,7 @@
     <sentence mode="on" keyword="change_password">
         <entry lang="RUS">Изменить пароль</entry>
         <entry lang="ENG">Change password</entry>
-    </sentence>   
+    </sentence>
     <sentence mode="on" keyword="edit">
         <entry lang="RUS">Редактирование</entry>
         <entry lang="KAZ">Өңдеу</entry>
@@ -295,7 +305,7 @@
         <entry lang="RUS">Описание</entry>
         <entry lang="KAZ">Сипаттама</entry>
         <entry lang="ENG">Description</entry>
-    </sentence>   
+    </sentence>
     <sentence mode="on" keyword="files">
         <entry lang="RUS">Вложения</entry>
         <entry lang="KAZ">Тіркемелер</entry>
@@ -313,7 +323,7 @@
         <entry lang="KAZ">Тіркеу</entry>
         <entry lang="ENG">Attach file</entry>
         <entry lang="CHI">附上</entry>
-    </sentence>   
+    </sentence>
     <sentence mode="on" keyword="author">
         <entry lang="RUS">Автор</entry>
         <entry lang="KAZ">Автор</entry>
@@ -331,14 +341,14 @@
         <entry lang="KAZ">бет</entry>
         <entry lang="ENG">page</entry>
         <entry lang="CHI">首页</entry>
-    </sentence>    
+    </sentence>
     <sentence mode="on" keyword="additional">
         <entry lang="RUS">Дополнительно</entry>
         <entry lang="KAZ">Қосымша</entry>
         <entry lang="ENG">More</entry>
         <entry lang="CHI">此外</entry>
     </sentence>
-   
+
     <sentence mode="on" keyword="new_">
         <entry lang="RUS">Добавить</entry>
         <entry lang="KAZ">Қосу</entry>
@@ -366,7 +376,7 @@
         <entry lang="KAZ">Шолу</entry>
         <entry lang="ENG">Review</entry>
         <entry lang="CHI">檢討</entry>
-    </sentence>   
+    </sentence>
     <sentence mode="on" keyword="Только для чтения">
         <entry lang="KAZ">Тек оқу үшін</entry>
         <entry lang="ENG">Reading only</entry>
@@ -405,7 +415,7 @@
         <entry lang="KAZ">Ескерту</entry>
         <entry lang="ENG">Notes</entry>
         <entry lang="CHI">注意：</entry>
-    </sentence> 
+    </sentence>
     <sentence mode="on" keyword="employee">
         <entry lang="RUS">Сотрудник</entry>
         <entry lang="KAZ">Қызметкер</entry>
@@ -449,7 +459,7 @@
         <entry lang="ENG">Color</entry>
         <entry lang="RUS">Цвет</entry>
         <entry lang="KAZ">Түс</entry>
-    </sentence>  
+    </sentence>
     <sentence mode="on" keyword="interface_lang">
         <entry lang="RUS">Язык интерфейса</entry>
         <entry lang="KAZ">Интерфейс тілі</entry>

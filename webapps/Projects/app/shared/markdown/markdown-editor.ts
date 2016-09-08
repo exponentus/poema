@@ -8,8 +8,8 @@ import { MarkdownConverter } from './markdown-converter';
         <div class="md-editor-container">
             <div class="md-editor__tabs" [class.md-active]="isMdMode" [class.preview-active]="isPreviewMode">
                 <div class="md-editor__placeholder" *ngIf="placeHolder">{{placeHolder}}</div>
-                <div class="md-editor__tab-title-md" *ngIf="editable" (click)="setActiveMdMode()">MARKDOWN</div>
-                <div class="md-editor__tab-title-preview" *ngIf="editable" (click)="setActivePreviewMode()">PREVIEW</div>
+                <div class="md-editor__tab-title-md" *ngIf="editable" (click)="setActiveMdMode()">{{writeLabel}}</div>
+                <div class="md-editor__tab-title-preview" *ngIf="editable" (click)="setActivePreviewMode()">{{previewLabel}}</div>
                 <!-- <div class="md-editor__btn-fullscreen" *ngIf="editable" (click)="toggleFullscreen()">
                     <i class="fa fa-expand"></i>
                 </div> -->
@@ -35,7 +35,7 @@ import { MarkdownConverter } from './markdown-converter';
                             innerHTML="{{html}}">
                         </div> -->
                     </div>
-                    <div class="md-editor__preview" [innerHTML]="html"></div>
+                    <div class="md-editor__preview" innerHTML="{{html}}"></div>
                 </div>
             </div>
             <div class="md-editor__help" [class.show]="helpVisible">
@@ -58,6 +58,8 @@ export class MarkdownEditorComponent {
     @Input() markdown: string = '';
     @Input() placeHolder: string;
     @Input() updateTimeout: number = 150;
+    @Input() writeLabel: string = 'Write';
+    @Input() previewLabel: string = 'Preview';
 
     @Output() update = new EventEmitter<any>();
     @Output() focus = new EventEmitter<any>();
