@@ -5,7 +5,7 @@
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <button type="button" class="btn btn-primary" *ngIf="isNew" [disabled]="!request.requestTypeId || (isResolveAction && !dueDate)" (click)="sendRequest()">
+            <button type="button" class="btn btn-primary" *ngIf="canSave" [disabled]="!request.requestTypeId || (isResolveAction && !dueDate)" (click)="sendRequest()">
                 {{'send_request' | translate}}
             </button>
         </div>
@@ -68,7 +68,7 @@
             <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
         </div>
     </section>
-    <section class="request__resol" *ngIf="task.authorId == appService.employee.userID && request.id && (request.resolution != 'ACCEPTED' && request.resolution != 'DECLINED')">
+    <section class="request__resol" *ngIf="canResolution">
         <fieldset class="fieldset" *ngIf="isResolveAction">
             <div class="form-group">
                 <div class="control-label">

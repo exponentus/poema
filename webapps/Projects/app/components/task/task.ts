@@ -168,7 +168,7 @@ export class TaskComponent {
 
     // === actions
     get canSave() {
-        return this.actions['save_and_close'] === true;;
+        return this.actions['save_and_close'] === true;
     }
 
     get canCancelTask() {

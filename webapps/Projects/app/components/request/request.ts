@@ -28,7 +28,7 @@ export class RequestComponent {
     private editable: boolean = true;
     private isResolveAction: boolean = false;
     private showDeclineDialog: boolean = false;
-    actions: any = {};
+    private actions: any = {};
 
     redirectUrl: any;
 
@@ -77,6 +77,20 @@ export class RequestComponent {
         this.subs.map(s => s.unsubscribe());
     }
 
+    // === actions
+    get canSave() {
+        return this.actions['save_and_close'];
+    }
+
+    get canResolution() {
+        return this.actions['resolution'];
+    }
+
+    get canDelete() {
+        return this.actions['delete_document'] === true;
+    }
+    // =====
+
     handleXhrError(errorResponse) {
         if (errorResponse.status === 401) {
             this.router.navigate(['/login']);
@@ -86,8 +100,6 @@ export class RequestComponent {
     }
 
     close() {
-        // window.history.back();
-        // this.router.navigate(['/tasks']);
         this.router.navigateByUrl(this.redirectUrl);
     }
 
