@@ -25,6 +25,11 @@ public class ExpiredTracking extends _DoScheduledTask {
 
 	@Override
 	public void doEvery1Hour(_Session session) {
+
+	}
+
+	@Override
+	public void doEveryNight(_Session session) {
 		TagDAO tagDAO = new TagDAO(session);
 		Tag tag = tagDAO.findByName(EXPIRED_TAG_NAME);
 		if (tag != null) {
@@ -61,11 +66,6 @@ public class ExpiredTracking extends _DoScheduledTask {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void doEveryNight(_Session session) {
-
 	}
 
 }
