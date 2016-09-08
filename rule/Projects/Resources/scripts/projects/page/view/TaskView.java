@@ -23,6 +23,7 @@ public class TaskView extends _DoPage {
 
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
+		// devPrint(formData);
 		if (formData.containsField("stream")) {
 			responseTaskStream(session, formData);
 		} else {
@@ -46,7 +47,7 @@ public class TaskView extends _DoPage {
 
 	private void responseTaskList(_Session session, _WebFormData formData) {
 		TaskDAO taskDAO = new TaskDAO(session);
-		TaskFilter taskFilter = createTaskFilter(session, formData);
+		TaskFilter taskFilter = setUpTaskFilter(session, formData, new TaskFilter());
 		int pageSize = session.pageSize;
 		int pageNum = formData.getNumberValueSilently("page", 0);
 		ViewPage<Task> vp = taskDAO.findAllByTaskFilter(taskFilter, pageNum, pageSize);
@@ -79,8 +80,7 @@ public class TaskView extends _DoPage {
 		}
 	}
 
-	public static TaskFilter createTaskFilter(_Session session, _WebFormData formData) {
-		TaskFilter filter = new TaskFilter();
+	public static TaskFilter setUpTaskFilter(_Session session, _WebFormData formData, TaskFilter filter) {
 
 		filter.setProject(formData.getValueSilently("projectId"));
 		filter.setParentTask(formData.getValueSilently("parentTaskId"));

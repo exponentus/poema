@@ -35,14 +35,28 @@ public class ExpiredTracking extends _DoScheduledTask {
 			ViewPage<Task> result = tDao.findAllByTaskFilter(filter, 0, 0);
 			for (Task task : result.getResult()) {
 				if (current.after(task.getDueDate())) {
-					List<Tag> tags = task.getTags();
-					tags.add(tag);
-					task.setTags(tags);
-					try {
-						tDao.update(task);
-						logger.infoLogEntry("The task \"" + task.getTitle() + "\" was marked as \"" + tag.getName() + "\"");
-					} catch (SecureException e) {
-						setError(e);
+					if (!task.getTags().contains(tag)) {
+						List<Tag> tags = task.getTags();
+						tags.add(tag);
+						task.setTags(tags);
+						try {
+							tDao.update(task);
+							logger.infoLogEntry("The task \"" + task.getTitle() + "\" was marked as \"" + tag.getName() + "\"");
+						} catch (SecureException e) {
+							setError(e);
+						}
+					}
+				} else {
+					if (task.getTags().contains(tag)) {
+						List<Tag> tags = task.getTags();
+						tags.remove(tag);
+						task.setTags(tags);
+						try {
+							tDao.update(task);
+							logger.infoLogEntry("The task \"" + task.getTitle() + "\" was unmarked as \"" + tag.getName() + "\"");
+						} catch (SecureException e) {
+							setError(e);
+						}
 					}
 				}
 			}

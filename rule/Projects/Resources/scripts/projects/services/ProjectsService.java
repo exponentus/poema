@@ -35,7 +35,7 @@ public class ProjectsService extends RestProvider {
 		MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 		String referrer = request.getHeader("referer");
 		_WebFormData formData = new _WebFormData(queryParams, referrer);
-		TaskFilter taskFilter = TaskView.createTaskFilter(ses, formData);
+		TaskFilter taskFilter = TaskView.setUpTaskFilter(ses, formData, new TaskFilter());
 		int pageSize = ses.pageSize;
 		int pageNum = formData.getNumberValueSilently("page", 0);
 		ViewPage<Task> vp = taskDAO.findAllByTaskFilter(taskFilter, pageNum, pageSize);
