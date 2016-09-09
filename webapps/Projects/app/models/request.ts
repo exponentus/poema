@@ -3,8 +3,10 @@ import { RequestType } from './request-type';
 
 export class Request {
     id: string = '';
-    fsid: string = '' + Date.now();
     regDate: Date;
+    fsid: string = '' + Date.now();
+    acl: any = {};
+
     taskId: string;
     requestTypeId: string;
     requestType: RequestType;

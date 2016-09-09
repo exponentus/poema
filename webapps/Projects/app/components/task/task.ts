@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { CommentsComponent } from '../comment/comments';
 import { NotificationService } from '../../shared/notification';
 import { AppService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
@@ -27,33 +26,23 @@ export class TaskComponent {
     isValid = true;
     isSubtask = false;
     parentTask: Task;
-    subTasks: Task[] = [];
     task: Task;
     acl: any = {};
     actions: any = {};
-    rights: any = {
-        addSubtask: false,
-        doRequest: false,
-        doResolution: false,
-        addComment: false,
-        removeTask: false
-    };
     FEATURE_FLAGS: any = {
         subTask: true,
         comments: false
     };
+
     showPropertyTabTitle: boolean = true;
     showProperty: boolean = true;
     showSubtasks: boolean = false;
     showRequests: boolean = false;
-    showACLTabTitle: boolean = false;
     showACL: boolean = false;
+
     showTaskCancelDialog = false;
-    hasUnResolvedRequest: boolean = true;
-    hasAcceptedRequestResolution: boolean = false;
     taskPriorityTypes: any;
     comments: Comment[];
-    requests: Request[];
     errors: any = {};
     redirectUrl: any;
 
@@ -69,23 +58,6 @@ export class TaskComponent {
     ) {
         this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
             this.comments = state.comments;
-            this.requests = state.requests;
-
-            if (!this.requests) {
-                this.hasUnResolvedRequest = false;
-            } else {
-                this.hasUnResolvedRequest = false;
-                this.hasAcceptedRequestResolution = false;
-
-                this.requests.forEach(it => {
-                    if (it.resolution == 'UNKNOWN') {
-                        this.hasUnResolvedRequest = true;
-                    }
-                    if (it.resolution == 'ACCEPT') {
-                        this.hasAcceptedRequestResolution = true;
-                    }
-                });
-            }
         }));
 
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
@@ -100,12 +72,9 @@ export class TaskComponent {
             this.showProperty = true;
             this.showSubtasks = false;
             this.showRequests = false;
-            this.hasUnResolvedRequest = true;
-            this.hasAcceptedRequestResolution = false;
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
             this.showPropertyTabTitle = !this.isNew;
-            this.showACLTabTitle = this.showPropertyTabTitle;
             this.showTaskCancelDialog = false;
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
@@ -122,8 +91,6 @@ export class TaskComponent {
                     }
                     if (!this.isNew) {
                         this.loadComments(1);
-                        this.loadRequests(1);
-                        this.loadSubtasks();
                     }
                     this.parentTask = null;
                     if (this.task.parentTaskId && !this.task.parentTask) {
@@ -168,31 +135,53 @@ export class TaskComponent {
 
     // === actions
     get canSave() {
-        return this.actions['save_and_close'] === true;
+        return this.actions['save_and_close'];
     }
 
     get canCancelTask() {
-        return this.actions['task_cancel'] === true; // !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
+        return this.actions['task_cancel'];
     }
 
     get canCompleteTask() {
-        return this.actions['task_complete'] === true; // !this.isNew && this.isEditable && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED';
+        return this.actions['task_complete'];
     }
 
     get canAcknowledgedTask() {
-        return this.actions['task_acknowledged'] === true; // !this.isNew && this.task.assigneeUserId == this.appService.employee.userID && (this.task.status == 'OPEN' || this.task.status == 'WAITING');
+        return this.actions['task_acknowledged'];
     }
 
     get canRequestAction() {
-        return this.actions['add_request'] === true; // (this.task && this.task.id && this.task.authorId != this.appService.employee.userID && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED') && !this.hasUnResolvedRequest;
+        return this.actions['add_request'];
     }
 
     get canAddSubTask() {
-        return this.actions['add_subtask'] === true; // this.FEATURE_FLAGS.subTask && !this.isNew && this.task.status != 'FINISHED' && this.task.status != 'COMPLETED' && this.task.status != 'CANCELLED'; //  && !this.isSubtask
+        return this.actions['add_subtask'];
     }
 
     get canDelete() {
-        return this.actions['delete_document'] === true;
+        return this.actions['delete_document'];
+    }
+    // =====
+
+    // ===
+    get hasRequests() {
+        return this.task.hasRequests;
+    }
+
+    get hasSubTasks() {
+        return this.task.hasSubtasks;
+    }
+
+    get hasACL() {
+        return this.task.id && this.task.acl;
+    }
+
+    get showComments() {
+        return this.hasFutureComments && !this.isNew;
+    }
+
+    get hasFutureComments() {
+        return this.FEATURE_FLAGS.comments;
     }
     // =====
 
@@ -308,13 +297,6 @@ export class TaskComponent {
     }
 
     //
-    showComments() {
-        return this.hasFutureComments() && !this.isNew;
-    }
-
-    hasFutureComments() {
-        return this.FEATURE_FLAGS.comments;
-    }
 
     loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(payload => {
@@ -335,27 +317,6 @@ export class TaskComponent {
     }
 
     //
-    loadRequests(page = 1) {
-        this.taskService.fetchTaskRequests(this.task, page).subscribe(payload => {
-            this.store.dispatch({ type: TaskActions.FETCH_TASK_REQUESTS_FULFILLED, payload: payload });
-        });
-    }
-
-    hasRequests() {
-        return this.task.hasRequests;
-    }
-
-    // loadSubtasks
-    loadSubtasks() {
-        this.taskService.fetchTasks({ parentTaskId: this.task.id }).subscribe(payload => {
-            this.subTasks = payload.tasks;
-        });
-    }
-
-    hasSubTasks() {
-        return this.subTasks && this.subTasks.length;
-    }
-
     onConfirmTaskCancelDialog(cancelComment) {
         this.doCancelTaskRequest(cancelComment);
         // this.showTaskCancelDialog = false;

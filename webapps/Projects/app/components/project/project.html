@@ -110,28 +110,7 @@
                 <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
             </tab>
             <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
-                <div class="fieldset">
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'editors' | translate}}
-                        </div>
-                        <div class="controls">
-                            <ul>
-                                <li *ngFor="let editor of project.acl.editors | values">{{editor}}</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'readers' | translate}}
-                        </div>
-                        <div class="controls">
-                            <ul>
-                                <li *ngFor="let reader of project.acl.readers | values">{{reader}}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <acl [acl]="project.acl"></acl>
             </tab>
         </tabs>
     </section>

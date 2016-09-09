@@ -27,43 +27,50 @@
         <section *ngIf="request.resolution == 'DECLINED' && request.decisionComment" class="task-cancel-info">
             <span>{{'decline_reason' | translate}}:&nbsp;</span><span>{{request.decisionComment}}</span>
         </section>
-        <fieldset class="fieldset">
-            <div class="form-group">
-                <div class="control-label">
-                    {{'task' | translate}}
-                </div>
-                <div class="controls">
-                    <a class="input-placeholder" [routerLink]="['/task', task.id]">{{task.title}}</a>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'request_type' | translate}}
-                </div>
-                <div class="controls">
-                    <div class="span8">
-                        <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (select)="setRequestType($event)"></request-type-input>
+        <tabs>
+            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
+                <fieldset class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'task' | translate}}
+                        </div>
+                        <div class="controls">
+                            <a class="input-placeholder" [routerLink]="['/task', task.id]">{{task.title}}</a>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'comment' | translate}}
-                </div>
-                <div class="controls">
-                    <div class="span8">
-                        <textarea name="comment" [disabled]="!editable" [(ngModel)]="request.comment"></textarea>
-                        <!-- <markdown-editor
-                            [markdown]="''"
-                            editable="true"
-                            placeHolder="{{'comment' | translate}}"
-                            updateTimeout="100"
-                            (update)="setComment($event)">
-                        </markdown-editor> -->
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'request_type' | translate}}
+                        </div>
+                        <div class="controls">
+                            <div class="span8">
+                                <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (select)="setRequestType($event)"></request-type-input>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </fieldset>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'comment' | translate}}
+                        </div>
+                        <div class="controls">
+                            <div class="span8">
+                                <textarea name="comment" [disabled]="!editable" [(ngModel)]="request.comment"></textarea>
+                                <!-- <markdown-editor
+                                    [markdown]="''"
+                                    editable="true"
+                                    placeHolder="{{'comment' | translate}}"
+                                    updateTimeout="100"
+                                    (update)="setComment($event)">
+                                </markdown-editor> -->
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+                <acl [acl]="request.acl"></acl>
+            </tab>
+        </tabs>
         <div *ngIf="!editable && !request.attachments">
             <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
         </div>

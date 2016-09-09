@@ -26,6 +26,7 @@ import { RequestComponent } from './components/request/request';
 import { RequestDeclineDialogComponent } from './components/request/request-decline-dialog';
 import { CommentsComponent } from './components/comment/comments';
 import { CommentComponent } from './components/comment/comment';
+import { AclComponent } from './components/acl/acl';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import {
@@ -77,6 +78,7 @@ import { AuthGuard } from './auth.guard';
         RequestDeclineDialogComponent,
         CommentsComponent,
         CommentComponent,
+        AclComponent,
         UserProfileComponent,
         LoginComponent,
         ErrorMessageComponent,

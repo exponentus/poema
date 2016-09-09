@@ -1,4 +1,4 @@
-import { Component, Output, OnInit, OnDestroy, HostBinding, EventEmitter } from '@angular/core';
+import { Component, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { ITasksState } from '../../reducers/tasks.reducer';
@@ -12,11 +12,13 @@ import { TaskType, Employee, Tag } from '../../models';
         <task-type-input [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (select)="setTaskType($event)"></task-type-input>
         <employee-input [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (select)="setAssigneeUser($event)"></employee-input>
         <tags-input [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (select)="setTags($event)"></tags-input>
-    `
+    `,
+    host: {
+        '[class.task-filter]': 'true'
+    }
 })
 
 export class TaskFilterComponent {
-    @HostBinding('class.task-filter') true;
     @Output() change = new EventEmitter<any>();
 
     private taskStatus: string = '';
@@ -24,23 +26,23 @@ export class TaskFilterComponent {
     private assigneeUserId: string = '';
     private tagIds: string[] = [];
 
-    private subs: any = [];
+    private sub: any;
 
     constructor(
         private store: Store<any>
     ) {
-        this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
+        this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
             if (state) {
                 this.taskStatus = state.filter.taskStatus;
                 this.taskTypeId = state.filter.taskTypeId;
                 this.assigneeUserId = state.filter.assigneeUserId;
                 this.tagIds = state.filter.tagIds;
             }
-        }));
+        });
     }
 
     ngOnDestroy() {
-        this.subs.map(s => s.unsubscribe());
+        this.sub.unsubscribe();
     }
 
     setTaskStatus(taskStatus: string) {
