@@ -29,7 +29,7 @@
     width: 100%;
 }
 
-.md-editor-container {
+.md-editor.fullscreen .md-editor-container {
     background: #fff;
     border-radius: 4px;
     margin: 0 auto;
