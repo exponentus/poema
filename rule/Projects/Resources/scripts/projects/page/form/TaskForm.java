@@ -382,7 +382,6 @@ public class TaskForm extends _DoForm {
 			setBadRequest();
 			logError(e);
 		} catch (MsgException e) {
-			setBadRequest();
 			logError(e);
 		}
 	}
@@ -410,7 +409,6 @@ public class TaskForm extends _DoForm {
 			setBadRequest();
 			logError(e);
 		} catch (MsgException e) {
-			setBadRequest();
 			logError(e);
 		}
 	}
@@ -442,7 +440,6 @@ public class TaskForm extends _DoForm {
 			setBadRequest();
 			logError(e);
 		} catch (MsgException e) {
-			setBadRequest();
 			logError(e);
 		}
 	}
