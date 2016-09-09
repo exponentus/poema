@@ -95,6 +95,7 @@ import { MarkdownConverter } from './markdown-converter';
         '[class.edit]': 'editable',
         '[class.fullscreen]': 'fullscreen',
         '[class.split-mode]': 'splitMode',
+        '[class.help-is-visible]': 'helpVisible',
         '[class.has-value]': 'hasValue'
     }
 })
@@ -110,6 +111,7 @@ export class MarkdownEditorComponent {
     @Output() update = new EventEmitter<any>();
     @Output() focus = new EventEmitter<any>();
     @Output() blur = new EventEmitter<any>();
+    @Output() onFullscreen = new EventEmitter<any>();
 
     private fullscreen: boolean = false;
     private splitMode: boolean = false;
@@ -148,6 +150,7 @@ export class MarkdownEditorComponent {
 
     toggleFullscreen() {
         this.fullscreen = !this.fullscreen;
+        this.onFullscreen.emit(this.fullscreen);
     }
 
     toggleSplitMode() {

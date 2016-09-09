@@ -124,6 +124,8 @@
     background: #eee;
 }
 
+.md-editor.fullscreen .md-editor__btn-fullscreen,
+.md-editor.help-is-visible .md-editor__btn-help,
 .md-editor.split-mode .md-editor__btn-split-mode {
     background: #e6e6e6;
 }
