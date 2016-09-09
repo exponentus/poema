@@ -91,12 +91,14 @@ import { MarkdownConverter } from './markdown-converter';
         </div>
     `,
     host: {
+        'tabindex': '0',
         '[class.md-editor]': 'true',
         '[class.edit]': 'editable',
         '[class.fullscreen]': 'fullscreen',
         '[class.split-mode]': 'splitMode',
         '[class.help-is-visible]': 'helpVisible',
-        '[class.has-value]': 'hasValue'
+        '[class.has-value]': 'hasValue',
+        '(keyup.esc)': 'onEsc($event)'
     }
 })
 
@@ -133,6 +135,13 @@ export class MarkdownEditorComponent {
 
         if (this.editable && !this.markdown.trim().length) {
             this.setActiveMdMode();
+        }
+    }
+
+    onEsc($event) {
+        $event.preventDefault();
+        if (this.fullscreen) {
+            this.toggleFullscreen();
         }
     }
 
