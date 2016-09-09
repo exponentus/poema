@@ -117,7 +117,7 @@ public class Messages {
 		AppEnv appEnv = session.getAppEnv();
 		String msgTemplate = "new_request";
 		Memo memo = new Memo();
-		memo.addVar("taskTitle", task.getTitle());
+		memo.addVar("title", task.getTitle());
 		memo.addVar("regNumber", task.getRegNumber());
 		memo.addVar("comment", request.getComment());
 		memo.addVar("author", request.getAuthor().getUserName());

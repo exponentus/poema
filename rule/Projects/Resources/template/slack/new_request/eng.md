@@ -1,6 +1,6 @@
 $orgname$ 
 Hello, there is request for your task: 
-`$regNumber$` $taskTitle$
+`$regNumber$` $title$
 Request type: $requestType$ 
 Comment: $comment$
 From: $author$
