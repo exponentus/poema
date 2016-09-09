@@ -17,7 +17,6 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.service.AttachmentThumbnailService;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
-import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.IPOJOObject;
@@ -204,8 +203,7 @@ public class TaskForm extends _DoForm {
 		} catch (_Exception | DatabaseException e) {
 			setBadRequest();
 			logError(e);
-		} catch (MsgException e) {
-			logError(e);
+
 		}
 	}
 
@@ -381,8 +379,7 @@ public class TaskForm extends _DoForm {
 		} catch (DatabaseException e) {
 			setBadRequest();
 			logError(e);
-		} catch (MsgException e) {
-			logError(e);
+
 		}
 	}
 
@@ -408,8 +405,7 @@ public class TaskForm extends _DoForm {
 		} catch (DatabaseException e) {
 			setBadRequest();
 			logError(e);
-		} catch (MsgException e) {
-			logError(e);
+
 		}
 	}
 
@@ -439,8 +435,7 @@ public class TaskForm extends _DoForm {
 		} catch (DatabaseException e) {
 			setBadRequest();
 			logError(e);
-		} catch (MsgException e) {
-			logError(e);
+
 		}
 	}
 }

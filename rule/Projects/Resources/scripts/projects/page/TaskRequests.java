@@ -7,7 +7,6 @@ import java.util.UUID;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
@@ -182,8 +181,6 @@ public class TaskRequests extends _DoForm {
 		} catch (SecureException e) {
 			logError(e);
 			setBadRequest();
-		} catch (MsgException e) {
-			logError(e);
 		}
 	}
 
@@ -245,8 +242,6 @@ public class TaskRequests extends _DoForm {
 			Messages.sendMessageOfRequestDecision(session, request);
 		} catch (SecureException e) {
 			setBadRequest();
-			logError(e);
-		} catch (MsgException e) {
 			logError(e);
 		}
 	}

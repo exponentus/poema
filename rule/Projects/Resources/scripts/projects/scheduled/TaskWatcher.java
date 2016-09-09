@@ -3,7 +3,6 @@ package projects.scheduled;
 import java.util.Date;
 
 import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduledTask;
@@ -37,8 +36,7 @@ public class TaskWatcher extends _DoScheduledTask {
 					Messages.sendToAssignee(session, task);
 				} catch (SecureException e) {
 					setError(e);
-				} catch (MsgException e) {
-					setError(e);
+
 				}
 			}
 		}
