@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 
+import { AppService } from '../../services/app.service';
 import { EnvironmentActions } from '../../actions/environment.actions';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { User } from '../../models/user';
@@ -16,14 +17,14 @@ export class NavbarComponent {
     @Input() user: User;
     keyup$ = new Subject<KeyboardEvent>();
     headerTitle: string = 'Projects';
-    workspaceUrl: string = 'Logout'; // '/Workspace/p?id=workspace';
     logoUrl: string = 'img/logo.png';
     keyWord: string = '';
     private subs: any = [];
 
     constructor(
         private store: Store<any>,
-        private environmentActions: EnvironmentActions
+        private environmentActions: EnvironmentActions,
+        private appService: AppService
     ) {
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.keyWord = state.keyWord;
@@ -40,6 +41,10 @@ export class NavbarComponent {
 
     ngOnDestroy() {
         this.subs.map(s => s.unsubscribe());
+    }
+
+    get workspaceUrl() {
+        return this.appService.workspaceUrl;
     }
 
     searchFocus() {

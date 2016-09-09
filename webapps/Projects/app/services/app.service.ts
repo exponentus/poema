@@ -17,6 +17,7 @@ export class AppService {
     isLogged: boolean = false;
     language: string = 'RUS';
     employee: Employee;
+    workspaceUrl: string;
 
     constructor(private http: Http) {
         let ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
@@ -29,7 +30,6 @@ export class AppService {
         return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
             response => {
                 let res = parseResponseObjects(response.json().objects);
-                console.log(res);
                 let pageSize = 20;
                 if (res.pagesize) {
                     pageSize = res.pagesize
@@ -37,11 +37,13 @@ export class AppService {
                 this.isLogged = true;
                 this.language = res.currentLang;
                 this.employee = res.employee as Employee;
+                this.workspaceUrl = res.workspaceUrl;
                 return {
                     userProfile: res.employee,
                     languages: res.language.list[0].localizedName,
                     pageSize: pageSize,
-                    language: res.currentLang || this.language
+                    language: res.currentLang || this.language,
+                    workspaceUrl: res.workspaceUrl
                 }
             },
             error => {
