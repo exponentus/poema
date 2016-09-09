@@ -143,14 +143,8 @@ export class TaskService {
     }
 
     fetchRequestById(requestId: string) {
-        if (requestId === 'new') {
-            return Observable.of({
-                request: new Request(),
-                actions: {}
-            });
-        }
-
-        return this.http.get('p?id=task-requests&requestId=' + requestId, { headers: HEADERS })
+        let url = 'p?id=task-requests&requestId=' + (requestId !== 'new' ? requestId : '');
+        return this.http.get(url, { headers: HEADERS })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let request = <Request>data.request;

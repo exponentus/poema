@@ -10,11 +10,11 @@ import { MarkdownConverter } from './markdown-converter';
                 <div class="md-editor__placeholder" *ngIf="placeHolder">{{placeHolder}}</div>
                 <div class="md-editor__tab-title-md" *ngIf="editable" (click)="setActiveMdMode()">{{writeLabel}}</div>
                 <div class="md-editor__tab-title-preview" *ngIf="editable" (click)="setActivePreviewMode()">{{previewLabel}}</div>
-                <!-- <div class="md-editor__btn-fullscreen" *ngIf="editable" (click)="toggleFullscreen()">
-                    <i class="fa fa-expand"></i>
-                </div> -->
                 <div class="md-editor__btn-split-mode" *ngIf="editable" (click)="toggleSplitMode()">
                     <i class="fa fa-columns"></i>
+                </div>
+                <div class="md-editor__btn-fullscreen" *ngIf="editable" (click)="toggleFullscreen()">
+                    <i class="fa fa-expand"></i>
                 </div>
                 <div class="md-editor__btn-help" *ngIf="editable" (click)="toggleHelp()">
                     <i class="fa fa-question"></i>
