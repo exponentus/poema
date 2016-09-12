@@ -180,6 +180,9 @@ public class TaskForm extends _DoForm {
 			}
 
 			if (isNew) {
+				if (task.getBody().isEmpty()) {
+					task.setBody("*" + task.getTitle() + "*");
+				}
 				IUser<Long> user = session.getUser();
 				task.addReaderEditor(user);
 				task.addReader(assigneeUser);
