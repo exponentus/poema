@@ -6,19 +6,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
+import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Exception;
+import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
@@ -26,53 +28,48 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.scripting.event._DoPage;
+import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
-import com.exponentus.util.Util;
 import com.exponentus.webserver.servlet.UploadedFile;
 
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 
-public class OfficeMemoForm extends _DoPage {
+public class OfficeMemoForm extends _DoForm {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
-
 		IUser<Long> user = session.getUser();
-		OfficeMemo entity;
+		OfficeMemo officeMemo;
 		String id = formData.getValueSilently("docid");
+
 		if (!id.isEmpty()) {
 			OfficeMemoDAO dao = new OfficeMemoDAO(session);
-			entity = dao.findById(UUID.fromString(id));
-			addValue("formsesid", Util.generateRandomAsText());
+			officeMemo = dao.findById(id);
 
-			String attachmentId = formData.getValueSilently("attachment");
-			if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
-				Attachment att = entity.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-				if (showAttachment(att)) {
-					return;
-				} else {
-					setBadRequest();
-				}
-			} else {
-				setBadRequest();
+			if (formData.containsField("attachment")) {
+				doGetAttachment(session, formData, officeMemo);
+				return;
 			}
+
+			addContent(officeMemo.getAttachments());
+			addContent(new ACL(officeMemo));
 		} else {
-			entity = new OfficeMemo();
-			entity.setAuthor(user);
+			officeMemo = new OfficeMemo();
+			officeMemo.setAuthor(user);
+
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-			addValue("formsesid", fsId);
+
 			List<String> formFiles = null;
 			Object obj = session.getAttribute(fsId);
 			if (obj == null) {
-				formFiles = new ArrayList<String>();
+				formFiles = new ArrayList<>();
 			} else {
-				formFiles = (List<String>) obj;
+				_FormAttachments fAtts = (_FormAttachments) obj;
+				formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
 			}
 
-			List<IPOJOObject> filesToPublish = new ArrayList<IPOJOObject>();
+			List<IPOJOObject> filesToPublish = new ArrayList<>();
 
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
@@ -83,18 +80,16 @@ public class OfficeMemoForm extends _DoPage {
 				}
 				filesToPublish.add(uf);
 			}
-			addContent(new _POJOListWrapper<IPOJOObject>(filesToPublish, session));
+			addContent(new _POJOListWrapper<>(filesToPublish, session));
 		}
 
-		addContent(entity);
+		addContent(officeMemo);
+
 		_ActionBar actionBar = new _ActionBar(session);
 		actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
 		actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
-		if (entity.getId() != null) {
 
-		}
 		addContent(actionBar);
-		startSaveFormTransact(entity);
 	}
 
 	@Override
@@ -143,8 +138,6 @@ public class OfficeMemoForm extends _DoPage {
 			} else {
 				entity = dao.update(entity);
 			}
-
-			finishSaveFormTransact(entity);
 		} catch (SecureException e) {
 			setError(e);
 		} catch (_Exception | DatabaseException | IOException e) {

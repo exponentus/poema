@@ -26,15 +26,14 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.scripting.event._DoPage;
+import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
-import com.exponentus.util.Util;
 import com.exponentus.webserver.servlet.UploadedFile;
 
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
-public class IncomingForm extends _DoPage {
+public class IncomingForm extends _DoForm {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -46,7 +45,6 @@ public class IncomingForm extends _DoPage {
 		if (!id.isEmpty()) {
 			IncomingDAO dao = new IncomingDAO(session);
 			entity = dao.findById(UUID.fromString(id));
-			addValue("formsesid", Util.generateRandomAsText());
 
 			String attachmentId = formData.getValueSilently("attachment");
 			if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
@@ -95,7 +93,6 @@ public class IncomingForm extends _DoPage {
 
 		}
 		addContent(actionBar);
-		startSaveFormTransact(entity);
 	}
 
 	@Override
@@ -144,7 +141,6 @@ public class IncomingForm extends _DoPage {
 				entity = dao.update(entity);
 			}
 
-			finishSaveFormTransact(entity);
 		} catch (SecureException e) {
 			setError(e);
 		} catch (_Exception | DatabaseException | IOException e) {

@@ -1,6 +1,5 @@
 package projects.page.form;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,7 +13,6 @@ import org.joda.time.LocalDate;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.service.AttachmentThumbnailService;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -337,25 +335,6 @@ public class TaskForm extends _DoForm {
 		}
 
 		return ve;
-	}
-
-	private void doGetAttachment(_Session session, _WebFormData formData, Task task) {
-		String attachmentId = formData.getValueSilently("attachment");
-		Attachment att = task.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
-
-		if (formData.containsField("_thumbnail")) {
-			File tf = AttachmentThumbnailService.createThumbnailFileIfSupported(session, att);
-			if (tf != null) {
-				showFile(tf.getAbsolutePath(), att.getRealFileName());
-			} else {
-				setBadRequest();
-				addContent("error", "Unsupported format, try without _thumbnail");
-			}
-		} else if (showAttachment(attachmentId, task)) {
-			//
-		} else {
-			setBadRequest();
-		}
 	}
 
 	private void doTaskComplete(_Session session, String taskId) {
