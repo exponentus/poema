@@ -298,45 +298,47 @@ public class Messages {
 	}
 
 	public static void sendOfTaskCancelled(_Session session, Task task) {
-		try {
-			AppEnv appEnv = session.getAppEnv();
-			String msgTemplate = "task_cancelled";
-			UserDAO userDAO = new UserDAO(session);
-
-			Memo memo = new Memo();
-			memo.addVar("regNumber", task.getRegNumber());
-			memo.addVar("title", task.getTitle());
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
-			memo.addVar("assignee", assigneeUser.getUserName());
-			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
-
-			User user = null;
-
+		if (task.getAssignee() != task.getAuthorId()) {
 			try {
-				user = (User) assigneeUser;
-			} catch (ClassCastException e) {
+				AppEnv appEnv = session.getAppEnv();
+				String msgTemplate = "task_cancelled";
+				UserDAO userDAO = new UserDAO(session);
 
-			}
+				Memo memo = new Memo();
+				memo.addVar("regNumber", task.getRegNumber());
+				memo.addVar("title", task.getTitle());
+				IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+				memo.addVar("assignee", assigneeUser.getUserName());
+				memo.addVar("author", task.getAuthor().getUserName());
+				memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
 
-			if (user != null) {
-				String slackAddr = user.getSlack();
-				if (slackAddr != null && !slackAddr.equals("")) {
-					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
-						return;
-					}
+				User user = null;
+
+				try {
+					user = (User) assigneeUser;
+				} catch (ClassCastException e) {
+
 				}
 
-				List<String> recipients = new ArrayList<>();
-				recipients.add(user.getEmail());
-				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", user.getDefaultLang()),
-				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				if (user != null) {
+					String slackAddr = user.getSlack();
+					if (slackAddr != null && !slackAddr.equals("")) {
+						SlackAgent sa = new SlackAgent();
+						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+						if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+							return;
+						}
+					}
+
+					List<String> recipients = new ArrayList<>();
+					recipients.add(user.getEmail());
+					MailAgent ma = new MailAgent();
+					ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", user.getDefaultLang()),
+					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				}
+			} catch (Exception e) {
+				logger.errorLogEntry(e);
 			}
-		} catch (Exception e) {
-			logger.errorLogEntry(e);
 		}
 	}
 }
