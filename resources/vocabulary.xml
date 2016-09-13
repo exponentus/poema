@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- common vocabulary file -->
 <vocabulary>
+    <sentence mode="on" keyword="workspace">
+        <entry lang="ENG">Workspace</entry>
+        <entry lang="RUS">Рабочая область</entry>
+        <entry lang="KAZ">Рабочая область</entry>
+        <entry lang="SPA">Еspacio de trabajo</entry>
+        <entry lang="POR">Area de trabalho</entry>
+        <entry lang="BUL">работно място</entry>
+    </sentence>
     <sentence mode="on" keyword="ACCEPTED">
         <entry lang="ENG">Accepted</entry>
         <entry lang="RUS">Принято</entry>

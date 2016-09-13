@@ -4,7 +4,7 @@
     <caching>NO_CACHING</caching>
 
     <caption name="brand"/>
-
+    <caption name="workspace"/>
     <caption name="new_"/>
     <caption name="cancel"/>
     <caption name="select"/>
