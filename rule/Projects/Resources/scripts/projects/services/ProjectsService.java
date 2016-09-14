@@ -1,7 +1,5 @@
 package projects.services;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,9 +14,7 @@ import javax.ws.rs.core.UriInfo;
 
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.IRestService;
 import com.exponentus.rest.RestProvider;
-import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 
@@ -28,7 +24,7 @@ import projects.model.Task;
 import projects.page.view.TaskView;
 
 @Path("/projects")
-public class ProjectsService extends RestProvider implements IRestService {
+public class ProjectsService extends RestProvider {
 
 	@GET
 	@Path("/tasks")
@@ -74,10 +70,4 @@ public class ProjectsService extends RestProvider implements IRestService {
 
 	}
 
-	@Override
-	public List<ServiceDescriptor> getServices() {
-		ServiceDescriptor sd = new ServiceDescriptor();
-		sd.setName("tasks");
-		return services;
-	}
 }

@@ -6,7 +6,7 @@
 
     <property name="vendor" value="exponentus.com" />
 	
-    <!-- Source directory (usually it is IDE workspace path) -->
+    <!-- Source directory -->
     <property name="workspace.dir" value="c:\workspace" />
     <!-- Application path -->
     <property name="application.dir" value="e:\poema" />
@@ -230,14 +230,7 @@
         <echo>Copying additional files</echo>
         <copy overwrite="true" file="${nb_prj.dir}/start.bat" tofile="${application.dir}/start.bat" />
         <copy overwrite="true" file="${nb_prj.dir}/start.sh" tofile="${application.dir}/start.sh" />
-        <copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />
-        <echo>Copying vocabularies of the applications</echo>
-        <copy file="${rule_nb.dir}/Administrator/Resources/vocabulary.xml" tofile="${application_rule.dir}/Administrator/Resources/vocabulary.xml" />
-        <copy file="${rule_officeframe.dir}/Staff/Resources/vocabulary.xml" tofile="${application_rule.dir}/Staff/Resources/vocabulary.xml" />
-        <copy file="${rule_officeframe.dir}/Reference/Resources/vocabulary.xml" tofile="${application_rule.dir}/Reference/Resources/vocabulary.xml" />
-        <copy file="${rule_officeframe.dir}/Workspace/Resources/vocabulary.xml" tofile="${application_rule.dir}/Workspace/Resources/vocabulary.xml" />
-        <copy file="${rule_poema.dir}/Projects/Resources/vocabulary.xml" tofile="${application_rule.dir}/Projects/Resources/vocabulary.xml" />
-
+        <copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />       
 
     </target>
 </project>
