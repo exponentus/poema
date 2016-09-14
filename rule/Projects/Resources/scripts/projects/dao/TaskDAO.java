@@ -31,7 +31,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             CriteriaQuery<Task> cq = cb.createQuery(Task.class);
             CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
             Root<Task> taskRoot = cq.from(Task.class);
-            cq.select(taskRoot);
+            cq.select(taskRoot).distinct(true);
             countCq.select(cb.count(taskRoot));
 
             Predicate condition = null;
