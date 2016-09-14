@@ -30,7 +30,7 @@ import { Employee } from '../../models';
                     </button>
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="ids && ids.indexOf(m.userID) !=- 1" *ngFor="let m of getEmps()" (click)="add(m)">
+                    <li class="select-option" [class.selected]="ids && ids.indexOf(m.userID) !=- 1" *ngFor="let m of visEmployees" (click)="add(m)">
                         {{m.name}}
                     </li>
                 </ul>
@@ -40,14 +40,19 @@ import { Employee } from '../../models';
 })
 
 export class EmployeeInputComponent {
-    @Input() ids: string[];
+    @Input('ids') set _ids(ids: string[]) {
+        this.ids = ids;
+        this.checkSelectedEmps();
+    };
     @Input() placeHolder: string = '';
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() searchable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select: EventEmitter<any> = new EventEmitter();
+    @Output() select = new EventEmitter();
+    private ids: string[] = [];
     private employees: Employee[] = [];
+    private visEmployees: Employee[] = [];
     private selectedEmps: Employee[] = [];
     private sub: any;
 
@@ -56,9 +61,8 @@ export class EmployeeInputComponent {
     ngOnInit() {
         this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
             this.employees = state.employees;
-            if (this.ids) {
-                this.selectedEmps = state.employees.filter(it => this.ids.indexOf(it.userID) != -1);
-            }
+            this.checkEmps();
+            this.checkSelectedEmps();
             this.searchable = this.employees.length > 13;
         });
     }
@@ -67,11 +71,17 @@ export class EmployeeInputComponent {
         this.sub.unsubscribe();
     }
 
-    getEmps() {
+    checkSelectedEmps() {
+        if (this.ids) {
+            this.selectedEmps = this.employees.filter(it => this.ids.indexOf(it.userID) != -1);
+        }
+    }
+
+    checkEmps() {
         if (this.multiple && this.ids) {
-            return this.employees.filter(it => this.ids.indexOf(it.userID) == -1);
+            this.visEmployees = this.employees.filter(it => this.ids.indexOf(it.userID) == -1);
         } else {
-            return this.employees;
+            this.visEmployees = this.employees;
         }
     }
 
@@ -90,6 +100,7 @@ export class EmployeeInputComponent {
         if (this.multiple) {
             this.selectedEmps.push(employee);
             this.ids = this.selectedEmps.map(it => it.userID);
+            this.checkEmps();
         } else {
             this.selectedEmps = [employee];
             this.ids = [employee.userID];
@@ -104,6 +115,7 @@ export class EmployeeInputComponent {
             this.selectedEmps = this.selectedEmps.filter(it => it.userID != employee.userID);
             this.ids = this.selectedEmps.map(it => it.userID);
             this.select.emit(this.selectedEmps);
+            this.checkEmps();
         }
     }
 

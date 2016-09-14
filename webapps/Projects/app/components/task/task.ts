@@ -40,6 +40,7 @@ export class TaskComponent {
     showACLTab: boolean = false;
 
     showTaskCancelDialog = false;
+    taskObsManualyChanged = false;
     taskPriorityTypes: any;
     comments: Comment[];
     errors: any = {};
@@ -381,6 +382,9 @@ export class TaskComponent {
 
     setProject(project: Project) {
         this.task.projectId = project.id;
+        if (!this.taskObsManualyChanged) {
+            this.task.observerUserIds = project.observerUserIds;
+        }
         this.validateForm();
     }
 
@@ -415,6 +419,7 @@ export class TaskComponent {
     }
 
     setObserver(observers: Employee[]) {
+        this.taskObsManualyChanged = true;
         this.task.observerUserIds = observers.map(it => it.userID);
     }
 
