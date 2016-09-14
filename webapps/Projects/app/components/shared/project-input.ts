@@ -10,7 +10,11 @@ import { Project } from '../../models';
         <span class="input project-input" *ngIf="!editable">
             {{project?.name}}
         </span>
-        <div dropdown class="select project-input" [class.allow-clear]="allowClear" [class.has-selected]="project" *ngIf="editable">
+        <div dropdown
+             class="select project-input"
+             [class.allow-clear]="allowClear"
+             [class.has-selected]="project"
+             *ngIf="editable">
             <div dropdown-toggle class="select-selection input">
                 <span>{{project?.name}}</span>
                 <span class="placeholder">{{placeHolder}}</span>
@@ -19,12 +23,6 @@ import { Project } from '../../models';
                 </div>
             </div>
             <div class="dropdown-menu select-dropdown">
-                <div class="select-search" *ngIf="searchable">
-                    <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <!-- <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
-                        <i class="fa fa-times"></i>
-                    </button> -->
-                </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" [class.selected]="project?.id == m.id" *ngFor="let m of getProjects()" (click)="onSelect(m)">
                         {{m.name}}
@@ -39,7 +37,6 @@ export class ProjectInputComponent {
     @Input() id: string;
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
-    @Input() searchable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
     private projects: Project[] = [];
@@ -53,7 +50,6 @@ export class ProjectInputComponent {
         this.sub = this.store.select('projects').subscribe((state: IProjectsState) => {
             this.projects = state.projects;
             this.project = state.projects.filter(it => it.id == this.id)[0];
-            this.searchable = this.projects.length > 13;
         });
     }
 

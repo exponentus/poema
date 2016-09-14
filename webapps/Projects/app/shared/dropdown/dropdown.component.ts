@@ -21,8 +21,8 @@ import { DropdownToggleComponent } from './dropdown-toggle.component';
 
 export class DropdownComponent {
     @HostBinding('class.dropdown') true;
-    @HostBinding('class.open') get isOpen() { return this.open };
-    @HostBinding('class.focus') get isFocused() { return this.focused };
+    @HostBinding('class.open') get isOpen() { return this.open; };
+    @HostBinding('class.focus') get isFocused() { return this.focused; };
     @HostBinding('tabIndex') get _tabIndex() { return this.tabIndex; };
 
     @HostListener('mouseenter', ['$event']) public onMouseEnter($event: MouseEvent): void {

@@ -45,32 +45,49 @@
                     <div>{{title | translate}}</div>
                     <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
                 </label>
-                <div class="task-reg-number" *ngIf="task.regNumber">№ {{task.regNumber}}</div>
+                <div class="task-reg-number" *ngIf="task.regNumber">{{task.regNumber}}</div>
                 <input [class.invalid]="errors.title" autofocus required name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
             </div>
         </h1>
     </header>
     <section class="content-body">
-        <section *ngIf="task.status == 'CANCELLED' && task.cancellationComment" class="task-cancel-info">
-            <span>{{'cancel_reason' | translate}}:&nbsp;</span><span>{{task.cancellationComment}}</span>
+        <section class="task-cancel-info" *ngIf="task.status == 'CANCELLED' && task.cancellationComment">
+            <span>{{'cancel_reason' | translate}}:&nbsp;</span>
+            <span>{{task.cancellationComment}}</span>
         </section>
-        <div class="task-tabs noselect" *ngIf="hasSubTasks || hasRequests || hasACL">
-            <div class="task-tab__title" [class.active]="showProperty" [class.hidden]="!showPropertyTabTitle" (click)="toggleShowProperty()">{{'properties' | translate}}</div>
-            <div class="task-tab__title" [class.active]="showSubtasks" [class.hidden]="!hasSubTasks && !hasRequests" (click)="toggleShowSubtasks()">
+        <div class="task-tabs noselect">
+            <div class="task-tab__title" [class.active]="showPropertyTab" (click)="togglePropertyTab()">{{'properties' | translate}}</div>
+            <div class="task-tab__title" [class.active]="showStreamTab" [class.hidden]="!hasSubTasks && !hasRequests" (click)="toggleStreamTab()">
                 <i class="fa fa-align-left"></i>
                 <span>{{'execution' | translate}}</span>
             </div>
-            <div class="task-tab__title" [class.active]="showACL" [class.hidden]="!hasACL" (click)="toggleShowACL()">
+            <div class="task-tab__title" [class.active]="showObserversTab" (click)="toggleObserversTab()">
+                <i class='fa fa-eye'></i> {{'observers' | translate}}
+            </div>
+            <div class="task-tab__title" [class.active]="showACLTab" [class.hidden]="!hasACL" (click)="toggleACLTab()">
                 <i class='fa fa-share-alt'></i> {{'acl_tab_title' | translate}}
             </div>
         </div>
-        <div class="task-tab" [class.active]="showSubtasks" *ngIf="!isNew">
+        <div class="task-tab" [class.active]="showStreamTab" *ngIf="!isNew">
             <task-list [streamMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
         </div>
-        <div class="task-tab" [class.active]="showACL" *ngIf="!isNew">
+        <div class="task-tab" [class.active]="showObserversTab">
+            <div class="fieldset">
+                <div class="form-group">
+                    <div class="control-label">
+                        {{'observers' | translate}}
+                    </div>
+                    <div class="controls" [class.has-error]="errors.observerUserIds">
+                        <employee-input class="span8" [editable]="isEditable" [multiple]="true" [ids]="task.observerUserIds" (select)="setObserver($event)"></employee-input>
+                        <error-message [error]="errors.observerUserIds"></error-message>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="task-tab" [class.active]="showACLTab" *ngIf="!isNew">
             <acl [acl]="task.acl"></acl>
         </div>
-        <div class="task-tab" [class.active]="showProperty">
+        <div class="task-tab" [class.active]="showPropertyTab">
             <div class="fieldset">
                 <div class="form-group" *ngIf="!isSubtask">
                     <div class="control-label">
@@ -116,7 +133,9 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.startDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" name="startDate" (select)="setStartDate($event)" [(ngModel)]="task.startDate" />
+                        <div class="span2" *ngIf="isEditable">
+                            <input datepicker class="span2" name="startDate" (select)="setStartDate($event)" [(ngModel)]="task.startDate" />
+                        </div>
                         <error-message [error]="errors.startDate"></error-message>
                     </div>
                 </div>
@@ -128,7 +147,9 @@
                         <div class="span2" *ngIf="!isEditable">
                             <span class="input">{{task.dueDate}}</span>
                         </div>
-                        <input datepicker class="span2" *ngIf="isEditable" name="dueDate" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
+                        <div class="span2" *ngIf="isEditable">
+                            <input datepicker class="span2" name="dueDate" (select)="setDueDate($event)" [(ngModel)]="task.dueDate" />
+                        </div>
                         <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                         <error-message [error]="errors.dueDate"></error-message>
                     </div>

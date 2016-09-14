@@ -9,9 +9,11 @@ import { Component, Input, OnInit } from '@angular/core';
                     {{'editors' | translate}}
                 </div>
                 <div class="controls">
-                    <ul>
-                        <li *ngFor="let editor of acl.editors | values">{{editor}}</li>
-                    </ul>
+                    <div class="input-placeholder">
+                        <ul class="acl-list list-style-none">
+                            <li class="acl-list-item" *ngFor="let editor of acl.editors | values">{{editor}}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -19,9 +21,11 @@ import { Component, Input, OnInit } from '@angular/core';
                     {{'readers' | translate}}
                 </div>
                 <div class="controls">
-                    <ul>
-                        <li *ngFor="let reader of acl.readers | values">{{reader}}</li>
-                    </ul>
+                    <div class="input-placeholder">
+                        <ul class="acl-list list-style-none">
+                            <li class="acl-list-item" *ngFor="let reader of acl.readers | values">{{reader}}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

@@ -89,7 +89,7 @@
 }
 
 .task-tab {
-    overflow: hidden;
+    /*overflow: hidden;*/
     transition: max-height .15s;
 }
 

@@ -34,11 +34,10 @@ export class TaskComponent {
         comments: false
     };
 
-    showPropertyTabTitle: boolean = true;
-    showProperty: boolean = true;
-    showSubtasks: boolean = false;
-    showRequests: boolean = false;
-    showACL: boolean = false;
+    showPropertyTab: boolean = true;
+    showStreamTab: boolean = false;
+    showObserversTab: boolean = false;
+    showACLTab: boolean = false;
 
     showTaskCancelDialog = false;
     taskPriorityTypes: any;
@@ -69,12 +68,9 @@ export class TaskComponent {
         this.subs.push(this.route.params.subscribe(params => {
             this.isReady = false;
             this.task = null;
-            this.showProperty = true;
-            this.showSubtasks = false;
-            this.showRequests = false;
+            this.togglePropertyTab();
             this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
             this.isSubtask = params['taskId'] && params['new'] === 'new';
-            this.showPropertyTabTitle = !this.isNew;
             this.showTaskCancelDialog = false;
 
             this.taskService.fetchTaskById(params['taskId']).subscribe(
@@ -194,29 +190,32 @@ export class TaskComponent {
     }
 
     // === tab toggle actions
-    toggleShowProperty() {
-        this.showProperty = true;
-        this.showRequests = false;
-        this.showSubtasks = false;
-        this.showACL = false;
+    togglePropertyTab() {
+        this.showPropertyTab = true;
+        this.showStreamTab = false;
+        this.showObserversTab = false;
+        this.showACLTab = false;
     }
 
-    toggleShowSubtasks() {
-        this.showSubtasks = true; // !this.showSubtasks;
-        // if (this.showSubtasks) {
-        this.showRequests = false;
-        this.showProperty = false;
-        this.showACL = false;
-        // }
+    toggleStreamTab() {
+        this.showStreamTab = true;
+        this.showPropertyTab = false;
+        this.showObserversTab = false;
+        this.showACLTab = false;
     }
 
-    toggleShowACL() {
-        this.showACL = true; // !this.showRequests;
-        // if (this.showRequests) {
-        this.showSubtasks = false;
-        this.showProperty = false;
-        this.showRequests = false;
-        // }
+    toggleObserversTab() {
+        this.showObserversTab = true;
+        this.showPropertyTab = false;
+        this.showStreamTab = false;
+        this.showACLTab = false;
+    }
+
+    toggleACLTab() {
+        this.showACLTab = true;
+        this.showStreamTab = false;
+        this.showPropertyTab = false;
+        this.showObserversTab = false;
     }
     // =====
 
@@ -413,6 +412,10 @@ export class TaskComponent {
     setTags(tags: Tag[]) {
         this.task.tagIds = tags.map(it => it.id);
         this.validateForm();
+    }
+
+    setObserver(observers: Employee[]) {
+        this.task.observerUserIds = observers.map(it => it.userID);
     }
 
     addAttachment(data) {

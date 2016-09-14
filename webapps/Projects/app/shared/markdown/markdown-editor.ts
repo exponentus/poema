@@ -122,8 +122,8 @@ export class MarkdownEditorComponent {
     private timeout: any;
 
     private _markdown: string;
-    private isMdMode: boolean = false;
-    private isPreviewMode: boolean = true;
+    private isMdMode: boolean = true;
+    private isPreviewMode: boolean = false;
     private helpVisible: boolean = false;
 
     constructor(private mdc: MarkdownConverter) { }

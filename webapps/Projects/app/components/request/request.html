@@ -24,8 +24,9 @@
         </h1>
     </header>
     <section class="content-body">
-        <section *ngIf="request.resolution == 'DECLINED' && request.decisionComment" class="task-cancel-info">
-            <span>{{'decline_reason' | translate}}:&nbsp;</span><span>{{request.decisionComment}}</span>
+        <section class="task-cancel-info" *ngIf="request.resolution == 'DECLINED' && request.decisionComment">
+            <span>{{'decline_reason' | translate}}:&nbsp;</span>
+            <span>{{request.decisionComment}}</span>
         </section>
         <tabs>
             <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
