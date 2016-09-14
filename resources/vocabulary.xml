@@ -165,7 +165,7 @@
     <sentence mode="on" keyword="reg_number">
         <entry lang="RUS">Регистрационный номер</entry>
         <entry lang="KAZ">Тіркелген нөмір</entry>
-        <entry lang="ENG">Registration number</entry>
+        <entry lang="ENG">ID</entry>
         <entry lang="CHI"></entry>
     </sentence>
     <sentence mode="on" keyword="status">
