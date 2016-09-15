@@ -10,6 +10,8 @@ const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
+const helpers = require('./helpers');
+
 const ENV = process.env.NODE_ENV = 'production';
 const metadata = {
     baseUrl: '/',
@@ -69,9 +71,9 @@ module.exports = {
         noParse: [/zone\.js\/dist\/.+/]
     },
     output: {
-        path: path.resolve(__dirname, 'js'),
+        path: helpers.root('js'),
         filename: '[name].js',
-        publicPath: '/js/'
+        publicPath: '/'
     },
     plugins: [
         new CommonsChunkPlugin({
@@ -79,6 +81,11 @@ module.exports = {
             filename: 'vendor.js',
             minChunks: Infinity
         }),
+        new webpack.ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+            helpers.root('') // location of your src
+        ),
         // new CompressionPlugin({regExp: /\.css$|\.html$|\.js$|\.map$/, threshold: 1500}),
         // new CopyWebpackPlugin([{from: './src/index.html', to: 'index.html'}]),
         // new DedupePlugin(),
