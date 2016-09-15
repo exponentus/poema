@@ -382,7 +382,7 @@ export class TaskComponent {
 
     setProject(project: Project) {
         this.task.projectId = project.id;
-        if (!this.taskObsManualyChanged) {
+        if (!this.task.id && !this.taskObsManualyChanged) {
             this.task.observerUserIds = project.observerUserIds;
         }
         this.validateForm();

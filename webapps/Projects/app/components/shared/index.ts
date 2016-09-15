@@ -5,3 +5,4 @@ export * from './tags-input';
 export * from './task-type-input';
 export * from './employee-input';
 export * from './task-status-input';
+export * from './selection.component';

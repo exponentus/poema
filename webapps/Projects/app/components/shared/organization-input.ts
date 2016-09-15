@@ -6,6 +6,11 @@ import { Organization } from '../../models';
 @Component({
     selector: 'organization-input',
     template: `
+        <!-- <selection
+            [items]="getOrganizations()"
+            [disabled]="!editable"
+            (onOpen)="startLoad()">
+        </selection> -->
         <span class="input organization-input" *ngIf="!editable">
             {{org?.name}}
         </span>
@@ -20,9 +25,6 @@ import { Organization } from '../../models';
             <div class="dropdown-menu select-dropdown">
                 <div class="select-search" *ngIf="searchable">
                     <input placeholder="{{'search' | translate}}" #searchInput (keyup)="search($event.target.value)" />
-                    <!-- <button type="button" class="btn select-search-reset" *ngIf="searchInput.value" (click)="searchInput.value = '' && search('')">
-                        <i class="fa fa-times"></i>
-                    </button> -->
                 </div>
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
                     <li class="select-option" [class.selected]="org?.id == m.id" *ngFor="let m of getOrganizations()" (click)="onSelect(m)">

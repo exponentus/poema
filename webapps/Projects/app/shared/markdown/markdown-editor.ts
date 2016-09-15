@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 
 import { MarkdownConverter } from './markdown-converter';
 
@@ -22,6 +22,7 @@ import { MarkdownConverter } from './markdown-converter';
                 <div class="md-editor__tab-content">
                     <div class="md-editor__markdown" *ngIf="editable">
                         <textarea class="md-editor__area"
+                            #mdTextArea
                             name="md"
                             value="{{_markdown}}"
                             (keyup)="updateValue($event.target.value)"
@@ -115,6 +116,8 @@ export class MarkdownEditorComponent {
     @Output() blur = new EventEmitter<any>();
     @Output() onFullscreen = new EventEmitter<any>();
 
+    @ViewChild('mdTextArea') mdTextArea: ElementRef;
+
     private fullscreen: boolean = false;
     private splitMode: boolean = false;
     private hasValue: boolean = false;
@@ -147,10 +150,17 @@ export class MarkdownEditorComponent {
         }
     }
 
+    focusMdTextArea() {
+        if (this.mdTextArea) {
+            setTimeout(() => this.mdTextArea.nativeElement.focus(), 0);
+        }
+    }
+
     setActiveMdMode() {
         this.isMdMode = true;
         this.isPreviewMode = false;
         this.splitMode = false;
+        this.focusMdTextArea();
     }
 
     setActivePreviewMode() {
@@ -162,12 +172,14 @@ export class MarkdownEditorComponent {
     toggleFullscreen() {
         this.fullscreen = !this.fullscreen;
         this.onFullscreen.emit(this.fullscreen);
+        this.focusMdTextArea();
     }
 
     toggleSplitMode() {
         this.splitMode = !this.splitMode;
         this.isMdMode = this.splitMode !== true;
         this.isPreviewMode = false;
+        this.focusMdTextArea();
     }
 
     toggleHelp() {

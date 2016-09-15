@@ -30,6 +30,7 @@ import { AclComponent } from './components/acl/acl';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import {
+    SelectionComponent,
     OrganizationInputComponent,
     ProjectInputComponent,
     EmployeeInputComponent,
@@ -83,6 +84,7 @@ import { AuthGuard } from './auth.guard';
         LoginComponent,
         ErrorMessageComponent,
         AttachmentsComponent,
+        SelectionComponent,
         OrganizationInputComponent,
         EmployeeInputComponent,
         ProjectInputComponent,
