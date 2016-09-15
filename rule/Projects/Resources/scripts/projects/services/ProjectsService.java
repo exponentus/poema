@@ -2,6 +2,7 @@ package projects.services;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,8 +14,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
+import com.exponentus.rest.ServiceDescriptor;
+import com.exponentus.rest.ServiceMethod;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 
@@ -68,6 +72,17 @@ public class ProjectsService extends RestProvider {
 		}
 		return Response.ok(new ViewPage<Task>(entity)).build();
 
+	}
+
+	@Override
+	public ServiceDescriptor getDescription() {
+		ServiceDescriptor sd = new ServiceDescriptor();
+		sd.setName(getClass().getName());
+		ServiceMethod m = new ServiceMethod();
+		m.setMethod(HttpMethod.GET);
+		m.setExample(Environment.getFullHostName());
+		sd.addMethod(m);
+		return sd;
 	}
 
 }
