@@ -133,8 +133,10 @@ export class MarkdownEditorComponent {
         this.hasValue = this.markdown.length > 0;
         this._markdown = this.markdown;
 
-        if (this.editable && !this.markdown.trim().length) {
+        if (this.editable) {
             this.setActiveMdMode();
+        } else {
+            this.setActivePreviewMode();
         }
     }
 
