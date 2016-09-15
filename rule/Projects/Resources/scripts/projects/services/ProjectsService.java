@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
@@ -75,12 +74,11 @@ public class ProjectsService extends RestProvider {
 	}
 
 	@Override
-	public ServiceDescriptor getDescription() {
-		ServiceDescriptor sd = new ServiceDescriptor();
+	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
 		sd.setName(getClass().getName());
 		ServiceMethod m = new ServiceMethod();
 		m.setMethod(HttpMethod.GET);
-		m.setExample(Environment.getFullHostName());
+		m.setURL("/" + sd.getAppName() + "/" + sd.getUrlMapping() + "/projects/tasks");
 		sd.addMethod(m);
 		return sd;
 	}
