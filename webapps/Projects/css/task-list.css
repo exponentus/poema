@@ -36,7 +36,7 @@ div.task-list__title {
 }
 
 .task-list__tags .tag {
-    padding: 0 4px;
+    padding: 0 4px !important;
 }
 
 /* .stream-level */

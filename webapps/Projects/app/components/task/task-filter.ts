@@ -59,9 +59,9 @@ export class TaskFilterComponent {
         this.updateFilter();
     }
 
-    setAssigneeUser(assigneeUsers: Employee[]) {
-        if (assigneeUsers.length) {
-            this.assigneeUserId = assigneeUsers[0].userID;
+    setAssigneeUser(assigneeUsers: Employee) {
+        if (assigneeUsers) {
+            this.assigneeUserId = assigneeUsers.userID;
         } else {
             this.assigneeUserId = '';
         }

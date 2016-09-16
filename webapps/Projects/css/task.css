@@ -21,13 +21,19 @@
     padding: 4px;
 }
 
+.tags-input .select-option .tag {
+    border: 0;
+    padding: 0 2px;
+}
+
 .record-author {
     color: #666;
     font-size: .9em;
     padding: 8px;
 }
 
-.record-author .input.employee-input {
+.record-author .employee-input,
+.record-author span.input {
     border: 0;
     display: inline;
     margin: 0;

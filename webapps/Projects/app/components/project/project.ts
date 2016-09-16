@@ -71,6 +71,7 @@ export class ProjectComponent {
     }
     // =====
 
+    // ===
     loadProject(projectId: string) {
         this.projectService.fetchProjectById(projectId).subscribe(
             ({project, actions}) => {
@@ -155,18 +156,18 @@ export class ProjectComponent {
         this.validateForm('customerId');
     }
 
-    setManager(employee: Employee[]) {
-        this.project.managerUserId = employee[0].userID;
+    setManager(employee: Employee) {
+        this.project.managerUserId = employee.userID;
         this.validateForm('managerUserId');
     }
 
-    setProgrammer(employee: Employee[]) {
-        this.project.programmerUserId = employee[0].userID;
+    setProgrammer(employee: Employee) {
+        this.project.programmerUserId = employee.userID;
         this.validateForm('programmerUserId');
     }
 
-    setTester(employee: Employee[]) {
-        this.project.testerUserId = employee[0].userID;
+    setTester(employee: Employee) {
+        this.project.testerUserId = employee.userID;
         this.validateForm('testerUserId');
     }
 
@@ -176,13 +177,12 @@ export class ProjectComponent {
     }
 
     removeObserver(observer: Employee, $event) {
+        $event.stopPropagation();
         this.project.observerUserIds.forEach((id, index) => {
             if (id === observer.userID) {
                 this.project.observerUserIds.splice(index, 1);
             }
         });
-
-        $event.stopPropagation();
     }
 
     setFinishDate(date) {

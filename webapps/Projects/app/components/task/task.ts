@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
@@ -49,7 +49,7 @@ export class TaskComponent {
     constructor(
         private store: Store<any>,
         private router: Router,
-        private route: ActivatedRoute,
+        private activatedRoute: ActivatedRoute,
         private translate: TranslateService,
         private taskActions: TaskActions,
         private taskService: TaskService,
@@ -66,55 +66,51 @@ export class TaskComponent {
     }
 
     ngOnInit() {
-        this.subs.push(this.route.params.subscribe(params => {
-            this.isReady = false;
-            this.task = null;
-            this.togglePropertyTab();
-            this.isNew = (params['taskId'] === 'new') || (params['taskId'] && params['new'] === 'new')
-            this.isSubtask = params['taskId'] && params['new'] === 'new';
-            this.showTaskCancelDialog = false;
-
-            this.taskService.fetchTaskById(params['taskId']).subscribe(
-                ({task, actions}) => {
-                    this.actions = actions || {};
-
-                    if (this.isSubtask) {
-                        this.parentTask = task;
-                        this.task = new Task();
-                        this.task.parentTaskId = this.parentTask.id;
-                    } else {
-                        this.task = task;
-                        this.isSubtask = !!this.task.parentTaskId;
-                    }
-                    if (!this.isNew) {
-                        this.loadComments(1);
-                    }
-                    this.parentTask = null;
-                    if (this.task.parentTaskId && !this.task.parentTask) {
-                        this.taskService.fetchTaskById(this.task.parentTaskId).subscribe(({task, actions}) => {
-                            this.parentTask = task;
-
-                            if (this.isNew && this.isSubtask) {
-                                this.copyValueFromTask(this.parentTask);
-                            }
-                            this.isReady = true;
-                        });
-                    } else {
-                        this.isReady = true;
-                    }
-                    this.isEditable = this.isNew || this.task.editable;
-                    this.isValid = true;
-                },
-                error => this.handleXhrError(error)
-            );
-        }));
-
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
+
+        this.subs.push(this.activatedRoute.params.subscribe((params: any) => {
+            let parentTaskId = this.router.routerState.snapshot.root.queryParams['parentTask']
+            this.loadTask(params['taskId'], parentTaskId);
+        }));
     }
 
     ngOnDestroy() {
         this.store.dispatch({ type: TaskActions.TASK_UNLOAD });
         this.subs.map(s => s.unsubscribe());
+    }
+
+    // ===
+    loadTask(taskId: string, parentTaskId?: string) {
+        this.isReady = false;
+        this.task = null;
+        this.parentTask = null;
+        this.togglePropertyTab();
+        this.isSubtask = false;
+        this.showTaskCancelDialog = false;
+        this.acl = {};
+        this.actions = {};
+
+        this.taskService.fetchTaskById(taskId, parentTaskId).subscribe(
+            ({task, parentTask, actions}) => {
+                this.actions = actions || {};
+
+                this.task = task;
+                if (this.task.parentTaskId) {
+                    this.isSubtask = true;
+                    this.parentTask = parentTask;
+                }
+
+                this.isReady = true;
+                this.isNew = this.task['new'];
+                this.isEditable = this.isNew || this.task.editable;
+                this.isValid = true;
+
+                if (!this.isNew && this.FEATURE_FLAGS.comments) {
+                    this.loadComments(1);
+                }
+            },
+            error => this.handleXhrError(error)
+        );
     }
 
     // === task title
@@ -293,11 +289,12 @@ export class TaskComponent {
     }
 
     addSubtask() {
-        this.router.navigate(['/task', this.task.id, 'new']);
+        this.router.navigate(['/task', 'new'], {
+            queryParams: { 'parentTask': this.task.id }
+        });
     }
 
     //
-
     loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(payload => {
             this.store.dispatch({ type: TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });
@@ -356,10 +353,9 @@ export class TaskComponent {
     }
 
     newRequest() {
-        let navigationExtras: NavigationExtras = {
+        this.router.navigate(['/requests', 'new'], {
             queryParams: { 'task': this.task.id }
-        };
-        this.router.navigate(['/requests', 'new'], navigationExtras);
+        });
     }
 
     onSendRequest({requestSendSuccess}) {
@@ -393,8 +389,8 @@ export class TaskComponent {
         this.validateForm();
     }
 
-    setAssigneeUser(assigneeUser: Employee[]) {
-        this.task.assigneeUserId = assigneeUser[0].userID;
+    setAssigneeUser(assigneeUser: Employee) {
+        this.task.assigneeUserId = assigneeUser.userID;
         this.validateForm();
     }
 

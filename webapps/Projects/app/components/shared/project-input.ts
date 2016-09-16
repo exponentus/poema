@@ -7,29 +7,16 @@ import { Project } from '../../models';
 @Component({
     selector: 'project-input',
     template: `
-        <span class="input project-input" *ngIf="!editable">
-            {{project?.name}}
-        </span>
-        <div dropdown
-             class="select project-input"
-             [class.allow-clear]="allowClear"
-             [class.has-selected]="project"
-             *ngIf="editable">
-            <div dropdown-toggle class="select-selection input">
-                <span>{{project?.name}}</span>
-                <span class="placeholder">{{placeHolder}}</span>
-                <div class="clear" *ngIf="allowClear && project" (click)="clear($event)">
-                    <i class="fa fa-times"></i>
-                </div>
-            </div>
-            <div class="dropdown-menu select-dropdown">
-                <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="project?.id == m.id" *ngFor="let m of getProjects()" (click)="onSelect(m)">
-                        {{m.name}}
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <selection
+            class="project-input"
+            [items]="projects"
+            [selectedItems]="project ? [project] : []"
+            [disabled]="!editable"
+            [searchable]="true"
+            [allowClear]="allowClear"
+            [placeHolder]="placeHolder"
+            (change)="onSelect($event)">
+        </selection>
     `
 })
 
@@ -42,7 +29,6 @@ export class ProjectInputComponent {
     private projects: Project[] = [];
     private project: Project;
     private sub: any;
-    private keyWord: string = '';
 
     constructor(private store: Store<any>) { }
 
@@ -57,32 +43,8 @@ export class ProjectInputComponent {
         this.sub.unsubscribe();
     }
 
-    getProjects() {
-        if (this.keyWord) {
-            return this.projects.filter(it => it.name.toLowerCase().indexOf(this.keyWord) != -1);
-        }
-        return this.projects;
-    }
-
-    search(keyWord) {
-        this.keyWord = keyWord.toLowerCase();
-    }
-
-    clear($event) {
-        $event.stopPropagation();
-        this.onSelect(null);
-    }
-
     onSelect(m) {
         this.project = m;
         this.select.emit(this.project);
-        document.body.click();
-    }
-
-    onScroll($event) {
-        let {scrollHeight, clientHeight, scrollTop} = $event.target;
-        if ((scrollHeight - clientHeight) == scrollTop) {
-            console.log('scroll end');
-        }
     }
 }

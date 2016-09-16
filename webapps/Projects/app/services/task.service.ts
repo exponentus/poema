@@ -66,29 +66,34 @@ export class TaskService {
             });
     }
 
-    fetchTaskById(taskId: string) {
-        let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
-        return this.http.get(url, { headers: HEADERS })
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                let task = <Task>data.task;
-                if (!task.id) {
-                    task.id = '';
-                }
-                if (data.fsid) {
-                    task.fsid = data.fsid;
-                }
-                if (data.ACL) {
-                    task.acl = data.ACL;
-                }
-                if (data.attachment) {
-                    task.attachments = <Attachment[]>data.attachment.list;
-                }
-                return {
-                    task: <Task>task,
-                    actions: data.actions
-                }
-            });
+    fetchTaskById(taskId: string, parentTask?: string) {
+        let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '') + (parentTask ? '&parentTask=' + parentTask : '');
+        return this.http.get(url, { headers: HEADERS }).map(response => {
+            let json = response.json();
+            let data = parseResponseObjects(json.objects);
+            let task = <Task>data.task;
+            if (!task.id) {
+                task.id = '';
+            }
+            if (data.fsid) {
+                task.fsid = data.fsid;
+            }
+            if (data.ACL) {
+                task.acl = data.ACL;
+            }
+            if (data.attachment) {
+                task.attachments = <Attachment[]>data.attachment.list;
+            }
+            let parentTask;
+            if (json.data) {
+                parentTask = json.data.parentTask;
+            }
+            return {
+                task: <Task>task,
+                parentTask: <Task>parentTask,
+                actions: data.actions
+            }
+        });
     }
 
     saveTask(task: Task) {

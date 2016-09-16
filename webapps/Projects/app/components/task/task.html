@@ -189,7 +189,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">
             <span>{{'author' | translate}}</span>
-            <employee-input [editable]="false" [ids]="[task.authorId]"></employee-input>
+            <employee-input [ids]="[task.authorId]"></employee-input>
             <span>{{task.regDate}}</span>
         </div>
     </footer>

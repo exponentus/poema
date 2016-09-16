@@ -1,0 +1,262 @@
+import {
+    Component, OnInit, OnDestroy, Input, Output, HostBinding,
+    HostListener, Renderer, EventEmitter, ElementRef, ViewChild
+} from '@angular/core';
+
+@Component({
+    selector: 'selection',
+    template: `
+        <span class="input" *ngIf="disabled">
+            <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
+                {{m | localizedName:textKey}}
+            </span>
+        </span>
+        <div class="select" [class.open]="isOpen" [class.allow-clear]="isAllowClear" [class.has-selected]="hasSelected" *ngIf="!disabled">
+            <div class="select-selection input" (click)="toggleOpen($event)">
+                <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems" (click)="remove(m, $event)">
+                    {{m | localizedName:textKey}}
+                </span>
+                <input class="select-search-input" *ngIf="false && searchable" #searchInput name="search" value="" autocomplete="off" />
+                <span class="placeholder">{{placeHolder}}</span>
+                <span class="select-clear" (click)="clear($event)">&times;</span>
+            </div>
+            <div class="select-dropdown">
+                <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
+                    <li class="select-option" [class.selected]="selectedItemIds.indexOf(m[idKey]) !== -1" *ngFor="let m of _items" (click)="add(m)">
+                        <div class="{{classPrefix}}{{m[classKey]}}" [style.color]="m.color">
+                            {{m | localizedName:textKey}}
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `,
+    host: {
+        '[class.selection]': 'true',
+        '[class.is-multiple]': 'multiple',
+        '[class.is-open]': 'isOpen',
+        '[class.is-focused]': 'isFocused',
+        '[tabindex]': 'tabIndex'
+    }
+})
+
+export class SelectionComponent {
+
+    @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
+        if (this.disabled) {
+            return;
+        }
+
+        $event.preventDefault();
+        this.isFocused = true;
+    }
+
+    @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
+        if (this.disabled) {
+            return;
+        }
+
+        $event.preventDefault();
+        this.close();
+        this.clearSearchInput();
+    }
+
+    @HostListener('click', ['$event']) public onClick($event: MouseEvent): void {
+        this.selfClick = true;
+    }
+
+    @HostListener('keydown', ['$event']) public onKeyDown($event: KeyboardEvent): void {
+        if (this.disabled) {
+            return;
+        }
+
+        this.handleEvent($event);
+    }
+
+    @Input('items') set __items(items: any) {
+        this.items = items;
+        this._items = items;
+    };
+    @Input() selectedItems: any = [];
+    @Input() idKey: string = 'id';
+    @Input() textKey: string = 'name';
+    @Input() classKey: string;
+    @Input() classPrefix: string = '';
+    @Input() itemStyle: string = '';
+    @Input() multiple = false;
+    @Input() disabled = false;
+    @Input() allowClear = false;
+    @Input() searchable = false;
+    @Input() tabIndex = 0;
+    @Input() placeHolder: string = '';
+    @Input() notFoundMessage: string = '';
+    @Output() load = new EventEmitter<any>();
+    @Output() change = new EventEmitter<any>();
+    @ViewChild('searchInput') searchInput: ElementRef;
+
+    private documentClickListener;
+    private documentKeyUpListener;
+    private items: any = [];
+    private _items: any = [];
+    private selectedItemIds: string[] = [];
+    private isOpen = false;
+    private isFocused = false;
+    private selfClick = false;
+    private firstOpen = true;
+    private keyWord = '';
+    private mode = { search: true };
+
+    constructor(private renderer: Renderer) { }
+
+    ngOnInit() {
+        this.initListenGlobal();
+        this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+    }
+
+    initListenGlobal() {
+        this.documentClickListener = this.renderer.listenGlobal('body', 'click', () => {
+            if (!this.selfClick) {
+                this.close();
+                this.clearSearchInput();
+            } else {
+                this.selfClick = false;
+            }
+        });
+
+        this.documentKeyUpListener = this.renderer.listenGlobal('body', 'keyup', (event) => {
+            if (event.code === 'Escape') {
+                this.close();
+                this.clearSearchInput();
+            }
+        });
+    }
+
+    // ===
+    emitChange() {
+        if (this.multiple) {
+            this.change.emit(this.selectedItems);
+        } else {
+            this.change.emit(this.selectedItems[0]);
+        }
+    }
+
+    add(item) {
+        if (this.multiple) {
+            this.selectedItems.push(item);
+            this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+        } else {
+            this.selectedItems = [item];
+            this.selectedItemIds = [item[this.idKey]];
+            this.close();
+        }
+        this.emitChange();
+        this.filterItems();
+        this.clearSearchInput();
+    }
+
+    remove(item, $event) {
+        if (!this.multiple) {
+            return;
+        }
+
+        $event.stopPropagation();
+        $event.preventDefault();
+        if (this.multiple) {
+            this.selectedItems = this.selectedItems.filter(it => it[this.idKey] != item[this.idKey]);
+            this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+        } else {
+            this.selectedItems = [];
+            this.selectedItemIds = [];
+        }
+        this.emitChange();
+        this.filterItems();
+        this.clearSearchInput();
+    }
+
+    clear($event) {
+        $event.stopPropagation();
+        this.selectedItems = [];
+        this.selectedItemIds = [];
+        this.emitChange();
+        this.filterItems();
+        this.clearSearchInput();
+    }
+
+    clearSearchInput() {
+        if (this.searchable && this.searchInput) {
+            this.searchInput.nativeElement.value = '';
+        }
+    }
+
+    filterItems() {
+        this._items = this.items.filter(it => this.selectedItemIds.indexOf(it[this.idKey]) == -1);
+    }
+
+    search(keyWord) {
+        if (this.keyWord !== keyWord) {
+            this.open();
+            this.load.emit({ search: keyWord });
+            this.keyWord = keyWord;
+        }
+    }
+
+    handleEvent($event) {
+        if ($event.key === 'Enter') {
+            this.toggleOpen($event);
+        } else if ($event.key === 'Escape' || $event.key === 'Tab') {
+            this.close();
+            this.clearSearchInput();
+        } else if ($event.key === 'ArrowUp') {
+            // console.log('ArrowUp');
+        } else if ($event.key === 'ArrowDown') {
+            // console.log('ArrowDown');
+        } else if ($event.key === 'ArrowLeft') {
+            // console.log('ArrowLeft');
+        } else if ($event.key === 'ArrowRight') {
+            // console.log('ArrowRight');
+        } else if ($event.target.name === 'search') {
+            this.search($event.target.value);
+        } else {
+            console.log($event);
+        }
+    }
+
+    // ===
+    get isAllowClear() {
+        return this.allowClear && this.selectedItems.length;
+    }
+
+    get hasSelected() {
+        return this.selectedItems.length;
+    }
+
+    open() {
+        this.isOpen = true;
+        this.isFocused = true;
+        if (this.firstOpen) {
+            this.load.emit({ first: true });
+            this.firstOpen = false;
+        }
+    }
+
+    close() {
+        this.isOpen = false;
+        this.isFocused = false;
+    }
+
+    toggleOpen($event) {
+        $event.preventDefault();
+        if (this.isOpen) {
+            this.close();
+        } else {
+            this.open();
+        }
+    }
+
+    onScroll($event) {
+        let {scrollHeight, clientHeight, scrollTop} = $event.target;
+        if ((scrollHeight - clientHeight) == scrollTop) { // scroll end
+            this.load.emit({ next: true });
+        }
+    }
+}

@@ -25,7 +25,7 @@ export function serializeObj(obj): string {
 }
 
 export function parseResponseObjects(objects: any): any {
-    let result: any = [];
+    let result: any = {};
     for (let obj of objects) {
         if (obj.kind || obj.entityKind) {
             result[obj.kind || obj.entityKind] = obj;

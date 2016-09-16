@@ -1,49 +1,56 @@
-import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
 @Component({
     selector: 'task-status-input',
     template: `
-        <span class="input task-status-input" *ngIf="!editable">
-            {{status | text:'L' | translate}}
-        </span>
-        <div dropdown class="select task-status-input" [class.allow-clear]="allowClear" [class.has-selected]="status" *ngIf="editable">
-            <div dropdown-toggle class="select-selection input">
-                <span class="status-{{status | text:'L'}}">{{status | text:'L' | translate}}</span>
-                <span class="placeholder">{{placeHolder}}</span>
-                <div class="clear" *ngIf="allowClear && status" (click)="clear($event)">
-                    <i class="fa fa-times"></i>
-                </div>
-            </div>
-            <div class="dropdown-menu select-dropdown">
-                <ul class="select-list">
-                    <li class="select-option" [class.selected]="status == m" *ngFor="let m of statusList" (click)="onSelect(m)">
-                        <div class="task-status status-{{m | text:'L'}}">{{m | text:'L' | translate}}</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <selection
+            class="task-status-input"
+            [items]="statusList"
+            [selectedItems]="status ? status : []"
+            textKey="name"
+            classKey="klass"
+            classPrefix="status-"
+            [disabled]="!editable"
+            [searchable]="true"
+            [allowClear]="allowClear"
+            [placeHolder]="placeHolder"
+            (change)="onSelect($event)">
+        </selection>
     `
 })
 
 export class TaskStatusInputComponent {
-    @Input() status: string = '';
+    @Input('status') set _status(status: string) {
+        this.statusName = status;
+        this.status = this.statusList.filter(it => it.id === status);
+    };
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
 
-    private statusList: string[] = ['PROCESSING', 'COMPLETED', 'WAITING', 'CANCELLED', 'PENDING', 'OPEN'];
+    private status: any = {};
+    private statusName: string = '';
+    private statusList: any[] = [];
 
-    constructor() { }
-
-    clear($event) {
-        $event.stopPropagation();
-        this.onSelect('');
+    constructor(private translate: TranslateService) {
+        translate.get(['processing', 'completed', 'waiting', 'cancelled', 'pending', 'open']).subscribe(t => {
+            this.statusList = [
+                { id: 'PROCESSING', name: t.processing, klass: 'processing' },
+                { id: 'COMPLETED', name: t.completed, klass: 'completed' },
+                { id: 'WAITING', name: t.waiting, klass: 'waiting' },
+                { id: 'CANCELLED', name: t.cancelled, klass: 'cancelled' },
+                { id: 'PENDING', name: t.pending, klass: 'pending' },
+                { id: 'OPEN', name: t.open, klass: 'open' }
+            ];
+            this.status = this.statusList.filter(it => it.id === this.statusName);
+        });
     }
 
     onSelect(m) {
         this.status = m;
-        this.select.emit(this.status);
-        document.body.click();
+        this.select.emit(this.status ? this.status.id : '');
     }
 }
