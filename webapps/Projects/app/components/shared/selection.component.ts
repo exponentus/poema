@@ -13,10 +13,19 @@ import {
         </span>
         <div [ngClass]="classes" *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
-                <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems" (click)="remove(m, $event)">
+                <span class="selection-item {{classPrefix}}{{m[classKey]}}"
+                      *ngFor="let m of selectedItems"
+                      [style.color]="m.color"
+                      (click)="remove(m, $event)">
                     {{m | localizedName:textKey}}
                 </span>
-                <input class="select-search-input" *ngIf="searchable" #searchInput name="search" value="" autocomplete="off" />
+                <input class="select-search-input"
+                    *ngIf="false && searchable"
+                    #searchInput
+                    name="search"
+                    value=""
+                    autocomplete="off"
+                    (keyup)="handleEvent($event)" />
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
             </div>
@@ -34,6 +43,7 @@ import {
 })
 
 export class SelectionComponent {
+    @HostBinding('tabindex') get _tabIndex() { return this.tabIndex; }
 
     @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
         if (this.disabled) {
@@ -42,10 +52,12 @@ export class SelectionComponent {
 
         $event.preventDefault();
         this.isFocused = true;
+        // this.searchInput.nativeElement.focus();
+        // this.renderer.invokeElementMethod(this.searchInput.nativeElement, 'focus');
     }
 
     @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
-        if (this.disabled) {
+        if (this.disabled || this.selfClick) {
             return;
         }
 
@@ -80,6 +92,7 @@ export class SelectionComponent {
     @Input() disabled = false;
     @Input() allowClear = false;
     @Input() searchable = false;
+    @Input() contentLoadable = false;
     @Input() tabIndex = 0;
     @Input() placeHolder: string = '';
     @Input() notFoundMessage: string = '';
@@ -179,8 +192,8 @@ export class SelectionComponent {
             this.close();
         }
         this.emitChange();
-        this.filterItems();
         this.clearSearchInput();
+        this.filterItems();
     }
 
     remove(item, $event) {
@@ -198,8 +211,8 @@ export class SelectionComponent {
             this.selectedItemIds = [];
         }
         this.emitChange();
-        this.filterItems();
         this.clearSearchInput();
+        this.filterItems();
     }
 
     clear($event) {
@@ -207,8 +220,8 @@ export class SelectionComponent {
         this.selectedItems = [];
         this.selectedItemIds = [];
         this.emitChange();
-        this.filterItems();
         this.clearSearchInput();
+        this.filterItems();
     }
 
     clearSearchInput() {
@@ -217,15 +230,27 @@ export class SelectionComponent {
         }
     }
 
-    filterItems() {
-        this._items = this.items.filter(it => this.selectedItemIds.indexOf(it[this.idKey]) == -1);
+    filterItems(keyWord?: string) {
+        if (!this.contentLoadable && keyWord) {
+            this._items = this.items.filter(it => {
+                return it[this.textKey].indexOf(keyWord) != -1;
+            });
+        } else {
+            this._items = this.items.filter(it => {
+                return this.selectedItemIds.indexOf(it[this.idKey]) == -1;
+            });
+        }
     }
 
     search(keyWord) {
         if (this.keyWord !== keyWord) {
-            this.open();
-            this.load.emit({ search: keyWord });
+            if (this.contentLoadable) {
+                this.load.emit({ search: keyWord });
+            } else {
+                this.filterItems(keyWord);
+            }
             this.keyWord = keyWord;
+            this.open();
         }
     }
 
@@ -244,6 +269,7 @@ export class SelectionComponent {
         } else if ($event.key === 'ArrowRight') {
             // console.log('ArrowRight');
         } else if ($event.target.name === 'search') {
+            $event.stopPropagation();
             this.search($event.target.value);
         } else {
             console.log($event);

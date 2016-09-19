@@ -52,12 +52,18 @@ export class OrganizationInputComponent {
             } else {
                 this.allLoaded = true;
             }
+        } else if (typeof $load.search === 'string') {
+            this.loadOrganizations(1, $load.search, true);
         }
     }
 
-    loadOrganizations(page = 1, keyWord = '') {
-        this.staffService.fetchOrganizations({ page: page, keyWord: keyWord }).subscribe(payload => {
-            this.organizations = this.organizations.concat(payload.organizations);
+    loadOrganizations(page = 1, keyWord = '', isSearch = false) {
+        this.staffService.fetchOrganizations({ page: page, keyword: keyWord }).subscribe(payload => {
+            if (isSearch) {
+                this.organizations = payload.organizations;
+            } else {
+                this.organizations = this.organizations.concat(payload.organizations);
+            }
             this.meta = payload.meta;
         });
     }

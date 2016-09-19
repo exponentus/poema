@@ -100,6 +100,7 @@ export class DropdownComponent {
 
     ngOnDestroy() {
         this.documentClickListener();
+        this.documentKeyupListener();
     }
 
     toggleDropdown(event) {
