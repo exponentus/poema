@@ -43,7 +43,7 @@ import {
 })
 
 export class SelectionComponent {
-    @HostBinding('tabindex') get _tabIndex() { return this.tabIndex; }
+    @HostBinding('tabIndex') get _tabIndex() { return this.tabIndex; }
 
     @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
         if (this.disabled) {

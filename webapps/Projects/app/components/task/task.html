@@ -159,7 +159,7 @@
                         {{'tags' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.tagIds">
-                        <tags-input class="span8" [editable]="isEditable" [ids]="task.tagIds" (select)="setTags($event)"></tags-input>
+                        <tags-input class="span8" [editable]="isEditable" [allowClear]="true" [ids]="task.tagIds" (select)="setTags($event)"></tags-input>
                         <error-message [error]="errors.tagIds"></error-message>
                     </div>
                 </div>
