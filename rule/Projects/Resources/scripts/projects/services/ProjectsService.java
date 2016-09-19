@@ -26,6 +26,8 @@ import projects.dao.filter.TaskFilter;
 import projects.model.Task;
 import projects.page.view.TaskView;
 
+/** rest **/
+
 @Path("/projects")
 public class ProjectsService extends RestProvider {
 
@@ -53,7 +55,7 @@ public class ProjectsService extends RestProvider {
 		_Session ses = getSession();
 		TaskDAO taskDAO = new TaskDAO(ses);
 		Task entity = taskDAO.findById(id);
-		return Response.ok(new ViewPage<Task>(entity)).build();
+		return Response.ok(new ViewPage<>(entity)).build();
 
 	}
 
@@ -69,7 +71,7 @@ public class ProjectsService extends RestProvider {
 		} catch (SecureException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
-		return Response.ok(new ViewPage<Task>(entity)).build();
+		return Response.ok(new ViewPage<>(entity)).build();
 
 	}
 
