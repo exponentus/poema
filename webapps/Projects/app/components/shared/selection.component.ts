@@ -1,23 +1,22 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, HostBinding,
-    HostListener, Renderer, EventEmitter, ElementRef, ViewChild,
-    ChangeDetectionStrategy
+    HostListener, Renderer, EventEmitter, ElementRef, ViewChild
 } from '@angular/core';
 
 @Component({
     selector: 'selection',
     template: `
-        <span class="input" *ngIf="disabled">
+        <span class="selection input" *ngIf="disabled">
             <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
                 {{m | localizedName:textKey}}
             </span>
         </span>
-        <div class="select" [class.open]="isOpen" [class.allow-clear]="isAllowClear" [class.has-selected]="hasSelected" *ngIf="!disabled">
+        <div [ngClass]="classes" *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
                 <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems" (click)="remove(m, $event)">
                     {{m | localizedName:textKey}}
                 </span>
-                <input class="select-search-input" *ngIf="false && searchable" #searchInput name="search" value="" autocomplete="off" />
+                <input class="select-search-input" *ngIf="searchable" #searchInput name="search" value="" autocomplete="off" />
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
             </div>
@@ -31,15 +30,7 @@ import {
                 </ul>
             </div>
         </div>
-    `,
-    host: {
-        '[class.selection]': 'true',
-        '[class.is-multiple]': 'multiple',
-        '[class.is-open]': 'isOpen',
-        '[class.is-focused]': 'isFocused',
-        '[tabindex]': 'tabIndex'
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush
+    `
 })
 
 export class SelectionComponent {
@@ -111,10 +102,41 @@ export class SelectionComponent {
     constructor(private renderer: Renderer) { }
 
     ngOnInit() {
-        this.initListenGlobal();
+        if (!this.disabled) {
+            this.initListenGlobal();
+        }
         this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
     }
 
+    ngOnDestroy() {
+        if (!this.disabled) {
+            this.removeListenGlobal();
+        }
+    }
+
+    // ===
+    get classes() {
+        return {
+            'select': true,
+            'selection': true,
+            'open': this.isOpen,
+            'is-open': this.isOpen,
+            'is-focused': this.isFocused,
+            'is-multiple': this.multiple,
+            'allow-clear': this.isAllowClear,
+            'has-selected': this.hasSelected
+        };
+    }
+
+    get isAllowClear() {
+        return this.allowClear && this.selectedItems.length;
+    }
+
+    get hasSelected() {
+        return this.selectedItems.length;
+    }
+
+    // ===
     initListenGlobal() {
         this.documentClickListener = this.renderer.listenGlobal('body', 'click', () => {
             if (!this.selfClick) {
@@ -131,6 +153,11 @@ export class SelectionComponent {
                 this.clearSearchInput();
             }
         });
+    }
+
+    removeListenGlobal() {
+        this.documentClickListener();
+        this.documentKeyUpListener();
     }
 
     // ===
@@ -224,14 +251,6 @@ export class SelectionComponent {
     }
 
     // ===
-    get isAllowClear() {
-        return this.allowClear && this.selectedItems.length;
-    }
-
-    get hasSelected() {
-        return this.selectedItems.length;
-    }
-
     open() {
         this.isOpen = true;
         this.isFocused = true;
