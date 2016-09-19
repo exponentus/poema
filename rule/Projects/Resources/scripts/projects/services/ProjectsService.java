@@ -78,7 +78,7 @@ public class ProjectsService extends RestProvider {
 		sd.setName(getClass().getName());
 		ServiceMethod m = new ServiceMethod();
 		m.setMethod(HttpMethod.GET);
-		m.setURL("/" + sd.getAppName() + "/" + sd.getUrlMapping() + "/projects/tasks");
+		m.setURL("/" + sd.getAppName() + sd.getUrlMapping() + "/projects/tasks");
 		sd.addMethod(m);
 		return sd;
 	}
