@@ -41,7 +41,7 @@ public class CommentDAO extends DAO<Comment, UUID> {
             long count = (long) countQuery.getSingleResult();
             int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
             if (pageNum == 0) {
-                pageNum = maxPage;
+                pageNum = 1; // maxPage;
             }
             int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 

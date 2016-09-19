@@ -56,7 +56,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			long count = (long) query.getSingleResult();
 			int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
 			if (pageNum == 0) {
-				pageNum = maxPage;
+				pageNum = 1; //maxPage;
 			}
 			int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 

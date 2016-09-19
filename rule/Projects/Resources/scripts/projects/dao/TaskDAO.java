@@ -125,7 +125,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 cq.where(condition);
                 countCq.where(condition);
             }
-            cq.orderBy(cb.asc(taskRoot.get("regDate")));
+            cq.orderBy(cb.desc(taskRoot.get("regDate")));
 
             TypedQuery<Task> typedQuery = em.createQuery(cq);
             Query query = em.createQuery(countCq);
@@ -134,7 +134,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             if (pageNum != 0 || pageSize != 0) {
                 maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
                 if (pageNum == 0) {
-                    pageNum = maxPage;
+                    pageNum = 1; // maxPage;
                 }
                 int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
                 typedQuery.setFirstResult(firstRec);

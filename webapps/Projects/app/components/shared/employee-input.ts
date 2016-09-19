@@ -22,13 +22,17 @@ import { Employee } from '../../models';
 })
 
 export class EmployeeInputComponent {
-    @Input() ids: string[] = [];
+    @Input('ids') set _ids(ids: string[]) {
+        this.ids = ids;
+        this.checkSelected();
+    };
     @Input() placeHolder: string = '';
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select = new EventEmitter();
 
+    private ids: string[] = [];
     private employees: Employee[] = [];
     private selectedEmps: Employee[] = [];
     private sub: any;
@@ -38,14 +42,18 @@ export class EmployeeInputComponent {
     ngOnInit() {
         this.sub = this.store.select('staff').subscribe((state: IStaffState) => {
             this.employees = state.employees;
-            if (this.ids) {
-                this.selectedEmps = this.employees.filter(it => this.ids.indexOf(it.userID) != -1);
-            }
+            this.checkSelected();
         });
     }
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    checkSelected() {
+        if (this.ids && this.employees) {
+            this.selectedEmps = this.employees.filter(it => this.ids.indexOf(it.userID) != -1);
+        }
     }
 
     onSelect(selectedEmps) {

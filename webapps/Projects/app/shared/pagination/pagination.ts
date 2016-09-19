@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, HostBinding, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'pagination',
@@ -15,22 +15,19 @@ import { Component, Input, Output, EventEmitter, AfterContentInit, HostBinding, 
 })
 
 export class PaginationComponent {
-    @HostBinding('hidden') get isHidden() { return this.totalPages < 2; };
+    @HostBinding('hidden') get isHidden() { return this.totalPages < 2 };
+    @Input('page') currentPage: number = 0;
+    @Input() totalPages: number = 0;
     @Input() maxPageControl: number = 5;
-    @Input('totalPages') set _totalPages(totalPages: number) {
-        this.totalPages = totalPages;
-        this.currentPage = totalPages;
-    }
-    @Input('page') set _page(page: number) {
-        this.currentPage = page;
-        this.pagination();
-    }
     @Output() change = new EventEmitter<any>();
-    private totalPages: number = 0;
-    private currentPage: number = 0;
+
     private startPage: number = 0;
     private stopPage: number = 0;
     private pages: number[] = [];
+
+    ngOnChanges() {
+        this.pagination();
+    }
 
     setPage(page: number, $event) {
         $event.preventDefault();

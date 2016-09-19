@@ -1,6 +1,7 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, HostBinding,
-    HostListener, Renderer, EventEmitter, ElementRef, ViewChild
+    HostListener, Renderer, EventEmitter, ElementRef, ViewChild,
+    ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
@@ -37,7 +38,8 @@ import {
         '[class.is-open]': 'isOpen',
         '[class.is-focused]': 'isFocused',
         '[tabindex]': 'tabIndex'
-    }
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SelectionComponent {

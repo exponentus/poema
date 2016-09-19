@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer } from '@angular/core';
 
 import { MarkdownConverter } from './markdown-converter';
 
@@ -129,7 +129,10 @@ export class MarkdownEditorComponent {
     private isPreviewMode: boolean = false;
     private helpVisible: boolean = false;
 
-    constructor(private mdc: MarkdownConverter) { }
+    constructor(
+        private renderer: Renderer,
+        private mdc: MarkdownConverter
+    ) { }
 
     ngOnInit() {
         this.html = this.mdc.toHtml(this.markdown);
@@ -152,7 +155,10 @@ export class MarkdownEditorComponent {
 
     focusMdTextArea() {
         if (this.mdTextArea) {
-            setTimeout(() => this.mdTextArea.nativeElement.focus(), 0);
+            setTimeout(() => {
+                // this.mdTextArea.nativeElement.focus();
+                this.renderer.invokeElementMethod(this.mdTextArea.nativeElement, 'focus');
+            }, 0);
         }
     }
 
