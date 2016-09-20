@@ -53,8 +53,7 @@ export class TaskComponent {
         private translate: TranslateService,
         private taskActions: TaskActions,
         private taskService: TaskService,
-        private notifyService: NotificationService,
-        private appService: AppService
+        private notifyService: NotificationService
     ) {
         this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
             this.comments = state.comments;
@@ -345,11 +344,7 @@ export class TaskComponent {
     }
 
     handleXhrError(errorResponse) {
-        if (errorResponse.status === 401) {
-            this.router.navigate(['/login']);
-        } else {
-            this.notifyService.error(errorResponse.message).show().remove(3000);
-        }
+        this.notifyService.error(errorResponse.message).show().remove(3000);
     }
 
     newRequest() {

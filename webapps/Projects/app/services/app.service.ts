@@ -27,8 +27,9 @@ export class AppService {
     }
 
     fetchUserProfile() {
-        return this.http.get('p?id=userprofile', { headers: HEADERS }).map(
-            response => {
+        return this.http.get('p?id=userprofile', { headers: HEADERS })
+            .retry(3)
+            .map(response => {
                 let res = parseResponseObjects(response.json().objects);
                 let pageSize = 20;
                 if (res.pagesize) {
@@ -45,11 +46,8 @@ export class AppService {
                     language: res.currentLang || this.language,
                     workspaceUrl: res.workspaceUrl
                 }
-            },
-            error => {
-                this.isLogged = false;
-            }
-        );
+            })
+            .catch(error => this.handleError(error));
     }
 
     updateUserProfile(userForm: any) {
@@ -59,6 +57,14 @@ export class AppService {
     }
 
     logout() {
-        return this.http.delete('/');
+        // return this.http.delete('/');
+        window.location.href = this.workspaceUrl;
+    }
+
+    handleError(error: any) {
+        if (error.status === 401) {
+            this.logout();
+        }
+        return Observable.throw(transformPostResponse(error));
     }
 }

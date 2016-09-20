@@ -14,8 +14,10 @@ export class TranslateService {
             'Accept': 'application/json'
         });
 
-        return this.http.get('p?id=common-captions', { headers: headers }).map(response => {
-            return response.json().captions;
-        });
+        return this.http.get('p?id=common-captions', { headers: headers })
+            .retry(3)
+            .map(response => {
+                return response.json().captions;
+            });
     }
 }

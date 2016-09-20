@@ -3,6 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { AppService } from './app.service';
 import { Project, Attachment } from '../models';
 import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
@@ -16,7 +17,8 @@ export class ProjectService {
 
     constructor(
         private http: Http,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private appService: AppService
     ) { }
 
     getProjectStatusTypes() {
@@ -38,11 +40,13 @@ export class ProjectService {
                     projects: <Project[]>data.list,
                     meta: data.meta
                 };
-            });
+            })
+            .catch(error => this.appService.handleError(error));
     }
 
     fetchProjectById(projectId: string) {
         let url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
+
         return this.http.get(url, { headers: HEADERS })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
@@ -63,23 +67,29 @@ export class ProjectService {
                     project: <Project>project,
                     actions: data.actions
                 }
-            });
+            })
+            .catch(error => this.appService.handleError(error));
     }
 
     saveProject(project: Project) {
         let url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
+
         return this.http.post(url, serializeObj(project), { headers: HEADERS })
             .map(response => transformPostResponse(response))
-            .catch(error => Observable.throw(transformPostResponse(error)));
+            .catch(error => this.appService.handleError(error));
     }
 
     deleteProject(projects: Project[]) {
-        return this.http.delete('p?id=project-view&projectIds=' + projects.map(it => it.id).join(','), { headers: HEADERS })
-            .catch(error => Observable.throw(transformPostResponse(error)));
+        let url = 'p?id=project-view&projectIds=' + projects.map(it => it.id).join(',');
+
+        return this.http.delete(url, { headers: HEADERS })
+            .catch(error => this.appService.handleError(error));
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {
-        return this.http.delete('p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid, { headers: HEADERS })
-            .catch(error => Observable.throw(transformPostResponse(error)));
+        let url = 'p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid;
+
+        return this.http.delete(url, { headers: HEADERS })
+            .catch(error => this.appService.handleError(error));
     }
 }

@@ -136,12 +136,7 @@ export class ProjectComponent {
     }
 
     handleXhrError(errorResponse) {
-        console.log(errorResponse);
-        if (errorResponse.status === 401) {
-            this.router.navigate(['/login']);
-        } else {
-            this.notifyService.error(errorResponse.message).show().remove(2000);
-        }
+        this.notifyService.error(errorResponse.message).show().remove(2000);
     }
 
     // ===

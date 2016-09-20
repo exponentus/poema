@@ -53,7 +53,6 @@ export class AppComponent {
     ngOnInit() {
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
-            this.isReady = true;
         });
 
         this.referenceService.fetchTags().subscribe(payload => {
@@ -86,7 +85,10 @@ export class AppComponent {
         // the lang to use, if the lang isn't available, it will use the current loader to get them
         this.translate.use('en'); // userLang
 
-        this.translate.get('brand').subscribe(value => this.HEADER_TITLE = value);
+        this.translate.get('brand').subscribe(value => {
+            this.HEADER_TITLE = value;
+            this.isReady = true;
+        });
     }
 
     ngOnDestroy() {

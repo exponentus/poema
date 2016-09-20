@@ -27,6 +27,7 @@ import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/pluck';
 import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/retryWhen';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/merge';

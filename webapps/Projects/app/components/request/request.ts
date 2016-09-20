@@ -92,11 +92,7 @@ export class RequestComponent {
     // =====
 
     handleXhrError(errorResponse) {
-        if (errorResponse.status === 401) {
-            this.router.navigate(['/login']);
-        } else {
-            this.notifyService.error(errorResponse.message).show().remove(3000);
-        }
+        this.notifyService.error(errorResponse.message).show().remove(3000);
     }
 
     close() {
