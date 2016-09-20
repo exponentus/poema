@@ -23,6 +23,8 @@ export class TasksComponent {
     filter: any = {};
     loading: boolean = true;
     private params: any = {};
+    private taskFor: string = '';
+    private projectId: string = '';
     private init: boolean = false;
 
     constructor(
@@ -59,9 +61,10 @@ export class TasksComponent {
         }));
 
         this.subs.push(this.route.params.subscribe(params => {
-            let taskFor = params['for'];
-            let projectId = params['projectId'];
-            switch (taskFor) {
+            this.taskFor = params['for'];
+            this.projectId = params['projectId'];
+
+            switch (this.taskFor) {
                 case 'inbox':
                     this.title = 'tasks_assigned_to_me';
                     break;
@@ -74,10 +77,10 @@ export class TasksComponent {
             }
 
             let r_url = '';
-            if (projectId) {
-                r_url = `/projects/${projectId}/tasks`;
-            } else if (taskFor) {
-                r_url = `/tasks/${taskFor}`;
+            if (this.projectId) {
+                r_url = `/projects/${this.projectId}/tasks`;
+            } else if (this.taskFor) {
+                r_url = `/tasks/${this.taskFor}`;
             } else {
                 r_url = '/tasks';
             }
@@ -92,9 +95,12 @@ export class TasksComponent {
     }
 
     loadData(params) {
-        this.params = params;
+        this.params = Object.assign({}, params, {
+            'for': this.taskFor,
+            'projectId': this.projectId
+        });
         this.store.dispatch(this.taskActions.fetchTasks());
-        this.taskService.fetchTasks(params).subscribe(
+        this.taskService.fetchTasks(this.params).subscribe(
             payload => {
                 this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
             },
