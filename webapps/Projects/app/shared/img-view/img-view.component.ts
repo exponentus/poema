@@ -14,7 +14,9 @@ import { ImgViewService } from './img-view.service';
     `,
     host: {
         '[class.img-view]': 'true',
-        '[class.show]': 'show'
+        '[class.show]': 'show',
+        '[tabIndex]': '0',
+        '(keyup.esc)': 'onEsc($event)'
     }
 })
 
@@ -34,6 +36,11 @@ export class ImgViewComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    onEsc($event) {
+        $event.preventDefault();
+        this.hide($event);
     }
 
     hide($event) {
