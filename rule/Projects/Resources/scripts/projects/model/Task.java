@@ -14,7 +14,10 @@ import reference.model.TaskType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @JsonRootName("task")
@@ -98,7 +101,7 @@ public class Task extends SecureAppEntity<UUID> {
 
     @JsonProperty("observerUserIds")
     @ElementCollection
-    private Set<Long> observers;
+    private List<Long> observers;
 
     @JsonIgnore
     public Project getProject() {
@@ -286,11 +289,11 @@ public class Task extends SecureAppEntity<UUID> {
         this.customerObservation = customerObservation;
     }
 
-    public Set<Long> getObservers() {
+    public List<Long> getObservers() {
         return observers;
     }
 
-    public void setObservers(Set<Long> observers) {
+    public void setObservers(List<Long> observers) {
         this.observers = observers;
     }
 

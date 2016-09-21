@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TranslateModule, TranslateLoader } from 'ng2-translate/ng2-translate';
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs/Observable';
 
 import { SharedModule } from './shared/shared.module';
 

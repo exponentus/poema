@@ -70,9 +70,9 @@ export class TaskService {
             .catch(error => this.appService.handleError(error));
     }
 
-    fetchTaskById(taskId: string, parentTask?: string) {
-        let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '') + (parentTask ? '&parentTask=' + parentTask : '');
-        return this.http.get(url, { headers: HEADERS })
+    fetchTaskById(taskId: string, params: any = {}) {
+        let url = 'p?id=task-form&taskId=' + (taskId !== 'new' ? taskId : '');
+        return this.http.get(url, { headers: HEADERS, search: createURLSearchParams(params) })
             .map(response => {
                 let json = response.json();
                 let data = parseResponseObjects(json.objects);

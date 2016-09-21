@@ -68,8 +68,9 @@ export class TaskComponent {
         this.taskService.getTaskPriorityTypes().subscribe(tpt => this.taskPriorityTypes = tpt);
 
         this.subs.push(this.activatedRoute.params.subscribe((params: any) => {
-            let parentTaskId = this.router.routerState.snapshot.root.queryParams['parentTask']
-            this.loadTask(params['taskId'], parentTaskId);
+            let parentTaskId = this.router.routerState.snapshot.root.queryParams['parentTaskId'];
+            let projectId = this.router.routerState.snapshot.root.queryParams['projectId'];
+            this.loadTask(params['taskId'], { projectId, parentTaskId });
         }));
     }
 
@@ -79,7 +80,7 @@ export class TaskComponent {
     }
 
     // ===
-    loadTask(taskId: string, parentTaskId?: string) {
+    loadTask(taskId: string, params: any = {}) {
         this.isReady = false;
         this.task = null;
         this.parentTask = null;
@@ -89,7 +90,7 @@ export class TaskComponent {
         this.acl = {};
         this.actions = {};
 
-        this.taskService.fetchTaskById(taskId, parentTaskId).subscribe(
+        this.taskService.fetchTaskById(taskId, params).subscribe(
             ({task, parentTask, actions}) => {
                 this.actions = actions || {};
 
