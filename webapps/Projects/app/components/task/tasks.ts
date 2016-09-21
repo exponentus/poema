@@ -123,11 +123,11 @@ export class TasksComponent {
     }
 
     newTask() {
-        this.router.navigate(['/task', 'new'], {
-            queryParams: {
-                projectId: this.projectId || ''
-            }
-        });
+        let queryParams: any = {};
+        if (this.projectId) {
+            queryParams.projectId = this.projectId;
+        }
+        this.router.navigate(['/task', 'new'], { queryParams });
     }
 
     deleteTask(task: Task) {
