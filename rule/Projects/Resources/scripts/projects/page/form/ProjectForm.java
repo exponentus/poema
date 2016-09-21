@@ -190,7 +190,9 @@ public class ProjectForm extends _DoForm {
         _ActionBar actionBar = new _ActionBar(session);
         if (project.isEditable()) {
             actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
-            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            if (!project.isNew()) {
+                actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            }
         }
         return actionBar;
     }
