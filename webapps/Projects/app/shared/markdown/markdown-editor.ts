@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ElementRef, ViewChild, Renderer } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, HostBinding, ElementRef, ViewChild, Renderer } from '@angular/core';
 
 import { MarkdownConverter } from './markdown-converter';
 
@@ -93,17 +93,18 @@ import { MarkdownConverter } from './markdown-converter';
     `,
     host: {
         'tabindex': '0',
-        '[class.md-editor]': 'true',
-        '[class.edit]': 'editable',
-        '[class.fullscreen]': 'fullscreen',
-        '[class.split-mode]': 'splitMode',
-        '[class.help-is-visible]': 'helpVisible',
-        '[class.has-value]': 'hasValue',
         '(keyup.esc)': 'onEsc($event)'
     }
 })
 
 export class MarkdownEditorComponent {
+    @HostBinding('class.md-editor') true;
+    @HostBinding('class.edit') get _edit() { return this.editable; };
+    @HostBinding('class.fullscreen') get _fullscreen() { return this.fullscreen; };
+    @HostBinding('class.split-mode') get _splitMode() { return this.splitMode; };
+    @HostBinding('class.help-is-visible') get _helpVisible() { return this.helpVisible; };
+    @HostBinding('class.has-value') get _hasValue() { return this.hasValue; };
+
     @Input() editable: boolean = true;
     @Input() markdown: string = '';
     @Input() placeHolder: string;

@@ -115,16 +115,11 @@ export class SelectionComponent {
     constructor(private renderer: Renderer) { }
 
     ngOnInit() {
-        if (!this.disabled) {
-            this.initListenGlobal();
-        }
         this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
     }
 
     ngOnDestroy() {
-        if (!this.disabled) {
-            this.removeListenGlobal();
-        }
+        this.removeListenGlobal();
     }
 
     // ===
@@ -169,8 +164,10 @@ export class SelectionComponent {
     }
 
     removeListenGlobal() {
-        this.documentClickListener();
-        this.documentKeyUpListener();
+        if (!this.disabled) {
+            this.documentClickListener && this.documentClickListener();
+            this.documentKeyUpListener && this.documentKeyUpListener();
+        }
     }
 
     // ===
@@ -278,6 +275,9 @@ export class SelectionComponent {
 
     // ===
     open() {
+        if (!this.isOpen) {
+            this.initListenGlobal();
+        }
         this.isOpen = true;
         this.isFocused = true;
         if (this.firstOpen) {
@@ -289,6 +289,7 @@ export class SelectionComponent {
     close() {
         this.isOpen = false;
         this.isFocused = false;
+        this.removeListenGlobal();
     }
 
     toggleOpen($event) {
