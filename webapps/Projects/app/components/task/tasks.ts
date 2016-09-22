@@ -11,7 +11,11 @@ import { Task } from '../../models/task';
 
 @Component({
     selector: 'tasks',
-    template: require('./tasks.html')
+    template: require('./tasks.html'),
+    host: {
+        '[class.view]': 'true',
+        '[class.load]': 'loading'
+    }
 })
 
 export class TasksComponent {
@@ -95,6 +99,7 @@ export class TasksComponent {
     }
 
     loadData(params) {
+        this.loading = true;
         this.params = Object.assign({}, params, {
             'for': this.taskFor,
             'projectId': this.projectId

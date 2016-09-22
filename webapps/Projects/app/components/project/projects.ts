@@ -12,7 +12,11 @@ import { Project } from '../../models/project';
 
 @Component({
     selector: 'projects',
-    template: require('./projects.html')
+    template: require('./projects.html'),
+    host: {
+        '[class.view]': 'true',
+        '[class.load]': 'loading'
+    }
 })
 
 export class ProjectsComponent {

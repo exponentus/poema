@@ -17,7 +17,7 @@
             </div>
         </div>
     </header>
-    <div class="entries" [class.hidden]="loading">
+    <div class="entries">
         <div *ngFor="let task of tasks">
             <div class="entry-wrap" *ngIf="!streamMode">
                 <div class="entry" [class.active]="isSelected(task.id)">

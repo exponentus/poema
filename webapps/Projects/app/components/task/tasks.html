@@ -14,7 +14,7 @@
         <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
     </div>
 </div>
-<div class="content-body" [class.load]="loading">
+<div class="content-body">
     <task-list [tasks]="tasks" (toggleStream)="onToggleStream($event)"></task-list>
 </div>
 <router-outlet></router-outlet>
