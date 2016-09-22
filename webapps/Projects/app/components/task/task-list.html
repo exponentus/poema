@@ -18,7 +18,7 @@
         </div>
     </header>
     <div class="entries">
-        <div *ngFor="let task of tasks">
+        <div class="top-entry" [class.is-last]="isLast" *ngFor="let task of tasks; let isLast = last">
             <div class="entry-wrap" *ngIf="!streamMode">
                 <div class="entry" [class.active]="isSelected(task.id)">
                     <label class="entry-select" *ngIf="showSelect">
@@ -26,11 +26,15 @@
                     </label>
                     <a class="entry-link" [routerLink]="['/task', task.id]">
                         <div class="entry-fields">
-                            <div class="task-list__reg-number expandable-level" [class.has-expandable]="task.hasSubtasks || task.hasRequests">
-                                <div class="entry-expander" [class.is-expanded]="expandedIds.indexOf(task.id) != -1" (click)="toggleExpandable(task.id, $event)">
-                                    <i class="entry-expander_icon fa"></i>
-                                </div>
-                                <span>{{task.regNumber}}</span>
+                            <div class="task-list__reg-number">
+                                <expandable-cell
+                                      [expandable]="task.hasSubtasks || task.hasRequests"
+                                      [expanded]="expandedIds.indexOf(task.id) != -1"
+                                      [level]="0"
+                                      [isLast]="isLast"
+                                      (click)="toggleExpandable(task.id, $event)">
+                                    {{task.regNumber}}
+                                </expandable-cell>
                             </div>
                             <div class="task-list__title">
                                 <span>{{task.title}}</span>
@@ -59,7 +63,13 @@
                     </a>
                 </div>
             </div>
-            <task-stream [expandRoot]="streamMode" [showSelect]="showSelect" [task]="task" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+            <task-stream
+                [expandRoot]="streamMode"
+                [showSelect]="showSelect"
+                [task]="task"
+                (toggleStream)="onToggleStream($event)"
+                (loadStreamLevel)="onLoadStreamLevel($event)">
+            </task-stream>
         </div>
     </div>
 </div>

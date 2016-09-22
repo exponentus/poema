@@ -157,3 +157,8 @@
     margin: 0;
     padding: 0;
 }
+
+/* */
+div.task-list__request_type {
+    padding-left: 20px;
+}

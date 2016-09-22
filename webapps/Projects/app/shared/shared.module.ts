@@ -10,6 +10,7 @@ import { Tabs, Tab } from './tabs';
 import { SwitchButtonComponent } from './switch-button';
 import { NotificationComponent, NotificationService } from './notification';
 import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './markdown';
+import { ExpandableCellComponent } from './expandable-cell/expandable-cell.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './markdo
         DropdownComponent, DropdownToggleComponent,
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
-        ImgViewDirective, ImgViewComponent
+        ImgViewDirective, ImgViewComponent,
+        ExpandableCellComponent
     ],
     exports: [
         PaginationComponent,
@@ -32,7 +34,8 @@ import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './markdo
         DropdownComponent, DropdownToggleComponent,
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
-        ImgViewDirective, ImgViewComponent
+        ImgViewDirective, ImgViewComponent,
+        ExpandableCellComponent
     ],
     imports: [CommonModule],
     providers: [
