@@ -52,6 +52,9 @@ public class TaskForm extends _DoForm {
                 return;
             }
 
+            if (task.getParent() != null) {
+                addContent("parentTask", task.getParent());
+            }
             addContent(task.getAttachments());
             addContent(new ACL(task));
         } else {

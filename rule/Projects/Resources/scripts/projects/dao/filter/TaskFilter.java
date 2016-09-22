@@ -28,6 +28,7 @@ public class TaskFilter {
     private Date dueDate;
     private List<Tag> tags;
     private boolean isParentOnly;
+    private boolean isChildOnly;
 
     public Project getProject() {
         return project;
@@ -151,5 +152,13 @@ public class TaskFilter {
 
     public void setParentOnly(boolean parentOnly) {
         isParentOnly = parentOnly;
+    }
+
+    public boolean isChildOnly() {
+        return isChildOnly;
+    }
+
+    public void setChildOnly(boolean childOnly) {
+        isChildOnly = childOnly;
     }
 }
