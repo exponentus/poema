@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'expandable-cell',
@@ -14,24 +14,18 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         '[class.expandable-cell]': 'true',
         '[class.is-expandable]': 'expandable',
         '[class.is-expanded]': 'expanded',
-        '[class.is-last]': 'isLast',
-        '(click)': 'onClick($event)'
+        '[class.is-loading]': 'loading',
+        '[class.is-last]': 'isLast'
     }
 })
 
 export class ExpandableCellComponent {
     @Input() expandable: boolean = false;
     @Input() expanded: boolean = false;
+    @Input() loading: boolean = false;
     @Input() level: number = 0;
     @Input() isLast: boolean = false;
     @Input() nextExpandable: boolean = false;
-    @Output() toggle = new EventEmitter<any>();
 
     private counter = Array;
-
-    constructor() { }
-
-    onClick($event) {
-        this.toggle.emit(!this.expanded);
-    }
 }
