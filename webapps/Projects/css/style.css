@@ -28,35 +28,6 @@ body:not(.side-nav-toggle) .aside + .content {
     margin-left: 280px;
 }
 
-.view {
-    display: block;
-    position: relative;
-}
-
-.view.load:before {
-    background: url("../img/loading.gif") no-repeat center center;
-    content: '';
-    display: block;
-    height: 100px;
-    left: 50%;
-    margin-left: -50px;
-    position: absolute;
-    top: 50px;
-    width: 100px;
-    z-index: 100;
-}
-
-.view.load:after {
-    background: rgba(255, 255, 255, .5);
-    content: '';
-    display: block;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
 .form .content-actions {
     border-bottom: 1px solid #e6e6e6;
     border-top: 1px solid transparent;

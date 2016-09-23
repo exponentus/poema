@@ -7,9 +7,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
             [class.is-last]="isLast"
             [class.has-next-expandable]="nextExpandable"
             *ngFor="let _level of counter(level); let isLast = last">
-        </i>
-        <i class="expandable-cell_icon fa"></i>
-        <span><ng-content></ng-content></span>
+        </i><i class="expandable-cell_icon fa"></i>
+        <span class="expandable-cell_content"><ng-content></ng-content></span>
     `,
     host: {
         '[class.expandable-cell]': 'true',
