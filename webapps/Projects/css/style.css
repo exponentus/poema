@@ -147,3 +147,19 @@ pagination:empty {
     display: block;
     position: relative;
 }
+
+.entries > .top-entry:after {
+    background: transparent;
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    z-index: 3;
+}
+
+.entries > .top-entry:nth-child(even):after {
+    background: #4CAF50;
+}
