@@ -133,6 +133,9 @@
         <class>administrator.model.Application</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Sentence</class>
+         <!-- Common module entities -->
+        <class>com.exponentus.common.model.Attachment</class>
+        <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <!-- Common Staff module entities -->       
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
