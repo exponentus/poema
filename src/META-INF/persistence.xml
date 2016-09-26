@@ -127,7 +127,24 @@
         <class>projects.model.Dashboard</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
-        <persistence-unit name="Workflow" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="Discussing" transaction-type="RESOURCE_LOCAL">
+        <!-- Obligatory the application module entities -->
+        <class>administrator.model.Language</class>
+        <class>administrator.model.Application</class>
+        <class>administrator.model.User</class>
+        <class>administrator.model.Sentence</class>
+        <!-- Common Staff module entities -->       
+        <class>staff.model.Organization</class>
+        <class>staff.model.Department</class>
+        <class>staff.model.Employee</class>
+        <class>staff.model.Role</class>
+        <class>staff.model.OrganizationLabel</class>       
+        <!-- Specific Discussing module entities -->
+        <class>discussing.model.Topic</class> 
+        <class>discussing.model.Comment</class>          
+        <shared-cache-mode>NONE</shared-cache-mode>
+    </persistence-unit>    
+    <persistence-unit name="Workflow" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
