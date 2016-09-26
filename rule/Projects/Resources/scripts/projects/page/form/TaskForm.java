@@ -4,7 +4,9 @@ import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.TempFile;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
@@ -22,6 +24,7 @@ import org.joda.time.LocalDate;
 import projects.dao.ProjectDAO;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
+import projects.dao.filter.TaskFilter;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -44,8 +47,8 @@ public class TaskForm extends _DoForm {
         String id = formData.getValueSilently("taskId");
 
         if (!id.isEmpty()) {
-            TaskDAO dao = new TaskDAO(session);
-            task = dao.findById(id);
+            TaskDAO taskDAO = new TaskDAO(session);
+            task = taskDAO.findById(id);
 
             if (formData.containsField("attachment")) {
                 doGetAttachment(session, formData, task);
@@ -57,6 +60,13 @@ public class TaskForm extends _DoForm {
             }
             addContent(task.getAttachments());
             addContent(new ACL(task));
+
+            TaskFilter taskFilter = new TaskFilter();
+            taskFilter.setParentTask(task);
+            ViewPage<Task> vp = taskDAO.findAllByTaskFilterWithChildren(taskFilter, 0, 0, null);
+
+            List<IAppEntity> children = new ArrayList<>(vp.getResult());
+            task.setChildren(children);
         } else {
             task = new Task();
             task.setAuthor(user);

@@ -2,10 +2,13 @@ package projects.dao;
 
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Session;
 import projects.dao.filter.TaskFilter;
+import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -14,9 +17,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
 
@@ -32,7 +37,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
             Root<Task> taskRoot = cq.from(Task.class);
             cq.select(taskRoot).distinct(true);
-            countCq.select(cb.count(taskRoot));
+            countCq.select(cb.countDistinct(taskRoot));
 
             Predicate condition = null;
 
@@ -155,13 +160,146 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Object> findTaskStream(Task task) {
+    public ViewPage<Task> findAllByTaskFilterWithChildren(TaskFilter filter, int pageNum, int pageSize, List<UUID> expandedIds) {
+        ViewPage<Task> vp = findAllByTaskFilter(filter, pageNum, pageSize);
+
+        if (vp.getResult().isEmpty()/* || expandedIds.isEmpty()*/) {
+            return vp;
+        }
+
+        // List<UUID> rootIds = vp.getResult().stream().map(Task::getId).collect(Collectors.toList());
+        // List<UUID> expandedRootIds = rootIds.stream().filter(expandedIds::contains).collect(Collectors.toList());
+        // if (!expandedRootIds.isEmpty()) {
+            List<IPOJOObject> childrenList = null; // findTaskStream(expandedIds);
+
+            for (Task task : vp.getResult()) {
+                //if (expandedIds.contains(task.getId())) {
+                    // task.setChildren(childrenList);
+                    recursiveProcessChildren(task, childrenList, expandedIds);
+                //}
+            }
+        // }
+
+        return vp;
+    }
+
+    private void recursiveProcessChildren(Task task, List<IPOJOObject> childrenList, List<UUID> expandedIds) {
+        if (task.isHasSubtasks() || task.isHasRequests()) {
+            List<IAppEntity> children = new ArrayList<>(task.getSubtasks());
+            children.addAll(task.getRequests());
+
+            //task.setChildren(findTaskStream(task));
+            task.setChildren(children);
+
+            for (Task t : task.getSubtasks()) {
+                recursiveProcessChildren(t, childrenList, expandedIds);
+            }
+        }
+    }
+
+    private List<IPOJOObject> findTaskStream(Task task) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
-            String jpql = "SELECT t, r, c FROM Task t LEFT JOIN t.requests r LEFT JOIN t.comments c WHERE t.parent = :parentTask";
-            TypedQuery<Object> query = em.createQuery(jpql, Object.class);
-            query.setParameter("parentTask", task);
-            return query.getResultList();
+            // === find tasks
+            CriteriaBuilder cbt = em.getCriteriaBuilder();
+            CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
+            Root<Task> taskRoot = cqt.from(Task.class);
+            cqt.select(taskRoot).distinct(true);
+
+            Predicate taskCondition = taskRoot.get("parent").in(task);
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
+                Path<Set<Long>> readers = taskRoot.join("readers", JoinType.LEFT);
+                Path<Set<Long>> observers = taskRoot.join("observers", JoinType.LEFT);
+                Predicate readCondition = cbt.or(readers.in(user.getId()), observers.in(user.getId()));
+                taskCondition = cbt.and(taskCondition, readCondition);
+            }
+            cqt.where(taskCondition);
+            cqt.orderBy(cbt.asc(taskRoot.get("regDate")));
+
+            TypedQuery<Task> taskQuery = em.createQuery(cqt);
+
+            List<Task> taskList = taskQuery.getResultList();
+            // =====
+
+            // === find requests
+            CriteriaBuilder cbr = em.getCriteriaBuilder();
+            CriteriaQuery<Request> cqr = cbr.createQuery(Request.class);
+            Root<Request> requestRoot = cqr.from(Request.class);
+            cqr.select(requestRoot).distinct(true);
+
+            Predicate requestCondition = requestRoot.get("task").in(task);
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Request.class)) {
+                Path<Set<Long>> readers = requestRoot.join("readers", JoinType.LEFT);
+                Predicate readCondition = cbr.or(readers.in(user.getId()));
+                requestCondition = cbr.and(requestCondition, readCondition);
+            }
+            cqr.where(requestCondition);
+            cqr.orderBy(cbr.asc(requestRoot.get("regDate")));
+
+            TypedQuery<Request> requestQuery = em.createQuery(cqr);
+
+            List<Request> requestList = requestQuery.getResultList();
+            // ======
+
+            List<IPOJOObject> result = new ArrayList<>(taskList);
+            result.addAll(requestList);
+
+            return result;
+        } finally {
+            em.close();
+        }
+    }
+
+    private List<IPOJOObject> findTaskStream(List<UUID> uids) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        try {
+            // === find tasks
+            CriteriaBuilder cbt = em.getCriteriaBuilder();
+            CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
+            Root<Task> taskRoot = cqt.from(Task.class);
+            cqt.select(taskRoot).distinct(true);
+
+            List<Task> tasks = uids.stream().map(it -> em.getReference(Task.class, it)).collect(Collectors.toList());
+
+            Predicate taskCondition = taskRoot.get("parent").in(tasks);
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
+                Path<Set<Long>> readers = taskRoot.join("readers", JoinType.LEFT);
+                Path<Set<Long>> observers = taskRoot.join("observers", JoinType.LEFT);
+                Predicate readCondition = cbt.or(readers.in(user.getId()), observers.in(user.getId()));
+                taskCondition = cbt.and(taskCondition, readCondition);
+            }
+            cqt.where(taskCondition);
+            cqt.orderBy(cbt.asc(taskRoot.get("regDate")));
+
+            TypedQuery<Task> taskQuery = em.createQuery(cqt);
+
+            List<Task> taskList = taskQuery.getResultList();
+            // =====
+
+            // === find requests
+            CriteriaBuilder cbr = em.getCriteriaBuilder();
+            CriteriaQuery<Request> cqr = cbr.createQuery(Request.class);
+            Root<Request> requestRoot = cqr.from(Request.class);
+            cqr.select(requestRoot).distinct(true);
+
+            Predicate requestCondition = requestRoot.get("task").in(tasks);
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Request.class)) {
+                Path<Set<Long>> readers = requestRoot.join("readers", JoinType.LEFT);
+                Predicate readCondition = cbr.or(readers.in(user.getId()));
+                requestCondition = cbr.and(requestCondition, readCondition);
+            }
+            cqr.where(requestCondition);
+            cqr.orderBy(cbr.asc(requestRoot.get("regDate")));
+
+            TypedQuery<Request> requestQuery = em.createQuery(cqr);
+
+            List<Request> requestList = requestQuery.getResultList();
+            // ======
+
+            List<IPOJOObject> result = new ArrayList<>(taskList);
+            result.addAll(requestList);
+
+            return result;
         } finally {
             em.close();
         }

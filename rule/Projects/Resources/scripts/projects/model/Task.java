@@ -1,6 +1,7 @@
 package projects.model;
 
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -103,6 +104,10 @@ public class Task extends SecureAppEntity<UUID> {
     @ElementCollection
     private List<Long> observers;
 
+    @Transient
+    private List<IAppEntity> children;
+
+    //
     @JsonIgnore
     public Project getProject() {
         return project;
@@ -295,6 +300,15 @@ public class Task extends SecureAppEntity<UUID> {
 
     public void setObservers(List<Long> observers) {
         this.observers = observers;
+    }
+
+    // @Transient
+    public List<IAppEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<IAppEntity> children) {
+        this.children = children;
     }
 
     @Override
