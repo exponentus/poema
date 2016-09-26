@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
 //import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
@@ -36,15 +37,16 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			countCq.select(cb.count(c));
 
 			Predicate condition = null;
-//			if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-//				condition = cb.and(c.get("readers").in(user.getId()));
-//			}
+			if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+				condition = cb.and(c.get("readers").in(user.getId()));
+			}
 			if (keyWord != null && !keyWord.isEmpty()) {
-//				if (condition != null) {
-//					condition = cb.and(cb.like(cb.lower(c.<String> get("name")), "%" + keyWord + "%"), condition);
-//				} else {
-					condition = cb.and(cb.like(cb.lower(c.<String> get("name")), "%" + keyWord + "%"));
-//				}
+				// if (condition != null) {
+				// condition = cb.and(cb.like(cb.lower(c.<String> get("name")),
+				// "%" + keyWord + "%"), condition);
+				// } else {
+				condition = cb.and(cb.like(cb.lower(c.<String> get("name")), "%" + keyWord + "%"));
+				// }
 			}
 			if (condition != null) {
 				cq.where(condition);
@@ -56,7 +58,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			long count = (long) query.getSingleResult();
 			int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
 			if (pageNum == 0) {
-				pageNum = 1; //maxPage;
+				pageNum = 1; // maxPage;
 			}
 			int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 
