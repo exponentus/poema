@@ -138,7 +138,11 @@
         <class>staff.model.Department</class>
         <class>staff.model.Employee</class>
         <class>staff.model.Role</class>
-        <class>staff.model.OrganizationLabel</class>       
+        <class>staff.model.OrganizationLabel</class>  
+        <!-- Common Reference module entities -->
+        <class>reference.model.OrgCategory</class>     
+        <class>reference.model.Position</class>  
+        <class>reference.model.DepartmentType</class>           
         <!-- Specific Discussing module entities -->
         <class>discussing.model.Topic</class> 
         <class>discussing.model.Comment</class>          
