@@ -1,8 +1,8 @@
 <div class="view project-list">
-    <header class="entries-head" *ngIf="showHeader">
+    <header class="entries-head" *ngIf="headerVisible">
         <div class="head-wrap">
             <label class="entry-select">
-                <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
+                <input type="checkbox" class="all" />
             </label>
             <div class="entry-captions">
                 <div class="project-list__name">{{'name' | translate}}</div>
@@ -17,10 +17,10 @@
         </div>
     </header>
     <div class="entries">
-        <div class="entry-wrap" *ngFor="let project of projects" [class.active]="isSelected(project.id)">
+        <div class="entry-wrap" *ngFor="let project of projects">
             <div class="entry">
                 <label class="entry-select">
-                    <input type="checkbox" name="project-id" value="{{project.id}}" [checked]="isSelected(project.id)" (change)="toggleSelected(project.id)" />
+                    <input type="checkbox" name="project-id" [value]="project.id" />
                 </label>
                 <a class="entry-link" [routerLink]="['./', project.id]">
                     <div class="entry-fields">

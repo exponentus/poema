@@ -11,6 +11,7 @@ export class Task {
     wasRead: boolean;
     fsid: string = '' + Date.now();
     acl: any = {};
+    children: any = {};
 
     project: Project;
     projectId: string;

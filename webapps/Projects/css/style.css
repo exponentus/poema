@@ -142,24 +142,3 @@ pagination:empty {
     box-shadow: 0 0 1px rgba(255, 0, 0, 0.3);
     border-color: #FF845D;
 }
-
-.top-entry {
-    display: block;
-    position: relative;
-}
-
-.entries > .top-entry:after {
-    background: transparent;
-    content: '';
-    display: block;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    z-index: 3;
-}
-
-.entries > .top-entry:nth-child(even):after {
-    background: #4CAF50;
-}

@@ -30,10 +30,21 @@ const initialState: ITasksState = {
 
 export const tasksReducer = (state = initialState, {type, payload}): ITasksState => {
     switch (type) {
+        case TaskActions.FETCH_TASKS:
+            return Object.assign({}, state, {
+                loading: true
+            });
         case TaskActions.FETCH_TASKS_FULFILLED:
             return Object.assign({}, state, {
                 tasks: payload.tasks,
-                meta: payload.meta
+                meta: payload.meta,
+                loading: false
+            });
+        case TaskActions.FETCH_TASKS_FAILED:
+            return Object.assign({}, state, {
+                tasks: payload.tasks,
+                meta: payload.meta,
+                loading: false
             });
         case TaskActions.FETCH_TASK_FULFILLED:
             return Object.assign({}, state, {

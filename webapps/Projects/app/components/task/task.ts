@@ -101,7 +101,7 @@ export class TaskComponent {
                 }
 
                 this.isReady = true;
-                this.isNew = this.task['new'];
+                this.isNew = this.task['isNew'];
                 this.isEditable = this.isNew || this.task.editable;
                 this.isValid = true;
 

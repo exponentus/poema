@@ -24,6 +24,7 @@ export class TasksComponent {
     tasks: Task[];
     meta: any = {};
     keyWord: string = '';
+    expandedIds: string[];
     filter: any = {};
     loading: boolean = true;
     private params: any = {};
@@ -59,7 +60,8 @@ export class TasksComponent {
             if (state) {
                 this.tasks = state.tasks;
                 this.meta = state.meta;
-                this.filter = state.filter
+                this.filter = state.filter;
+                this.expandedIds = state.expandedIds;
                 this.loading = state.loading;
             }
         }));
@@ -90,7 +92,7 @@ export class TasksComponent {
             }
             this.store.dispatch(this.envActions.setRedirectUrl(r_url));
 
-            this.loadData(Object.assign({}, params, this.filter));
+            this.loadData(Object.assign({}, params, this.filter, { page: this.meta.page }));
         }));
     }
 
@@ -102,7 +104,8 @@ export class TasksComponent {
         this.loading = true;
         this.params = Object.assign({}, params, {
             'for': this.taskFor,
-            'projectId': this.projectId
+            'projectId': this.projectId,
+            // 'expandedIds': this.expandedIds
         });
         this.store.dispatch(this.taskActions.fetchTasks());
         this.taskService.fetchTasks(this.params).subscribe(
@@ -111,6 +114,33 @@ export class TasksComponent {
             },
             error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
         );
+    }
+
+    loadTasks(params) {
+        this.loading = true;
+
+        this.params = Object.assign({}, params, {
+            'for': this.taskFor,
+            'projectId': this.projectId
+        });
+
+        this.store.dispatch(this.taskActions.fetchTasks());
+
+        this.taskService.fetchTasks(this.params).subscribe(
+            payload => {
+                let {tasks, meta} = this.loadTasksStream(payload.tasks, payload.meta);
+                this.store.dispatch(this.taskActions.fetchTasksFulfilled(tasks, meta));
+            },
+            error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
+        );
+    }
+
+    loadTasksStream(tasks: Task[], meta: any): any {
+        for (let task of tasks) {
+
+        }
+
+
     }
 
     refresh() {

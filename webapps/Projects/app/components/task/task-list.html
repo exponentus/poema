@@ -1,5 +1,5 @@
 <div class="view task-list">
-    <header class="entries-head" *ngIf="showHeader">
+    <header class="entries-head" *ngIf="headerVisible">
         <div class="head-wrap">
             <label class="entry-select" *ngIf="showSelect">
                 <input type="checkbox" class="all" [checked]="isSelectedAll" (change)="toggleSelectAll()" />
@@ -28,11 +28,11 @@
                         <div class="entry-fields">
                             <div class="task-list__reg-number">
                                 <expandable-cell
-                                      [expandable]="task.hasSubtasks || task.hasRequests"
-                                      [expanded]="expandedIds.indexOf(task.id) != -1"
-                                      [level]="0"
-                                      [isLast]="isLast"
-                                      (click)="toggleExpandable(task.id, $event)">
+                                    [expandable]="task.hasSubtasks || task.hasRequests"
+                                    [expanded]="expandedIds.indexOf(task.id) != -1"
+                                    [level]="0"
+                                    [isLast]="isLast"
+                                    (click)="toggleExpandable(task.id, $event)">
                                     {{task.regNumber}}
                                 </expandable-cell>
                             </div>
@@ -63,13 +63,19 @@
                     </a>
                 </div>
             </div>
-            <task-stream
+            <!-- <task-stream
                 [expandRoot]="streamMode"
-                [showSelect]="showSelect"
                 [task]="task"
                 (toggleStream)="onToggleStream($event)"
                 (loadStreamLevel)="onLoadStreamLevel($event)">
-            </task-stream>
+            </task-stream> -->
+            <task-tree
+                [rootId]="task.id"
+                [expand]="streamMode"
+                [children]="task.children"
+                [showSelect]="showSelect"
+                (toggleStream)="onToggleStream($event)">
+            </task-tree>
         </div>
     </div>
 </div>

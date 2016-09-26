@@ -20,6 +20,7 @@ import { TasksComponent } from './components/task/tasks';
 import { TaskComponent } from './components/task/task';
 import { TaskListComponent } from './components/task/task-list';
 import { TaskStreamComponent } from './components/task/task-stream';
+import { TaskTreeComponent } from './components/task/task-tree';
 import { TaskFilterComponent } from './components/task/task-filter';
 import { TaskCancelDialogComponent } from './components/task/task-cancel-dialog';
 import { RequestComponent } from './components/request/request';
@@ -73,6 +74,7 @@ import { AuthGuard } from './auth.guard';
         TaskComponent,
         TaskListComponent,
         TaskStreamComponent,
+        TaskTreeComponent,
         TaskFilterComponent,
         TaskCancelDialogComponent,
         RequestComponent,

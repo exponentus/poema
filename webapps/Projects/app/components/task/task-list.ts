@@ -15,7 +15,6 @@ export class TaskListComponent {
         this.tasks = tasks;
         this.selectedIds = [];
         this.isSelectedAll = false;
-        this.loadedExpandedCount = 0;
         this.loading = true; // this.tasks.filter(it => (it.hasSubtasks || it.hasRequests)).length > 0 && this.expandedIds.length > 0;
 
         if (this.loading && this.tasks.length > 0) {
@@ -24,7 +23,7 @@ export class TaskListComponent {
             }, 300);
         }
     }
-    @Input() showHeader: boolean = true;
+    @Input() headerVisible: boolean = true;
     @Input() showSelect: boolean = true;
     @Input() streamMode: boolean = false;
     private sub: any;
@@ -33,7 +32,6 @@ export class TaskListComponent {
     private isSelectedAll: boolean = false;
     private loading: boolean = true;
     private expandedIds: string[] = [];
-    private loadedExpandedCount: number = 0;
     private timeout: number = 0;
 
     constructor(
@@ -77,15 +75,6 @@ export class TaskListComponent {
     }
 
     // level
-    onLoadStreamLevel(id: string) {
-        this.loadedExpandedCount++;
-        if (this.loadedExpandedCount >= this.expandedIds.length) {
-            this.loading = false;
-            this.loadedExpandedCount--;
-            clearTimeout(this.timeout);
-        }
-    }
-
     onToggleStream(id: string) {
         this.store.dispatch(this.taskActions.toggleStreamExpand(id));
     }
