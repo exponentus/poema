@@ -1,10 +1,5 @@
 package workflow.model;
 
-/**
- * 
- * @author Kayra created 07-04-2016
- */
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -96,10 +91,12 @@ public class Incoming extends SecureAppEntity<UUID> {
 		return summary;
 	}
 
+	@Override
 	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
 	}
 
+	@Override
 	public List<Attachment> getAttachments() {
 		return attachments;
 	}
