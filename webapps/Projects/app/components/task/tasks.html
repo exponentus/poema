@@ -1,9 +1,9 @@
-<div class="content-header">
-    <h1 class="header-title">
+<div class="content-header" *ngIf="headerVisible">
+    <h1 class="header-title" *ngIf="titleVisible">
         {{title | translate}}
         <sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
-    <div class="content-actions">
+    <div class="content-actions" *ngIf="actionsVisible">
         <button class="btn" type="button" (click)="newTask()">
             {{'new_task' | translate}}
         </button>
@@ -15,6 +15,81 @@
     </div>
 </div>
 <div class="content-body">
-    <task-list [tasks]="tasks" (toggleStream)="onToggleStream($event)"></task-list>
+    <div class="view task-list">
+        <header class="entries-head" *ngIf="captionsVisible">
+            <div class="head-wrap">
+                <label class="entry-select" *ngIf="selectable">
+                    <input type="checkbox" class="all" />
+                </label>
+                <div class="entry-captions">
+                    <div class="task-list__reg-number">{{'reg_number' | translate}}</div>
+                    <div class="task-list__title">{{'task_title' | translate}}</div>
+                    <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
+                    <div class="task-list__status">{{'status' | translate}}</div>
+                    <div class="task-list__priority">{{'priority' | translate}}</div>
+                    <div class="task-list__assignee">{{'assignee_user' | translate}}</div>
+                    <div class="task-list__start_date">
+                        <sort-label>{{'start_date' | translate}}</sort-label>
+                    </div>
+                    <div class="task-list__due_date">
+                        <sort-label>{{'due_date' | translate}}</sort-label>
+                    </div>
+                    <div class="task-list__tags">{{'tags' | translate}}</div>
+                </div>
+            </div>
+        </header>
+        <div class="entries">
+            <div class="top-entry" [class.is-last]="isLast" *ngFor="let task of tasks; let isLast = last">
+                <div class="entry-wrap">
+                    <div class="entry">
+                        <label class="entry-select" *ngIf="selectable">
+                            <input type="checkbox" name="task-id" value="{{task.id}}" />
+                        </label>
+                        <a class="entry-link" [routerLink]="['/task', task.id]">
+                            <div class="entry-fields">
+                                <div class="task-list__reg-number">
+                                    <expandable-cell
+                                        [expandable]="task.hasSubtasks || task.hasRequests"
+                                        [expanded]="expandedIds.indexOf(task.id) != -1"
+                                        [level]="0"
+                                        [isLast]="isLast"
+                                        (click)="toggleExpanded(task.id, $event)">
+                                        {{task.regNumber}}
+                                    </expandable-cell>
+                                </div>
+                                <div class="task-list__title">
+                                    <span>{{task.title}}</span>
+                                </div>
+                                <div class="vw-icon">
+                                    <i class="fa fa-paperclip" *ngIf="task.hasAttachments"></i>
+                                </div>
+                                <div class="task-list__status">
+                                    <span class="status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
+                                </div>
+                                <div class="task-list__priority">
+                                    <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
+                                </div>
+                                <div class="task-list__assignee">
+                                    <employee-input [ids]="[task.assigneeUserId]"></employee-input>
+                                </div>
+                                <div class="task-list__start_date">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>
+                                <div class="task-list__due_date">
+                                    <span>{{task.dueDate | dateFmt:'DD.MM.YYYY'}}</span>
+                                    <span>{{task.startDate | dateDuration:task.dueDate}}</span>
+                                </div>
+                                <div class="task-list__tags">
+                                    <tags-input [ids]="task.tagIds"></tags-input>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <task-tree
+                    [rootId]="task.id"
+                    [children]="task.children"
+                    [selectable]="selectable">
+                </task-tree>
+            </div>
+        </div>
+    </div>
 </div>
-<router-outlet></router-outlet>

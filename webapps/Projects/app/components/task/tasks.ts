@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -19,12 +19,19 @@ import { Task } from '../../models/task';
 })
 
 export class TasksComponent {
+    @Input() tasks: Task[] = [];
+    @Input() embedded: boolean = false;
+    @Input() selectable: boolean = true;
+    @Input() headerVisible: boolean = true;
+    @Input() titleVisible: boolean = true;
+    @Input() actionsVisible: boolean = true;
+    @Input() captionsVisible: boolean = true;
+
     private subs: any = [];
     title: string;
-    tasks: Task[];
     meta: any = {};
     keyWord: string = '';
-    expandedIds: string[];
+    expandedIds: string[] = [];
     filter: any = {};
     loading: boolean = true;
     private params: any = {};
@@ -42,6 +49,16 @@ export class TasksComponent {
     ) { }
 
     ngOnInit() {
+        if (this.embedded) {
+            this.loading = false;
+            this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
+                if (state) {
+                    this.expandedIds = state.expandedIds;
+                }
+            }));
+            return;
+        }
+
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             if (this.init) {
                 if (this.keyWord != state.keyWord) {
@@ -116,33 +133,6 @@ export class TasksComponent {
         );
     }
 
-    loadTasks(params) {
-        this.loading = true;
-
-        this.params = Object.assign({}, params, {
-            'for': this.taskFor,
-            'projectId': this.projectId
-        });
-
-        this.store.dispatch(this.taskActions.fetchTasks());
-
-        this.taskService.fetchTasks(this.params).subscribe(
-            payload => {
-                let {tasks, meta} = this.loadTasksStream(payload.tasks, payload.meta);
-                this.store.dispatch(this.taskActions.fetchTasksFulfilled(tasks, meta));
-            },
-            error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
-        );
-    }
-
-    loadTasksStream(tasks: Task[], meta: any): any {
-        for (let task of tasks) {
-
-        }
-
-
-    }
-
     refresh() {
         this.loadData(this.params);
     }
@@ -155,6 +145,12 @@ export class TasksComponent {
         this.filter = filter;
         this.store.dispatch(this.taskActions.setFilter(filter));
         this.loadData(filter);
+    }
+
+    toggleExpanded(id: string, $event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        this.store.dispatch(this.taskActions.toggleExpanded(id));
     }
 
     newTask() {

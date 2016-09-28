@@ -15,11 +15,8 @@ import { NavComponent } from './components/nav/nav';
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
-import { ProjectListComponent } from './components/project/project-list';
 import { TasksComponent } from './components/task/tasks';
 import { TaskComponent } from './components/task/task';
-import { TaskListComponent } from './components/task/task-list';
-import { TaskStreamComponent } from './components/task/task-stream';
 import { TaskTreeComponent } from './components/task/task-tree';
 import { TaskFilterComponent } from './components/task/task-filter';
 import { TaskCancelDialogComponent } from './components/task/task-cancel-dialog';
@@ -69,11 +66,8 @@ import { AuthGuard } from './auth.guard';
         DashboardComponent,
         ProjectsComponent,
         ProjectComponent,
-        ProjectListComponent,
         TasksComponent,
         TaskComponent,
-        TaskListComponent,
-        TaskStreamComponent,
         TaskTreeComponent,
         TaskFilterComponent,
         TaskCancelDialogComponent,

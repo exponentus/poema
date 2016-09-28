@@ -69,7 +69,7 @@
             </div>
         </div>
         <div class="task-tab" [class.active]="showStreamTab" *ngIf="!isNew">
-            <task-list [streamMode]="true" [showSelect]="false" [tasks]="[task]"></task-list>
+            <tasks [tasks]="[task]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>
         </div>
         <div class="task-tab" [class.active]="showObserversTab">
             <div class="fieldset">

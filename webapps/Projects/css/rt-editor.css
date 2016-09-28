@@ -60,7 +60,7 @@
 
 .md-editor.edit .md-editor__area {
     border-color: transparent;
-    min-height: 15em;
+    min-height: 3em;
     min-height: 100%;
 }
 
@@ -172,9 +172,7 @@
     width: 100%;
 }
 
-.md-editor.edit .md-editor__markdown {
-    min-height: 15em;
-}
+.md-editor.edit .md-editor__markdown {}
 
 .md-editor:not(.edit) .md-editor__preview {
     border-radius: 2px;

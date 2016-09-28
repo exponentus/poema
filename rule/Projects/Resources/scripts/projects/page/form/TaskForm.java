@@ -4,7 +4,6 @@ import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -21,6 +20,7 @@ import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.joda.time.LocalDate;
+import projects.SortMap;
 import projects.dao.ProjectDAO;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
@@ -63,10 +63,10 @@ public class TaskForm extends _DoForm {
 
             TaskFilter taskFilter = new TaskFilter();
             taskFilter.setParentTask(task);
-            ViewPage<Task> vp = taskDAO.findAllByTaskFilterWithChildren(taskFilter, 0, 0, null);
 
-            List<IAppEntity> children = new ArrayList<>(vp.getResult());
-            task.setChildren(children);
+            ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, SortMap.asc("regDate"), 0, 0, null);
+
+            task.setChildren(new LinkedList<>(vp.getResult()));
         } else {
             task = new Task();
             task.setAuthor(user);

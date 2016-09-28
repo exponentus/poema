@@ -24,16 +24,19 @@ import { MarkdownConverter } from './markdown-converter';
                         <textarea class="md-editor__area"
                             #mdTextArea
                             name="md"
-                            value="{{_markdown}}"
+                            rows="3"
+                            autosize
                             (keyup)="updateValue($event.target.value)"
                             (focus)="focus.emit($event)"
-                            (blur)="updateValue($event.target.value)"></textarea>
-                        <!-- <div class="md-editor__area"
+                            (blur)="updateValue($event.target.value)">{{_markdown}}</textarea>
+                        <!-- <div class="md-editor__area" tabindex="0" draggable="false"
+                            #mdTextArea
                             [contentEditable]="editable"
+                            (drop)="false"
                             (keyup)="updateValue($event.target)"
                             (focus)="focus.emit($event)"
-                            (blur)="blur.emit($event)"
-                            innerHTML="{{html}}">
+                            (blur)="updateValue($event.target)"
+                            innerHTML="{{_markdown}}">
                         </div> -->
                     </div>
                     <div class="md-editor__preview" innerHTML="{{html}}"></div>
@@ -157,7 +160,6 @@ export class MarkdownEditorComponent {
     focusMdTextArea() {
         if (this.mdTextArea) {
             setTimeout(() => {
-                // this.mdTextArea.nativeElement.focus();
                 this.renderer.invokeElementMethod(this.mdTextArea.nativeElement, 'focus');
             }, 0);
         }
