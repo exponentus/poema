@@ -77,6 +77,16 @@ import { MarkdownConverter } from './markdown-converter';
                             </ul>
                         </div>
                     </div>
+                    <!-- <div class="md-editor__help-item">
+                        <div class="md-editor__help-item-md">
+                            &gt; blockquote<br/>&gt; Abc<br/>&gt; 123<br/>
+                        </div>
+                        <div class="md-editor__help-item-html">
+                            <blockquote>
+                                <p>blockquote<br>Abc<br>123</p>
+                            </blockquote>
+                        </div>
+                    </div>
                     <div class="md-editor__help-item">
                         <div class="md-editor__help-item-md">
                             1. n1<br/>2. n2<br/>3. n3
@@ -88,7 +98,7 @@ import { MarkdownConverter } from './markdown-converter';
                                 <li>n3</li>
                             </ol>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="md-editor__help-item">
                         [link](http://google.com)<br/>
                         <a href="http://google.com">link</a>
