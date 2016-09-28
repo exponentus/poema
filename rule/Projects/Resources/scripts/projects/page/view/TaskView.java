@@ -2,13 +2,12 @@ package projects.page.view;
 
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
-import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
+import projects.SortMap;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -24,11 +23,16 @@ public class TaskView extends _DoPage {
 
     @Override
     public void doGET(_Session session, _WebFormData formData) {
-        if (formData.containsField("stream")) {
-            responseTaskStream(session, formData);
-        } else {
-            responseTaskList(session, formData);
-        }
+        String[] expandedIds = formData.getListOfValuesSilently("expandedIds");
+        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
+        int pageSize = session.pageSize;
+        int pageNum = formData.getNumberValueSilently("page", 0);
+
+        TaskDAO taskDAO = new TaskDAO(session);
+        TaskFilter taskFilter = setUpTaskFilter(session, formData, new TaskFilter());
+
+        ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, SortMap.desc("regDate"), pageNum, pageSize, expandedIdList);
+        addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
     }
 
     @Override
@@ -42,43 +46,6 @@ public class TaskView extends _DoPage {
             } catch (SecureException e) {
                 setError(e);
             }
-        }
-    }
-
-    private void responseTaskList(_Session session, _WebFormData formData) {
-        TaskDAO taskDAO = new TaskDAO(session);
-        TaskFilter taskFilter = setUpTaskFilter(session, formData, new TaskFilter());
-        String[] expandedIds = formData.getListOfValuesSilently("expandedIds");
-        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
-        int pageSize = session.pageSize;
-        int pageNum = formData.getNumberValueSilently("page", 0);
-        ViewPage<Task> vp = taskDAO.findAllByTaskFilterWithChildren(taskFilter, pageNum, pageSize, expandedIdList);
-        addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
-    }
-
-    private void responseTaskStream(_Session session, _WebFormData formData) {
-        try {
-            String taskId = formData.getValue("taskId");
-            TaskDAO taskDAO = new TaskDAO(session);
-            Task task = taskDAO.findById(taskId);
-
-            if (task == null) {
-                addContent("message", "task not found");
-                return;
-            }
-
-            List<Task> subTasks = task.getSubtasks();
-            List<Request> requests = task.getRequests();
-
-            if (subTasks.size() > 0) {
-                addContent(subTasks);
-            }
-            if (requests.size() > 0) {
-                addContent(requests);
-            }
-        } catch (_Exception e) {
-            setError(e);
-            e.printStackTrace();
         }
     }
 

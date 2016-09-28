@@ -7,6 +7,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Session;
+import projects.SortMap;
 import projects.dao.filter.TaskFilter;
 import projects.model.Request;
 import projects.model.Task;
@@ -17,10 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
@@ -30,6 +29,14 @@ public class TaskDAO extends DAO<Task, UUID> {
     }
 
     public ViewPage<Task> findAllByTaskFilter(TaskFilter filter, int pageNum, int pageSize) {
+        return findAll(filter, SortMap.desc("regDate"), pageNum, pageSize);
+    }
+
+    public ViewPage<Task> findAll(TaskFilter filter, SortMap sortMap, int pageNum, int pageSize) {
+        if (filter == null) {
+            throw new IllegalArgumentException("filter is null");
+        }
+
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -64,12 +71,6 @@ public class TaskDAO extends DAO<Task, UUID> {
                     condition = cb.isEmpty(taskRoot.get("parent"));
                 } else {
                     condition = cb.and(cb.isEmpty(taskRoot.get("parent")), condition);
-                }
-            } else if (filter.isChildOnly()) {
-                if (condition == null) {
-                    condition = cb.isNotEmpty(taskRoot.get("parent"));
-                } else {
-                    condition = cb.and(cb.isNotEmpty(taskRoot.get("parent")), condition);
                 }
             }
 
@@ -136,7 +137,18 @@ public class TaskDAO extends DAO<Task, UUID> {
                 cq.where(condition);
                 countCq.where(condition);
             }
-            cq.orderBy(cb.desc(taskRoot.get("regDate")));
+
+            if (sortMap != null && !sortMap.values().isEmpty()) {
+                List<Order> orderBy = new ArrayList<>();
+                sortMap.values().forEach((fieldName, direction) -> {
+                    if (direction.isAscending()) {
+                        orderBy.add(cb.asc(taskRoot.get(fieldName)));
+                    } else {
+                        orderBy.add(cb.desc(taskRoot.get(fieldName)));
+                    }
+                });
+                cq.orderBy(orderBy);
+            }
 
             TypedQuery<Task> typedQuery = em.createQuery(cq);
             Query query = em.createQuery(countCq);
@@ -160,8 +172,8 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAllByTaskFilterWithChildren(TaskFilter filter, int pageNum, int pageSize, List<UUID> expandedIds) {
-        ViewPage<Task> vp = findAllByTaskFilter(filter, pageNum, pageSize);
+    public ViewPage<Task> findAllWithChildren(TaskFilter filter, SortMap sortMap, int pageNum, int pageSize, List<UUID> expandedIds) {
+        ViewPage<Task> vp = findAll(filter, sortMap, pageNum, pageSize);
 
         if (vp.getResult().isEmpty()/* || expandedIds.isEmpty()*/) {
             return vp;
@@ -170,34 +182,37 @@ public class TaskDAO extends DAO<Task, UUID> {
         // List<UUID> rootIds = vp.getResult().stream().map(Task::getId).collect(Collectors.toList());
         // List<UUID> expandedRootIds = rootIds.stream().filter(expandedIds::contains).collect(Collectors.toList());
         // if (!expandedRootIds.isEmpty()) {
-            List<IPOJOObject> childrenList = null; // findTaskStream(expandedIds);
+        List<IPOJOObject> childrenList = null; // findTaskStream(expandedIds);
 
-            for (Task task : vp.getResult()) {
-                //if (expandedIds.contains(task.getId())) {
-                    // task.setChildren(childrenList);
-                    recursiveProcessChildren(task, childrenList, expandedIds);
-                //}
-            }
+        for (Task task : vp.getResult()) {
+            //if (expandedIds.contains(task.getId())) {
+            // task.setChildren(childrenList);
+            findChildren(task, childrenList, expandedIds);
+            //}
+        }
         // }
 
         return vp;
     }
 
-    private void recursiveProcessChildren(Task task, List<IPOJOObject> childrenList, List<UUID> expandedIds) {
+    private void findChildren(Task task, List<IPOJOObject> childrenList, List<UUID> expandedIds) {
         if (task.isHasSubtasks() || task.isHasRequests()) {
             List<IAppEntity> children = new ArrayList<>(task.getSubtasks());
             children.addAll(task.getRequests());
+
+            Supplier<List<IAppEntity>> supplier = LinkedList::new;
+            children = children.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1).collect(Collectors.toCollection(supplier));
 
             //task.setChildren(findTaskStream(task));
             task.setChildren(children);
 
             for (Task t : task.getSubtasks()) {
-                recursiveProcessChildren(t, childrenList, expandedIds);
+                findChildren(t, childrenList, expandedIds);
             }
         }
     }
 
-    private List<IPOJOObject> findTaskStream(Task task) {
+    private List<IAppEntity> findTaskStream(Task task) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
             // === find tasks
@@ -241,7 +256,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             List<Request> requestList = requestQuery.getResultList();
             // ======
 
-            List<IPOJOObject> result = new ArrayList<>(taskList);
+            List<IAppEntity> result = new ArrayList<>(taskList);
             result.addAll(requestList);
 
             return result;
@@ -250,7 +265,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    private List<IPOJOObject> findTaskStream(List<UUID> uids) {
+    private List<IAppEntity> findTaskStream(List<UUID> uids) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
             // === find tasks
@@ -296,7 +311,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             List<Request> requestList = requestQuery.getResultList();
             // ======
 
-            List<IPOJOObject> result = new ArrayList<>(taskList);
+            List<IAppEntity> result = new ArrayList<>(taskList);
             result.addAll(requestList);
 
             return result;

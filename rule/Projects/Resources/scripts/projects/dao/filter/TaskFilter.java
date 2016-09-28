@@ -28,7 +28,6 @@ public class TaskFilter {
     private Date dueDate;
     private List<Tag> tags;
     private boolean isParentOnly;
-    private boolean isChildOnly;
 
     public Project getProject() {
         return project;
@@ -42,7 +41,7 @@ public class TaskFilter {
         if (projectId != null && !projectId.isEmpty()) {
             Project project = new Project();
             project.setId(UUID.fromString(projectId));
-            this.project = project;
+            setProject(project);
         }
     }
 
@@ -58,7 +57,7 @@ public class TaskFilter {
         if (parentTaskId != null && !parentTaskId.isEmpty()) {
             Task task = new Task();
             task.setId(UUID.fromString(parentTaskId));
-            this.parentTask = task;
+            setParentTask(task);
         }
     }
 
@@ -74,7 +73,7 @@ public class TaskFilter {
         if (id != null && !id.isEmpty()) {
             TaskType tt = new TaskType();
             tt.setId(UUID.fromString(id));
-            this.taskType = tt;
+            setTaskType(tt);
         }
     }
 
@@ -152,13 +151,5 @@ public class TaskFilter {
 
     public void setParentOnly(boolean parentOnly) {
         isParentOnly = parentOnly;
-    }
-
-    public boolean isChildOnly() {
-        return isChildOnly;
-    }
-
-    public void setChildOnly(boolean childOnly) {
-        isChildOnly = childOnly;
     }
 }
