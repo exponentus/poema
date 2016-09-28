@@ -6,13 +6,11 @@ import {
 @Component({
     selector: 'selection',
     template: `
-       <div [ngClass]="classes" *ngIf="disabled">
-            <span class="selection input">
-                <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
-                    {{m | localizedName:textKey}}
-                </span>
+        <span class="selection input" [class.is-multiple]="multiple" *ngIf="disabled">
+            <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
+                {{m | localizedName:textKey}}
             </span>
-        </div>
+        </span>
         <div [ngClass]="classes" *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
                 <span class="selection-item {{classPrefix}}{{m[classKey]}}"

@@ -48,16 +48,6 @@ export function parseResponseObjects(objects: any): any {
     return result;
 }
 
-export function parseListObjectsToKeyValue(list: any): any {
-    let result = [];
-    if (list) {
-        for (let it of list) {
-            result[it.id] = it;
-        }
-    }
-    return result;
-}
-
 export function transformPostResponse(response: Response): any {
     let json = response.json();
     return Object.assign(json, {
