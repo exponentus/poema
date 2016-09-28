@@ -9,7 +9,7 @@ import {
        <div [ngClass]="classes" *ngIf="disabled">
             <span class="selection input">
                 <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
-                    testdsss{{m | localizedName:textKey}}
+                    {{m | localizedName:textKey}}
                 </span>
             </span>
         </div>
