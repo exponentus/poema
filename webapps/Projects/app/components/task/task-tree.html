@@ -1,19 +1,19 @@
-<div class="top-entry" [class.is-last]="isLast" *ngFor="let m of stream; let isLast = last">
+<div class="top-entry" [class.is-last]="isLast" *ngFor="let m of children; let isLast = last">
     <div class="entry-wrap" *ngIf="m">
         <div class="entry" *ngIf="m.kind == 'task'">
-            <label class="entry-select" *ngIf="showSelect">
-                <input type="checkbox" name="task-id" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+            <label class="entry-select" *ngIf="selectable">
+                <input type="checkbox" name="task-id" value="{{m.id}}" />
             </label>
             <a class="entry-link" [routerLink]="['/task', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__reg-number">
                         <expandable-cell
-                              [expandable]="m.hasSubtasks || m.hasRequests"
-                              [expanded]="expandedIds.indexOf(m.id) != -1"
-                              [level]="level"
-                              [isLast]="isLast"
-                              (click)="toggleExpandable(m.id, $event)">
-                            {{task.regNumber}}
+                            [expandable]="m.hasSubtasks || m.hasRequests"
+                            [expanded]="expandedIds.indexOf(m.id) != -1"
+                            [level]="level"
+                            [isLast]="isLast"
+                            (click)="toggleExpanded(m.id, $event)">
+                            {{m.regNumber}}
                         </expandable-cell>
                     </div>
                     <div class="task-list__title">
@@ -43,8 +43,8 @@
             </a>
         </div>
         <div class="entry" *ngIf="m.kind == 'request'">
-            <label class="entry-select" *ngIf="showSelect">
-                <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+            <label class="entry-select" *ngIf="selectable">
+                <input type="checkbox" value="{{m.id}}" />
             </label>
             <a class="entry-link" [routerLink]="['/requests', m.id]">
                 <div class="entry-fields">
@@ -72,7 +72,7 @@
         </div>
         <div class="entry" *ngIf="m.kind == 'comment'">
             <label class="entry-select">
-                <input type="checkbox" value="{{m.id}}" (change)="toggleSelected(m.id)" />
+                <input type="checkbox" value="{{m.id}}" />
             </label>
             <div class="entry-link">
                 <div class="entry-fields">
@@ -81,5 +81,10 @@
             </div>
         </div>
     </div>
-    <task-stream *ngIf="m && m.kind == 'task'" [level]="level" [showSelect]="showSelect" [task]="m" (toggleStream)="onToggleStream($event)" (loadStreamLevel)="onLoadStreamLevel($event)"></task-stream>
+    <task-tree *ngIf="m.children"
+        [level]="level"
+        [rootId]="m.id"
+        [children]="m.children"
+        [selectable]="selectable">
+    </task-tree>
 </div>

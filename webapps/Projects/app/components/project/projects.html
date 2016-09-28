@@ -1,9 +1,9 @@
-<div class="content-header">
-    <h1 class="header-title">
+<div class="content-header" *ngIf="headerVisible">
+    <h1 class="header-title" *ngIf="titleVisible">
         {{title | translate}}
         <sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
-    <div class="content-actions">
+    <div class="content-actions" *ngIf="actionsVisible">
         <button class="btn" type="button" (click)="newProject()">
             {{'new_project' | translate}}
         </button>
@@ -14,6 +14,59 @@
     </div>
 </div>
 <div class="content-body">
-    <project-list [projects]="projects"></project-list>
+    <div class="view project-list">
+        <header class="entries-head" *ngIf="captionsVisible">
+            <div class="head-wrap">
+                <label class="entry-select" *ngIf="selectable">
+                    <input type="checkbox" class="all" />
+                </label>
+                <div class="entry-captions">
+                    <div class="project-list__name">{{'name' | translate}}</div>
+                    <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
+                    <div class="project-list__status">{{'status' | translate}}</div>
+                    <div class="project-list__customer">{{'customer' | translate}}</div>
+                    <div class="project-list__manager">{{'manager' | translate}}</div>
+                    <div class="project-list__programmer">{{'programmer' | translate}}</div>
+                    <div class="project-list__tester">{{'tester' | translate}}</div>
+                    <div class="project-list__finish_date">{{'finish_date' | translate}}</div>
+                </div>
+            </div>
+        </header>
+        <div class="entries">
+            <div class="entry-wrap" *ngFor="let project of projects">
+                <div class="entry">
+                    <label class="entry-select" *ngIf="selectable">
+                        <input type="checkbox" name="project-id" [value]="project.id" />
+                    </label>
+                    <a class="entry-link" [routerLink]="['./', project.id]">
+                        <div class="entry-fields">
+                            <div class="project-list__name">{{project.name}}</div>
+                            <div class="vw-icon">
+                                <i class="fa fa-paperclip" *ngIf="project.hasAttachments"></i>
+                            </div>
+                            <div class="project-list__status">
+                                <span class="status-{{project.status | text:'L'}}">{{project.status | text:'L' | translate}}</span>
+                            </div>
+                            <div class="project-list__customer">
+                                <organization-input [org]="project.customer"></organization-input>
+                            </div>
+                            <div class="project-list__manager">
+                                <employee-input [ids]="[project.managerUserId]"></employee-input>
+                            </div>
+                            <div class="project-list__programmer">
+                                <employee-input [ids]="[project.programmerUserId]"></employee-input>
+                            </div>
+                            <div class="project-list__tester">
+                                <employee-input [ids]="[project.testerUserId]"></employee-input>
+                            </div>
+                            <div class="project-list__finish_date">
+                                {{project.finishDate | dateFmt:'DD.MM.YYYY'}}
+                                <span>{{'now' | dateDuration:project.finishDate}}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<router-outlet></router-outlet>

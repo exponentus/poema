@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -20,6 +20,13 @@ import { Project } from '../../models/project';
 })
 
 export class ProjectsComponent {
+    @Input() embedded: boolean = false;
+    @Input() selectable: boolean = true;
+    @Input() headerVisible: boolean = true;
+    @Input() titleVisible: boolean = true;
+    @Input() actionsVisible: boolean = true;
+    @Input() captionsVisible: boolean = true;
+
     private subs: any = [];
 
     title = 'projects';

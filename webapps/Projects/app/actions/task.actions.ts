@@ -211,10 +211,10 @@ export class TaskActions {
 
 
     //===================================
-    //  TASK STREAM ACTIONS
+    //  TASK EXPAND ACTIONS
     //-----------------------------------
 
-    toggleStreamExpand(id: string) {
+    toggleExpanded(id: string) {
         return {
             type: TaskActions.TOGGLE_STREAM_EXPAND,
             payload: id

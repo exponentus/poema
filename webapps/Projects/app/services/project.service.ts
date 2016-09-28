@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService } from './app.service';
