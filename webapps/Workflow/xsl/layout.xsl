@@ -99,9 +99,9 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a class="logout" href="Logout">
+                                    <a class="logout" href="{//workspaceUrl}">
                                         <i class="fa fa-th"></i>
-                                        <span> Workspace</span>
+                                        <span>Workspace</span>
                                     </a>
                                 </li>
                             </ul>
