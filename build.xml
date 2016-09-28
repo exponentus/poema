@@ -230,7 +230,9 @@
         <echo>Copying additional files</echo>
         <copy overwrite="true" file="${nb_prj.dir}/start.bat" tofile="${application.dir}/start.bat" />
         <copy overwrite="true" file="${nb_prj.dir}/start.sh" tofile="${application.dir}/start.sh" />
-        <copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />       
+        <copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />    
+    	<copy overwrite="true" file="${nb_prj.dir}/ip-to-country.bin" tofile="${application.dir}/ip-to-country.bin" />    
+    
 
     </target>
 </project>
