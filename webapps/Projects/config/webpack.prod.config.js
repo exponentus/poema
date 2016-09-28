@@ -19,13 +19,13 @@ const metadata = {
 };
 
 module.exports = {
-    debug: false,
+    // debug: false,
     devtool: 'source-map',
     entry: {
         'app': './app/main.browser.ts',
         'vendor': './app/vendors.ts'
     },
-    metadata: metadata,
+    // metadata: metadata,
     module: {
         loaders: [{
             test: /\.css$/,
@@ -113,7 +113,7 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['', '.ts', '.js']
+        extensions: ['.ts', '.js']
     },
     stats: {
         colors: true

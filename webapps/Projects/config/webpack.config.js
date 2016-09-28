@@ -17,7 +17,7 @@ const metadata = {
 };
 
 module.exports = {
-    debug: true,
+    // debug: true,
     devtool: 'source-map',
     entry: {
         'app': './app/main.browser.ts',
@@ -78,6 +78,6 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['', '.ts', '.js']
+        extensions: ['.ts', '.js']
     }
 };
