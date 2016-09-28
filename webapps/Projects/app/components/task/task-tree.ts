@@ -13,9 +13,7 @@ import { Task } from '../../models';
 
 export class TaskTreeComponent {
     @HostBinding('class.hidden') get isHidden() { return !this.expanded; };
-    @Input('level') set _level(level: number) {
-        this.level = 1 + level;
-    };
+    @Input() level: string = '';
     @Input() rootId: string;
     @Input() children: any = [];
     @Input() expand: boolean = false;
@@ -23,7 +21,6 @@ export class TaskTreeComponent {
 
     private expandedIds: string[] = [];
     private expanded: boolean = false;
-    public level: number = 1;
     private sub: any;
 
     constructor(

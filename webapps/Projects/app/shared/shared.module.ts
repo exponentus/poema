@@ -11,7 +11,7 @@ import { Tabs, Tab } from './tabs';
 import { SwitchButtonComponent } from './switch-button';
 import { NotificationComponent, NotificationService } from './notification';
 import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './markdown';
-import { ExpandableCellComponent } from './expandable-cell/expandable-cell.component';
+import { TreeIndentationComponent } from './tree-indentation/tree-indentation.component';
 import { SortLabelComponent } from './sort-label/sort-label.component';
 
 @NgModule({
@@ -26,7 +26,7 @@ import { SortLabelComponent } from './sort-label/sort-label.component';
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
         ImgViewDirective, ImgViewComponent,
-        ExpandableCellComponent,
+        TreeIndentationComponent,
         SortLabelComponent
     ],
     exports: [
@@ -40,7 +40,7 @@ import { SortLabelComponent } from './sort-label/sort-label.component';
         MarkdownEditorComponent, MarkedPipe,
         SwitchButtonComponent,
         ImgViewDirective, ImgViewComponent,
-        ExpandableCellComponent,
+        TreeIndentationComponent,
         SortLabelComponent
     ],
     imports: [CommonModule],

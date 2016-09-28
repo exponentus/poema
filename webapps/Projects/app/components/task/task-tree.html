@@ -7,14 +7,14 @@
             <a class="entry-link" [routerLink]="['/task', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__reg-number">
-                        <expandable-cell
+                        <tree-indentation
                             [expandable]="m.hasSubtasks || m.hasRequests"
                             [expanded]="expandedIds.indexOf(m.id) != -1"
-                            [level]="level"
+                            [level]="level + (isLast ? '0' : '1')"
                             [isLast]="isLast"
                             (click)="toggleExpanded(m.id, $event)">
                             {{m.regNumber}}
-                        </expandable-cell>
+                        </tree-indentation>
                     </div>
                     <div class="task-list__title">
                         <span>{{m.title}}</span>
@@ -49,9 +49,9 @@
             <a class="entry-link" [routerLink]="['/requests', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__request_type">
-                        <expandable-cell [level]="level">
+                        <tree-indentation [level]="level + (isLast ? '0' : '1')">
                             {{m.requestType | localizedName}}
-                        </expandable-cell>
+                        </tree-indentation>
                     </div>
                     <div class="request__time">{{m.regDate}}</div>
                     <div class="request__comment">{{m.comment}}</div>
@@ -82,7 +82,7 @@
         </div>
     </div>
     <task-tree *ngIf="m.children"
-        [level]="level"
+        [level]="level + (isLast ? '0' : '1')"
         [rootId]="m.id"
         [children]="m.children"
         [selectable]="selectable">

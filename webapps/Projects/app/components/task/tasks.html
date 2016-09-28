@@ -48,14 +48,13 @@
                         <a class="entry-link" [routerLink]="['/task', task.id]">
                             <div class="entry-fields">
                                 <div class="task-list__reg-number">
-                                    <expandable-cell
+                                    <tree-indentation
                                         [expandable]="task.hasSubtasks || task.hasRequests"
                                         [expanded]="expandedIds.indexOf(task.id) != -1"
-                                        [level]="0"
                                         [isLast]="isLast"
                                         (click)="toggleExpanded(task.id, $event)">
                                         {{task.regNumber}}
-                                    </expandable-cell>
+                                    </tree-indentation>
                                 </div>
                                 <div class="task-list__title">
                                     <span>{{task.title}}</span>
