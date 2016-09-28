@@ -193,10 +193,11 @@ public class TaskForm extends _DoForm {
 			String sd = formData.getValueSilently("startDate");
 			if (sd.isEmpty()) {
 				task.setStatus(TaskStatusType.DRAFT);
+				task.setStartDate(null);
 			} else {
-				task.setStartDate(TimeUtil.stringToDate(sd));
 				if (task.getStatus() == TaskStatusType.DRAFT || task.getStatus() == TaskStatusType.OPEN
 				        || task.getStatus() == TaskStatusType.WAITING) {
+					task.setStartDate(TimeUtil.stringToDateSilently(sd));
 					if (new Date().before(task.getStartDate())) {
 						task.setStatus(TaskStatusType.WAITING);
 					} else {

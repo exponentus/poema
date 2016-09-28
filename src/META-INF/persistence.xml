@@ -70,6 +70,8 @@
         <class>reference.model.Street</class>
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
+        <class>reference.model.DocumentLanguage</class>
+        <class>reference.model.DocumentType</class>
         <class>reference.model.Tag</class>
         <class>reference.model.OrgCategory</class>
         <!-- Specific Reference module entities -->
@@ -117,6 +119,7 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
         <class>reference.model.TaskType</class>
+        <class>reference.model.DocumentLanguage</class>
         <class>reference.model.Tag</class>
         <class>reference.model.RequestType</class>
         <!-- Projects module entities -->
@@ -167,6 +170,8 @@
         <class>reference.model.Position</class> 
         <class>reference.model.DepartmentType</class>   
         <class>reference.model.OrgCategory</class>
+        <class>reference.model.DocumentLanguage</class>
+        <class>reference.model.DocumentType</class>
         <!-- The application module entities -->
         <class>workflow.model.Approval</class>  
         <class>workflow.model.Approver</class>  
