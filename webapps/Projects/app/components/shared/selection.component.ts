@@ -6,22 +6,34 @@ import {
 @Component({
     selector: 'selection',
     template: `
-        <span class="selection input" [class.is-multiple]="multiple" *ngIf="disabled">
-            <span class="selection-item {{classPrefix}}{{m[classKey]}}" [style.color]="m.color" *ngFor="let m of selectedItems">
-                {{m | localizedName:textKey}}
-            </span>
-        </span>
-        <div [ngClass]="classes" *ngIf="!disabled">
+        <div class="select selection input" [class.is-multiple]="multiple" *ngIf="disabled">
+            <div class="selection-item"
+                  [ngClass]="m._itemClass"
+                  [ngStyle]="m._itemStyle"
+                  *ngFor="let m of selectedItems">
+                <div class="selection-item-text">{{m | localizedName:textKey}}</div>
+                <div class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</div>
+            </div>
+        </div>
+        <div class="select selection"
+              [class.open]="isOpen"
+              [class.is-focused]="isFocused"
+              [class.is-multiple]="multiple"
+              [class.allow-clear]="isAllowClear"
+              [class.has-selected]="hasSelected"
+              *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
-                <span class="selection-item {{classPrefix}}{{m[classKey]}}"
-                      *ngFor="let m of selectedItems"
-                      [style.color]="m.color"
-                      (click)="remove(m, $event)">
-                    {{m | localizedName:textKey}}
+                <span class="selection-item"
+                      [ngClass]="m._itemClass"
+                      [ngStyle]="m._itemStyle"
+                      (click)="remove(m, $event)"
+                      *ngFor="let m of selectedItems">
+                    <span class="selection-item-text">{{m | localizedName:textKey}}</span>
+                    <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>
                 </span>
-                <input class="select-search-input"
-                    *ngIf="false && searchable"
+                <input *ngIf="false && searchable"
                     #searchInput
+                    class="select-search-input"
                     name="search"
                     value=""
                     autocomplete="off"
@@ -31,9 +43,15 @@ import {
             </div>
             <div class="select-dropdown">
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
-                    <li class="select-option" [class.selected]="selectedItemIds.indexOf(m[idKey]) !== -1" *ngFor="let m of _items" (click)="add(m)">
-                        <div class="{{classPrefix}}{{m[classKey]}}" [style.color]="m.color">
-                            {{m | localizedName:textKey}}
+                    <li class="select-option"
+                          [class.selected]="selectedItemIds.indexOf(m[idKey]) !== -1"
+                          [class.focus]="cursorId === m[idKey]"
+                          (click)="add(m)"
+                          *ngFor="let m of _items">
+                        <i class="select-checkmark-icon"></i>
+                        <div [ngClass]="m._itemClass" [ngStyle]="m._itemStyle">
+                            <div class="selection-item-text">{{m | localizedName:textKey}}</div>
+                            <div class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</div>
                         </div>
                     </li>
                 </ul>
@@ -85,19 +103,20 @@ export class SelectionComponent {
     @Input() selectedItems: any = [];
     @Input() idKey: string = 'id';
     @Input() textKey: string = 'name';
-    @Input() classKey: string;
-    @Input() classPrefix: string = '';
-    @Input() itemStyle: string = '';
+    @Input() descriptionKey: string;
     @Input() multiple = false;
     @Input() disabled = false;
     @Input() allowClear = false;
     @Input() searchable = false;
     @Input() contentLoadable = false;
     @Input() tabIndex = 0;
+    @Input() checkmarkIconClass = 'fa fa-check';
     @Input() placeHolder: string = '';
-    @Input() notFoundMessage: string = '';
+    @Input() notFoundText: string = 'Not found';
+
     @Output() load = new EventEmitter<any>();
     @Output() change = new EventEmitter<any>();
+
     @ViewChild('searchInput') searchInput: ElementRef;
 
     private documentClickListener;
@@ -111,11 +130,21 @@ export class SelectionComponent {
     private firstOpen = true;
     private keyWord = '';
     private mode = { search: true };
+    private cursorId;
+    private cursorPosition = -1;
 
     constructor(private renderer: Renderer) { }
 
     ngOnInit() {
-        this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+        if (this.disabled) {
+            return;
+        }
+
+        if (this.multiple) {
+            this.filterItems();
+        }
+
+        this.checkSelected();
     }
 
     ngOnDestroy() {
@@ -123,19 +152,6 @@ export class SelectionComponent {
     }
 
     // ===
-    get classes() {
-        return {
-            'select': true,
-            'selection': true,
-            'open': this.isOpen,
-            'is-open': this.isOpen,
-            'is-focused': this.isFocused,
-            'is-multiple': this.multiple,
-            'allow-clear': this.isAllowClear,
-            'has-selected': this.hasSelected
-        };
-    }
-
     get isAllowClear() {
         return this.allowClear && this.selectedItems.length;
     }
@@ -179,10 +195,16 @@ export class SelectionComponent {
         }
     }
 
+    checkSelected() {
+        this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+    }
+
     add(item) {
         if (this.multiple) {
-            this.selectedItems.push(item);
-            this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+            if (this.selectedItems.filter(it => it[this.idKey] == item[this.idKey]).length === 0) {
+                this.selectedItems.push(item);
+                this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
+            }
         } else {
             this.selectedItems = [item];
             this.selectedItemIds = [item[this.idKey]];
@@ -232,10 +254,12 @@ export class SelectionComponent {
             this._items = this.items.filter(it => {
                 return it[this.textKey].indexOf(keyWord) != -1;
             });
-        } else {
+        } else if (this.multiple) {
             this._items = this.items.filter(it => {
                 return this.selectedItemIds.indexOf(it[this.idKey]) == -1;
             });
+        } else {
+            this._items = this.items;
         }
     }
 
@@ -251,26 +275,80 @@ export class SelectionComponent {
         }
     }
 
+    // ===
     handleEvent($event) {
         if ($event.key === 'Enter') {
-            this.toggleOpen($event);
+            if (this.cursorId) {
+                this.add(this.items[this.cursorPosition]);
+            } else {
+                this.toggleOpen($event);
+            }
         } else if ($event.key === 'Escape' || $event.key === 'Tab') {
             this.close();
             this.clearSearchInput();
         } else if ($event.key === 'ArrowUp') {
-            // console.log('ArrowUp');
+            $event.preventDefault();
+            this.move($event.key);
         } else if ($event.key === 'ArrowDown') {
-            // console.log('ArrowDown');
+            $event.preventDefault();
+            this.move($event.key);
         } else if ($event.key === 'ArrowLeft') {
-            // console.log('ArrowLeft');
+            $event.preventDefault();
+            this.move($event.key);
         } else if ($event.key === 'ArrowRight') {
-            // console.log('ArrowRight');
+            $event.preventDefault();
+            this.move($event.key);
         } else if ($event.target.name === 'search') {
             $event.stopPropagation();
             this.search($event.target.value);
         } else {
             console.log($event);
         }
+    }
+
+    // === move
+    move(direction) {
+        if (!this.isOpen) {
+            return;
+        }
+
+        switch (direction) {
+            case 'ArrowUp':
+                if (this.cursorPosition === -1) {
+                    this.cursorPosition = this.items.length - 1;
+                } else {
+                    this.cursorPosition--;
+                    if (this.cursorPosition < 0) {
+                        this.cursorPosition = this.items.length - 1;
+                    }
+                }
+                break;
+            case 'ArrowDown':
+                if (this.cursorPosition === -1) {
+                    this.cursorPosition = 0;
+                } else {
+                    this.cursorPosition++;
+                    if (this.cursorPosition >= this.items.length) {
+                        this.cursorPosition = 0;
+                    }
+                }
+                break;
+            case 'ArrowLeft':
+                this.cursorPosition = 0;
+                break;
+            case 'ArrowRight':
+                this.cursorPosition = this.items.length - 1;
+                break;
+            default:
+                return;
+        }
+
+        this.cursorId = this.items[this.cursorPosition][this.idKey];
+    }
+
+    resetCursor() {
+        this.cursorId = '';
+        this.cursorPosition = -1;
     }
 
     // ===
@@ -289,6 +367,7 @@ export class SelectionComponent {
     close() {
         this.isOpen = false;
         this.isFocused = false;
+        this.resetCursor();
         this.removeListenGlobal();
     }
 

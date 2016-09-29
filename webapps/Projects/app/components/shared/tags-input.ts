@@ -9,9 +9,8 @@ import { Tag } from '../../models';
     template: `
         <selection
             class="tags-input"
-            [items]="tags"
+            [items]="items"
             [selectedItems]="selectedTags"
-            classPrefix="tag"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"
@@ -28,7 +27,7 @@ export class TagsInputComponent {
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
     @Output() select: EventEmitter<any> = new EventEmitter();
-    private tags: Tag[] = [];
+    private items: any[] = [];
     private selectedTags: Tag[] = [];
     private sub: any;
 
@@ -36,7 +35,11 @@ export class TagsInputComponent {
 
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
-            this.tags = state.tags;
+            this.items = state.tags;
+            this.items.map(it => {
+                it._itemStyle = { color: it.color };
+                it._itemClass = 'tag';
+            });
             if (this.ids) {
                 this.selectedTags = state.tags.filter(it => this.ids.indexOf(it.id) != -1);
             }

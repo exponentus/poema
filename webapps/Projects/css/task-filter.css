@@ -37,6 +37,6 @@
     min-width: 110px;
 }
 
-.task-filter .task-status-input li {
-    padding: .6em .6em .6em 1.2em;
+.task-filter .task-status-input .select-option {
+    padding: .6em .6em .6em 1.8em;
 }

@@ -9,9 +9,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
             class="task-status-input"
             [items]="statusList"
             [selectedItems]="status ? status : []"
-            textKey="name"
-            classKey="klass"
-            classPrefix="status-"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"
@@ -38,12 +35,12 @@ export class TaskStatusInputComponent {
     constructor(private translate: TranslateService) {
         translate.get(['processing', 'completed', 'waiting', 'cancelled', 'pending', 'open']).subscribe(t => {
             this.statusList = [
-                { id: 'PROCESSING', name: t.processing, klass: 'processing' },
-                { id: 'COMPLETED', name: t.completed, klass: 'completed' },
-                { id: 'WAITING', name: t.waiting, klass: 'waiting' },
-                { id: 'CANCELLED', name: t.cancelled, klass: 'cancelled' },
-                { id: 'PENDING', name: t.pending, klass: 'pending' },
-                { id: 'OPEN', name: t.open, klass: 'open' }
+                { id: 'PROCESSING', name: t.processing, _itemClass: 'status-processing' },
+                { id: 'COMPLETED', name: t.completed, _itemClass: 'status-completed' },
+                { id: 'WAITING', name: t.waiting, _itemClass: 'status-waiting' },
+                { id: 'CANCELLED', name: t.cancelled, _itemClass: 'status-cancelled' },
+                { id: 'PENDING', name: t.pending, _itemClass: 'status-pending' },
+                { id: 'OPEN', name: t.open, _itemClass: 'status-open' }
             ];
             this.status = this.statusList.filter(it => it.id === this.statusName);
         });
