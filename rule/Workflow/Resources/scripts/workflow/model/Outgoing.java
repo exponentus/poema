@@ -23,6 +23,8 @@ import javax.persistence.Table;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 
+import reference.model.DocumentLanguage;
+import reference.model.DocumentType;
 import staff.model.Organization;
 
 @Entity
@@ -46,6 +48,13 @@ public class Outgoing extends SecureAppEntity<UUID> {
 	@Column(nullable = false)
 	private String summary = "";
 
+	@Column(name = "doc_lang")
+	private DocumentLanguage docLanguage;
+
+	@Column(name = "doc_type")
+	private DocumentType docType;
+
+	@Override
 	public List<Attachment> getAttachments() {
 		return attachments;
 	}
@@ -82,8 +91,24 @@ public class Outgoing extends SecureAppEntity<UUID> {
 		return summary;
 	}
 
+	@Override
 	public void setAttachments(List<Attachment> attachments) {
 		this.attachments = attachments;
 	}
 
+	public DocumentLanguage getDocLanguage() {
+		return docLanguage;
+	}
+
+	public void setDocLanguage(DocumentLanguage docLanguage) {
+		this.docLanguage = docLanguage;
+	}
+
+	public DocumentType getDocType() {
+		return docType;
+	}
+
+	public void setDocType(DocumentType docType) {
+		this.docType = docType;
+	}
 }
