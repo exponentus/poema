@@ -1,21 +1,15 @@
 package workflow.page.form;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.IPOJOObject;
@@ -117,19 +111,7 @@ public class OfficeMemoForm extends _DoForm {
 			entity.setSummary(formData.getValue("summary"));
 			entity.setRegNumber(formData.getValue("regnumber"));
 			entity.setAppliedRegDate(formData.getDateSilently("regdate"));
-
-			String[] fileNames = formData.getListOfValuesSilently("fileid");
-			if (fileNames.length > 0) {
-				File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
-				for (String fn : fileNames) {
-					File file = new File(userTmpDir + File.separator + fn);
-					InputStream is = new FileInputStream(file);
-					Attachment att = new Attachment();
-					att.setRealFileName(fn);
-					att.setFile(IOUtils.toByteArray(is));
-					entity.getAttachments().add(att);
-				}
-			}
+			entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
 			if (isNew) {
 				IUser<Long> user = session.getUser();
@@ -140,7 +122,7 @@ public class OfficeMemoForm extends _DoForm {
 			}
 		} catch (SecureException e) {
 			setError(e);
-		} catch (_Exception | DatabaseException | IOException e) {
+		} catch (_Exception | DatabaseException e) {
 			logError(e);
 			setBadRequest();
 		}

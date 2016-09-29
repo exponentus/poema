@@ -1,20 +1,14 @@
 package workflow.page.form;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.env.EnvConst;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting.IPOJOObject;
@@ -65,12 +59,12 @@ public class OutgoingForm extends _DoForm {
 			List<String> formFiles = null;
 			Object obj = session.getAttribute(fsId);
 			if (obj == null) {
-				formFiles = new ArrayList<String>();
+				formFiles = new ArrayList<>();
 			} else {
 				formFiles = (List<String>) obj;
 			}
 
-			List<IPOJOObject> filesToPublish = new ArrayList<IPOJOObject>();
+			List<IPOJOObject> filesToPublish = new ArrayList<>();
 
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
@@ -81,7 +75,7 @@ public class OutgoingForm extends _DoForm {
 				}
 				filesToPublish.add(uf);
 			}
-			addContent(new _POJOListWrapper<IPOJOObject>(filesToPublish, session));
+			addContent(new _POJOListWrapper<>(filesToPublish, session));
 		}
 
 		addContent(entity);
@@ -118,21 +112,7 @@ public class OutgoingForm extends _DoForm {
 
 			// entity.setContent(formData.getValue("content"));
 			entity.setSummary(formData.getValue("summary"));
-
-			String[] fileNames = formData.getListOfValuesSilently("fileid");
-			if (fileNames.length > 0) {
-				File userTmpDir = new File(Environment.tmpDir + File.separator + session.getUser().getUserID());
-				for (String fn : fileNames) {
-					File file = new File(userTmpDir + File.separator + fn);
-					InputStream is = new FileInputStream(file);
-					Attachment att = new Attachment();
-					att.setRealFileName(fn);
-					att.setFile(IOUtils.toByteArray(is));
-					att.setAuthor(session.getUser());
-					att.setForm("attachment");
-					entity.getAttachments().add(att);
-				}
-			}
+			entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
 			if (isNew) {
 				IUser<Long> user = session.getUser();
@@ -144,7 +124,7 @@ public class OutgoingForm extends _DoForm {
 
 		} catch (SecureException e) {
 			setError(e);
-		} catch (_Exception | DatabaseException | IOException e) {
+		} catch (_Exception | DatabaseException e) {
 			logError(e);
 			setBadRequest();
 		}
