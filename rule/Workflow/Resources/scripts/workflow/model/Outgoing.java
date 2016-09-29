@@ -48,10 +48,8 @@ public class Outgoing extends SecureAppEntity<UUID> {
 	@Column(nullable = false)
 	private String summary = "";
 
-	@Column(name = "doc_lang")
 	private DocumentLanguage docLanguage;
 
-	@Column(name = "doc_type")
 	private DocumentType docType;
 
 	@Override
