@@ -197,7 +197,7 @@ public class TaskForm extends _DoForm {
 			} else {
 				if (task.getStatus() == TaskStatusType.DRAFT || task.getStatus() == TaskStatusType.OPEN
 				        || task.getStatus() == TaskStatusType.WAITING) {
-					task.setStartDate(TimeUtil.stringToDateSilently(sd));
+					task.setStartDate(TimeUtil.stringToDate(sd));
 					if (new Date().before(task.getStartDate())) {
 						task.setStatus(TaskStatusType.WAITING);
 					} else {

@@ -6,25 +6,23 @@ import { Component, Input } from '@angular/core';
         <i class="tree-indentation_indent"
             [class.has-sibling]="_level == '1'"
             [class.is-last]="isLast"
-            *ngFor="let _level of level; let isLast = last;">
+            *ngFor="let _level of levels; let isLast = last;">
         </i><i class="tree-indentation_icon fa"></i>
         <span class="tree-indentation_content"><ng-content></ng-content></span>
     `,
     host: {
         '[class.tree-indentation]': 'true',
         '[class.is-expandable]': 'expandable',
-        '[class.is-expanded]': 'expanded',
-        '[class.is-last]': 'isLast'
+        '[class.is-expanded]': 'expanded'
     }
 })
 
 export class TreeIndentationComponent {
     @Input() expandable: boolean = false;
     @Input() expanded: boolean = false;
-    @Input() isLast: boolean = false;
-    @Input('level') set _level(levelTree: string) {
-        this.level = levelTree ? levelTree.split('') : [];
+    @Input('level') set _levels(levels: string) {
+        this.levels = levels ? levels.split('') : [];
     };
 
-    private level = [];
+    private levels = [];
 }

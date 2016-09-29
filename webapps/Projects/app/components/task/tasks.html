@@ -51,7 +51,6 @@
                                     <tree-indentation
                                         [expandable]="task.hasSubtasks || task.hasRequests"
                                         [expanded]="expandedIds.indexOf(task.id) != -1"
-                                        [isLast]="isLast"
                                         (click)="toggleExpanded(task.id, $event)">
                                         {{task.regNumber}}
                                     </tree-indentation>
