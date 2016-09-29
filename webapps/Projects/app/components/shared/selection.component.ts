@@ -261,6 +261,10 @@ export class SelectionComponent {
         } else {
             this._items = this.items;
         }
+
+        if (this._items.length === 0 || this._items.length !== this.items.length) {
+            this.resetCursor();
+        }
     }
 
     search(keyWord) {
@@ -279,47 +283,38 @@ export class SelectionComponent {
     handleEvent($event) {
         if ($event.key === 'Enter') {
             if (this.cursorId) {
-                this.add(this.items[this.cursorPosition]);
+                this.addOnCursor();
             } else {
                 this.toggleOpen($event);
             }
         } else if ($event.key === 'Escape' || $event.key === 'Tab') {
             this.close();
             this.clearSearchInput();
-        } else if ($event.key === 'ArrowUp') {
-            $event.preventDefault();
-            this.move($event.key);
-        } else if ($event.key === 'ArrowDown') {
-            $event.preventDefault();
-            this.move($event.key);
-        } else if ($event.key === 'ArrowLeft') {
-            $event.preventDefault();
-            this.move($event.key);
-        } else if ($event.key === 'ArrowRight') {
+        } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf($event.key) != -1) {
             $event.preventDefault();
             this.move($event.key);
         } else if ($event.target.name === 'search') {
             $event.stopPropagation();
             this.search($event.target.value);
-        } else {
-            console.log($event);
+        } else if ($event.key === 'Space') {
+            this.toggleOpen($event);
         }
     }
 
     // === move
     move(direction) {
-        if (!this.isOpen) {
+        if (!this.isOpen || this._items.length === 0) {
             return;
         }
 
         switch (direction) {
             case 'ArrowUp':
                 if (this.cursorPosition === -1) {
-                    this.cursorPosition = this.items.length - 1;
+                    this.cursorPosition = this._items.length - 1;
                 } else {
                     this.cursorPosition--;
                     if (this.cursorPosition < 0) {
-                        this.cursorPosition = this.items.length - 1;
+                        this.cursorPosition = this._items.length - 1;
                     }
                 }
                 break;
@@ -328,7 +323,7 @@ export class SelectionComponent {
                     this.cursorPosition = 0;
                 } else {
                     this.cursorPosition++;
-                    if (this.cursorPosition >= this.items.length) {
+                    if (this.cursorPosition >= this._items.length) {
                         this.cursorPosition = 0;
                     }
                 }
@@ -337,13 +332,19 @@ export class SelectionComponent {
                 this.cursorPosition = 0;
                 break;
             case 'ArrowRight':
-                this.cursorPosition = this.items.length - 1;
+                this.cursorPosition = this._items.length - 1;
                 break;
             default:
                 return;
         }
 
-        this.cursorId = this.items[this.cursorPosition][this.idKey];
+        this.cursorId = this._items[this.cursorPosition][this.idKey];
+
+        // console.log(this.cursorPosition, this.cursorId, this._items);
+    }
+
+    addOnCursor() {
+        this.add(this._items[this.cursorPosition]);
     }
 
     resetCursor() {
