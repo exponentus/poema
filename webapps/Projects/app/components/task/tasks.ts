@@ -144,7 +144,6 @@ export class TasksComponent {
     }
 
     onSort($event) {
-        console.log($event);
         this.activeSort = $event;
         this.refresh();
     }
