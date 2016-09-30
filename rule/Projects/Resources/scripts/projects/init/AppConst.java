@@ -12,5 +12,7 @@ public class AppConst {
 	public static String NAME_SPA = "Proyectos";
 	public static String DEFAULT_PAGE = "index";
 	public static AppCode CODE = AppCode.CUSTOM;
-	public static String FT_INDEX_SCOPE = "";
+	public static String FT_INDEX_SCOPE = "[{\"tableName\":\"projects\",\"fieldNames\":"
+	        + "[\"name\",\"comment\",\"status\"],\"daoImpl\":\"projects.dao.ProjectDAO\"},{\"tableName\":\"tasks\",\"fieldNames\":"
+	        + "[\"reg_number\",\"title\",\"status\",\"body\",\"cancellationComment\"],\"daoImpl\":\"projects.dao.TaskDAO\"}]";
 }
