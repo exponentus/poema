@@ -25,7 +25,8 @@ export class ProjectInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select: EventEmitter<any> = new EventEmitter();
+    @Output() select = new EventEmitter();
+
     private projects: Project[] = [];
     private project: Project;
     private sub: any;

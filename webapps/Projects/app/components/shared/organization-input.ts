@@ -26,7 +26,8 @@ export class OrganizationInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select: EventEmitter<any> = new EventEmitter();
+    @Output() select = new EventEmitter();
+
     private organizations: Organization[] = [];
     private meta: any = { page: 0, totalPages: 1 };
     private allLoaded = false;

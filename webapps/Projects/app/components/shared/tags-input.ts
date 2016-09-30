@@ -26,7 +26,8 @@ export class TagsInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select: EventEmitter<any> = new EventEmitter();
+    @Output() select = new EventEmitter();
+
     private items: any[] = [];
     private selectedTags: Tag[] = [];
     private sub: any;

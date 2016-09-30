@@ -40,6 +40,7 @@ import {
                     (keyup)="handleEvent($event)" />
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
+                <div class="select-search-not-found" *ngIf="showNotFound && notFoundText">{{notFoundText}}</div>
             </div>
             <div class="select-dropdown">
                 <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
@@ -70,8 +71,6 @@ export class SelectionComponent {
 
         $event.preventDefault();
         this.isFocused = true;
-        // this.searchInput.nativeElement.focus();
-        // this.renderer.invokeElementMethod(this.searchInput.nativeElement, 'focus');
     }
 
     @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
@@ -129,7 +128,11 @@ export class SelectionComponent {
     private selfClick = false;
     private firstOpen = true;
     private keyWord = '';
-    private mode = { search: true };
+    private showNotFound = false;
+
+    private SEARCH_MODE = 0;
+    private MOVE_MODE = 1;
+    private cursorMode = 1;
     private cursorId;
     private cursorPosition = -1;
 
@@ -144,6 +147,7 @@ export class SelectionComponent {
             this.filterItems();
         }
 
+        this.resetCursor();
         this.checkSelected();
     }
 
@@ -252,7 +256,7 @@ export class SelectionComponent {
     filterItems(keyWord?: string) {
         if (!this.contentLoadable && keyWord) {
             this._items = this.items.filter(it => {
-                return it[this.textKey].indexOf(keyWord) != -1;
+                return it[this.textKey].toLowerCase().indexOf(keyWord) != -1;
             });
         } else if (this.multiple) {
             this._items = this.items.filter(it => {
@@ -265,6 +269,8 @@ export class SelectionComponent {
         if (this._items.length === 0 || this._items.length !== this.items.length) {
             this.resetCursor();
         }
+
+        this.selectFirst();
     }
 
     search(keyWord) {
@@ -281,29 +287,49 @@ export class SelectionComponent {
 
     // ===
     handleEvent($event) {
-        if ($event.key === 'Enter') {
-            if (this.cursorId) {
-                this.addOnCursor();
-            } else {
-                this.toggleOpen($event);
+        console.log($event);
+
+        let keyCode = $event.key;
+        if ($event.type === 'keydown') {
+            if (keyCode === 'Enter') {
+                if (this.cursorId && this.canMove()) {
+                    this.addOnCursor();
+                } else {
+                    this.toggleOpen($event);
+                }
+                return;
+            } else if (keyCode === 'Escape' || keyCode === 'Tab') {
+                if (this.isOpen) {
+                    this.close();
+                }
+                this.clearSearchInput();
+                return;
             }
-        } else if ($event.key === 'Escape' || $event.key === 'Tab') {
-            this.close();
-            this.clearSearchInput();
-        } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf($event.key) != -1) {
+
+            // toggle move mode
+            if (this.cursorMode === this.SEARCH_MODE) {
+                if ('ArrowUp' === keyCode || 'ArrowDown' === keyCode) {
+                    this.cursorMode = this.MOVE_MODE;
+                } else if ($event.target.value === '' && ('ArrowLeft' === keyCode || 'ArrowRight' === keyCode)) {
+                    this.cursorMode = this.MOVE_MODE;
+                }
+            }
+        }
+
+        //
+        if ($event.type === 'keydown' && this.cursorMode === this.MOVE_MODE && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(keyCode) != -1) {
             $event.preventDefault();
-            this.move($event.key);
-        } else if ($event.target.name === 'search') {
+            this.move(keyCode);
+        } else if ($event.type === 'keyup' && $event.target.name === 'search') {
             $event.stopPropagation();
-            this.search($event.target.value);
-        } else if ($event.key === 'Space') {
-            this.toggleOpen($event);
+            this.cursorMode = this.SEARCH_MODE;
+            this.search($event.target.value.toLowerCase());
         }
     }
 
-    // === move
+    // === cursor
     move(direction) {
-        if (!this.isOpen || this._items.length === 0) {
+        if (!this.canMove()) {
             return;
         }
 
@@ -339,8 +365,10 @@ export class SelectionComponent {
         }
 
         this.cursorId = this._items[this.cursorPosition][this.idKey];
+    }
 
-        // console.log(this.cursorPosition, this.cursorId, this._items);
+    canMove() {
+        return this.isOpen && this._items.length > 0;
     }
 
     addOnCursor() {
@@ -348,8 +376,17 @@ export class SelectionComponent {
     }
 
     resetCursor() {
-        this.cursorId = '';
+        this.cursorId = null;
         this.cursorPosition = -1;
+        this.cursorMode = this.MOVE_MODE;
+    }
+
+    selectFirst() {
+        // if (this.cursorMode === this.SEARCH_MODE && this._items.length > 0) {
+        //     this.cursorId = this._items[0].id;
+        //     this.cursorPosition = 0;
+        //     this.cursorMode = this.MOVE_MODE;
+        // }
     }
 
     // ===
