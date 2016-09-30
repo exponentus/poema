@@ -5,11 +5,13 @@ export function createURLSearchParams(_params): URLSearchParams {
     for (let p in _params) {
         if (_params[p] instanceof Array) {
             for (let t in _params[p]) {
-                params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
+                // params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
+                params.append(p, _params[p][t]);
             }
         } else {
             if (typeof (_params[p]) != 'undefined') {
-                params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+                // params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
+                params.set(p, _params[p]);
             }
         }
     }

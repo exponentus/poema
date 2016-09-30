@@ -1,76 +1,85 @@
 package projects.dao;
 
-import java.util.List;
-import java.util.UUID;
+import com.exponentus.dataengine.RuntimeObjUtil;
+import com.exponentus.dataengine.jpa.DAO;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.scripting._Session;
+import projects.SortMap;
+import projects.model.Project;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-import com.exponentus.dataengine.RuntimeObjUtil;
-import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 //import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.scripting._Session;
-
-import projects.model.Project;
 
 public class ProjectDAO extends DAO<Project, UUID> {
 
-	public ProjectDAO(_Session session) {
-		super(Project.class, session);
-	}
+    public ProjectDAO(_Session session) {
+        super(Project.class, session);
+    }
 
-	public ViewPage<Project> findProjects(String keyWord, int pageNum, int pageSize) {
-		EntityManager em = getEntityManagerFactory().createEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		try {
-			CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-			CriteriaQuery<Project> cq = cb.createQuery(Project.class);
-			Root<Project> c = cq.from(Project.class);
-			cq.select(c);
-			countCq.select(cb.count(c));
+    public ViewPage<Project> findProjects(String keyWord, SortMap sortMap, int pageNum, int pageSize) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+            CriteriaQuery<Project> cq = cb.createQuery(Project.class);
+            Root<Project> projectRoot = cq.from(Project.class);
+            cq.select(projectRoot);
+            countCq.select(cb.count(projectRoot));
 
-			Predicate condition = null;
-			if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-				condition = cb.and(c.get("readers").in(user.getId()));
-			}
-			if (keyWord != null && !keyWord.isEmpty()) {
-				// if (condition != null) {
-				// condition = cb.and(cb.like(cb.lower(c.<String> get("name")),
-				// "%" + keyWord + "%"), condition);
-				// } else {
-				condition = cb.and(cb.like(cb.lower(c.<String> get("name")), "%" + keyWord + "%"));
-				// }
-			}
-			if (condition != null) {
-				cq.where(condition);
-				countCq.where(condition);
-			}
-			cq.orderBy(cb.asc(c.get("name")));
+            Predicate condition = null;
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+                condition = cb.and(projectRoot.get("readers").in(user.getId()));
+            }
+            if (keyWord != null && !keyWord.isEmpty()) {
+                // if (condition != null) {
+                // condition = cb.and(cb.like(cb.lower(c.<String> get("name")),
+                // "%" + keyWord + "%"), condition);
+                // } else {
+                condition = cb.and(cb.like(cb.lower(projectRoot.<String>get("name")), "%" + keyWord + "%"));
+                // }
+            }
+            if (condition != null) {
+                cq.where(condition);
+                countCq.where(condition);
+            }
 
-			Query query = em.createQuery(countCq);
-			long count = (long) query.getSingleResult();
-			int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-			if (pageNum == 0) {
-				pageNum = 1; // maxPage;
-			}
-			int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+            if (sortMap != null && !sortMap.isEmpty()) {
+                List<Order> orderBy = new ArrayList<>();
+                sortMap.values().forEach((fieldName, direction) -> {
+                    if (direction.isAscending()) {
+                        orderBy.add(cb.asc(projectRoot.get(fieldName)));
+                    } else {
+                        orderBy.add(cb.desc(projectRoot.get(fieldName)));
+                    }
+                });
+                cq.orderBy(orderBy);
+            }
 
-			TypedQuery<Project> typedQuery = em.createQuery(cq);
-			typedQuery.setFirstResult(firstRec);
-			typedQuery.setMaxResults(pageSize);
+            Query query = em.createQuery(countCq);
+            long count = (long) query.getSingleResult();
+            int maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+            if (pageNum == 0) {
+                pageNum = 1; // maxPage;
+            }
+            int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 
-			List<Project> result = typedQuery.getResultList();
+            TypedQuery<Project> typedQuery = em.createQuery(cq);
+            typedQuery.setFirstResult(firstRec);
+            typedQuery.setMaxResults(pageSize);
 
-			return new ViewPage<>(result, count, maxPage, pageNum);
-		} finally {
-			em.close();
-		}
-	}
+            List<Project> result = typedQuery.getResultList();
+
+            return new ViewPage<>(result, count, maxPage, pageNum);
+        } finally {
+            em.close();
+        }
+    }
 }

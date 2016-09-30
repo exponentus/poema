@@ -9,7 +9,7 @@ import { Attachment } from '../../models';
     template: `
         <div class="attachments">
             <i class="fa fa-paperclip" *ngIf="!editable"></i>
-            <label class="btn btn-upload" title="{{'attach_file' | translate}}" *ngIf="editable">
+            <label class="btn btn-upload" title="{{'attach_file' | translate}}" tabindex="0" *ngIf="editable">
                 <i class="fa fa-paperclip"></i>
                 <span>{{'attach_file' | translate}}</span>
                 <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>

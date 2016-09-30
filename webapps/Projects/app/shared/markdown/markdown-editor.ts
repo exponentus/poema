@@ -10,7 +10,7 @@ import { MarkdownConverter } from './markdown-converter';
                 <div class="md-editor__placeholder" *ngIf="placeHolder">{{placeHolder}}</div>
                 <div class="md-editor__tab-title-md" *ngIf="editable" (click)="setActiveMdMode()">
                     {{writeLabel}}
-                    <a class="md-editor-site" href="https://daringfireball.net/projects/markdown/syntax" (click)="false" title="Markdown" target="blank" rel="noreferrer">
+                    <a class="md-editor-site" href="https://daringfireball.net/projects/markdown/syntax" tabindex="-1" (click)="false" title="Markdown" target="blank" rel="noreferrer">
                         <img height="14px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAYAAAGblg/ZAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFXpUWHRBdXRob3IAAAiZy01NycwDAAYmAg7P7sJVAAABUklEQVRIx2NgYGAwAuL/SBhCwAAjmsB6RmwqYOA/Ni0MyIYuQGKj0MicB1D2YZgYyMh/aHYhg6sMuIyFeYwJh4vhAFmBMJocK05voQcEPkcSBf5jseUrEGvhUYMRe8iSyTgsQQcxuAz4j0fMHMr/i6zmCpomUjFFBhgSjCZCAD2lIEfnQixijNiiHD3AtKDRyEBMNCJ7gZFAWkFW8x+bF9BBClqcM+LKGOjOewDNGOhOZkbin8CXEnElpN9QtiOupEwMno8uRmk6uESNpEwJvkKpD5ANY6aGIdgcwwUtfWHyV6FipJqDNRSwhQCuDJGAVMEwEFHmMRJRJjKQ4gBiQpJkBzARYfB3IDZG4psA8Q8caj8CsSIOT4DElIH4M7lxtwOIdxIZx7VY5NtwVQhkJR4kXzFBcwC6/B0g5gFiISB+QkoipCtggjbSrg6A3aBS0AAACVPtjHPTRNQAAAAASUVORK5CYII=" alt="md" />
                     </a>
                 </div>
@@ -108,7 +108,7 @@ import { MarkdownConverter } from './markdown-converter';
         </div>
     `,
     host: {
-        'tabindex': '0',
+        'tabindex': '-1',
         '(keyup.esc)': 'onEsc($event)'
     }
 })

@@ -34,6 +34,7 @@ export class ProjectsComponent {
     meta: any = {};
     keyWord: string = '';
     loading: boolean = true;
+    activeSort: string = 'name:asc';
     private params: any = {};
 
     constructor(
@@ -72,9 +73,13 @@ export class ProjectsComponent {
     loadData(params?) {
         this.store.dispatch(this.envActions.setRedirectUrl('/projects'));
 
-        this.params = params;
+        // this.params = params;
+        this.params = Object.assign({}, params, {
+            'sort': this.activeSort || 'name:asc'
+        });
+
         this.store.dispatch(this.projectActions.fetchProjects());
-        this.projectService.fetchProjects(params).subscribe(data => {
+        this.projectService.fetchProjects(this.params).subscribe(data => {
             let customerIds = data.projects.map(it => it.customerId);
             this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(
                 payload => {
@@ -100,6 +105,11 @@ export class ProjectsComponent {
             page: params.page,
             keyWord: this.keyWord
         });
+    }
+
+    onSort($event) {
+        this.activeSort = $event;
+        this.refresh();
     }
 
     newProject() {

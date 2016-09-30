@@ -138,7 +138,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 countCq.where(condition);
             }
 
-            if (sortMap != null && !sortMap.values().isEmpty()) {
+            if (sortMap != null && !sortMap.isEmpty()) {
                 List<Order> orderBy = new ArrayList<>();
                 sortMap.values().forEach((fieldName, direction) -> {
                     if (direction.isAscending()) {

@@ -12,7 +12,7 @@ import { SwitchButtonComponent } from './switch-button';
 import { NotificationComponent, NotificationService } from './notification';
 import { MarkdownEditorComponent, MarkdownConverter, MarkedPipe } from './markdown';
 import { TreeIndentationComponent } from './tree-indentation/tree-indentation.component';
-import { SortLabelComponent } from './sort-label/sort-label.component';
+import { SortControlComponent } from './sort-control/sort-control.component';
 
 @NgModule({
     declarations: [
@@ -27,7 +27,7 @@ import { SortLabelComponent } from './sort-label/sort-label.component';
         SwitchButtonComponent,
         ImgViewDirective, ImgViewComponent,
         TreeIndentationComponent,
-        SortLabelComponent
+        SortControlComponent
     ],
     exports: [
         PaginationComponent,
@@ -41,7 +41,7 @@ import { SortLabelComponent } from './sort-label/sort-label.component';
         SwitchButtonComponent,
         ImgViewDirective, ImgViewComponent,
         TreeIndentationComponent,
-        SortLabelComponent
+        SortControlComponent
     ],
     imports: [CommonModule],
     providers: [

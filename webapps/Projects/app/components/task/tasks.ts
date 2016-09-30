@@ -34,6 +34,7 @@ export class TasksComponent {
     expandedIds: string[] = [];
     filter: any = {};
     loading: boolean = true;
+    activeSort: string = 'regDate:desc';
     private params: any = {};
     private taskFor: string = '';
     private projectId: string = '';
@@ -122,6 +123,7 @@ export class TasksComponent {
         this.params = Object.assign({}, params, {
             'for': this.taskFor,
             'projectId': this.projectId,
+            'sort': this.activeSort || 'regDate:desc'
             // 'expandedIds': this.expandedIds
         });
         this.store.dispatch(this.taskActions.fetchTasks());
@@ -139,6 +141,12 @@ export class TasksComponent {
 
     goToPage(params) {
         this.loadData(Object.assign({}, params, this.filter));
+    }
+
+    onSort($event) {
+        console.log($event);
+        this.activeSort = $event;
+        this.refresh();
     }
 
     changeFilter(filter) {

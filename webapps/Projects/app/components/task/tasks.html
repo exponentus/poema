@@ -23,16 +23,32 @@
                 </label>
                 <div class="entry-captions">
                     <div class="task-list__reg-number">{{'reg_number' | translate}}</div>
-                    <div class="task-list__title">{{'task_title' | translate}}</div>
+                    <div class="task-list__title">
+                        <sort-control name="title" [active]="activeSort" (sort)="onSort($event)">
+                            {{'task_title' | translate}}
+                        </sort-control>
+                    </div>
                     <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
-                    <div class="task-list__status">{{'status' | translate}}</div>
-                    <div class="task-list__priority">{{'priority' | translate}}</div>
+                    <div class="task-list__status">
+                        <sort-control name="status" [active]="activeSort" (sort)="onSort($event)">
+                            {{'status' | translate}}
+                        </sort-control>
+                    </div>
+                    <div class="task-list__priority">
+                        <sort-control name="priority" [active]="activeSort" (sort)="onSort($event)">
+                            {{'priority' | translate}}
+                        </sort-control>
+                    </div>
                     <div class="task-list__assignee">{{'assignee_user' | translate}}</div>
                     <div class="task-list__start_date">
-                        <sort-label>{{'start_date' | translate}}</sort-label>
+                        <sort-control name="startDate" [active]="activeSort" (sort)="onSort($event)">
+                            {{'start_date' | translate}}
+                        </sort-control>
                     </div>
                     <div class="task-list__due_date">
-                        <sort-label>{{'due_date' | translate}}</sort-label>
+                        <sort-control name="dueDate" [active]="activeSort" (sort)="onSort($event)">
+                            {{'due_date' | translate}}
+                        </sort-control>
                     </div>
                     <div class="task-list__tags">{{'tags' | translate}}</div>
                 </div>

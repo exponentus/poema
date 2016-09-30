@@ -44,6 +44,10 @@ public class SortMap {
         return sort;
     }
 
+    public boolean isEmpty() {
+        return sort.isEmpty();
+    }
+
     public class _Direction {
 
         private boolean ascending;

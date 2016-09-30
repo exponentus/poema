@@ -21,14 +21,22 @@
                     <input type="checkbox" class="all" />
                 </label>
                 <div class="entry-captions">
-                    <div class="project-list__name">{{'name' | translate}}</div>
+                    <div class="project-list__name">
+                        <sort-control direction="desc" name="name" [active]="activeSort" (sort)="onSort($event)">
+                            {{'name' | translate}}
+                        </sort-control>
+                    </div>
                     <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
                     <div class="project-list__status">{{'status' | translate}}</div>
                     <div class="project-list__customer">{{'customer' | translate}}</div>
                     <div class="project-list__manager">{{'manager' | translate}}</div>
                     <div class="project-list__programmer">{{'programmer' | translate}}</div>
                     <div class="project-list__tester">{{'tester' | translate}}</div>
-                    <div class="project-list__finish_date">{{'finish_date' | translate}}</div>
+                    <div class="project-list__finish_date">
+                        <sort-control name="finishDate" [active]="activeSort" (sort)="onSort($event)">
+                            {{'finish_date' | translate}}
+                        </sort-control>
+                    </div>
                 </div>
             </div>
         </header>
