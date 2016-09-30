@@ -72,6 +72,7 @@
         <class>reference.model.Position</class>
         <class>reference.model.DocumentLanguage</class>
         <class>reference.model.DocumentType</class>
+        <class>reference.model.ControlType</class>
         <class>reference.model.Tag</class>
         <class>reference.model.OrgCategory</class>
         <!-- Specific Reference module entities -->
@@ -172,6 +173,7 @@
         <class>reference.model.OrgCategory</class>
         <class>reference.model.DocumentLanguage</class>
         <class>reference.model.DocumentType</class>
+        <class>reference.model.ControlType</class>
         <!-- The application module entities -->
         <class>workflow.model.Approval</class>  
         <class>workflow.model.Approver</class>  
@@ -179,6 +181,7 @@
         <class>workflow.model.OfficeMemo</class>
         <class>workflow.model.Incoming</class>
         <class>workflow.model.Outgoing</class>
+        <class>workflow.model.Assignment</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>  
         <class>com.exponentus.common.model.AttachmentThumbnail</class> 
