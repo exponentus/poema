@@ -46,7 +46,7 @@ public class ProjectView extends _DoPage {
         SortMap result = new SortMap();
 
         for (String param : params) {
-            String[] skv = param.split(":");
+            String[] skv = param.split(":"); // name:direction
             String name = skv[0];
             String dir;
             if (skv.length > 1) {
