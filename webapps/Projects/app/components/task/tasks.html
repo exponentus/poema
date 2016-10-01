@@ -67,7 +67,7 @@
                                     <tree-indentation
                                         [expandable]="task.hasSubtasks || task.hasRequests"
                                         [expanded]="expandedIds.indexOf(task.id) != -1"
-                                        (click)="toggleExpanded(task.id, $event)">
+                                        (toggle)="toggleExpanded(task.id)">
                                         {{task.regNumber}}
                                     </tree-indentation>
                                 </div>

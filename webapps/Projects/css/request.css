@@ -42,7 +42,7 @@
 }
 
 .request__comment {
-    display: block;
+    display: inline-block;
     padding: 8px;
 }
 
@@ -160,5 +160,5 @@
 
 /* */
 div.task-list__request_type {
-    padding-left: 20px;
+    /*padding-left: 20px;*/
 }

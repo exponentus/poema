@@ -154,9 +154,7 @@ export class TasksComponent {
         this.loadData(filter);
     }
 
-    toggleExpanded(id: string, $event) {
-        $event.preventDefault();
-        $event.stopPropagation();
+    toggleExpanded(id: string) {
         this.store.dispatch(this.taskActions.toggleExpanded(id));
     }
 

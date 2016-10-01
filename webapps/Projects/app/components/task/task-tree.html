@@ -11,7 +11,7 @@
                             [expandable]="m.hasSubtasks || m.hasRequests"
                             [expanded]="expandedIds.indexOf(m.id) != -1"
                             [level]="level + (isLast ? '0' : '1')"
-                            (click)="toggleExpanded(m.id, $event)">
+                            (toggle)="toggleExpanded(m.id)">
                             {{m.regNumber}}
                         </tree-indentation>
                     </div>
@@ -50,22 +50,22 @@
                     <div class="task-list__request_type">
                         <tree-indentation [level]="level + (isLast ? '0' : '1')">
                             {{m.requestType | localizedName}}
+                            <span class="request__time">{{m.regDate}}</span>
+                            <span class="request__comment">{{m.comment}}</span>
+                            <span class="request__attachments" *ngIf="m.attachments && m.attachments.length">
+                                <i class="fa fa-paperclip"></i>
+                            </span>
+                            <span class="accepted" *ngIf="m.resolution == 'ACCEPTED'">
+                                <i class="fa fa-check"></i>
+                                {{'accepted' | translate}}
+                            </span>
+                            <span class="declined" *ngIf="m.resolution == 'DECLINED'">
+                                <i class="fa fa-times"></i>
+                                {{'declined' | translate}}
+                            </span>
+                            <span class="request__resolution_time">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
                         </tree-indentation>
                     </div>
-                    <div class="request__time">{{m.regDate}}</div>
-                    <div class="request__comment">{{m.comment}}</div>
-                    <div class="request__attachments" *ngIf="m.attachments && m.attachments.length">
-                        <i class="fa fa-paperclip"></i>
-                    </div>
-                    <span class="accepted" *ngIf="m.resolution == 'ACCEPTED'">
-                        <i class="fa fa-check"></i>
-                        {{'accepted' | translate}}
-                    </span>
-                    <span class="declined" *ngIf="m.resolution == 'DECLINED'">
-                        <i class="fa fa-times"></i>
-                        {{'declined' | translate}}
-                    </span>
-                    <div class="request__resolution_time">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</div>
                 </div>
             </a>
         </div>

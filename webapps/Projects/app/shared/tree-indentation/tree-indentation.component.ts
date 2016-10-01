@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
     selector: 'tree-indentation',
@@ -13,7 +13,8 @@ import { Component, Input } from '@angular/core';
     host: {
         '[class.tree-indentation]': 'true',
         '[class.is-expandable]': 'expandable',
-        '[class.is-expanded]': 'expanded'
+        '[class.is-expanded]': 'expanded',
+        '(click)': 'onClick($event)'
     }
 })
 
@@ -23,6 +24,15 @@ export class TreeIndentationComponent {
     @Input('level') set _levels(levels: string) {
         this.levels = levels ? levels.split('') : [];
     };
+    @Output() toggle = new EventEmitter();
 
     private levels = [];
+
+    onClick($event) {
+        if (this.expandable) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            this.toggle.emit($event);
+        }
+    }
 }
