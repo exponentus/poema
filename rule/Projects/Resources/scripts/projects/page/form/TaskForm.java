@@ -99,12 +99,11 @@ public class TaskForm extends _DoForm {
 
             String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
-            List<String> formFiles = null;
+            List<String> formFiles;
             Object obj = session.getAttribute(fsId);
             if (obj == null) {
                 formFiles = new ArrayList<>();
             } else {
-                // formFiles = (List<String>) obj;
                 _FormAttachments fAtts = (_FormAttachments) obj;
                 formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
             }

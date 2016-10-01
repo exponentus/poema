@@ -1,166 +1,175 @@
 package workflow.page.form;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.eclipse.persistence.exceptions.DatabaseException;
-
+import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.scripting.IPOJOObject;
-import com.exponentus.scripting._Exception;
-import com.exponentus.scripting._POJOListWrapper;
-import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.*;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
-
+import org.eclipse.persistence.exceptions.DatabaseException;
+import reference.dao.DocumentLanguageDAO;
+import reference.dao.DocumentTypeDAO;
+import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 public class IncomingForm extends _DoForm {
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void doGET(_Session session, _WebFormData formData) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void doGET(_Session session, _WebFormData formData) {
+        IUser<Long> user = session.getUser();
+        Incoming entity;
+        String id = formData.getValueSilently("docid");
 
-		IUser<Long> user = session.getUser();
-		Incoming entity;
-		String id = formData.getValueSilently("docid");
-		if (!id.isEmpty()) {
-			IncomingDAO dao = new IncomingDAO(session);
-			entity = dao.findById(UUID.fromString(id));
+        if (!id.isEmpty()) {
+            IncomingDAO dao = new IncomingDAO(session);
+            entity = dao.findById(UUID.fromString(id));
 
-			String attachmentId = formData.getValueSilently("attachment");
-			if (!attachmentId.isEmpty() && entity.getAttachments() != null) {
-				Attachment att = entity.getAttachments().stream().filter(it -> it.getIdentifier().equals(attachmentId)).findFirst().get();
+            if (formData.containsField("attachment")) {
+                doGetAttachment(session, formData, entity);
+                return;
+            }
+        } else {
+            entity = new Incoming();
+            entity.setAuthor(user);
 
-				if (showAttachment(att)) {
-					return;
-				} else {
-					setBadRequest();
-				}
-			} else {
-				setBadRequest();
-			}
-		} else {
-			entity = new Incoming();
-			entity.setAuthor(user);
-			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-			addValue("formsesid", fsId);
-			List<String> formFiles = null;
-			Object obj = session.getAttribute(fsId);
-			if (obj == null) {
-				formFiles = new ArrayList<>();
-			} else {
-				formFiles = (List<String>) obj;
-			}
+            String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 
-			List<IPOJOObject> filesToPublish = new ArrayList<>();
+            List<String> formFiles;
+            Object obj = session.getAttribute(fsId);
+            if (obj == null) {
+                formFiles = new ArrayList<>();
+            } else {
+                _FormAttachments fAtts = (_FormAttachments) obj;
+                formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
+            }
 
-			for (String fn : formFiles) {
-				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-				if (uf == null) {
-					uf = new UploadedFile();
-					uf.setName(fn);
-					session.setAttribute(fsId + "_file" + fn, uf);
-				}
-				filesToPublish.add(uf);
-			}
-			addContent(new _POJOListWrapper<>(filesToPublish, session));
-		}
+            List<IPOJOObject> filesToPublish = new ArrayList<>();
 
-		addContent(entity);
-		_ActionBar actionBar = new _ActionBar(session);
-		actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
-		actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
-		if (entity.getId() != null) {
+            for (String fn : formFiles) {
+                UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
+                if (uf == null) {
+                    uf = new UploadedFile();
+                    uf.setName(fn);
+                    session.setAttribute(fsId + "_file" + fn, uf);
+                }
+                filesToPublish.add(uf);
+            }
+            addContent(new _POJOListWrapper<>(filesToPublish, session));
+        }
 
-		}
-		addContent(actionBar);
-	}
+        addContent(entity);
+        addContent(getActionBar(session, entity));
+    }
 
-	@Override
-	public void doPOST(_Session session, _WebFormData formData) {
-		try {
-			_Validation ve = validate(formData, session.getLang());
-			if (ve.hasError()) {
-				setBadRequest();
-				setValidation(ve);
-				return;
-			}
+    @Override
+    public void doPOST(_Session session, _WebFormData formData) {
+        try {
+            _Validation ve = validate(formData, session.getLang());
+            if (ve.hasError()) {
+                setBadRequest();
+                setValidation(ve);
+                return;
+            }
 
-			IncomingDAO dao = new IncomingDAO(session);
-			Incoming entity;
-			String id = formData.getValueSilently("docid");
-			boolean isNew = id.isEmpty();
+            OrganizationDAO organizationDAO = new OrganizationDAO(session);
+            DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(session);
+            DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(session);
+            IncomingDAO dao = new IncomingDAO(session);
+            Incoming entity;
+            String id = formData.getValueSilently("docid");
+            boolean isNew = id.isEmpty();
 
-			if (isNew) {
-				entity = new Incoming();
-			} else {
-				entity = dao.findById(id);
-			}
+            if (isNew) {
+                entity = new Incoming();
+            } else {
+                entity = dao.findById(id);
+            }
 
-			entity.setSummary(formData.getValue("summary"));
-			entity.setAttachments(getActualAttachments(entity.getAttachments()));
+            entity.setTitle(formData.getValue("title"));
+            entity.setAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("appliedRegDate")));
+            entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLangId")));
+            entity.setDocType(documentTypeDAO.findById(formData.getValue("docTypeId")));
+            entity.setSender(organizationDAO.findById(formData.getValue("senderOrgId")));
+            entity.setSenderAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("senderAppliedRegDate")));
+            entity.setSummary(formData.getValue("summary"));
+            entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
-			if (isNew) {
-				IUser<Long> user = session.getUser();
-				entity.addReaderEditor(user);
-				entity = dao.add(entity);
-			} else {
-				entity = dao.update(entity);
-			}
+            if (isNew) {
+                IUser<Long> user = session.getUser();
+                entity.addReaderEditor(user);
+                entity = dao.add(entity);
+            } else {
+                entity = dao.update(entity);
+            }
 
-		} catch (SecureException e) {
-			setError(e);
-		} catch (_Exception | DatabaseException e) {
-			logError(e);
-			setBadRequest();
-		}
-	}
+            addContent(entity);
+        } catch (SecureException e) {
+            setError(e);
+        } catch (_Exception | DatabaseException e) {
+            logError(e);
+            setBadRequest();
+        }
+    }
 
-	private _Validation validate(_WebFormData formData, LanguageCode lang) {
-		_Validation ve = new _Validation();
+    @Override
+    public void doDELETE(_Session session, _WebFormData formData) {
+        String incomingId = formData.getValueSilently("docid");
+        String attachmentId = formData.getValueSilently("attachment");
 
-		if (formData.getValueSilently("summary").isEmpty()) {
-			ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
-		}
+        if (incomingId.isEmpty() || attachmentId.isEmpty()) {
+            addContent("error", "docid or attachmentId empty");
+            return;
+        }
 
-		return ve;
-	}
+        IncomingDAO dao = new IncomingDAO(session);
+        Incoming incoming = dao.findById(incomingId);
 
-	@Override
-	public void doDELETE(_Session session, _WebFormData formData) {
-		String id = formData.getValueSilently("docid");
-		String attachmentId = formData.getValueSilently("attachment");
-		String attachmentName = formData.getValueSilently("att-name");
+        AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+        Attachment attachment = attachmentDAO.findById(attachmentId);
+        incoming.getAttachments().remove(attachment);
 
-		if (id.isEmpty() || attachmentId.isEmpty() || attachmentName.isEmpty()) {
-			return;
-		}
+        try {
+            dao.update(incoming);
+        } catch (SecureException e) {
+            setBadRequest();
+            logError(e);
+        }
+    }
 
-		IncomingDAO dao = new IncomingDAO(session);
-		Incoming entity = dao.findById(id);
+    private _ActionBar getActionBar(_Session session, Incoming entity) {
+        _ActionBar actionBar = new _ActionBar(session);
+        if (entity.isEditable()) {
+            actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
+            if (!entity.isNew()) {
+                actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.DELETE_DOCUMENT));
+            }
+        }
 
-		List<Attachment> atts = entity.getAttachments();
-		List<Attachment> forRemove = atts.stream()
-		        .filter(it -> attachmentId.equals(it.getIdentifier()) && it.getRealFileName().equals(attachmentName)).collect(Collectors.toList());
-		atts.removeAll(forRemove);
+        return actionBar;
+    }
 
-		try {
-			dao.update(entity);
-		} catch (SecureException e) {
-			setError(e);
-		}
-	}
+    private _Validation validate(_WebFormData formData, LanguageCode lang) {
+        _Validation ve = new _Validation();
+
+        if (formData.getValueSilently("summary").isEmpty()) {
+            ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
+        }
+
+        return ve;
+    }
 }

@@ -35,10 +35,10 @@ import {
     TaskTypeInputComponent,
     TagsInputComponent,
     RequestTypeInputComponent,
-    TaskStatusInputComponent
+    TaskStatusInputComponent,
+    ErrorMessageComponent
 } from './components/shared';
 import { AttachmentsComponent } from './components/attachment/attachments';
-import { ErrorMessageComponent } from './components/error-message';
 
 import {
     DateFormatPipe,
@@ -88,6 +88,7 @@ import { AuthGuard } from './auth.guard';
         TagsInputComponent,
         RequestTypeInputComponent,
         TaskStatusInputComponent,
+        ErrorMessageComponent,
         DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe
     ],
     imports: [

@@ -1,21 +1,21 @@
 import { URLSearchParams, Response } from '@angular/http';
 
-export function createURLSearchParams(_params): URLSearchParams {
-    let params: URLSearchParams = new URLSearchParams();
-    for (let p in _params) {
-        if (_params[p] instanceof Array) {
-            for (let t in _params[p]) {
-                // params.append(encodeURIComponent(p), encodeURIComponent(_params[p][t]));
-                params.append(p, _params[p][t]);
+export function createURLSearchParams(params): URLSearchParams {
+    let searchParams: URLSearchParams = new URLSearchParams();
+
+    for (let i in params) {
+        if (params[i] instanceof Array) {
+            for (let j in params[i]) {
+                searchParams.append(i, params[i][j]);
             }
         } else {
-            if (typeof (_params[p]) != 'undefined') {
-                // params.set(encodeURIComponent(p), encodeURIComponent(_params[p]));
-                params.set(p, _params[p]);
+            if (typeof (params[i]) != 'undefined') {
+                searchParams.set(i, params[i]);
             }
         }
     }
-    return params;
+
+    return searchParams;
 }
 
 export function serializeObj(obj): string {
