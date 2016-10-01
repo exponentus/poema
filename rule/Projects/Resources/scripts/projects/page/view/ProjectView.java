@@ -16,11 +16,7 @@ public class ProjectView extends _DoPage {
         String keyWord = formData.getAnyValueSilently("keyWord");
         int pageSize = 200; // session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
-
-        _SortMap sortMap = getSortMap(formData.getListOfValuesSilently("sort"));
-        if (sortMap.isEmpty()) {
-            sortMap = _SortMap.asc("name");
-        }
+        _SortMap sortMap = formData.getSortMap(_SortMap.asc("name"));
 
         ProjectDAO projectDAO = new ProjectDAO(session);
         ViewPage<Project> vp = projectDAO.findProjects(keyWord, sortMap, pageNum, pageSize);
@@ -39,29 +35,5 @@ public class ProjectView extends _DoPage {
                 setError(e);
             }
         }
-    }
-
-    // TODO refactor / standardize
-    public _SortMap getSortMap(String[] params) {
-        _SortMap result = new _SortMap();
-
-        for (String param : params) {
-            String[] skv = param.split(":"); // name:direction
-            String name = skv[0];
-            String dir;
-            if (skv.length > 1) {
-                dir = skv[1];
-            } else {
-                dir = "asc";
-            }
-
-            if (dir.equals("asc")) {
-                result.addAsc(name);
-            } else {
-                result.addDesc(name);
-            }
-        }
-
-        return result;
     }
 }

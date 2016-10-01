@@ -30,11 +30,7 @@ public class TaskView extends _DoPage {
 
         TaskDAO taskDAO = new TaskDAO(session);
         TaskFilter taskFilter = setUpTaskFilter(session, formData, new TaskFilter());
-
-        _SortMap sortMap = getSortMap(formData.getListOfValuesSilently("sort"));
-        if (sortMap.isEmpty()) {
-            sortMap = _SortMap.desc("regDate");
-        }
+        _SortMap sortMap = formData.getSortMap(_SortMap.desc("regDate"));
 
         ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortMap, pageNum, pageSize, expandedIdList);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
@@ -104,29 +100,5 @@ public class TaskView extends _DoPage {
         }
 
         return filter;
-    }
-
-    // TODO refactor / standardize
-    public _SortMap getSortMap(String[] params) {
-        _SortMap result = new _SortMap();
-
-        for (String param : params) {
-            String[] skv = param.split(":"); // name:direction
-            String name = skv[0];
-            String dir;
-            if (skv.length > 1) {
-                dir = skv[1];
-            } else {
-                dir = "asc";
-            }
-
-            if (dir.equals("asc")) {
-                result.addAsc(name);
-            } else {
-                result.addDesc(name);
-            }
-        }
-
-        return result;
     }
 }
