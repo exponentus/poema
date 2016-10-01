@@ -78,7 +78,7 @@
                         {{'observers' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.observerUserIds">
-                        <employee-input class="span8" [editable]="isEditable" [multiple]="true" [ids]="task.observerUserIds" (change)="setObserver($event)"></employee-input>
+                        <employee-input class="span8" [editable]="isEditable" [allowClear]="true" [multiple]="true" [ids]="task.observerUserIds" (change)="setObserver($event)"></employee-input>
                         <error-message [error]="errors.observerUserIds"></error-message>
                     </div>
                 </div>
