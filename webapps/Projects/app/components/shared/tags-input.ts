@@ -26,7 +26,7 @@ export class TagsInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private items: any[] = [];
     private selectedTags: Tag[] = [];
@@ -52,6 +52,6 @@ export class TagsInputComponent {
     }
 
     onSelect(selectedTags) {
-        this.select.emit(selectedTags);
+        this.change.emit(selectedTags);
     }
 }

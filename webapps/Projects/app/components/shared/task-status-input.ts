@@ -26,7 +26,7 @@ export class TaskStatusInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private status: any = {};
     private statusName: string = '';
@@ -48,6 +48,6 @@ export class TaskStatusInputComponent {
 
     onSelect(m) {
         this.status = m;
-        this.select.emit(this.status ? this.status.id : '');
+        this.change.emit(this.status ? this.status.id : '');
     }
 }

@@ -45,7 +45,7 @@
                         </div>
                         <div class="controls">
                             <div class="span8">
-                                <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (select)="setRequestType($event)"></request-type-input>
+                                <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (change)="setRequestType($event)"></request-type-input>
                             </div>
                         </div>
                     </div>

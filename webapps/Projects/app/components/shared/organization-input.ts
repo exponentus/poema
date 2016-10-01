@@ -26,7 +26,7 @@ export class OrganizationInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private organizations: Organization[] = [];
     private meta: any = { page: 0, totalPages: 1 };
@@ -71,6 +71,6 @@ export class OrganizationInputComponent {
 
     onSelect(m) {
         this.org = m;
-        this.select.emit(this.org);
+        this.change.emit(this.org);
     }
 }

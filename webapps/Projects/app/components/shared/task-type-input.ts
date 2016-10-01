@@ -25,7 +25,7 @@ export class TaskTypeInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private taskTypes: any = [];
     private taskType: any;
@@ -46,6 +46,6 @@ export class TaskTypeInputComponent {
 
     onSelect(m) {
         this.taskType = m;
-        this.select.emit(this.taskType);
+        this.change.emit(this.taskType);
     }
 }

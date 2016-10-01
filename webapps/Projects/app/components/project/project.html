@@ -35,7 +35,7 @@
                             {{'customer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.customerId">
-                            <organization-input class="span8" [editable]="isEditable" [id]="project.customerId" (select)="setCustomer($event)"></organization-input>
+                            <organization-input class="span8" [editable]="isEditable" [id]="project.customerId" (change)="setCustomer($event)"></organization-input>
                             <error-message [error]="errors.customerId"></error-message>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                             {{'manager' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.managerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.managerUserId]" (select)="setManager($event)"></employee-input>
+                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.managerUserId]" (change)="setManager($event)"></employee-input>
                             <error-message [error]="errors.managerUserId"></error-message>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             {{'programmer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.programmerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.programmerUserId]" (select)="setProgrammer($event)"></employee-input>
+                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.programmerUserId]" (change)="setProgrammer($event)"></employee-input>
                             <error-message [error]="errors.programmerUserId"></error-message>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                             {{'tester' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.testerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.testerUserId]" (select)="setTester($event)"></employee-input>
+                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.testerUserId]" (change)="setTester($event)"></employee-input>
                             <error-message [error]="errors.testerUserId"></error-message>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                             {{'observers' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.observerUserIds">
-                            <employee-input class="span8" [editable]="isEditable" [multiple]="true" [allowClear]="true" [ids]="project.observerUserIds" (select)="setObserver($event)"></employee-input>
+                            <employee-input class="span8" [editable]="isEditable" [multiple]="true" [allowClear]="true" [ids]="project.observerUserIds" (change)="setObserver($event)"></employee-input>
                             <error-message [error]="errors.observerUserIds"></error-message>
                         </div>
                     </div>

@@ -30,7 +30,7 @@ export class EmployeeInputComponent {
     @Input() multiple: boolean = false;
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private ids: string[] = [];
     private employees: Employee[] = [];
@@ -57,6 +57,6 @@ export class EmployeeInputComponent {
     }
 
     onSelect(selectedEmps) {
-        this.select.emit(selectedEmps);
+        this.change.emit(selectedEmps);
     }
 }

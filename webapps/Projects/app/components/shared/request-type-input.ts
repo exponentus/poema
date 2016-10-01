@@ -26,7 +26,7 @@ export class RequestTypeInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private requestTypes: RequestType[];
     private sub: any;
@@ -49,6 +49,6 @@ export class RequestTypeInputComponent {
 
     onSelect(m) {
         this.requestType = m;
-        this.select.emit(this.requestType);
+        this.change.emit(this.requestType);
     }
 }

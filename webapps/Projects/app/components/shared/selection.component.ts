@@ -1,6 +1,7 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, HostBinding,
-    HostListener, Renderer, EventEmitter, ElementRef, ViewChild
+    HostListener, Renderer, EventEmitter, ElementRef, ViewChild,
+    ChangeDetectionStrategy
 } from '@angular/core';
 
 @Component({
@@ -31,12 +32,15 @@ import {
                     <span class="selection-item-text">{{m | localizedName:textKey}}</span>
                     <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>
                 </span>
-                <input *ngIf="false && searchable"
+                <input *ngIf="searchable"
                     #searchInput
                     class="select-search-input"
                     name="search"
                     value=""
                     autocomplete="off"
+                    [tabindex]="tabIndex"
+                    (focus)="onFocus($event)"
+                    (blur)="onBlur($event)"
                     (keyup)="handleEvent($event)" />
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
@@ -58,19 +62,20 @@ import {
                 </ul>
             </div>
         </div>
-    `
+    `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class SelectionComponent {
-    @HostBinding('tabIndex') get _tabIndex() { return this.tabIndex; }
+    @HostBinding('tabIndex') get _tabIndex() { return -1; /* this.tabIndex; */ }
 
     @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
         if (this.disabled) {
             return;
         }
 
-        $event.preventDefault();
         this.isFocused = true;
+        // this.renderer.invokeElementMethod(this.searchInput.nativeElement, 'focus');
     }
 
     @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
@@ -78,12 +83,15 @@ export class SelectionComponent {
             return;
         }
 
-        $event.preventDefault();
         this.close();
         this.clearSearchInput();
     }
 
     @HostListener('click', ['$event']) public onClick($event: MouseEvent): void {
+        this.selfClick = true;
+    }
+
+    @HostListener('mousedown', ['$event']) public onMouseDown($event: MouseEvent): void {
         this.selfClick = true;
     }
 
@@ -287,10 +295,9 @@ export class SelectionComponent {
 
     // ===
     handleEvent($event) {
-        console.log($event);
-
-        let keyCode = $event.key;
         if ($event.type === 'keydown') {
+            let keyCode = $event.key;
+
             if (keyCode === 'Enter') {
                 if (this.cursorId && this.canMove()) {
                     this.addOnCursor();
@@ -306,7 +313,7 @@ export class SelectionComponent {
                 return;
             }
 
-            // toggle move mode
+            // toggle cursor mode
             if (this.cursorMode === this.SEARCH_MODE) {
                 if ('ArrowUp' === keyCode || 'ArrowDown' === keyCode) {
                     this.cursorMode = this.MOVE_MODE;
@@ -314,16 +321,17 @@ export class SelectionComponent {
                     this.cursorMode = this.MOVE_MODE;
                 }
             }
-        }
 
-        //
-        if ($event.type === 'keydown' && this.cursorMode === this.MOVE_MODE && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(keyCode) != -1) {
-            $event.preventDefault();
-            this.move(keyCode);
+            if (this.cursorMode === this.MOVE_MODE && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(keyCode) != -1) {
+                $event.preventDefault();
+                this.move(keyCode);
+            }
         } else if ($event.type === 'keyup' && $event.target.name === 'search') {
             $event.stopPropagation();
             this.cursorMode = this.SEARCH_MODE;
             this.search($event.target.value.toLowerCase());
+        } else {
+            console.log('SelectionComponent::handleEvent > unknown', $event);
         }
     }
 
@@ -382,11 +390,11 @@ export class SelectionComponent {
     }
 
     selectFirst() {
-        // if (this.cursorMode === this.SEARCH_MODE && this._items.length > 0) {
-        //     this.cursorId = this._items[0].id;
-        //     this.cursorPosition = 0;
-        //     this.cursorMode = this.MOVE_MODE;
-        // }
+        if (this.cursorMode === this.SEARCH_MODE && this._items.length > 0) {
+            this.cursorId = this._items[0].id;
+            this.cursorPosition = 0;
+            this.cursorMode = this.MOVE_MODE;
+        }
     }
 
     // ===

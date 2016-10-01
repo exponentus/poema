@@ -25,7 +25,7 @@ export class ProjectInputComponent {
     @Input() placeHolder: string = '';
     @Input() editable: boolean = false;
     @Input() allowClear: boolean = false;
-    @Output() select = new EventEmitter();
+    @Output() change = new EventEmitter();
 
     private projects: Project[] = [];
     private project: Project;
@@ -46,6 +46,6 @@ export class ProjectInputComponent {
 
     onSelect(m) {
         this.project = m;
-        this.select.emit(this.project);
+        this.change.emit(this.project);
     }
 }
