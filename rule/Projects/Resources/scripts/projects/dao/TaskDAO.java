@@ -7,7 +7,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Session;
-import projects.SortMap;
+import com.exponentus.scripting._SortMap;
 import projects.dao.filter.TaskFilter;
 import projects.model.Request;
 import projects.model.Task;
@@ -29,10 +29,10 @@ public class TaskDAO extends DAO<Task, UUID> {
     }
 
     public ViewPage<Task> findAllByTaskFilter(TaskFilter filter, int pageNum, int pageSize) {
-        return findAll(filter, SortMap.desc("regDate"), pageNum, pageSize);
+        return findAll(filter, _SortMap.desc("regDate"), pageNum, pageSize);
     }
 
-    public ViewPage<Task> findAll(TaskFilter filter, SortMap sortMap, int pageNum, int pageSize) {
+    public ViewPage<Task> findAll(TaskFilter filter, _SortMap sortMap, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
         }
@@ -172,7 +172,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAllWithChildren(TaskFilter filter, SortMap sortMap, int pageNum, int pageSize, List<UUID> expandedIds) {
+    public ViewPage<Task> findAllWithChildren(TaskFilter filter, _SortMap sortMap, int pageNum, int pageSize, List<UUID> expandedIds) {
         ViewPage<Task> vp = findAll(filter, sortMap, pageNum, pageSize);
 
         if (vp.getResult().isEmpty()/* || expandedIds.isEmpty()*/) {

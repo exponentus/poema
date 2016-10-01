@@ -3,9 +3,9 @@ package projects.page.view;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortMap;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
-import projects.SortMap;
 import projects.dao.ProjectDAO;
 import projects.model.Project;
 
@@ -17,9 +17,9 @@ public class ProjectView extends _DoPage {
         int pageSize = 200; // session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
 
-        SortMap sortMap = getSortMap(formData.getListOfValuesSilently("sort"));
+        _SortMap sortMap = getSortMap(formData.getListOfValuesSilently("sort"));
         if (sortMap.isEmpty()) {
-            sortMap = SortMap.asc("name");
+            sortMap = _SortMap.asc("name");
         }
 
         ProjectDAO projectDAO = new ProjectDAO(session);
@@ -42,8 +42,8 @@ public class ProjectView extends _DoPage {
     }
 
     // TODO refactor / standardize
-    public SortMap getSortMap(String[] params) {
-        SortMap result = new SortMap();
+    public _SortMap getSortMap(String[] params) {
+        _SortMap result = new _SortMap();
 
         for (String param : params) {
             String[] skv = param.split(":"); // name:direction
