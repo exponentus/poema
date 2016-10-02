@@ -247,12 +247,14 @@ export class SelectionComponent {
     }
 
     clear($event) {
-        $event.stopPropagation();
-        this.selectedItems = [];
-        this.selectedItemIds = [];
-        this.emitChange();
-        this.clearSearchInput();
-        this.filterItems();
+        if (this.selectedItemIds.length || this.selectedItems.length) {
+            $event.stopPropagation();
+            this.selectedItems = [];
+            this.selectedItemIds = [];
+            this.emitChange();
+            this.clearSearchInput();
+            this.filterItems();
+        }
     }
 
     clearSearchInput() {
@@ -310,6 +312,9 @@ export class SelectionComponent {
                     this.close();
                 }
                 this.clearSearchInput();
+                return;
+            } else if (keyCode === 'Delete') {
+                this.clear($event);
                 return;
             }
 
