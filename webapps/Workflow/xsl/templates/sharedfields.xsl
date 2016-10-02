@@ -1,56 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-    <xsl:template name="balanceholder-bin">
-        <div class="form-group">
-            <div class="control-label">
-                <xsl:value-of select="//captions/balance_holder/@caption"/>
-            </div>
-            <div class="controls">
-                <xsl:choose>
-                    <xsl:when test="@docid eq '' or @docid eq 'null'">
-                        <select name="balanceholder" class="span8">
-                            <xsl:apply-templates select="fields/balanceholder" mode="selected_options"/>
-                        </select>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <div class="input-placeholder span8">
-                            <xsl:value-of select="fields/balanceholder"/>
-                            <input type="hidden" name="balanceholder" value="{fields/balanceholder/@id}"
-                                   disabled="disabled"/>
-                        </div>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="control-label">
-                <xsl:value-of select="//captions/bin/@caption"/>
-            </div>
-            <div class="controls">
-                <input type="text" name="balanceholderbin" value="{fields/balanceholderbin}" class="span4"
-                       disabled="disabled"/>
-            </div>
-        </div>
-    </xsl:template>
-
-
-    <xsl:template name="property_status_type">
-        <!-- property_status -->
-        <div class="form-group">
-            <div class="control-label">
-                <xsl:value-of select="//captions/property_status/@caption"/>
-            </div>
-            <div class="controls">
-                <xsl:apply-templates select="//constants[@entity = 'propertystatustype']/entry[@attrval != 'UNKNOWN']"
-                                     mode="constants">
-                    <xsl:with-param name="select" select="fields/propertystatus"/>
-                    <xsl:with-param name="type" select="'radio'"/>
-                </xsl:apply-templates>
-            </div>
-        </div>
-    </xsl:template>
-
     <xsl:template name="signer">
         <!-- Подписывающий  -->
         <div class="form-group">
@@ -258,7 +208,6 @@
             </div>
         </div>
     </xsl:template>
-
 
 
     <xsl:template match="*" mode="selected_options">

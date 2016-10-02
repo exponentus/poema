@@ -102,9 +102,9 @@ public class IncomingForm extends _DoForm {
 
             entity.setTitle(formData.getValue("title"));
             entity.setAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("appliedRegDate")));
-            entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLangId")));
-            entity.setDocType(documentTypeDAO.findById(formData.getValue("docTypeId")));
-            entity.setSender(organizationDAO.findById(formData.getValue("senderOrgId")));
+            entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLanguage")));
+            entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
+            entity.setSender(organizationDAO.findById(formData.getValue("sender")));
             entity.setSenderAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("senderAppliedRegDate")));
             entity.setSummary(formData.getValue("summary"));
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
@@ -137,14 +137,14 @@ public class IncomingForm extends _DoForm {
         }
 
         IncomingDAO dao = new IncomingDAO(session);
-        Incoming incoming = dao.findById(incomingId);
+        Incoming entity = dao.findById(incomingId);
 
         AttachmentDAO attachmentDAO = new AttachmentDAO(session);
         Attachment attachment = attachmentDAO.findById(attachmentId);
-        incoming.getAttachments().remove(attachment);
+        entity.getAttachments().remove(attachment);
 
         try {
-            dao.update(incoming);
+            dao.update(entity);
         } catch (SecureException e) {
             setBadRequest();
             logError(e);

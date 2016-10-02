@@ -28,37 +28,96 @@
                             <xsl:value-of select="//captions/properties/@caption"/>
                         </a>
                     </li>
+                    <li>
+                        <a href="#tabs-att" role="tab" data-toggle="tab">
+                            <xsl:value-of select="//captions/reg_documents/@caption"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#tabs-docinfo" role="tab" data-toggle="tab">
+                            <xsl:value-of select="//captions/additional/@caption"/>
+                        </a>
+                    </li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="tabs-1">
-                        <fieldset class="fieldset">
-                            <xsl:call-template name="regnumber"/>
-                            <xsl:call-template name="regdate"/>
-                            <xsl:call-template name="signer"/>
-                            <xsl:call-template name="recipient"/>
+                        <div class="fieldset">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/title/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <input type="text" name="title" value="{fields/title}" class="span8"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/applied_reg_date/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <input type="date" name="appliedRegDate" value="{fields/appliedregdate}"
+                                           class="span2"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/doc_language/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <select name="docLanguage" class="span8">
+                                        <xsl:apply-templates select="fields/doclanguage" mode="selected_options"/>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/doc_type/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <select name="docType" class="span8">
+                                        <xsl:apply-templates select="fields/doctype" mode="selected_options"/>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/sender/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <select name="sender" class="span8">
+                                        <xsl:apply-templates select="fields/sender" mode="selected_options"/>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <xsl:value-of select="//captions/sender_applied_reg_date/@caption"/>
+                                </div>
+                                <div class="controls">
+                                    <input type="date" name="senderAppliedRegDate" value="{fields/senderappliedregdate}"
+                                           class="span2"/>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div class="control-label">
                                     <xsl:value-of select="//captions/summary/@caption"/>
                                 </div>
                                 <div class="controls">
                                     <textarea type="text" name="summary" value="{fields/summary}" class="span8">
-                                       <xsl:value-of select="fields/summary"/>
+                                        <xsl:value-of select="fields/summary"/>
                                     </textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="control-label">
-                                    <xsl:value-of select="//captions/content/@caption"/>
-                                </div>
-                                <div class="controls">
-                                    <textarea type="text" name="content" value="{fields/content}" class="span8">
-                                       <xsl:value-of select="fields/content"/>
-                                    </textarea>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tabs-att">
+                        <fieldset class="fieldset">
+                            <xsl:call-template name="upload-files">
+                                <xsl:with-param name="input-name" select="'reg-files'"/>
+                            </xsl:call-template>
                         </fieldset>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="tabs-3">
+                    <div role="tabpanel" class="tab-pane" id="tabs-docinfo">
                         <xsl:call-template name="docinfo"/>
                     </div>
                 </div>
