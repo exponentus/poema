@@ -142,9 +142,15 @@ public class Incoming extends SecureAppEntity<UUID> {
 
         chunk.append("<regnumber>" + regNumber + "</regnumber>");
         chunk.append("<appliedregdate>" + TimeUtil.dateTimeToStringSilently(appliedRegDate) + "</appliedregdate>");
-        chunk.append("<doclanguage id=\"" + docLanguage.getId() + "\">" + docLanguage.getLocalizedName(ses.getLang()) + "</doclanguage>");
-        chunk.append("<doctype id=\"" + docType.getId() + "\">" + docType.getLocalizedName(ses.getLang()) + "</doctype>");
-        chunk.append("<sender id=\"" + sender.getId() + "\">" + sender.getLocalizedName(ses.getLang()) + "</sender>");
+        if (docLanguage != null) {
+            chunk.append("<doclanguage id=\"" + docLanguage.getId() + "\">" + docLanguage.getLocalizedName(ses.getLang()) + "</doclanguage>");
+        }
+        if (docType != null) {
+            chunk.append("<doctype id=\"" + docType.getId() + "\">" + docType.getLocalizedName(ses.getLang()) + "</doctype>");
+        }
+        if (sender != null) {
+            chunk.append("<sender id=\"" + sender.getId() + "\">" + sender.getLocalizedName(ses.getLang()) + "</sender>");
+        }
         chunk.append("<senderappliedregdate>" + TimeUtil.dateTimeToStringSilently(senderAppliedRegDate) + "</senderappliedregdate>");
         chunk.append("<summary>" + summary + "</summary>");
 
