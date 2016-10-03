@@ -4,10 +4,12 @@
 }
 
 .vw-reg-number {
+    min-width: 130px;
     width: 130px;
 }
 
 .vw-reg-date {
+    min-width: 180px;
     width: 180px;
 }
 

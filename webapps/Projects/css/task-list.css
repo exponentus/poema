@@ -3,35 +3,42 @@
 .task-list {}
 
 div.task-list__reg-number {
-    /*padding-left: 20px;*/
+    min-width: 190px;
     width: 190px;
 }
 
 div.task-list__title {
+    min-width: 80px;
     width: 20%;
 }
 
 .task-list__status {
+    min-width: 100px;
     width: 100px;
 }
 
 .task-list__priority {
+    min-width: 100px;
     width: 100px;
 }
 
 .task-list__assignee {
+    min-width: 80px;
     width: 10%;
 }
 
 .task-list__start_date {
+    min-width: 130px;
     width: 130px;
 }
 
 .task-list__due_date {
+    min-width: 130px;
     width: 130px;
 }
 
 .task-list__tags {
+    min-width: 80px;
     width: 20%;
 }
 

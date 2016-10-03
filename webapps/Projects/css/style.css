@@ -27,6 +27,14 @@ body:not(.side-nav-toggle) .aside + .content {
     margin-left: 280px;
 }
 
+.content-body {
+    overflow: auto;
+}
+
+.view {
+    min-width: 800px;
+}
+
 .form .content-actions {
     border-bottom: 1px solid #e6e6e6;
     border-top: 1px solid transparent;
@@ -116,10 +124,12 @@ pagination:empty {
 /* .vw- */
 
 .vw-icon {
+    min-width: 22px;
     width: 22px;
 }
 
 .vw-date {
+    min-width: 105px;
     width: 105px;
 }
 
