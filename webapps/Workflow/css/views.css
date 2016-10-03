@@ -9,8 +9,23 @@
 }
 
 .vw-reg-date {
+    min-width: 120px;
+    width: 120px;
+}
+
+.vw-doc-language {
+    min-width: 140px;
+    width: 140px;
+}
+
+.vw-doc-type {
     min-width: 180px;
     width: 180px;
+}
+
+.vw-sender {
+    min-width: 190px;
+    width: 190px;
 }
 
 .vw-content {

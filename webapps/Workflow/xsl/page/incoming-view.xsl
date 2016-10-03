@@ -30,7 +30,19 @@
                         <xsl:value-of select="//captions/reg_number/@caption"/>
                     </div>
                     <div class="vw-reg-date">
-                        <xsl:value-of select="//captions/reg_date/@caption"/>
+                        <xsl:value-of select="//captions/applied_reg_date/@caption"/>
+                    </div>
+                    <div class="vw-doc-language">
+                        <xsl:value-of select="//captions/doc_language/@caption"/>
+                    </div>
+                    <div class="vw-doc-type">
+                        <xsl:value-of select="//captions/doc_type/@caption"/>
+                    </div>
+                    <div class="vw-sender">
+                        <xsl:value-of select="//captions/sender/@caption"/>
+                    </div>
+                    <div class="vw-reg-date">
+                        <xsl:value-of select="//captions/sender_applied_reg_date/@caption"/>
                     </div>
                     <div class="vw-content">
                         <xsl:value-of select="//captions/content/@caption"/>
@@ -55,10 +67,22 @@
                             <xsl:value-of select="viewcontent/regnumber"/>
                         </div>
                         <div class="vw-reg-date">
-                            <xsl:value-of select="viewcontent/regdate"/>
+                            <xsl:value-of select="viewcontent/appliedregdate"/>
+                        </div>
+                        <div class="vw-doc-language">
+                            <xsl:value-of select="viewcontent/doclanguage"/>
+                        </div>
+                        <div class="vw-doc-type">
+                            <xsl:value-of select="viewcontent/doctype"/>
+                        </div>
+                        <div class="vw-sender">
+                            <xsl:value-of select="viewcontent/sender"/>
+                        </div>
+                        <div class="vw-reg-date">
+                            <xsl:value-of select="viewcontent/senderappliedregdate"/>
                         </div>
                         <div class="vw-content">
-                            <xsl:value-of select="viewcontent/content"/>
+                            <xsl:value-of select="viewcontent/summary"/>
                         </div>
                     </div>
                 </a>
