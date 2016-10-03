@@ -38,6 +38,26 @@
         <entry lang="KAZ">Регистрационные документы</entry>
         <entry lang="ENG">Registration documents</entry>
     </sentence>
+    <sentence mode="on" keyword="applied_reg_date">
+        <entry lang="RUS">Дата регистрации</entry>
+        <entry lang="ENG">Date</entry>
+    </sentence>
+    <sentence mode="on" keyword="doc_language">
+        <entry lang="RUS">Язык документа</entry>
+        <entry lang="ENG">Language</entry>
+    </sentence>
+    <sentence mode="on" keyword="doc_type">
+        <entry lang="RUS">Тип документа</entry>
+        <entry lang="ENG">Document type</entry>
+    </sentence>
+    <sentence mode="on" keyword="sender_applied_reg_date">
+        <entry lang="RUS">Дата</entry>
+        <entry lang="ENG">Date</entry>
+    </sentence>
+    <sentence mode="on" keyword="sender_applied_reg_date">
+        <entry lang="RUS">Дата</entry>
+        <entry lang="ENG">Date</entry>
+    </sentence>
     <sentence mode="on" keyword="summary">
         <entry lang="RUS">Краткое содержание</entry>
         <entry lang="ENG">Summary</entry>
