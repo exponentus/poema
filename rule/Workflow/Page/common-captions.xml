@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rule  mode="on">
+<rule mode="on">
     <!-- <caching>CACHING_IN_SERVER_SCOPE</caching> -->
     <caching>NO_CACHING</caching>
 
@@ -11,17 +11,6 @@
     <caption name="close"/>
     <caption name="filter"/>
     <caption name="wait_while_document_save"/>
-
-    <caption name="reg_date"/>
-    <caption name="expiry_date"/>
-    <caption name="reg_number"/>
-
-    <caption name="notifications"/>
-    <caption name="type"/>
-    <caption name="sender"/>
-    <caption name="recipient"/>
-    <caption name="sendtime"/>
-    <caption name="content"/>
 
     <caption name="attach_file"/>
     <caption name="properties"/>
@@ -58,4 +47,18 @@
     <caption name="incoming_documents"/>
     <caption name="outgoing_documents"/>
 
+    <caption name="reg_date"/>
+    <caption name="expiry_date"/>
+    <caption name="reg_number"/>
+    <caption name="applied_reg_date"/>
+
+    <caption name="notifications"/>
+    <caption name="type"/>
+    <caption name="sender"/>
+    <caption name="recipient"/>
+    <caption name="sendtime"/>
+    <caption name="content"/>
+    <caption name="doc_language"/>
+    <caption name="doc_type"/>
+    <caption name="sender_applied_reg_date"/>
 </rule>

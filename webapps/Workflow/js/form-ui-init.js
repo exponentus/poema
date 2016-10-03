@@ -13,7 +13,9 @@ $(function() {
             'type': 'text',
             'data-type': 'date',
             /*'readonly': 'readonly',*/
-        }).datepicker({ dateFormat:'dd.mm.yy' });
+        }).datepicker({
+            dateFormat: 'dd.mm.yy'
+        });
     });
 
     // init action
@@ -74,17 +76,15 @@ $(function() {
         });
     }
 
-   $('.js-select-recipient').on('click', function(e) {
+    $('.js-select-recipient').on('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        nbApp.choiceRecipient(this, function() {
-        });
+        nbApp.choiceRecipient(this, function() {});
     });
-    
-   $('.js-select-signer').on('click', function(e) {
+
+    $('.js-select-signer').on('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        nbApp.choiceSigner(this, function() {
-        });
+        nbApp.choiceSigner(this, function() {});
     });
 });

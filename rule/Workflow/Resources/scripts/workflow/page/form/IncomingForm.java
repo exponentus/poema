@@ -100,7 +100,7 @@ public class IncomingForm extends _DoForm {
                 entity = dao.findById(id);
             }
 
-            entity.setTitle(formData.getValue("title"));
+            // ? entity.setTitle(formData.getValue("title"));
             entity.setAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("appliedRegDate")));
             entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLanguage")));
             entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
@@ -155,9 +155,7 @@ public class IncomingForm extends _DoForm {
         _ActionBar actionBar = new _ActionBar(session);
         if (entity.isEditable()) {
             actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
-            if (!entity.isNew()) {
-                actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.DELETE_DOCUMENT));
-            }
+            actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
         }
 
         return actionBar;

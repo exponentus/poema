@@ -26,18 +26,15 @@
                     <input type="checkbox" data-toggle="docid" class="all"/>
                 </label>
                 <div class="entry-captions">
-                    <span class="vw-tags">
-                        <xsl:value-of select="//captions/status/@caption"/>
-                    </span>
-                    <span class="vw-balance-holder">
+                    <div class="vw-reg-number">
                         <xsl:value-of select="//captions/reg_number/@caption"/>
-                    </span>
-                    <span class="vw-balance-holder">
+                    </div>
+                    <div class="vw-reg-date">
                         <xsl:value-of select="//captions/reg_date/@caption"/>
-                    </span>
-                    <span class="vw-order-description">
+                    </div>
+                    <div class="vw-content">
                         <xsl:value-of select="//captions/content/@caption"/>
-                    </span>
+                    </div>
                 </div>
             </div>
         </header>
@@ -54,18 +51,15 @@
                 </label>
                 <a href="{@url}" class="entry-link">
                     <div class="entry-fields">
-                        <span class="vw-tags">
-                            <xsl:value-of select="viewcontent/status"/>
-                        </span>
-                        <span class="vw-balance-holder">
+                        <div class="vw-reg-number">
                             <xsl:value-of select="viewcontent/regnumber"/>
-                        </span>
-                        <span class="vw-balance-holder">
+                        </div>
+                        <div class="vw-reg-date">
                             <xsl:value-of select="viewcontent/regdate"/>
-                        </span>
-                        <span class="vw-order-description">
+                        </div>
+                        <div class="vw-content">
                             <xsl:value-of select="viewcontent/content"/>
-                        </span>
+                        </div>
                     </div>
                 </a>
             </div>

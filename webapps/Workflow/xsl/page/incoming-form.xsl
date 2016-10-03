@@ -44,14 +44,6 @@
                         <div class="fieldset">
                             <div class="form-group">
                                 <div class="control-label">
-                                    <xsl:value-of select="//captions/title/@caption"/>
-                                </div>
-                                <div class="controls">
-                                    <input type="text" name="title" value="{fields/title}" class="span8"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="control-label">
                                     <xsl:value-of select="//captions/applied_reg_date/@caption"/>
                                 </div>
                                 <div class="controls">
