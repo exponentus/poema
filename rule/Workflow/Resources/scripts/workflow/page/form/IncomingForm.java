@@ -1,6 +1,7 @@
 package workflow.page.form;
 
 import com.exponentus.common.dao.AttachmentDAO;
+import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
@@ -43,6 +44,9 @@ public class IncomingForm extends _DoForm {
                 doGetAttachment(session, formData, entity);
                 return;
             }
+
+            addContent(entity.getAttachments());
+            addContent(new ACL(entity));
         } else {
             entity = new Incoming();
             entity.setAuthor(user);
