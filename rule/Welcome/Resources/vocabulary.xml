@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <vocabulary>
 	<sentence mode="on" keyword="brand">
-		<entry lang="RUS">Exponentus</entry>
-		<entry lang="KAZ">Exponentus</entry>
-		<entry lang="ENG">Exponentus</entry>
-		<entry lang="BUL">Exponentus</entry>
-		<entry lang="POR">Exponentus</entry>
-		<entry lang="SPA">Exponentus</entry>
+		<entry lang="RUS">Flabs</entry>
+		<entry lang="KAZ">Flabs</entry>
+		<entry lang="ENG">Flabs</entry>
+		<entry lang="BUL">Flabs</entry>
+		<entry lang="POR">Flabs</entry>
+		<entry lang="SPA">Flabs</entry>
 	</sentence>
 
 	<!-- cookieconsent -->
