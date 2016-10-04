@@ -1,11 +1,15 @@
 package welcome.page.form;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 
 import administrator.dao.LanguageDAO;
+import administrator.model.Language;
 
 public class Index extends _DoPage {
 
@@ -24,7 +28,18 @@ public class Index extends _DoPage {
 			addContent("error", "the " + toLang + " language is not available");
 		}
 
-		addContent(new LanguageDAO(session).findAll());
+		LanguageDAO lDao = new LanguageDAO(session);
+		List<Language> lList = new ArrayList<>();
+		try {
+			lList.add(lDao.findByCode(LanguageCode.ENG));
+			lList.add(lDao.findByCode(LanguageCode.BUL));
+			lList.add(lDao.findByCode(LanguageCode.RUS));
+			lList.add(lDao.findByCode(LanguageCode.SPA));
+			lList.add(lDao.findByCode(LanguageCode.POR));
+			lList.add(lDao.findByCode(LanguageCode.KAZ));
+		} catch (Exception e) {
+		}
+		addContent(lList);
 	}
 
 }
