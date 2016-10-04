@@ -8,6 +8,7 @@ import { TranslateModule, TranslateLoader } from 'ng2-translate/ng2-translate';
 import { Observable } from 'rxjs/Observable';
 
 import { SharedModule } from './shared/shared.module';
+import { PipesModule } from './pipes/pipes.module';
 
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
@@ -39,15 +40,6 @@ import {
     ErrorMessageComponent
 } from './components/shared';
 import { AttachmentsComponent } from './components/attachment/attachments';
-
-import {
-    DateFormatPipe,
-    DateDurationPipe,
-    TextTransformPipe,
-    LocalizedNamePipe,
-    KeysPipe,
-    ValuesPipe
-} from './pipes';
 
 import { APP_ROUTES } from './app.routes';
 import { APP_SERVICES } from './services';
@@ -88,8 +80,7 @@ import { AuthGuard } from './auth.guard';
         TagsInputComponent,
         RequestTypeInputComponent,
         TaskStatusInputComponent,
-        ErrorMessageComponent,
-        DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe
+        ErrorMessageComponent
     ],
     imports: [
         BrowserModule,
@@ -102,7 +93,8 @@ import { AuthGuard } from './auth.guard';
             useFactory: (trs: translateService) => new CustomTranslateLoader(trs),
             deps: [translateService]
         }),
-        SharedModule
+        SharedModule,
+        PipesModule
     ],
     providers: [
         APP_SERVICES,

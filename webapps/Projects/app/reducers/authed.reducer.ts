@@ -1,5 +1,3 @@
-import { Project } from '../models';
-
 import { AppActions } from '../actions/app.actions';
 
 export interface IAuthedState {

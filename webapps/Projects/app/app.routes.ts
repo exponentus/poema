@@ -9,7 +9,6 @@ import { TaskComponent } from './components/task/task';
 import { RequestComponent } from './components/request/request';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
-import { User } from './models/user';
 
 export const APP_ROUTES: Routes = [
     { path: '', component: TasksComponent, canActivate: [AuthGuard] },
