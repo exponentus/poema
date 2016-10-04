@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.env.EnvConst;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.log.Log4jLogger;
 import com.exponentus.messaging.MessageType;
@@ -255,6 +256,7 @@ public class Messages {
 	}
 
 	public static void sendOfTaskCompleted(_Session session, Task task) {
+		LanguageCode lang = EnvConst.getDefaultLang();
 		try {
 			AppEnv appEnv = session.getAppEnv();
 			String msgTemplate = "task_completed";
@@ -266,15 +268,17 @@ public class Messages {
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
 
 			User user = null;
 
 			try {
 				user = (User) assigneeUser;
+				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
 			}
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();

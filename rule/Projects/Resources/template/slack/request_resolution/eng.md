@@ -1,7 +1,12 @@
 $orgname$ 
 Dear $assignee$, 
-the task `$regNumber$` was completed
+The request `$regNumber$`  was considered
 Title: $title$
+
+type: $requestType$
+resolution: $requestResolution$
+comment$requestComment$
+
 Author: $author$
 _Click >_ $url$
 
