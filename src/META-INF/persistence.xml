@@ -187,4 +187,8 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class> 
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit> 
+    
+    <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
+        <class>administrator.model.Language</class>     
+    </persistence-unit>
 </persistence>
