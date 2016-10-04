@@ -1,0 +1,101 @@
+<form class="form" *ngIf="isReady">
+    <header class="content-header">
+        <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
+            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()">
+                {{'save_close' | translate}}
+            </button>
+            <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
+                <div dropdown-toggle>
+                    <span class="btn">...</span>
+                </div>
+                <div class="dropdown-menu">
+                    <ul class="menu">
+                        <li>
+                            <a class="menu-item" (click)="delete()">{{'delete' | translate}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <h1 class="header-title">
+            {{'incoming' | translate}}
+        </h1>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'applied_reg_date' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input type="date" name="appliedRegDate" class="span2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'doc_language' | translate}}
+                        </div>
+                        <div class="controls">
+                            <select name="docLanguage" class="span8">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'doc_type' | translate}}
+                        </div>
+                        <div class="controls">
+                            <select name="docType" class="span8">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'sender' | translate}}
+                        </div>
+                        <div class="controls">
+                            <select name="sender" class="span8">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'sender_applied_reg_date' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input type="date" name="senderAppliedRegDate" class="span2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'summary' | translate}}
+                        </div>
+                        <div class="controls">
+                            <textarea type="text" name="summary" class="span8">{{incoming.summary}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <attachments [editable]="isEditable" [model]="incoming" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+                <acl [acl]="incoming.acl"></acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="incoming.authorId">
+            <span>{{'author' | translate}}</span>
+            <!--<employee-input [ids]="[incoming.authorId]"></employee-input>-->
+            <span>{{incoming.regDate}}</span>
+        </div>
+    </footer>
+</form>

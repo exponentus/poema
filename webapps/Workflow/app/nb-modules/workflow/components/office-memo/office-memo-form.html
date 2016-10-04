@@ -1,0 +1,73 @@
+<form class="form" *ngIf="isReady">
+    <header class="content-header">
+        <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
+            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()">
+                {{'save_close' | translate}}
+            </button>
+            <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
+                <div dropdown-toggle>
+                    <span class="btn">...</span>
+                </div>
+                <div class="dropdown-menu">
+                    <ul class="menu">
+                        <li>
+                            <a class="menu-item" (click)="delete()">{{'delete' | translate}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <h1 class="header-title">
+            {{'office_memo' | translate}}
+        </h1>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'applied_reg_date' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input type="date" name="appliedRegDate" class="span2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'doc_language' | translate}}
+                        </div>
+                        <div class="controls">
+                            <select name="docLanguage" class="span8">
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'summary' | translate}}
+                        </div>
+                        <div class="controls">
+                            <textarea type="text" name="summary" class="span8">{{officeMemo.summary}}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <attachments [editable]="isEditable" [model]="officeMemo" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+                <acl [acl]="officeMemo.acl"></acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="officeMemo.authorId">
+            <span>{{'author' | translate}}</span>
+            <!--<employee-input [ids]="[officeMemo.authorId]"></employee-input>-->
+            <span>{{officeMemo.regDate}}</span>
+        </div>
+    </footer>
+</form>

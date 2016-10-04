@@ -18,6 +18,41 @@
 
         <xsl:call-template name="HTML-DOCTYPE"/>
         <html>
+            <head>
+                <base href="" />
+                <meta charset="utf-8" />
+                <title></title>
+                <link rel="shortcut icon" href="img/favicon.png" />
+                <meta name="format-detection" content="telephone=no" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css" />
+                <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css" />
+                <link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css" />
+                <link rel="stylesheet" href="css/all.min.css" />
+            </head>
+            <body>
+                <app class="body">
+                    <div class="app-loading">
+                        <img class="brand-logo" alt="logo" src="img/logo.png" />Loading...
+                    </div>
+                </app>
+                <script src="ngjs/vendor.js"></script>
+                <script src="ngjs/app.js"></script>
+            </body>
+        </html>
+    </xsl:template>
+
+    <xsl:template name="layout2">
+        <xsl:param name="title" select="concat(//captions/title/@caption, ' - ', $APP_NAME)"/>
+        <xsl:param name="active_aside_id" select="//app_menu//outline_current"/>
+        <xsl:param name="aside_collapse" select="''"/>
+        <xsl:param name="include_head" select="''"/>
+        <xsl:param name="include_body_top" select="''"/>
+        <xsl:param name="include_body_bottom" select="''"/>
+        <xsl:param name="body_class" select="''"/>
+
+        <xsl:call-template name="HTML-DOCTYPE"/>
+        <html>
             <xsl:call-template name="html-head">
                 <xsl:with-param name="title" select="$title"/>
                 <xsl:with-param name="include" select="$include_head"/>

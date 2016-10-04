@@ -1,0 +1,7 @@
+<section data-nav="common" class="side-tree-collapsible" *ngFor="let out of outline">
+    <header data-role="side-tree-toggle">
+        <i class="side-tree-toggle fa"></i>
+        <span>{{out.caption | translate}}</span>
+    </header>
+    <nav nb-nav-tree [rootSegment]="rootSegment" [entries]="out.entries" *ngIf="out.entries"></nav>
+</section>
