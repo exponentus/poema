@@ -21,8 +21,10 @@
                 </label>
                 <div class="entry-captions">
                     <div [class]="col.className" *ngFor="let col of cols">
-                        {{col.caption | translate}}
-                        <!-- col.sort -->
+                        <sort-control *ngIf="col.sort" [direction]="col.sort" [name]="col.value" [active]="activeSort" (sort)="onSort($event)">
+                            {{col.caption | translate}}
+                        </sort-control>
+                        <span *ngIf="!col.sort">{{col.caption | translate}}</span>
                     </div>
                 </div>
             </div>

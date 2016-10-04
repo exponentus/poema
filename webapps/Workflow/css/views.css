@@ -3,6 +3,11 @@
     width: 26px;
 }
 
+.vw-name {
+    min-width: 200px;
+    width: 200px;
+}
+
 .vw-reg-number {
     min-width: 130px;
     width: 130px;
