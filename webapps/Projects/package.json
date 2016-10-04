@@ -10,6 +10,7 @@
     "start": "node server.js",
     "clean": "rm -rf js",
     "build": "npm run clean && webpack --config config/webpack.config.js",
+    "build:noclean": "webpack --config config/webpack.config.js",
     "build:w": "npm run clean && webpack -w --config config/webpack.config.js",
     "build:p": "npm run clean && webpack --config config/webpack.prod.config.js --progress --profile --colors --display-error-details --display-cached",
     "minifyjs": "uglifyjs js/app.js --screw-ie8 --compress --mangle --output js/app.min.js"
