@@ -40,12 +40,7 @@ module.exports = {
             loader: 'html?caseSensitive=true&removeAttributeQuotes=false&minimize=true'
         }, {
             test: /\.ts$/,
-            loader: 'ts',
-            query: {
-                compilerOptions: {
-                    noEmit: false
-                }
-            }
+            loaders: ['awesome-typescript-loader', 'angular2-template-loader', 'angular2-router-loader']
         }, {
             test: /\.js$/,
             exclude: /node_modules/,

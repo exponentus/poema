@@ -32,12 +32,7 @@ module.exports = {
             loader: 'raw'
         }, {
             test: /\.ts$/,
-            loader: 'ts',
-            query: {
-                compilerOptions: {
-                    noEmit: false
-                }
-            }
+            loaders: ['awesome-typescript-loader', 'angular2-template-loader', 'angular2-router-loader']
         }, {
             test: /\.woff$/,
             loader: 'url?limit=10000&mimetype=application/font-woff'
