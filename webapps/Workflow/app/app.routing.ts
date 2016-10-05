@@ -12,20 +12,11 @@ import { ReferenceModule } from './+modules/reference/reference.module';
 import { StaffModule } from './+modules/staff/staff.module';
 import { WorkflowModule } from './+modules/workflow/workflow.module';
 
-import { WORKSPACE_ROUTES } from './+modules/workspace/ws.routing';
-import { REFERENCE_ROUTES } from './+modules/reference/reference.routing';
-import { STAFF_ROUTES } from './+modules/staff/staff.routing';
-import { WORKFLOW_ROUTES } from './+modules/workflow/workflow.routing';
-
 const routes: Routes = [
     // { path: 'workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule', canActivate: [AuthGuard] },
     // { path: 'reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
     // { path: 'staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
     // { path: 'workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
-    ...WORKSPACE_ROUTES,
-    ...REFERENCE_ROUTES,
-    ...STAFF_ROUTES,
-    ...WORKFLOW_ROUTES,
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: '**', component: Error404 }
@@ -33,7 +24,14 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, { useHash: true })],
-    exports: [RouterModule, WorkspaceModule, ReferenceModule, StaffModule, WorkflowModule],
+    exports: [
+        RouterModule,
+        // for lazy loading rm +modules
+        WorkspaceModule,
+        ReferenceModule,
+        StaffModule,
+        WorkflowModule
+    ],
 })
 
 export class AppRoutingModule { }
