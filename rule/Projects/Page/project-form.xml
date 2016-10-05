@@ -4,7 +4,7 @@
     <xsltfile>page/index.xsl</xsltfile>
     <element mode="ON" type="SCRIPT">
         <events>
-            <doscript source="JAVA_CLASS">projects.page.form.ProjectForm</doscript>
+            <doscript source="JAVA_CLASS">projects.page.project.ProjectForm</doscript>
         </events>
     </element>
 </rule>

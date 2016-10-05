@@ -34,21 +34,21 @@
                             {{'name' | translate}}
                         </div>
                         <div class="controls">
-                            <input type="date" name="name" [(ngModel)]="model.name" class="span2" />
+                            <input type="text" name="name" [(ngModel)]="model.name" class="span8" />
                         </div>
                     </div>
                 </div>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="false && !isNew">
                 <acl [acl]="model.acl"></acl>
             </tab>
         </tabs>
     </section>
     <footer class="content-footer">
-        <div class="record-author" *ngIf="incoming.authorId">
+        <div class="record-author" *ngIf="model.authorId">
             <span>{{'author' | translate}}</span>
-            <!--<employee-input [ids]="[incoming.authorId]"></employee-input>-->
-            <span>{{incoming.regDate}}</span>
+            <!--<employee-input [ids]="[model.authorId]"></employee-input>-->
+            <span>{{model.regDate}}</span>
         </div>
     </footer>
 </form>

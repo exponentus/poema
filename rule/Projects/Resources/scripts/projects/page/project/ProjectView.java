@@ -1,4 +1,4 @@
-package projects.page.view;
+package projects.page.project;
 
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;

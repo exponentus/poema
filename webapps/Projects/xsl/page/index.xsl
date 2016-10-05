@@ -35,7 +35,7 @@
             <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css"/>
             <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css"/>
             <link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css"/>
-            <link rel="stylesheet" href="css/style.css"/>
+            <link rel="stylesheet" href="css/all.min.css"/>
             <style>
                 <![CDATA[
                 /* fix: fieldset content overflow */
