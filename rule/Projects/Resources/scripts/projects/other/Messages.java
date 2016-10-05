@@ -6,6 +6,7 @@ import java.util.List;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.env.EnvConst;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.localization.Vocabulary;
 import com.exponentus.log.Log4jLogger;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
@@ -26,10 +27,12 @@ public class Messages {
 	private LanguageCode lang = EnvConst.getDefaultLang();
 	private _Session session;
 	private AppEnv appEnv;
+	private Vocabulary v;
 
 	public Messages(_Session session) {
 		this.session = session;
 		appEnv = session.getAppEnv();
+		v = appEnv.vocabulary;
 	}
 
 	public void sendOfNewProject(Project project) {
@@ -189,7 +192,6 @@ public class Messages {
 			memo.addVar("taskAuthor", request.getTask().getAuthor().getUserName());
 			memo.addVar("requestType", request.getRequestType().getName());
 			memo.addVar("requestComment", request.getComment());
-			memo.addVar("requestResolution", request.getResolution().name());
 
 			try {
 				user = (User) assigneeUser;
@@ -199,6 +201,7 @@ public class Messages {
 			}
 
 			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL() + "&lang=" + lang);
+			memo.addVar("requestResolution", v.getWord(request.getResolution().name(), lang));
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -214,7 +217,8 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_request_resolution", lang),
+				ma.sendMеssage(recipients,
+				        v.getWord("notify_about_request_resolution", lang) + " [" + v.getWord(request.getResolution().name(), lang) + "]",
 				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
