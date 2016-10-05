@@ -1,4 +1,11 @@
-import { URLSearchParams, Response } from '@angular/http';
+import { Headers, URLSearchParams, Response } from '@angular/http';
+
+export function xhrHeaders() {
+    return new Headers({
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Accept': 'application/json'
+    });
+}
 
 export function createURLSearchParams(params): URLSearchParams {
     let searchParams: URLSearchParams = new URLSearchParams();

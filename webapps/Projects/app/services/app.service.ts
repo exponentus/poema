@@ -3,12 +3,7 @@ import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Employee } from '../models';
-import { parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 @Injectable()
 export class AppService {
@@ -27,7 +22,7 @@ export class AppService {
     }
 
     fetchUserProfile() {
-        return this.http.get('p?id=userprofile', { headers: HEADERS })
+        return this.http.get('p?id=userprofile', { headers: xhrHeaders() })
             .retry(3)
             .map(response => {
                 let res = parseResponseObjects(response.json().objects);
@@ -51,7 +46,7 @@ export class AppService {
     }
 
     updateUserProfile(userForm: any) {
-        return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: HEADERS })
+        return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: xhrHeaders() })
             .map(response => response.json())
             .catch(error => Observable.throw(transformPostResponse(error)));
     }

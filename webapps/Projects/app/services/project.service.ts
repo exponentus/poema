@@ -4,12 +4,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { AppService } from './app.service';
 import { Project, Attachment } from '../models';
-import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
 
 @Injectable()
 export class ProjectService {
@@ -30,7 +25,7 @@ export class ProjectService {
 
     fetchProjects(queryParams = {}) {
         return this.http.get('p?id=project-view', {
-            headers: HEADERS,
+            headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
             .map(response => response.json().objects[0])
@@ -46,7 +41,7 @@ export class ProjectService {
     fetchProjectById(projectId: string) {
         let url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
 
-        return this.http.get(url, { headers: HEADERS })
+        return this.http.get(url, { headers: xhrHeaders() })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let project = <Project>data.project;
@@ -73,7 +68,7 @@ export class ProjectService {
     saveProject(project: Project) {
         let url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
 
-        return this.http.post(url, serializeObj(project), { headers: HEADERS })
+        return this.http.post(url, serializeObj(project), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));
     }
@@ -81,14 +76,14 @@ export class ProjectService {
     deleteProject(projects: Project[]) {
         let url = 'p?id=project-view&projectIds=' + projects.map(it => it.id).join(',');
 
-        return this.http.delete(url, { headers: HEADERS })
+        return this.http.delete(url, { headers: xhrHeaders() })
             .catch(error => this.appService.handleError(error));
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {
         let url = 'p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid;
 
-        return this.http.delete(url, { headers: HEADERS })
+        return this.http.delete(url, { headers: xhrHeaders() })
             .catch(error => this.appService.handleError(error));
     }
 }

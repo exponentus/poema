@@ -3,11 +3,7 @@ import { Http, Headers } from '@angular/http';
 
 import { AppService } from './app.service';
 import { Tag, TaskType, RequestType } from '../models';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders } from '../utils/utils';
 
 @Injectable()
 export class ReferenceService {
@@ -18,7 +14,7 @@ export class ReferenceService {
     ) { }
 
     fetchTags() {
-        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=tags', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {
@@ -31,7 +27,7 @@ export class ReferenceService {
     }
 
     fetchTaskTypes() {
-        return this.http.get('/Reference/p?id=tasktypes', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=tasktypes', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {
@@ -44,7 +40,7 @@ export class ReferenceService {
     }
 
     fetchRequestTypes() {
-        return this.http.get('/Reference/p?id=request-types', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=request-types', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {

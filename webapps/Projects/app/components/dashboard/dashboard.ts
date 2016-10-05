@@ -2,12 +2,7 @@ import { Component } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
 import { Project } from '../../models';
-import { parseResponseObjects, serializeObj, transformPostResponse } from '../../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, parseResponseObjects, serializeObj, transformPostResponse } from '../../utils/utils';
 
 @Component({
     selector: '[dashboard]',
@@ -46,7 +41,7 @@ export class DashboardComponent {
     }
 
     private fetchDashboardProjects() {
-        this.http.get('p?id=dashboard', { headers: HEADERS })
+        this.http.get('p?id=dashboard', { headers: xhrHeaders() })
             .map(response => parseResponseObjects(response.json().objects).project)
             .subscribe(data => {
                 this.projects = data ? data.list : [];
@@ -54,7 +49,7 @@ export class DashboardComponent {
     }
 
     private addProjectToDashboard() {
-        this.http.post('p?id=dashboard', `projectId=${this.projectId}`, { headers: HEADERS })
+        this.http.post('p?id=dashboard', `projectId=${this.projectId}`, { headers: xhrHeaders() })
             .map(response => response.json())
             .subscribe(data => {
                 this.fetchDashboardProjects();
@@ -62,7 +57,7 @@ export class DashboardComponent {
     }
 
     private deleteProjectFromDashboard(projectId: string) {
-        this.http.delete(`p?id=dashboard&projectId=${projectId}`, { headers: HEADERS })
+        this.http.delete(`p?id=dashboard&projectId=${projectId}`, { headers: xhrHeaders() })
             .map(response => response.json())
             .subscribe(data => {
                 this.fetchDashboardProjects();
