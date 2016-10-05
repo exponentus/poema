@@ -19,7 +19,8 @@ const initialState: IEnvironmentState = {
     apps: [
         { name: 'Reference', url: '/reference' },
         { name: 'Staff', url: '/staff' },
-        { name: 'Workflow', url: '/workflow' }
+        { name: 'Workflow', url: '/workflow' },
+        { name: 'WorkSpace', url: '/workspace' }
     ],
     rootSegment: '',
     navUrl: 'p?id=outline',

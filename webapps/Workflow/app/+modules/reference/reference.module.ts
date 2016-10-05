@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../../shared.module';
 
+import { ReferenceRoutingModule } from './reference.routing';
 import { ReferenceActions } from './reference.actions';
 import { ReferenceService } from './reference.service';
 
@@ -15,7 +16,8 @@ import { ReferenceFormComponent } from './components/form';
     ],
     exports: [],
     imports: [
-        SharedModule
+        SharedModule,
+        ReferenceRoutingModule
     ],
     providers: [
         ReferenceActions,

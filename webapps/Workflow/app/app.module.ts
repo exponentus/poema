@@ -8,11 +8,13 @@ import { Observable } from 'rxjs/Observable';
 // shared
 import { SharedModule } from './shared.module';
 
-// nb modules
-import { ReferenceModule } from './nb-modules/reference/reference.module';
-import { StaffModule } from './nb-modules/staff/staff.module';
-import { WorkflowModule } from './nb-modules/workflow/workflow.module';
+// nb modules // TODO make lazy loading
+import { WorkspaceModule } from './+modules/workspace/ws.module';
+import { ReferenceModule } from './+modules/reference/reference.module';
+import { StaffModule } from './+modules/staff/staff.module';
+import { WorkflowModule } from './+modules/workflow/workflow.module';
 
+//
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
 import { NavComponent } from './components/nav/nav';
@@ -28,12 +30,10 @@ import {
     ErrorMessageComponent
 } from './components/shared';
 
-import { APP_ROUTES } from './app.routes';
+import { AppRoutingModule } from './app.routing';
 import { APP_STORE } from './store';
 import { AppService, TranslateService } from './services';
 import { AppActions, EnvironmentActions } from './actions';
-
-import { TranslateService as translateService } from './services/translate.service';
 
 import { AuthGuard } from './auth.guard';
 
@@ -53,13 +53,14 @@ import { AuthGuard } from './auth.guard';
     ],
     imports: [
         BrowserModule,
-        RouterModule.forRoot(APP_ROUTES, { useHash: true }),
         TranslateModule.forRoot({
             provide: TranslateLoader,
-            useFactory: (trs: translateService) => new CustomTranslateLoader(trs),
-            deps: [translateService]
+            useFactory: (trs: TranslateService) => new CustomTranslateLoader(trs),
+            deps: [TranslateService]
         }),
+        AppRoutingModule,
         SharedModule,
+        WorkspaceModule,
         ReferenceModule,
         StaffModule,
         WorkflowModule
@@ -75,7 +76,7 @@ import { AuthGuard } from './auth.guard';
 export class AppModule { }
 
 class CustomTranslateLoader implements TranslateLoader {
-    constructor(private translateService: translateService) { }
+    constructor(private translateService: TranslateService) { }
     public getTranslation(lang: string): Observable<any> {
         return this.translateService.fetchTranslations();
     }

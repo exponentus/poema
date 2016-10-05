@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 
-import { StaffService } from '../../nb-modules/staff/staff.service';
-import { Organization } from '../../nb-modules/staff/models';
+import { StaffService } from '../../+modules/staff/staff.service';
+import { Organization } from '../../+modules/staff/models';
 
 @Component({
     selector: 'organization-input',

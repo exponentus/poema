@@ -3,12 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { AppService } from '../../../services/app.service';
 import { Outgoing } from '../models';
-import { createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
 @Injectable()
 export class WorkflowOutgoingService {
@@ -20,7 +15,7 @@ export class WorkflowOutgoingService {
 
     fetchOutgoings(queryParams = {}) {
         return this.http.get('/Workflow/p?id=outgoing-view', {
-            headers: HEADERS,
+            headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
             .map(response => response.json().objects[1])
@@ -36,7 +31,7 @@ export class WorkflowOutgoingService {
     fetchOutgoingById(id: string) {
         let url = '/Workflow/p?id=outgoing-form&docid=' + (id !== 'new' ? id : '');
 
-        return this.http.get(url, { headers: HEADERS })
+        return this.http.get(url, { headers: xhrHeaders() })
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
                 let outgoing = <any>data.outgoing;

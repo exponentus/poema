@@ -1,4 +1,5 @@
-import { Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
 import { IncomingViewComponent } from './components/incoming/incoming-view';
 import { IncomingFormComponent } from './components/incoming/incoming-form';
@@ -16,3 +17,10 @@ export const WORKFLOW_ROUTES: Routes = [
     { path: 'officememo-view', component: OfficeMemoViewComponent },
     { path: 'officememo-form', component: OfficeMemoFormComponent }
 ];
+
+@NgModule({
+    imports: [RouterModule.forChild(WORKFLOW_ROUTES)],
+    exports: [RouterModule],
+})
+
+export class WorkflowRoutingModule { }

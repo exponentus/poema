@@ -3,12 +3,7 @@ import { Http, Headers } from '@angular/http';
 
 import { AppService } from '../../services/app.service';
 import { Organization, Employee } from './models';
-import { createURLSearchParams } from '../../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, createURLSearchParams } from '../../utils/utils';
 
 @Injectable()
 export class StaffService {
@@ -19,7 +14,7 @@ export class StaffService {
     ) { }
 
     fetchList(params: any) {
-        return this.http.get('/Staff/p', { headers: HEADERS, search: createURLSearchParams(params) })
+        return this.http.get('/Staff/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
             .map(response => response.json().objects[1])
             .map(data => {
@@ -33,7 +28,7 @@ export class StaffService {
 
     fetchOrganizations(queryParams = {}) {
         return this.http.get('/Staff/p?id=get-organizations', {
-            headers: HEADERS,
+            headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
             .map(response => response.json().objects[0])
@@ -47,7 +42,7 @@ export class StaffService {
     }
 
     fetchEmployees() {
-        return this.http.get('/Staff/p?id=employees', { headers: HEADERS })
+        return this.http.get('/Staff/p?id=employees', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {

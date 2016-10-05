@@ -3,12 +3,7 @@ import { Http, Headers } from '@angular/http';
 
 import { AppService } from '../../services/app.service';
 import { Tag, TaskType, RequestType } from './models';
-import { createURLSearchParams, parseResponseObjects } from '../../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
 @Injectable()
 export class ReferenceService {
@@ -19,7 +14,7 @@ export class ReferenceService {
     ) { }
 
     fetchList(params: any) {
-        return this.http.get('/Reference/p', { headers: HEADERS, search: createURLSearchParams(params) })
+        return this.http.get('/Reference/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
             .map(response => response.json().objects[1])
             .map(data => {
@@ -32,7 +27,7 @@ export class ReferenceService {
     }
 
     fetchOne(params: any) {
-        return this.http.get('/Reference/p', { headers: HEADERS, search: createURLSearchParams(params) })
+        return this.http.get('/Reference/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
@@ -42,7 +37,7 @@ export class ReferenceService {
     }
 
     fetchTags() {
-        return this.http.get('/Reference/p?id=tags', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=tags', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {
@@ -55,7 +50,7 @@ export class ReferenceService {
     }
 
     fetchTaskTypes() {
-        return this.http.get('/Reference/p?id=tasktypes', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=tasktypes', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {
@@ -68,7 +63,7 @@ export class ReferenceService {
     }
 
     fetchRequestTypes() {
-        return this.http.get('/Reference/p?id=request-types', { headers: HEADERS })
+        return this.http.get('/Reference/p?id=request-types', { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json().objects[0])
             .map(data => {

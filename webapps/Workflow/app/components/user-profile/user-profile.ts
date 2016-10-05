@@ -10,12 +10,7 @@ import { AppService } from '../../services/app.service';
 import { TranslateService as translateService } from '../../services/translate.service';
 import { IAuthedState } from '../../reducers/authed.reducer';
 import { User } from '../../models/user';
-import { createCookie } from '../../utils/utils';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders, createCookie } from '../../utils/utils';
 
 @Component({
     selector: '[user-profile]',
@@ -93,7 +88,7 @@ export class UserProfileComponent {
     changeLang($event) {
         let langCode = $event.target.value;
         let url = '/Staff/p?id=change-session-val-action&lang=' + langCode;
-        return this.http.post(url, {}, { headers: HEADERS })
+        return this.http.post(url, {}, { headers: xhrHeaders() })
             .map(response => response.json())
             .subscribe(data => {
                 this.ng2Translate.reloadLang(langCode).subscribe(r => {

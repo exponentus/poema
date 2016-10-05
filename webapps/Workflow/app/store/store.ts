@@ -5,9 +5,9 @@ import { storeLogger } from 'ngrx-store-logger';
 import { environmentReducer as environment } from '../reducers/environment.reducer';
 import { authedReducer as authed } from '../reducers/authed.reducer';
 
-import { referenceReducer as reference } from '../nb-modules/reference/reference.reducer';
-import { staffReducer as staff } from '../nb-modules/staff/staff.reducer';
-import { workflowReducer as workflow } from '../nb-modules/workflow/workflow.reducer';
+import { referenceReducer as reference } from '../+modules/reference/reference.reducer';
+import { staffReducer as staff } from '../+modules/staff/staff.reducer';
+import { workflowReducer as workflow } from '../+modules/workflow/workflow.reducer';
 
 const logger = storeLogger({
     level: 'log', // 'console' | 'warn' | 'error' | 'info'; default log

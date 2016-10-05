@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { IReferenceState } from '../../nb-modules/reference/reference.reducer';
-import { Tag } from '../../nb-modules/reference/models';
+import { IReferenceState } from '../../+modules/reference/reference.reducer';
+import { Tag } from '../../+modules/reference/models';
 
 @Component({
     selector: 'tags-input',

@@ -4,11 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { IEnvironmentState } from '../../reducers/environment.reducer';
-
-const HEADERS = new Headers({
-    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    'Accept': 'application/json'
-});
+import { xhrHeaders } from '../../utils/utils';
 
 @Component({
     selector: '[nb-nav]',
@@ -38,7 +34,7 @@ export class NavComponent {
 
     loadNav(navUrl: string) {
         this.loading = true;
-        this.http.get(navUrl, { headers: HEADERS })
+        this.http.get(navUrl, { headers: xhrHeaders() })
             .retry(3)
             .map(response => response.json())
             .map(({objects}) => objects.filter(it => it.outlines && it.entries))

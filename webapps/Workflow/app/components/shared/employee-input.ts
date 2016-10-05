@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnDestroy, EventEmitter } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import { IStaffState } from '../../nb-modules/staff/staff.reducer';
-import { Employee } from '../../nb-modules/staff/models';
+import { IStaffState } from '../../+modules/staff/staff.reducer';
+import { Employee } from '../../+modules/staff/models';
 
 @Component({
     selector: 'employee-input',
