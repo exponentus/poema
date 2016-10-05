@@ -5,10 +5,9 @@ Title: $title$
 
 type: $requestType$
 resolution: $requestResolution$
-comment$requestComment$
-
-Author: $author$
+comment: $requestComment$
 _Click >_ $url$
 
-Thank you.Kind regards,
+Thank you.Kind regards
+$author$
 

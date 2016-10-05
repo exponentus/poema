@@ -23,9 +23,17 @@ import projects.model.Task;
 public class Messages {
 	protected static Log4jLogger logger = new Log4jLogger("Messaging");
 
-	public static void sendOfNewProject(_Session session, Project project) {
+	private LanguageCode lang = EnvConst.getDefaultLang();
+	private _Session session;
+	private AppEnv appEnv;
+
+	public Messages(_Session session) {
+		this.session = session;
+		appEnv = session.getAppEnv();
+	}
+
+	public void sendOfNewProject(Project project) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			UserDAO userDAO = new UserDAO(session);
 			List<IUser<Long>> recipients = new ArrayList<>();
 			String msgTemplate = "new_project";
@@ -46,21 +54,23 @@ public class Messages {
 			memo.addVar("tester", testerName);
 			memo.addVar("projectName", project.getName());
 			memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL());
 
 			for (IUser<Long> u : recipients) {
 				User user = null;
 				try {
 					user = (User) u;
+					lang = user.getDefaultLang();
 				} catch (ClassCastException e) {
 
 				}
+
+				memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL() + "&lang=" + lang);
 
 				if (user != null) {
 					String slackAddr = user.getSlack();
 					if (slackAddr != null && !slackAddr.equals("")) {
 						SlackAgent sa = new SlackAgent();
-						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 						if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 							break;
 						}
@@ -69,8 +79,8 @@ public class Messages {
 					List<String> mailRecipients = new ArrayList<>();
 					mailRecipients.add(user.getEmail());
 					MailAgent ma = new MailAgent();
-					ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", user.getDefaultLang()),
-					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+					ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
+					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 				}
 			}
 		} catch (Exception e) {
@@ -79,10 +89,8 @@ public class Messages {
 
 	}
 
-	public static void sendToAssignee(_Session session, Task task) {
-		LanguageCode lang = EnvConst.getDefaultLang();
+	public void sendToAssignee(Task task) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			UserDAO userDAO = new UserDAO(session);
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			String msgTemplate = task.getParent() != null ? "new_subtask" : "new_task";
@@ -94,13 +102,15 @@ public class Messages {
 			memo.addVar("title", task.getTitle());
 			memo.addVar("content", task.getBody());
 			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
 
 			try {
 				user = (User) assigneeUser;
+				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
 			}
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -115,8 +125,8 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_new_task_short", user.getDefaultLang()),
-				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
@@ -124,32 +134,32 @@ public class Messages {
 
 	}
 
-	public static void sendOfNewRequest(_Session session, Request request, Task task) {
+	public void sendOfNewRequest(Request request, Task task) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			String msgTemplate = "new_request";
 			Memo memo = new Memo();
 			memo.addVar("title", task.getTitle());
 			memo.addVar("regNumber", task.getRegNumber());
 			memo.addVar("comment", request.getComment());
 			memo.addVar("author", request.getAuthor().getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
 
 			User user = null;
 
 			try {
 				user = (User) task.getAuthor();
+				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
 			}
-			LanguageCode lang = user.getDefaultLang();
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
 			memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
@@ -167,33 +177,34 @@ public class Messages {
 
 	}
 
-	public static void sendMessageOfRequestDecision(_Session session, Request request) {
+	public void sendMessageOfRequestDecision(Request request) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			String msgTemplate = "request_resolution";
 			UserDAO userDAO = new UserDAO(session);
 			IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
 			User user = null;
 
 			Memo memo = new Memo();
-			memo.addVar("taskTitle", request.getTask().getTitle());
+			memo.addVar("regNumber", request.getTask().getRegNumber());
 			memo.addVar("taskAuthor", request.getTask().getAuthor().getUserName());
 			memo.addVar("requestType", request.getRequestType().getName());
 			memo.addVar("requestComment", request.getComment());
 			memo.addVar("requestResolution", request.getResolution().name());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL());
 
 			try {
 				user = (User) assigneeUser;
+				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
 			}
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
@@ -203,8 +214,8 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_request_resolution", user.getDefaultLang()),
-				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_request_resolution", lang),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
@@ -212,9 +223,8 @@ public class Messages {
 
 	}
 
-	public static void sendOfNewAcknowledging(_Session session, Task task) {
+	public void sendOfNewAcknowledging(Task task) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			String msgTemplate = "task_acknowledged";
 			UserDAO userDAO = new UserDAO(session);
 
@@ -224,21 +234,23 @@ public class Messages {
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
 
 			User user = null;
 
 			try {
 				user = (User) task.getAuthor();
+				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
 			}
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
@@ -247,8 +259,8 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_acknowledged", user.getDefaultLang()),
-				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_acknowledged", lang),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
@@ -256,10 +268,8 @@ public class Messages {
 
 	}
 
-	public static void sendOfTaskCompleted(_Session session, Task task) {
-		LanguageCode lang = EnvConst.getDefaultLang();
+	public void sendOfTaskCompleted(Task task) {
 		try {
-			AppEnv appEnv = session.getAppEnv();
 			String msgTemplate = "task_completed";
 			UserDAO userDAO = new UserDAO(session);
 
@@ -285,7 +295,7 @@ public class Messages {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
@@ -294,15 +304,15 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(user.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_finish_task", user.getDefaultLang()),
-				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_finish_task", lang),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
 	}
 
-	public static void sendOfTaskCancelled(_Session session, Task task) {
+	public void sendOfTaskCancelled(Task task) {
 		if (task.getAssignee() != task.getAuthorId()) {
 			try {
 				AppEnv appEnv = session.getAppEnv();
@@ -315,21 +325,23 @@ public class Messages {
 				IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 				memo.addVar("assignee", assigneeUser.getUserName());
 				memo.addVar("author", task.getAuthor().getUserName());
-				memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL());
 
 				User user = null;
 
 				try {
 					user = (User) assigneeUser;
+					lang = user.getDefaultLang();
 				} catch (ClassCastException e) {
 
 				}
+
+				memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
 
 				if (user != null) {
 					String slackAddr = user.getSlack();
 					if (slackAddr != null && !slackAddr.equals("")) {
 						SlackAgent sa = new SlackAgent();
-						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 						if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 							return;
 						}
@@ -338,8 +350,8 @@ public class Messages {
 					List<String> recipients = new ArrayList<>();
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent();
-					ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", user.getDefaultLang()),
-					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, user.getDefaultLang())));
+					ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", lang),
+					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 				}
 			} catch (Exception e) {
 				logger.errorLogEntry(e);
