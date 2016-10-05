@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.exponentus.appenv.AppEnv;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.MsgException;
 import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.MessageType;
@@ -31,11 +30,11 @@ import com.exponentus.rest.pojo.ServerServiceExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validator;
 
+import welcome.init.AppConst;
 import welcome.model.ReCaptchaResponse;
 
 @Path("service")
 public class PromoService extends RestProvider {
-	private static final String RECEPIENT_EMAIL = "info@exponentus.com";
 
 	@POST
 	@Path("/sendmail")
@@ -44,7 +43,7 @@ public class PromoService extends RestProvider {
 	public Response create(@FormParam("email") String email, @FormParam("subject") String subj, @FormParam("message") String msg,
 	        @FormParam("g-recaptcha-response") String grecaptcha) {
 
-		return processSimpleMessage(getSession(), RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
+		return processSimpleMessage(getSession(), AppConst.RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
 	}
 
 	public static Response processSimpleMessage(_Session session, String recipient, String email, String subj, String msg, String captcha) {
@@ -108,7 +107,7 @@ public class PromoService extends RestProvider {
 	}
 
 	private static boolean validateReCaptcha(String captcha) {
-		String secret = EnvConst.CAPTCHA_CODE;
+		String secret = AppConst.CAPTCHA_CODE;
 		return validate(secret, captcha).isSuccess();
 	}
 
