@@ -29,7 +29,7 @@ export class OutgoingViewComponent {
     meta: any = {};
     keyWord: string = '';
     loading: boolean = true;
-    activeSort: string = 'name:asc';
+    activeSort: string = '';
     private params: any = {};
 
     constructor(

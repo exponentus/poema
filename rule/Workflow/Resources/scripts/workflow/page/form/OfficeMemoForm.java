@@ -96,10 +96,10 @@ public class OfficeMemoForm extends _DoForm {
                 entity = dao.findById(id);
             }
 
+            entity.setRegNumber(formData.getValue("regNumber"));
             entity.setContent(formData.getValue("content"));
             entity.setSummary(formData.getValue("summary"));
-            entity.setRegNumber(formData.getValue("regnumber"));
-            entity.setAppliedRegDate(formData.getDateSilently("regdate"));
+            entity.setAppliedRegDate(formData.getDateSilently("appliedRegDate"));
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {

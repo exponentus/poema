@@ -104,7 +104,6 @@ public class IncomingForm extends _DoForm {
                 entity = dao.findById(id);
             }
 
-            // ? entity.setTitle(formData.getValue("title"));
             entity.setAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("appliedRegDate")));
             entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLanguage")));
             entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));

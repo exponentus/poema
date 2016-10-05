@@ -2,25 +2,14 @@ import { Incoming } from './models';
 
 import { WorkflowActions } from './workflow.actions';
 
-export interface IIncomingViewState {
-    meta: {},
-    list: any[],
-    loading: boolean
+export interface IWorkflowState {
+
 };
 
-const initialState: IIncomingViewState = {
-    meta: {},
-    list: [],
-    loading: false
+const initialState: IWorkflowState = {
+
 };
 
-export const workflowReducer = (state = initialState, {type, payload}): IIncomingViewState => {
-    switch (type) {
-        case WorkflowActions.FETCH_INCOMINGS:
-            return Object.assign({}, state, {
-                loading: true
-            });
-        default:
-            return state;
-    }
+export const workflowReducer = (state = initialState, {type, payload}): IWorkflowState => {
+    return state;
 };
