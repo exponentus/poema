@@ -3,7 +3,6 @@ $orgname$
 `$regNumber$` $taskTitle$
 Тип: $requestType$ 
 Комментарии: $comment$
-От: $author$
 
 _Подробнее >_ $url$
 С уважением

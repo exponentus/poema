@@ -80,6 +80,7 @@ public class Messages {
 	}
 
 	public static void sendToAssignee(_Session session, Task task) {
+		LanguageCode lang = EnvConst.getDefaultLang();
 		try {
 			AppEnv appEnv = session.getAppEnv();
 			UserDAO userDAO = new UserDAO(session);
@@ -105,7 +106,7 @@ public class Messages {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
-					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, user.getDefaultLang());
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
