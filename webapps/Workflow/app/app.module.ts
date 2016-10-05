@@ -8,12 +8,6 @@ import { Observable } from 'rxjs/Observable';
 // shared
 import { SharedModule } from './shared.module';
 
-// nb modules // TODO make lazy loading
-import { WorkspaceModule } from './+modules/workspace/ws.module';
-import { ReferenceModule } from './+modules/reference/reference.module';
-import { StaffModule } from './+modules/staff/staff.module';
-import { WorkflowModule } from './+modules/workflow/workflow.module';
-
 //
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
@@ -59,11 +53,7 @@ import { AuthGuard } from './auth.guard';
             deps: [TranslateService]
         }),
         AppRoutingModule,
-        SharedModule,
-        WorkspaceModule,
-        ReferenceModule,
-        StaffModule,
-        WorkflowModule
+        SharedModule
     ],
     providers: [
         APP_STORE,

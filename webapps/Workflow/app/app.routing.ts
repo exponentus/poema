@@ -6,16 +6,22 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { Error404 } from './components/404';
 
+// nb modules // TODO make lazy loading
+import { WorkspaceModule } from './+modules/workspace/ws.module';
+import { ReferenceModule } from './+modules/reference/reference.module';
+import { StaffModule } from './+modules/staff/staff.module';
+import { WorkflowModule } from './+modules/workflow/workflow.module';
+
 import { WORKSPACE_ROUTES } from './+modules/workspace/ws.routing';
 import { REFERENCE_ROUTES } from './+modules/reference/reference.routing';
 import { STAFF_ROUTES } from './+modules/staff/staff.routing';
 import { WORKFLOW_ROUTES } from './+modules/workflow/workflow.routing';
 
 const routes: Routes = [
-    // { path: 'workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule' },
-    // { path: 'reference', loadChildren: './+modules/reference/reference.module#ReferenceModule' },
-    // { path: 'staff', loadChildren: './+modules/staff/staff.module#StaffModule' },
-    // { path: 'workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule' },
+    // { path: 'workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule', canActivate: [AuthGuard] },
+    // { path: 'reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
+    // { path: 'staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
+    // { path: 'workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
     ...WORKSPACE_ROUTES,
     ...REFERENCE_ROUTES,
     ...STAFF_ROUTES,
@@ -27,7 +33,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, { useHash: true })],
-    exports: [RouterModule],
+    exports: [RouterModule, WorkspaceModule, ReferenceModule, StaffModule, WorkflowModule],
 })
 
 export class AppRoutingModule { }
