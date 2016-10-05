@@ -1,6 +1,6 @@
 $orgname$ 
-Hello *$assignee$*, there is new issue for you: 
-`$reg_number$` $title$
-_Click >_ $url$
-Yours respectfully
+Привет *$assignee$*, для вас новая задача: 
+`$regNumber$` $title$
+_Подробнее >_ $url$
+С уважением :
 *$author$*
