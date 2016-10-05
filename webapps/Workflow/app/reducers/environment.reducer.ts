@@ -5,6 +5,7 @@ export interface IEnvironmentState {
     isNavOpen: boolean,
     isSearchOpen: boolean,
     redirectUrl: any,
+    apps: any[],
     rootSegment: string,
     navUrl: string,
     keyWord: string
@@ -15,6 +16,11 @@ const initialState: IEnvironmentState = {
     isNavOpen: true,
     isSearchOpen: false,
     redirectUrl: '/tasks',
+    apps: [
+        { name: 'Reference', url: '/reference' },
+        { name: 'Staff', url: '/staff' },
+        { name: 'Workflow', url: '/workflow' }
+    ],
     rootSegment: '',
     navUrl: 'p?id=outline',
     keyWord: ''
@@ -46,6 +52,10 @@ export const environmentReducer = (state = initialState, {type, payload}): IEnvi
         case EnvironmentActions.SET_REDIRECT_URL:
             return Object.assign({}, state, {
                 redirectUrl: payload.redirectUrl
+            });
+        case EnvironmentActions.SET_APPS:
+            return Object.assign({}, state, {
+                apps: payload.apps
             });
         case EnvironmentActions.SET_NAV_URL:
             return Object.assign({}, state, {

@@ -19,6 +19,7 @@ export class NavbarComponent {
     headerTitle: string = 'Projects';
     logoUrl: string = 'img/logo.png';
     keyWord: string = '';
+    private apps: any = [];
     private subs: any = [];
 
     constructor(
@@ -28,6 +29,7 @@ export class NavbarComponent {
     ) {
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.keyWord = state.keyWord;
+            this.apps = state.apps;
         }));
     }
 
@@ -43,6 +45,7 @@ export class NavbarComponent {
         this.subs.map(s => s.unsubscribe());
     }
 
+    // ===
     get workspaceUrl() {
         return this.appService.workspaceUrl;
     }
@@ -66,6 +69,6 @@ export class NavbarComponent {
     logout(event) {
         event.preventDefault();
         // this.loggedUser = null;
-       //  window.location.href = 'Logout';
+        window.location.href = 'Logout';
     }
 }

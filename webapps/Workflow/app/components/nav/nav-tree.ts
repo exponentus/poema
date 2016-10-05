@@ -5,8 +5,12 @@ import { Router } from '@angular/router';
     selector: '[nb-nav-tree]',
     template: `
         <ul>
-            <li *ngFor="let entry of entries">
-                <a [routerLink]="[rootSegment, entry.customID]" class="nav-link" [class.active]="isActive([rootSegment, entry.customID])">
+            <li [class.side-tree-collapsible]="entry.entries"
+                 *ngFor="let entry of entries">
+                <a class="nav-link" [title]="entry.hint"
+                     [routerLink]="[rootSegment, entry.customID]"
+                     [class.active]="isActive([rootSegment, entry.customID])">
+                    <i class="fa fa-file-o"></i>
                     <span>{{entry.caption | translate}}</span>
                 </a>
                 <nav nb-nav-tree [rootSegment]="rootSegment" [entries]="entry.entries" *ngIf="entry.entries"></nav>

@@ -57,7 +57,7 @@ export class AppService {
 
     logout() {
         // return this.http.delete('/');
-        // window.location.href = this.workspaceUrl;
+        window.location.href = this.workspaceUrl;
     }
 
     handleError(error: any) {

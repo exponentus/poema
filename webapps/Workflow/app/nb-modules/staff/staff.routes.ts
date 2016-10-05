@@ -1,3 +1,8 @@
 import { Routes } from '@angular/router';
 
-export const STAFF_ROUTES: Routes = [];
+import { StaffIndexComponent } from './components/index';
+
+export const STAFF_ROUTES: Routes = [
+    { path: 'staff', component: StaffIndexComponent },
+    { path: 'staff/:id', component: StaffIndexComponent }
+];

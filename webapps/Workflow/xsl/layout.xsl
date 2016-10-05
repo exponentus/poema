@@ -7,7 +7,7 @@
 
     <xsl:output method="html" encoding="utf-8" indent="no"/>
 
-    <xsl:template name="layout2">
+    <xsl:template name="layout">
         <xsl:param name="title" select="concat(//captions/title/@caption, ' - ', $APP_NAME)"/>
         <xsl:param name="active_aside_id" select="//app_menu//outline_current"/>
         <xsl:param name="aside_collapse" select="''"/>
@@ -42,7 +42,7 @@
         </html>
     </xsl:template>
 
-    <xsl:template name="layout">
+    <xsl:template name="layout2">
         <xsl:param name="title" select="concat(//captions/title/@caption, ' - ', $APP_NAME)"/>
         <xsl:param name="active_aside_id" select="//app_menu//outline_current"/>
         <xsl:param name="aside_collapse" select="''"/>

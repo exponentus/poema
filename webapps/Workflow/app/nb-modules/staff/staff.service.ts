@@ -18,6 +18,19 @@ export class StaffService {
         private appService: AppService
     ) { }
 
+    fetchList(params: any) {
+        return this.http.get('/Staff/p', { headers: HEADERS, search: createURLSearchParams(params) })
+            .retry(3)
+            .map(response => response.json().objects[1])
+            .map(data => {
+                return {
+                    list: <any[]>data.list,
+                    meta: data.meta
+                };
+            })
+            .catch(error => this.appService.handleError(error));
+    }
+
     fetchOrganizations(queryParams = {}) {
         return this.http.get('/Staff/p?id=get-organizations', {
             headers: HEADERS,

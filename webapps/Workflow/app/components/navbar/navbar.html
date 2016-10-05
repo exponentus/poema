@@ -18,12 +18,9 @@
                                 <span>{{user.name}}</span>
                             </a>
                         </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a [routerLink]="['/reference']" class="nav-item nav-link">ref</a>
-                        </li>
-                        <li>
-                            <a [routerLink]="['/workflow']" class="nav-item nav-link">workflow</a>
+                        <li class="divider" *ngIf="apps.length"></li>
+                        <li *ngFor="let app of apps">
+                            <a [routerLink]="[app.url]" class="nav-item nav-link">{{app.name}}</a>
                         </li>
                         <li class="divider"></li>
                         <li>

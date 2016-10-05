@@ -1,15 +1,22 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { SharedModule } from '../../shared.module';
 
 import { StaffActions } from './staff.actions';
-import { staffReducer } from './staff.reducer';
 import { StaffService } from './staff.service';
 
+import { StaffIndexComponent } from './components/index';
+
 @NgModule({
-    declarations: [],
+    declarations: [
+        StaffIndexComponent
+    ],
     exports: [],
-    imports: [CommonModule],
+    imports: [
+        SharedModule
+    ],
     providers: [
+        StaffActions,
         StaffService
     ]
 })

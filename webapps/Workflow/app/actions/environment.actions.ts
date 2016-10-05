@@ -11,6 +11,7 @@ export class EnvironmentActions {
     static HIDE_NAV = 'HIDE_NAV';
     static SET_REDIRECT_URL = 'SET_REDIRECT_URL';
     static SET_NAV_URL = 'NAV_URL';
+    static SET_APPS = 'SET_APPS';
 
     search(keyWord): Action {
         return {
@@ -47,6 +48,13 @@ export class EnvironmentActions {
         return {
             type: EnvironmentActions.SET_REDIRECT_URL,
             payload: { redirectUrl }
+        };
+    }
+
+    setApps(apps: any[]): Action {
+        return {
+            type: EnvironmentActions.SET_APPS,
+            payload: { apps }
         };
     }
 
