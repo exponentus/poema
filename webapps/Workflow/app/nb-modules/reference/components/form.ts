@@ -31,6 +31,7 @@ export class ReferenceFormComponent {
     model: any;
     loading: boolean = true;
     id: string = '';
+    fsid: string = '';
 
     constructor(
         private store: Store<any>,
@@ -65,7 +66,8 @@ export class ReferenceFormComponent {
             payload => {
                 this.isReady = true;
                 this.loading = false;
-                this.model = payload.model;
+                this.fsid = payload.fsid;
+                this.model = payload[params.id.split('-')[0]];
             },
             error => console.log(error)
         );

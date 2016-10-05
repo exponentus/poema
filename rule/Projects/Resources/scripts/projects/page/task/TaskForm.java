@@ -1,4 +1,4 @@
-package projects.page.form;
+package projects.page.task;
 
 import administrator.dao.UserDAO;
 import com.exponentus.common.dao.AttachmentDAO;
@@ -249,6 +249,8 @@ public class TaskForm extends _DoForm {
             if (isNew && task.getStatus() == TaskStatusType.OPEN) {
                 Messages.sendToAssignee(session, task);
             }
+
+            addContent(task);
         } catch (SecureException e) {
             setBadRequest();
             logError(e);
