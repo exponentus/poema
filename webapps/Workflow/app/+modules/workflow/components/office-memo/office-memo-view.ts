@@ -40,10 +40,7 @@ export class OfficeMemoViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
-    private actions = [
-        { action: 'add_new', label: 'add_new' },
-        { action: 'remove', label: 'remove' }
-    ];
+    private actions = [];
     private columns = [
         { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-reg-number' },
         { name: 'att', value: 'hasAttachment', type: 'icon', className: 'vw-icon' },
@@ -86,12 +83,14 @@ export class OfficeMemoViewComponent {
         this.params = Object.assign({}, params, {
             'sort': this.activeSort || 'regDate:desc'
         });
+        let typeId = 'officememo';
 
         this.officeMemoService.fetchOfficeMemos(this.params).subscribe(
             payload => {
                 this.loading = false;
-                this.list = payload.list;
-                this.meta = payload.meta;
+                this.list = payload[typeId] ? payload[typeId].list : [];
+                this.meta = payload[typeId] ? payload[typeId].meta : {};
+                this.actions = payload.actions;
             },
             error => console.log(error)
         );
@@ -111,6 +110,6 @@ export class OfficeMemoViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.label)
+        alert($event.action.caption);
     }
 }

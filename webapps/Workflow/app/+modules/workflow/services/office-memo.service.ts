@@ -18,12 +18,9 @@ export class WorkflowOfficeMemoService {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
-            .map(response => response.json().objects[1])
-            .map(data => {
-                return {
-                    list: <OfficeMemo[]>data.list,
-                    meta: data.meta
-                };
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                return data;
             })
             .catch(error => this.appService.handleError(error));
     }

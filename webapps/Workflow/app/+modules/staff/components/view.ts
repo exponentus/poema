@@ -87,12 +87,14 @@ export class StaffViewComponent {
         this.params = Object.assign({}, params, {
             'sort': this.activeSort || 'regDate:desc'
         });
+        let typeId = this.params.id.split('-')[0];
 
         this.staffService.fetchList(this.params).subscribe(
             payload => {
                 this.loading = false;
-                this.list = payload.list;
-                this.meta = payload.meta;
+                this.list = payload[typeId] ? payload[typeId].list : [];
+                this.meta = payload[typeId] ? payload[typeId].meta : {};
+                this.actions = payload.actions;
             },
             error => console.log(error)
         );
@@ -112,6 +114,6 @@ export class StaffViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.label)
+        alert($event.action.caption);
     }
 }

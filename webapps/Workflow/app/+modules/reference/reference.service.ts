@@ -16,12 +16,9 @@ export class ReferenceService {
     fetchList(params: any) {
         return this.http.get('/Reference/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
-            .map(response => response.json().objects[1])
-            .map(data => {
-                return {
-                    list: <any[]>data.list,
-                    meta: data.meta
-                };
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                return data;
             })
             .catch(error => this.appService.handleError(error));
     }

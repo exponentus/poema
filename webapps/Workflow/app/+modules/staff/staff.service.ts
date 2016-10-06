@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 
 import { AppService } from '../../services';
 import { Organization, Employee } from './models';
-import { xhrHeaders, createURLSearchParams } from '../../utils/utils';
+import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
 @Injectable()
 export class StaffService {
@@ -16,12 +16,9 @@ export class StaffService {
     fetchList(params: any) {
         return this.http.get('/Staff/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
-            .map(response => response.json().objects[1])
-            .map(data => {
-                return {
-                    list: <any[]>data.list,
-                    meta: data.meta
-                };
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                return data;
             })
             .catch(error => this.appService.handleError(error));
     }

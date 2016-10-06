@@ -5,7 +5,7 @@
     <div class="content-actions" *ngIf="actionsVisible">
         <button class="btn" type="button" (click)="onAction(action, $event)" *ngFor="let action of actions">
             <i class="action {{action.icon}}" *ngIf="action.icon"></i>
-            <span>{{action.label | translate}}</span>
+            <span>{{action.caption | translate}}</span>
         </button>
         <button class="btn btn-refresh" type="button" (click)="onRefresh()">
             <i class="fa fa-refresh"></i>

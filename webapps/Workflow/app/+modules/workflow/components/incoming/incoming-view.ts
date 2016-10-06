@@ -87,12 +87,14 @@ export class IncomingViewComponent {
         this.params = Object.assign({}, params, {
             'sort': this.activeSort || 'regDate:desc'
         });
+        let typeId = 'incoming';
 
         this.incomingService.fetchIncomings(this.params).subscribe(
             payload => {
                 this.loading = false;
-                this.list = payload.list;
-                this.meta = payload.meta;
+                this.list = payload[typeId] ? payload[typeId].list : [];
+                this.meta = payload[typeId] ? payload[typeId].meta : {};
+                this.actions = payload.actions;
             },
             error => console.log(error)
         );
@@ -112,7 +114,7 @@ export class IncomingViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.label)
+        alert($event.action.caption);
     }
 
     addNew() {
