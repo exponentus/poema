@@ -22,7 +22,7 @@
 		<app>
 			<name mode="on">Projects</name>
 			 <rest mode="on">
-                <urlmapping>/rest/*</urlmapping>
+           <urlmapping></urlmapping>
                 <allowcors>*</allowcors>
                 <services>
                     <class>projects.services.ProjectsService</class>
@@ -32,7 +32,9 @@
 		<app>
             <name mode="on">Workflow</name>
         </app>
-       
+       <app>
+            <name mode="on">Welcome</name>
+        </app>
 	</applications>
 	<langs>
 		<!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
