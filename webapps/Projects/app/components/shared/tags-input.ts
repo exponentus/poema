@@ -37,6 +37,7 @@ export class TagsInputComponent {
     ngOnInit() {
         this.sub = this.store.select('reference').subscribe((state: IReferenceState) => {
             this.items = state.tags;
+            this.items = state.tags.filter(it => it.hidden != true);
             this.items.map(it => {
                 it._itemStyle = { color: it.color };
                 it._itemClass = 'tag';
