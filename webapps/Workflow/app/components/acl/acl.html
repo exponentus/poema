@@ -5,7 +5,7 @@
         </div>
         <div class="controls">
             <div class="input-placeholder">
-                <ul class="acl-list list-style-none">
+                <ul class="acl-list list-style-none" *ngIf="acl.editors">
                     <li class="acl-list-item" *ngFor="let editor of acl.editors | values">{{editor}}</li>
                 </ul>
             </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="controls">
             <div class="input-placeholder">
-                <ul class="acl-list list-style-none">
+                <ul class="acl-list list-style-none" *ngIf="acl.readers">
                     <li class="acl-list-item" *ngFor="let reader of acl.readers | values">{{reader}}</li>
                 </ul>
             </div>

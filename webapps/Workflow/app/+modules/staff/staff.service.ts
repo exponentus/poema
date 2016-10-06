@@ -18,7 +18,10 @@ export class StaffService {
             .retry(3)
             .map(response => {
                 let data = parseResponseObjects(response.json().objects);
-                return data;
+                return {
+                    data: data,
+                    columnOptions: response.json().data.columnOptions ? response.json().data.columnOptions.columns : null
+                };
             })
             .catch(error => this.appService.handleError(error));
     }

@@ -5,7 +5,6 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-
 import workflow.dao.OfficeMemoDAO;
 
 public class OfficeMemoView extends AbstractWorkflowView {
@@ -23,7 +22,19 @@ public class OfficeMemoView extends AbstractWorkflowView {
     }
 
     @Override
+    public void doPUT(_Session session, _WebFormData formData) {
+        String actionId = formData.getValueSilently("_action");
+        if (!actionId.isEmpty()) {
+            doAction(session, formData, actionId);
+        }
+    }
+
+    @Override
     public void doDELETE(_Session session, _WebFormData formData) {
 
+    }
+
+    private void doAction(_Session session, _WebFormData formData, String actionId) {
+        addValue("from_serve", "do action by id: " + actionId);
     }
 }

@@ -51,4 +51,10 @@ export class WorkflowIncomingService {
             })
             .catch(error => this.appService.handleError(error));
     }
+
+    doAction(actionId: string) {
+        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: xhrHeaders() })
+            .map(response => transformPostResponse(response))
+            .catch(error => this.appService.handleError(error));
+    }
 }

@@ -94,11 +94,12 @@ export class ReferenceViewComponent {
         let typeId = this.params.id.split('-')[0];
 
         this.referenceService.fetchList(this.params).subscribe(
-            payload => {
+            ({data, columnOptions}) => {
                 this.loading = false;
-                this.list = payload[typeId] ? payload[typeId].list : [];
-                this.meta = payload[typeId] ? payload[typeId].meta : {};
-                this.actions = payload.actions;
+                this.list = data[typeId] ? data[typeId].list : [];
+                this.meta = data[typeId] ? data[typeId].meta : {};
+                this.actions = data.actions;
+                this.columns = columnOptions || [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }]
             },
             error => console.log(error)
         );

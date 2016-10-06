@@ -22,7 +22,19 @@ public class IncomingView extends AbstractWorkflowView {
     }
 
     @Override
+    public void doPUT(_Session session, _WebFormData formData) {
+        String actionId = formData.getValueSilently("_action");
+        if (!actionId.isEmpty()) {
+            doAction(session, formData, actionId);
+        }
+    }
+
+    @Override
     public void doDELETE(_Session session, _WebFormData formData) {
 
+    }
+
+    private void doAction(_Session session, _WebFormData formData, String actionId) {
+        addValue("from_serve", "do action by id: " + actionId);
     }
 }

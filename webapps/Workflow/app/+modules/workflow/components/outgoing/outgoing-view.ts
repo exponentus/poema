@@ -110,6 +110,9 @@ export class OutgoingViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.caption);
+        this.outgoingService.doAction($event.action.customID).subscribe(payload => {
+            let resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
     }
 }

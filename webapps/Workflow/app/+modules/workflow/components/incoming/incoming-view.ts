@@ -40,10 +40,7 @@ export class IncomingViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
-    private actions = [
-        { action: 'add_new', label: 'add_new' },
-        { action: 'remove', label: 'remove' }
-    ];
+    private actions = [];
     private columns = [
         { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-reg-number' },
         { name: 'att', value: 'hasAttachment', type: 'icon', className: 'vw-icon' },
@@ -114,7 +111,10 @@ export class IncomingViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.caption);
+        this.incomingService.doAction($event.action.customID).subscribe(payload => {
+            let resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
     }
 
     addNew() {

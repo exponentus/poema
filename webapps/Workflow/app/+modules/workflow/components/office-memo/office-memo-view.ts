@@ -110,6 +110,9 @@ export class OfficeMemoViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.caption);
+        this.officeMemoService.doAction($event.action.customID).subscribe(payload => {
+            let resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
     }
 }
