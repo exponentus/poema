@@ -32,16 +32,7 @@
 		<app>
             <name mode="on">Workflow</name>
         </app>
-        <app>
-            <name mode="on">Welcome</name>
-             <rest mode="on">
-                <urlmapping>/rest/*</urlmapping>
-                <allowcors>*</allowcors>
-                <services>
-                    <class>welcome.services.PromoService</class>
-                </services>
-            </rest>
-        </app>
+       
 	</applications>
 	<langs>
 		<!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
