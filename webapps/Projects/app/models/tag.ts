@@ -3,4 +3,5 @@ export class Tag {
     name: string;
     color: string;
     localizedName: any;
+    hidden: boolean;
 }
