@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { WorkflowIndexComponent } from './components/index/index';
 import { IncomingViewComponent } from './components/incoming/incoming-view';
 import { IncomingFormComponent } from './components/incoming/incoming-form';
 import { OutgoingViewComponent } from './components/outgoing/outgoing-view';
@@ -9,7 +10,7 @@ import { OfficeMemoViewComponent } from './components/office-memo/office-memo-vi
 import { OfficeMemoFormComponent } from './components/office-memo/office-memo-form';
 
 const routes: Routes = [
-    { path: 'workflow', component: IncomingViewComponent },
+    { path: 'workflow', component: WorkflowIndexComponent },
     { path: 'incoming-view', component: IncomingViewComponent },
     { path: 'incoming-form', component: IncomingFormComponent },
     { path: 'outgoing-view', component: OutgoingViewComponent },

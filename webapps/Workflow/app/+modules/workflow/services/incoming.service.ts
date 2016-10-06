@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-import { AppService } from '../../../services/app.service';
+import { AppService } from '../../../services';
 import { Incoming } from '../models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
@@ -18,12 +18,9 @@ export class WorkflowIncomingService {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
-            .map(response => response.json().objects[1])
-            .map(data => {
-                return {
-                    list: <Incoming[]>data.list,
-                    meta: data.meta
-                };
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                return data;
             })
             .catch(error => this.appService.handleError(error));
     }

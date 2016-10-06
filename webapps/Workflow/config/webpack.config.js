@@ -32,7 +32,11 @@ module.exports = {
             loader: 'raw'
         }, {
             test: /\.ts$/,
-            loaders: ['awesome-typescript-loader', 'angular2-template-loader', 'angular2-router-loader']
+            loaders: [
+                'awesome-typescript-loader',
+                'angular2-template-loader',
+                'angular2-router-loader'
+            ]
         }, {
             test: /\.woff$/,
             loader: 'url?limit=10000&mimetype=application/font-woff'
@@ -52,8 +56,9 @@ module.exports = {
     },
     output: {
         path: helpers.root('ngjs'),
+        publicPath: '/',
         filename: '[name].js',
-        publicPath: '/'
+        chunkFilename: '[id].[hash].chunk.js'
     },
     plugins: [
         new CommonsChunkPlugin({

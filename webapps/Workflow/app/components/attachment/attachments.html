@@ -1,0 +1,22 @@
+<div class="attachments">
+    <i class="fa fa-paperclip" *ngIf="!editable"></i>
+    <label class="btn btn-upload" title="{{'attach_file' | translate}}" tabindex="0" *ngIf="editable">
+        <i class="fa fa-paperclip"></i>
+        <span>{{'attach_file' | translate}}</span>
+        <input type="file" (change)="uploadFile($event.target.files)" style="display:none;"/>
+    </label>
+    <div class="attachment-list" *ngIf="!isHidden">
+        <div class="attachment-list__item" *ngFor="let att of model.attachments">
+            <div class="attachment">
+                <a class="attachment__link" title="{{att.realFileName}}" href="{{model.url}}&attachment={{att.id}}">
+                    {{att.realFileName}}
+                </a>
+                <img img-view *ngIf="isThumbnailSupported(att)" [url]="att.base64 || model.url + '&attachment=' + att.id" [src]="att.base64 || model.url + '&attachment=' + att.id + '&_thumbnail'" />
+                <span class="attachment__size">{{model.size}}</span>
+                <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

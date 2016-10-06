@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../services';
 import { Tag, TaskType, RequestType } from './models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
@@ -16,12 +16,9 @@ export class ReferenceService {
     fetchList(params: any) {
         return this.http.get('/Reference/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
             .retry(3)
-            .map(response => response.json().objects[1])
-            .map(data => {
-                return {
-                    list: <any[]>data.list,
-                    meta: data.meta
-                };
+            .map(response => {
+                let data = parseResponseObjects(response.json().objects);
+                return data;
             })
             .catch(error => this.appService.handleError(error));
     }

@@ -3,9 +3,8 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { EnvironmentActions, AppActions } from '../../actions';
+import { IAuthedState, IEnvironmentState } from '../../reducers';
 import { AppService } from '../../services';
-import { IEnvironmentState } from '../../reducers/environment.reducer';
-import { IAuthedState } from '../../reducers/authed.reducer';
 import { User } from '../../models';
 
 @Component({

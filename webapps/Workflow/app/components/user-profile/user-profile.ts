@@ -6,10 +6,12 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { AppService } from '../../services/app.service';
-import { TranslateService as translateService } from '../../services/translate.service';
-import { IAuthedState } from '../../reducers/authed.reducer';
-import { User } from '../../models/user';
+import {
+    AppService,
+    TranslateService as translateService
+} from '../../services';
+import { IAuthedState } from '../../reducers';
+import { User } from '../../models';
 import { xhrHeaders, createCookie } from '../../utils/utils';
 
 @Component({

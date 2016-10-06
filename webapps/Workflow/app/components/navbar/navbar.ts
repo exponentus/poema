@@ -3,9 +3,9 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Store } from '@ngrx/store';
 
-import { AppService } from '../../services/app.service';
-import { EnvironmentActions } from '../../actions/environment.actions';
-import { IEnvironmentState } from '../../reducers/environment.reducer';
+import { AppService } from '../../services';
+import { EnvironmentActions } from '../../actions';
+import { IEnvironmentState } from '../../reducers';
 import { User } from '../../models/user';
 
 @Component({

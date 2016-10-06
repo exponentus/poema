@@ -43,10 +43,10 @@ export function parseResponseObjects(objects: any): any {
         } else if (obj.name && obj.value) {
             result[obj.name] = obj.value;
         } else if (obj.actions) {
-            result['actions'] = {};
-            for (let action of obj.actions) {
-                result['actions'][action.customID] = action.url ? { url: action.url } : true;
-            }
+            result['actions'] = obj.actions;
+            // for (let action of obj.actions) {
+            //     result['actions'][action.customID] = action; // action.url ? { url: action.url } : true;
+            // }
         } else {
             for (let k in obj) {
                 result[k] = obj[k];
