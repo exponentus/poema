@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
-import { WorkflowOutgoingService } from '../../services/outgoing.service';
+import { WorkflowOutgoingService } from '../../services';
 
 @Component({
     selector: 'outgoing-form',

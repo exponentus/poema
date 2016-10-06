@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
-import { WorkflowIncomingService } from '../../services/incoming.service';
+import { WorkflowIncomingService } from '../../services';
 
 @Component({
     selector: 'incoming-form',
@@ -18,6 +18,7 @@ export class IncomingFormComponent {
     isNew = true;
     isEditable = false;
     isValid = true;
+    title: 'incoming';
     incoming: any;
     projectStatusTypes: any;
     actions: any = {};
@@ -35,7 +36,7 @@ export class IncomingFormComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
-            let id = this.router.routerState.snapshot.root.queryParams['id'] || undefined;
+            let id = this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
             this.loadIncoming(id);
         }));
     }

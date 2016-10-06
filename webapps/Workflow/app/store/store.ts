@@ -2,8 +2,10 @@ import { compose } from '@ngrx/core/compose';
 import { combineReducers, provideStore } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
 
-import { environmentReducer as environment } from '../reducers/environment.reducer';
-import { authedReducer as authed } from '../reducers/authed.reducer';
+import {
+    authedReducer as authed,
+    environmentReducer as environment
+} from '../reducers';
 
 import { referenceReducer as reference } from '../+modules/reference/reference.reducer';
 import { staffReducer as staff } from '../+modules/staff/staff.reducer';

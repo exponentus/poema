@@ -6,7 +6,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { Error404 } from './components/404';
 
-// nb modules // TODO make lazy loading
+// +modules
 import { WorkspaceModule } from './+modules/workspace/ws.module';
 import { ReferenceModule } from './+modules/reference/reference.module';
 import { StaffModule } from './+modules/staff/staff.module';
@@ -31,7 +31,8 @@ const routes: Routes = [
         WorkspaceModule,
         ReferenceModule,
         StaffModule,
-        WorkflowModule]
+        WorkflowModule
+    ]
 })
 
 export class AppRoutingModule { }

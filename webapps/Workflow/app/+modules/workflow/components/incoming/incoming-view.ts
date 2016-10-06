@@ -1,13 +1,31 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
-import { WorkflowIncomingService } from '../../services/incoming.service';
+import { WorkflowIncomingService } from '../../services';
 
 @Component({
     selector: 'incoming-view',
-    templateUrl: './incoming-view.html',
+    template: `
+        <list-page
+            [title]="title"
+            [selectable]="true"
+            [headerVisible]="true"
+            [titleVisible]="true"
+            [actionsVisible]="true"
+            [captionsVisible]="true"
+            [activeSort]="activeSort"
+            [list]="list"
+            [meta]="meta"
+            [actions]="actions"
+            [columns]="columns"
+            (action)="onAction($event)"
+            (refresh)="refresh($event)"
+            (sort)="onSort($event)"
+            (goToPage)="goToPage($event)">
+        </list-page>
+    `,
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'
@@ -22,6 +40,20 @@ export class IncomingViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
+    private actions = [
+        { action: 'add_new', label: 'add_new' },
+        { action: 'remove', label: 'remove' }
+    ];
+    private columns = [
+        { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-reg-number' },
+        { name: 'att', value: 'hasAttachment', type: 'icon', className: 'vw-icon' },
+        { name: 'applied_reg_date', value: 'appliedRegDate', type: 'date', className: 'vw-reg-date' },
+        { name: 'doc_language', value: 'docLanguage', type: 'localizedName', className: 'vw-name' },
+        { name: 'doc_type', value: 'docType', type: 'localizedName', className: 'vw-name' },
+        { name: 'sender', value: 'sender', type: 'localizedName', className: 'vw-name' },
+        { name: 'sender_applied_reg_date', value: 'senderAppliedRegDate', type: 'date', className: 'vw-reg-date' },
+        { name: 'summary', value: 'summary', type: 'text', className: 'vw-content' }
+    ];
     private subs: any = [];
 
     title = 'incoming-view';
@@ -35,13 +67,12 @@ export class IncomingViewComponent {
     constructor(
         private store: Store<any>,
         private route: ActivatedRoute,
+        private router: Router,
         private environmentActions: EnvironmentActions,
         private incomingService: WorkflowIncomingService
     ) { }
 
     ngOnInit() {
-        this.store.dispatch(this.environmentActions.setNavUrl('', '/Workflow/p?id=outline'));
-
         this.subs.push(this.route.params.subscribe(params => {
             this.loadData(Object.assign({}, params, { page: this.meta.page }));
         }));
@@ -78,5 +109,13 @@ export class IncomingViewComponent {
     onSort($event) {
         this.activeSort = $event;
         this.refresh();
+    }
+
+    onAction($event) {
+        alert($event.action.label)
+    }
+
+    addNew() {
+        this.router.navigate(['./'], { queryParams: { docid: '' } });
     }
 }

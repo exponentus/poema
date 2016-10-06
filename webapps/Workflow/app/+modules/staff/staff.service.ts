@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { AppService } from '../../services/app.service';
+import { AppService } from '../../services';
 import { Organization, Employee } from './models';
 import { xhrHeaders, createURLSearchParams } from '../../utils/utils';
 

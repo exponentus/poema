@@ -6,11 +6,13 @@ import { StaffRoutingModule } from './staff.routing';
 import { StaffActions } from './staff.actions';
 import { StaffService } from './staff.service';
 
-import { StaffIndexComponent } from './components/index';
+import { StaffIndexComponent } from './components/index/index';
+import { StaffViewComponent } from './components/view';
 
 @NgModule({
     declarations: [
-        StaffIndexComponent
+        StaffIndexComponent,
+        StaffViewComponent
     ],
     exports: [],
     imports: [

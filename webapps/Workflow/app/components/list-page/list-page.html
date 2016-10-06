@@ -3,13 +3,14 @@
         {{title | translate}}<sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
     <div class="content-actions" *ngIf="actionsVisible">
-        <button class="btn" type="button" (click)="addNew()">
-            {{'add_new' | translate}}
+        <button class="btn" type="button" (click)="onAction(action, $event)" *ngFor="let action of actions">
+            <i class="action {{action.icon}}" *ngIf="action.icon"></i>
+            <span>{{action.label | translate}}</span>
         </button>
-        <button class="btn btn-refresh" type="button" (click)="refresh()">
+        <button class="btn btn-refresh" type="button" (click)="onRefresh()">
             <i class="fa fa-refresh"></i>
         </button>
-        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
+        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="onGoToPage($event)"></pagination>
     </div>
 </div>
 <div class="content-body">
@@ -20,11 +21,11 @@
                     <input type="checkbox" class="all" />
                 </label>
                 <div class="entry-captions">
-                    <div [class]="col.className" *ngFor="let col of cols">
-                        <sort-control *ngIf="col.sort" [direction]="col.sort" [name]="col.value" [active]="activeSort" (sort)="onSort($event)">
-                            {{col.caption | translate}}
+                    <div [class]="column.className" *ngFor="let column of columns">
+                        <sort-control *ngIf="column.sort" [direction]="column.sort" [name]="column.value" [active]="activeSort" (sort)="onSort($event)">
+                            {{column.name | translate}}
                         </sort-control>
-                        <span *ngIf="!col.sort">{{col.caption | translate}}</span>
+                        <span *ngIf="!column.sort">{{column.name | translate}}</span>
                     </div>
                 </div>
             </div>
@@ -37,12 +38,12 @@
                     </label>
                     <a class="entry-link" [routerLink]="['/reference/form', model.kind + '-form']" [queryParams]="{ docid: model.id }">
                         <div class="entry-fields">
-                            <div [class]="col.className" *ngFor="let col of cols">
-                                <span *ngIf="col.value === 'localizedName'">
-                                    {{model | localizedName}}
+                            <div [class]="column.className" [ngSwitch]="column.type" *ngFor="let column of columns">
+                                <span *ngSwitchCase="'localizedName'" class="localized-name">
+                                    {{model | localizedName:column.value}}
                                 </span>
-                                <span *ngIf="col.value !== 'localizedName'">
-                                    {{model[col.value]}}
+                                <span *ngSwitchDefault>
+                                    {{model[column.value]}}
                                 </span>
                             </div>
                         </div>

@@ -3,11 +3,29 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
-import { WorkflowOutgoingService } from '../../services/outgoing.service';
+import { WorkflowOutgoingService } from '../../services';
 
 @Component({
     selector: 'outgoing-view',
-    templateUrl: './outgoing-view.html',
+    template: `
+        <list-page
+            [title]="title"
+            [selectable]="true"
+            [headerVisible]="true"
+            [titleVisible]="true"
+            [actionsVisible]="true"
+            [captionsVisible]="true"
+            [activeSort]="activeSort"
+            [list]="list"
+            [meta]="meta"
+            [actions]="actions"
+            [columns]="columns"
+            (action)="onAction($event)"
+            (refresh)="refresh($event)"
+            (sort)="onSort($event)"
+            (goToPage)="goToPage($event)">
+        </list-page>
+    `,
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'
@@ -22,6 +40,20 @@ export class OutgoingViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
+    private actions = [
+        { action: 'add_new', label: 'add_new' },
+        { action: 'remove', label: 'remove' }
+    ];
+    private columns = [
+        { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-reg-number' },
+        { name: 'att', value: 'hasAttachment', type: 'icon', className: 'vw-icon' },
+        { name: 'applied_reg_date', value: 'appliedRegDate', type: 'date', className: 'vw-reg-date' },
+        { name: 'doc_language', value: 'docLanguage', type: 'localizedName', className: 'vw-name' },
+        { name: 'doc_type', value: 'docType', type: 'localizedName', className: 'vw-name' },
+        { name: 'sender', value: 'sender', type: 'localizedName', className: 'vw-name' },
+        { name: 'sender_applied_reg_date', value: 'senderAppliedRegDate', type: 'date', className: 'vw-reg-date' },
+        { name: 'summary', value: 'summary', type: 'text', className: 'vw-content' }
+    ];
     private subs: any = [];
 
     title = 'outgoing-view';
@@ -76,5 +108,9 @@ export class OutgoingViewComponent {
     onSort($event) {
         this.activeSort = $event;
         this.refresh();
+    }
+
+    onAction($event) {
+        alert($event.action.label)
     }
 }

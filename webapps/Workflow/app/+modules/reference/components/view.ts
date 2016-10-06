@@ -7,7 +7,25 @@ import { ReferenceService } from '../reference.service';
 
 @Component({
     selector: 'reference-view',
-    templateUrl: './view.html',
+    template: `
+        <list-page
+            [title]="title"
+            [selectable]="true"
+            [headerVisible]="true"
+            [titleVisible]="true"
+            [actionsVisible]="true"
+            [captionsVisible]="true"
+            [activeSort]="activeSort"
+            [list]="list"
+            [meta]="meta"
+            [actions]="actions"
+            [columns]="columns"
+            (action)="onAction($event)"
+            (refresh)="refresh($event)"
+            (sort)="onSort($event)"
+            (goToPage)="goToPage($event)">
+        </list-page>
+    `,
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'
@@ -22,11 +40,11 @@ export class ReferenceViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
-    private cols = [
-        // { caption: 'reg_date', value: 'regDate', type: 'date', sort: 'both', className: 'vw-reg-date' },
-        { caption: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' },
-        { caption: 'localized_name', type: 'text', value: 'localizedName', className: 'vw-localized-name' }
+    private actions = [
+        { action: 'add_new', label: 'add_new' },
+        { action: 'remove', label: 'remove' }
     ];
+    private columns = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
     private subs: any = [];
 
     list: any[];
@@ -45,8 +63,6 @@ export class ReferenceViewComponent {
     ) { }
 
     ngOnInit() {
-        this.store.dispatch(this.environmentActions.setNavUrl('/reference/view', '/Reference/p?id=outline'));
-
         this.subs.push(this.route.params.subscribe(params => {
             let id = params['id'];
             if (id) {
@@ -100,5 +116,9 @@ export class ReferenceViewComponent {
     onSort($event) {
         this.activeSort = $event;
         this.refresh();
+    }
+
+    onAction($event) {
+        alert($event.action.label)
     }
 }

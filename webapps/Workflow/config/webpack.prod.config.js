@@ -40,7 +40,11 @@ module.exports = {
             loader: 'html?caseSensitive=true&removeAttributeQuotes=false&minimize=true'
         }, {
             test: /\.ts$/,
-            loaders: ['awesome-typescript-loader', 'angular2-template-loader', 'angular2-router-loader']
+            loaders: [
+                'awesome-typescript-loader',
+                'angular2-template-loader',
+                'angular2-router-loader'
+            ]
         }, {
             test: /\.js$/,
             exclude: /node_modules/,
@@ -67,8 +71,9 @@ module.exports = {
     },
     output: {
         path: helpers.root('ngjs'),
+        publicPath: '/',
         filename: '[name].js',
-        publicPath: '/'
+        chunkFilename: '[id].[hash].chunk.js'
     },
     plugins: [
         new CommonsChunkPlugin({

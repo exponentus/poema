@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { IAuthedState } from '../reducers/authed.reducer';
+import { IAuthedState } from '../reducers';
 import { User } from '../models';
 
 @Injectable()

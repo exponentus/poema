@@ -37,7 +37,9 @@
                         {{'doc_type' | translate}}
                     </div>
                     <div class="vw-sender">
-                        {{'sender' | translate}}
+                        <sort-control name="sender" [active]="activeSort" (sort)="onSort($event)">
+                            {{'sender' | translate}}
+                        </sort-control>
                     </div>
                     <div class="vw-reg-date">
                         {{'sender_applied_reg_date' | translate}}
@@ -54,7 +56,7 @@
                     <label class="entry-select" *ngIf="selectable">
                         <input type="checkbox" name="docid" [value]="model.id" />
                     </label>
-                    <a class="entry-link" [routerLink]="['/incoming-form']" [queryParams]="{ id: model.id }">
+                    <a class="entry-link" [routerLink]="['/incoming-form']" [queryParams]="{ docid: model.id }">
                         <div class="entry-fields">
                             <div class="vw-reg-number">
                                 {{model.regNumber}}

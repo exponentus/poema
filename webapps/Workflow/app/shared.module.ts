@@ -8,12 +8,14 @@ import { TranslateModule } from 'ng2-translate/ng2-translate';
 import { SharedModule as _SharedModule } from './shared/shared.module';
 import { AclComponent } from './components/acl/acl';
 import { AttachmentsComponent } from './components/attachment/attachments';
+import { ListPageComponent } from './components/list-page/list-page';
 import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe } from './pipes';
 
 @NgModule({
     declarations: [
         AclComponent,
         AttachmentsComponent,
+        ListPageComponent,
         DateFormatPipe,
         DateDurationPipe,
         TextTransformPipe,
@@ -29,6 +31,7 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         TranslateModule,
         AclComponent,
         AttachmentsComponent,
+        ListPageComponent,
         _SharedModule,
         DateFormatPipe,
         DateDurationPipe,

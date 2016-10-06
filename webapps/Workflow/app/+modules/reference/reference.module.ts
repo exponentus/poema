@@ -6,11 +6,13 @@ import { ReferenceRoutingModule } from './reference.routing';
 import { ReferenceActions } from './reference.actions';
 import { ReferenceService } from './reference.service';
 
+import { ReferenceIndexComponent } from './components/index/index';
 import { ReferenceViewComponent } from './components/view';
 import { ReferenceFormComponent } from './components/form';
 
 @NgModule({
     declarations: [
+        ReferenceIndexComponent,
         ReferenceViewComponent,
         ReferenceFormComponent
     ],

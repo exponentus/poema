@@ -6,11 +6,29 @@ import { EnvironmentActions } from '../../../actions';
 import { StaffService } from '../staff.service';
 
 @Component({
-    selector: 'staff-index',
-    templateUrl: './index.html'
+    selector: 'staff-view',
+    template: `
+        <list-page
+            [title]="title"
+            [selectable]="true"
+            [headerVisible]="true"
+            [titleVisible]="true"
+            [actionsVisible]="true"
+            [captionsVisible]="true"
+            [activeSort]="activeSort"
+            [list]="list"
+            [meta]="meta"
+            [actions]="actions"
+            [columns]="columns"
+            (action)="onAction($event)"
+            (refresh)="refresh($event)"
+            (sort)="onSort($event)"
+            (goToPage)="goToPage($event)">
+        </list-page>
+    `
 })
 
-export class StaffIndexComponent {
+export class StaffViewComponent {
     @Input() embedded: boolean = false;
     @Input() selectable: boolean = true;
     @Input() headerVisible: boolean = true;
@@ -18,9 +36,12 @@ export class StaffIndexComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
-    private cols = [
-        { caption: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' },
-        { caption: 'localized_name', type: 'text', value: 'localizedName', className: 'vw-localized-name' }
+    private actions = [
+        { action: 'add_new', label: 'add_new' },
+        { action: 'remove', label: 'remove' }
+    ];
+    private columns = [
+        { name: 'name', value: 'name', type: 'localizedName', sort: 'desc', className: 'vw-name' }
     ];
     private subs: any = [];
 
@@ -40,8 +61,6 @@ export class StaffIndexComponent {
     ) { }
 
     ngOnInit() {
-        this.store.dispatch(this.environmentActions.setNavUrl('/staff', '/Staff/p?id=outline'));
-
         this.subs.push(this.route.params.subscribe(params => {
             let id = params['id'];
             if (id) {
@@ -90,5 +109,9 @@ export class StaffIndexComponent {
     onSort($event) {
         this.activeSort = $event;
         this.refresh();
+    }
+
+    onAction($event) {
+        alert($event.action.label)
     }
 }

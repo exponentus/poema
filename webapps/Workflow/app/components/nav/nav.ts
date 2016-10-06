@@ -3,7 +3,7 @@ import { Http, Headers } from '@angular/http';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { IEnvironmentState } from '../../reducers/environment.reducer';
+import { IEnvironmentState } from '../../reducers';
 import { xhrHeaders } from '../../utils/utils';
 
 @Component({

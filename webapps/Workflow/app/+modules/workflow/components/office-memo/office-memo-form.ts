@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
-import { WorkflowOfficeMemoService } from '../../services/office-memo.service';
+import { WorkflowOfficeMemoService } from '../../services';
 
 @Component({
     selector: 'office-memo-form',
