@@ -12,7 +12,7 @@ import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'project',
-    template: require('./project.html')
+    templateUrl: './project.html'
 })
 
 export class ProjectComponent {

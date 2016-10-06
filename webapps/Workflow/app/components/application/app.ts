@@ -10,7 +10,7 @@ import { User } from '../../models';
 
 @Component({
     selector: 'app',
-    template: require('./app.html')
+    templateUrl: './app.html'
 })
 
 export class AppComponent {

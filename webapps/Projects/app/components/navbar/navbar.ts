@@ -10,7 +10,7 @@ import { User } from '../../models/user';
 
 @Component({
     selector: 'navbar',
-    template: require('./navbar.html')
+    templateUrl: './navbar.html'
 })
 
 export class NavbarComponent {

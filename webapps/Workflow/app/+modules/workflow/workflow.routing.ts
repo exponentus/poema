@@ -8,7 +8,7 @@ import { OutgoingFormComponent } from './components/outgoing/outgoing-form';
 import { OfficeMemoViewComponent } from './components/office-memo/office-memo-view';
 import { OfficeMemoFormComponent } from './components/office-memo/office-memo-form';
 
-export const WORKFLOW_ROUTES: Routes = [
+const routes: Routes = [
     { path: 'workflow', component: IncomingViewComponent },
     { path: 'incoming-view', component: IncomingViewComponent },
     { path: 'incoming-form', component: IncomingFormComponent },
@@ -19,7 +19,7 @@ export const WORKFLOW_ROUTES: Routes = [
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(WORKFLOW_ROUTES)],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 

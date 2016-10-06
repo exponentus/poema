@@ -7,7 +7,7 @@ import { ReferenceService } from '../reference.service';
 
 @Component({
     selector: 'reference-view',
-    template: require('./view.html'),
+    templateUrl: './view.html',
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'

@@ -13,25 +13,25 @@ import { StaffModule } from './+modules/staff/staff.module';
 import { WorkflowModule } from './+modules/workflow/workflow.module';
 
 const routes: Routes = [
+    { path: '', redirectTo: 'workspace', pathMatch: 'full' },
+    { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+    { path: 'login', component: LoginComponent },
+    // lazy loading
     // { path: 'workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule', canActivate: [AuthGuard] },
     // { path: 'reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
     // { path: 'staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
     // { path: 'workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
-    { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
-    { path: 'login', component: LoginComponent },
     { path: '**', component: Error404 }
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes, { useHash: true })],
-    exports: [
-        RouterModule,
+    exports: [RouterModule,
         // for lazy loading rm +modules
         WorkspaceModule,
         ReferenceModule,
         StaffModule,
-        WorkflowModule
-    ],
+        WorkflowModule]
 })
 
 export class AppRoutingModule { }

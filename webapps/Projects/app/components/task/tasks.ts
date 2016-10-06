@@ -11,7 +11,7 @@ import { Task } from '../../models/task';
 
 @Component({
     selector: 'tasks',
-    template: require('./tasks.html'),
+    templateUrl: './tasks.html',
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'

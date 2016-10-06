@@ -14,7 +14,7 @@ import { xhrHeaders, createCookie } from '../../utils/utils';
 
 @Component({
     selector: '[user-profile]',
-    template: require('./user-profile.html'),
+    templateUrl: './user-profile.html',
     providers: [FormBuilder]
 })
 

@@ -8,7 +8,7 @@ import { xhrHeaders } from '../../utils/utils';
 
 @Component({
     selector: '[nb-nav]',
-    template: require('./nav.html')
+    templateUrl: './nav.html'
 })
 
 export class NavComponent {

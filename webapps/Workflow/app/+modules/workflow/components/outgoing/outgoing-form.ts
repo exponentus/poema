@@ -9,7 +9,7 @@ import { WorkflowOutgoingService } from '../../services/outgoing.service';
 
 @Component({
     selector: 'outgoing-form',
-    template: require('./outgoing-form.html')
+    templateUrl: './outgoing-form.html'
 })
 
 export class OutgoingFormComponent {

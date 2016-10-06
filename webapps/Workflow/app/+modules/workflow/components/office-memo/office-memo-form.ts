@@ -9,7 +9,7 @@ import { WorkflowOfficeMemoService } from '../../services/office-memo.service';
 
 @Component({
     selector: 'office-memo-form',
-    template: require('./office-memo-form.html')
+    templateUrl: './office-memo-form.html'
 })
 
 export class OfficeMemoFormComponent {

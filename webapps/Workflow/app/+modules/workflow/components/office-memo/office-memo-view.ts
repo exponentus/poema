@@ -7,7 +7,7 @@ import { WorkflowOfficeMemoService } from '../../services/office-memo.service';
 
 @Component({
     selector: 'office-memo-view',
-    template: require('./office-memo-view.html'),
+    templateUrl: './office-memo-view.html',
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'

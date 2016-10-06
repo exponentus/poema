@@ -13,7 +13,7 @@ import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
     selector: 'request',
-    template: require('./request.html')
+    templateUrl: './request.html'
 })
 
 export class RequestComponent {

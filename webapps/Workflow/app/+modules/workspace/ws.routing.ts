@@ -3,12 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { WorkspaceComponent } from './ws.component';
 
-export const WORKSPACE_ROUTES: Routes = [
+const routes: Routes = [
     { path: 'workspace', component: WorkspaceComponent }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(WORKSPACE_ROUTES)],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 

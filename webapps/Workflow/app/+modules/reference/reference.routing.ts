@@ -4,14 +4,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { ReferenceViewComponent } from './components/view';
 import { ReferenceFormComponent } from './components/form';
 
-export const REFERENCE_ROUTES: Routes = [
+const routes: Routes = [
     { path: 'reference', component: ReferenceViewComponent },
     { path: 'reference/view/:id', component: ReferenceViewComponent },
     { path: 'reference/form/:id', component: ReferenceFormComponent }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(REFERENCE_ROUTES)],
+    imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
 

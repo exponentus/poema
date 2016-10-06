@@ -7,7 +7,7 @@ import { ReferenceService } from '../reference.service';
 
 @Component({
     selector: 'reference-form',
-    template: require('./form.html'),
+    templateUrl: './form.html',
     host: {
         '[class.form]': 'true',
         '[class.load]': 'loading'

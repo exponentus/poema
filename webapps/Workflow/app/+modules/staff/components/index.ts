@@ -7,7 +7,7 @@ import { StaffService } from '../staff.service';
 
 @Component({
     selector: 'staff-index',
-    template: require('./index.html')
+    templateUrl: './index.html'
 })
 
 export class StaffIndexComponent {

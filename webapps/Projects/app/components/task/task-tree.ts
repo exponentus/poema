@@ -8,7 +8,7 @@ import { Task } from '../../models';
 
 @Component({
     selector: 'task-tree',
-    template: require('./task-tree.html')
+    templateUrl: './task-tree.html'
 })
 
 export class TaskTreeComponent {

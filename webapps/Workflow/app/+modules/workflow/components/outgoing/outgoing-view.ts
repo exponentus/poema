@@ -7,7 +7,7 @@ import { WorkflowOutgoingService } from '../../services/outgoing.service';
 
 @Component({
     selector: 'outgoing-view',
-    template: require('./outgoing-view.html'),
+    templateUrl: './outgoing-view.html',
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'

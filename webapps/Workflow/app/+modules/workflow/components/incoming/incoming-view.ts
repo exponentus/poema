@@ -7,7 +7,7 @@ import { WorkflowIncomingService } from '../../services/incoming.service';
 
 @Component({
     selector: 'incoming-view',
-    template: require('./incoming-view.html'),
+    templateUrl: './incoming-view.html',
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'

@@ -10,7 +10,7 @@ import { Project } from '../../models/project';
 
 @Component({
     selector: '[data-c=nav]',
-    template: require('./nav.html')
+    templateUrl: './nav.html'
 })
 
 export class NavComponent {

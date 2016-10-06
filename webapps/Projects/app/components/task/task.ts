@@ -15,7 +15,7 @@ import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'task',
-    template: require('./task.html')
+    templateUrl: './task.html'
 })
 
 export class TaskComponent {
