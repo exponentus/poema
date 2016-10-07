@@ -24,11 +24,9 @@ public class OfficeMemoView extends AbstractWorkflowView {
         _ColumnOptions columnOptions = new _ColumnOptions();
         columnOptions.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
         columnOptions.add("", "attachment", "icon", "", "vw-icon");
-        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
-        columnOptions.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
-        columnOptions.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
-        columnOptions.add("sender", "sender", "localizedName", "both", "vw-sender");
-        columnOptions.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
+        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
+        columnOptions.add("approval", "approval", "localizedName", "both", "vw-name");
+        columnOptions.add("content", "content", "text", "both", "vw-content");
         columnOptions.add("summary", "summary", "text", "", "vw-summary");
 
         addContent("columnOptions", columnOptions);

@@ -27,8 +27,7 @@ public class OutgoingView extends AbstractWorkflowView {
         columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
         columnOptions.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
         columnOptions.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
-        columnOptions.add("sender", "sender", "localizedName", "both", "vw-sender");
-        columnOptions.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
+        columnOptions.add("recipient", "recipient", "localizedName", "both", "vw-recipient");
         columnOptions.add("summary", "summary", "text", "", "vw-summary");
 
         addContent("columnOptions", columnOptions);
