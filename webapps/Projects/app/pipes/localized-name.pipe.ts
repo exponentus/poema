@@ -14,8 +14,12 @@ export class LocalizedNamePipe {
 
             if (model.localizedName) {
                 return model.localizedName[_locale] || model[_field];
-            } else {
-                return model[_field] || '';
+            } else if (model[_field]) {
+                if (model[_field].localizedName) {
+                    return model[_field].localizedName[_locale] || model[_field];
+                } else {
+                    return model[_field];
+                }
             }
         }
 

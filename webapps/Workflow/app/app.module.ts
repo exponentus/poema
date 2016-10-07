@@ -26,7 +26,7 @@ import {
 
 import { AppRoutingModule } from './app.routing';
 import { APP_STORE } from './store';
-import { AppService, TranslateService } from './services';
+import { AppService, DataService, TranslateService } from './services';
 import { AppActions, EnvironmentActions } from './actions';
 
 import { AuthGuard } from './auth.guard';
@@ -57,7 +57,7 @@ import { AuthGuard } from './auth.guard';
     ],
     providers: [
         APP_STORE,
-        AppService, TranslateService,
+        AppService, DataService, TranslateService,
         AppActions, EnvironmentActions,
         AuthGuard
     ]
