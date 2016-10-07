@@ -1,5 +1,6 @@
 package workflow.page.view;
 
+import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
@@ -19,6 +20,12 @@ public class OutgoingView extends AbstractWorkflowView {
         addContent(actionBar);
 
         addContent(getViewPage(new OutgoingDAO(session), formData));
+
+        _ColumnOptions columnOptions = new _ColumnOptions();
+        columnOptions.add("name", "name", "localizedName", "both", "vw-name");
+        columnOptions.add("type", "type", "localizedName", "both", "");
+
+        addContent("columnOptions", columnOptions);
     }
 
     @Override
