@@ -47,8 +47,6 @@ export class AppComponent {
     }
 
     ngOnInit() {
-        // this.store.dispatch(this.environmentActions.setNavUrl('reference/view', '/Reference/p?id=outline'));
-
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
         });

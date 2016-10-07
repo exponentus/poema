@@ -32,7 +32,7 @@ export class ListPageComponent {
      * @param value - model field name
      * @param type - text, date, localizedName
      * @param sort - desc, asc, both
-     * @param cell css class name
+     * @param className - cell css class name
      */
     @Input() columns: any[] = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' }];
 
