@@ -84,14 +84,14 @@ export class IncomingViewComponent {
 
         this.incomingService.fetch(this.params).subscribe(
             payload => {
-                let columnOptions = payload.data.columnOptions.columns;
                 let objects = parseResponseObjects(payload.objects);
 
-                this.loading = false;
                 this.list = objects[typeId] ? objects[typeId].list : [];
                 this.meta = objects[typeId] ? objects[typeId].meta : {};
-                this.actions = objects.actions;
-                this.columns = columnOptions;
+
+                this.actions = payload.data.actionBar.actions;
+                this.columns = payload.data.columnOptions.columns;
+                this.loading = false;
             },
             error => console.log(error)
         );

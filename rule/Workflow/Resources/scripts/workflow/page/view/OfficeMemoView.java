@@ -17,19 +17,19 @@ public class OfficeMemoView extends AbstractWorkflowView {
         newDocAction.setURL("p?id=officememo-form");
         actionBar.addAction(newDocAction);
         actionBar.addAction(new _Action(getLocalizedWord("del_document", session.getLang()), "", _ActionType.DELETE_DOCUMENT));
-        addContent(actionBar);
 
         addContent(getViewPage(new OfficeMemoDAO(session), formData));
 
-        _ColumnOptions columnOptions = new _ColumnOptions();
-        columnOptions.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        columnOptions.add("", "attachment", "icon", "", "vw-icon");
-        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
-        columnOptions.add("approval", "approval", "localizedName", "both", "vw-name");
-        columnOptions.add("content", "content", "text", "both", "vw-content");
-        columnOptions.add("summary", "summary", "text", "", "vw-summary");
+        _ColumnOptions colOpts = new _ColumnOptions();
+        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
+        colOpts.add("approval", "approval", "localizedName", "both", "vw-name");
+        colOpts.add("content", "content", "text", "both", "vw-content");
+        colOpts.add("summary", "summary", "text", "", "vw-summary");
 
-        addContent("columnOptions", columnOptions);
+        addContent("actionBar", actionBar);
+        addContent("columnOptions", colOpts);
     }
 
     @Override

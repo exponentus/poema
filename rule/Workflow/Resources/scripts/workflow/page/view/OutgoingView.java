@@ -17,20 +17,20 @@ public class OutgoingView extends AbstractWorkflowView {
         newDocAction.setURL("p?id=outgoing-form");
         actionBar.addAction(newDocAction);
         actionBar.addAction(new _Action(getLocalizedWord("del_document", session.getLang()), "", _ActionType.DELETE_DOCUMENT));
-        addContent(actionBar);
 
         addContent(getViewPage(new OutgoingDAO(session), formData));
 
-        _ColumnOptions columnOptions = new _ColumnOptions();
-        columnOptions.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        columnOptions.add("", "attachment", "icon", "", "vw-icon");
-        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
-        columnOptions.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
-        columnOptions.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
-        columnOptions.add("recipient", "recipient", "localizedName", "both", "vw-recipient");
-        columnOptions.add("summary", "summary", "text", "", "vw-summary");
+        _ColumnOptions colOpts = new _ColumnOptions();
+        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
+        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
+        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
+        colOpts.add("recipient", "recipient", "localizedName", "both", "vw-recipient");
+        colOpts.add("summary", "summary", "text", "", "vw-summary");
 
-        addContent("columnOptions", columnOptions);
+        addContent("actionBar", actionBar);
+        addContent("columnOptions", colOpts);
     }
 
     @Override

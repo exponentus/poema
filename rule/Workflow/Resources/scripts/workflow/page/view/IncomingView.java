@@ -17,21 +17,21 @@ public class IncomingView extends AbstractWorkflowView {
         newDocAction.setURL("p?id=incoming-form");
         actionBar.addAction(newDocAction);
         actionBar.addAction(new _Action(getLocalizedWord("del_document", session.getLang()), "", _ActionType.DELETE_DOCUMENT));
-        addContent(actionBar);
 
         addContent(getViewPage(new IncomingDAO(session), formData));
 
-        _ColumnOptions columnOptions = new _ColumnOptions();
-        columnOptions.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        columnOptions.add("", "attachment", "icon", "", "vw-icon");
-        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
-        columnOptions.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
-        columnOptions.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
-        columnOptions.add("sender", "sender", "localizedName", "both", "vw-sender");
-        columnOptions.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
-        columnOptions.add("summary", "summary", "text", "", "vw-summary");
+        _ColumnOptions colOpts = new _ColumnOptions();
+        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
+        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
+        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
+        colOpts.add("sender", "sender", "localizedName", "both", "vw-sender");
+        colOpts.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
+        colOpts.add("summary", "summary", "text", "", "vw-summary");
 
-        addContent("columnOptions", columnOptions);
+        addContent("actionBar", actionBar);
+        addContent("columnOptions", colOpts);
     }
 
     @Override
