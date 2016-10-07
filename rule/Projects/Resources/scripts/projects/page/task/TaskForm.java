@@ -24,7 +24,7 @@ import com.exponentus.scripting._Exception;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._POJOListWrapper;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortMap;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
@@ -77,7 +77,7 @@ public class TaskForm extends _DoForm {
 			TaskFilter taskFilter = new TaskFilter();
 			taskFilter.setParentTask(task);
 
-			ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, _SortMap.asc("regDate"), 0, 0, null);
+			ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, _SortParams.asc("regDate"), 0, 0, null);
 			task.setChildren(new LinkedList<>(vp.getResult()));
 		} else {
 			task = new Task();

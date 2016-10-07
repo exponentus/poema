@@ -3,7 +3,7 @@ package projects.page.project;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortMap;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import projects.dao.ProjectDAO;
@@ -16,10 +16,10 @@ public class ProjectView extends _DoPage {
         String keyWord = formData.getAnyValueSilently("keyWord");
         int pageSize = 200; // session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
-        _SortMap sortMap = formData.getSortMap(_SortMap.asc("name"));
+        _SortParams sortParams = formData.getSortParams(_SortParams.asc("name"));
 
         ProjectDAO projectDAO = new ProjectDAO(session);
-        ViewPage<Project> vp = projectDAO.findProjects(keyWord, sortMap, pageNum, pageSize);
+        ViewPage<Project> vp = projectDAO.findProjects(keyWord, sortParams, pageNum, pageSize);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
     }
 

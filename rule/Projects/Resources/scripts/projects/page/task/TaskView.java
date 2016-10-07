@@ -3,7 +3,7 @@ package projects.page.task;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortMap;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import projects.dao.TaskDAO;
@@ -30,9 +30,9 @@ public class TaskView extends _DoPage {
 
         TaskDAO taskDAO = new TaskDAO(session);
         TaskFilter taskFilter = setUpTaskFilter(session, formData, new TaskFilter());
-        _SortMap sortMap = formData.getSortMap(_SortMap.desc("regDate"));
+        _SortParams sortParams = formData.getSortParams(_SortParams.desc("regDate"));
 
-        ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortMap, pageNum, pageSize, expandedIdList);
+        ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
     }
 

@@ -7,7 +7,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.IPOJOObject;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortMap;
+import com.exponentus.scripting._SortParams;
 import projects.dao.filter.TaskFilter;
 import projects.model.Request;
 import projects.model.Task;
@@ -29,10 +29,10 @@ public class TaskDAO extends DAO<Task, UUID> {
     }
 
     public ViewPage<Task> findAllByTaskFilter(TaskFilter filter, int pageNum, int pageSize) {
-        return findAll(filter, _SortMap.desc("regDate"), pageNum, pageSize);
+        return findAll(filter, _SortParams.desc("regDate"), pageNum, pageSize);
     }
 
-    public ViewPage<Task> findAll(TaskFilter filter, _SortMap sortMap, int pageNum, int pageSize) {
+    public ViewPage<Task> findAll(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
         }
@@ -138,9 +138,9 @@ public class TaskDAO extends DAO<Task, UUID> {
                 countCq.where(condition);
             }
 
-            if (sortMap != null && !sortMap.isEmpty()) {
+            if (sortParams != null && !sortParams.isEmpty()) {
                 List<Order> orderBy = new ArrayList<>();
-                sortMap.values().forEach((fieldName, direction) -> {
+                sortParams.values().forEach((fieldName, direction) -> {
                     if (direction.isAscending()) {
                         orderBy.add(cb.asc(taskRoot.get(fieldName)));
                     } else {
@@ -172,8 +172,8 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAllWithChildren(TaskFilter filter, _SortMap sortMap, int pageNum, int pageSize, List<UUID> expandedIds) {
-        ViewPage<Task> vp = findAll(filter, sortMap, pageNum, pageSize);
+    public ViewPage<Task> findAllWithChildren(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize, List<UUID> expandedIds) {
+        ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
 
         if (vp.getResult().isEmpty()/* || expandedIds.isEmpty()*/) {
             return vp;

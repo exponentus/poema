@@ -5,7 +5,7 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortMap;
+import com.exponentus.scripting._SortParams;
 import projects.model.Project;
 
 import javax.persistence.EntityManager;
@@ -24,7 +24,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<Project> findProjects(String keyWord, _SortMap sortMap, int pageNum, int pageSize) {
+    public ViewPage<Project> findProjects(String keyWord, _SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -51,9 +51,9 @@ public class ProjectDAO extends DAO<Project, UUID> {
                 countCq.where(condition);
             }
 
-            if (sortMap != null && !sortMap.isEmpty()) {
+            if (sortParams != null && !sortParams.isEmpty()) {
                 List<Order> orderBy = new ArrayList<>();
-                sortMap.values().forEach((fieldName, direction) -> {
+                sortParams.values().forEach((fieldName, direction) -> {
                     if (direction.isAscending()) {
                         orderBy.add(cb.asc(projectRoot.get(fieldName)));
                     } else {
