@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <vocabulary>
 	<sentence mode="on" keyword="brand">
-		<entry lang="RUS">Flabs</entry>
-		<entry lang="KAZ">Flabs</entry>
-		<entry lang="ENG">Flabs</entry>
-		<entry lang="BUL">Flabs</entry>
-		<entry lang="POR">Flabs</entry>
-		<entry lang="SPA">Flabs</entry>
+		<entry lang="RUS">Poema</entry>
+		<entry lang="KAZ">Poema</entry>
+		<entry lang="ENG">Poema</entry>
+		<entry lang="BUL">Poema</entry>
+		<entry lang="POR">Poema</entry>
+		<entry lang="SPA">Poema</entry>
 	</sentence>
 
 	<!-- cookieconsent -->
@@ -20,28 +20,28 @@
 	</sentence>
 
 	<sentence mode="on" keyword="promo_heading">
-		<entry lang="RUS">IT Excellence Beyond Measure</entry>
-		<entry lang="KAZ">IT Excellence Beyond Measure</entry>
-		<entry lang="ENG">IT Excellence Beyond Measure</entry>
-		<entry lang="BUL">IT Excellence Beyond Measure</entry>
-		<entry lang="POR">IT Excellence Beyond Measure</entry>
-		<entry lang="SPA">IT Excellence Beyond Measure</entry>
+		<entry lang="RUS">POEMA</entry>
+		<entry lang="KAZ">POEMA</entry>
+		<entry lang="ENG">POEMA</entry>
+		<entry lang="BUL">POEMA</entry>
+		<entry lang="POR">POEMA</entry>
+		<entry lang="SPA">POEMA</entry>
 	</sentence>
 	<sentence mode="on" keyword="promo_heading_sub">
-		<entry lang="RUS">Мы команда талантливых, опытных и мотивированных программистов-разработчиков</entry>
-		<entry lang="KAZ">Біз талантты, тәжиребелі және дәлельді шешим шығарушы жоспар жасаушы</entry>
-		<entry lang="ENG">We are a team of talented, experienced and motivated developers</entry>
-		<entry lang="BUL">Ние сме екип от талантливи, опитни и мотивирани програмисти-разработчици</entry>
-		<entry lang="POR">Somos uma equipe de desenvolvedores talentosos, experientes e motivados</entry>
-		<entry lang="SPA">Somos un equipo de desarrolladores talentosos, experimentados y motivados</entry>
+		<entry lang="RUS">tools bundle</entry>
+		<entry lang="KAZ">tools bundle</entry>
+		<entry lang="ENG">tools bundle</entry>
+		<entry lang="BUL">tools bundle</entry>
+		<entry lang="POR">tools bundle</entry>
+		<entry lang="SPA">tools bundle</entry>
 	</sentence>
 	<sentence mode="on" keyword="promo_experience">
-		<entry lang="RUS">Больше 10 лет на рынке ИТ</entry>
-		<entry lang="KAZ">Больше 10 лет на рынке ИТ</entry>
-		<entry lang="ENG">Over 10 years in IT</entry>
-		<entry lang="BUL">Повече от 10 години в ИТ сектора</entry>
-		<entry lang="POR">Mais de 10 anos nas tecnologias da informação.</entry>
-		<entry lang="SPA">Mmás de 10 años en las TIC.</entry>
+		<entry lang="RUS"></entry>
+		<entry lang="KAZ"></entry>
+		<entry lang="ENG"></entry>
+		<entry lang="BUL"></entry>
+		<entry lang="POR"></entry>
+		<entry lang="SPA"></entry>
 	</sentence>
 
 	<sentence mode="on" keyword="find_out_more">
