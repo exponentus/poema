@@ -20,11 +20,6 @@ export class ReferenceFormComponent {
     @Input() titleVisible: boolean = true;
     @Input() actionsVisible: boolean = true;
 
-    private cols = [
-        // { caption: 'reg_date', value: 'regDate', type: 'date', sort: 'both', className: 'vw-reg-date' },
-        { caption: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' },
-        { caption: 'localized_name', type: 'text', value: 'localizedName', className: 'vw-localized-name' }
-    ];
     private subs: any = [];
 
     isReady = false;

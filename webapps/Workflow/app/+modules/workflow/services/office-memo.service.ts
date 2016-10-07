@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-import { AppService } from '../../../services';
+import { AppService, DataService } from '../../../services';
 import { OfficeMemo } from '../models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
@@ -10,8 +10,13 @@ export class WorkflowOfficeMemoService {
 
     constructor(
         private http: Http,
-        private appService: AppService
+        private appService: AppService,
+        private dataService: DataService
     ) { }
+
+    fetch(params: any, retry = 1) {
+        return this.dataService.get('/Workflow/p', params, retry);
+    }
 
     fetchOfficeMemos(queryParams = {}) {
         return this.http.get('/Workflow/p?id=officememo-view', {

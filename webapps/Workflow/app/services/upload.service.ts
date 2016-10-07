@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UploadService {
+
     public progress$: Observable<any>;
     private progressObserver: any;
 

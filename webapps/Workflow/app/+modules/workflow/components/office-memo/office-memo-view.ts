@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { WorkflowOfficeMemoService } from '../../services';
+import { parseResponseObjects } from '../../../../utils/utils';
 
 @Component({
     selector: 'office-memo-view',
@@ -33,6 +34,7 @@ import { WorkflowOfficeMemoService } from '../../services';
 })
 
 export class OfficeMemoViewComponent {
+
     @Input() embedded: boolean = false;
     @Input() selectable: boolean = true;
     @Input() headerVisible: boolean = true;
@@ -41,16 +43,7 @@ export class OfficeMemoViewComponent {
     @Input() captionsVisible: boolean = true;
 
     private actions = [];
-    private columns = [
-        { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-reg-number' },
-        { name: 'att', value: 'hasAttachment', type: 'icon', className: 'vw-icon' },
-        { name: 'applied_reg_date', value: 'appliedRegDate', type: 'date', className: 'vw-reg-date' },
-        { name: 'doc_language', value: 'docLanguage', type: 'localizedName', className: 'vw-name' },
-        { name: 'doc_type', value: 'docType', type: 'localizedName', className: 'vw-name' },
-        { name: 'sender', value: 'sender', type: 'localizedName', className: 'vw-name' },
-        { name: 'sender_applied_reg_date', value: 'senderAppliedRegDate', type: 'date', className: 'vw-reg-date' },
-        { name: 'summary', value: 'summary', type: 'text', className: 'vw-content' }
-    ];
+    private columns = [];
     private subs: any = [];
 
     title = 'office-memo-view';
@@ -70,7 +63,9 @@ export class OfficeMemoViewComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
-            this.loadData(Object.assign({}, params, { page: this.meta.page }));
+            this.loadData(Object.assign({}, params, {
+                page: this.meta.page
+            }));
         }));
     }
 
@@ -81,16 +76,21 @@ export class OfficeMemoViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
-            'sort': this.activeSort || 'regDate:desc'
+            id: 'officememo-view',
+            sort: this.activeSort || 'regDate:desc'
         });
         let typeId = 'officememo';
 
-        this.officeMemoService.fetchOfficeMemos(this.params).subscribe(
+        this.officeMemoService.fetch(this.params).subscribe(
             payload => {
+                let columnOptions = payload.data.columnOptions.columns;
+                let objects = parseResponseObjects(payload.objects);
+
                 this.loading = false;
-                this.list = payload[typeId] ? payload[typeId].list : [];
-                this.meta = payload[typeId] ? payload[typeId].meta : {};
-                this.actions = payload.actions;
+                this.list = objects[typeId] ? objects[typeId].list : [];
+                this.meta = objects[typeId] ? objects[typeId].meta : {};
+                this.actions = objects.actions;
+                this.columns = columnOptions;
             },
             error => console.log(error)
         );

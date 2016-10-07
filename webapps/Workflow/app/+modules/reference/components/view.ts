@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
 import { ReferenceService } from '../reference.service';
+import { parseResponseObjects } from '../../../utils/utils';
 
 @Component({
     selector: 'reference-view',
@@ -33,6 +34,7 @@ import { ReferenceService } from '../reference.service';
 })
 
 export class ReferenceViewComponent {
+
     @Input() embedded: boolean = false;
     @Input() selectable: boolean = true;
     @Input() headerVisible: boolean = true;
@@ -41,7 +43,7 @@ export class ReferenceViewComponent {
     @Input() captionsVisible: boolean = true;
 
     private actions = [];
-    private columns = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+    private columns = [];
     private subs: any = [];
 
     list: any[];
@@ -68,11 +70,6 @@ export class ReferenceViewComponent {
                     id: id,
                     page: this.meta.page
                 }));
-            } else {
-                this.loadData(Object.assign({}, params, {
-                    id: 'region-view',
-                    page: this.meta.page
-                }));
             }
         }));
     }
@@ -89,17 +86,23 @@ export class ReferenceViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
-            'sort': this.activeSort || 'regDate:desc'
+            sort: this.activeSort || 'regDate:desc'
         });
         let typeId = this.params.id.split('-')[0];
 
-        this.referenceService.fetchList(this.params).subscribe(
-            ({data, columnOptions}) => {
+        this.referenceService.fetch(this.params).subscribe(
+            payload => {
+                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+                if (payload.data.columnOptions) {
+                    columnOptions = payload.data.columnOptions.columns;
+                }
+                let objects = parseResponseObjects(payload.objects);
+
                 this.loading = false;
-                this.list = data[typeId] ? data[typeId].list : [];
-                this.meta = data[typeId] ? data[typeId].meta : {};
-                this.actions = data.actions;
-                this.columns = columnOptions || [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }]
+                this.list = objects[typeId] ? objects[typeId].list : [];
+                this.meta = objects[typeId] ? objects[typeId].meta : {};
+                this.actions = objects.actions;
+                this.columns = columnOptions;
             },
             error => console.log(error)
         );

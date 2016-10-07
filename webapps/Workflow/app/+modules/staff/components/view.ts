@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
 import { StaffService } from '../staff.service';
+import { parseResponseObjects } from '../../../utils/utils';
 
 @Component({
     selector: 'staff-view',
@@ -25,10 +26,15 @@ import { StaffService } from '../staff.service';
             (sort)="onSort($event)"
             (goToPage)="goToPage($event)">
         </list-page>
-    `
+    `,
+    host: {
+        '[class.view]': 'true',
+        '[class.load]': 'loading'
+    }
 })
 
 export class StaffViewComponent {
+
     @Input() embedded: boolean = false;
     @Input() selectable: boolean = true;
     @Input() headerVisible: boolean = true;
@@ -36,13 +42,8 @@ export class StaffViewComponent {
     @Input() actionsVisible: boolean = true;
     @Input() captionsVisible: boolean = true;
 
-    private actions = [
-        { action: 'add_new', label: 'add_new' },
-        { action: 'remove', label: 'remove' }
-    ];
-    private columns = [
-        { name: 'name', value: 'name', type: 'localizedName', sort: 'desc', className: 'vw-name' }
-    ];
+    private actions = [];
+    private columns = [];
     private subs: any = [];
 
     list: any[];
@@ -85,17 +86,23 @@ export class StaffViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
-            'sort': this.activeSort || 'regDate:desc'
+            sort: this.activeSort || 'regDate:desc'
         });
         let typeId = this.params.id.split('-')[0];
 
-        this.staffService.fetchList(this.params).subscribe(
-            ({data, columnOptions}) => {
+        this.staffService.fetch(this.params).subscribe(
+            payload => {
+                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+                if (payload.data.columnOptions) {
+                    columnOptions = payload.data.columnOptions.columns;
+                }
+                let objects = parseResponseObjects(payload.objects);
+
                 this.loading = false;
-                this.list = data[typeId] ? data[typeId].list : [];
-                this.meta = data[typeId] ? data[typeId].meta : {};
-                this.actions = data.actions;
-                this.columns = columnOptions || [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }]
+                this.list = objects[typeId] ? objects[typeId].list : [];
+                this.meta = objects[typeId] ? objects[typeId].meta : {};
+                this.actions = objects.actions;
+                this.columns = columnOptions;
             },
             error => console.log(error)
         );

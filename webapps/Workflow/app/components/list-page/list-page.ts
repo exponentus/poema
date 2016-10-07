@@ -27,12 +27,12 @@ export class ListPageComponent {
     @Input() meta: any = {}; // list meta data
     @Input() actions: any[] = [];
     /**
-     * columns param
+     * columns
      * @param name - column name
      * @param value - model field name
      * @param type - text, date, localizedName
      * @param sort - desc, asc, both
-     * @param className - cell css class name
+     * @param className - css class name
      */
     @Input() columns: any[] = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' }];
 

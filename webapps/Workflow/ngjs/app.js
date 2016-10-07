@@ -1,9 +1,12564 @@
-webpackJsonp([0],{113:function(e,t,n){"use strict";var o=n(0),i=n(73),r=n(23),a=n(16),s=n(167),c=n(100),u=(n.n(c),n(718)),l=n(676),p=n(678),f=n(679),d=n(693);n.d(t,"a",function(){return g});var h=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},m=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},g=function(){function SharedModule(){}return SharedModule=h([n.i(o.NgModule)({declarations:[l.a,p.a,f.a,d.a,d.b,d.c,d.d,d.e,d.f],exports:[i.b,a.a,s.a,s.b,c.TranslateModule,l.a,p.a,f.a,u.a,d.a,d.b,d.c,d.d,d.e,d.f],imports:[i.b,r.HttpModule,a.a,s.a,s.b,c.TranslateModule,u.a]}),m("design:paramtypes",[])],SharedModule)}()},114:function(e,t,n){"use strict";var o=n(376),i=n(715);n(377);n.d(t,"b",function(){return o.a}),n.d(t,"a",function(){return i.a})},151:function(e,t,n){"use strict";function defaultErrorHandler(e){throw e}function parentLoadedConfig(e){for(var t=e.parent;t;){var n=t._routeConfig;if(n&&n._loadedConfig)return n._loadedConfig;if(n&&n.component)return null;t=t.parent}return null}function closestLoadedConfig(e){if(!e)return null;for(var t=e.parent;t;){var n=t._routeConfig;if(n&&n._loadedConfig)return n._loadedConfig;t=t.parent}return null}function nodeChildrenAsMap(e){return e?e.children.reduce(function(e,t){return e[t.value.outlet]=t,e},{}):{}}function getOutlet(e,t){var n=e._outlets[t.outlet];if(!n){var o=t.component.name;throw t.outlet===R.a?new Error("Cannot find primary outlet to load '"+o+"'"):new Error("Cannot find the outlet "+t.outlet+" to load '"+o+"'")}return n}var o=n(0),i=n(37),r=(n.n(i),n(512)),a=(n.n(r),n(98)),s=(n.n(a),n(517)),c=(n.n(s),n(83)),u=(n.n(c),n(164)),l=(n.n(u),n(165)),p=(n.n(l),n(910)),f=(n.n(p),n(644)),d=n(645),h=n(646),m=n(647),g=n(650),v=n(152),y=n(153),b=n(91),R=n(52),O=n(75),C=n(53);n.d(t,"b",function(){return S}),n.d(t,"a",function(){return I});var w=function(){function NavigationStart(e,t){this.id=e,this.url=t}return NavigationStart.prototype.toString=function(){return"NavigationStart(id: "+this.id+", url: '"+this.url+"')"},NavigationStart}(),S=function(){function NavigationEnd(e,t,n){this.id=e,this.url=t,this.urlAfterRedirects=n}return NavigationEnd.prototype.toString=function(){return"NavigationEnd(id: "+this.id+", url: '"+this.url+"', urlAfterRedirects: '"+this.urlAfterRedirects+"')"},NavigationEnd}(),_=function(){function NavigationCancel(e,t,n){this.id=e,this.url=t,this.reason=n}return NavigationCancel.prototype.toString=function(){return"NavigationCancel(id: "+this.id+", url: '"+this.url+"')"},NavigationCancel}(),j=function(){function NavigationError(e,t,n){this.id=e,this.url=t,this.error=n}return NavigationError.prototype.toString=function(){return"NavigationError(id: "+this.id+", url: '"+this.url+"', error: "+this.error+")"},NavigationError}(),P=function(){function RoutesRecognized(e,t,n,o){this.id=e,this.url=t,this.urlAfterRedirects=n,this.state=o}return RoutesRecognized.prototype.toString=function(){return"RoutesRecognized(id: "+this.id+", url: '"+this.url+"', urlAfterRedirects: '"+this.urlAfterRedirects+"', state: "+this.state+")"},RoutesRecognized}(),I=function(){function Router(e,t,o,r,a,s,c,u){this.rootComponentType=e,this.urlSerializer=t,this.outletMap=o,this.location=r,this.injector=a,this.config=u,this.navigationId=0,this.errorHandler=defaultErrorHandler,this.navigated=!1,this.resetConfig(u),this.routerEvents=new i.Subject,this.currentUrlTree=n.i(O.e)(),this.configLoader=new v.b(s,c),this.currentRouterState=n.i(b.f)(this.currentUrlTree,this.rootComponentType)}return Router.prototype.initialNavigation=function(){this.setUpLocationChangeListener(),this.navigateByUrl(this.location.path(!0),{replaceUrl:!0})},Router.prototype.setUpLocationChangeListener=function(){var e=this;this.locationSubscription=this.location.subscribe(Zone.current.wrap(function(t){var n=e.urlSerializer.parse(t.url);return e.currentUrlTree.toString()!==n.toString()?e.scheduleNavigation(n,{skipLocationChange:t.pop,replaceUrl:!0}):null}))},Object.defineProperty(Router.prototype,"routerState",{get:function(){return this.currentRouterState},enumerable:!0,configurable:!0}),Object.defineProperty(Router.prototype,"url",{get:function(){return this.serializeUrl(this.currentUrlTree)},enumerable:!0,configurable:!0}),Object.defineProperty(Router.prototype,"events",{get:function(){return this.routerEvents},enumerable:!0,configurable:!0}),Router.prototype.resetConfig=function(e){n.i(d.a)(e),this.config=e},Router.prototype.ngOnDestroy=function(){this.dispose()},Router.prototype.dispose=function(){this.locationSubscription.unsubscribe()},Router.prototype.createUrlTree=function(e,t){var o=void 0===t?{}:t,i=o.relativeTo,r=o.queryParams,a=o.fragment,s=o.preserveQueryParams,c=o.preserveFragment,u=i?i:this.routerState.root,l=s?this.currentUrlTree.queryParams:r,p=c?this.currentUrlTree.fragment:a;return n.i(m.a)(u,this.currentUrlTree,e,l,p)},Router.prototype.navigateByUrl=function(e,t){if(void 0===t&&(t={skipLocationChange:!1}),e instanceof O.b)return this.scheduleNavigation(e,t);var n=this.urlSerializer.parse(e);return this.scheduleNavigation(n,t)},Router.prototype.navigate=function(e,t){return void 0===t&&(t={skipLocationChange:!1}),this.scheduleNavigation(this.createUrlTree(e,t),t)},Router.prototype.serializeUrl=function(e){return this.urlSerializer.serialize(e)},Router.prototype.parseUrl=function(e){return this.urlSerializer.parse(e)},Router.prototype.isActive=function(e,t){if(e instanceof O.b)return n.i(O.f)(this.currentUrlTree,e,t);var o=this.urlSerializer.parse(e);return n.i(O.f)(this.currentUrlTree,o,t)},Router.prototype.scheduleNavigation=function(e,t){var n=this,o=++this.navigationId;return this.routerEvents.next(new w(o,this.serializeUrl(e))),Promise.resolve().then(function(i){return n.runNavigate(e,t.skipLocationChange,t.replaceUrl,o)})},Router.prototype.runNavigate=function(e,t,o,i){var r=this;return i!==this.navigationId?(this.location.go(this.urlSerializer.serialize(this.currentUrlTree)),this.routerEvents.next(new _(i,this.serializeUrl(e),"Navigation ID "+i+" is not equal to the current navigation id "+this.navigationId)),Promise.resolve(!1)):new Promise(function(s,u){var p,d,m,v,y=r.currentRouterState,b=r.currentUrlTree,O=n.i(f.a)(r.injector,r.configLoader,e,r.config),C=l.mergeMap.call(O,function(e){return v=e,n.i(g.a)(r.rootComponentType,r.config,v,r.serializeUrl(v))}),w=c.map.call(C,function(t){return r.routerEvents.next(new P(i,r.serializeUrl(e),r.serializeUrl(v),t)),t}),I=c.map.call(w,function(e){return n.i(h.a)(e,r.currentRouterState)}),E=c.map.call(I,function(e){p=e,m=new k(p.snapshot,r.currentRouterState.snapshot,r.injector),m.traverse(r.outletMap)}),A=l.mergeMap.call(E,function(){return m.checkGuards()}),T=l.mergeMap.call(A,function(e){return e?c.map.call(m.resolveData(),function(){return e}):n.i(a.of)(e)});T.forEach(function(e){if(!e||i!==r.navigationId)return void(d=!1);if(r.currentUrlTree=v,r.currentRouterState=p,!t){var n=r.urlSerializer.serialize(v);r.location.isCurrentPathEqualTo(n)||o?r.location.replaceState(n):r.location.go(n)}new D(p,y).activate(r.outletMap),d=!0}).then(function(){r.navigated=!0,d?(r.routerEvents.next(new S(i,r.serializeUrl(e),r.serializeUrl(v))),s(!0)):(r.routerEvents.next(new _(i,r.serializeUrl(e),"")),s(!1))},function(t){if(t instanceof R.b)r.navigated=!0,r.routerEvents.next(new _(i,r.serializeUrl(e),t.message)),s(!1);else{r.routerEvents.next(new j(i,r.serializeUrl(e),t));try{s(r.errorHandler(t))}catch(e){u(e)}}i===r.navigationId&&(r.currentRouterState=y,r.currentUrlTree=b,r.location.replaceState(r.serializeUrl(b)))})})},Router}(),E=function(){function CanActivate(e){this.path=e}return Object.defineProperty(CanActivate.prototype,"route",{get:function(){return this.path[this.path.length-1]},enumerable:!0,configurable:!0}),CanActivate}(),A=function(){function CanDeactivate(e,t){this.component=e,this.route=t}return CanDeactivate}(),k=function(){function PreActivation(e,t,n){this.future=e,this.curr=t,this.injector=n,this.checks=[]}return PreActivation.prototype.traverse=function(e){var t=this.future._root,n=this.curr?this.curr._root:null;this.traverseChildRoutes(t,n,e,[t.value])},PreActivation.prototype.checkGuards=function(){var e=this;if(0===this.checks.length)return n.i(a.of)(!0);var t=n.i(r.from)(this.checks),o=c.map.call(t,function(t){if(t instanceof E)return n.i(C.f)(n.i(r.from)([e.runCanActivateChild(t.path),e.runCanActivate(t.route)]));if(t instanceof A){var o=t;return e.runCanDeactivate(o.component,o.route)}throw new Error("Cannot be reached")}),i=u.mergeAll.call(o);return s.every.call(i,function(e){return e===!0})},PreActivation.prototype.resolveData=function(){var e=this;if(0===this.checks.length)return n.i(a.of)(null);var t=n.i(r.from)(this.checks),o=l.mergeMap.call(t,function(t){return t instanceof E?e.runResolve(t.route):n.i(a.of)(null)});return p.reduce.call(o,function(e,t){return e})},PreActivation.prototype.traverseChildRoutes=function(e,t,o,i){var r=this,a=nodeChildrenAsMap(t);e.children.forEach(function(e){r.traverseRoutes(e,a[e.value.outlet],o,i.concat([e.value])),delete a[e.value.outlet]}),n.i(C.c)(a,function(e,t){return r.deactivateOutletAndItChildren(e,o._outlets[t])})},PreActivation.prototype.traverseRoutes=function(e,t,o,i){var r=e.value,a=t?t.value:null,s=o?o._outlets[e.value.outlet]:null;a&&r._routeConfig===a._routeConfig?(n.i(C.d)(r.params,a.params)?r.data=a.data:this.checks.push(new A(s.component,a),new E(i)),r.component?this.traverseChildRoutes(e,t,s?s.outletMap:null,i):this.traverseChildRoutes(e,t,o,i)):(a&&(a.component?this.deactivateOutletAndItChildren(a,s):this.deactivateOutletMap(o)),this.checks.push(new E(i)),r.component?this.traverseChildRoutes(e,null,s?s.outletMap:null,i):this.traverseChildRoutes(e,null,o,i))},PreActivation.prototype.deactivateOutletAndItChildren=function(e,t){t&&t.isActivated&&(this.deactivateOutletMap(t.outletMap),this.checks.push(new A(t.component,e)))},PreActivation.prototype.deactivateOutletMap=function(e){var t=this;n.i(C.c)(e._outlets,function(e){e.isActivated&&t.deactivateOutletAndItChildren(e.activatedRoute.snapshot,e)})},PreActivation.prototype.runCanActivate=function(e){var t=this,o=e._routeConfig?e._routeConfig.canActivate:null;if(!o||0===o.length)return n.i(a.of)(!0);var i=c.map.call(n.i(r.from)(o),function(o){var i=t.getToken(o,e);return i.canActivate?n.i(C.b)(i.canActivate(e,t.future)):n.i(C.b)(i(e,t.future))});return n.i(C.f)(i)},PreActivation.prototype.runCanActivateChild=function(e){var t=this,o=e[e.length-1],i=e.slice(0,e.length-1).reverse().map(function(e){return t.extractCanActivateChild(e)}).filter(function(e){return null!==e});return n.i(C.f)(c.map.call(n.i(r.from)(i),function(e){var i=c.map.call(n.i(r.from)(e.guards),function(e){var i=t.getToken(e,e.node);return i.canActivateChild?n.i(C.b)(i.canActivateChild(o,t.future)):n.i(C.b)(i(o,t.future))});return n.i(C.f)(i)}))},PreActivation.prototype.extractCanActivateChild=function(e){var t=e._routeConfig?e._routeConfig.canActivateChild:null;return t&&0!==t.length?{node:e,guards:t}:null},PreActivation.prototype.runCanDeactivate=function(e,t){var o=this,i=t&&t._routeConfig?t._routeConfig.canDeactivate:null;if(!i||0===i.length)return n.i(a.of)(!0);var l=c.map.call(n.i(r.from)(i),function(i){var r=o.getToken(i,t);return r.canDeactivate?n.i(C.b)(r.canDeactivate(e,t,o.curr)):n.i(C.b)(r(e,t,o.curr))}),p=u.mergeAll.call(l);return s.every.call(p,function(e){return e===!0})},PreActivation.prototype.runResolve=function(e){var t=e._resolve;return c.map.call(this.resolveNode(t.current,e),function(o){return t.resolvedData=o,e.data=n.i(C.g)(e.data,t.flattenedResolvedData),null})},PreActivation.prototype.resolveNode=function(e,t){var o=this;return n.i(C.e)(e,function(e,i){var r=o.getToken(i,t);return r.resolve?n.i(C.b)(r.resolve(t,o.future)):n.i(C.b)(r(t,o.future))})},PreActivation.prototype.getToken=function(e,t){var n=closestLoadedConfig(t),o=n?n.injector:this.injector;return o.get(e)},PreActivation}(),D=function(){function ActivateRoutes(e,t){this.futureState=e,this.currState=t}return ActivateRoutes.prototype.activate=function(e){var t=this.futureState._root,o=this.currState?this.currState._root:null;n.i(b.g)(this.futureState.root),this.activateChildRoutes(t,o,e)},ActivateRoutes.prototype.activateChildRoutes=function(e,t,o){var i=this,r=nodeChildrenAsMap(t);e.children.forEach(function(e){i.activateRoutes(e,r[e.value.outlet],o),delete r[e.value.outlet]}),n.i(C.c)(r,function(e,t){return i.deactivateOutletAndItChildren(o._outlets[t])})},ActivateRoutes.prototype.activateRoutes=function(e,t,o){var i=e.value,r=t?t.value:null;if(i===r)if(n.i(b.g)(i),i.component){var a=getOutlet(o,e.value);this.activateChildRoutes(e,t,a.outletMap)}else this.activateChildRoutes(e,t,o);else{if(r)if(r.component){var a=getOutlet(o,e.value);this.deactivateOutletAndItChildren(a)}else this.deactivateOutletMap(o);if(i.component){n.i(b.g)(i);var a=getOutlet(o,e.value),s=new y.a;this.placeComponentIntoOutlet(s,i,a),this.activateChildRoutes(e,null,s)}else n.i(b.g)(i),this.activateChildRoutes(e,null,o)}},ActivateRoutes.prototype.placeComponentIntoOutlet=function(e,t,n){var i=[{provide:b.b,useValue:t},{provide:y.a,useValue:e}],r=parentLoadedConfig(t.snapshot),a=null,s=null;r&&(a=r.factoryResolver,s=r.injector,i.push({provide:o.ComponentFactoryResolver,useValue:a})),n.activate(t,a,s,o.ReflectiveInjector.resolve(i),e)},ActivateRoutes.prototype.deactivateOutletAndItChildren=function(e){e&&e.isActivated&&(this.deactivateOutletMap(e.outletMap),e.deactivate())},ActivateRoutes.prototype.deactivateOutletMap=function(e){var t=this;n.i(C.c)(e._outlets,function(e){return t.deactivateOutletAndItChildren(e)})},ActivateRoutes}()},152:function(e,t,n){"use strict";var o=n(0),i=n(249),r=(n.n(i),n(98)),a=(n.n(r),n(83)),s=(n.n(a),n(165)),c=(n.n(s),n(53));n.d(t,"c",function(){return u}),n.d(t,"a",function(){return l}),n.d(t,"b",function(){return p});var u=new o.OpaqueToken("ROUTES"),l=function(){function LoadedRouterConfig(e,t,n){this.routes=e,this.injector=t,this.factoryResolver=n}return LoadedRouterConfig}(),p=function(){function RouterConfigLoader(e,t){this.loader=e,this.compiler=t}return RouterConfigLoader.prototype.load=function(e,t){return a.map.call(this.loadModuleFactory(t),function(t){var o=t.create(e);return new l(n.i(c.a)(o.injector.get(u)),o.injector,o.componentFactoryResolver)})},RouterConfigLoader.prototype.loadModuleFactory=function(e){var t=this;if("string"==typeof e)return n.i(i.fromPromise)(this.loader.load(e));var a=this.compiler instanceof o.Compiler;return s.mergeMap.call(n.i(c.b)(e()),function(e){return a?n.i(r.of)(e):n.i(i.fromPromise)(t.compiler.compileModuleAsync(e))})},RouterConfigLoader}()},153:function(e,t,n){"use strict";n.d(t,"a",function(){return o});var o=function(){function RouterOutletMap(){this._outlets={}}return RouterOutletMap.prototype.registerOutlet=function(e,t){this._outlets[e]=t},RouterOutletMap.prototype.removeOutlet=function(e){this._outlets[e]=void 0},RouterOutletMap}()},16:function(e,t,n){"use strict";var o=n(648);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return o.b}),n.d(t,"c",function(){return o.c})},22:function(e,t,n){"use strict";var o=n(369),i=n(368);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return i.a})},220:function(e,t,n){"use strict";function toBool(e){return""===e||!!e}var o=n(73),i=n(0),r=n(151),a=n(91);n.d(t,"a",function(){return s}),n.d(t,"b",function(){return c});var s=function(){function RouterLink(e,t,n){this.router=e,this.route=t,this.locationStrategy=n,this.commands=[]}return Object.defineProperty(RouterLink.prototype,"routerLink",{set:function(e){Array.isArray(e)?this.commands=e:this.commands=[e]},enumerable:!0,configurable:!0}),RouterLink.prototype.onClick=function(e,t,n){return!(0===e&&!t&&!n)||(this.router.navigateByUrl(this.urlTree),!1)},Object.defineProperty(RouterLink.prototype,"urlTree",{get:function(){return this.router.createUrlTree(this.commands,{relativeTo:this.route,queryParams:this.queryParams,fragment:this.fragment,preserveQueryParams:toBool(this.preserveQueryParams),preserveFragment:toBool(this.preserveFragment)})},enumerable:!0,configurable:!0}),RouterLink.decorators=[{type:i.Directive,args:[{selector:":not(a)[routerLink]"}]}],RouterLink.ctorParameters=[{type:r.a},{type:a.b},{type:o.c}],RouterLink.propDecorators={queryParams:[{type:i.Input}],fragment:[{type:i.Input}],preserveQueryParams:[{type:i.Input}],preserveFragment:[{type:i.Input}],routerLink:[{type:i.Input}],onClick:[{type:i.HostListener,args:["click",["$event.button","$event.ctrlKey","$event.metaKey"]]}]},RouterLink}(),c=function(){function RouterLinkWithHref(e,t,n){var o=this;this.router=e,this.route=t,this.locationStrategy=n,this.commands=[],this.subscription=e.events.subscribe(function(e){e instanceof r.b&&o.updateTargetUrlAndHref()})}return Object.defineProperty(RouterLinkWithHref.prototype,"routerLink",{set:function(e){Array.isArray(e)?this.commands=e:this.commands=[e]},enumerable:!0,configurable:!0}),RouterLinkWithHref.prototype.ngOnChanges=function(e){this.updateTargetUrlAndHref()},RouterLinkWithHref.prototype.ngOnDestroy=function(){this.subscription.unsubscribe()},RouterLinkWithHref.prototype.onClick=function(e,t,n){return!(0===e&&!t&&!n)||("string"==typeof this.target&&"_self"!=this.target||(this.router.navigateByUrl(this.urlTree),!1))},RouterLinkWithHref.prototype.updateTargetUrlAndHref=function(){this.href=this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree))},Object.defineProperty(RouterLinkWithHref.prototype,"urlTree",{get:function(){return this.router.createUrlTree(this.commands,{relativeTo:this.route,queryParams:this.queryParams,fragment:this.fragment,preserveQueryParams:toBool(this.preserveQueryParams),preserveFragment:toBool(this.preserveFragment)})},enumerable:!0,configurable:!0}),RouterLinkWithHref.decorators=[{type:i.Directive,args:[{selector:"a[routerLink]"}]}],RouterLinkWithHref.ctorParameters=[{type:r.a},{type:a.b},{type:o.c}],RouterLinkWithHref.propDecorators={target:[{type:i.Input}],queryParams:[{type:i.Input}],fragment:[{type:i.Input}],routerLinkOptions:[{type:i.Input}],preserveQueryParams:[{type:i.Input}],preserveFragment:[{type:i.Input}],href:[{type:i.HostBinding}],routerLink:[{type:i.Input}],onClick:[{type:i.HostListener,args:["click",["$event.button","$event.ctrlKey","$event.metaKey"]]}]},RouterLinkWithHref}()},221:function(e,t,n){"use strict";function findNode(e,t){if(e===t.value)return t;for(var n=0,o=t.children;n<o.length;n++){var i=o[n],r=findNode(e,i);if(r)return r}return null}function findPath(e,t,n){if(n.push(t),e===t.value)return n;for(var o=0,i=t.children;o<i.length;o++){var r=i[o],a=n.slice(0),s=findPath(e,r,a);if(s.length>0)return s}return[]}n.d(t,"a",function(){return o}),n.d(t,"b",function(){return i});var o=function(){function Tree(e){this._root=e}return Object.defineProperty(Tree.prototype,"root",{get:function(){return this._root.value},enumerable:!0,configurable:!0}),Tree.prototype.parent=function(e){var t=this.pathFromRoot(e);return t.length>1?t[t.length-2]:null},Tree.prototype.children=function(e){var t=findNode(e,this._root);return t?t.children.map(function(e){return e.value}):[]},Tree.prototype.firstChild=function(e){var t=findNode(e,this._root);return t&&t.children.length>0?t.children[0].value:null},Tree.prototype.siblings=function(e){var t=findPath(e,this._root,[]);if(t.length<2)return[];var n=t[t.length-2].children.map(function(e){return e.value});return n.filter(function(t){return t!==e})},Tree.prototype.pathFromRoot=function(e){return findPath(e,this._root,[]).map(function(e){return e.value})},Tree}(),i=function(){function TreeNode(e,t){this.value=e,this.children=t}return TreeNode.prototype.toString=function(){return"TreeNode("+this.value+")"},TreeNode}()},222:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function ReferenceService(e,t){this.http=e,this.appService=t}return ReferenceService.prototype.fetchList=function(e){var t=this;return this.http.get("/Reference/p",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).retry(3).map(function(e){var t=n.i(a.b)(e.json().objects);return{data:t,columnOptions:e.json().data.columnOptions?e.json().data.columnOptions.columns:null}}).catch(function(e){return t.appService.handleError(e)})},ReferenceService.prototype.fetchOne=function(e){var t=this;return this.http.get("/Reference/p",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).retry(3).map(function(e){var t=n.i(a.b)(e.json().objects);return t}).catch(function(e){return t.appService.handleError(e)})},ReferenceService.prototype.fetchTags=function(){var e=this;return this.http.get("/Reference/p?id=tags",{headers:n.i(a.a)()}).retry(3).map(function(e){return e.json().objects[0]}).map(function(e){return{tags:e.list,meta:e.meta}}).catch(function(t){return e.appService.handleError(t)})},ReferenceService.prototype.fetchTaskTypes=function(){var e=this;return this.http.get("/Reference/p?id=tasktypes",{headers:n.i(a.a)()}).retry(3).map(function(e){return e.json().objects[0]}).map(function(e){return{taskTypes:e.list,meta:e.meta}}).catch(function(t){return e.appService.handleError(t)})},ReferenceService.prototype.fetchRequestTypes=function(){var e=this;return this.http.get("/Reference/p?id=request-types",{headers:n.i(a.a)()}).retry(3).map(function(e){return e.json().objects[0]}).map(function(e){return{requestTypes:e.list,meta:e.meta}}).catch(function(t){return e.appService.handleError(t)})},ReferenceService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],ReferenceService);var e,t}()},223:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function StaffService(e,t){this.http=e,this.appService=t}return StaffService.prototype.fetchList=function(e){var t=this;return this.http.get("/Staff/p",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).retry(3).map(function(e){var t=n.i(a.b)(e.json().objects);return{data:t,columnOptions:e.json().data.columnOptions?e.json().data.columnOptions.columns:null}}).catch(function(e){return t.appService.handleError(e)})},StaffService.prototype.fetchOrganizations=function(e){var t=this;return void 0===e&&(e={}),this.http.get("/Staff/p?id=get-organizations",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).map(function(e){return e.json().objects[0]}).map(function(e){return{organizations:e.list,meta:e.meta}}).catch(function(e){return t.appService.handleError(e)})},StaffService.prototype.fetchEmployees=function(){var e=this;return this.http.get("/Staff/p?id=employees",{headers:n.i(a.a)()}).retry(3).map(function(e){return e.json().objects[0]}).map(function(e){return{employees:e.list}}).catch(function(t){return e.appService.handleError(t)})},StaffService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],StaffService);var e,t}()},224:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function ImgViewService(){this.emitter=new o.EventEmitter}return ImgViewService.prototype.getEmitter=function(){return this.emitter},ImgViewService.prototype.show=function(e){this.emitter.emit({url:e})},ImgViewService=i([n.i(o.Injectable)(),r("design:paramtypes",[])],ImgViewService)}()},225:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return c});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=n(256),s=n(260),c=function(){function MarkdownConverter(){a.setOptions({gfm:!0,tables:!0,breaks:!0})}return MarkdownConverter.prototype.toMarkdown=function(e){return s(e,{gfm:!0})},MarkdownConverter.prototype.toHtml=function(e){return a(e)},MarkdownConverter=i([n.i(o.Injectable)(),r("design:paramtypes",[])],MarkdownConverter)}()},253:function(e,t){"use strict";var n=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},o=function(e){function EmptyError(){var t=e.call(this,"no elements in sequence");this.name=t.name="EmptyError",this.stack=t.stack,this.message=t.message}return n(EmptyError,e),EmptyError}(Error);t.EmptyError=o},32:function(e,t,n){"use strict";var o=n(701),i=n(702),r=n(703);n.d(t,"b",function(){return o.a}),n.d(t,"c",function(){return i.a}),n.d(t,"a",function(){return r.a})},344:function(e,t,n){"use strict";var o=n(0),i=n(151),r=n(220);n.d(t,"a",function(){return a});var a=function(){function RouterLinkActive(e,t,n){var o=this;this.router=e,this.element=t,this.renderer=n,this.classes=[],this.routerLinkActiveOptions={exact:!1},this.subscription=e.events.subscribe(function(e){e instanceof i.b&&o.update()})}return RouterLinkActive.prototype.ngAfterContentInit=function(){var e=this;this.links.changes.subscribe(function(t){return e.update()}),this.linksWithHrefs.changes.subscribe(function(t){return e.update()}),this.update()},Object.defineProperty(RouterLinkActive.prototype,"routerLinkActive",{set:function(e){Array.isArray(e)?this.classes=e:this.classes=e.split(" ")},enumerable:!0,configurable:!0}),RouterLinkActive.prototype.ngOnChanges=function(e){this.update()},RouterLinkActive.prototype.ngOnDestroy=function(){this.subscription.unsubscribe()},RouterLinkActive.prototype.update=function(){var e=this;if(this.links&&this.linksWithHrefs&&this.router.navigated){var t=this.reduceList(this.links),n=this.reduceList(this.linksWithHrefs);this.classes.forEach(function(o){return e.renderer.setElementClass(e.element.nativeElement,o,t||n)})}},RouterLinkActive.prototype.reduceList=function(e){var t=this;return e.reduce(function(e,n){return e||t.router.isActive(n.urlTree,t.routerLinkActiveOptions.exact)},!1)},RouterLinkActive.decorators=[{type:o.Directive,args:[{selector:"[routerLinkActive]"}]}],RouterLinkActive.ctorParameters=[{type:i.a},{type:o.ElementRef},{type:o.Renderer}],RouterLinkActive.propDecorators={links:[{type:o.ContentChildren,args:[r.a,{descendants:!0}]}],linksWithHrefs:[{type:o.ContentChildren,args:[r.b,{descendants:!0}]}],routerLinkActiveOptions:[{type:o.Input}],routerLinkActive:[{type:o.Input}]},RouterLinkActive}()},345:function(e,t,n){"use strict";var o=n(0),i=n(153),r=n(52);n.d(t,"a",function(){return a});var a=function(){function RouterOutlet(e,t,n,i){this.parentOutletMap=e,this.location=t,this.resolver=n,this.name=i,this.activateEvents=new o.EventEmitter,this.deactivateEvents=new o.EventEmitter,e.registerOutlet(i?i:r.a,this)}return RouterOutlet.prototype.ngOnDestroy=function(){this.parentOutletMap.removeOutlet(this.name?this.name:r.a)},Object.defineProperty(RouterOutlet.prototype,"isActivated",{get:function(){return!!this.activated},enumerable:!0,configurable:!0}),Object.defineProperty(RouterOutlet.prototype,"component",{get:function(){if(!this.activated)throw new Error("Outlet is not activated");return this.activated.instance},enumerable:!0,configurable:!0}),Object.defineProperty(RouterOutlet.prototype,"activatedRoute",{get:function(){if(!this.activated)throw new Error("Outlet is not activated");return this._activatedRoute},enumerable:!0,configurable:!0}),RouterOutlet.prototype.deactivate=function(){if(this.activated){var e=this.component;this.activated.destroy(),this.activated=null,this.deactivateEvents.emit(e)}},RouterOutlet.prototype.activate=function(e,t,n,i,r){this.outletMap=r,this._activatedRoute=e;var a,s=e._futureSnapshot,c=s._routeConfig.component;a=t?t.resolveComponentFactory(c):this.resolver.resolveComponentFactory(c);var u=n?n:this.location.parentInjector,l=o.ReflectiveInjector.fromResolvedProviders(i,u);this.activated=this.location.createComponent(a,this.location.length,l,[]),this.activated.changeDetectorRef.detectChanges(),this.activateEvents.emit(this.activated.instance)},RouterOutlet.decorators=[{type:o.Directive,args:[{selector:"router-outlet"}]}],RouterOutlet.ctorParameters=[{type:i.a},{type:o.ViewContainerRef},{type:o.ComponentFactoryResolver},{type:void 0,decorators:[{type:o.Attribute,args:["name"]}]}],RouterOutlet.propDecorators={activateEvents:[{type:o.Output,args:["activate"]}],deactivateEvents:[{type:o.Output,args:["deactivate"]}]},RouterOutlet}()},346:function(e,t,n){"use strict";function provideLocationStrategy(e,t,n){return void 0===n&&(n={}),n.useHash?new o.e(e,t):new o.d(e,t)}function provideForRootGuard(e){if(e)throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");return"guarded"}function provideRoutes(e){return[{provide:i.ANALYZE_FOR_ENTRY_COMPONENTS,multi:!0,useValue:e},{provide:u.c,multi:!0,useValue:e}]}function setupRouter(e,t,o,i,r,a,s,u,l){if(void 0===l&&(l={}),0==e.componentTypes.length)throw new Error("Bootstrap at least one component before injecting Router.");var p=e.componentTypes[0],f=new c.a(p,t,o,i,r,a,s,n.i(d.a)(u));return l.errorHandler&&(f.errorHandler=l.errorHandler),l.enableTracing&&f.events.subscribe(function(e){console.group("Router Event: "+e.constructor.name),console.log(e.toString()),console.log(e),console.groupEnd()}),f}function rootRoute(e){return e.routerState.root}function initialRouterNavigation(e,t){return function(){t.initialNavigation===!1?e.setUpLocationChangeListener():e.initialNavigation()}}function provideRouterInitializer(){return{provide:i.APP_BOOTSTRAP_LISTENER,multi:!0,useFactory:initialRouterNavigation,deps:[c.a,m]}}var o=n(73),i=n(0),r=n(220),a=n(344),s=n(345),c=n(151),u=n(152),l=n(153),p=n(91),f=n(75),d=n(53);n.d(t,"a",function(){return v}),n.d(t,"b",function(){return y});var h=[s.a,r.a,r.b,a.a],m=new i.OpaqueToken("ROUTER_CONFIGURATION"),g=new i.OpaqueToken("ROUTER_FORROOT_GUARD"),v=({provide:o.c,useClass:o.d},{provide:o.c,useClass:o.e},[o.f,{provide:f.g,useClass:f.h},{
-provide:c.a,useFactory:setupRouter,deps:[i.ApplicationRef,f.g,l.a,o.f,i.Injector,i.NgModuleFactoryLoader,i.Compiler,u.c,m]},l.a,{provide:p.b,useFactory:rootRoute,deps:[c.a]},{provide:i.NgModuleFactoryLoader,useClass:i.SystemJsNgModuleLoader},{provide:m,useValue:{enableTracing:!1}}]),y=function(){function RouterModule(e){}return RouterModule.forRoot=function(e,t){return{ngModule:RouterModule,providers:[v,provideRoutes(e),{provide:g,useFactory:provideForRootGuard,deps:[[c.a,new i.Optional,new i.SkipSelf]]},{provide:m,useValue:t?t:{}},{provide:o.c,useFactory:provideLocationStrategy,deps:[o.a,[new i.Inject(o.g),new i.Optional],m]},provideRouterInitializer()]}},RouterModule.forChild=function(e){return{ngModule:RouterModule,providers:[provideRoutes(e)]}},RouterModule.decorators=[{type:i.NgModule,args:[{declarations:h,exports:h}]}],RouterModule.ctorParameters=[{type:void 0,decorators:[{type:i.Optional},{type:i.Inject,args:[g]}]}],RouterModule}()},352:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(222);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function ReferenceFormComponent(e,t,n,o,i){this.store=e,this.route=t,this.router=n,this.environmentActions=o,this.referenceService=i,this.embedded=!1,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.cols=[{caption:"name",value:"name",type:"text",sort:"desc",className:"vw-name"},{caption:"localized_name",type:"text",value:"localizedName",className:"vw-localized-name"}],this.subs=[],this.isReady=!1,this.loading=!0,this.id="",this.fsid=""}return ReferenceFormComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){var n=t.id,o=e.router.routerState.snapshot.root.queryParams.docid||void 0;e.id=n,e.loadData({id:n,docid:o})}))},ReferenceFormComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},Object.defineProperty(ReferenceFormComponent.prototype,"title",{get:function(){return this.id},enumerable:!0,configurable:!0}),ReferenceFormComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.referenceService.fetchOne(e).subscribe(function(n){t.isReady=!0,t.loading=!1,t.fsid=n.fsid,t.model=n[e.id.split("-")[0]]},function(e){return console.log(e)})},c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceFormComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceFormComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceFormComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceFormComponent.prototype,"actionsVisible",void 0),ReferenceFormComponent=c([n.i(o.Component)({selector:"reference-form",template:n(872),host:{"[class.form]":"true","[class.load]":"loading"}}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof i.b&&i.b)&&l||Object,"function"==typeof(p="undefined"!=typeof a.a&&a.a)&&p||Object,"function"==typeof(f="undefined"!=typeof s.a&&s.a)&&f||Object])],ReferenceFormComponent);var e,t,l,p,f}()},353:function(e,t,n){"use strict";var o=n(0),i=n(13),r=n(22);n.d(t,"a",function(){return c});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=function(){function ReferenceIndexComponent(e,t){this.store=e,this.environmentActions=t,this.subs=[]}return ReferenceIndexComponent.prototype.ngOnInit=function(){this.store.dispatch(this.environmentActions.setNavUrl("/reference/view","/Reference/p?id=outline"))},ReferenceIndexComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},ReferenceIndexComponent=a([n.i(o.Component)({selector:"reference-index",template:"<h1>reference-index</h1>"}),s("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object,"function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object])],ReferenceIndexComponent);var e,t}()},354:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(222);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function ReferenceViewComponent(e,t,n,o){this.store=e,this.route=t,this.environmentActions=n,this.referenceService=o,this.embedded=!1,this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.actions=[],this.columns=[{name:"name",value:"name",type:"localizedName",sort:"both",className:"vw-name"}],this.subs=[],this.meta={},this.keyWord="",this.loading=!0,this.activeSort="name:asc",this.id="",this.params={}}return ReferenceViewComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){var n=t.id;n?(e.id=n,e.loadData(Object.assign({},t,{id:n,page:e.meta.page}))):e.loadData(Object.assign({},t,{id:"region-view",page:e.meta.page}))}))},ReferenceViewComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},Object.defineProperty(ReferenceViewComponent.prototype,"title",{get:function(){return this.id},enumerable:!0,configurable:!0}),ReferenceViewComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.params=Object.assign({},e,{sort:this.activeSort||"regDate:desc"});var n=this.params.id.split("-")[0];this.referenceService.fetchList(this.params).subscribe(function(e){var o=e.data,i=e.columnOptions;t.loading=!1,t.list=o[n]?o[n].list:[],t.meta=o[n]?o[n].meta:{},t.actions=o.actions,t.columns=i||[{name:"name",value:"name",type:"localizedName",sort:"both",className:"vw-name"}]},function(e){return console.log(e)})},ReferenceViewComponent.prototype.refresh=function(){this.loadData(this.params)},ReferenceViewComponent.prototype.goToPage=function(e){this.loadData(e)},ReferenceViewComponent.prototype.onSort=function(e){this.activeSort=e,this.refresh()},ReferenceViewComponent.prototype.onAction=function(e){alert(e.action.caption)},c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"selectable",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"actionsVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],ReferenceViewComponent.prototype,"captionsVisible",void 0),ReferenceViewComponent=c([n.i(o.Component)({selector:"reference-view",template:'\n        <list-page\n            [title]="title"\n            [selectable]="true"\n            [headerVisible]="true"\n            [titleVisible]="true"\n            [actionsVisible]="true"\n            [captionsVisible]="true"\n            [activeSort]="activeSort"\n            [list]="list"\n            [meta]="meta"\n            [actions]="actions"\n            [columns]="columns"\n            (action)="onAction($event)"\n            (refresh)="refresh($event)"\n            (sort)="onSort($event)"\n            (goToPage)="goToPage($event)">\n        </list-page>\n    ',host:{"[class.view]":"true","[class.load]":"loading"}}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof a.a&&a.a)&&l||Object,"function"==typeof(p="undefined"!=typeof s.a&&s.a)&&p||Object])],ReferenceViewComponent);var e,t,l,p}()},355:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function ReferenceActions(){}return ReferenceActions.prototype.fetchTaskTypes=function(e){return{type:ReferenceActions.FETCH_TASK_TYPES,payload:{taskTypes:e}}},ReferenceActions.prototype.fetchRequestTypes=function(e){return{type:ReferenceActions.FETCH_REQUEST_TYPES,payload:{requestTypes:e}}},ReferenceActions.prototype.fetchTags=function(e){return{type:ReferenceActions.FETCH_TAGS,payload:{tags:e}}},ReferenceActions.prototype.fetchReferenceFailed=function(e){return{type:ReferenceActions.FETCH_REFERENCE_FAILED,payload:e}},ReferenceActions.FETCH_TASK_TYPES="FETCH_TASK_TYPES",ReferenceActions.FETCH_REQUEST_TYPES="FETCH_REQUEST_TYPES",ReferenceActions.FETCH_TAGS="FETCH_TAGS",ReferenceActions.FETCH_REFERENCE_SUCCESS="FETCH_REFERENCE_SUCCESS",ReferenceActions.FETCH_REFERENCE_FAILED="FETCH_REFERENCE_FAILED",ReferenceActions=i([n.i(o.Injectable)(),r("design:paramtypes",[])],ReferenceActions)}()},356:function(e,t,n){"use strict";var o=n(0),i=n(13),r=n(22);n.d(t,"a",function(){return c});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=function(){function StaffIndexComponent(e,t){this.store=e,this.environmentActions=t,this.subs=[]}return StaffIndexComponent.prototype.ngOnInit=function(){this.store.dispatch(this.environmentActions.setNavUrl("/staff","/Staff/p?id=outline"))},StaffIndexComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},StaffIndexComponent=a([n.i(o.Component)({selector:"staff-index",template:"<h1>staff-index</h1>"}),s("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object,"function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object])],StaffIndexComponent);var e,t}()},357:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(223);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function StaffViewComponent(e,t,n,o){this.store=e,this.route=t,this.environmentActions=n,this.staffService=o,this.embedded=!1,this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.actions=[{action:"add_new",label:"add_new"},{action:"remove",label:"remove"}],this.columns=[{name:"name",value:"name",type:"localizedName",sort:"desc",className:"vw-name"}],this.subs=[],this.meta={},this.keyWord="",this.loading=!0,this.activeSort="name:asc",this.id="",this.params={}}return StaffViewComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){var n=t.id;n&&(e.id=n,e.loadData(Object.assign({},t,{id:n,page:e.meta.page})))}))},StaffViewComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},Object.defineProperty(StaffViewComponent.prototype,"title",{get:function(){return this.id},enumerable:!0,configurable:!0}),StaffViewComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.params=Object.assign({},e,{sort:this.activeSort||"regDate:desc"});var n=this.params.id.split("-")[0];this.staffService.fetchList(this.params).subscribe(function(e){var o=e.data,i=e.columnOptions;t.loading=!1,t.list=o[n]?o[n].list:[],t.meta=o[n]?o[n].meta:{},t.actions=o.actions,t.columns=i||[{name:"name",value:"name",type:"localizedName",sort:"both",className:"vw-name"}]},function(e){return console.log(e)})},StaffViewComponent.prototype.refresh=function(){this.loadData(this.params)},StaffViewComponent.prototype.goToPage=function(e){this.loadData(e)},StaffViewComponent.prototype.onSort=function(e){this.activeSort=e,this.refresh()},StaffViewComponent.prototype.onAction=function(e){alert(e.action.caption)},c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"selectable",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"actionsVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],StaffViewComponent.prototype,"captionsVisible",void 0),StaffViewComponent=c([n.i(o.Component)({selector:"staff-view",template:'\n        <list-page\n            [title]="title"\n            [selectable]="true"\n            [headerVisible]="true"\n            [titleVisible]="true"\n            [actionsVisible]="true"\n            [captionsVisible]="true"\n            [activeSort]="activeSort"\n            [list]="list"\n            [meta]="meta"\n            [actions]="actions"\n            [columns]="columns"\n            (action)="onAction($event)"\n            (refresh)="refresh($event)"\n            (sort)="onSort($event)"\n            (goToPage)="goToPage($event)">\n        </list-page>\n    '}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof a.a&&a.a)&&l||Object,"function"==typeof(p="undefined"!=typeof s.a&&s.a)&&p||Object])],StaffViewComponent);var e,t,l,p}()},358:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function StaffActions(){}return StaffActions.prototype.fetchOrganizations=function(e){return{type:StaffActions.FETCH_ORGANIZATIONS,payload:{organizations:e}}},StaffActions.prototype.fetchEmployees=function(e){return{type:StaffActions.FETCH_EMPLOYEES,payload:{employees:e}}},StaffActions.FETCH_ORGANIZATIONS="FETCH_ORGANIZATIONS",StaffActions.FETCH_EMPLOYEES="FETCH_EMPLOYEES",StaffActions=i([n.i(o.Injectable)(),r("design:paramtypes",[])],StaffActions)}()},359:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(114),c=n(76);n.d(t,"a",function(){return p});var u=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},l=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},p=function(){function IncomingFormComponent(e,t,n,o,i,r){this.store=e,this.router=t,this.route=n,this.environmentActions=o,this.incomingService=i,this.notifyService=r,this.subs=[],this.isReady=!1,this.isNew=!0,this.isEditable=!1,this.isValid=!0,this.actions={},this.errors={}}return IncomingFormComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){var n=e.router.routerState.snapshot.root.queryParams.docid||void 0;e.loadIncoming(n)}))},IncomingFormComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},IncomingFormComponent.prototype.loadIncoming=function(e){var t=this;this.incomingService.fetchIncomingById(e).subscribe(function(e){var n=e.incoming,o=e.actions;t.incoming=n,t.actions=o||{},t.isNew=""==t.incoming.id,t.isEditable=t.isNew||t.incoming.editable,t.isReady=!0,t.isValid=!0},function(e){return t.handleXhrError(e)})},IncomingFormComponent.prototype.handleXhrError=function(e){this.notifyService.error(e.message).show().remove(2e3)},IncomingFormComponent=u([n.i(o.Component)({selector:"incoming-form",template:n(873)}),l("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.b&&i.b)&&t||Object,"function"==typeof(p="undefined"!=typeof i.c&&i.c)&&p||Object,"function"==typeof(f="undefined"!=typeof a.a&&a.a)&&f||Object,"function"==typeof(d="undefined"!=typeof c.a&&c.a)&&d||Object,"function"==typeof(h="undefined"!=typeof s.b&&s.b)&&h||Object])],IncomingFormComponent);var e,t,p,f,d,h}()},360:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(76);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function IncomingViewComponent(e,t,n,o,i){this.store=e,this.route=t,this.router=n,this.environmentActions=o,this.incomingService=i,this.embedded=!1,this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.actions=[],this.columns=[{name:"reg_number",value:"regNumber",type:"text",sort:"both",className:"vw-reg-number"},{name:"att",value:"hasAttachment",type:"icon",className:"vw-icon"},{name:"applied_reg_date",value:"appliedRegDate",type:"date",className:"vw-reg-date"},{name:"doc_language",value:"docLanguage",type:"localizedName",className:"vw-name"},{name:"doc_type",value:"docType",type:"localizedName",className:"vw-name"},{name:"sender",value:"sender",type:"localizedName",className:"vw-name"},{name:"sender_applied_reg_date",value:"senderAppliedRegDate",type:"date",className:"vw-reg-date"},{name:"summary",value:"summary",type:"text",className:"vw-content"}],this.subs=[],this.title="incoming-view",this.meta={},this.keyWord="",this.loading=!0,this.activeSort="",this.params={}}return IncomingViewComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){e.loadData(Object.assign({},t,{page:e.meta.page}))}))},IncomingViewComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},IncomingViewComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.params=Object.assign({},e,{sort:this.activeSort||"regDate:desc"});var n="incoming";this.incomingService.fetchIncomings(this.params).subscribe(function(e){t.loading=!1,t.list=e[n]?e[n].list:[],t.meta=e[n]?e[n].meta:{},t.actions=e.actions},function(e){return console.log(e)})},IncomingViewComponent.prototype.refresh=function(){this.loadData(this.params)},IncomingViewComponent.prototype.goToPage=function(e){this.loadData(e)},IncomingViewComponent.prototype.onSort=function(e){this.activeSort=e,this.refresh()},IncomingViewComponent.prototype.onAction=function(e){this.incomingService.doAction(e.action.customID).subscribe(function(e){var t=e.objects[0];alert(t.name+" : "+t.value)})},IncomingViewComponent.prototype.addNew=function(){this.router.navigate(["./"],{queryParams:{docid:""}})},c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"selectable",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"actionsVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],IncomingViewComponent.prototype,"captionsVisible",void 0),IncomingViewComponent=c([n.i(o.Component)({selector:"incoming-view",template:'\n        <list-page\n            [title]="title"\n            [selectable]="true"\n            [headerVisible]="true"\n            [titleVisible]="true"\n            [actionsVisible]="true"\n            [captionsVisible]="true"\n            [activeSort]="activeSort"\n            [list]="list"\n            [meta]="meta"\n            [actions]="actions"\n            [columns]="columns"\n            (action)="onAction($event)"\n            (refresh)="refresh($event)"\n            (sort)="onSort($event)"\n            (goToPage)="goToPage($event)">\n        </list-page>\n    ',host:{"[class.view]":"true","[class.load]":"loading"}}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof i.b&&i.b)&&l||Object,"function"==typeof(p="undefined"!=typeof a.a&&a.a)&&p||Object,"function"==typeof(f="undefined"!=typeof s.a&&s.a)&&f||Object])],IncomingViewComponent);var e,t,l,p,f}()},361:function(e,t,n){"use strict";var o=n(0),i=n(13),r=n(22);n.d(t,"a",function(){return c});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=function(){function WorkflowIndexComponent(e,t){this.store=e,this.environmentActions=t,this.subs=[]}return WorkflowIndexComponent.prototype.ngOnInit=function(){this.store.dispatch(this.environmentActions.setNavUrl("","/Workflow/p?id=outline"))},WorkflowIndexComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},WorkflowIndexComponent=a([n.i(o.Component)({selector:"workflow-index",template:"<h1>workflow-index</h1>"}),s("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object,"function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object])],WorkflowIndexComponent);var e,t}()},362:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(114),c=n(76);n.d(t,"a",function(){return p});var u=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},l=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},p=function(){function OfficeMemoFormComponent(e,t,n,o,i,r){this.store=e,this.router=t,this.route=n,this.environmentActions=o,this.officeMemoService=i,this.notifyService=r,this.subs=[],this.isReady=!1,this.isNew=!0,this.isEditable=!1,this.isValid=!0,this.actions={},this.errors={}}return OfficeMemoFormComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){var n=e.router.routerState.snapshot.root.queryParams.id||void 0;e.loadOfficeMemo(n)}))},OfficeMemoFormComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},OfficeMemoFormComponent.prototype.loadOfficeMemo=function(e){var t=this;this.officeMemoService.fetchOfficeMemoById(e).subscribe(function(e){var n=e.officeMemo,o=e.actions;t.officeMemo=n,t.actions=o||{},t.isNew=""==t.officeMemo.id,t.isEditable=t.isNew||t.officeMemo.editable,t.isReady=!0,t.isValid=!0},function(e){return t.handleXhrError(e)})},OfficeMemoFormComponent.prototype.handleXhrError=function(e){this.notifyService.error(e.message).show().remove(2e3)},OfficeMemoFormComponent=u([n.i(o.Component)({selector:"office-memo-form",template:n(874)}),l("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.b&&i.b)&&t||Object,"function"==typeof(p="undefined"!=typeof i.c&&i.c)&&p||Object,"function"==typeof(f="undefined"!=typeof a.a&&a.a)&&f||Object,"function"==typeof(d="undefined"!=typeof c.c&&c.c)&&d||Object,"function"==typeof(h="undefined"!=typeof s.b&&s.b)&&h||Object])],OfficeMemoFormComponent);var e,t,p,f,d,h}()},363:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(76);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function OfficeMemoViewComponent(e,t,n,o){this.store=e,this.route=t,this.environmentActions=n,this.officeMemoService=o,this.embedded=!1,this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.actions=[],this.columns=[{name:"reg_number",value:"regNumber",type:"text",sort:"both",className:"vw-reg-number"},{name:"att",value:"hasAttachment",type:"icon",className:"vw-icon"},{name:"applied_reg_date",value:"appliedRegDate",type:"date",className:"vw-reg-date"},{name:"doc_language",value:"docLanguage",type:"localizedName",className:"vw-name"},{name:"doc_type",value:"docType",type:"localizedName",className:"vw-name"},{name:"sender",value:"sender",type:"localizedName",className:"vw-name"},{name:"sender_applied_reg_date",value:"senderAppliedRegDate",type:"date",className:"vw-reg-date"},{name:"summary",value:"summary",type:"text",className:"vw-content"}],this.subs=[],this.title="office-memo-view",this.meta={},this.keyWord="",this.loading=!0,this.activeSort="",this.params={}}return OfficeMemoViewComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){e.loadData(Object.assign({},t,{page:e.meta.page}))}))},OfficeMemoViewComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},OfficeMemoViewComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.params=Object.assign({},e,{sort:this.activeSort||"regDate:desc"});var n="officememo";this.officeMemoService.fetchOfficeMemos(this.params).subscribe(function(e){t.loading=!1,t.list=e[n]?e[n].list:[],t.meta=e[n]?e[n].meta:{},t.actions=e.actions},function(e){return console.log(e)})},OfficeMemoViewComponent.prototype.refresh=function(){this.loadData(this.params)},OfficeMemoViewComponent.prototype.goToPage=function(e){this.loadData(e)},OfficeMemoViewComponent.prototype.onSort=function(e){this.activeSort=e,this.refresh()},OfficeMemoViewComponent.prototype.onAction=function(e){this.officeMemoService.doAction(e.action.customID).subscribe(function(e){var t=e.objects[0];alert(t.name+" : "+t.value)})},c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"selectable",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"actionsVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OfficeMemoViewComponent.prototype,"captionsVisible",void 0),OfficeMemoViewComponent=c([n.i(o.Component)({selector:"office-memo-view",template:'\n        <list-page\n            [title]="title"\n            [selectable]="true"\n            [headerVisible]="true"\n            [titleVisible]="true"\n            [actionsVisible]="true"\n            [captionsVisible]="true"\n            [activeSort]="activeSort"\n            [list]="list"\n            [meta]="meta"\n            [actions]="actions"\n            [columns]="columns"\n            (action)="onAction($event)"\n            (refresh)="refresh($event)"\n            (sort)="onSort($event)"\n            (goToPage)="goToPage($event)">\n        </list-page>\n    ',host:{"[class.view]":"true","[class.load]":"loading"}}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof a.a&&a.a)&&l||Object,"function"==typeof(p="undefined"!=typeof s.c&&s.c)&&p||Object])],OfficeMemoViewComponent);var e,t,l,p}()},364:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(114),c=n(76);n.d(t,"a",function(){return p});var u=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},l=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},p=function(){function OutgoingFormComponent(e,t,n,o,i,r){this.store=e,this.router=t,this.route=n,this.environmentActions=o,this.outgoingService=i,this.notifyService=r,this.subs=[],this.isReady=!1,this.isNew=!0,this.isEditable=!1,this.isValid=!0,this.actions={},this.errors={}}return OutgoingFormComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){
-var n=e.router.routerState.snapshot.root.queryParams.id||void 0;e.loadOutgoing(n)}))},OutgoingFormComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},OutgoingFormComponent.prototype.loadOutgoing=function(e){var t=this;this.outgoingService.fetchOutgoingById(e).subscribe(function(e){var n=e.outgoing,o=e.actions;t.outgoing=n,t.actions=o||{},t.isNew=""==t.outgoing.id,t.isEditable=t.isNew||t.outgoing.editable,t.isReady=!0,t.isValid=!0},function(e){return t.handleXhrError(e)})},OutgoingFormComponent.prototype.handleXhrError=function(e){this.notifyService.error(e.message).show().remove(2e3)},OutgoingFormComponent=u([n.i(o.Component)({selector:"outgoing-form",template:n(875)}),l("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.b&&i.b)&&t||Object,"function"==typeof(p="undefined"!=typeof i.c&&i.c)&&p||Object,"function"==typeof(f="undefined"!=typeof a.a&&a.a)&&f||Object,"function"==typeof(d="undefined"!=typeof c.b&&c.b)&&d||Object,"function"==typeof(h="undefined"!=typeof s.b&&s.b)&&h||Object])],OutgoingFormComponent);var e,t,p,f,d,h}()},365:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(13),a=n(22),s=n(76);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function OutgoingViewComponent(e,t,n,o){this.store=e,this.route=t,this.environmentActions=n,this.outgoingService=o,this.embedded=!1,this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.actions=[],this.columns=[{name:"reg_number",value:"regNumber",type:"text",sort:"both",className:"vw-reg-number"},{name:"att",value:"hasAttachment",type:"icon",className:"vw-icon"},{name:"applied_reg_date",value:"appliedRegDate",type:"date",className:"vw-reg-date"},{name:"doc_language",value:"docLanguage",type:"localizedName",className:"vw-name"},{name:"doc_type",value:"docType",type:"localizedName",className:"vw-name"},{name:"sender",value:"sender",type:"localizedName",className:"vw-name"},{name:"sender_applied_reg_date",value:"senderAppliedRegDate",type:"date",className:"vw-reg-date"},{name:"summary",value:"summary",type:"text",className:"vw-content"}],this.subs=[],this.title="outgoing-view",this.meta={},this.keyWord="",this.loading=!0,this.activeSort="",this.params={}}return OutgoingViewComponent.prototype.ngOnInit=function(){var e=this;this.subs.push(this.route.params.subscribe(function(t){e.loadData(Object.assign({},t,{page:e.meta.page}))}))},OutgoingViewComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},OutgoingViewComponent.prototype.loadData=function(e){var t=this;this.loading=!0,this.params=Object.assign({},e,{sort:this.activeSort||"regDate:desc"});var n="outgoing";this.outgoingService.fetchOutgoings(this.params).subscribe(function(e){t.loading=!1,t.list=e[n]?e[n].list:[],t.meta=e[n]?e[n].meta:{},t.actions=e.actions},function(e){return console.log(e)})},OutgoingViewComponent.prototype.refresh=function(){this.loadData(this.params)},OutgoingViewComponent.prototype.goToPage=function(e){this.loadData(e)},OutgoingViewComponent.prototype.onSort=function(e){this.activeSort=e,this.refresh()},OutgoingViewComponent.prototype.onAction=function(e){this.outgoingService.doAction(e.action.customID).subscribe(function(e){var t=e.objects[0];alert(t.name+" : "+t.value)})},c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"embedded",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"selectable",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"headerVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"titleVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"actionsVisible",void 0),c([n.i(o.Input)(),u("design:type",Boolean)],OutgoingViewComponent.prototype,"captionsVisible",void 0),OutgoingViewComponent=c([n.i(o.Component)({selector:"outgoing-view",template:'\n        <list-page\n            [title]="title"\n            [selectable]="true"\n            [headerVisible]="true"\n            [titleVisible]="true"\n            [actionsVisible]="true"\n            [captionsVisible]="true"\n            [activeSort]="activeSort"\n            [list]="list"\n            [meta]="meta"\n            [actions]="actions"\n            [columns]="columns"\n            (action)="onAction($event)"\n            (refresh)="refresh($event)"\n            (sort)="onSort($event)"\n            (goToPage)="goToPage($event)">\n        </list-page>\n    ',host:{"[class.view]":"true","[class.load]":"loading"}}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.c&&i.c)&&t||Object,"function"==typeof(l="undefined"!=typeof a.a&&a.a)&&l||Object,"function"==typeof(p="undefined"!=typeof s.b&&s.b)&&p||Object])],OutgoingViewComponent);var e,t,l,p}()},366:function(e,t,n){"use strict";var o=n(0),i=n(13),r=n(22),a=n(367);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function WorkspaceComponent(e,t,n){this.store=e,this.environmentActions=t,this.wsService=n,this.subs=[],this.isReady=!1}return WorkspaceComponent.prototype.ngOnInit=function(){},WorkspaceComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},WorkspaceComponent=s([n.i(o.Component)({selector:"WorkSpaceComponent",template:"<h1>Workspace component</h1>"}),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object,"function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object,"function"==typeof(u="undefined"!=typeof a.a&&a.a)&&u||Object])],WorkspaceComponent);var e,t,u}()},367:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function WorkspaceService(e,t){this.http=e,this.appService=t}return WorkspaceService.prototype.fetchApps=function(){var e=this;return this.http.get("/p?id=apps",{headers:n.i(a.a)()}).map(function(e){return e.json().objects}).catch(function(t){return e.appService.handleError(t)})},WorkspaceService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],WorkspaceService);var e,t}()},368:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function AppActions(){}return AppActions.prototype.fetchUserProfile=function(){return{type:AppActions.FETCH_USER_PROFILE}},AppActions.prototype.fetchUserProfileFailed=function(e){return{type:AppActions.FETCH_USER_PROFILE_FAILED,payload:e}},AppActions.prototype.fetchUserProfileFulfilled=function(e){return{type:AppActions.FETCH_USER_PROFILE_FULFILLED,payload:e}},AppActions.prototype.updateUserProfile=function(e){return{type:AppActions.UPDATE_USER_PROFILE,payload:{userProfile:e}}},AppActions.prototype.updateUserProfileFailed=function(e){return{type:AppActions.UPDATE_USER_PROFILE_FAILED,payload:e}},AppActions.prototype.updateUserProfileFulfilled=function(e){return{type:AppActions.UPDATE_USER_PROFILE_FULFILLED,payload:{userProfile:e}}},AppActions.FETCH_USER_PROFILE="FETCH_USER_PROFILE",AppActions.FETCH_USER_PROFILE_FAILED="FETCH_USER_PROFILE_FAILED",AppActions.FETCH_USER_PROFILE_FULFILLED="FETCH_USER_PROFILE_FULFILLED",AppActions.UPDATE_USER_PROFILE="UPDATE_USER_PROFILE",AppActions.UPDATE_USER_PROFILE_FAILED="UPDATE_USER_PROFILE_FAILED",AppActions.UPDATE_USER_PROFILE_FULFILLED="UPDATE_USER_PROFILE_FULFILLED",AppActions=i([n.i(o.Injectable)(),r("design:paramtypes",[])],AppActions)}()},369:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function EnvironmentActions(){}return EnvironmentActions.prototype.search=function(e){return{type:EnvironmentActions.SEARCH,payload:{keyWord:e}}},EnvironmentActions.prototype.resetSearch=function(){return{type:EnvironmentActions.RESET_SEARCH}},EnvironmentActions.prototype.toggleNav=function(){return{type:EnvironmentActions.TOGGLE_NAV}},EnvironmentActions.prototype.toggleSearch=function(){return{type:EnvironmentActions.TOGGLE_SEARCH}},EnvironmentActions.prototype.hideNav=function(){return{type:EnvironmentActions.HIDE_NAV}},EnvironmentActions.prototype.setRedirectUrl=function(e){return{type:EnvironmentActions.SET_REDIRECT_URL,payload:{redirectUrl:e}}},EnvironmentActions.prototype.setApps=function(e){return{type:EnvironmentActions.SET_APPS,payload:{apps:e}}},EnvironmentActions.prototype.setNavUrl=function(e,t){return{type:EnvironmentActions.SET_NAV_URL,payload:{rootSegment:e,navUrl:t}}},EnvironmentActions.SEARCH="SEARCH",EnvironmentActions.RESET_SEARCH="RESET_SEARCH",EnvironmentActions.TOGGLE_NAV="TOGGLE_NAV",EnvironmentActions.TOGGLE_SEARCH="TOGGLE_SEARCH",EnvironmentActions.HIDE_NAV="HIDE_NAV",EnvironmentActions.SET_REDIRECT_URL="SET_REDIRECT_URL",EnvironmentActions.SET_NAV_URL="NAV_URL",EnvironmentActions.SET_APPS="SET_APPS",EnvironmentActions=i([n.i(o.Injectable)(),r("design:paramtypes",[])],EnvironmentActions)}()},370:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(3),a=(n.n(r),n(32));n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function AuthGuard(e,t){this.appService=e,this.router=t}return AuthGuard.prototype.canActivate=function(e,t){return this.appService.isLogged?r.Observable.of(!0):r.Observable.of(!0)},AuthGuard=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof a.b&&a.b)&&e||Object,"function"==typeof(t="undefined"!=typeof i.b&&i.b)&&t||Object])],AuthGuard);var e,t}()},371:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function Error404(){}return Error404=i([n.i(o.Component)({selector:"[error404]",template:"404"}),r("design:paramtypes",[])],Error404)}()},372:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function LoginComponent(){}return LoginComponent=i([n.i(o.Component)({selector:"[login]",template:""}),r("design:paramtypes",[])],LoginComponent)}()},373:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(16),a=n(167),s=n(13),c=n(100),u=(n.n(c),n(114)),l=n(32),p=n(54);n.d(t,"a",function(){return h});var f=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},d=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},h=function(){function UserProfileComponent(e,t,n,o,i,r,a,s){var c=this;this.store=e,this.http=t,this.router=n,this.formBuilder=o,this.ng2Translate=i,this.appService=r,this.translateService=a,this.notifyService=s,this.user=null,this.changePassword=!1,this.language="RUS",this.pageSizes=[10,20,30,40,50],this.errors={},this.sub=this.store.select("authed").subscribe(function(e){c.user=e.userProfile,c.pageSize=e.pageSize,c.language=e.language,c.languages=e.languages,c.user&&(c.form=o.group({login:[c.user.login],pwd:[],pwd_new:[],pwd_confirm:[],email:[c.user.email]}))})}return UserProfileComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},UserProfileComponent.prototype.toggleChangePassword=function(){this.changePassword=!this.changePassword},UserProfileComponent.prototype.updateUserProfile=function(){var e=this,t=this.notifyService.process(this.ng2Translate.instant("wait_while_document_save")).show();this.appService.updateUserProfile(this.form.value).subscribe(function(n){e.errors={},t.remove(),e.router.navigate(["/tasks"])},function(n){if(e.errors={},t.remove(),n.validation)for(var o=0,i=n.validation.errors;o<i.length;o++){var r=i[o];e.errors[r.field]=r.message}})},UserProfileComponent.prototype.changeLang=function(e){var t=this,o=e.target.value,i="/Staff/p?id=change-session-val-action&lang="+o;return this.http.post(i,{},{headers:n.i(p.a)()}).map(function(e){return e.json()}).subscribe(function(e){t.ng2Translate.reloadLang(o).subscribe(function(e){t.ng2Translate.use(o)}),n.i(p.e)("lang",o,365)})},UserProfileComponent.prototype.close=function(){window.history.back()},UserProfileComponent=f([n.i(o.Component)({selector:"[user-profile]",template:n(883),providers:[a.c]}),d("design:paramtypes",["function"==typeof(e="undefined"!=typeof s.a&&s.a)&&e||Object,"function"==typeof(t="undefined"!=typeof i.Http&&i.Http)&&t||Object,"function"==typeof(h="undefined"!=typeof r.b&&r.b)&&h||Object,"function"==typeof(m="undefined"!=typeof a.c&&a.c)&&m||Object,"function"==typeof(g="undefined"!=typeof c.TranslateService&&c.TranslateService)&&g||Object,"function"==typeof(v="undefined"!=typeof l.b&&l.b)&&v||Object,"function"==typeof(y="undefined"!=typeof l.c&&l.c)&&y||Object,"function"==typeof(b="undefined"!=typeof u.b&&u.b)&&b||Object])],UserProfileComponent);var e,t,h,m,g,v,y,b}()},374:function(e,t,n){"use strict";n.d(t,"a",function(){return o});var o=function(){function User(){this.id="",this.name="@anonymous"}return User}()},375:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function DropdownToggleComponent(){this.toggle=new o.EventEmitter}return DropdownToggleComponent.prototype.onClick=function(e){e.preventDefault(),this.toggle.emit(e)},i([n.i(o.HostBinding)("class.dropdown-toggle"),r("design:type",Object)],DropdownToggleComponent.prototype,"true",void 0),i([n.i(o.HostListener)("click",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],DropdownToggleComponent.prototype,"onClick",null),DropdownToggleComponent=i([n.i(o.Component)({selector:"[dropdown-toggle]",template:"<ng-content></ng-content>"}),r("design:paramtypes",[])],DropdownToggleComponent)}()},376:function(e,t,n){"use strict";var o=n(0),i=n(377);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function NotificationService(){this.emitter=new o.EventEmitter}return NotificationService.prototype.getEmitter=function(){return this.emitter},NotificationService.prototype.info=function(e){return this.add({type:"info",message:e})},NotificationService.prototype.success=function(e){return this.add({type:"success",message:e})},NotificationService.prototype.error=function(e){return this.add({type:"error",message:e})},NotificationService.prototype.process=function(e){return this.add({type:"process",message:e})},NotificationService.prototype.add=function(e){var t=new i.a(e.type,e.message);return this.emitter.emit({command:"add",notify:t}),t},NotificationService.prototype.removeAll=function(){this.emitter.emit({command:"cleanAll"})},NotificationService=r([n.i(o.Injectable)(),a("design:paramtypes",[])],NotificationService)}()},377:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return i});var i=function(){function Notification(e,t){this.emitter=new o.EventEmitter,this.display=!1,this.type=e,this.message=t}return Notification.prototype.getEmitter=function(){return this.emitter},Notification.prototype.show=function(){return this.display=!0,this},Notification.prototype.hide=function(){return this.display=!1,this},Notification.prototype.set=function(e){for(var t in e)"message"===t?this.message=e[t]:"type"===t&&(this.type=e[t]);return this},Notification.prototype.dismiss=function(){"click"===this.delay&&this.emitter.emit({dismiss:!0,notify:this,promise:this.promise})},Notification.prototype.remove=function(e){var t=this;return void 0===e&&(e=0),this.delay=e,"click"===e||(e>0?setTimeout(function(){t.emitter.emit({dismiss:!0,notify:t,promise:t.promise})},e):this.emitter.emit({dismiss:!0,notify:this,promise:this.promise})),this.promise},Notification}()},378:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function Tab(){this.active=!1,this.pinned=!1,this.select=new o.EventEmitter}return i([n.i(o.Input)("tabTitle"),r("design:type",String)],Tab.prototype,"title",void 0),i([n.i(o.Input)(),r("design:type",String)],Tab.prototype,"icon",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],Tab.prototype,"active",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],Tab.prototype,"pinned",void 0),i([n.i(o.Output)(),r("design:type",Object)],Tab.prototype,"select",void 0),Tab=i([n.i(o.Component)({selector:"tab",template:'\n      <div [hidden]="!active && !pinned">\n        <ng-content></ng-content>\n      </div>\n    '}),r("design:paramtypes",[])],Tab)}()},512:function(e,t,n){"use strict";var o=n(897);t.from=o.FromObservable.create},515:function(e,t,n){"use strict";function concatAll(){return this.lift(new o.MergeAllOperator(1))}var o=n(164);t.concatAll=concatAll},517:function(e,t,n){"use strict";function every(e,t){return this.lift(new r(e,t,this))}var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(14);t.every=every;var r=function(){function EveryOperator(e,t,n){this.predicate=e,this.thisArg=t,this.source=n}return EveryOperator.prototype.call=function(e,t){return t._subscribe(new a(e,this.predicate,this.thisArg,this.source))},EveryOperator}(),a=function(e){function EverySubscriber(t,n,o,i){e.call(this,t),this.predicate=n,this.thisArg=o,this.source=i,this.index=0,this.thisArg=o||this}return o(EverySubscriber,e),EverySubscriber.prototype.notifyComplete=function(e){this.destination.next(e),this.destination.complete()},EverySubscriber.prototype._next=function(e){var t=!1;try{t=this.predicate.call(this.thisArg,e,this.index++,this.source)}catch(e){return void this.destination.error(e)}t||this.notifyComplete(!1)},EverySubscriber.prototype._complete=function(){this.notifyComplete(!0)},EverySubscriber}(i.Subscriber)},52:function(e,t,n){"use strict";n.d(t,"a",function(){return i}),n.d(t,"b",function(){return r});var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i="primary",r=function(e){function NavigationCancelingError(t){e.call(this,t),this.message=t,this.stack=new Error(t).stack}return o(NavigationCancelingError,e),NavigationCancelingError.prototype.toString=function(){return this.message},NavigationCancelingError}(Error)},527:function(e,t,n){"use strict";var o=n(120),i=n(0),r=n(100),a=(n.n(r),n(113)),s=n(677),c=n(682),u=n(681),l=n(680),p=n(373),f=n(372),d=n(371),h=n(685),m=n(675),g=n(725),v=n(32),y=n(22),b=n(370);n.d(t,"a",function(){return C});var R=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},O=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},C=function(){function AppModule(){}return AppModule=R([n.i(i.NgModule)({bootstrap:[s.a],declarations:[s.a,c.a,u.a,l.a,p.a,f.a,d.a,h.a,h.b,h.c,h.d,h.e],imports:[o.b,r.TranslateModule.forRoot({provide:r.TranslateLoader,useFactory:function(e){return new w(e)},deps:[v.c]}),m.a,a.a],providers:[g.a,v.b,v.c,y.b,y.a,b.a]}),O("design:paramtypes",[])],AppModule)}(),w=function(){function CustomTranslateLoader(e){this.translateService=e}return CustomTranslateLoader.prototype.getTranslation=function(e){return this.translateService.fetchTranslations()},CustomTranslateLoader}();n.i(i.enableProdMode)()},53:function(e,t,n){"use strict";function shallowEqualArrays(e,t){if(e.length!==t.length)return!1;for(var n=0;n<e.length;++n)if(!shallowEqual(e[n],t[n]))return!1;return!0}function shallowEqual(e,t){var n=Object.keys(e),o=Object.keys(t);if(n.length!=o.length)return!1;for(var i,r=0;r<n.length;r++)if(i=n[r],e[i]!==t[i])return!1;return!0}function flatten(e){for(var t=[],n=0;n<e.length;++n)for(var o=0;o<e[n].length;++o)t.push(e[n][o]);return t}function last(e){return e.length>0?e[e.length-1]:null}function merge(e,t){var n={};for(var o in e)e.hasOwnProperty(o)&&(n[o]=e[o]);for(var o in t)t.hasOwnProperty(o)&&(n[o]=t[o]);return n}function forEach(e,t){for(var n in e)e.hasOwnProperty(n)&&t(e[n],n)}function waitForMap(e,t){var o=[],i={};if(forEach(e,function(e,n){n===p.a&&o.push(u.map.call(t(n,e),function(e){return i[n]=e,e}))}),forEach(e,function(e,n){n!==p.a&&o.push(u.map.call(t(n,e),function(e){return i[n]=e,e}))}),o.length>0){var s=a.concatAll.call(r.of.apply(void 0,o)),l=c.last.call(s);return u.map.call(l,function(){return i})}return n.i(r.of)(i)}function andObservables(e){var t=l.mergeAll.call(e);return s.every.call(t,function(e){return e===!0})}function wrapIntoObservable(e){return e instanceof o.Observable?e:e instanceof Promise?n.i(i.fromPromise)(e):n.i(r.of)(e)}var o=n(3),i=(n.n(o),n(249)),r=(n.n(i),n(98)),a=(n.n(r),n(515)),s=(n.n(a),n(517)),c=(n.n(s),n(908)),u=(n.n(c),n(83)),l=(n.n(u),n(164)),p=(n.n(l),n(52));t.h=shallowEqualArrays,t.d=shallowEqual,t.a=flatten,t.i=last,t.g=merge,t.c=forEach,t.e=waitForMap,t.f=andObservables,t.b=wrapIntoObservable},54:function(e,t,n){"use strict";function xhrHeaders(){return new o.Headers({"Content-Type":"application/x-www-form-urlencoded; charset=utf-8",Accept:"application/json"})}function createURLSearchParams(e){var t=new o.URLSearchParams;for(var n in e)if(e[n]instanceof Array)for(var i in e[n])t.append(n,e[n][i]);else"undefined"!=typeof e[n]&&t.set(n,e[n]);return t}function serializeObj(e){var t=[];for(var n in e)t.push(encodeURIComponent(n)+"="+encodeURIComponent(e[n]));return t.join("&")}function parseResponseObjects(e){for(var t={},n=0,o=e;n<o.length;n++){var i=o[n];if(i.kind||i.entityKind)t[i.kind||i.entityKind]=i;else if(i.list&&i.meta&&i.type)t[i.type]=i;else if(i.name&&i.value)t[i.name]=i.value;else if(i.actions)t.actions=i.actions;else for(var r in i)t[r]=i[r]}return t}function transformPostResponse(e){var t=e.json();return Object.assign(t,{ok:"DOCUMENT_SAVED"===t.type,message:t.captions?t.captions.type:t.message})}function createCookie(e,t,n){var o;if(n){var i=new Date;i.setTime(i.getTime()+24*n*60*60*1e3),o="; expires="+i.toUTCString()}else o="";document.cookie=encodeURIComponent(e)+"="+encodeURIComponent(t)+o+"; path=/"}var o=n(23);t.a=xhrHeaders,t.f=createURLSearchParams,t.c=serializeObj,t.b=parseResponseObjects,t.d=transformPostResponse,t.e=createCookie},644:function(e,t,n){"use strict";function noMatch(e){return new o.Observable(function(t){return t.error(new g(e))})}function absoluteRedirect(e){return new o.Observable(function(t){return t.error(new v(e))})}function canLoadFails(e){return new o.Observable(function(t){return t.error(new d.b("Cannot load children because the guard of the route \"path: '"+e.path+"'\" returned false"))})}function applyRedirects(e,t,n,o){return new y(e,t,n,o).apply()}function runGuards(e,t){var o=t.canLoad;if(!o||0===o.length)return n.i(r.of)(!0);var a=u.map.call(n.i(i.from)(o),function(o){var i=e.get(o);return i.canLoad?n.i(m.b)(i.canLoad(t)):n.i(m.b)(i(t))});return n.i(m.f)(a)}function match(e,t,n){var o={matched:!1,consumedSegments:[],lastChild:0,positionalParamSegments:{}};if(""===t.path)return"full"===t.pathMatch&&(e.hasChildren()||n.length>0)?{matched:!1,consumedSegments:[],lastChild:0,positionalParamSegments:{}}:{matched:!0,consumedSegments:[],lastChild:0,positionalParamSegments:{}};for(var i=t.path,r=i.split("/"),a={},s=[],c=0,u=0;u<r.length;++u){if(c>=n.length)return o;var l=n[c],p=r[u],f=p.startsWith(":");if(!f&&p!==l.path)return o;f&&(a[p.substring(1)]=l),s.push(l),c++}return"full"===t.pathMatch&&(e.hasChildren()||c<n.length)?{matched:!1,consumedSegments:[],lastChild:0,positionalParamSegments:{}}:{matched:!0,consumedSegments:s,lastChild:c,positionalParamSegments:a}}function applyRedirectCommands(e,t,n){var o=t.startsWith("/")?t.substring(1):t;return""===o?[]:createSegments(t,o.split("/"),e,n)}function createSegments(e,t,n,o){return t.map(function(t){return t.startsWith(":")?findPosParam(t,o,e):findOrCreateSegment(t,n)})}function findPosParam(e,t,n){var o=e.substring(1),i=t[o];if(!i)throw new Error("Cannot redirect to '"+n+"'. Cannot find '"+e+"'.");return i}function findOrCreateSegment(e,t){for(var n=0,o=0,i=t;o<i.length;o++){var r=i[o];if(r.path===e)return t.splice(n),r;n++}return new h.c(e,{})}function split(e,t,n,o){if(n.length>0&&containsEmptyPathRedirectsWithNamedOutlets(e,n,o)){var i=new h.a(t,createChildrenForEmptySegments(o,new h.a(n,e.children)));return{segmentGroup:mergeTrivialChildren(i),slicedSegments:[]}}if(0===n.length&&containsEmptyPathRedirects(e,n,o)){var i=new h.a(e.segments,addEmptySegmentsToChildrenIfNeeded(e,n,o,e.children));return{segmentGroup:mergeTrivialChildren(i),slicedSegments:n}}return{segmentGroup:e,slicedSegments:n}}function mergeTrivialChildren(e){if(1===e.numberOfChildren&&e.children[d.a]){var t=e.children[d.a];return new h.a(e.segments.concat(t.segments),t.children)}return e}function addEmptySegmentsToChildrenIfNeeded(e,t,o,i){for(var r={},a=0,s=o;a<s.length;a++){var c=s[a];emptyPathRedirect(e,t,c)&&!i[getOutlet(c)]&&(r[getOutlet(c)]=new h.a([],{}))}return n.i(m.g)(i,r)}function createChildrenForEmptySegments(e,t){var n={};n[d.a]=t;for(var o=0,i=e;o<i.length;o++){var r=i[o];""===r.path&&getOutlet(r)!==d.a&&(n[getOutlet(r)]=new h.a([],{}))}return n}function containsEmptyPathRedirectsWithNamedOutlets(e,t,n){return n.filter(function(n){return emptyPathRedirect(e,t,n)&&getOutlet(n)!==d.a}).length>0}function containsEmptyPathRedirects(e,t,n){return n.filter(function(n){return emptyPathRedirect(e,t,n)}).length>0}function emptyPathRedirect(e,t,n){return(!(e.hasChildren()||t.length>0)||"full"!==n.pathMatch)&&(""===n.path&&void 0!==n.redirectTo)}function getOutlet(e){return e.outlet?e.outlet:d.a}var o=n(3),i=(n.n(o),n(512)),r=(n.n(i),n(98)),a=(n.n(r),n(513)),s=(n.n(a),n(515)),c=(n.n(s),n(907)),u=(n.n(c),n(83)),l=(n.n(u),n(165)),p=(n.n(l),n(253)),f=(n.n(p),n(152)),d=n(52),h=n(75),m=n(53);t.a=applyRedirects;var g=function(){function NoMatch(e){void 0===e&&(e=null),this.segmentGroup=e}return NoMatch}(),v=function(){function AbsoluteRedirect(e){this.segments=e}return AbsoluteRedirect}(),y=function(){function ApplyRedirects(e,t,n,o){this.injector=e,this.configLoader=t,this.urlTree=n,this.config=o,this.allowRedirects=!0}return ApplyRedirects.prototype.apply=function(){var e=this,t=this.expandSegmentGroup(this.injector,this.config,this.urlTree.root,d.a),n=u.map.call(t,function(t){return e.createUrlTree(t)});return a._catch.call(n,function(t){
-if(t instanceof v){e.allowRedirects=!1;var n=new h.a([],(o={},o[d.a]=new h.a(t.segments,{}),o));return e.match(n)}throw t instanceof g?e.noMatchError(t):t;var o})},ApplyRedirects.prototype.match=function(e){var t=this,n=this.expandSegmentGroup(this.injector,this.config,e,d.a),o=u.map.call(n,function(e){return t.createUrlTree(e)});return a._catch.call(o,function(e){throw e instanceof g?t.noMatchError(e):e})},ApplyRedirects.prototype.noMatchError=function(e){return new Error("Cannot match any routes: '"+e.segmentGroup+"'")},ApplyRedirects.prototype.createUrlTree=function(e){var t=e.segments.length>0?new h.a([],(n={},n[d.a]=e,n)):e;return new h.b(t,this.urlTree.queryParams,this.urlTree.fragment);var n},ApplyRedirects.prototype.expandSegmentGroup=function(e,t,n,o){return 0===n.segments.length&&n.hasChildren()?u.map.call(this.expandChildren(e,t,n),function(e){return new h.a([],e)}):this.expandSegment(e,n,t,n.segments,o,!0)},ApplyRedirects.prototype.expandChildren=function(e,t,o){var i=this;return n.i(m.e)(o.children,function(n,o){return i.expandSegmentGroup(e,t,o,n)})},ApplyRedirects.prototype.expandSegment=function(e,t,o,i,l,f){var d=this,h=r.of.apply(void 0,o),m=u.map.call(h,function(s){var c=d.expandSegmentAgainstRoute(e,t,o,s,i,l,f);return a._catch.call(c,function(e){if(e instanceof g)return n.i(r.of)(null);throw e})}),v=s.concatAll.call(m),y=c.first.call(v,function(e){return!!e});return a._catch.call(y,function(e,n){throw e instanceof p.EmptyError?new g(t):e})},ApplyRedirects.prototype.expandSegmentAgainstRoute=function(e,t,n,o,i,r,a){return getOutlet(o)!==r?noMatch(t):void 0===o.redirectTo||a&&this.allowRedirects?void 0===o.redirectTo?this.matchSegmentAgainstRoute(e,t,o,i):this.expandSegmentAgainstRouteUsingRedirect(e,t,n,o,i,r):noMatch(t)},ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect=function(e,t,n,o,i,r){return"**"===o.path?this.expandWildCardWithParamsAgainstRouteUsingRedirect(o):this.expandRegularSegmentAgainstRouteUsingRedirect(e,t,n,o,i,r)},ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect=function(e){var t=applyRedirectCommands([],e.redirectTo,{});return e.redirectTo.startsWith("/")?absoluteRedirect(t):n.i(r.of)(new h.a(t,{}))},ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect=function(e,t,n,o,i,r){var a=match(t,o,i),s=a.matched,c=a.consumedSegments,u=a.lastChild,l=a.positionalParamSegments;if(!s)return noMatch(t);var p=applyRedirectCommands(c,o.redirectTo,l);return o.redirectTo.startsWith("/")?absoluteRedirect(p):this.expandSegment(e,t,n,p.concat(i.slice(u)),r,!1)},ApplyRedirects.prototype.matchSegmentAgainstRoute=function(e,t,o,i){var a=this;if("**"===o.path)return n.i(r.of)(new h.a(i,{}));var s=match(t,o,i),c=s.matched,p=s.consumedSegments,f=s.lastChild;if(!c)return noMatch(t);var m=i.slice(f),g=this.getChildConfig(e,o);return l.mergeMap.call(g,function(e){var o=e.injector,i=e.routes,s=split(t,p,m,i),c=s.segmentGroup,l=s.slicedSegments;if(0===l.length&&c.hasChildren()){var f=a.expandChildren(o,i,c);return u.map.call(f,function(e){return new h.a(p,e)})}if(0===i.length&&0===l.length)return n.i(r.of)(new h.a(p,{}));var f=a.expandSegment(o,c,i,l,d.a,!0);return u.map.call(f,function(e){return new h.a(p.concat(e.segments),e.children)})})},ApplyRedirects.prototype.getChildConfig=function(e,t){var o=this;return t.children?n.i(r.of)(new f.a(t.children,e,null)):t.loadChildren?l.mergeMap.call(runGuards(e,t),function(i){return i?t._loadedConfig?n.i(r.of)(t._loadedConfig):u.map.call(o.configLoader.load(e,t.loadChildren),function(e){return t._loadedConfig=e,e}):canLoadFails(t)}):n.i(r.of)(new f.a([],e,null))},ApplyRedirects}()},645:function(e,t,n){"use strict";function validateConfig(e){e.forEach(validateNode)}function validateNode(e){if(Array.isArray(e))throw new Error("Invalid route configuration: Array cannot be specified");if(e.redirectTo&&e.children)throw new Error("Invalid configuration of route '"+e.path+"': redirectTo and children cannot be used together");if(e.redirectTo&&e.loadChildren)throw new Error("Invalid configuration of route '"+e.path+"': redirectTo and loadChildren cannot be used together");if(e.children&&e.loadChildren)throw new Error("Invalid configuration of route '"+e.path+"': children and loadChildren cannot be used together");if(e.redirectTo&&e.component)throw new Error("Invalid configuration of route '"+e.path+"': redirectTo and component cannot be used together");if(void 0===e.redirectTo&&!e.component&&!e.children&&!e.loadChildren)throw new Error("Invalid configuration of route '"+e.path+"': one of the following must be provided (component or redirectTo or children or loadChildren)");if(void 0===e.path)throw new Error("Invalid route configuration: routes must have path specified");if(e.path.startsWith("/"))throw new Error("Invalid route configuration of route '"+e.path+"': path cannot start with a slash");if(""===e.path&&void 0!==e.redirectTo&&void 0===e.pathMatch){var t="The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";throw new Error("Invalid route configuration of route '{path: \""+e.path+'", redirectTo: "'+e.redirectTo+"\"}': please provide 'pathMatch'. "+t)}if(void 0!==e.pathMatch&&"full"!==e.pathMatch&&"prefix"!==e.pathMatch)throw new Error("Invalid configuration of route '"+e.path+"': pathMatch can only be set to 'prefix' or 'full'")}t.a=validateConfig},646:function(e,t,n){"use strict";function createRouterState(e,t){var n=createNode(e._root,t?t._root:void 0);return new i.a(n,e)}function createNode(e,t){if(t&&equalRouteSnapshots(t.value.snapshot,e.value)){var n=t.value;n._futureSnapshot=e.value;var o=createOrReuseChildren(e,t);return new r.b(n,o)}var n=createActivatedRoute(e.value),o=e.children.map(function(e){return createNode(e)});return new r.b(n,o)}function createOrReuseChildren(e,t){return e.children.map(function(e){for(var n=0,o=t.children;n<o.length;n++){var i=o[n];if(equalRouteSnapshots(i.value.snapshot,e.value))return createNode(e,i)}return createNode(e)})}function createActivatedRoute(e){return new i.b(new o.BehaviorSubject(e.url),new o.BehaviorSubject(e.params),new o.BehaviorSubject(e.queryParams),new o.BehaviorSubject(e.fragment),new o.BehaviorSubject(e.data),e.outlet,e.component,e)}function equalRouteSnapshots(e,t){return e._routeConfig===t._routeConfig}var o=n(118),i=(n.n(o),n(91)),r=n(221);t.a=createRouterState},647:function(e,t,n){"use strict";function createUrlTree(e,t,n,o,r){if(0===n.length)return tree(t.root,t.root,t,o,r);var a=normalizeCommands(n);if(validateCommands(a),navigateToRoot(a))return tree(t.root,new i.a([],{}),t,o,r);var s=findStartingPosition(a,t,e),c=s.processChildren?updateSegmentGroupChildren(s.segmentGroup,s.index,a.commands):updateSegmentGroup(s.segmentGroup,s.index,a.commands);return tree(s.segmentGroup,c,t,o,r)}function validateCommands(e){if(e.isAbsolute&&e.commands.length>0&&isMatrixParams(e.commands[0]))throw new Error("Root segment cannot have matrix parameters");var t=e.commands.filter(function(e){return"object"==typeof e&&void 0!==e.outlets});if(t.length>0&&t[0]!==e.commands[e.commands.length-1])throw new Error("{outlets:{}} has to be the last command")}function isMatrixParams(e){return"object"==typeof e&&void 0===e.outlets&&void 0===e.segmentPath}function tree(e,t,n,o,r){return n.root===e?new i.b(t,stringify(o),r):new i.b(replaceSegment(n.root,e,t),stringify(o),r)}function replaceSegment(e,t,o){var a={};return n.i(r.c)(e.children,function(e,n){e===t?a[n]=o:a[n]=replaceSegment(e,t,o)}),new i.a(e.segments,a)}function navigateToRoot(e){return e.isAbsolute&&1===e.commands.length&&"/"==e.commands[0]}function normalizeCommands(e){if("string"==typeof e[0]&&1===e.length&&"/"==e[0])return new a(!0,0,e);for(var t=0,o=!1,i=[],s=function(a){var s=e[a];if("object"==typeof s&&void 0!==s.outlets){var c={};return n.i(r.c)(s.outlets,function(e,t){"string"==typeof e?c[t]=e.split("/"):c[t]=e}),i.push({outlets:c}),"continue"}if("object"==typeof s&&void 0!==s.segmentPath)return i.push(s.segmentPath),"continue";if("string"!=typeof s)return i.push(s),"continue";if(0===a)for(var u=s.split("/"),l=0;l<u.length;++l){var p=u[l];0==l&&"."==p||(0==l&&""==p?o=!0:".."==p?t++:""!=p&&i.push(p))}else i.push(s)},c=0;c<e.length;++c)s(c);return new a(o,t,i)}function findStartingPosition(e,t,n){if(e.isAbsolute)return new s(t.root,!0,0);if(n.snapshot._lastPathIndex===-1)return new s(n.snapshot._urlSegment,!0,0);var o=isMatrixParams(e.commands[0])?0:1,i=n.snapshot._lastPathIndex+o;return createPositionApplyingDoubleDots(n.snapshot._urlSegment,i,e.numberOfDoubleDots)}function createPositionApplyingDoubleDots(e,t,n){for(var o=e,i=t,r=n;r>i;){if(r-=i,o=o.parent,!o)throw new Error("Invalid number of '../'");i=o.segments.length}return new s(o,!1,i-r)}function getPath(e){return""+e}function getOutlets(e){return"object"!=typeof e[0]?(t={},t[o.a]=e,t):void 0===e[0].outlets?(n={},n[o.a]=e,n):e[0].outlets;var t,n}function updateSegmentGroup(e,t,n){if(e||(e=new i.a([],{})),0===e.segments.length&&e.hasChildren())return updateSegmentGroupChildren(e,t,n);var o=prefixedWith(e,t,n),r=n.slice(o.lastIndex);return o.match&&0===r.length?new i.a(e.segments,{}):o.match&&!e.hasChildren()?createNewSegmentGroup(e,t,n):o.match?updateSegmentGroupChildren(e,0,r):createNewSegmentGroup(e,t,n)}function updateSegmentGroupChildren(e,t,o){if(0===o.length)return new i.a(e.segments,{});var a=getOutlets(o),s={};return n.i(r.c)(a,function(n,o){null!==n&&(s[o]=updateSegmentGroup(e.children[o],t,n))}),n.i(r.c)(e.children,function(e,t){void 0===a[t]&&(s[t]=e)}),new i.a(e.segments,s)}function prefixedWith(e,t,n){for(var o=0,i=t,r={match:!1,lastIndex:0};i<e.segments.length;){if(o>=n.length)return r;var a=e.segments[i],s=getPath(n[o]),c=o<n.length-1?n[o+1]:null;if(s&&c&&"object"==typeof c&&void 0===c.outlets){if(!compare(s,c,a))return r;o+=2}else{if(!compare(s,{},a))return r;o++}i++}return{match:!0,lastIndex:o}}function createNewSegmentGroup(e,t,n){for(var o=e.segments.slice(0,t),r=0;r<n.length;){if("object"==typeof n[r]&&void 0!==n[r].outlets){var a=createNewSegmentChldren(n[r].outlets);return new i.a(o,a)}if(0===r&&isMatrixParams(n[0])){var s=e.segments[t];o.push(new i.c(s.path,n[0])),r++}else{var c=getPath(n[r]),u=r<n.length-1?n[r+1]:null;c&&u&&isMatrixParams(u)?(o.push(new i.c(c,stringify(u))),r+=2):(o.push(new i.c(c,{})),r++)}}return new i.a(o,{})}function createNewSegmentChldren(e){var t={};return n.i(r.c)(e,function(e,n){null!==e&&(t[n]=createNewSegmentGroup(new i.a([],{}),0,e))}),t}function stringify(e){var t={};return n.i(r.c)(e,function(e,n){return t[n]=""+e}),t}function compare(e,t,o){return e==o.path&&n.i(r.d)(t,o.parameters)}var o=n(52),i=n(75),r=n(53);t.a=createUrlTree;var a=function(){function NormalizedNavigationCommands(e,t,n){this.isAbsolute=e,this.numberOfDoubleDots=t,this.commands=n}return NormalizedNavigationCommands}(),s=function(){function Position(e,t,n){this.segmentGroup=e,this.processChildren=t,this.index=n}return Position}()},648:function(e,t,n){"use strict";var o=(n(220),n(344),n(345),n(151)),i=n(346),r=(n(153),n(91));n(52),n(75),n(649);n.d(t,"b",function(){return o.a}),n.d(t,"a",function(){return i.b}),n.d(t,"c",function(){return r.b})},649:function(e,t,n){"use strict";var o=n(152),i=n(346),r=n(53);({ROUTER_PROVIDERS:i.a,ROUTES:o.c,flatten:r.a})},650:function(e,t,n){"use strict";function recognize(e,t,n,o){return new f(e,t,n,o).recognize()}function sortActivatedRouteSnapshots(e){e.sort(function(e,t){return e.value.outlet===a.a?-1:t.value.outlet===a.a?1:e.value.outlet.localeCompare(t.value.outlet)})}function getChildConfig(e){return e.children?e.children:e.loadChildren?e._loadedConfig.routes:[]}function match(e,t,o,i){if(""===t.path){if("full"===t.pathMatch&&(e.hasChildren()||o.length>0))throw new l;var r=i?i.params:{};return{consumedSegments:[],lastChild:0,parameters:r}}for(var a=t.path,s=a.split("/"),u={},p=[],f=0,d=0;d<s.length;++d){if(f>=o.length)throw new l;var h=o[f],m=s[d],g=m.startsWith(":");if(!g&&m!==h.path)throw new l;g&&(u[m.substring(1)]=h.path),p.push(h),f++}if("full"===t.pathMatch&&(e.hasChildren()||f<o.length))throw new l;var v=n.i(c.g)(u,p[p.length-1].parameters);return{consumedSegments:p,lastChild:f,parameters:v}}function checkOutletNameUniqueness(e){var t={};e.forEach(function(e){var n=t[e.value.outlet];if(n){var o=n.url.map(function(e){return e.toString()}).join("/"),i=e.value.url.map(function(e){return e.toString()}).join("/");throw new Error("Two segments cannot have the same outlet name: '"+o+"' and '"+i+"'.")}t[e.value.outlet]=e.value})}function getSourceSegmentGroup(e){for(var t=e;t._sourceSegment;)t=t._sourceSegment;return t}function getPathIndexShift(e){for(var t=e,n=t._segmentIndexShift?t._segmentIndexShift:0;t._sourceSegment;)t=t._sourceSegment,n+=t._segmentIndexShift?t._segmentIndexShift:0;return n-1}function split(e,t,n,o){if(n.length>0&&containsEmptyPathMatchesWithNamedOutlets(e,n,o)){var i=new s.a(t,createChildrenForEmptyPaths(e,t,o,new s.a(n,e.children)));return i._sourceSegment=e,i._segmentIndexShift=t.length,{segmentGroup:i,slicedSegments:[]}}if(0===n.length&&containsEmptyPathMatches(e,n,o)){var i=new s.a(e.segments,addEmptyPathsToChildrenIfNeeded(e,n,o,e.children));return i._sourceSegment=e,i._segmentIndexShift=t.length,{segmentGroup:i,slicedSegments:n}}var i=new s.a(e.segments,e.children);return i._sourceSegment=e,i._segmentIndexShift=t.length,{segmentGroup:i,slicedSegments:n}}function addEmptyPathsToChildrenIfNeeded(e,t,o,i){for(var r={},a=0,u=o;a<u.length;a++){var l=u[a];if(emptyPathMatch(e,t,l)&&!i[getOutlet(l)]){var p=new s.a([],{});p._sourceSegment=e,p._segmentIndexShift=e.segments.length,r[getOutlet(l)]=p}}return n.i(c.g)(i,r)}function createChildrenForEmptyPaths(e,t,n,o){var i={};i[a.a]=o,o._sourceSegment=e,o._segmentIndexShift=t.length;for(var r=0,c=n;r<c.length;r++){var u=c[r];if(""===u.path&&getOutlet(u)!==a.a){var l=new s.a([],{});l._sourceSegment=e,l._segmentIndexShift=t.length,i[getOutlet(u)]=l}}return i}function containsEmptyPathMatchesWithNamedOutlets(e,t,n){return n.filter(function(n){return emptyPathMatch(e,t,n)&&getOutlet(n)!==a.a}).length>0}function containsEmptyPathMatches(e,t,n){return n.filter(function(n){return emptyPathMatch(e,t,n)}).length>0}function emptyPathMatch(e,t,n){return(!(e.hasChildren()||t.length>0)||"full"!==n.pathMatch)&&(""===n.path&&void 0===n.redirectTo)}function getOutlet(e){return e.outlet?e.outlet:a.a}function getData(e){return e.data?e.data:{}}function getResolve(e){return e.resolve?e.resolve:{}}var o=n(3),i=(n.n(o),n(98)),r=(n.n(i),n(91)),a=n(52),s=n(75),c=n(53),u=n(221);t.a=recognize;var l=function(){function NoMatch(){}return NoMatch}(),p=function(){function InheritedFromParent(e,t,n,o,i){this.parent=e,this.snapshot=t,this.params=n,this.data=o,this.resolve=i}return Object.defineProperty(InheritedFromParent.prototype,"allParams",{get:function(){return this.parent?n.i(c.g)(this.parent.allParams,this.params):this.params},enumerable:!0,configurable:!0}),Object.defineProperty(InheritedFromParent.prototype,"allData",{get:function(){return this.parent?n.i(c.g)(this.parent.allData,this.data):this.data},enumerable:!0,configurable:!0}),InheritedFromParent.empty=function(e){return new InheritedFromParent(null,e,{},{},new r.c(null,{}))},InheritedFromParent}(),f=function(){function Recognizer(e,t,n,o){this.rootComponentType=e,this.config=t,this.urlTree=n,this.url=o}return Recognizer.prototype.recognize=function(){try{var e=split(this.urlTree.root,[],[],this.config).segmentGroup,t=this.processSegmentGroup(this.config,e,p.empty(null),a.a),s=new r.d([],Object.freeze({}),Object.freeze(this.urlTree.queryParams),this.urlTree.fragment,{},a.a,this.rootComponentType,null,this.urlTree.root,-1,r.c.empty),c=new u.b(s,t);return n.i(i.of)(new r.e(this.url,c))}catch(e){return new o.Observable(function(t){return t.error(e)})}},Recognizer.prototype.processSegmentGroup=function(e,t,n,o){return 0===t.segments.length&&t.hasChildren()?this.processChildren(e,t,n):this.processSegment(e,t,0,t.segments,n,o)},Recognizer.prototype.processChildren=function(e,t,o){var i=this,r=n.i(s.d)(t,function(t,n){return i.processSegmentGroup(e,t,o,n)});return checkOutletNameUniqueness(r),sortActivatedRouteSnapshots(r),r},Recognizer.prototype.processSegment=function(e,t,n,o,i,r){for(var a=0,s=e;a<s.length;a++){var c=s[a];try{return this.processSegmentAgainstRoute(c,t,n,o,i,r)}catch(e){if(!(e instanceof l))throw e}}throw new l},Recognizer.prototype.processSegmentAgainstRoute=function(e,t,o,i,s,f){if(e.redirectTo)throw new l;if((e.outlet?e.outlet:a.a)!==f)throw new l;var d=new r.c(s.resolve,getResolve(e));if("**"===e.path){var h=i.length>0?n.i(c.i)(i).parameters:{},m=new r.d(i,Object.freeze(n.i(c.g)(s.allParams,h)),Object.freeze(this.urlTree.queryParams),this.urlTree.fragment,n.i(c.g)(s.allData,getData(e)),f,e.component,e,getSourceSegmentGroup(t),getPathIndexShift(t)+i.length,d);return[new u.b(m,[])]}var g=match(t,e,i,s.snapshot),v=g.consumedSegments,y=g.parameters,b=g.lastChild,R=i.slice(b),O=getChildConfig(e),C=split(t,v,R,O),w=C.segmentGroup,S=C.slicedSegments,_=new r.d(v,Object.freeze(n.i(c.g)(s.allParams,y)),Object.freeze(this.urlTree.queryParams),this.urlTree.fragment,n.i(c.g)(s.allData,getData(e)),f,e.component,e,getSourceSegmentGroup(t),getPathIndexShift(t)+v.length,d),j=e.component?p.empty(_):new p(s,_,y,getData(e),d);if(0===S.length&&w.hasChildren()){var P=this.processChildren(O,w,j);return[new u.b(_,P)]}if(0===O.length&&0===S.length)return[new u.b(_,[])];var P=this.processSegment(O,w,o+b,S,j,a.a);return[new u.b(_,P)]},Recognizer}()},651:function(e,t){"use strict";t.compose=function(){for(var e=[],t=0;t<arguments.length;t++)e[t-0]=arguments[t];return function(t){if(0===e.length)return t;var n=e[e.length-1],o=e.slice(0,-1);return o.reduceRight(function(e,t){return t(e)},n(t))}}},658:function(e,t,n){"use strict";var o=n(0),i=n(113),r=n(660),a=n(355),s=n(222),c=n(353),u=n(354),l=n(352);n.d(t,"a",function(){return d});var p=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},f=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},d=function(){function ReferenceModule(){}return ReferenceModule=p([n.i(o.NgModule)({declarations:[c.a,u.a,l.a],exports:[],imports:[i.a,r.a],providers:[a.a,s.a]}),f("design:paramtypes",[])],ReferenceModule)}()},659:function(e,t,n){"use strict";var o=n(355);n.d(t,"a",function(){return r});var i={tags:[],taskTypes:[],requestTypes:[],fetchFail:!1},r=function(e,t){void 0===e&&(e=i);var n=t.type,r=t.payload;switch(n){case o.a.FETCH_TAGS:return Object.assign({},e,{tags:r.tags});case o.a.FETCH_TASK_TYPES:return Object.assign({},e,{taskTypes:r.taskTypes});case o.a.FETCH_REQUEST_TYPES:return Object.assign({},e,{requestTypes:r.requestTypes});case o.a.FETCH_REFERENCE_FAILED:return Object.assign({},e,{fetchFail:!0});default:return e}}},660:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(353),a=n(354),s=n(352);n.d(t,"a",function(){return p});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=[{path:"reference",component:r.a},{path:"reference/view/:id",component:a.a},{path:"reference/form/:id",component:s.a}],p=function(){function ReferenceRoutingModule(){}return ReferenceRoutingModule=c([n.i(o.NgModule)({imports:[i.a.forChild(l)],exports:[i.a]}),u("design:paramtypes",[])],ReferenceRoutingModule)}()},661:function(e,t,n){"use strict";(function(){function Employee(){this.id="",this.name="@anonymous"}return Employee})()},662:function(e,t,n){"use strict";var o=n(663);n(661);n.d(t,"a",function(){return o.a})},663:function(e,t,n){"use strict";n.d(t,"a",function(){return o});var o=function(){function Organization(){this.id=""}return Organization}()},664:function(e,t,n){"use strict";var o=n(0),i=n(113),r=n(666),a=n(358),s=n(223),c=n(356),u=n(357);n.d(t,"a",function(){return f});var l=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},p=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},f=function(){function StaffModule(){}return StaffModule=l([n.i(o.NgModule)({declarations:[c.a,u.a],exports:[],imports:[i.a,r.a],providers:[a.a,s.a]}),p("design:paramtypes",[])],StaffModule)}()},665:function(e,t,n){"use strict";var o=n(358);n.d(t,"a",function(){return r});var i={organizations:[],employees:[]},r=function(e,t){void 0===e&&(e=i);var n=t.type,r=t.payload;switch(n){case o.a.FETCH_ORGANIZATIONS:return Object.assign({},e,{organizations:r.organizations});case o.a.FETCH_EMPLOYEES:return Object.assign({},e,{employees:r.employees});default:return e}}},666:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(356),a=n(357);n.d(t,"a",function(){return l});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=[{path:"staff",component:r.a},{path:"staff/:id",component:a.a}],l=function(){function StaffRoutingModule(){}return StaffRoutingModule=s([n.i(o.NgModule)({imports:[i.a.forChild(u)],exports:[i.a]}),c("design:paramtypes",[])],StaffRoutingModule)}()},667:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function WorkflowIncomingService(e,t){this.http=e,this.appService=t}return WorkflowIncomingService.prototype.fetchIncomings=function(e){var t=this;return void 0===e&&(e={}),this.http.get("/Workflow/p?id=incoming-view",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).map(function(e){var t=n.i(a.b)(e.json().objects);return t}).catch(function(e){return t.appService.handleError(e)})},WorkflowIncomingService.prototype.fetchIncomingById=function(e){var t=this,o="/Workflow/p?id=incoming-form&docid="+("new"!==e?e:"");return this.http.get(o,{headers:n.i(a.a)()}).map(function(e){var t=n.i(a.b)(e.json().objects),o=t.incoming;return o.id||(o.id=""),t.fsid&&(o.fsid=t.fsid),t.ACL&&(o.acl=t.ACL),t.attachment&&(o.attachments=t.attachment.list),{incoming:o,actions:t.actions}}).catch(function(e){return t.appService.handleError(e)})},WorkflowIncomingService.prototype.doAction=function(e){var t=this;return this.http.put("/Workflow/p?id=incoming-view&_action="+e,"",{headers:n.i(a.a)()}).map(function(e){return n.i(a.d)(e)}).catch(function(e){return t.appService.handleError(e)})},WorkflowIncomingService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],WorkflowIncomingService);var e,t}()},668:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function WorkflowOfficeMemoService(e,t){this.http=e,this.appService=t}return WorkflowOfficeMemoService.prototype.fetchOfficeMemos=function(e){var t=this;return void 0===e&&(e={}),this.http.get("/Workflow/p?id=officememo-view",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).map(function(e){var t=n.i(a.b)(e.json().objects);return t}).catch(function(e){return t.appService.handleError(e)})},WorkflowOfficeMemoService.prototype.fetchOfficeMemoById=function(e){var t=this,o="/Workflow/p?id=officememo-form&docid="+("new"!==e?e:"");return this.http.get(o,{headers:n.i(a.a)()}).map(function(e){var t=n.i(a.b)(e.json().objects),o=t.officememo;return o.id||(o.id=""),t.fsid&&(o.fsid=t.fsid),t.ACL&&(o.acl=t.ACL),t.attachment&&(o.attachments=t.attachment.list),{officememo:o,actions:t.actions}}).catch(function(e){return t.appService.handleError(e)})},WorkflowOfficeMemoService.prototype.doAction=function(e){var t=this;return this.http.put("/Workflow/p?id=incoming-view&_action="+e,"",{headers:n.i(a.a)()}).map(function(e){return n.i(a.d)(e)}).catch(function(e){return t.appService.handleError(e)})},WorkflowOfficeMemoService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],WorkflowOfficeMemoService);var e,t}()},669:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32),a=n(54);n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function WorkflowOutgoingService(e,t){this.http=e,this.appService=t}return WorkflowOutgoingService.prototype.fetchOutgoings=function(e){var t=this;return void 0===e&&(e={}),this.http.get("/Workflow/p?id=outgoing-view",{headers:n.i(a.a)(),search:n.i(a.f)(e)}).map(function(e){var t=n.i(a.b)(e.json().objects);return t}).catch(function(e){return t.appService.handleError(e)})},WorkflowOutgoingService.prototype.fetchOutgoingById=function(e){var t=this,o="/Workflow/p?id=outgoing-form&docid="+("new"!==e?e:"");return this.http.get(o,{headers:n.i(a.a)()}).map(function(e){var t=n.i(a.b)(e.json().objects),o=t.outgoing;return o.id||(o.id=""),t.fsid&&(o.fsid=t.fsid),t.ACL&&(o.acl=t.ACL),t.attachment&&(o.attachments=t.attachment.list),{outgoing:o,actions:t.actions}}).catch(function(e){return t.appService.handleError(e)})},WorkflowOutgoingService.prototype.doAction=function(e){var t=this;return this.http.put("/Workflow/p?id=incoming-view&_action="+e,"",{headers:n.i(a.a)()}).map(function(e){return n.i(a.d)(e)}).catch(function(e){return t.appService.handleError(e)})},WorkflowOutgoingService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.b&&r.b)&&t||Object])],WorkflowOutgoingService);var e,t}()},670:function(e,t,n){"use strict";var o=n(0),i=n(113),r=n(672),a=n(361),s=n(360),c=n(359),u=n(365),l=n(364),p=n(363),f=n(362),d=n(76);n.d(t,"a",function(){return g});var h=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},m=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},g=function(){function WorkflowModule(){}return WorkflowModule=h([n.i(o.NgModule)({declarations:[a.a,s.a,c.a,u.a,l.a,p.a,f.a],imports:[i.a,r.a],providers:[d.a,d.b,d.c]}),m("design:paramtypes",[])],WorkflowModule)}()},671:function(e,t,n){"use strict";n.d(t,"a",function(){return i});var o={},i=function(e,t){void 0===e&&(e=o);t.type,t.payload;return e}},672:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(361),a=n(360),s=n(359),c=n(365),u=n(364),l=n(363),p=n(362);n.d(t,"a",function(){return m});var f=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},d=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},h=[{path:"workflow",component:r.a},{path:"incoming-view",component:a.a},{path:"incoming-form",component:s.a},{path:"outgoing-view",component:c.a},{path:"outgoing-form",component:u.a},{path:"officememo-view",component:l.a},{path:"officememo-form",component:p.a}],m=function(){function WorkflowRoutingModule(){}return WorkflowRoutingModule=f([n.i(o.NgModule)({imports:[i.a.forChild(h)],exports:[i.a]}),d("design:paramtypes",[])],WorkflowRoutingModule)}()},673:function(e,t,n){"use strict";var o=n(0),i=n(113),r=n(674),a=n(366),s=n(367);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function WorkspaceModule(){}return WorkspaceModule=c([n.i(o.NgModule)({declarations:[a.a],imports:[i.a,r.a],providers:[s.a]}),u("design:paramtypes",[])],WorkspaceModule)}()},674:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(366);n.d(t,"a",function(){return u});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=[{path:"workspace",component:r.a}],u=function(){function WorkspaceRoutingModule(){}return WorkspaceRoutingModule=a([n.i(o.NgModule)({imports:[i.a.forChild(c)],exports:[i.a]}),s("design:paramtypes",[])],WorkspaceRoutingModule)}()},675:function(e,t,n){"use strict";var o=n(0),i=n(16),r=n(370),a=n(373),s=n(372),c=n(371),u=n(673),l=n(658),p=n(664),f=n(670);n.d(t,"a",function(){return g;
-});var d=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},h=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},m=[{path:"",redirectTo:"workspace",pathMatch:"full"},{path:"user-profile",component:a.a,canActivate:[r.a]},{path:"login",component:s.a},{path:"**",component:c.a}],g=function(){function AppRoutingModule(){}return AppRoutingModule=d([n.i(o.NgModule)({imports:[i.a.forRoot(m,{useHash:!0})],exports:[i.a,u.a,l.a,p.a,f.a]}),h("design:paramtypes",[])],AppRoutingModule)}()},676:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function AclComponent(){this.acl={}}return i([n.i(o.Input)(),r("design:type",Object)],AclComponent.prototype,"acl",void 0),AclComponent=i([n.i(o.Component)({selector:"acl",template:n(876)}),r("design:paramtypes",[])],AclComponent)}()},677:function(e,t,n){"use strict";var o=n(0),i=n(13),r=n(100),a=(n.n(r),n(22)),s=n(32),c=n(690);n.d(t,"a",function(){return p});var u=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},l=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},p=function(){function AppComponent(e,t,n,o,i){var r=this;this.store=e,this.environmentActions=t,this.appActions=n,this.appService=o,this.translate=i,this.subs=[],this.isReady=!1,this.loggedUser=new c.a,this.HEADER_TITLE="Projects",this.isNavCollapsed=!1,this.isSearchOpen=!1,this.isMobileDevice=!1,this.subs.push(this.store.select("authed").subscribe(function(e){r.loggedUser=e.userProfile})),this.subs.push(this.store.select("reference")),this.subs.push(this.store.select("environment").subscribe(function(e){r.isSearchOpen=e.isSearchOpen,r.isNavCollapsed=!e.isNavOpen}))}return AppComponent.prototype.resize=function(e){this.onResize(e)},Object.defineProperty(AppComponent.prototype,"device",{get:function(){return this.isMobileDevice},enumerable:!0,configurable:!0}),Object.defineProperty(AppComponent.prototype,"toggleNavVisible",{get:function(){return this.isNavCollapsed},enumerable:!0,configurable:!0}),Object.defineProperty(AppComponent.prototype,"toggleSearch",{get:function(){return this.isSearchOpen},enumerable:!0,configurable:!0}),AppComponent.prototype.ngOnInit=function(){var e=this;this.appService.fetchUserProfile().subscribe(function(t){e.store.dispatch(e.appActions.fetchUserProfileFulfilled(t))}),this.isMobileDevice=this.isMobile();var t=navigator.language.split("-")[0];t=/(ru|en)/gi.test(t)?t:"en",this.translate.setDefaultLang("en"),this.translate.use("en"),this.translate.get("brand").subscribe(function(t){e.HEADER_TITLE=t,e.isReady=!0})},AppComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},AppComponent.prototype.hideNav=function(e){this.store.dispatch({type:a.a.HIDE_NAV}),e.preventDefault()},AppComponent.prototype.isMobile=function(){return/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)},AppComponent.prototype.onResize=function(e){this.isMobileDevice=e.innerWidth<=1024||this.isMobile()},u([n.i(o.HostListener)("window:resize",["$event.target"]),l("design:type",Function),l("design:paramtypes",[Object]),l("design:returntype",void 0)],AppComponent.prototype,"resize",null),u([n.i(o.HostBinding)("class.phone"),l("design:type",Object)],AppComponent.prototype,"device",null),u([n.i(o.HostBinding)("class.side-nav-toggle"),l("design:type",Object)],AppComponent.prototype,"toggleNavVisible",null),u([n.i(o.HostBinding)("class.search-open"),l("design:type",Object)],AppComponent.prototype,"toggleSearch",null),AppComponent=u([n.i(o.Component)({selector:"app",template:n(877)}),l("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object,"function"==typeof(t="undefined"!=typeof a.a&&a.a)&&t||Object,"function"==typeof(p="undefined"!=typeof a.b&&a.b)&&p||Object,"function"==typeof(f="undefined"!=typeof s.b&&s.b)&&f||Object,"function"==typeof(d="undefined"!=typeof r.TranslateService&&r.TranslateService)&&d||Object])],AppComponent);var e,t,p,f,d}()},678:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(32);n.d(t,"a",function(){return c});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=function(){function AttachmentsComponent(e,t){this.http=e,this.uploadService=t,this.editable=!1,this.upload=new o.EventEmitter,this.delete=new o.EventEmitter,this.progress=0}return AttachmentsComponent.prototype.ngOnInit=function(){var e=this;this.sub=this.uploadService.progress$.subscribe(function(t){t&&t<100?e.progress=t:e.progress=0})},AttachmentsComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},AttachmentsComponent.prototype.isThumbnailSupported=function(e){return e.extension?["jpeg","jpg","png","gif"].indexOf(e.extension)!=-1:["jpeg","jpg","png","gif"].indexOf(e.realFileName.toLowerCase().split(".").pop())!=-1},Object.defineProperty(AttachmentsComponent.prototype,"isHidden",{get:function(){return!this.editable&&!this.model.attachments},enumerable:!0,configurable:!0}),AttachmentsComponent.prototype.uploadFile=function(e){var t=this;this.uploadService.makeFileRequest("UploadFile?time="+Date.now(),{fsid:this.model.fsid},e).subscribe(function(n){t.upload.emit({response:n,files:e})})},a([n.i(o.Input)(),s("design:type",Object)],AttachmentsComponent.prototype,"model",void 0),a([n.i(o.Input)(),s("design:type",Boolean)],AttachmentsComponent.prototype,"editable",void 0),a([n.i(o.Output)(),s("design:type",Object)],AttachmentsComponent.prototype,"upload",void 0),a([n.i(o.Output)(),s("design:type",Object)],AttachmentsComponent.prototype,"delete",void 0),AttachmentsComponent=a([n.i(o.Component)({selector:"attachments",template:n(878),providers:[r.a],host:{"[class.hidden]":"isHidden"}}),s("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object,"function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object])],AttachmentsComponent);var e,t}()},679:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function ListPageComponent(){this.title="",this.selectable=!0,this.headerVisible=!0,this.titleVisible=!0,this.actionsVisible=!0,this.captionsVisible=!0,this.activeSort="regDate:desc",this.list=[],this.meta={},this.actions=[],this.columns=[{name:"name",value:"name",type:"text",sort:"desc",className:"vw-name"}],this.action=new o.EventEmitter,this.refresh=new o.EventEmitter,this.sort=new o.EventEmitter,this.goToPage=new o.EventEmitter}return ListPageComponent.prototype.onAction=function(e,t){this.action.emit({action:e,e:t})},ListPageComponent.prototype.onRefresh=function(){this.refresh.emit(!0)},ListPageComponent.prototype.onGoToPage=function(e){this.goToPage.emit(e)},ListPageComponent.prototype.onSort=function(e){this.sort.emit(e)},i([n.i(o.Input)(),r("design:type",String)],ListPageComponent.prototype,"title",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],ListPageComponent.prototype,"selectable",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],ListPageComponent.prototype,"headerVisible",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],ListPageComponent.prototype,"titleVisible",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],ListPageComponent.prototype,"actionsVisible",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],ListPageComponent.prototype,"captionsVisible",void 0),i([n.i(o.Input)(),r("design:type",String)],ListPageComponent.prototype,"activeSort",void 0),i([n.i(o.Input)(),r("design:type",Array)],ListPageComponent.prototype,"list",void 0),i([n.i(o.Input)(),r("design:type",Object)],ListPageComponent.prototype,"meta",void 0),i([n.i(o.Input)(),r("design:type",Array)],ListPageComponent.prototype,"actions",void 0),i([n.i(o.Input)(),r("design:type",Array)],ListPageComponent.prototype,"columns",void 0),i([n.i(o.Output)(),r("design:type",Object)],ListPageComponent.prototype,"action",void 0),i([n.i(o.Output)(),r("design:type",Object)],ListPageComponent.prototype,"refresh",void 0),i([n.i(o.Output)(),r("design:type",Object)],ListPageComponent.prototype,"sort",void 0),i([n.i(o.Output)(),r("design:type",Object)],ListPageComponent.prototype,"goToPage",void 0),ListPageComponent=i([n.i(o.Component)({selector:"list-page",template:n(879),host:{"[class.list-page]":"true"}}),r("design:paramtypes",[])],ListPageComponent)}()},680:function(e,t,n){"use strict";var o=n(0),i=n(16);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function NavTreeComponent(e){this.router=e,this.entries=[],this.rootSegment="/"}return NavTreeComponent.prototype.isActive=function(e){return this.router.isActive(this.router.createUrlTree(e),!0)},r([n.i(o.Input)(),a("design:type",Object)],NavTreeComponent.prototype,"entries",void 0),r([n.i(o.Input)(),a("design:type",Object)],NavTreeComponent.prototype,"rootSegment",void 0),NavTreeComponent=r([n.i(o.Component)({selector:"[nb-nav-tree]",template:n(880)}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.b&&i.b)&&e||Object])],NavTreeComponent);var e}()},681:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(16),a=n(13),s=n(54);n.d(t,"a",function(){return l});var c=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},u=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},l=function(){function NavComponent(e,t,n){var o=this;this.router=e,this.http=t,this.store=n,this.outline=[],this.loading=!0,this.rootSegment="/",this.sub=n.select("environment").subscribe(function(e){o.rootSegment=e.rootSegment,o.loadNav(e.navUrl)})}return NavComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},NavComponent.prototype.loadNav=function(e){var t=this;this.loading=!0,this.http.get(e,{headers:n.i(s.a)()}).retry(3).map(function(e){return e.json()}).map(function(e){var t=e.objects;return t.filter(function(e){return e.outlines&&e.entries})}).subscribe(function(e){t.loading=!1,t.outline=e})},NavComponent.prototype.isActive=function(e){return this.router.isActive(this.router.createUrlTree(e),!0)},NavComponent=c([n.i(o.Component)({selector:"[nb-nav]",template:n(881)}),u("design:paramtypes",["function"==typeof(e="undefined"!=typeof r.b&&r.b)&&e||Object,"function"==typeof(t="undefined"!=typeof i.Http&&i.Http)&&t||Object,"function"==typeof(l="undefined"!=typeof a.a&&a.a)&&l||Object])],NavComponent);var e,t,l}()},682:function(e,t,n){"use strict";var o=n(0),i=n(37),r=(n.n(i),n(13)),a=n(32),s=n(22),c=n(374);n.d(t,"a",function(){return p});var u=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},l=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},p=function(){function NavbarComponent(e,t,n){var o=this;this.store=e,this.environmentActions=t,this.appService=n,this.keyup$=new i.Subject,this.headerTitle="Projects",this.logoUrl="img/logo.png",this.keyWord="",this.apps=[],this.subs=[],this.subs.push(this.store.select("environment").subscribe(function(e){o.keyWord=e.keyWord,o.apps=e.apps}))}return NavbarComponent.prototype.ngOnInit=function(){var e=this;this.keyup$.debounceTime(250).map(function(e){return e.target.value}).distinctUntilChanged().subscribe(function(t){return e.search(t)})},NavbarComponent.prototype.ngOnDestroy=function(){this.subs.map(function(e){return e.unsubscribe()})},Object.defineProperty(NavbarComponent.prototype,"workspaceUrl",{get:function(){return this.appService.workspaceUrl},enumerable:!0,configurable:!0}),NavbarComponent.prototype.searchFocus=function(){this.store.dispatch(this.environmentActions.toggleSearch())},NavbarComponent.prototype.searchBlur=function(){this.store.dispatch(this.environmentActions.hideNav())},NavbarComponent.prototype.search=function(e){this.store.dispatch(this.environmentActions.search(e))},NavbarComponent.prototype.toggleNav=function(){this.store.dispatch(this.environmentActions.toggleNav())},NavbarComponent.prototype.logout=function(e){e.preventDefault(),window.location.href="Logout"},u([n.i(o.Input)(),l("design:type","function"==typeof(e="undefined"!=typeof c.a&&c.a)&&e||Object)],NavbarComponent.prototype,"user",void 0),NavbarComponent=u([n.i(o.Component)({selector:"navbar",template:n(882)}),l("design:paramtypes",["function"==typeof(t="undefined"!=typeof r.a&&r.a)&&t||Object,"function"==typeof(p="undefined"!=typeof s.a&&s.a)&&p||Object,"function"==typeof(f="undefined"!=typeof a.b&&a.b)&&f||Object])],NavbarComponent);var e,t,p,f}()},683:function(e,t,n){"use strict";var o=n(0),i=n(13);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function EmployeeInputComponent(e){this.store=e,this.placeHolder="",this.multiple=!1,this.editable=!1,this.allowClear=!1,this.change=new o.EventEmitter,this.ids=[],this.employees=[],this.selectedEmps=[]}return Object.defineProperty(EmployeeInputComponent.prototype,"_ids",{set:function(e){this.ids=e,this.checkSelected()},enumerable:!0,configurable:!0}),EmployeeInputComponent.prototype.ngOnInit=function(){var e=this;this.sub=this.store.select("staff").subscribe(function(t){e.employees=t.employees,e.checkSelected()})},EmployeeInputComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},EmployeeInputComponent.prototype.checkSelected=function(){var e=this;this.ids&&this.employees&&(this.selectedEmps=this.employees.filter(function(t){return e.ids.indexOf(t.userID)!=-1}))},EmployeeInputComponent.prototype.onSelect=function(e){this.change.emit(e)},r([n.i(o.Input)("ids"),a("design:type",Array),a("design:paramtypes",[Array])],EmployeeInputComponent.prototype,"_ids",null),r([n.i(o.Input)(),a("design:type",String)],EmployeeInputComponent.prototype,"placeHolder",void 0),r([n.i(o.Input)(),a("design:type",Boolean)],EmployeeInputComponent.prototype,"multiple",void 0),r([n.i(o.Input)(),a("design:type",Boolean)],EmployeeInputComponent.prototype,"editable",void 0),r([n.i(o.Input)(),a("design:type",Boolean)],EmployeeInputComponent.prototype,"allowClear",void 0),r([n.i(o.Output)(),a("design:type",Object)],EmployeeInputComponent.prototype,"change",void 0),EmployeeInputComponent=r([n.i(o.Component)({selector:"employee-input",template:'\n        <selection\n            class="employee-input"\n            [items]="employees"\n            [selectedItems]="selectedEmps"\n            [disabled]="!editable"\n            [searchable]="true"\n            [allowClear]="allowClear"\n            [multiple]="multiple"\n            [placeHolder]="placeHolder"\n            (change)="onSelect($event)">\n        </selection>\n    '}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],EmployeeInputComponent);var e}()},684:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function ErrorMessageComponent(){this.error={}}return i([n.i(o.Input)(),r("design:type",Object)],ErrorMessageComponent.prototype,"error",void 0),ErrorMessageComponent=i([n.i(o.Component)({selector:"error-message",template:'\n        <div class="error-message__message" *ngIf="error">\n            {{error.message | translate}}\n        </div>\n    ',host:{"[class.error-message]":"true","[class.show]":"error"}}),r("design:paramtypes",[])],ErrorMessageComponent)}()},685:function(e,t,n){"use strict";var o=n(684),i=n(686),r=n(688),a=n(683),s=n(687);n.d(t,"a",function(){return o.a}),n.d(t,"c",function(){return i.a}),n.d(t,"e",function(){return r.a}),n.d(t,"d",function(){return a.a}),n.d(t,"b",function(){return s.a})},686:function(e,t,n){"use strict";var o=n(0),i=n(223),r=n(662);n.d(t,"a",function(){return c});var a=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},s=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},c=function(){function OrganizationInputComponent(e){this.staffService=e,this.placeHolder="",this.editable=!1,this.allowClear=!1,this.change=new o.EventEmitter,this.organizations=[],this.meta={page:0,totalPages:1},this.allLoaded=!1,this.firstLoad=!0}return OrganizationInputComponent.prototype.ngOnInit=function(){var e=this;!this.org&&this.id&&this.staffService.fetchOrganizations({ids:this.id}).subscribe(function(t){e.org=t.organizations[0]})},OrganizationInputComponent.prototype.load=function(e){e.first&&this.firstLoad?(this.loadOrganizations(),this.firstLoad=!1):e.next&&!this.allLoaded?this.meta&&this.meta.page<this.meta.totalPages?this.loadOrganizations(this.meta.page+1):this.allLoaded=!0:"string"==typeof e.search&&this.loadOrganizations(1,e.search,!0)},OrganizationInputComponent.prototype.loadOrganizations=function(e,t,n){var o=this;void 0===e&&(e=1),void 0===t&&(t=""),void 0===n&&(n=!1),this.staffService.fetchOrganizations({page:e,keyword:t}).subscribe(function(e){n?o.organizations=e.organizations:o.organizations=o.organizations.concat(e.organizations),o.meta=e.meta})},OrganizationInputComponent.prototype.onSelect=function(e){this.org=e,this.change.emit(this.org)},a([n.i(o.Input)(),s("design:type",String)],OrganizationInputComponent.prototype,"id",void 0),a([n.i(o.Input)(),s("design:type","function"==typeof(e="undefined"!=typeof r.a&&r.a)&&e||Object)],OrganizationInputComponent.prototype,"org",void 0),a([n.i(o.Input)(),s("design:type",String)],OrganizationInputComponent.prototype,"placeHolder",void 0),a([n.i(o.Input)(),s("design:type",Boolean)],OrganizationInputComponent.prototype,"editable",void 0),a([n.i(o.Input)(),s("design:type",Boolean)],OrganizationInputComponent.prototype,"allowClear",void 0),a([n.i(o.Output)(),s("design:type",Object)],OrganizationInputComponent.prototype,"change",void 0),OrganizationInputComponent=a([n.i(o.Component)({selector:"organization-input",template:'\n        <selection\n            class="organization-input"\n            [items]="organizations"\n            [selectedItems]="org? [org] : []"\n            [disabled]="!editable"\n            [searchable]="true"\n            [allowClear]="allowClear"\n            [placeHolder]="placeHolder"\n            (load)="load($event)"\n            (change)="onSelect($event)">\n        </selection>\n    '}),s("design:paramtypes",["function"==typeof(t="undefined"!=typeof i.a&&i.a)&&t||Object])],OrganizationInputComponent);var e,t}()},687:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function SelectionComponent(e){this.renderer=e,this.selectedItems=[],this.idKey="id",this.textKey="name",this.multiple=!1,this.disabled=!1,this.allowClear=!1,this.searchable=!1,this.contentLoadable=!1,this.tabIndex=0,this.checkmarkIconClass="fa fa-check",this.placeHolder="",this.notFoundText="Not found",this.load=new o.EventEmitter,this.change=new o.EventEmitter,this.items=[],this._items=[],this.selectedItemIds=[],this.isOpen=!1,this.isFocused=!1,this.selfClick=!1,this.firstOpen=!0,this.keyWord="",this.showNotFound=!1,this.SEARCH_MODE=0,this.MOVE_MODE=1,this.cursorMode=1,this.cursorPosition=-1}return Object.defineProperty(SelectionComponent.prototype,"_tabIndex",{get:function(){return-1},enumerable:!0,configurable:!0}),SelectionComponent.prototype.onFocus=function(e){this.disabled||(this.isFocused=!0)},SelectionComponent.prototype.onBlur=function(e){this.disabled||this.selfClick||(this.close(),this.clearSearchInput())},SelectionComponent.prototype.onClick=function(e){this.selfClick=!0},SelectionComponent.prototype.onMouseDown=function(e){this.selfClick=!0},SelectionComponent.prototype.onKeyDown=function(e){this.disabled||this.handleEvent(e)},Object.defineProperty(SelectionComponent.prototype,"__items",{set:function(e){this.items=e,this._items=e},enumerable:!0,configurable:!0}),SelectionComponent.prototype.ngOnInit=function(){this.disabled||(this.multiple&&this.filterItems(),this.resetCursor(),this.checkSelected())},SelectionComponent.prototype.ngOnDestroy=function(){this.removeListenGlobal()},Object.defineProperty(SelectionComponent.prototype,"isAllowClear",{get:function(){return this.allowClear&&this.selectedItems.length},enumerable:!0,configurable:!0}),Object.defineProperty(SelectionComponent.prototype,"hasSelected",{get:function(){return this.selectedItems.length},enumerable:!0,configurable:!0}),SelectionComponent.prototype.initListenGlobal=function(){var e=this;this.documentClickListener=this.renderer.listenGlobal("body","click",function(){e.selfClick?e.selfClick=!1:(e.close(),e.clearSearchInput())}),this.documentKeyUpListener=this.renderer.listenGlobal("body","keyup",function(t){"Escape"===t.code&&(e.close(),e.clearSearchInput())})},SelectionComponent.prototype.removeListenGlobal=function(){this.disabled||(this.documentClickListener&&this.documentClickListener(),this.documentKeyUpListener&&this.documentKeyUpListener())},SelectionComponent.prototype.emitChange=function(){this.multiple?this.change.emit(this.selectedItems):this.change.emit(this.selectedItems[0])},SelectionComponent.prototype.checkSelected=function(){var e=this;this.selectedItemIds=this.selectedItems.map(function(t){return t[e.idKey]})},SelectionComponent.prototype.add=function(e){var t=this;this.multiple?0===this.selectedItems.filter(function(n){return n[t.idKey]==e[t.idKey]}).length&&(this.selectedItems.push(e),this.selectedItemIds=this.selectedItems.map(function(e){return e[t.idKey]})):(this.selectedItems=[e],this.selectedItemIds=[e[this.idKey]],this.close()),this.emitChange(),this.clearSearchInput(),this.filterItems()},SelectionComponent.prototype.remove=function(e,t){var n=this;this.multiple&&(t.stopPropagation(),t.preventDefault(),this.multiple?(this.selectedItems=this.selectedItems.filter(function(t){return t[n.idKey]!=e[n.idKey]}),this.selectedItemIds=this.selectedItems.map(function(e){return e[n.idKey]})):(this.selectedItems=[],this.selectedItemIds=[]),this.emitChange(),this.clearSearchInput(),this.filterItems())},SelectionComponent.prototype.clear=function(e){(this.selectedItemIds.length||this.selectedItems.length)&&(e.stopPropagation(),this.selectedItems=[],this.selectedItemIds=[],this.emitChange(),this.clearSearchInput(),this.filterItems())},SelectionComponent.prototype.clearSearchInput=function(){this.searchable&&this.searchInput&&(this.searchInput.nativeElement.value="")},SelectionComponent.prototype.filterItems=function(e){var t=this;!this.contentLoadable&&e?this._items=this.items.filter(function(n){return n[t.textKey].toLowerCase().indexOf(e)!=-1}):this.multiple?this._items=this.items.filter(function(e){return t.selectedItemIds.indexOf(e[t.idKey])==-1}):this._items=this.items,0!==this._items.length&&this._items.length===this.items.length||this.resetCursor(),this.selectFirst()},SelectionComponent.prototype.search=function(e){this.keyWord!==e&&(this.contentLoadable?this.load.emit({search:e}):this.filterItems(e),this.keyWord=e,this.open())},SelectionComponent.prototype.handleEvent=function(e){if("keydown"===e.type){var t=e.key;if("Enter"===t)return void(this.cursorId&&this.canMove()?this.addOnCursor():this.toggleOpen(e));if("Escape"===t||"Tab"===t)return this.isOpen&&this.close(),void this.clearSearchInput();if("Delete"===t)return void this.clear(e);this.cursorMode===this.SEARCH_MODE&&("ArrowUp"===t||"ArrowDown"===t?this.cursorMode=this.MOVE_MODE:""!==e.target.value||"ArrowLeft"!==t&&"ArrowRight"!==t||(this.cursorMode=this.MOVE_MODE)),this.cursorMode===this.MOVE_MODE&&["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(t)!=-1&&(e.preventDefault(),this.move(t))}else"keyup"===e.type&&"search"===e.target.name?(e.stopPropagation(),this.cursorMode=this.SEARCH_MODE,this.search(e.target.value.toLowerCase())):console.log("SelectionComponent::handleEvent > unknown",e)},SelectionComponent.prototype.move=function(e){if(this.canMove()){switch(e){case"ArrowUp":this.cursorPosition===-1?this.cursorPosition=this._items.length-1:(this.cursorPosition--,this.cursorPosition<0&&(this.cursorPosition=this._items.length-1));break;case"ArrowDown":this.cursorPosition===-1?this.cursorPosition=0:(this.cursorPosition++,this.cursorPosition>=this._items.length&&(this.cursorPosition=0));break;case"ArrowLeft":this.cursorPosition=0;break;case"ArrowRight":this.cursorPosition=this._items.length-1;break;default:return}this.cursorId=this._items[this.cursorPosition][this.idKey]}},SelectionComponent.prototype.canMove=function(){return this.isOpen&&this._items.length>0},SelectionComponent.prototype.addOnCursor=function(){this.add(this._items[this.cursorPosition])},SelectionComponent.prototype.resetCursor=function(){this.cursorId=null,this.cursorPosition=-1,this.cursorMode=this.MOVE_MODE},SelectionComponent.prototype.selectFirst=function(){this.cursorMode===this.SEARCH_MODE&&this._items.length>0&&(this.cursorId=this._items[0].id,this.cursorPosition=0,this.cursorMode=this.MOVE_MODE)},SelectionComponent.prototype.open=function(){this.isOpen||this.initListenGlobal(),this.isOpen=!0,this.isFocused=!0,this.firstOpen&&(this.load.emit({first:!0}),this.firstOpen=!1)},SelectionComponent.prototype.close=function(){this.isOpen=!1,this.isFocused=!1,this.resetCursor(),this.removeListenGlobal()},SelectionComponent.prototype.toggleOpen=function(e){e.preventDefault(),this.isOpen?this.close():this.open()},SelectionComponent.prototype.onScroll=function(e){var t=e.target,n=t.scrollHeight,o=t.clientHeight,i=t.scrollTop;n-o==i&&this.load.emit({next:!0})},i([n.i(o.HostBinding)("tabIndex"),r("design:type",Object)],SelectionComponent.prototype,"_tabIndex",null),i([n.i(o.HostListener)("focus",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],SelectionComponent.prototype,"onFocus",null),i([n.i(o.HostListener)("blur",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],SelectionComponent.prototype,"onBlur",null),i([n.i(o.HostListener)("click",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],SelectionComponent.prototype,"onClick",null),i([n.i(o.HostListener)("mousedown",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],SelectionComponent.prototype,"onMouseDown",null),i([n.i(o.HostListener)("keydown",["$event"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],SelectionComponent.prototype,"onKeyDown",null),i([n.i(o.Input)("items"),r("design:type",Object),r("design:paramtypes",[Object])],SelectionComponent.prototype,"__items",null),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"selectedItems",void 0),i([n.i(o.Input)(),r("design:type",String)],SelectionComponent.prototype,"idKey",void 0),i([n.i(o.Input)(),r("design:type",String)],SelectionComponent.prototype,"textKey",void 0),i([n.i(o.Input)(),r("design:type",String)],SelectionComponent.prototype,"descriptionKey",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"multiple",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"disabled",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"allowClear",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"searchable",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"contentLoadable",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"tabIndex",void 0),i([n.i(o.Input)(),r("design:type",Object)],SelectionComponent.prototype,"checkmarkIconClass",void 0),
-i([n.i(o.Input)(),r("design:type",String)],SelectionComponent.prototype,"placeHolder",void 0),i([n.i(o.Input)(),r("design:type",String)],SelectionComponent.prototype,"notFoundText",void 0),i([n.i(o.Output)(),r("design:type",Object)],SelectionComponent.prototype,"load",void 0),i([n.i(o.Output)(),r("design:type",Object)],SelectionComponent.prototype,"change",void 0),i([n.i(o.ViewChild)("searchInput"),r("design:type","function"==typeof(e="undefined"!=typeof o.ElementRef&&o.ElementRef)&&e||Object)],SelectionComponent.prototype,"searchInput",void 0),SelectionComponent=i([n.i(o.Component)({selector:"selection",template:'\n        <div class="select selection input" [class.is-multiple]="multiple" *ngIf="disabled">\n            <div class="selection-item"\n                  [ngClass]="m._itemClass"\n                  [ngStyle]="m._itemStyle"\n                  *ngFor="let m of selectedItems">\n                <div class="selection-item-text">{{m | localizedName:textKey}}</div>\n                <div class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</div>\n            </div>\n        </div>\n        <div class="select selection"\n              [class.open]="isOpen"\n              [class.is-focused]="isFocused"\n              [class.is-multiple]="multiple"\n              [class.allow-clear]="isAllowClear"\n              [class.has-selected]="hasSelected"\n              *ngIf="!disabled">\n            <div class="select-selection input" (click)="toggleOpen($event)">\n                <span class="selection-item"\n                      [ngClass]="m._itemClass"\n                      [ngStyle]="m._itemStyle"\n                      (click)="remove(m, $event)"\n                      *ngFor="let m of selectedItems">\n                    <span class="selection-item-text">{{m | localizedName:textKey}}</span>\n                    <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>\n                </span>\n                <input *ngIf="searchable"\n                    #searchInput\n                    class="select-search-input"\n                    name="search"\n                    value=""\n                    autocomplete="off"\n                    [tabindex]="tabIndex"\n                    (focus)="onFocus($event)"\n                    (blur)="onBlur($event)"\n                    (keyup)="handleEvent($event)" />\n                <span class="placeholder">{{placeHolder}}</span>\n                <span class="select-clear" (click)="clear($event)">&times;</span>\n                <div class="select-search-not-found" *ngIf="showNotFound && notFoundText">{{notFoundText}}</div>\n            </div>\n            <div class="select-dropdown">\n                <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">\n                    <li class="select-option"\n                          [class.selected]="selectedItemIds.indexOf(m[idKey]) !== -1"\n                          [class.focus]="cursorId === m[idKey]"\n                          (click)="add(m)"\n                          *ngFor="let m of _items">\n                        <i class="select-checkmark-icon"></i>\n                        <div [ngClass]="m._itemClass" [ngStyle]="m._itemStyle">\n                            <div class="selection-item-text">{{m | localizedName:textKey}}</div>\n                            <div class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</div>\n                        </div>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ',changeDetection:o.ChangeDetectionStrategy.OnPush}),r("design:paramtypes",["function"==typeof(t="undefined"!=typeof o.Renderer&&o.Renderer)&&t||Object])],SelectionComponent);var e,t}()},688:function(e,t,n){"use strict";var o=n(0),i=n(13);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function TagsInputComponent(e){this.store=e,this.ids=[],this.placeHolder="",this.editable=!1,this.allowClear=!1,this.change=new o.EventEmitter,this.items=[],this.selectedTags=[]}return TagsInputComponent.prototype.ngOnInit=function(){var e=this;this.sub=this.store.select("reference").subscribe(function(t){e.items=t.tags,e.items.map(function(e){e._itemStyle={color:e.color},e._itemClass="tag"}),e.ids&&(e.selectedTags=t.tags.filter(function(t){return e.ids.indexOf(t.id)!=-1}))})},TagsInputComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},TagsInputComponent.prototype.onSelect=function(e){this.change.emit(e)},r([n.i(o.Input)(),a("design:type",Array)],TagsInputComponent.prototype,"ids",void 0),r([n.i(o.Input)(),a("design:type",String)],TagsInputComponent.prototype,"placeHolder",void 0),r([n.i(o.Input)(),a("design:type",Boolean)],TagsInputComponent.prototype,"editable",void 0),r([n.i(o.Input)(),a("design:type",Boolean)],TagsInputComponent.prototype,"allowClear",void 0),r([n.i(o.Output)(),a("design:type",Object)],TagsInputComponent.prototype,"change",void 0),TagsInputComponent=r([n.i(o.Component)({selector:"tags-input",template:'\n        <selection\n            class="tags-input"\n            [items]="items"\n            [selectedItems]="selectedTags"\n            [disabled]="!editable"\n            [searchable]="true"\n            [allowClear]="allowClear"\n            [multiple]="true"\n            [placeHolder]="placeHolder"\n            (change)="onSelect($event)">\n        </selection>\n    '}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],TagsInputComponent);var e}()},689:function(e,t,n){"use strict";(function(){function Attachment(){this.id=""}return Attachment})()},690:function(e,t,n){"use strict";var o=(n(689),n(374));n.d(t,"a",function(){return o.a})},691:function(e,t,n){"use strict";var o=n(0),i=n(1);n.n(i);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function DateDurationPipe(){}return DateDurationPipe.prototype.transform=function(e,t){if(!e&&!t)return"";var n,o,r;return n="now"===e?i():i(e,"DD.MM.YYYY"),o=i(t,"DD.MM.YYYY"),r=o.diff(n,"days"),r?"("+r.toString()+")":""},DateDurationPipe=r([n.i(o.Pipe)({name:"dateDuration"}),a("design:paramtypes",[])],DateDurationPipe)}()},692:function(e,t,n){"use strict";var o=n(0),i=n(1);n.n(i);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function DateFormatPipe(){}return DateFormatPipe.prototype.transform=function(e,t){if(!e)return"";t||(t="DD.MM.YYYY HH:mm");var n=i(e,t);return n.isValid()?n.format(t):""},DateFormatPipe=r([n.i(o.Pipe)({name:"dateFmt"}),a("design:paramtypes",[])],DateFormatPipe)}()},693:function(e,t,n){"use strict";var o=n(692),i=n(691),r=n(696),a=n(697),s=n(694),c=n(695);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return i.a}),n.d(t,"c",function(){return r.a}),n.d(t,"f",function(){return a.a}),n.d(t,"e",function(){return s.a}),n.d(t,"d",function(){return c.a})},694:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function KeysPipe(){}return KeysPipe.prototype.transform=function(e,t){var n=[];for(var o in e)n.push(o);return n},KeysPipe=i([n.i(o.Pipe)({name:"keys"}),r("design:paramtypes",[])],KeysPipe)}()},695:function(e,t,n){"use strict";var o=n(0),i=n(32);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function LocalizedNamePipe(e){this.appService=e}return LocalizedNamePipe.prototype.transform=function(e,t,n){if(e){var o=t||"name",i=n||this.appService.language;if(e.localizedName)return e.localizedName[i]||e[o];if(e[o])return e[o].localizedName?e[o].localizedName[i]||e[o]:e[o]}return""},LocalizedNamePipe=r([n.i(o.Pipe)({name:"localizedName"}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.b&&i.b)&&e||Object])],LocalizedNamePipe);var e}()},696:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function TextTransformPipe(){}return TextTransformPipe.prototype.transform=function(e,t){switch(t){case"L":return e.toLowerCase();case"U":return e.toUpperCase();default:return e}},TextTransformPipe=i([n.i(o.Pipe)({name:"text"}),r("design:paramtypes",[])],TextTransformPipe)}()},697:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function ValuesPipe(){}return ValuesPipe.prototype.transform=function(e,t){return Object.keys(e).map(function(t){return e[t]})},ValuesPipe=i([n.i(o.Pipe)({name:"values"}),r("design:paramtypes",[])],ValuesPipe)}()},698:function(e,t,n){"use strict";var o=n(368);n.d(t,"a",function(){return r});var i={userProfile:null,languages:{},pageSize:20,language:"RUS"},r=function(e,t){void 0===e&&(e=i);var n=t.type,r=t.payload;switch(n){case o.a.FETCH_USER_PROFILE_FULFILLED:return Object.assign({},e,{userProfile:r.userProfile,languages:r.languages,pageSize:r.pageSize,language:r.language});default:return e}}},699:function(e,t,n){"use strict";var o=n(369);n.d(t,"a",function(){return r});var i={isMobile:!1,isNavOpen:!0,isSearchOpen:!1,redirectUrl:"/tasks",apps:[{name:"Reference",url:"/reference"},{name:"Staff",url:"/staff"},{name:"Workflow",url:"/workflow"},{name:"WorkSpace",url:"/workspace"}],rootSegment:"",navUrl:"p?id=outline",keyWord:""},r=function(e,t){void 0===e&&(e=i);var n=t.type,r=t.payload;switch(n){case o.a.SEARCH:return Object.assign({},e,{keyWord:r.keyWord});case o.a.RESET_SEARCH:return Object.assign({},e,{keyWord:""});case o.a.TOGGLE_NAV:return Object.assign({},e,{isNavOpen:!e.isNavOpen});case o.a.TOGGLE_SEARCH:return Object.assign({},e,{isSearchOpen:!e.isSearchOpen});case o.a.HIDE_NAV:return Object.assign({},e,{isNavOpen:!0,isSearchOpen:!1});case o.a.SET_REDIRECT_URL:return Object.assign({},e,{redirectUrl:r.redirectUrl});case o.a.SET_APPS:return Object.assign({},e,{apps:r.apps});case o.a.SET_NAV_URL:return Object.assign({},e,{rootSegment:r.rootSegment,navUrl:r.navUrl});default:return e}}},700:function(e,t,n){"use strict";var o=n(698),i=n(699);n.d(t,"b",function(){return o.a}),n.d(t,"a",function(){return i.a})},701:function(e,t,n){"use strict";var o=n(0),i=n(23),r=n(3),a=(n.n(r),n(54));n.d(t,"a",function(){return u});var s=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},c=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},u=function(){function AppService(e){this.http=e,this.thumbnailSupportedFormat=["jpeg","jpg","png","gif"],this.isLogged=!1,this.language="RUS";var t=document.cookie.match("(lang)=(.*?)($|;|,(?! ))");t&&(this.language=t[2])}return AppService.prototype.fetchUserProfile=function(){var e=this;return this.http.get("p?id=userprofile",{headers:n.i(a.a)()}).retry(3).map(function(t){var o=n.i(a.b)(t.json().objects),i=20;return o.pagesize&&(i=o.pagesize),e.isLogged=!0,e.language=o.currentLang,e.employee=o.employee,e.workspaceUrl=o.workspaceUrl,{userProfile:o.employee,languages:o.language.list[0].localizedName,pageSize:i,language:o.currentLang||e.language,workspaceUrl:o.workspaceUrl}}).catch(function(t){return e.handleError(t)})},AppService.prototype.updateUserProfile=function(e){return this.http.post("p?id=userprofile",n.i(a.c)(e),{headers:n.i(a.a)()}).map(function(e){return e.json()}).catch(function(e){return r.Observable.throw(n.i(a.d)(e))})},AppService.prototype.logout=function(){window.location.href=this.workspaceUrl},AppService.prototype.handleError=function(e){return 401===e.status&&this.logout(),r.Observable.throw(n.i(a.d)(e))},AppService=s([n.i(o.Injectable)(),c("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object])],AppService);var e}()},702:function(e,t,n){"use strict";var o=n(0),i=n(23);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function TranslateService(e){this.http=e}return TranslateService.prototype.fetchTranslations=function(e){void 0===e&&(e="");var t=new i.Headers({"Content-Type":"application/x-www-form-urlencoded; charset=utf-8",Accept:"application/json"}),n=(e?e+"/":"")+"p?id=common-captions";return this.http.get(n,{headers:t}).retry(3).map(function(e){return e.json().captions})},TranslateService=r([n.i(o.Injectable)(),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.Http&&i.Http)&&e||Object])],TranslateService);var e}()},703:function(e,t,n){"use strict";var o=n(0),i=n(3);n.n(i);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function UploadService(){var e=this;this.progress$=i.Observable.create(function(t){e.progressObserver=t}).share()}return UploadService.prototype.makeFileRequest=function(e,t,n){var o=this;return i.Observable.create(function(i){for(var r=new FormData,a=new XMLHttpRequest,s=0;s<n.length;s++)r.append("uploads[]",n[s],n[s].name);if(t)for(var c in t)r.append(c,t[c]);a.onreadystatechange=function(){4===a.readyState&&(200===a.status?(i.next(JSON.parse(a.response)),i.complete()):i.error(a.response))},a.upload.onprogress=function(e){var t=Math.round(e.loaded/e.total*100);o.progressObserver.next(t)},a.open("POST",e,!0),a.send(r)})},UploadService=r([n.i(o.Injectable)(),a("design:paramtypes",[])],UploadService)}()},704:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return s});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=n(257),s=function(){function DatepickerDirective(e){this.elementRef=e,this.format="DD.MM.YYYY",this.yearRange=30,this.firstDay=1,this.select=new o.EventEmitter}return DatepickerDirective.prototype.ngOnInit=function(){var e=this;this.picker=new a({field:this.elementRef.nativeElement,minDate:this.minDate,maxDate:this.maxDate,firstDay:this.firstDay,yearRange:this.yearRange,format:this.format,onSelect:function(){e.elementRef.nativeElement.value=e.picker.toString(),e.select.emit(e.picker.toString(e.format))}})},DatepickerDirective.prototype.ngOnDestroy=function(){this.picker.destroy()},i([n.i(o.Input)(),r("design:type",String)],DatepickerDirective.prototype,"format",void 0),i([n.i(o.Input)(),r("design:type",Object)],DatepickerDirective.prototype,"minDate",void 0),i([n.i(o.Input)(),r("design:type",Object)],DatepickerDirective.prototype,"maxDate",void 0),i([n.i(o.Input)(),r("design:type",Number)],DatepickerDirective.prototype,"yearRange",void 0),i([n.i(o.Input)(),r("design:type",Number)],DatepickerDirective.prototype,"firstDay",void 0),i([n.i(o.Output)(),r("design:type",Object)],DatepickerDirective.prototype,"select",void 0),DatepickerDirective=i([n.i(o.Directive)({selector:"[datepicker]"}),r("design:paramtypes",["function"==typeof(e="undefined"!=typeof o.ElementRef&&o.ElementRef)&&e||Object])],DatepickerDirective);var e}()},705:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function AutofocusDirective(e){this.element=e}return AutofocusDirective.prototype.ngOnInit=function(){this.element.nativeElement.focus()},AutofocusDirective=i([n.i(o.Directive)({selector:"[autofocus]"}),r("design:paramtypes",["function"==typeof(e="undefined"!=typeof o.ElementRef&&o.ElementRef)&&e||Object])],AutofocusDirective);var e}()},706:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function TextareaAutoSizeDirective(e){this.element=e,this.minRows=3,this.el=this.element.nativeElement}return TextareaAutoSizeDirective.prototype.onInput=function(e){this.resize()},Object.defineProperty(TextareaAutoSizeDirective.prototype,"_minRows",{set:function(e){+e>0&&(this.minRows=+e)},enumerable:!0,configurable:!0}),TextareaAutoSizeDirective.prototype.ngAfterContentInit=function(){var e=this;setTimeout(function(){e.resize()},0)},TextareaAutoSizeDirective.prototype.resize=function(){var e=parseFloat(window.getComputedStyle(this.el,null).getPropertyValue("line-height"));this.el.rows=this.minRows;var t=Math.ceil((this.el.scrollHeight-this.el.offsetHeight)/e);this.el.rows=this.minRows+t},i([n.i(o.HostListener)("input",["$event.target"]),r("design:type",Function),r("design:paramtypes",[Object]),r("design:returntype",void 0)],TextareaAutoSizeDirective.prototype,"onInput",null),i([n.i(o.Input)("rows"),r("design:type",Number),r("design:paramtypes",[Number])],TextareaAutoSizeDirective.prototype,"_minRows",null),TextareaAutoSizeDirective=i([n.i(o.Directive)({selector:"textarea[autosize]"}),r("design:paramtypes",["function"==typeof(e="undefined"!=typeof o.ElementRef&&o.ElementRef)&&e||Object])],TextareaAutoSizeDirective);var e}()},707:function(e,t,n){"use strict";var o=n(0),i=n(375);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function DropdownComponent(e){var t=this;this.renderer=e,this.open=!1,this.mouseEvent=!1,this.tabIndex=0,this.dropdownToggle=new o.EventEmitter,this.selfClick=!1,this.focused=!1,this.delay=500,this.documentClickListener=this.renderer.listenGlobal("body","click",function(){t.selfClick?t.selfClick=!1:t.open=!1}),this.documentKeyupListener=this.renderer.listenGlobal("body","keyup",function(e){"Escape"===e.code&&(t.open=!1)})}return Object.defineProperty(DropdownComponent.prototype,"isOpen",{get:function(){return this.open},enumerable:!0,configurable:!0}),Object.defineProperty(DropdownComponent.prototype,"isFocused",{get:function(){return this.focused},enumerable:!0,configurable:!0}),Object.defineProperty(DropdownComponent.prototype,"_tabIndex",{get:function(){return this.tabIndex},enumerable:!0,configurable:!0}),DropdownComponent.prototype.onMouseEnter=function(e){var t=this;this.mouseEvent&&(clearTimeout(this.time),this.time=setTimeout(function(){return t.open=!0},this.delay))},DropdownComponent.prototype.onMouseLeave=function(e){var t=this;this.mouseEvent&&(clearTimeout(this.time),this.time=setTimeout(function(){return t.open=!1},this.delay))},DropdownComponent.prototype.onClick=function(e){this.selfClick=!0},DropdownComponent.prototype.onFocus=function(e){e.preventDefault(),this.focused=!0},DropdownComponent.prototype.onBlur=function(e){e.preventDefault(),this.focused=!1,this.open=!1},DropdownComponent.prototype.onKeyDown=function(e){"Enter"===e.key?this.open=!0:"ArrowUp"===e.key?console.log("ArrowUp"):"ArrowDown"===e.key&&console.log("ArrowDown")},DropdownComponent.prototype.ngAfterContentInit=function(){var e=this;this.toggleComponent.forEach(function(t){return t.toggle.subscribe(function(t){e.toggleDropdown(t)})})},DropdownComponent.prototype.ngOnDestroy=function(){this.documentClickListener(),this.documentKeyupListener()},DropdownComponent.prototype.toggleDropdown=function(e){e.preventDefault(),this.open=!this.open,this.dropdownToggle.emit(this.open)},r([n.i(o.HostBinding)("class.dropdown"),a("design:type",Object)],DropdownComponent.prototype,"true",void 0),r([n.i(o.HostBinding)("class.open"),a("design:type",Object)],DropdownComponent.prototype,"isOpen",null),r([n.i(o.HostBinding)("class.focus"),a("design:type",Object)],DropdownComponent.prototype,"isFocused",null),r([n.i(o.HostBinding)("tabIndex"),a("design:type",Object)],DropdownComponent.prototype,"_tabIndex",null),r([n.i(o.HostListener)("mouseenter",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onMouseEnter",null),r([n.i(o.HostListener)("mouseleave",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onMouseLeave",null),r([n.i(o.HostListener)("click",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onClick",null),r([n.i(o.HostListener)("focus",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onFocus",null),r([n.i(o.HostListener)("blur",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onBlur",null),r([n.i(o.HostListener)("keydown",["$event"]),a("design:type",Function),a("design:paramtypes",[Object]),a("design:returntype",void 0)],DropdownComponent.prototype,"onKeyDown",null),r([n.i(o.ContentChildren)(i.a),a("design:type","function"==typeof(e="undefined"!=typeof o.QueryList&&o.QueryList)&&e||Object)],DropdownComponent.prototype,"toggleComponent",void 0),r([n.i(o.Input)(),a("design:type",Object)],DropdownComponent.prototype,"open",void 0),r([n.i(o.Input)(),a("design:type",Object)],DropdownComponent.prototype,"mouseEvent",void 0),r([n.i(o.Input)(),a("design:type",Object)],DropdownComponent.prototype,"tabIndex",void 0),r([n.i(o.Output)(),a("design:type",Object)],DropdownComponent.prototype,"dropdownToggle",void 0),DropdownComponent=r([n.i(o.Component)({selector:"[dropdown]",template:"<ng-content></ng-content>"}),a("design:paramtypes",["function"==typeof(t="undefined"!=typeof o.Renderer&&o.Renderer)&&t||Object])],DropdownComponent);var e,t}()},708:function(e,t,n){"use strict";var o=n(707),i=n(375);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return i.a})},709:function(e,t,n){"use strict";var o=n(0),i=n(224);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function ImgViewComponent(e){var t=this;this.imgViewService=e,this.show=!1,this.sub=this.imgViewService.getEmitter().subscribe(function(e){t.url=e.url,t.show=!0})}return ImgViewComponent.prototype.ngOnDestroy=function(){this.sub.unsubscribe()},ImgViewComponent.prototype.onEsc=function(e){e.preventDefault(),this.hide(e)},ImgViewComponent.prototype.hide=function(e){this.show=!1},r([n.i(o.Input)(),a("design:type",String)],ImgViewComponent.prototype,"url",void 0),ImgViewComponent=r([n.i(o.Component)({selector:"img-view",template:'\n        <div class="img-view-overlay" (click)="hide($event)">\n            <div class="img-view-close">&times;</div>\n        </div>\n        <div class="img-view-content">\n            <img class="img-view-content-img" [src]="url" />\n        </div>\n    ',host:{"[class.img-view]":"true","[class.show]":"show","[tabIndex]":"0","(keyup.esc)":"onEsc($event)"}}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],ImgViewComponent);var e}()},710:function(e,t,n){"use strict";var o=n(0),i=n(224);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function ImgViewDirective(e){this.imgViewService=e}return ImgViewDirective.prototype.show=function(e){this.imgViewService.show(this.url)},r([n.i(o.Input)(),a("design:type",String)],ImgViewDirective.prototype,"url",void 0),ImgViewDirective=r([n.i(o.Directive)({selector:"[img-view]",host:{"(click)":"show($event)"}}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],ImgViewDirective);var e}()},711:function(e,t,n){"use strict";var o=n(709),i=n(710),r=n(224);n.d(t,"b",function(){return o.a}),n.d(t,"a",function(){return i.a}),n.d(t,"c",function(){return r.a})},712:function(e,t,n){"use strict";var o=n(225),i=n(713),r=n(714);n.d(t,"c",function(){return o.a}),n.d(t,"a",function(){return i.a}),n.d(t,"b",function(){return r.a})},713:function(e,t,n){"use strict";var o=n(0),i=n(225);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function MarkdownEditorComponent(e,t){this.renderer=e,this.mdc=t,this.editable=!0,this.markdown="",this.updateTimeout=150,this.writeLabel="Write",this.previewLabel="Preview",this.update=new o.EventEmitter,this.focus=new o.EventEmitter,this.blur=new o.EventEmitter,this.onFullscreen=new o.EventEmitter,this.fullscreen=!1,this.splitMode=!1,this.hasValue=!1,this.isMdMode=!0,this.isPreviewMode=!1,this.helpVisible=!1}return Object.defineProperty(MarkdownEditorComponent.prototype,"_edit",{get:function(){return this.editable},enumerable:!0,configurable:!0}),Object.defineProperty(MarkdownEditorComponent.prototype,"_fullscreen",{get:function(){return this.fullscreen},enumerable:!0,configurable:!0}),Object.defineProperty(MarkdownEditorComponent.prototype,"_splitMode",{get:function(){return this.splitMode},enumerable:!0,configurable:!0}),Object.defineProperty(MarkdownEditorComponent.prototype,"_helpVisible",{get:function(){return this.helpVisible},enumerable:!0,configurable:!0}),Object.defineProperty(MarkdownEditorComponent.prototype,"_hasValue",{get:function(){return this.hasValue},enumerable:!0,configurable:!0}),MarkdownEditorComponent.prototype.ngOnInit=function(){this.html=this.mdc.toHtml(this.markdown),this.hasValue=this.markdown.length>0,this._markdown=this.markdown,
-this.editable?this.setActiveMdMode():this.setActivePreviewMode()},MarkdownEditorComponent.prototype.onEsc=function(e){e.preventDefault(),this.fullscreen&&this.toggleFullscreen()},MarkdownEditorComponent.prototype.focusMdTextArea=function(){var e=this;this.mdTextArea&&setTimeout(function(){e.renderer.invokeElementMethod(e.mdTextArea.nativeElement,"focus")},0)},MarkdownEditorComponent.prototype.setActiveMdMode=function(){this.isMdMode=!0,this.isPreviewMode=!1,this.splitMode=!1,this.focusMdTextArea()},MarkdownEditorComponent.prototype.setActivePreviewMode=function(){this.isPreviewMode=!0,this.isMdMode=!1,this.splitMode=!1},MarkdownEditorComponent.prototype.toggleFullscreen=function(){this.fullscreen=!this.fullscreen,this.onFullscreen.emit(this.fullscreen),this.focusMdTextArea()},MarkdownEditorComponent.prototype.toggleSplitMode=function(){this.splitMode=!this.splitMode,this.isMdMode=this.splitMode!==!0,this.isPreviewMode=!1,this.focusMdTextArea()},MarkdownEditorComponent.prototype.toggleHelp=function(){this.helpVisible=!this.helpVisible},MarkdownEditorComponent.prototype.updateValue=function(e){var t=this;clearTimeout(this.timeout),this.hasValue=e.trim().length>0,this.timeout=setTimeout(function(){t.update.emit(e.trim()),t.html=t.mdc.toHtml(e.trim())},this.updateTimeout)},r([n.i(o.HostBinding)("class.md-editor"),a("design:type",Object)],MarkdownEditorComponent.prototype,"true",void 0),r([n.i(o.HostBinding)("class.edit"),a("design:type",Object)],MarkdownEditorComponent.prototype,"_edit",null),r([n.i(o.HostBinding)("class.fullscreen"),a("design:type",Object)],MarkdownEditorComponent.prototype,"_fullscreen",null),r([n.i(o.HostBinding)("class.split-mode"),a("design:type",Object)],MarkdownEditorComponent.prototype,"_splitMode",null),r([n.i(o.HostBinding)("class.help-is-visible"),a("design:type",Object)],MarkdownEditorComponent.prototype,"_helpVisible",null),r([n.i(o.HostBinding)("class.has-value"),a("design:type",Object)],MarkdownEditorComponent.prototype,"_hasValue",null),r([n.i(o.Input)(),a("design:type",Boolean)],MarkdownEditorComponent.prototype,"editable",void 0),r([n.i(o.Input)(),a("design:type",String)],MarkdownEditorComponent.prototype,"markdown",void 0),r([n.i(o.Input)(),a("design:type",String)],MarkdownEditorComponent.prototype,"placeHolder",void 0),r([n.i(o.Input)(),a("design:type",Number)],MarkdownEditorComponent.prototype,"updateTimeout",void 0),r([n.i(o.Input)(),a("design:type",String)],MarkdownEditorComponent.prototype,"writeLabel",void 0),r([n.i(o.Input)(),a("design:type",String)],MarkdownEditorComponent.prototype,"previewLabel",void 0),r([n.i(o.Output)(),a("design:type",Object)],MarkdownEditorComponent.prototype,"update",void 0),r([n.i(o.Output)(),a("design:type",Object)],MarkdownEditorComponent.prototype,"focus",void 0),r([n.i(o.Output)(),a("design:type",Object)],MarkdownEditorComponent.prototype,"blur",void 0),r([n.i(o.Output)(),a("design:type",Object)],MarkdownEditorComponent.prototype,"onFullscreen",void 0),r([n.i(o.ViewChild)("mdTextArea"),a("design:type","function"==typeof(e="undefined"!=typeof o.ElementRef&&o.ElementRef)&&e||Object)],MarkdownEditorComponent.prototype,"mdTextArea",void 0),MarkdownEditorComponent=r([n.i(o.Component)({selector:"markdown-editor",template:'\n        <div class="md-editor-container">\n            <div class="md-editor__tabs" [class.md-active]="isMdMode" [class.preview-active]="isPreviewMode">\n                <div class="md-editor__placeholder" *ngIf="placeHolder">{{placeHolder}}</div>\n                <div class="md-editor__tab-title-md" *ngIf="editable" (click)="setActiveMdMode()">\n                    {{writeLabel}}\n                    <a class="md-editor-site" href="https://daringfireball.net/projects/markdown/syntax" tabindex="-1" (click)="false" title="Markdown" target="blank" rel="noreferrer">\n                        <img height="14px" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAYAAAGblg/ZAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFXpUWHRBdXRob3IAAAiZy01NycwDAAYmAg7P7sJVAAABUklEQVRIx2NgYGAwAuL/SBhCwAAjmsB6RmwqYOA/Ni0MyIYuQGKj0MicB1D2YZgYyMh/aHYhg6sMuIyFeYwJh4vhAFmBMJocK05voQcEPkcSBf5jseUrEGvhUYMRe8iSyTgsQQcxuAz4j0fMHMr/i6zmCpomUjFFBhgSjCZCAD2lIEfnQixijNiiHD3AtKDRyEBMNCJ7gZFAWkFW8x+bF9BBClqcM+LKGOjOewDNGOhOZkbin8CXEnElpN9QtiOupEwMno8uRmk6uESNpEwJvkKpD5ANY6aGIdgcwwUtfWHyV6FipJqDNRSwhQCuDJGAVMEwEFHmMRJRJjKQ4gBiQpJkBzARYfB3IDZG4psA8Q8caj8CsSIOT4DElIH4M7lxtwOIdxIZx7VY5NtwVQhkJR4kXzFBcwC6/B0g5gFiISB+QkoipCtggjbSrg6A3aBS0AAACVPtjHPTRNQAAAAASUVORK5CYII=" alt="md" />\n                    </a>\n                </div>\n                <div class="md-editor__tab-title-preview" *ngIf="editable" (click)="setActivePreviewMode()">{{previewLabel}}</div>\n                <div class="md-editor__btn-split-mode" *ngIf="editable" (click)="toggleSplitMode()">\n                    <i class="fa fa-columns"></i>\n                </div>\n                <div class="md-editor__btn-fullscreen" *ngIf="editable" (click)="toggleFullscreen()">\n                    <i class="fa fa-expand"></i>\n                </div>\n                <div class="md-editor__btn-help" *ngIf="editable" (click)="toggleHelp()">\n                    <i class="fa fa-question"></i>\n                </div>\n                <div class="md-editor__tab-content">\n                    <div class="md-editor__markdown" *ngIf="editable">\n                        <textarea class="md-editor__area"\n                            #mdTextArea\n                            name="md"\n                            rows="3"\n                            autosize\n                            (keyup)="updateValue($event.target.value)"\n                            (focus)="focus.emit($event)"\n                            (blur)="updateValue($event.target.value)">{{_markdown}}</textarea>\n                        <!-- <div class="md-editor__area" tabindex="0" draggable="false"\n                            #mdTextArea\n                            [contentEditable]="editable"\n                            (drop)="false"\n                            (keyup)="updateValue($event.target)"\n                            (focus)="focus.emit($event)"\n                            (blur)="updateValue($event.target)"\n                            innerHTML="{{_markdown}}">\n                        </div> -->\n                    </div>\n                    <div class="md-editor__preview" innerHTML="{{html}}"></div>\n                </div>\n            </div>\n            <div class="md-editor__help" [class.show]="helpVisible">\n                <div class="md-editor__help-list">\n                    <div class="md-editor__help-item">\n                        <h1 class="md-editor__help-item-h"># H1</h1>\n                        <h2 class="md-editor__help-item-h">## H2</h2>\n                        <h3 class="md-editor__help-item-h">### H3</h3>\n                    </div>\n                    <div class="md-editor__help-item">\n                        <em>_italic_</em><br/>\n                        <em>*italic*</em><br/>\n                        <strong>__bold__</strong><br/>\n                        <strong>**bold**</strong><br/>\n                        <code>`monospace`</code>\n                    </div>\n                    <div class="md-editor__help-item">\n                        ---\n                        <hr/>\n                    </div>\n                    <div class="md-editor__help-item">\n                        <div class="md-editor__help-item-md">\n                            - 1<br/>- 2<br/>- 3\n                        </div>\n                        <div class="md-editor__help-item-html">\n                            <ul>\n                                <li>1</li>\n                                <li>2</li>\n                                <li>3</li>\n                            </ul>\n                        </div>\n                    </div>\n                    <!-- <div class="md-editor__help-item">\n                        <div class="md-editor__help-item-md">\n                            &gt; blockquote<br/>&gt; Abc<br/>&gt; 123<br/>\n                        </div>\n                        <div class="md-editor__help-item-html">\n                            <blockquote>\n                                <p>blockquote<br>Abc<br>123</p>\n                            </blockquote>\n                        </div>\n                    </div>\n                    <div class="md-editor__help-item">\n                        <div class="md-editor__help-item-md">\n                            1. n1<br/>2. n2<br/>3. n3\n                        </div>\n                        <div class="md-editor__help-item-html">\n                            <ol>\n                                <li>n1</li>\n                                <li>n2</li>\n                                <li>n3</li>\n                            </ol>\n                        </div>\n                    </div> -->\n                    <div class="md-editor__help-item">\n                        [link](http://google.com)<br/>\n                        <a href="http://google.com">link</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ',host:{tabindex:"-1","(keyup.esc)":"onEsc($event)"}}),a("design:paramtypes",["function"==typeof(t="undefined"!=typeof o.Renderer&&o.Renderer)&&t||Object,"function"==typeof(s="undefined"!=typeof i.a&&i.a)&&s||Object])],MarkdownEditorComponent);var e,t,s}()},714:function(e,t,n){"use strict";var o=n(0),i=n(225);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function MarkedPipe(e){this.mdc=e}return MarkedPipe.prototype.transform=function(e){return this.mdc.toHtml(e)},MarkedPipe=r([n.i(o.Pipe)({name:"marked"}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],MarkedPipe);var e}()},715:function(e,t,n){"use strict";var o=n(0),i=n(376);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function NotificationComponent(e){this.notifyService=e,this.notifications=[]}return Object.defineProperty(NotificationComponent.prototype,"isHidden",{get:function(){return 0==this.notifications.length},enumerable:!0,configurable:!0}),NotificationComponent.prototype.ngOnInit=function(){var e=this;this.listener=this.notifyService.getEmitter().subscribe(function(t){switch(t.command){case"cleanAll":e.notifications=[];break;case"add":e.addNotify(t.notify)}})},NotificationComponent.prototype.ngOnDestroy=function(){this.listener&&(this.notifications.map(function(e){return e.getEmitter().unsubscribe()}),this.listener.unsubscribe())},NotificationComponent.prototype.addNotify=function(e){var t=this;this.notifications.push(e),e.getEmitter().subscribe(function(e){return t.notifyEmitter(e)})},NotificationComponent.prototype.notifyEmitter=function(e){if(e.dismiss){var t=this.notifications.indexOf(e.notify);this.notifications.splice(t,1),e.notify.getEmitter().unsubscribe()}},r([n.i(o.HostBinding)("class.nb-notify"),a("design:type",Object)],NotificationComponent.prototype,"true",void 0),r([n.i(o.HostBinding)("class.hidden"),a("design:type",Object)],NotificationComponent.prototype,"isHidden",null),NotificationComponent=r([n.i(o.Component)({selector:"notification",template:'\n        <div class="nb-notify-entry-{{notify.type}}"\n            [class.dismiss-click]="notify.delay == \'click\'"\n            [style.display]="notify.display ? \'block\': \'none\'"\n            (click)="notify.dismiss()"\n            *ngFor="let notify of notifications">\n            {{notify.message}}\n        </div>\n    '}),a("design:paramtypes",["function"==typeof(e="undefined"!=typeof i.a&&i.a)&&e||Object])],NotificationComponent);var e}()},716:function(e,t,n){"use strict";var o=n(717);n.d(t,"a",function(){return o.a})},717:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function PaginationComponent(){this.currentPage=0,this.totalPages=0,this.maxPageControl=5,this.change=new o.EventEmitter,this.startPage=0,this.stopPage=0,this.pages=[]}return Object.defineProperty(PaginationComponent.prototype,"isHidden",{get:function(){return this.totalPages<2},enumerable:!0,configurable:!0}),PaginationComponent.prototype.ngOnChanges=function(){this.pagination()},PaginationComponent.prototype.setPage=function(e,t){t.preventDefault(),this.change.emit({page:e})},PaginationComponent.prototype.pagination=function(){if(this.pages=[],!(this.totalPages<=1)){var e=Math.floor(this.maxPageControl/2);this.startPage=this.currentPage-e,this.stopPage=this.currentPage+e,this.startPage<=e?this.startPage=1:this.currentPage==this.totalPages&&(this.startPage=this.totalPages-this.maxPageControl),this.stopPage>this.totalPages-e?this.stopPage=this.totalPages:1==this.currentPage&&(this.stopPage=this.maxPageControl+1),this.maxPageControl+e>=this.totalPages&&(this.startPage=1,this.stopPage=this.totalPages);for(var t=this.startPage;t<=this.stopPage;t++)this.pages.push(t)}},i([n.i(o.HostBinding)("hidden"),r("design:type",Object)],PaginationComponent.prototype,"isHidden",null),i([n.i(o.Input)("page"),r("design:type",Number)],PaginationComponent.prototype,"currentPage",void 0),i([n.i(o.Input)(),r("design:type",Number)],PaginationComponent.prototype,"totalPages",void 0),i([n.i(o.Input)(),r("design:type",Number)],PaginationComponent.prototype,"maxPageControl",void 0),i([n.i(o.Output)(),r("design:type",Object)],PaginationComponent.prototype,"change",void 0),PaginationComponent=i([n.i(o.Component)({selector:"pagination",template:'\n        <div class="pagination" *ngIf="totalPages > 1">\n            <a href="#" *ngIf="startPage > 1" (click)="setPage(1, $event)">1</a>\n            <span *ngIf="startPage > 1">...</span>\n            <a [class.page-active]="p == currentPage" href="#" *ngFor="let p of pages" (click)="setPage(p, $event)">{{p}}</a>\n            <span *ngIf="stopPage < totalPages">...</span>\n            <a *ngIf="stopPage < totalPages" href="#" (click)="setPage(totalPages, $event)">{{totalPages}}</a>\n        </div>\n    ',changeDetection:o.ChangeDetectionStrategy.OnPush}),r("design:paramtypes",[])],PaginationComponent)}()},718:function(e,t,n){"use strict";var o=n(0),i=n(73),r=n(711),a=n(716),s=n(705),c=n(706),u=n(704),l=n(708),p=n(722),f=n(720),d=n(114),h=n(712),m=n(724),g=n(719);n.d(t,"a",function(){return b});var v=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},y=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},b=function(){function SharedModule(){}return SharedModule=v([n.i(o.NgModule)({declarations:[a.a,d.a,s.a,c.a,u.a,p.a,p.b,l.a,l.b,h.a,h.b,f.a,r.a,r.b,m.a,g.a],exports:[a.a,d.a,s.a,c.a,u.a,p.a,p.b,l.a,l.b,h.a,h.b,f.a,r.a,r.b,m.a,g.a],imports:[i.b],providers:[d.b,r.c,h.c]}),y("design:paramtypes",[])],SharedModule)}()},719:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function SortControlComponent(){this.direction="both",this.active="",this.name="",this.sort=new o.EventEmitter,this._dir=0,this.NONE=0,this.ASC=-1,this.DESC=1}return SortControlComponent.prototype.ngOnInit=function(){this.onChanges()},SortControlComponent.prototype.ngOnChanges=function(){this.onChanges()},SortControlComponent.prototype.onChanges=function(){var e=this.active.split(":");e[0]===this.name?"asc"===e[1]?this._dir=this.ASC:"desc"===e[1]?this._dir=this.DESC:this._dir=this.NONE:(this.active="",this._dir=this.NONE)},SortControlComponent.prototype.onClick=function(e){var t="";"both"===this.direction?this._dir===this.NONE?t=this.name+":asc":this._dir===this.ASC?t=this.name+":desc":this._dir===this.DESC&&(t=""):"asc"===this.direction?this._dir!==this.ASC&&(t=this.name+":asc"):"desc"===this.direction&&this._dir!==this.DESC&&(t=this.name+":desc"),this.sort.emit(t)},i([n.i(o.Input)(),r("design:type",Object)],SortControlComponent.prototype,"direction",void 0),i([n.i(o.Input)(),r("design:type",Object)],SortControlComponent.prototype,"active",void 0),i([n.i(o.Input)(),r("design:type",Object)],SortControlComponent.prototype,"name",void 0),i([n.i(o.Output)(),r("design:type",Object)],SortControlComponent.prototype,"sort",void 0),SortControlComponent=i([n.i(o.Component)({selector:"sort-control",template:"<ng-content></ng-content>",host:{"[class.sort-control]":"true","[class.both]":'direction === "both"',"[class.asc]":'direction === "asc"',"[class.desc]":'direction === "desc"',"[class.is-asc]":"_dir === ASC","[class.is-desc]":"_dir === DESC","(click)":"onClick($event)"}}),r("design:paramtypes",[])],SortControlComponent)}()},720:function(e,t,n){"use strict";var o=n(721);n.d(t,"a",function(){return o.a})},721:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function SwitchButtonComponent(){this.class="input",this.name="swb"+Math.random(),this.multi=!1,this.disabled=!1,this.checkDefault=!0}return SwitchButtonComponent.prototype.ngAfterContentInit=function(){var e=this;[].concat(this.items).forEach(function(t){e.checkDefault&&t&&t.value==e.model[e.value]&&(e.checkDefault=!1)})},SwitchButtonComponent.prototype.select=function(e){this.model[this.value]=e},SwitchButtonComponent.prototype.isSelected=function(e){return e.value==this.model[this.value]||this.checkDefault&&e.default},i([n.i(o.HostBinding)("class.switch-button"),r("design:type",Object)],SwitchButtonComponent.prototype,"true",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"model",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"value",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"items",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"class",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"name",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"multi",void 0),i([n.i(o.Input)(),r("design:type",Object)],SwitchButtonComponent.prototype,"disabled",void 0),SwitchButtonComponent=i([n.i(o.Component)({selector:"switch-button",template:'\n        <label\n             [ngClass]="class"\n             [class.active]="isSelected(item)"\n             [class.disabled]="disabled || item.disabled"\n             *ngFor="let item of items">\n            <input\n                type="{{multi ? \'checkbox\' : \'radio\'}}"\n                name="{{name}}"\n                value="{{item.value}}"\n                [checked]="isSelected(item)"\n                [disabled]="disabled || item.disabled"\n                (change)="select(item.value)" />\n            <i class="fa fa-{{item.icon}}" *ngIf="item.icon"></i>\n            <span>{{item.text}}</span>\n        </label>\n    '}),r("design:paramtypes",[])],SwitchButtonComponent)}()},722:function(e,t,n){"use strict";var o=n(723),i=n(378);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return i.a})},723:function(e,t,n){"use strict";var o=n(0),i=n(378);n.d(t,"a",function(){return s});var r=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},a=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},s=function(){function Tabs(){}return Tabs.prototype.ngAfterContentInit=function(){var e=this.tabs.filter(function(e){return e.active});0===e.length&&this.selectTab(this.tabs.first)},Tabs.prototype.selectTab=function(e){this.tabs.forEach(function(e){return e.active=!1}),e.active=!0,e.select.emit(!0)},r([n.i(o.ContentChildren)(i.a),a("design:type","function"==typeof(e="undefined"!=typeof o.QueryList&&o.QueryList)&&e||Object)],Tabs.prototype,"tabs",void 0),Tabs=r([n.i(o.Component)({selector:"tabs",template:'\n        <ul class="nav nav-tabs">\n            <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.pinned]="tab.pinned" [class.active]="tab.active">\n                <a href="#" (click)="$event.preventDefault()">\n                    <i class="{{tab.icon}}" *ngIf="tab.icon"></i>\n                    {{tab.title}}\n                </a>\n            </li>\n        </ul>\n        <ng-content></ng-content>\n    '}),a("design:paramtypes",[])],Tabs);var e}()},724:function(e,t,n){"use strict";var o=n(0);n.d(t,"a",function(){return a});var i=this&&this.__decorate||function(e,t,n,o){var i,r=arguments.length,a=r<3?t:null===o?o=Object.getOwnPropertyDescriptor(t,n):o;if("object"==typeof Reflect&&"function"==typeof Reflect.decorate)a=Reflect.decorate(e,t,n,o);else for(var s=e.length-1;s>=0;s--)(i=e[s])&&(a=(r<3?i(a):r>3?i(t,n,a):i(t,n))||a);return r>3&&a&&Object.defineProperty(t,n,a),a},r=this&&this.__metadata||function(e,t){if("object"==typeof Reflect&&"function"==typeof Reflect.metadata)return Reflect.metadata(e,t)},a=function(){function TreeIndentationComponent(){this.expandable=!1,this.expanded=!1,this.toggle=new o.EventEmitter,this.levels=[]}return Object.defineProperty(TreeIndentationComponent.prototype,"_levels",{set:function(e){this.levels=e?e.split(""):[]},enumerable:!0,configurable:!0}),TreeIndentationComponent.prototype.onClick=function(e){this.expandable&&(e.preventDefault(),e.stopPropagation(),this.toggle.emit(e))},i([n.i(o.Input)(),r("design:type",Boolean)],TreeIndentationComponent.prototype,"expandable",void 0),i([n.i(o.Input)(),r("design:type",Boolean)],TreeIndentationComponent.prototype,"expanded",void 0),i([n.i(o.Input)("level"),r("design:type",String),r("design:paramtypes",[String])],TreeIndentationComponent.prototype,"_levels",null),i([n.i(o.Output)(),r("design:type",Object)],TreeIndentationComponent.prototype,"toggle",void 0),TreeIndentationComponent=i([n.i(o.Component)({selector:"tree-indentation",template:'\n        <i class="tree-indentation_indent"\n            [class.has-sibling]="_level == \'1\'"\n            [class.is-last]="isLast"\n            *ngFor="let _level of levels; let isLast = last;">\n        </i><i class="tree-indentation_icon fa"></i>\n        <span class="tree-indentation_content"><ng-content></ng-content></span>\n    ',host:{"[class.tree-indentation]":"true","[class.is-expandable]":"expandable","[class.is-expanded]":"expanded","(click)":"onClick($event)"}}),r("design:paramtypes",[])],TreeIndentationComponent)}()},725:function(e,t,n){"use strict";var o=n(726);n.d(t,"a",function(){return o.a})},726:function(e,t,n){"use strict";var o=n(651),i=(n.n(o),n(13)),r=n(885),a=(n.n(r),n(700)),s=n(659),c=n(665),u=n(671);n.d(t,"a",function(){return p});var l=n.i(r.storeLogger)({level:"log",collapsed:!0,duration:!0,timestamp:!0}),p=n.i(i.b)(n.i(o.compose)(l,i.c)({environment:a.a,authed:a.b,reference:s.a,staff:c.a,workflow:u.a}))},75:function(e,t,n){"use strict";function createEmptyUrlTree(){return new r(new a([],{}),{},null)}function containsTree(e,t,n){return n?equalSegmentGroups(e.root,t.root):containsSegmentGroup(e.root,t.root)}function equalSegmentGroups(e,t){if(!equalPath(e.segments,t.segments))return!1;if(e.numberOfChildren!==t.numberOfChildren)return!1;for(var n in t.children){if(!e.children[n])return!1;if(!equalSegmentGroups(e.children[n],t.children[n]))return!1}return!0}function containsSegmentGroup(e,t){return containsSegmentGroupHelper(e,t,t.segments)}function containsSegmentGroupHelper(e,t,n){if(e.segments.length>n.length){var i=e.segments.slice(0,n.length);return!!equalPath(i,n)&&!t.hasChildren()}if(e.segments.length===n.length){if(!equalPath(e.segments,n))return!1;for(var r in t.children){if(!e.children[r])return!1;if(!containsSegmentGroup(e.children[r],t.children[r]))return!1}return!0}var i=n.slice(0,e.segments.length),a=n.slice(e.segments.length);return!!equalPath(e.segments,i)&&(!!e.children[o.a]&&containsSegmentGroupHelper(e.children[o.a],t,a))}function equalPath(e,t){if(e.length!==t.length)return!1;for(var n=0;n<e.length;++n)if(e[n].path!==t[n].path)return!1;return!0}function mapChildrenIntoArray(e,t){var r=[];return n.i(i.c)(e.children,function(e,n){n===o.a&&(r=r.concat(t(e,n)))}),n.i(i.c)(e.children,function(e,n){n!==o.a&&(r=r.concat(t(e,n)))}),r}function serializePaths(e){return e.segments.map(function(e){return serializePath(e)}).join("/")}function serializeSegment(e,t){if(e.hasChildren()&&t){var r=e.children[o.a]?serializeSegment(e.children[o.a],!1):"",a=[];return n.i(i.c)(e.children,function(e,t){t!==o.a&&a.push(t+":"+serializeSegment(e,!1))}),a.length>0?r+"("+a.join("//")+")":""+r}if(e.hasChildren()&&!t){var s=mapChildrenIntoArray(e,function(t,n){return n===o.a?[serializeSegment(e.children[o.a],!1)]:[n+":"+serializeSegment(t,!1)]});return serializePaths(e)+"/("+s.join("//")+")"}return serializePaths(e)}function encode(e){return encodeURIComponent(e)}function decode(e){return decodeURIComponent(e)}function serializePath(e){return""+encode(e.path)+serializeParams(e.parameters)}function serializeParams(e){return pairs(e).map(function(e){return";"+encode(e.first)+"="+encode(e.second)}).join("")}function serializeQueryParams(e){var t=pairs(e).map(function(e){return encode(e.first)+"="+encode(e.second)});return t.length>0?"?"+t.join("&"):""}function pairs(e){var t=[];for(var n in e)e.hasOwnProperty(n)&&t.push(new l(n,e[n]));return t}function matchSegments(e){p.lastIndex=0;var t=e.match(p);return t?t[0]:""}function matchQueryParams(e){f.lastIndex=0;var t=e.match(p);return t?t[0]:""}function matchUrlQueryParamValue(e){d.lastIndex=0;var t=e.match(d);return t?t[0]:""}var o=n(52),i=n(53);t.e=createEmptyUrlTree,t.f=containsTree,n.d(t,"b",function(){return r}),n.d(t,"a",function(){return a}),n.d(t,"c",function(){return s}),t.d=mapChildrenIntoArray,n.d(t,"g",function(){return c}),n.d(t,"h",function(){return u});var r=function(){function UrlTree(e,t,n){this.root=e,this.queryParams=t,this.fragment=n}return UrlTree.prototype.toString=function(){return(new u).serialize(this)},UrlTree}(),a=function(){function UrlSegmentGroup(e,t){var o=this;this.segments=e,this.children=t,this.parent=null,n.i(i.c)(t,function(e,t){return e.parent=o})}return UrlSegmentGroup.prototype.hasChildren=function(){return this.numberOfChildren>0},Object.defineProperty(UrlSegmentGroup.prototype,"numberOfChildren",{get:function(){return Object.keys(this.children).length},enumerable:!0,configurable:!0}),UrlSegmentGroup.prototype.toString=function(){return serializePaths(this)},UrlSegmentGroup}(),s=function(){function UrlSegment(e,t){this.path=e,this.parameters=t}return UrlSegment.prototype.toString=function(){return serializePath(this)},UrlSegment}(),c=function(){function UrlSerializer(){}return UrlSerializer}(),u=function(){function DefaultUrlSerializer(){}return DefaultUrlSerializer.prototype.parse=function(e){var t=new h(e);return new r(t.parseRootSegment(),t.parseQueryParams(),t.parseFragment())},DefaultUrlSerializer.prototype.serialize=function(e){var t="/"+serializeSegment(e.root,!0),n=serializeQueryParams(e.queryParams),o=null!==e.fragment&&void 0!==e.fragment?"#"+encodeURI(e.fragment):"";return""+t+n+o},DefaultUrlSerializer}(),l=function(){function Pair(e,t){this.first=e,this.second=t}return Pair}(),p=/^[^\/\(\)\?;=&#]+/,f=/^[^=\?&#]+/,d=/^[^\?&#]+/,h=function(){function UrlParser(e){this.url=e,this.remaining=e}return UrlParser.prototype.peekStartsWith=function(e){return this.remaining.startsWith(e)},UrlParser.prototype.capture=function(e){if(!this.remaining.startsWith(e))throw new Error('Expected "'+e+'".');this.remaining=this.remaining.substring(e.length)},UrlParser.prototype.parseRootSegment=function(){return this.remaining.startsWith("/")&&this.capture("/"),""===this.remaining||this.remaining.startsWith("?")||this.remaining.startsWith("#")?new a([],{}):new a([],this.parseChildren())},UrlParser.prototype.parseChildren=function(){if(0==this.remaining.length)return{};this.peekStartsWith("/")&&this.capture("/");var e=[];for(this.peekStartsWith("(")||e.push(this.parseSegments());this.peekStartsWith("/")&&!this.peekStartsWith("//")&&!this.peekStartsWith("/(");)this.capture("/"),e.push(this.parseSegments());var t={};this.peekStartsWith("/(")&&(this.capture("/"),t=this.parseParens(!0));var n={};return this.peekStartsWith("(")&&(n=this.parseParens(!1)),(e.length>0||Object.keys(t).length>0)&&(n[o.a]=new a(e,t)),n},UrlParser.prototype.parseSegments=function(){var e=matchSegments(this.remaining);if(""===e&&this.peekStartsWith(";"))throw new Error("Empty path url segment cannot have parameters: '"+this.remaining+"'.");this.capture(e);var t={};return this.peekStartsWith(";")&&(t=this.parseMatrixParams()),new s(decode(e),t)},UrlParser.prototype.parseQueryParams=function(){var e={};if(this.peekStartsWith("?"))for(this.capture("?"),this.parseQueryParam(e);this.remaining.length>0&&this.peekStartsWith("&");)this.capture("&"),this.parseQueryParam(e);return e},UrlParser.prototype.parseFragment=function(){return this.peekStartsWith("#")?decodeURI(this.remaining.substring(1)):null},UrlParser.prototype.parseMatrixParams=function(){for(var e={};this.remaining.length>0&&this.peekStartsWith(";");)this.capture(";"),this.parseParam(e);return e},UrlParser.prototype.parseParam=function(e){var t=matchSegments(this.remaining);if(t){this.capture(t);var n="";if(this.peekStartsWith("=")){this.capture("=");
-var o=matchSegments(this.remaining);o&&(n=o,this.capture(n))}e[decode(t)]=decode(n)}},UrlParser.prototype.parseQueryParam=function(e){var t=matchQueryParams(this.remaining);if(t){this.capture(t);var n="";if(this.peekStartsWith("=")){this.capture("=");var o=matchUrlQueryParamValue(this.remaining);o&&(n=o,this.capture(n))}e[decode(t)]=decode(n)}},UrlParser.prototype.parseParens=function(e){var t={};for(this.capture("(");!this.peekStartsWith(")")&&this.remaining.length>0;){var n=matchSegments(this.remaining),i=this.remaining[n.length];if("/"!==i&&")"!==i&&";"!==i)throw new Error("Cannot parse url '"+this.url+"'");var r=void 0;n.indexOf(":")>-1?(r=n.substr(0,n.indexOf(":")),this.capture(r),this.capture(":")):e&&(r=o.a);var s=this.parseChildren();t[r]=1===Object.keys(s).length?s[o.a]:new a([],s),this.peekStartsWith("//")&&this.capture("//")}return this.capture(")"),t},UrlParser}()},76:function(e,t,n){"use strict";var o=n(667),i=n(669),r=n(668);n.d(t,"a",function(){return o.a}),n.d(t,"b",function(){return i.a}),n.d(t,"c",function(){return r.a})},872:function(e,t){e.exports='<form class="form" *ngIf="isReady"> <header class="content-header"> <div class="content-actions"> <button class="btn-back" type="button" title="{{\'close\' | translate}}" (click)="close($event)"> <i class="fa fa-chevron-left"></i> <span>{{\'close\' | translate}}</span> </button> <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()"> {{\'save_close\' | translate}} </button> <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1"> <div dropdown-toggle> <span class="btn">...</span> </div> <div class="dropdown-menu"> <ul class="menu"> <li> <a class="menu-item" (click)="delete()">{{\'delete\' | translate}}</a> </li> </ul> </div> </div> </div> <h1 class="header-title"> {{title | translate}} </h1> </header> <section class="content-body"> <tabs> <tab class="tab-pane" tabTitle="{{\'properties\' | translate}}"> <div class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'name\' | translate}} </div> <div class="controls"> <input type="text" name="name" [(ngModel)]="model.name" class="span8"/> </div> </div> </div> </tab> <tab class="tab-pane" tabTitle="{{\'acl_tab_title\' | translate}}" icon="fa fa-share-alt" *ngIf="false && !isNew"> <acl [acl]="model.acl"></acl> </tab> </tabs> </section> <footer class="content-footer"> <div class="record-author" *ngIf="model.authorId"> <span>{{\'author\' | translate}}</span> <span>{{model.regDate}}</span> </div> </footer> </form> '},873:function(e,t){e.exports='<form class="form" *ngIf="isReady"> <header class="content-header"> <div class="content-actions"> <button class="btn-back" type="button" title="{{\'close\' | translate}}" (click)="close($event)"> <i class="fa fa-chevron-left"></i> <span>{{\'close\' | translate}}</span> </button> <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()"> {{\'save_close\' | translate}} </button> <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1"> <div dropdown-toggle> <span class="btn">...</span> </div> <div class="dropdown-menu"> <ul class="menu"> <li> <a class="menu-item" (click)="delete()">{{\'delete\' | translate}}</a> </li> </ul> </div> </div> </div> <h1 class="header-title"> {{title | translate}} </h1> </header> <section class="content-body"> <tabs> <tab class="tab-pane" tabTitle="{{\'properties\' | translate}}"> <div class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'applied_reg_date\' | translate}} </div> <div class="controls"> <input type="date" name="appliedRegDate" class="span2"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'doc_language\' | translate}} </div> <div class="controls"> <select name="docLanguage" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'doc_type\' | translate}} </div> <div class="controls"> <select name="docType" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'sender\' | translate}} </div> <div class="controls"> <select name="sender" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'sender_applied_reg_date\' | translate}} </div> <div class="controls"> <input type="date" name="senderAppliedRegDate" class="span2"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'summary\' | translate}} </div> <div class="controls"> <textarea type="text" name="summary" class="span8">{{incoming.summary}}</textarea> </div> </div> </div> <attachments [editable]="isEditable" [model]="incoming" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments> </tab> <tab class="tab-pane" tabTitle="{{\'acl_tab_title\' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew"> <acl [acl]="incoming.acl"></acl> </tab> </tabs> </section> <footer class="content-footer"> <div class="record-author" *ngIf="incoming.authorId"> <span>{{\'author\' | translate}}</span> <span>{{incoming.regDate}}</span> </div> </footer> </form> '},874:function(e,t){e.exports='<form class="form" *ngIf="isReady"> <header class="content-header"> <div class="content-actions"> <button class="btn-back" type="button" title="{{\'close\' | translate}}" (click)="close($event)"> <i class="fa fa-chevron-left"></i> <span>{{\'close\' | translate}}</span> </button> <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()"> {{\'save_close\' | translate}} </button> <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1"> <div dropdown-toggle> <span class="btn">...</span> </div> <div class="dropdown-menu"> <ul class="menu"> <li> <a class="menu-item" (click)="delete()">{{\'delete\' | translate}}</a> </li> </ul> </div> </div> </div> <h1 class="header-title"> {{\'office_memo\' | translate}} </h1> </header> <section class="content-body"> <tabs> <tab class="tab-pane" tabTitle="{{\'properties\' | translate}}"> <div class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'applied_reg_date\' | translate}} </div> <div class="controls"> <input type="date" name="appliedRegDate" class="span2"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'doc_language\' | translate}} </div> <div class="controls"> <select name="docLanguage" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'summary\' | translate}} </div> <div class="controls"> <textarea type="text" name="summary" class="span8">{{officeMemo.summary}}</textarea> </div> </div> </div> <attachments [editable]="isEditable" [model]="officeMemo" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments> </tab> <tab class="tab-pane" tabTitle="{{\'acl_tab_title\' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew"> <acl [acl]="officeMemo.acl"></acl> </tab> </tabs> </section> <footer class="content-footer"> <div class="record-author" *ngIf="officeMemo.authorId"> <span>{{\'author\' | translate}}</span> <span>{{officeMemo.regDate}}</span> </div> </footer> </form> '},875:function(e,t){e.exports='<form class="form" *ngIf="isReady"> <header class="content-header"> <div class="content-actions"> <button class="btn-back" type="button" title="{{\'close\' | translate}}" (click)="close($event)"> <i class="fa fa-chevron-left"></i> <span>{{\'close\' | translate}}</span> </button> <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()"> {{\'save_close\' | translate}} </button> <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1"> <div dropdown-toggle> <span class="btn">...</span> </div> <div class="dropdown-menu"> <ul class="menu"> <li> <a class="menu-item" (click)="delete()">{{\'delete\' | translate}}</a> </li> </ul> </div> </div> </div> <h1 class="header-title"> {{\'outgoing\' | translate}} </h1> </header> <section class="content-body"> <tabs> <tab class="tab-pane" tabTitle="{{\'properties\' | translate}}"> <div class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'applied_reg_date\' | translate}} </div> <div class="controls"> <input type="date" name="appliedRegDate" class="span2"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'doc_language\' | translate}} </div> <div class="controls"> <select name="docLanguage" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'doc_type\' | translate}} </div> <div class="controls"> <select name="docType" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'sender\' | translate}} </div> <div class="controls"> <select name="sender" class="span8"> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'sender_applied_reg_date\' | translate}} </div> <div class="controls"> <input type="date" name="senderAppliedRegDate" class="span2"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'summary\' | translate}} </div> <div class="controls"> <textarea type="text" name="summary" class="span8">{{outgoing.summary}}</textarea> </div> </div> </div> <attachments [editable]="isEditable" [model]="outgoing" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments> </tab> <tab class="tab-pane" tabTitle="{{\'acl_tab_title\' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew"> <acl [acl]="outgoing.acl"></acl> </tab> </tabs> </section> <footer class="content-footer"> <div class="record-author" *ngIf="outgoing.authorId"> <span>{{\'author\' | translate}}</span> <span>{{outgoing.regDate}}</span> </div> </footer> </form> '},876:function(e,t){e.exports='<div class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'editors\' | translate}} </div> <div class="controls"> <div class="input-placeholder"> <ul class="acl-list list-style-none" *ngIf="acl.editors"> <li class="acl-list-item" *ngFor="let editor of acl.editors | values">{{editor}}</li> </ul> </div> </div> </div> <div class="form-group"> <div class="control-label"> {{\'readers\' | translate}} </div> <div class="controls"> <div class="input-placeholder"> <ul class="acl-list list-style-none" *ngIf="acl.readers"> <li class="acl-list-item" *ngFor="let reader of acl.readers | values">{{reader}}</li> </ul> </div> </div> </div> </div> '},877:function(e,t){e.exports='<div class="layout" [class.hidden]="!isReady"> <div class="content-overlay" (mousedown)="hideNav($event)" (touchstart)="hideNav($event)"></div> <navbar [user]="loggedUser"></navbar> <section class="container"> <nav nb-nav class="aside side-nav"></nav> <main class="content"> <router-outlet></router-outlet> </main> </section> </div> <div class="app-loading" *ngIf="!isReady"> <img class="brand-logo" alt="logo" src="{{\'img/logo.png\'}}"/>Loading... </div> <img-view></img-view> <notification></notification> '},878:function(e,t){e.exports='<div class="attachments"> <i class="fa fa-paperclip" *ngIf="!editable"></i> <label class="btn btn-upload" title="{{\'attach_file\' | translate}}" tabindex="0" *ngIf="editable"> <i class="fa fa-paperclip"></i> <span>{{\'attach_file\' | translate}}</span> <input type="file" (change)="uploadFile($event.target.files)" style="display:none"/> </label> <div class="attachment-list" *ngIf="!isHidden"> <div class="attachment-list__item" *ngFor="let att of model.attachments"> <div class="attachment"> <a class="attachment__link" title="{{att.realFileName}}" href="{{model.url}}&attachment={{att.id}}"> {{att.realFileName}} </a> <img img-view *ngIf="isThumbnailSupported(att)" [url]="att.base64 || model.url + \'&attachment=\' + att.id" [src]="att.base64 || model.url + \'&attachment=\' + att.id + \'&_thumbnail\'"/> <span class="attachment__size">{{model.size}}</span> <button type="button" class="btn btn-sm btn-link btn-remove" *ngIf="editable" (click)="delete.emit(att)"> <i class="fa fa-times"></i> </button> </div> </div> </div> </div> '},879:function(e,t){e.exports='<div class="content-header" *ngIf="headerVisible"> <h1 class="header-title" *ngIf="titleVisible"> {{title | translate}}<sup *ngIf="!loading && meta.count">({{meta.count}})</sup> </h1> <div class="content-actions" *ngIf="actionsVisible"> <button class="btn" type="button" (click)="onAction(action, $event)" *ngFor="let action of actions"> <i class="action {{action.icon}}" *ngIf="action.icon"></i> <span>{{action.caption | translate}}</span> </button> <button class="btn btn-refresh" type="button" (click)="onRefresh()"> <i class="fa fa-refresh"></i> </button> <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="onGoToPage($event)"></pagination> </div> </div> <div class="content-body"> <div class="view"> <header class="entries-head" *ngIf="captionsVisible"> <div class="head-wrap"> <label class="entry-select" *ngIf="selectable"> <input type="checkbox" class="all"/> </label> <div class="entry-captions"> <div [class]="column.className" *ngFor="let column of columns"> <sort-control *ngIf="column.sort" [direction]="column.sort" [name]="column.value" [active]="activeSort" (sort)="onSort($event)"> {{column.name | translate}} </sort-control> <span *ngIf="!column.sort">{{column.name | translate}}</span> </div> </div> </div> </header> <div class="entries"> <div class="entry-wrap" *ngFor="let model of list"> <div class="entry"> <label class="entry-select" *ngIf="selectable"> <input type="checkbox" name="docid" [value]="model.id"/> </label> <a class="entry-link" [routerLink]="[\'/reference/form\', model.kind + \'-form\']" [queryParams]="{ docid: model.id }"> <div class="entry-fields"> <div [class]="column.className" [ngSwitch]="column.type" *ngFor="let column of columns"> <span *ngSwitchCase="\'localizedName\'" class="localized-name"> {{model | localizedName:column.value}} </span> <span *ngSwitchDefault> {{model[column.value]}} </span> </div> </div> </a> </div> </div> </div> </div> </div> '},880:function(e,t){e.exports='<ul> <li [class.side-tree-collapsible]="entry.entries" *ngFor="let entry of entries"> <a class="nav-link" [title]="entry.hint" [routerLink]="[rootSegment, entry.customID]" [class.active]="isActive([rootSegment, entry.customID])"> <i class="fa fa-file-o"></i> <span>{{entry.caption | translate}}</span> </a> <nav nb-nav-tree [rootSegment]="rootSegment" [entries]="entry.entries" *ngIf="entry.entries"></nav> </li> </ul> '},881:function(e,t){e.exports='<section [attr.data-nav]="section.customID" class="side-tree-collapsible" *ngFor="let section of outline"> <header data-role="side-tree-toggle" *ngIf="section.caption"> <i class="side-tree-toggle fa"></i> <span>{{section.caption | translate}}</span> </header> <nav nb-nav-tree [rootSegment]="rootSegment" [entries]="section.entries" *ngIf="section.entries"></nav> </section> '},882:function(e,t){e.exports='<header class="header navbar"> <div class="container"> <div class="navbar-header"> <button class="btn-side-nav-toggle" type="button" (click)="toggleNav()"></button> <img class="brand-logo" alt="logo" src="{{logoUrl}}"/> <span class="brand-title">{{headerTitle}}</span> </div> <nav class="navbar-nav navbar-right"> <ul class="nav nav-inline navbar-right"> <li dropdown [tabIndex]="-1" class="dropdown"> <a dropdown-toggle href="#" class="dropdown-toggle"> <i class="fa fa-user"></i> </a> <ul class="dropdown-menu right"> <li *ngIf="user"> <a class="user-profile" [routerLink]="[\'/user-profile\']"> <i class="fa fa-user"></i> <span>{{user.name}}</span> </a> </li> <li class="divider" *ngIf="apps.length"></li> <li *ngFor="let app of apps"> <a [routerLink]="[app.url]" class="nav-item nav-link">{{app.name}}</a> </li> <li class="divider"></li> <li> <a class="ws" href="{{workspaceUrl}}"> <i class="fa fa-th"></i> <span>{{\'workspace\' | translate}}</span> </a> </li> </ul> </li> </ul> <form class="navbar-form navbar-search"> <input type="search" class="q" name="keyword" value="{{keyWord}}" placeholder="{{\'search\' | translate}}" required autocomplete="off" (keyup)="keyup$.next($event)" (focus)="searchFocus()" (blur)="searchBlur($event.target)"/> <button type="reset" (click)="search(\'\')"><i class="fa fa-times"></i></button> <input type="submit" value="search"/> </form> </nav> </div> </header> '},883:function(e,t){e.exports='<form class="form form-userprofile" autocomplete="off" *ngIf="user"> <header class="content-header"> <div class="content-actions"> <button class="btn-back" type="button" (click)="close($event)"> <i class="fa fa-chevron-left"></i> <span>{{\'close\' | translate}}</span> </button> <button class="btn btn-primary" type="button" (click)="updateUserProfile()"> {{\'save_close\' | translate}} </button> </div> <h1 class="header-title"> {{\'employee\' | translate}} / {{user.name}} </h1> </header> <section class="content-body"> <tabs> <tab class="tab-pane" tabTitle="{{\'properties\' | translate}}"> <fieldset class="fieldset fieldset-user-fields"> <div class="form-group"> <div class="control-label"> {{\'login_name\' | translate}} </div> <div class="controls"> <input type="text" class="span4" ngControl="login"/> </div> </div> <div class="form-group" *ngIf="!changePassword"> <div class="control-label"></div> <div class="controls"> <span class="btn btn-xs" (click)="toggleChangePassword()">{{\'change_password\' | translate}}</span> </div> </div> <div class="form-group" *ngIf="changePassword"> <div class="control-label"> {{\'password\' | translate}} </div> <div class="controls" [class.has-error]="errors.pwd"> <input type="password" name="pwd" class="span4" [class.invalid]="errors.pwd" ngControl="pwd"/> </div> </div> <div class="form-group" *ngIf="changePassword"> <div class="control-label"> {{\'password_new\' | translate}} </div> <div class="controls" [class.has-error]="errors.pwd_new"> <input type="password" name="pwd_new" class="span4" [class.invalid]="errors.pwd_new" ngControl="pwd_new"/> </div> </div> <div class="form-group" *ngIf="changePassword"> <div class="control-label"> {{\'password_confirm\' | translate}} </div> <div class="controls" [class.has-error]="errors.pwd_confirm"> <input type="password" name="pwd_confirm" class="span4" [class.invalid]="errors.pwd_confirm" ngControl="pwd_confirm"/> </div> </div> <div class="form-group"> <div class="control-label"> {{\'email\' | translate}} </div> <div class="controls" [class.has-error]="errors.email"> <input type="email" name="email" class="span4" [class.invalid]="errors.email" ngControl="email"/> <div class="error-message">{{errors.email | translate}}</div> </div> </div> <div class="form-group" *ngIf="user.organization"> <div class="control-label"> {{\'org_name\' | translate}} </div> <div class="controls"> <span class="input-placeholder"> {{user.organization}} </span> </div> </div> <div class="form-group" *ngIf="user.department"> <div class="control-label"> {{\'department\' | translate}} </div> <div class="controls"> <span class="input-placeholder"> {{user.department}} </span> </div> </div> <div class="form-group" *ngIf="user.position"> <div class="control-label"> {{\'position\' | translate}} </div> <div class="controls"> <span class="input-placeholder"> {{user.position}} </span> </div> </div> <div class="form-group" *ngIf="user.roles"> <div class="control-label"> {{\'roles\' | translate}} </div> <div class="controls"> <ul class="input-placeholder list-style-none"> <li *ngFor="let role of user.roles">{{role.localizedName[language]}}</li> </ul> </div> </div> </fieldset> </tab> <tab class="tab-pane" tabTitle="{{\'interface\' | translate}}"> <fieldset class="fieldset"> <div class="form-group"> <div class="control-label"> {{\'limit_view\' | translate}} </div> <div class="controls"> <select name="pagesize" class="span2" (change)="changePageSize($event)"> <option value="{{ps}}" [selected]="ps == pageSize" *ngFor="let ps of pageSizes">{{ps}}</option> </select> </div> </div> <div class="form-group"> <div class="control-label"> {{\'interface_lang\' | translate}} </div> <div class="controls"> <select name="lang" class="span2" (change)="changeLang($event)"> <option value="{{langCode}}" [selected]="langCode == language" *ngFor="let langCode of languages | keys"> {{languages[langCode]}} </option> </select> </div> </div> </fieldset> </tab> </tabs> </section> </form> '},885:function(e,t){"use strict";var n=console,o="@ngrx/store/init",i=function(e,t){return new Array(t+1).join(e)},r=function(e,t){return i("0",t-e.toString().length)+e},a=function(e){return"@ "+r(e.getHours(),2)+":"+r(e.getMinutes(),2)+":"+r(e.getSeconds(),2)+"."+r(e.getMilliseconds(),3)},s="undefined"!=typeof performance&&"function"==typeof performance.now?performance:Date,c=function(e,t,n,o){switch(typeof e){case"object":return"function"==typeof e[o]?e[o].apply(e,n):e[o];case"function":return e(t);default:return e}},u=function(e){return function(t){var o=e.actionTransformer,i=e.collapsed,r=e.colors,s=e.timestamp,u=e.duration,l=e.level;t.forEach(function(e,p){var f=e.started,d=e.startedTime,h=e.action,m=e.error,g=e.prevState.nextState?e.prevState.nextState:"(Empty)",v=e.took,y=e.nextState,b=t[p+1];b&&(y=b.prevState,v=b.started-f);var R=o(h),O="function"==typeof i?i(function(){return y},h):i,C=a(d),w=r.title?"color: "+r.title(R)+";":null,S="action "+(s?C:"")+" "+R.type+" "+(u?"(in "+v.toFixed(2)+" ms)":"");try{O?r.title?n.groupCollapsed("%c "+S,w):n.groupCollapsed(S):r.title?n.group("%c "+S,w):n.group(S)}catch(e){n.log(S)}var _=c(l,R,[g],"prevState"),j=c(l,R,[R],"action"),P=c(l,R,[m,g],"error"),I=c(l,R,[y],"nextState");_&&(r.prevState?n[_]("%c prev state","color: "+r.prevState(g)+"; font-weight: bold",g):n[_]("prev state",g)),j&&(r.action?n[j]("%c action","color: "+r.action(R)+"; font-weight: bold",R):n[j]("action",R)),m&&P&&(r.error?n[P]("%c error","color: "+r.error(m,g)+"; font-weight: bold",m):n[P]("error",m)),I&&(r.nextState?n[I]("%c next state","color: "+r.nextState(y)+"; font-weight: bold",y):n[I]("next state",y));try{n.groupEnd()}catch(e){n.log("—— log end ——")}}),t.length=0}};t.storeLogger=function(e){return void 0===e&&(e={}),function(t){var n={},i="undefined"!=typeof window&&window.navigator.userAgent?window.navigator.userAgent:"",r=!1,a=i.indexOf("MSIE "),c=i.indexOf("Trident/");(a>-1||c>-1)&&(r=!0);var l={level:"log",collapsed:!1,duration:!0,timestamp:!0,stateTransformer:function(e){return e},actionTransformer:function(e){return e},colors:r?{}:{title:function(){return"#000000"},prevState:function(){return"#9E9E9E"},action:function(){return"#03A9F4"},nextState:function(){return"#4CAF50"},error:function(){return"#F20404"}}},p=Object.assign({},l,e),f=p.stateTransformer,d=u(p);return function(e,i){var r={started:s.now(),startedTime:new Date,prevState:f(n),action:i},a=t(e,i),c={took:s.now()-r.started,nextState:f(a)};return n=Object.assign({},r,c),i.type!==o&&d([n]),a}}}},894:function(e,t,n){"use strict";var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(3),r=n(511),a=n(163),s=function(e){function ArrayLikeObservable(t,n){e.call(this),this.arrayLike=t,this.scheduler=n,n||1!==t.length||(this._isScalar=!0,this.value=t[0])}return o(ArrayLikeObservable,e),ArrayLikeObservable.create=function(e,t){var n=e.length;return 0===n?new a.EmptyObservable:1===n?new r.ScalarObservable(e[0],t):new ArrayLikeObservable(e,t)},ArrayLikeObservable.dispatch=function(e){var t=e.arrayLike,n=e.index,o=e.length,i=e.subscriber;if(!i.closed){if(n>=o)return void i.complete();i.next(t[n]),e.index=n+1,this.schedule(e)}},ArrayLikeObservable.prototype._subscribe=function(e){var t=0,n=this,o=n.arrayLike,i=n.scheduler,r=o.length;if(i)return i.schedule(ArrayLikeObservable.dispatch,0,{arrayLike:o,index:t,length:r,subscriber:e});for(var a=0;a<r&&!e.closed;a++)e.next(o[a]);e.complete()},ArrayLikeObservable}(i.Observable);t.ArrayLikeObservable=s},897:function(e,t,n){"use strict";var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(99),r=n(526),a=n(510),s=n(898),c=n(119),u=n(894),l=n(250),p=n(3),f=n(519),d=n(251),h=function(e){return e&&"number"==typeof e.length},m=function(e){function FromObservable(t,n){e.call(this,null),this.ish=t,this.scheduler=n}return o(FromObservable,e),FromObservable.create=function(e,t){if(null!=e){if("function"==typeof e[d.$$observable])return e instanceof p.Observable&&!t?e:new FromObservable(e,t);if(i.isArray(e))return new c.ArrayObservable(e,t);if(r.isPromise(e))return new a.PromiseObservable(e,t);if("function"==typeof e[l.$$iterator]||"string"==typeof e)return new s.IteratorObservable(e,t);if(h(e))return new u.ArrayLikeObservable(e,t)}throw new TypeError((null!==e&&typeof e||e)+" is not observable")},FromObservable.prototype._subscribe=function(e){var t=this.ish,n=this.scheduler;return null==n?t[d.$$observable]().subscribe(e):t[d.$$observable]().subscribe(new f.ObserveOnSubscriber(e,n,0))},FromObservable}(p.Observable);t.FromObservable=m},898:function(e,t,n){"use strict";function getIterator(e){var t=e[a.$$iterator];if(!t&&"string"==typeof e)return new c(e);if(!t&&void 0!==e.length)return new u(e);if(!t)throw new TypeError("object is not iterable");return e[a.$$iterator]()}function toLength(e){var t=+e.length;return isNaN(t)?0:0!==t&&numberIsFinite(t)?(t=sign(t)*Math.floor(Math.abs(t)),t<=0?0:t>l?l:t):t}function numberIsFinite(e){return"number"==typeof e&&i.root.isFinite(e)}function sign(e){var t=+e;return 0===t?t:isNaN(t)?t:t<0?-1:1}var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(60),r=n(3),a=n(250),s=function(e){function IteratorObservable(t,n){if(e.call(this),this.scheduler=n,null==t)throw new Error("iterator cannot be null.");this.iterator=getIterator(t)}return o(IteratorObservable,e),IteratorObservable.create=function(e,t){return new IteratorObservable(e,t)},IteratorObservable.dispatch=function(e){var t=e.index,n=e.hasError,o=e.iterator,i=e.subscriber;if(n)return void i.error(e.error);var r=o.next();return r.done?void i.complete():(i.next(r.value),e.index=t+1,void(i.closed||this.schedule(e)))},IteratorObservable.prototype._subscribe=function(e){var t=0,n=this,o=n.iterator,i=n.scheduler;if(i)return i.schedule(IteratorObservable.dispatch,0,{index:t,iterator:o,subscriber:e});for(;;){var r=o.next();if(r.done){e.complete();break}if(e.next(r.value),e.closed)break}},IteratorObservable}(r.Observable);t.IteratorObservable=s;var c=function(){function StringIterator(e,t,n){void 0===t&&(t=0),void 0===n&&(n=e.length),this.str=e,this.idx=t,this.len=n}return StringIterator.prototype[a.$$iterator]=function(){return this},StringIterator.prototype.next=function(){return this.idx<this.len?{done:!1,value:this.str.charAt(this.idx++)}:{done:!0,value:void 0}},StringIterator}(),u=function(){function ArrayIterator(e,t,n){void 0===t&&(t=0),void 0===n&&(n=toLength(e)),this.arr=e,this.idx=t,this.len=n}return ArrayIterator.prototype[a.$$iterator]=function(){return this},ArrayIterator.prototype.next=function(){return this.idx<this.len?{done:!1,value:this.arr[this.idx++]}:{done:!0,value:void 0}},ArrayIterator}(),l=Math.pow(2,53)-1},907:function(e,t,n){"use strict";function first(e,t,n){return this.lift(new a(e,t,n,this))}var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(14),r=n(253);t.first=first;var a=function(){function FirstOperator(e,t,n,o){this.predicate=e,this.resultSelector=t,this.defaultValue=n,this.source=o}return FirstOperator.prototype.call=function(e,t){return t._subscribe(new s(e,this.predicate,this.resultSelector,this.defaultValue,this.source))},FirstOperator}(),s=function(e){function FirstSubscriber(t,n,o,i,r){e.call(this,t),this.predicate=n,this.resultSelector=o,this.defaultValue=i,this.source=r,this.index=0,this.hasCompleted=!1}return o(FirstSubscriber,e),FirstSubscriber.prototype._next=function(e){var t=this.index++;this.predicate?this._tryPredicate(e,t):this._emit(e,t)},FirstSubscriber.prototype._tryPredicate=function(e,t){var n;try{n=this.predicate(e,t,this.source)}catch(e){return void this.destination.error(e)}n&&this._emit(e,t)},FirstSubscriber.prototype._emit=function(e,t){return this.resultSelector?void this._tryResultSelector(e,t):void this._emitFinal(e)},FirstSubscriber.prototype._tryResultSelector=function(e,t){var n;try{n=this.resultSelector(e,t)}catch(e){return void this.destination.error(e)}this._emitFinal(n)},FirstSubscriber.prototype._emitFinal=function(e){var t=this.destination;t.next(e),t.complete(),this.hasCompleted=!0},FirstSubscriber.prototype._complete=function(){var e=this.destination;this.hasCompleted||"undefined"==typeof this.defaultValue?this.hasCompleted||e.error(new r.EmptyError):(e.next(this.defaultValue),e.complete())},FirstSubscriber}(i.Subscriber)},908:function(e,t,n){"use strict";function last(e,t,n){return this.lift(new a(e,t,n,this))}var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(14),r=n(253);t.last=last;var a=function(){function LastOperator(e,t,n,o){this.predicate=e,this.resultSelector=t,this.defaultValue=n,this.source=o}return LastOperator.prototype.call=function(e,t){return t._subscribe(new s(e,this.predicate,this.resultSelector,this.defaultValue,this.source))},LastOperator}(),s=function(e){function LastSubscriber(t,n,o,i,r){e.call(this,t),this.predicate=n,this.resultSelector=o,this.defaultValue=i,this.source=r,this.hasValue=!1,this.index=0,"undefined"!=typeof i&&(this.lastValue=i,this.hasValue=!0)}return o(LastSubscriber,e),LastSubscriber.prototype._next=function(e){var t=this.index++;if(this.predicate)this._tryPredicate(e,t);else{if(this.resultSelector)return void this._tryResultSelector(e,t);this.lastValue=e,this.hasValue=!0}},LastSubscriber.prototype._tryPredicate=function(e,t){var n;try{n=this.predicate(e,t,this.source)}catch(e){return void this.destination.error(e)}if(n){if(this.resultSelector)return void this._tryResultSelector(e,t);this.lastValue=e,this.hasValue=!0}},LastSubscriber.prototype._tryResultSelector=function(e,t){var n;try{n=this.resultSelector(e,t)}catch(e){return void this.destination.error(e)}this.lastValue=n,this.hasValue=!0},LastSubscriber.prototype._complete=function(){var e=this.destination;this.hasValue?(e.next(this.lastValue),e.complete()):e.error(new r.EmptyError)},LastSubscriber}(i.Subscriber)},91:function(e,t,n){"use strict";function createEmptyState(e,t){var n=createEmptyStateSnapshot(e,t),a=new o.BehaviorSubject([new r.c("",{})]),c=new o.BehaviorSubject({}),p=new o.BehaviorSubject({}),f=new o.BehaviorSubject({}),d=new o.BehaviorSubject(""),h=new l(a,c,f,d,p,i.a,t,n.root);return h.snapshot=n.root,new u(new s.b(h,[]),n)}function createEmptyStateSnapshot(e,t){var n={},o={},r={},a="",c=new f([],n,r,a,o,i.a,t,null,e.root,-1,p.empty);return new d("",new s.b(c,[]))}function setRouterStateSnapshot(e,t){t.value._routerState=e,t.children.forEach(function(t){return setRouterStateSnapshot(e,t)})}function serializeNode(e){var t=e.children.length>0?" { "+e.children.map(serializeNode).join(", ")+" } ":"";return""+e.value+t}function advanceActivatedRoute(e){e.snapshot?(n.i(a.d)(e.snapshot.queryParams,e._futureSnapshot.queryParams)||e.queryParams.next(e._futureSnapshot.queryParams),e.snapshot.fragment!==e._futureSnapshot.fragment&&e.fragment.next(e._futureSnapshot.fragment),n.i(a.d)(e.snapshot.params,e._futureSnapshot.params)||(e.params.next(e._futureSnapshot.params),e.data.next(e._futureSnapshot.data)),n.i(a.h)(e.snapshot.url,e._futureSnapshot.url)||e.url.next(e._futureSnapshot.url),e.snapshot=e._futureSnapshot):(e.snapshot=e._futureSnapshot,e.data.next(e._futureSnapshot.data));
-}var o=n(118),i=(n.n(o),n(52)),r=n(75),a=n(53),s=n(221);n.d(t,"a",function(){return u}),t.f=createEmptyState,n.d(t,"b",function(){return l}),n.d(t,"c",function(){return p}),n.d(t,"d",function(){return f}),n.d(t,"e",function(){return d}),t.g=advanceActivatedRoute;var c=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},u=function(e){function RouterState(t,n){e.call(this,t),this.snapshot=n,setRouterStateSnapshot(this,t)}return c(RouterState,e),RouterState.prototype.toString=function(){return this.snapshot.toString()},RouterState}(s.a),l=function(){function ActivatedRoute(e,t,n,o,i,r,a,s){this.url=e,this.params=t,this.queryParams=n,this.fragment=o,this.data=i,this.outlet=r,this.component=a,this._futureSnapshot=s}return Object.defineProperty(ActivatedRoute.prototype,"routeConfig",{get:function(){return this._futureSnapshot.routeConfig},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRoute.prototype,"root",{get:function(){return this._routerState.root},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRoute.prototype,"parent",{get:function(){return this._routerState.parent(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRoute.prototype,"firstChild",{get:function(){return this._routerState.firstChild(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRoute.prototype,"children",{get:function(){return this._routerState.children(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRoute.prototype,"pathFromRoot",{get:function(){return this._routerState.pathFromRoot(this)},enumerable:!0,configurable:!0}),ActivatedRoute.prototype.toString=function(){return this.snapshot?this.snapshot.toString():"Future("+this._futureSnapshot+")"},ActivatedRoute}(),p=function(){function InheritedResolve(e,t){this.parent=e,this.current=t,this.resolvedData={}}return Object.defineProperty(InheritedResolve.prototype,"flattenedResolvedData",{get:function(){return this.parent?n.i(a.g)(this.parent.flattenedResolvedData,this.resolvedData):this.resolvedData},enumerable:!0,configurable:!0}),Object.defineProperty(InheritedResolve,"empty",{get:function(){return new InheritedResolve(null,{})},enumerable:!0,configurable:!0}),InheritedResolve}(),f=function(){function ActivatedRouteSnapshot(e,t,n,o,i,r,a,s,c,u,l){this.url=e,this.params=t,this.queryParams=n,this.fragment=o,this.data=i,this.outlet=r,this.component=a,this._routeConfig=s,this._urlSegment=c,this._lastPathIndex=u,this._resolve=l}return Object.defineProperty(ActivatedRouteSnapshot.prototype,"routeConfig",{get:function(){return this._routeConfig},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRouteSnapshot.prototype,"root",{get:function(){return this._routerState.root},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRouteSnapshot.prototype,"parent",{get:function(){return this._routerState.parent(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRouteSnapshot.prototype,"firstChild",{get:function(){return this._routerState.firstChild(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRouteSnapshot.prototype,"children",{get:function(){return this._routerState.children(this)},enumerable:!0,configurable:!0}),Object.defineProperty(ActivatedRouteSnapshot.prototype,"pathFromRoot",{get:function(){return this._routerState.pathFromRoot(this)},enumerable:!0,configurable:!0}),ActivatedRouteSnapshot.prototype.toString=function(){var e=this.url.map(function(e){return e.toString()}).join("/"),t=this._routeConfig?this._routeConfig.path:"";return"Route(url:'"+e+"', path:'"+t+"')"},ActivatedRouteSnapshot}(),d=function(e){function RouterStateSnapshot(t,n){e.call(this,n),this.url=t,setRouterStateSnapshot(this,n)}return c(RouterStateSnapshot,e),RouterStateSnapshot.prototype.toString=function(){return serializeNode(this._root)},RouterStateSnapshot}(s.a)},910:function(e,t,n){"use strict";function reduce(e,t){return this.lift(new r(e,t))}var o=this&&this.__extends||function(e,t){function __(){this.constructor=e}for(var n in t)t.hasOwnProperty(n)&&(e[n]=t[n]);e.prototype=null===t?Object.create(t):(__.prototype=t.prototype,new __)},i=n(14);t.reduce=reduce;var r=function(){function ReduceOperator(e,t){this.accumulator=e,this.seed=t}return ReduceOperator.prototype.call=function(e,t){return t._subscribe(new a(e,this.accumulator,this.seed))},ReduceOperator}();t.ReduceOperator=r;var a=function(e){function ReduceSubscriber(t,n,o){e.call(this,t),this.accumulator=n,this.hasValue=!1,this.acc=o,this.accumulator=n,this.hasSeed="undefined"!=typeof o}return o(ReduceSubscriber,e),ReduceSubscriber.prototype._next=function(e){this.hasValue||(this.hasValue=this.hasSeed)?this._tryReduce(e):(this.acc=e,this.hasValue=!0)},ReduceSubscriber.prototype._tryReduce=function(e){var t;try{t=this.accumulator(this.acc,e)}catch(e){return void this.destination.error(e)}this.acc=t},ReduceSubscriber.prototype._complete=function(){(this.hasValue||this.hasSeed)&&this.destination.next(this.acc),this.destination.complete()},ReduceSubscriber}(i.Subscriber);t.ReduceSubscriber=a},934:function(e,t,n){"use strict";var o=n(168),i=n(527);n.i(o.a)().bootstrapModule(i.a)}},[934]);
+webpackJsonp([0],{
+
+/***/ 113:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_forms__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_shared_module__ = __webpack_require__(719);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_acl_acl__ = __webpack_require__(677);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_attachment_attachments__ = __webpack_require__(679);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_list_page_list_page__ = __webpack_require__(680);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__pipes__ = __webpack_require__(694);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return SharedModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+var SharedModule = (function () {
+    function SharedModule() {
+    }
+    SharedModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_7__components_acl_acl__["a" /* AclComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__components_attachment_attachments__["a" /* AttachmentsComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__components_list_page_list_page__["a" /* ListPageComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["a" /* DateFormatPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["b" /* DateDurationPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["c" /* TextTransformPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["d" /* LocalizedNamePipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["e" /* KeysPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["f" /* ValuesPipe */]
+            ],
+            exports: [
+                __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
+                __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* RouterModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__["TranslateModule"],
+                __WEBPACK_IMPORTED_MODULE_7__components_acl_acl__["a" /* AclComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__components_attachment_attachments__["a" /* AttachmentsComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__components_list_page_list_page__["a" /* ListPageComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__shared_shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["a" /* DateFormatPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["b" /* DateDurationPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["c" /* TextTransformPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["d" /* LocalizedNamePipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["e" /* KeysPipe */],
+                __WEBPACK_IMPORTED_MODULE_10__pipes__["f" /* ValuesPipe */]
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */],
+                __WEBPACK_IMPORTED_MODULE_2__angular_http__["HttpModule"],
+                __WEBPACK_IMPORTED_MODULE_3__angular_router__["a" /* RouterModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["a" /* ReactiveFormsModule */],
+                __WEBPACK_IMPORTED_MODULE_4__angular_forms__["b" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__["TranslateModule"],
+                __WEBPACK_IMPORTED_MODULE_6__shared_shared_module__["a" /* SharedModule */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SharedModule);
+    return SharedModule;
+}());
+
+
+/***/ },
+
+/***/ 114:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__notification_service__ = __webpack_require__(377);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notification_component__ = __webpack_require__(716);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__notification__ = __webpack_require__(378);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__notification_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__notification_component__["a"]; });
+/* unused harmony namespace reexport */
+
+
+
+
+
+/***/ },
+
+/***/ 151:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__ = __webpack_require__(518);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_mergeAll__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_mergeAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_operator_mergeAll__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_reduce__ = __webpack_require__(912);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_reduce___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_operator_reduce__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__apply_redirects__ = __webpack_require__(645);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__config__ = __webpack_require__(646);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__create_router_state__ = __webpack_require__(647);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__create_url_tree__ = __webpack_require__(648);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__recognize__ = __webpack_require__(651);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__router_config_loader__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__router_outlet_map__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__router_state__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__utils_collection__ = __webpack_require__(54);
+/* unused harmony export NavigationStart */
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return NavigationEnd; });
+/* unused harmony export NavigationCancel */
+/* unused harmony export NavigationError */
+/* unused harmony export RoutesRecognized */
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Router; });
+/* unused harmony export PreActivation */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @whatItDoes Represents an event triggered when a navigation starts.
+ *
+ * @stable
+ */
+var NavigationStart = (function () {
+    // TODO: vsavkin: make internal
+    function NavigationStart(
+        /** @docsNotRequired */
+        id, 
+        /** @docsNotRequired */
+        url) {
+        this.id = id;
+        this.url = url;
+    }
+    /** @docsNotRequired */
+    NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
+    return NavigationStart;
+}());
+/**
+ * @whatItDoes Represents an event triggered when a navigation ends successfully.
+ *
+ * @stable
+ */
+var NavigationEnd = (function () {
+    // TODO: vsavkin: make internal
+    function NavigationEnd(
+        /** @docsNotRequired */
+        id, 
+        /** @docsNotRequired */
+        url, 
+        /** @docsNotRequired */
+        urlAfterRedirects) {
+        this.id = id;
+        this.url = url;
+        this.urlAfterRedirects = urlAfterRedirects;
+    }
+    /** @docsNotRequired */
+    NavigationEnd.prototype.toString = function () {
+        return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
+    };
+    return NavigationEnd;
+}());
+/**
+ * @whatItDoes Represents an event triggered when a navigation is canceled.
+ *
+ * @stable
+ */
+var NavigationCancel = (function () {
+    // TODO: vsavkin: make internal
+    function NavigationCancel(
+        /** @docsNotRequired */
+        id, 
+        /** @docsNotRequired */
+        url, 
+        /** @docsNotRequired */
+        reason) {
+        this.id = id;
+        this.url = url;
+        this.reason = reason;
+    }
+    /** @docsNotRequired */
+    NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
+    return NavigationCancel;
+}());
+/**
+ * @whatItDoes Represents an event triggered when a navigation fails due to an unexpected error.
+ *
+ * @stable
+ */
+var NavigationError = (function () {
+    // TODO: vsavkin: make internal
+    function NavigationError(
+        /** @docsNotRequired */
+        id, 
+        /** @docsNotRequired */
+        url, 
+        /** @docsNotRequired */
+        error) {
+        this.id = id;
+        this.url = url;
+        this.error = error;
+    }
+    /** @docsNotRequired */
+    NavigationError.prototype.toString = function () {
+        return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
+    };
+    return NavigationError;
+}());
+/**
+ * @whatItDoes Represents an event triggered when routes are recognized.
+ *
+ * @stable
+ */
+var RoutesRecognized = (function () {
+    // TODO: vsavkin: make internal
+    function RoutesRecognized(
+        /** @docsNotRequired */
+        id, 
+        /** @docsNotRequired */
+        url, 
+        /** @docsNotRequired */
+        urlAfterRedirects, 
+        /** @docsNotRequired */
+        state) {
+        this.id = id;
+        this.url = url;
+        this.urlAfterRedirects = urlAfterRedirects;
+        this.state = state;
+    }
+    /** @docsNotRequired */
+    RoutesRecognized.prototype.toString = function () {
+        return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
+    };
+    return RoutesRecognized;
+}());
+function defaultErrorHandler(error) {
+    throw error;
+}
+/**
+ * @whatItDoes Provides the navigation and url manipulation capabilities.
+ *
+ * See {@link Routes} for more details and examples.
+ *
+ * @ngModule RouterModule
+ *
+ * @stable
+ */
+var Router = (function () {
+    /**
+     * Creates the router service.
+     */
+    // TODO: vsavkin make internal after the final is out.
+    function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+        this.rootComponentType = rootComponentType;
+        this.urlSerializer = urlSerializer;
+        this.outletMap = outletMap;
+        this.location = location;
+        this.injector = injector;
+        this.config = config;
+        this.navigationId = 0;
+        /**
+         * Error handler that is invoked when a navigation errors.
+         *
+         * See {@link ErrorHandler} for more information.
+         */
+        this.errorHandler = defaultErrorHandler;
+        /**
+         * Indicates if at least one navigation happened.
+         */
+        this.navigated = false;
+        this.resetConfig(config);
+        this.routerEvents = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.currentUrlTree = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_18__url_tree__["e" /* createEmptyUrlTree */])();
+        this.configLoader = new __WEBPACK_IMPORTED_MODULE_14__router_config_loader__["b" /* RouterConfigLoader */](loader, compiler);
+        this.currentRouterState = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16__router_state__["f" /* createEmptyState */])(this.currentUrlTree, this.rootComponentType);
+    }
+    /**
+     * Sets up the location change listener and performs the initial navigation.
+     */
+    Router.prototype.initialNavigation = function () {
+        this.setUpLocationChangeListener();
+        this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+    };
+    /**
+     * Sets up the location change listener.
+     */
+    Router.prototype.setUpLocationChangeListener = function () {
+        var _this = this;
+        // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+        // which does not work properly with zone.js in IE and Safari
+        this.locationSubscription = this.location.subscribe(Zone.current.wrap(function (change) {
+            var tree = _this.urlSerializer.parse(change['url']);
+            // we fire multiple events for a single URL change
+            // we should navigate only once
+            return _this.currentUrlTree.toString() !== tree.toString() ?
+                _this.scheduleNavigation(tree, { skipLocationChange: change['pop'], replaceUrl: true }) :
+                null;
+        }));
+    };
+    Object.defineProperty(Router.prototype, "routerState", {
+        /**
+         * Returns the current route state.
+         */
+        get: function () { return this.currentRouterState; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Router.prototype, "url", {
+        /**
+         * Returns the current url.
+         */
+        get: function () { return this.serializeUrl(this.currentUrlTree); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Router.prototype, "events", {
+        /**
+         * Returns an observable of route events
+         */
+        get: function () { return this.routerEvents; },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * Resets the configuration used for navigation and generating links.
+     *
+     * ### Usage
+     *
+     * ```
+     * router.resetConfig([
+     *  { path: 'team/:id', component: TeamCmp, children: [
+     *    { path: 'simple', component: SimpleCmp },
+     *    { path: 'user/:name', component: UserCmp }
+     *  ] }
+     * ]);
+     * ```
+     */
+    Router.prototype.resetConfig = function (config) {
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_10__config__["a" /* validateConfig */])(config);
+        this.config = config;
+    };
+    /**
+     * @docsNotRequired
+     */
+    Router.prototype.ngOnDestroy = function () { this.dispose(); };
+    /**
+     * Disposes of the router.
+     */
+    Router.prototype.dispose = function () { this.locationSubscription.unsubscribe(); };
+    /**
+     * Applies an array of commands to the current url tree and creates a new url tree.
+     *
+     * When given an activate route, applies the given commands starting from the route.
+     * When not given a route, applies the given command starting from the root.
+     *
+     * ### Usage
+     *
+     * ```
+     * // create /team/33/user/11
+     * router.createUrlTree(['/team', 33, 'user', 11]);
+     *
+     * // create /team/33;expand=true/user/11
+     * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
+     *
+     * // you can collapse static segments like this (this works only with the first passed-in value):
+     * router.createUrlTree(['/team/33/user', userId]);
+     *
+     * // If the first segment can contain slashes, and you do not want the router to split it, you
+     * // can do the following:
+     *
+     * router.createUrlTree([{segmentPath: '/one/two'}]);
+     *
+     * // create /team/33/(user/11//right:chat)
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
+     *
+     * // remove the right secondary node
+     * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+     *
+     * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
+     *
+     * // navigate to /team/33/user/11/details
+     * router.createUrlTree(['details'], {relativeTo: route});
+     *
+     * // navigate to /team/33/user/22
+     * router.createUrlTree(['../22'], {relativeTo: route});
+     *
+     * // navigate to /team/44/user/22
+     * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+     * ```
+     */
+    Router.prototype.createUrlTree = function (commands, _a) {
+        var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, preserveFragment = _b.preserveFragment;
+        var a = relativeTo ? relativeTo : this.routerState.root;
+        var q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+        var f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__create_url_tree__["a" /* createUrlTree */])(a, this.currentUrlTree, commands, q, f);
+    };
+    /**
+     * Navigate based on the provided url. This navigation is always absolute.
+     *
+     * Returns a promise that:
+     * - is resolved with 'true' when navigation succeeds
+     * - is resolved with 'false' when navigation fails
+     * - is rejected when an error happens
+     *
+     * ### Usage
+     *
+     * ```
+     * router.navigateByUrl("/team/33/user/11");
+     *
+     * // Navigate without updating the URL
+     * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
+     * ```
+     *
+     * In opposite to `navigate`, `navigateByUrl` takes a whole URL
+     * and does not apply any delta to the current one.
+     */
+    Router.prototype.navigateByUrl = function (url, extras) {
+        if (extras === void 0) { extras = { skipLocationChange: false }; }
+        if (url instanceof __WEBPACK_IMPORTED_MODULE_18__url_tree__["b" /* UrlTree */]) {
+            return this.scheduleNavigation(url, extras);
+        }
+        else {
+            var urlTree = this.urlSerializer.parse(url);
+            return this.scheduleNavigation(urlTree, extras);
+        }
+    };
+    /**
+     * Navigate based on the provided array of commands and a starting point.
+     * If no starting route is provided, the navigation is absolute.
+     *
+     * Returns a promise that:
+     * - is resolved with 'true' when navigation succeeds
+     * - is resolved with 'false' when navigation fails
+     * - is rejected when an error happens
+     *
+     * ### Usage
+     *
+     * ```
+     * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
+     *
+     * // Navigate without updating the URL
+     * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true });
+     * ```
+     *
+     * In opposite to `navigateByUrl`, `navigate` always takes a delta
+     * that is applied to the current URL.
+     */
+    Router.prototype.navigate = function (commands, extras) {
+        if (extras === void 0) { extras = { skipLocationChange: false }; }
+        return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
+    };
+    /**
+     * Serializes a {@link UrlTree} into a string.
+     */
+    Router.prototype.serializeUrl = function (url) { return this.urlSerializer.serialize(url); };
+    /**
+     * Parses a string into a {@link UrlTree}.
+     */
+    Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
+    /**
+     * Returns if the url is activated or not.
+     */
+    Router.prototype.isActive = function (url, exact) {
+        if (url instanceof __WEBPACK_IMPORTED_MODULE_18__url_tree__["b" /* UrlTree */]) {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_18__url_tree__["f" /* containsTree */])(this.currentUrlTree, url, exact);
+        }
+        else {
+            var urlTree = this.urlSerializer.parse(url);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_18__url_tree__["f" /* containsTree */])(this.currentUrlTree, urlTree, exact);
+        }
+    };
+    Router.prototype.scheduleNavigation = function (url, extras) {
+        var _this = this;
+        var id = ++this.navigationId;
+        this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+        return Promise.resolve().then(function (_) { return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id); });
+    };
+    Router.prototype.runNavigate = function (url, shouldPreventPushState, shouldReplaceUrl, id) {
+        var _this = this;
+        if (id !== this.navigationId) {
+            this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
+            this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
+            return Promise.resolve(false);
+        }
+        return new Promise(function (resolvePromise, rejectPromise) {
+            var state;
+            var navigationIsSuccessful;
+            var preActivation;
+            var appliedUrl;
+            var storedState = _this.currentRouterState;
+            var storedUrl = _this.currentUrlTree;
+            var redirectsApplied$ = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_9__apply_redirects__["a" /* applyRedirects */])(_this.injector, _this.configLoader, url, _this.config);
+            var snapshot$ = __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(redirectsApplied$, function (u) {
+                appliedUrl = u;
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_13__recognize__["a" /* recognize */])(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
+            });
+            var emitRecognzied$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(snapshot$, function (newRouterStateSnapshot) {
+                _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
+                return newRouterStateSnapshot;
+            });
+            var routerState$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(emitRecognzied$, function (routerStateSnapshot) {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_11__create_router_state__["a" /* createRouterState */])(routerStateSnapshot, _this.currentRouterState);
+            });
+            var preactivation$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(routerState$, function (newState) {
+                state = newState;
+                preActivation =
+                    new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
+                preActivation.traverse(_this.outletMap);
+            });
+            var preactivation2$ = __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(preactivation$, function () { return preActivation.checkGuards(); });
+            var resolveData$ = __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(preactivation2$, function (shouldActivate) {
+                if (shouldActivate) {
+                    return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(preActivation.resolveData(), function () { return shouldActivate; });
+                }
+                else {
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(shouldActivate);
+                }
+            });
+            resolveData$
+                .forEach(function (shouldActivate) {
+                if (!shouldActivate || id !== _this.navigationId) {
+                    navigationIsSuccessful = false;
+                    return;
+                }
+                _this.currentUrlTree = appliedUrl;
+                _this.currentRouterState = state;
+                if (!shouldPreventPushState) {
+                    var path = _this.urlSerializer.serialize(appliedUrl);
+                    if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+                        _this.location.replaceState(path);
+                    }
+                    else {
+                        _this.location.go(path);
+                    }
+                }
+                new ActivateRoutes(state, storedState).activate(_this.outletMap);
+                navigationIsSuccessful = true;
+            })
+                .then(function () {
+                _this.navigated = true;
+                if (navigationIsSuccessful) {
+                    _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+                    resolvePromise(true);
+                }
+                else {
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
+                    resolvePromise(false);
+                }
+            }, function (e) {
+                if (e instanceof __WEBPACK_IMPORTED_MODULE_17__shared__["b" /* NavigationCancelingError */]) {
+                    _this.navigated = true;
+                    _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
+                    resolvePromise(false);
+                }
+                else {
+                    _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+                    try {
+                        resolvePromise(_this.errorHandler(e));
+                    }
+                    catch (ee) {
+                        rejectPromise(ee);
+                    }
+                }
+                if (id === _this.navigationId) {
+                    _this.currentRouterState = storedState;
+                    _this.currentUrlTree = storedUrl;
+                    _this.location.replaceState(_this.serializeUrl(storedUrl));
+                }
+            });
+        });
+    };
+    return Router;
+}());
+var CanActivate = (function () {
+    function CanActivate(path) {
+        this.path = path;
+    }
+    Object.defineProperty(CanActivate.prototype, "route", {
+        get: function () { return this.path[this.path.length - 1]; },
+        enumerable: true,
+        configurable: true
+    });
+    return CanActivate;
+}());
+var CanDeactivate = (function () {
+    function CanDeactivate(component, route) {
+        this.component = component;
+        this.route = route;
+    }
+    return CanDeactivate;
+}());
+var PreActivation = (function () {
+    function PreActivation(future, curr, injector) {
+        this.future = future;
+        this.curr = curr;
+        this.injector = injector;
+        this.checks = [];
+    }
+    PreActivation.prototype.traverse = function (parentOutletMap) {
+        var futureRoot = this.future._root;
+        var currRoot = this.curr ? this.curr._root : null;
+        this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
+    };
+    PreActivation.prototype.checkGuards = function () {
+        var _this = this;
+        if (this.checks.length === 0)
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(true);
+        var checks$ = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(this.checks);
+        var runningChecks$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(checks$, function (s) {
+            if (s instanceof CanActivate) {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["f" /* andObservables */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
+            }
+            else if (s instanceof CanDeactivate) {
+                // workaround https://github.com/Microsoft/TypeScript/issues/7271
+                var s2 = s;
+                return _this.runCanDeactivate(s2.component, s2.route);
+            }
+            else {
+                throw new Error('Cannot be reached');
+            }
+        });
+        var mergedChecks$ = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_mergeAll__["mergeAll"].call(runningChecks$);
+        return __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__["every"].call(mergedChecks$, function (result) { return result === true; });
+    };
+    PreActivation.prototype.resolveData = function () {
+        var _this = this;
+        if (this.checks.length === 0)
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(null);
+        var checks$ = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(this.checks);
+        var runningChecks$ = __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(checks$, function (s) {
+            if (s instanceof CanActivate) {
+                return _this.runResolve(s.route);
+            }
+            else {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(null);
+            }
+        });
+        return __WEBPACK_IMPORTED_MODULE_8_rxjs_operator_reduce__["reduce"].call(runningChecks$, function (_, __) { return _; });
+    };
+    PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap, futurePath) {
+        var _this = this;
+        var prevChildren = nodeChildrenAsMap(currNode);
+        futureNode.children.forEach(function (c) {
+            _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
+            delete prevChildren[c.value.outlet];
+        });
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["c" /* forEach */])(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]); });
+    };
+    PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap, futurePath) {
+        var future = futureNode.value;
+        var curr = currNode ? currNode.value : null;
+        var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
+        // reusing the node
+        if (curr && future._routeConfig === curr._routeConfig) {
+            if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["d" /* shallowEqual */])(future.params, curr.params)) {
+                this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
+            }
+            else {
+                // we need to set the data
+                future.data = curr.data;
+            }
+            // If we have a component, we need to go through an outlet.
+            if (future.component) {
+                this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
+            }
+            else {
+                this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
+            }
+        }
+        else {
+            if (curr) {
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    this.deactivateOutletAndItChildren(curr, outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
+            }
+            this.checks.push(new CanActivate(futurePath));
+            // If we have a component, we need to go through an outlet.
+            if (future.component) {
+                this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
+            }
+            else {
+                this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
+            }
+        }
+    };
+    PreActivation.prototype.deactivateOutletAndItChildren = function (route, outlet) {
+        if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
+            this.checks.push(new CanDeactivate(outlet.component, route));
+        }
+    };
+    PreActivation.prototype.deactivateOutletMap = function (outletMap) {
+        var _this = this;
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["c" /* forEach */])(outletMap._outlets, function (v) {
+            if (v.isActivated) {
+                _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
+            }
+        });
+    };
+    PreActivation.prototype.runCanActivate = function (future) {
+        var _this = this;
+        var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
+        if (!canActivate || canActivate.length === 0)
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(true);
+        var obs = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(canActivate), function (c) {
+            var guard = _this.getToken(c, future);
+            if (guard.canActivate) {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard.canActivate(future, _this.future));
+            }
+            else {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard(future, _this.future));
+            }
+        });
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["f" /* andObservables */])(obs);
+    };
+    PreActivation.prototype.runCanActivateChild = function (path) {
+        var _this = this;
+        var future = path[path.length - 1];
+        var canActivateChildGuards = path.slice(0, path.length - 1)
+            .reverse()
+            .map(function (p) { return _this.extractCanActivateChild(p); })
+            .filter(function (_) { return _ !== null; });
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["f" /* andObservables */])(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(canActivateChildGuards), function (d) {
+            var obs = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(d.guards), function (c) {
+                var guard = _this.getToken(c, c.node);
+                if (guard.canActivateChild) {
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard.canActivateChild(future, _this.future));
+                }
+                else {
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard(future, _this.future));
+                }
+            });
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["f" /* andObservables */])(obs);
+        }));
+    };
+    PreActivation.prototype.extractCanActivateChild = function (p) {
+        var canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
+        if (!canActivateChild || canActivateChild.length === 0)
+            return null;
+        return { node: p, guards: canActivateChild };
+    };
+    PreActivation.prototype.runCanDeactivate = function (component, curr) {
+        var _this = this;
+        var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+        if (!canDeactivate || canDeactivate.length === 0)
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3_rxjs_observable_of__["of"])(true);
+        var canDeactivate$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_from__["from"])(canDeactivate), function (c) {
+            var guard = _this.getToken(c, curr);
+            if (guard.canDeactivate) {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard.canDeactivate(component, curr, _this.curr));
+            }
+            else {
+                return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(guard(component, curr, _this.curr));
+            }
+        });
+        var merged$ = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_mergeAll__["mergeAll"].call(canDeactivate$);
+        return __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__["every"].call(merged$, function (result) { return result === true; });
+    };
+    PreActivation.prototype.runResolve = function (future) {
+        var resolve = future._resolve;
+        return __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_map__["map"].call(this.resolveNode(resolve.current, future), function (resolvedData) {
+            resolve.resolvedData = resolvedData;
+            future.data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["g" /* merge */])(future.data, resolve.flattenedResolvedData);
+            return null;
+        });
+    };
+    PreActivation.prototype.resolveNode = function (resolve, future) {
+        var _this = this;
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["e" /* waitForMap */])(resolve, function (k, v) {
+            var resolver = _this.getToken(v, future);
+            return resolver.resolve ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(resolver.resolve(future, _this.future)) :
+                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["b" /* wrapIntoObservable */])(resolver(future, _this.future));
+        });
+    };
+    PreActivation.prototype.getToken = function (token, snapshot) {
+        var config = closestLoadedConfig(snapshot);
+        var injector = config ? config.injector : this.injector;
+        return injector.get(token);
+    };
+    return PreActivation;
+}());
+var ActivateRoutes = (function () {
+    function ActivateRoutes(futureState, currState) {
+        this.futureState = futureState;
+        this.currState = currState;
+    }
+    ActivateRoutes.prototype.activate = function (parentOutletMap) {
+        var futureRoot = this.futureState._root;
+        var currRoot = this.currState ? this.currState._root : null;
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16__router_state__["g" /* advanceActivatedRoute */])(this.futureState.root);
+        this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+    };
+    ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {
+        var _this = this;
+        var prevChildren = nodeChildrenAsMap(currNode);
+        futureNode.children.forEach(function (c) {
+            _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
+            delete prevChildren[c.value.outlet];
+        });
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["c" /* forEach */])(prevChildren, function (v, k) { return _this.deactivateOutletAndItChildren(outletMap._outlets[k]); });
+    };
+    ActivateRoutes.prototype.activateRoutes = function (futureNode, currNode, parentOutletMap) {
+        var future = futureNode.value;
+        var curr = currNode ? currNode.value : null;
+        // reusing the node
+        if (future === curr) {
+            // advance the route to push the parameters
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16__router_state__["g" /* advanceActivatedRoute */])(future);
+            // If we have a normal route, we need to go through an outlet.
+            if (future.component) {
+                var outlet = getOutlet(parentOutletMap, futureNode.value);
+                this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+            }
+            else {
+                this.activateChildRoutes(futureNode, currNode, parentOutletMap);
+            }
+        }
+        else {
+            if (curr) {
+                // if we had a normal route, we need to deactivate only that outlet.
+                if (curr.component) {
+                    var outlet = getOutlet(parentOutletMap, futureNode.value);
+                    this.deactivateOutletAndItChildren(outlet);
+                }
+                else {
+                    this.deactivateOutletMap(parentOutletMap);
+                }
+            }
+            // if we have a normal route, we need to advance the route
+            // and place the component into the outlet. After that recurse.
+            if (future.component) {
+                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16__router_state__["g" /* advanceActivatedRoute */])(future);
+                var outlet = getOutlet(parentOutletMap, futureNode.value);
+                var outletMap = new __WEBPACK_IMPORTED_MODULE_15__router_outlet_map__["a" /* RouterOutletMap */]();
+                this.placeComponentIntoOutlet(outletMap, future, outlet);
+                this.activateChildRoutes(futureNode, null, outletMap);
+            }
+            else {
+                __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_16__router_state__["g" /* advanceActivatedRoute */])(future);
+                this.activateChildRoutes(futureNode, null, parentOutletMap);
+            }
+        }
+    };
+    ActivateRoutes.prototype.placeComponentIntoOutlet = function (outletMap, future, outlet) {
+        var resolved = [{ provide: __WEBPACK_IMPORTED_MODULE_16__router_state__["b" /* ActivatedRoute */], useValue: future }, {
+                provide: __WEBPACK_IMPORTED_MODULE_15__router_outlet_map__["a" /* RouterOutletMap */],
+                useValue: outletMap
+            }];
+        var config = parentLoadedConfig(future.snapshot);
+        var loadedFactoryResolver = null;
+        var loadedInjector = null;
+        if (config) {
+            loadedFactoryResolver = config.factoryResolver;
+            loadedInjector = config.injector;
+            resolved.push({ provide: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"], useValue: loadedFactoryResolver });
+        }
+        outlet.activate(future, loadedFactoryResolver, loadedInjector, __WEBPACK_IMPORTED_MODULE_0__angular_core__["ReflectiveInjector"].resolve(resolved), outletMap);
+    };
+    ActivateRoutes.prototype.deactivateOutletAndItChildren = function (outlet) {
+        if (outlet && outlet.isActivated) {
+            this.deactivateOutletMap(outlet.outletMap);
+            outlet.deactivate();
+        }
+    };
+    ActivateRoutes.prototype.deactivateOutletMap = function (outletMap) {
+        var _this = this;
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_19__utils_collection__["c" /* forEach */])(outletMap._outlets, function (v) { return _this.deactivateOutletAndItChildren(v); });
+    };
+    return ActivateRoutes;
+}());
+function parentLoadedConfig(snapshot) {
+    var s = snapshot.parent;
+    while (s) {
+        var c = s._routeConfig;
+        if (c && c._loadedConfig)
+            return c._loadedConfig;
+        if (c && c.component)
+            return null;
+        s = s.parent;
+    }
+    return null;
+}
+function closestLoadedConfig(snapshot) {
+    if (!snapshot)
+        return null;
+    var s = snapshot.parent;
+    while (s) {
+        var c = s._routeConfig;
+        if (c && c._loadedConfig)
+            return c._loadedConfig;
+        s = s.parent;
+    }
+    return null;
+}
+function nodeChildrenAsMap(node) {
+    return node ? node.children.reduce(function (m, c) {
+        m[c.value.outlet] = c;
+        return m;
+    }, {}) : {};
+}
+function getOutlet(outletMap, route) {
+    var outlet = outletMap._outlets[route.outlet];
+    if (!outlet) {
+        var componentName = route.component.name;
+        if (route.outlet === __WEBPACK_IMPORTED_MODULE_17__shared__["a" /* PRIMARY_OUTLET */]) {
+            throw new Error("Cannot find primary outlet to load '" + componentName + "'");
+        }
+        else {
+            throw new Error("Cannot find the outlet " + route.outlet + " to load '" + componentName + "'");
+        }
+    }
+    return outlet;
+}
+//# sourceMappingURL=router.js.map
+
+/***/ },
+
+/***/ 152:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_map__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_mergeMap__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_mergeMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_mergeMap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_collection__ = __webpack_require__(54);
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return ROUTES; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return LoadedRouterConfig; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return RouterConfigLoader; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+/**
+ * @experimental
+ */
+var ROUTES = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["OpaqueToken"]('ROUTES');
+var LoadedRouterConfig = (function () {
+    function LoadedRouterConfig(routes, injector, factoryResolver) {
+        this.routes = routes;
+        this.injector = injector;
+        this.factoryResolver = factoryResolver;
+    }
+    return LoadedRouterConfig;
+}());
+var RouterConfigLoader = (function () {
+    function RouterConfigLoader(loader, compiler) {
+        this.loader = loader;
+        this.compiler = compiler;
+    }
+    RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
+        return __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_map__["map"].call(this.loadModuleFactory(loadChildren), function (r) {
+            var ref = r.create(parentInjector);
+            return new LoadedRouterConfig(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["a" /* flatten */])(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
+        });
+    };
+    RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
+        var _this = this;
+        if (typeof loadChildren === 'string') {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__["fromPromise"])(this.loader.load(loadChildren));
+        }
+        else {
+            var offlineMode_1 = this.compiler instanceof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Compiler"];
+            return __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_mergeMap__["mergeMap"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["b" /* wrapIntoObservable */])(loadChildren()), function (t) { return offlineMode_1 ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(t) : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__["fromPromise"])(_this.compiler.compileModuleAsync(t)); });
+        }
+    };
+    return RouterConfigLoader;
+}());
+//# sourceMappingURL=router_config_loader.js.map
+
+/***/ },
+
+/***/ 153:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return RouterOutletMap; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @whatItDoes Contains all the router outlets created in a component.
+ *
+ * @stable
+ */
+var RouterOutletMap = (function () {
+    function RouterOutletMap() {
+        /** @internal */
+        this._outlets = {};
+    }
+    /**
+     * Adds an outlet to this map.
+     */
+    RouterOutletMap.prototype.registerOutlet = function (name, outlet) { this._outlets[name] = outlet; };
+    /**
+     * Removes an outlet from this map.
+     */
+    RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
+    return RouterOutletMap;
+}());
+//# sourceMappingURL=router_outlet_map.js.map
+
+/***/ },
+
+/***/ 16:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_index__ = __webpack_require__(649);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__src_index__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__src_index__["b"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__src_index__["c"]; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+/**
+ * @module
+ * @description
+ * Entry point for all public APIs of the router package.
+ */
+
+//# sourceMappingURL=index.js.map
+
+/***/ },
+
+/***/ 220:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router_state__ = __webpack_require__(91);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return RouterLink; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return RouterLinkWithHref; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+/**
+ * @whatItDoes Lets you link to specific parts of your app.
+ *
+ * @howToUse
+ *
+ * Consider the following route configuration:
+
+ * ```
+ * [{ path: 'user/:name', component: UserCmp }]
+ * ```
+ *
+ * When linking to this `user/:name` route, you can write:
+ *
+ * ```
+ * <a routerLink='/user/bob'>link to user component</a>
+ * ```
+ *
+ * @description
+ *
+ * The RouterLink directives let you link to specific parts of your app.
+ *
+ * Whe the link is static, you can use the directive as follows:
+ *
+ * ```
+ * <a routerLink="/user/bob">link to user component</a>
+ * ```
+ *
+ * If you use dynamic values to generate the link, you can pass an array of path
+ * segments, followed by the params for each segment.
+ *
+ * For instance `['/team', teamId, 'user', userName, {details: true}]`
+ * means that we want to generate a link to `/team/11/user/bob;details=true`.
+ *
+ * Multiple static segments can be merged into one (e.g., `['/team/11/user', userName, {details:
+ true}]`).
+ *
+ * The first segment name can be prepended with `/`, `./`, or `../`:
+ * * If the first segment begins with `/`, the router will look up the route from the root of the
+ app.
+ * * If the first segment begins with `./`, or doesn't begin with a slash, the router will
+ * instead look in the children of the current activated route.
+ * * And if the first segment begins with `../`, the router will go up one level.
+ *
+ * You can set query params and fragment as follows:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">link to user
+ component</a>
+ * ```
+ * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+ *
+ * You can also tell the directive to preserve the current query params and fragment:
+ *
+ * ```
+ * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>link to user
+ component</a>
+ * ```
+ *
+ * The router link directive always treats the provided input as a delta to the current url.
+ *
+ * For instance, if the current url is `/user/(box//aux:team)`.
+ *
+ * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
+ * `/user/(jim//aux:team)`.
+ *
+ * @selector ':not(a)[routerLink]'
+ * @ngModule RouterModule
+ *
+ * See {@link Router.createUrlTree} for more information.
+ *
+ * @stable
+ */
+var RouterLink = (function () {
+    function RouterLink(router, route, locationStrategy) {
+        this.router = router;
+        this.route = route;
+        this.locationStrategy = locationStrategy;
+        this.commands = [];
+    }
+    Object.defineProperty(RouterLink.prototype, "routerLink", {
+        set: function (data) {
+            if (Array.isArray(data)) {
+                this.commands = data;
+            }
+            else {
+                this.commands = [data];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLink.prototype.onClick = function (button, ctrlKey, metaKey) {
+        if (button !== 0 || ctrlKey || metaKey) {
+            return true;
+        }
+        this.router.navigateByUrl(this.urlTree);
+        return false;
+    };
+    Object.defineProperty(RouterLink.prototype, "urlTree", {
+        get: function () {
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: toBool(this.preserveQueryParams),
+                preserveFragment: toBool(this.preserveFragment)
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLink.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Directive"], args: [{ selector: ':not(a)[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLink.ctorParameters = [
+        { type: __WEBPACK_IMPORTED_MODULE_2__router__["a" /* Router */], },
+        { type: __WEBPACK_IMPORTED_MODULE_3__router_state__["b" /* ActivatedRoute */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_common__["c" /* LocationStrategy */], },
+    ];
+    RouterLink.propDecorators = {
+        'queryParams': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'fragment': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'preserveQueryParams': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'preserveFragment': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'routerLink': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'onClick': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["HostListener"], args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
+    return RouterLink;
+}());
+/**
+ * @whatItDoes Lets you link to specific parts of your app.
+ *
+ * See {@link RouterLink} for more information.
+ *
+ * @selector 'a[routerLink]'
+ * @ngModule RouterModule
+ *
+ * @stable
+ */
+var RouterLinkWithHref = (function () {
+    function RouterLinkWithHref(router, route, locationStrategy) {
+        var _this = this;
+        this.router = router;
+        this.route = route;
+        this.locationStrategy = locationStrategy;
+        this.commands = [];
+        this.subscription = router.events.subscribe(function (s) {
+            if (s instanceof __WEBPACK_IMPORTED_MODULE_2__router__["b" /* NavigationEnd */]) {
+                _this.updateTargetUrlAndHref();
+            }
+        });
+    }
+    Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+        set: function (data) {
+            if (Array.isArray(data)) {
+                this.commands = data;
+            }
+            else {
+                this.commands = [data];
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+    RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+    RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
+        if (button !== 0 || ctrlKey || metaKey) {
+            return true;
+        }
+        if (typeof this.target === 'string' && this.target != '_self') {
+            return true;
+        }
+        this.router.navigateByUrl(this.urlTree);
+        return false;
+    };
+    RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
+        this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+    };
+    Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+        get: function () {
+            return this.router.createUrlTree(this.commands, {
+                relativeTo: this.route,
+                queryParams: this.queryParams,
+                fragment: this.fragment,
+                preserveQueryParams: toBool(this.preserveQueryParams),
+                preserveFragment: toBool(this.preserveFragment)
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLinkWithHref.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Directive"], args: [{ selector: 'a[routerLink]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkWithHref.ctorParameters = [
+        { type: __WEBPACK_IMPORTED_MODULE_2__router__["a" /* Router */], },
+        { type: __WEBPACK_IMPORTED_MODULE_3__router_state__["b" /* ActivatedRoute */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_common__["c" /* LocationStrategy */], },
+    ];
+    RouterLinkWithHref.propDecorators = {
+        'target': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'queryParams': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'fragment': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'routerLinkOptions': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'preserveQueryParams': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'preserveFragment': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'href': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["HostBinding"] },],
+        'routerLink': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Input"] },],
+        'onClick': [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["HostListener"], args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+    };
+    return RouterLinkWithHref;
+}());
+function toBool(s) {
+    if (s === '')
+        return true;
+    return !!s;
+}
+//# sourceMappingURL=router_link.js.map
+
+/***/ },
+
+/***/ 221:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Tree; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return TreeNode; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var Tree = (function () {
+    function Tree(root) {
+        this._root = root;
+    }
+    Object.defineProperty(Tree.prototype, "root", {
+        get: function () { return this._root.value; },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @internal
+     */
+    Tree.prototype.parent = function (t) {
+        var p = this.pathFromRoot(t);
+        return p.length > 1 ? p[p.length - 2] : null;
+    };
+    /**
+     * @internal
+     */
+    Tree.prototype.children = function (t) {
+        var n = findNode(t, this._root);
+        return n ? n.children.map(function (t) { return t.value; }) : [];
+    };
+    /**
+     * @internal
+     */
+    Tree.prototype.firstChild = function (t) {
+        var n = findNode(t, this._root);
+        return n && n.children.length > 0 ? n.children[0].value : null;
+    };
+    /**
+     * @internal
+     */
+    Tree.prototype.siblings = function (t) {
+        var p = findPath(t, this._root, []);
+        if (p.length < 2)
+            return [];
+        var c = p[p.length - 2].children.map(function (c) { return c.value; });
+        return c.filter(function (cc) { return cc !== t; });
+    };
+    /**
+     * @internal
+     */
+    Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
+    return Tree;
+}());
+function findNode(expected, c) {
+    if (expected === c.value)
+        return c;
+    for (var _i = 0, _a = c.children; _i < _a.length; _i++) {
+        var cc = _a[_i];
+        var r = findNode(expected, cc);
+        if (r)
+            return r;
+    }
+    return null;
+}
+function findPath(expected, c, collected) {
+    collected.push(c);
+    if (expected === c.value)
+        return collected;
+    for (var _i = 0, _a = c.children; _i < _a.length; _i++) {
+        var cc = _a[_i];
+        var cloned = collected.slice(0);
+        var r = findPath(expected, cc, cloned);
+        if (r.length > 0)
+            return r;
+    }
+    return [];
+}
+var TreeNode = (function () {
+    function TreeNode(value, children) {
+        this.value = value;
+        this.children = children;
+    }
+    TreeNode.prototype.toString = function () { return "TreeNode(" + this.value + ")"; };
+    return TreeNode;
+}());
+//# sourceMappingURL=tree.js.map
+
+/***/ },
+
+/***/ 222:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var ReferenceService = (function () {
+    function ReferenceService(http, appService, dataService) {
+        this.http = http;
+        this.appService = appService;
+        this.dataService = dataService;
+    }
+    ReferenceService.prototype.fetch = function (params, retry) {
+        if (retry === void 0) { retry = 1; }
+        return this.dataService.get('/Reference/p', params, retry);
+    };
+    ReferenceService.prototype.fetchOne = function (params) {
+        var _this = this;
+        return this.http.get('/Reference/p', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(), search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params) })
+            .retry(3)
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            return data;
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    ReferenceService.prototype.fetchTags = function () {
+        var _this = this;
+        return this.http.get('/Reference/p?id=tags', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) { return response.json().objects[0]; })
+            .map(function (data) {
+            return {
+                tags: data.list,
+                meta: data.meta
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    ReferenceService.prototype.fetchTaskTypes = function () {
+        var _this = this;
+        return this.http.get('/Reference/p?id=tasktypes', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) { return response.json().objects[0]; })
+            .map(function (data) {
+            return {
+                taskTypes: data.list,
+                meta: data.meta
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    ReferenceService.prototype.fetchRequestTypes = function () {
+        var _this = this;
+        return this.http.get('/Reference/p?id=request-types', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) { return response.json().objects[0]; })
+            .map(function (data) {
+            return {
+                requestTypes: data.list,
+                meta: data.meta
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    ReferenceService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */]) === 'function' && _c) || Object])
+    ], ReferenceService);
+    return ReferenceService;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 223:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var StaffService = (function () {
+    function StaffService(http, appService, dataService) {
+        this.http = http;
+        this.appService = appService;
+        this.dataService = dataService;
+    }
+    StaffService.prototype.fetch = function (params, retry) {
+        if (retry === void 0) { retry = 1; }
+        return this.dataService.get('/Staff/p', params, retry);
+    };
+    StaffService.prototype.fetchList = function (params) {
+        var _this = this;
+        return this.http.get('/Staff/p', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(), search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params) })
+            .retry(3)
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            return {
+                data: data,
+                columnOptions: response.json().data.columnOptions ? response.json().data.columnOptions.columns : null
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    StaffService.prototype.fetchOrganizations = function (queryParams) {
+        var _this = this;
+        if (queryParams === void 0) { queryParams = {}; }
+        return this.http.get('/Staff/p?id=get-organizations', {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(queryParams)
+        })
+            .map(function (response) { return response.json().objects[0]; })
+            .map(function (data) {
+            return {
+                organizations: data.list,
+                meta: data.meta
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    StaffService.prototype.fetchEmployees = function () {
+        var _this = this;
+        return this.http.get('/Staff/p?id=employees', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) { return response.json().objects[0]; })
+            .map(function (data) {
+            return {
+                employees: data.list
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    StaffService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */]) === 'function' && _c) || Object])
+    ], StaffService);
+    return StaffService;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 224:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ImgViewService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ImgViewService = (function () {
+    function ImgViewService() {
+        this.emitter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    ImgViewService.prototype.getEmitter = function () {
+        return this.emitter;
+    };
+    ImgViewService.prototype.show = function (url) {
+        this.emitter.emit({ url: url });
+    };
+    ImgViewService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], ImgViewService);
+    return ImgViewService;
+}());
+
+
+/***/ },
+
+/***/ 225:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MarkdownConverter; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var marked = __webpack_require__(256);
+var toMarkdown = __webpack_require__(260);
+var MarkdownConverter = (function () {
+    function MarkdownConverter() {
+        marked.setOptions({
+            gfm: true,
+            tables: true,
+            breaks: true
+        });
+    }
+    MarkdownConverter.prototype.toMarkdown = function (html) {
+        return toMarkdown(html, { gfm: true });
+    };
+    MarkdownConverter.prototype.toHtml = function (markdown) {
+        return marked(markdown);
+    };
+    MarkdownConverter = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], MarkdownConverter);
+    return MarkdownConverter;
+}());
+
+
+/***/ },
+
+/***/ 23:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__environment_actions__ = __webpack_require__(369);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_actions__ = __webpack_require__(368);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__environment_actions__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__app_actions__["a"]; });
+
+
+
+
+/***/ },
+
+/***/ 253:
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * An error thrown when an Observable or a sequence was queried but has no
+ * elements.
+ *
+ * @see {@link first}
+ * @see {@link last}
+ * @see {@link single}
+ *
+ * @class EmptyError
+ */
+var EmptyError = (function (_super) {
+    __extends(EmptyError, _super);
+    function EmptyError() {
+        var err = _super.call(this, 'no elements in sequence');
+        this.name = err.name = 'EmptyError';
+        this.stack = err.stack;
+        this.message = err.message;
+    }
+    return EmptyError;
+}(Error));
+exports.EmptyError = EmptyError;
+//# sourceMappingURL=EmptyError.js.map
+
+/***/ },
+
+/***/ 26:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_http__ = __webpack_require__(22);
+/* harmony export (immutable) */ exports["a"] = xhrHeaders;
+/* harmony export (immutable) */ exports["e"] = createURLSearchParams;
+/* harmony export (immutable) */ exports["c"] = serializeObj;
+/* harmony export (immutable) */ exports["b"] = parseResponseObjects;
+/* harmony export (immutable) */ exports["d"] = transformPostResponse;
+/* harmony export (immutable) */ exports["f"] = createCookie;
+/* unused harmony export imgToBase64 */
+
+function xhrHeaders() {
+    return new __WEBPACK_IMPORTED_MODULE_0__angular_http__["Headers"]({
+        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+        'Accept': 'application/json'
+    });
+}
+function createURLSearchParams(params) {
+    var searchParams = new __WEBPACK_IMPORTED_MODULE_0__angular_http__["URLSearchParams"]();
+    for (var i in params) {
+        if (params[i] instanceof Array) {
+            for (var j in params[i]) {
+                searchParams.append(i, params[i][j]);
+            }
+        }
+        else {
+            if (typeof (params[i]) != 'undefined') {
+                searchParams.set(i, params[i]);
+            }
+        }
+    }
+    return searchParams;
+}
+function serializeObj(obj) {
+    var result = [];
+    for (var property in obj) {
+        result.push(encodeURIComponent(property) + '=' + encodeURIComponent(obj[property]));
+    }
+    return result.join('&');
+}
+function parseResponseObjects(objects) {
+    var result = {};
+    for (var _i = 0, objects_1 = objects; _i < objects_1.length; _i++) {
+        var obj = objects_1[_i];
+        if (obj.kind || obj.entityKind) {
+            result[obj.kind || obj.entityKind] = obj;
+        }
+        else if (obj.list && obj.meta && obj.type) {
+            result[obj.type] = obj;
+        }
+        else if (obj.name && obj.value) {
+            result[obj.name] = obj.value;
+        }
+        else if (obj.actions) {
+            result['actions'] = obj.actions;
+        }
+        else {
+            for (var k in obj) {
+                result[k] = obj[k];
+            }
+        }
+    }
+    return result;
+}
+function transformPostResponse(response) {
+    var json = response.json();
+    return Object.assign(json, {
+        ok: json.type === 'DOCUMENT_SAVED',
+        message: json.captions ? json.captions.type : json.message
+    });
+}
+function createCookie(name, value, days) {
+    var expires;
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+    }
+    else {
+        expires = '';
+    }
+    document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value) + expires + '; path=/';
+}
+function imgToBase64(file, callback) {
+    var fr = new FileReader();
+    fr.onload = callback;
+    fr.readAsDataURL(file);
+}
+
+
+/***/ },
+
+/***/ 33:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__app_service__ = __webpack_require__(375);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_service__ = __webpack_require__(702);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__translate_service__ = __webpack_require__(703);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__upload_service__ = __webpack_require__(704);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__app_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "d", function() { return __WEBPACK_IMPORTED_MODULE_1__data_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__translate_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__upload_service__["a"]; });
+
+
+
+
+
+
+/***/ },
+
+/***/ 344:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_link__ = __webpack_require__(220);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return RouterLinkActive; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+/**
+ * @whatItDoes Lets you add a CSS class to an element when the link's route becomes active.
+ *
+ * @howToUse
+ *
+ * ```
+ * <a [routerLink]='/user/bob' routerLinkActive='active-link'>Bob</a>
+ * ```
+ *
+ * @description
+ *
+ * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
+ * becomes active.
+ *
+ * Consider the following example:
+ *
+ * ```
+ * <a [routerLink]="/user/bob" routerLinkActive="active-link">Bob</a>
+ * ```
+ *
+ * When the url is either '/user' or '/user/bob', the active-link class will
+ * be added to the `a` tag. If the url changes, the class will be removed.
+ *
+ * You can set more than one class, as follows:
+ *
+ * ```
+ * <a [routerLink]="/user/bob" routerLinkActive="class1 class2">Bob</a>
+ * <a [routerLink]="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
+ * ```
+ *
+ * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
+ * only when the url matches the link exactly.
+ *
+ * ```
+ * <a [routerLink]="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+ * true}">Bob</a>
+ * ```
+ *
+ * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
+ *
+ * ```
+ * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+ *   <a [routerLink]="/user/jim">Jim</a>
+ *   <a [routerLink]="/user/bob">Bob</a>
+ * </div>
+ * ```
+ *
+ * This will set the active-link class on the div tag if the url is either '/user/jim' or
+ * '/user/bob'.
+ *
+ * @selector ':not(a)[routerLink]'
+ * @ngModule RouterModule
+ *
+ * @stable
+ */
+var RouterLinkActive = (function () {
+    function RouterLinkActive(router, element, renderer) {
+        var _this = this;
+        this.router = router;
+        this.element = element;
+        this.renderer = renderer;
+        this.classes = [];
+        this.routerLinkActiveOptions = { exact: false };
+        this.subscription = router.events.subscribe(function (s) {
+            if (s instanceof __WEBPACK_IMPORTED_MODULE_1__router__["b" /* NavigationEnd */]) {
+                _this.update();
+            }
+        });
+    }
+    RouterLinkActive.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        this.links.changes.subscribe(function (s) { return _this.update(); });
+        this.linksWithHrefs.changes.subscribe(function (s) { return _this.update(); });
+        this.update();
+    };
+    Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
+        set: function (data) {
+            if (Array.isArray(data)) {
+                this.classes = data;
+            }
+            else {
+                this.classes = data.split(' ');
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterLinkActive.prototype.ngOnChanges = function (changes) { this.update(); };
+    RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+    RouterLinkActive.prototype.update = function () {
+        var _this = this;
+        if (!this.links || !this.linksWithHrefs || !this.router.navigated)
+            return;
+        var isActiveLinks = this.reduceList(this.links);
+        var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
+        this.classes.forEach(function (c) { return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs); });
+    };
+    RouterLinkActive.prototype.reduceList = function (q) {
+        var _this = this;
+        return q.reduce(function (res, link) {
+            return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+        }, false);
+    };
+    RouterLinkActive.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{ selector: '[routerLinkActive]' },] },
+    ];
+    /** @nocollapse */
+    RouterLinkActive.ctorParameters = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__router__["a" /* Router */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"], },
+    ];
+    RouterLinkActive.propDecorators = {
+        'links': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ContentChildren"], args: [__WEBPACK_IMPORTED_MODULE_2__router_link__["a" /* RouterLink */], { descendants: true },] },],
+        'linksWithHrefs': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ContentChildren"], args: [__WEBPACK_IMPORTED_MODULE_2__router_link__["b" /* RouterLinkWithHref */], { descendants: true },] },],
+        'routerLinkActiveOptions': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+        'routerLinkActive': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"] },],
+    };
+    return RouterLinkActive;
+}());
+//# sourceMappingURL=router_link_active.js.map
+
+/***/ },
+
+/***/ 345:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_outlet_map__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__shared__ = __webpack_require__(53);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return RouterOutlet; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+/**
+ * @whatItDoes Acts as a placeholder that Angular dynamically fills based on the current router
+ * state.
+ *
+ * @howToUse
+ *
+ * ```
+ * <router-outlet></router-outlet>
+ * <router-outlet name='left'></router-outlet>
+ * <router-outlet name='right'></router-outlet>
+ * ```
+ *
+ * A router outlet will emit an activate event any time a new component is being instantiated,
+ * and a deactivate event when it is being destroyed.
+ *
+ * ```
+ * <router-outlet
+ *   (activate)='onActivate($event)'
+ *   (deactivate)='onDeactivate($event)'></router-outlet>
+ * ```
+ * @selector 'a[routerLink]'
+ * @ngModule RouterModule
+ *
+ * @stable
+ */
+var RouterOutlet = (function () {
+    function RouterOutlet(parentOutletMap, location, resolver, name) {
+        this.parentOutletMap = parentOutletMap;
+        this.location = location;
+        this.resolver = resolver;
+        this.name = name;
+        this.activateEvents = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.deactivateEvents = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        parentOutletMap.registerOutlet(name ? name : __WEBPACK_IMPORTED_MODULE_2__shared__["a" /* PRIMARY_OUTLET */], this);
+    }
+    RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : __WEBPACK_IMPORTED_MODULE_2__shared__["a" /* PRIMARY_OUTLET */]); };
+    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+        get: function () { return !!this.activated; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "component", {
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this.activated.instance;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
+        get: function () {
+            if (!this.activated)
+                throw new Error('Outlet is not activated');
+            return this._activatedRoute;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    RouterOutlet.prototype.deactivate = function () {
+        if (this.activated) {
+            var c = this.component;
+            this.activated.destroy();
+            this.activated = null;
+            this.deactivateEvents.emit(c);
+        }
+    };
+    RouterOutlet.prototype.activate = function (activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
+        this.outletMap = outletMap;
+        this._activatedRoute = activatedRoute;
+        var snapshot = activatedRoute._futureSnapshot;
+        var component = snapshot._routeConfig.component;
+        var factory;
+        if (loadedResolver) {
+            factory = loadedResolver.resolveComponentFactory(component);
+        }
+        else {
+            factory = this.resolver.resolveComponentFactory(component);
+        }
+        var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+        var inj = __WEBPACK_IMPORTED_MODULE_0__angular_core__["ReflectiveInjector"].fromResolvedProviders(providers, injector);
+        this.activated = this.location.createComponent(factory, this.location.length, inj, []);
+        this.activated.changeDetectorRef.detectChanges();
+        this.activateEvents.emit(this.activated.instance);
+    };
+    RouterOutlet.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"], args: [{ selector: 'router-outlet' },] },
+    ];
+    /** @nocollapse */
+    RouterOutlet.ctorParameters = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__router_outlet_map__["a" /* RouterOutletMap */], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewContainerRef"], },
+        { type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ComponentFactoryResolver"], },
+        { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Attribute"], args: ['name',] },] },
+    ];
+    RouterOutlet.propDecorators = {
+        'activateEvents': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"], args: ['activate',] },],
+        'deactivateEvents': [{ type: __WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"], args: ['deactivate',] },],
+    };
+    return RouterOutlet;
+}());
+//# sourceMappingURL=router_outlet.js.map
+
+/***/ },
+
+/***/ 346:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__directives_router_link__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__directives_router_link_active__ = __webpack_require__(344);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__directives_router_outlet__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__router__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router_config_loader__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__router_outlet_map__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__router_state__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__utils_collection__ = __webpack_require__(54);
+/* unused harmony export ROUTER_CONFIGURATION */
+/* unused harmony export ROUTER_FORROOT_GUARD */
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ROUTER_PROVIDERS; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return RouterModule; });
+/* unused harmony export provideLocationStrategy */
+/* unused harmony export provideForRootGuard */
+/* unused harmony export provideRoutes */
+/* unused harmony export setupRouter */
+/* unused harmony export rootRoute */
+/* unused harmony export initialRouterNavigation */
+/* unused harmony export provideRouterInitializer */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * @whatItDoes Contains a list of directives
+ * @stable
+ */
+var ROUTER_DIRECTIVES = [__WEBPACK_IMPORTED_MODULE_4__directives_router_outlet__["a" /* RouterOutlet */], __WEBPACK_IMPORTED_MODULE_2__directives_router_link__["a" /* RouterLink */], __WEBPACK_IMPORTED_MODULE_2__directives_router_link__["b" /* RouterLinkWithHref */], __WEBPACK_IMPORTED_MODULE_3__directives_router_link_active__["a" /* RouterLinkActive */]];
+/**
+ * @whatItDoes Is used in DI to configure the router.
+ * @stable
+ */
+var ROUTER_CONFIGURATION = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["OpaqueToken"]('ROUTER_CONFIGURATION');
+/**
+ * @docsNotRequired
+ */
+var ROUTER_FORROOT_GUARD = new __WEBPACK_IMPORTED_MODULE_1__angular_core__["OpaqueToken"]('ROUTER_FORROOT_GUARD');
+var pathLocationStrategy = {
+    provide: __WEBPACK_IMPORTED_MODULE_0__angular_common__["c" /* LocationStrategy */],
+    useClass: __WEBPACK_IMPORTED_MODULE_0__angular_common__["d" /* PathLocationStrategy */]
+};
+var hashLocationStrategy = {
+    provide: __WEBPACK_IMPORTED_MODULE_0__angular_common__["c" /* LocationStrategy */],
+    useClass: __WEBPACK_IMPORTED_MODULE_0__angular_common__["e" /* HashLocationStrategy */]
+};
+var ROUTER_PROVIDERS = [
+    __WEBPACK_IMPORTED_MODULE_0__angular_common__["f" /* Location */], { provide: __WEBPACK_IMPORTED_MODULE_9__url_tree__["g" /* UrlSerializer */], useClass: __WEBPACK_IMPORTED_MODULE_9__url_tree__["h" /* DefaultUrlSerializer */] }, {
+        provide: __WEBPACK_IMPORTED_MODULE_5__router__["a" /* Router */],
+        useFactory: setupRouter,
+        deps: [
+            __WEBPACK_IMPORTED_MODULE_1__angular_core__["ApplicationRef"], __WEBPACK_IMPORTED_MODULE_9__url_tree__["g" /* UrlSerializer */], __WEBPACK_IMPORTED_MODULE_7__router_outlet_map__["a" /* RouterOutletMap */], __WEBPACK_IMPORTED_MODULE_0__angular_common__["f" /* Location */], __WEBPACK_IMPORTED_MODULE_1__angular_core__["Injector"], __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModuleFactoryLoader"],
+            __WEBPACK_IMPORTED_MODULE_1__angular_core__["Compiler"], __WEBPACK_IMPORTED_MODULE_6__router_config_loader__["c" /* ROUTES */], ROUTER_CONFIGURATION
+        ]
+    },
+    __WEBPACK_IMPORTED_MODULE_7__router_outlet_map__["a" /* RouterOutletMap */], { provide: __WEBPACK_IMPORTED_MODULE_8__router_state__["b" /* ActivatedRoute */], useFactory: rootRoute, deps: [__WEBPACK_IMPORTED_MODULE_5__router__["a" /* Router */]] },
+    { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModuleFactoryLoader"], useClass: __WEBPACK_IMPORTED_MODULE_1__angular_core__["SystemJsNgModuleLoader"] },
+    { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } }
+];
+/**
+ * @whatItDoes Adds router directives and providers.
+ *
+ * @howToUse
+ *
+ * RouterModule can be imported multiple times: once per lazily-loaded bundle.
+ * Since the router deals with a global shared resource--location, we cannot have
+ * more than one router service active.
+ *
+ * That is why there are two ways to create the module: `RouterModule.forRoot` and
+ * `RouterModule.forChild`.
+ *
+ * * `forRoot` creates a module that contains all the directives, the given routes, and the router
+ * service itself.
+ * * `forChild` creates a module that contains all the directives and the given routes, but does not
+ * include
+ * the router service.
+ *
+ * When registered at the root, the module should be used as follows
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModule.forRoot(ROUTES)]
+ * })
+ * class MyNgModule {}
+ * ```
+ *
+ * For submodules and lazy loaded submodules the module should be used as follows:
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModule.forChild(ROUTES)]
+ * })
+ * class MyNgModule {}
+ * ```
+ *
+ * @description
+ *
+ * Managing state transitions is one of the hardest parts of building applications. This is
+ * especially true on the web, where you also need to ensure that the state is reflected in the URL.
+ * In addition, we often want to split applications into multiple bundles and load them on demand.
+ * Doing this transparently is not trivial.
+ *
+ * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+ * application states, manage state transitions while taking care of the URL, and load bundles on
+ * demand.
+ *
+ * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
+ * overview of how the router should be used.
+ *
+ * @stable
+ */
+var RouterModule = (function () {
+    function RouterModule(guard) {
+    }
+    /**
+     * Creates a module with all the router providers and directives. It also optionally sets up an
+     * application listener to perform an initial navigation.
+     *
+     * Options:
+     * * `enableTracing` makes the router log all its internal events to the console.
+     * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+     * API.
+     * * `initialNavigation` disables the initial navigation.
+     * * `errorHandler` provides a custom error handler.
+     */
+    RouterModule.forRoot = function (routes, config) {
+        return {
+            ngModule: RouterModule,
+            providers: [
+                ROUTER_PROVIDERS, provideRoutes(routes), {
+                    provide: ROUTER_FORROOT_GUARD,
+                    useFactory: provideForRootGuard,
+                    deps: [[__WEBPACK_IMPORTED_MODULE_5__router__["a" /* Router */], new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Optional"](), new __WEBPACK_IMPORTED_MODULE_1__angular_core__["SkipSelf"]()]]
+                },
+                { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} }, {
+                    provide: __WEBPACK_IMPORTED_MODULE_0__angular_common__["c" /* LocationStrategy */],
+                    useFactory: provideLocationStrategy,
+                    deps: [
+                        __WEBPACK_IMPORTED_MODULE_0__angular_common__["a" /* PlatformLocation */], [new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"](__WEBPACK_IMPORTED_MODULE_0__angular_common__["g" /* APP_BASE_HREF */]), new __WEBPACK_IMPORTED_MODULE_1__angular_core__["Optional"]()], ROUTER_CONFIGURATION
+                    ]
+                },
+                provideRouterInitializer()
+            ]
+        };
+    };
+    /**
+     * Creates a module with all the router directives and a provider registering routes.
+     */
+    RouterModule.forChild = function (routes) {
+        return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
+    };
+    RouterModule.decorators = [
+        { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"], args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+    ];
+    /** @nocollapse */
+    RouterModule.ctorParameters = [
+        { type: undefined, decorators: [{ type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Optional"] }, { type: __WEBPACK_IMPORTED_MODULE_1__angular_core__["Inject"], args: [ROUTER_FORROOT_GUARD,] },] },
+    ];
+    return RouterModule;
+}());
+function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+    if (options === void 0) { options = {}; }
+    return options.useHash ? new __WEBPACK_IMPORTED_MODULE_0__angular_common__["e" /* HashLocationStrategy */](platformLocationStrategy, baseHref) :
+        new __WEBPACK_IMPORTED_MODULE_0__angular_common__["d" /* PathLocationStrategy */](platformLocationStrategy, baseHref);
+}
+function provideForRootGuard(router) {
+    if (router) {
+        throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+    }
+    return 'guarded';
+}
+/**
+ * @whatItDoes Registers routes.
+ *
+ * @howToUse
+ *
+ * ```
+ * @NgModule({
+ *   imports: [RouterModule.forChild(ROUTES)],
+ *   providers: [provideRoutes(EXTRA_ROUTES)]
+ * })
+ * class MyNgModule {}
+ * ```
+ *
+ * @stable
+ */
+function provideRoutes(routes) {
+    return [
+        { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["ANALYZE_FOR_ENTRY_COMPONENTS"], multi: true, useValue: routes },
+        { provide: __WEBPACK_IMPORTED_MODULE_6__router_config_loader__["c" /* ROUTES */], multi: true, useValue: routes }
+    ];
+}
+function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
+    if (opts === void 0) { opts = {}; }
+    if (ref.componentTypes.length == 0) {
+        throw new Error('Bootstrap at least one component before injecting Router.');
+    }
+    var componentType = ref.componentTypes[0];
+    var r = new __WEBPACK_IMPORTED_MODULE_5__router__["a" /* Router */](componentType, urlSerializer, outletMap, location, injector, loader, compiler, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_10__utils_collection__["a" /* flatten */])(config));
+    if (opts.errorHandler) {
+        r.errorHandler = opts.errorHandler;
+    }
+    if (opts.enableTracing) {
+        r.events.subscribe(function (e) {
+            console.group("Router Event: " + e.constructor.name);
+            console.log(e.toString());
+            console.log(e);
+            console.groupEnd();
+        });
+    }
+    return r;
+}
+function rootRoute(router) {
+    return router.routerState.root;
+}
+function initialRouterNavigation(router, opts) {
+    return function () {
+        if (opts.initialNavigation === false) {
+            router.setUpLocationChangeListener();
+        }
+        else {
+            router.initialNavigation();
+        }
+    };
+}
+function provideRouterInitializer() {
+    return {
+        provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["APP_BOOTSTRAP_LISTENER"],
+        multi: true,
+        useFactory: initialRouterNavigation,
+        deps: [__WEBPACK_IMPORTED_MODULE_5__router__["a" /* Router */], ROUTER_CONFIGURATION]
+    };
+}
+//# sourceMappingURL=router_module.js.map
+
+/***/ },
+
+/***/ 352:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reference_service__ = __webpack_require__(222);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceFormComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var ReferenceFormComponent = (function () {
+    function ReferenceFormComponent(store, route, router, environmentActions, referenceService) {
+        this.store = store;
+        this.route = route;
+        this.router = router;
+        this.environmentActions = environmentActions;
+        this.referenceService = referenceService;
+        this.embedded = false;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.subs = [];
+        this.isReady = false;
+        this.loading = true;
+        this.id = '';
+        this.fsid = '';
+    }
+    ReferenceFormComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var formId = params['id'];
+            var modelId = _this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
+            _this.id = formId;
+            _this.loadData({ id: formId, docid: modelId });
+        }));
+    };
+    ReferenceFormComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    Object.defineProperty(ReferenceFormComponent.prototype, "title", {
+        get: function () {
+            return this.id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ReferenceFormComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.referenceService.fetchOne(params).subscribe(function (payload) {
+            _this.isReady = true;
+            _this.loading = false;
+            _this.fsid = payload.fsid;
+            _this.model = payload[params.id.split('-')[0]];
+        }, function (error) { return console.log(error); });
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceFormComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceFormComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceFormComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceFormComponent.prototype, "actionsVisible", void 0);
+    ReferenceFormComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'reference-form',
+            template: __webpack_require__(876),
+            host: {
+                '[class.form]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__reference_service__["a" /* ReferenceService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__reference_service__["a" /* ReferenceService */]) === 'function' && _e) || Object])
+    ], ReferenceFormComponent);
+    return ReferenceFormComponent;
+    var _a, _b, _c, _d, _e;
+}());
+
+
+/***/ },
+
+/***/ 353:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(23);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceIndexComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var ReferenceIndexComponent = (function () {
+    function ReferenceIndexComponent(store, environmentActions) {
+        this.store = store;
+        this.environmentActions = environmentActions;
+    }
+    ReferenceIndexComponent.prototype.ngOnInit = function () {
+        this.store.dispatch(this.environmentActions.setNavUrl('/reference/view', '/Reference/p?id=outline'));
+    };
+    ReferenceIndexComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'reference-index',
+            template: '<h1>reference-index</h1>'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */]) === 'function' && _b) || Object])
+    ], ReferenceIndexComponent);
+    return ReferenceIndexComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 354:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reference_service__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var ReferenceViewComponent = (function () {
+    function ReferenceViewComponent(store, route, environmentActions, referenceService) {
+        this.store = store;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.referenceService = referenceService;
+        this.embedded = false;
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.actions = [];
+        this.columns = [];
+        this.subs = [];
+        this.meta = {};
+        this.keyWord = '';
+        this.loading = true;
+        this.activeSort = 'name:asc';
+        this.id = '';
+        this.params = {};
+    }
+    ReferenceViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var id = params['id'];
+            if (id) {
+                _this.id = id;
+                _this.loadData(Object.assign({}, params, {
+                    id: id,
+                    page: _this.meta.page
+                }));
+            }
+        }));
+    };
+    ReferenceViewComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    Object.defineProperty(ReferenceViewComponent.prototype, "title", {
+        get: function () {
+            return this.id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ReferenceViewComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.params = Object.assign({}, params, {
+            sort: this.activeSort || 'regDate:desc'
+        });
+        var typeId = this.params.id.split('-')[0];
+        this.referenceService.fetch(this.params).subscribe(function (payload) {
+            var columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+            if (payload.data.columnOptions) {
+                columnOptions = payload.data.columnOptions.columns;
+            }
+            var objects = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_utils__["b" /* parseResponseObjects */])(payload.objects);
+            _this.loading = false;
+            _this.list = objects[typeId] ? objects[typeId].list : [];
+            _this.meta = objects[typeId] ? objects[typeId].meta : {};
+            _this.actions = objects.actions;
+            _this.columns = columnOptions;
+        }, function (error) { return console.log(error); });
+    };
+    ReferenceViewComponent.prototype.refresh = function () {
+        this.loadData(this.params);
+    };
+    ReferenceViewComponent.prototype.goToPage = function (params) {
+        this.loadData(params);
+    };
+    ReferenceViewComponent.prototype.onSort = function ($event) {
+        this.activeSort = $event;
+        this.refresh();
+    };
+    ReferenceViewComponent.prototype.onAction = function ($event) {
+        alert($event.action.caption);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ReferenceViewComponent.prototype, "captionsVisible", void 0);
+    ReferenceViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'reference-view',
+            template: "\n        <list-page\n            [title]=\"title\"\n            [selectable]=\"true\"\n            [headerVisible]=\"true\"\n            [titleVisible]=\"true\"\n            [actionsVisible]=\"true\"\n            [captionsVisible]=\"true\"\n            [activeSort]=\"activeSort\"\n            [list]=\"list\"\n            [meta]=\"meta\"\n            [actions]=\"actions\"\n            [columns]=\"columns\"\n            (action)=\"onAction($event)\"\n            (refresh)=\"refresh($event)\"\n            (sort)=\"onSort($event)\"\n            (goToPage)=\"goToPage($event)\">\n        </list-page>\n    ",
+            host: {
+                '[class.view]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__reference_service__["a" /* ReferenceService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__reference_service__["a" /* ReferenceService */]) === 'function' && _d) || Object])
+    ], ReferenceViewComponent);
+    return ReferenceViewComponent;
+    var _a, _b, _c, _d;
+}());
+
+
+/***/ },
+
+/***/ 355:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceActions; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ReferenceActions = (function () {
+    function ReferenceActions() {
+    }
+    ReferenceActions.prototype.fetchTaskTypes = function (taskTypes) {
+        return {
+            type: ReferenceActions.FETCH_TASK_TYPES,
+            payload: { taskTypes: taskTypes }
+        };
+    };
+    ReferenceActions.prototype.fetchRequestTypes = function (requestTypes) {
+        return {
+            type: ReferenceActions.FETCH_REQUEST_TYPES,
+            payload: { requestTypes: requestTypes }
+        };
+    };
+    ReferenceActions.prototype.fetchTags = function (tags) {
+        return {
+            type: ReferenceActions.FETCH_TAGS,
+            payload: { tags: tags }
+        };
+    };
+    ReferenceActions.prototype.fetchReferenceFailed = function (error) {
+        return {
+            type: ReferenceActions.FETCH_REFERENCE_FAILED,
+            payload: error
+        };
+    };
+    ReferenceActions.FETCH_TASK_TYPES = 'FETCH_TASK_TYPES';
+    ReferenceActions.FETCH_REQUEST_TYPES = 'FETCH_REQUEST_TYPES';
+    ReferenceActions.FETCH_TAGS = 'FETCH_TAGS';
+    ReferenceActions.FETCH_REFERENCE_SUCCESS = 'FETCH_REFERENCE_SUCCESS';
+    ReferenceActions.FETCH_REFERENCE_FAILED = 'FETCH_REFERENCE_FAILED';
+    ReferenceActions = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], ReferenceActions);
+    return ReferenceActions;
+}());
+
+
+/***/ },
+
+/***/ 356:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(23);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffIndexComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var StaffIndexComponent = (function () {
+    function StaffIndexComponent(store, environmentActions) {
+        this.store = store;
+        this.environmentActions = environmentActions;
+    }
+    StaffIndexComponent.prototype.ngOnInit = function () {
+        this.store.dispatch(this.environmentActions.setNavUrl('/staff', '/Staff/p?id=outline'));
+    };
+    StaffIndexComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'staff-index',
+            template: '<h1>staff-index</h1>'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */]) === 'function' && _b) || Object])
+    ], StaffIndexComponent);
+    return StaffIndexComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 357:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__staff_service__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var StaffViewComponent = (function () {
+    function StaffViewComponent(store, route, environmentActions, staffService) {
+        this.store = store;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.staffService = staffService;
+        this.embedded = false;
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.actions = [];
+        this.columns = [];
+        this.subs = [];
+        this.meta = {};
+        this.keyWord = '';
+        this.loading = true;
+        this.activeSort = 'name:asc';
+        this.id = '';
+        this.params = {};
+    }
+    StaffViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var id = params['id'];
+            if (id) {
+                _this.id = id;
+                _this.loadData(Object.assign({}, params, {
+                    id: id,
+                    page: _this.meta.page
+                }));
+            }
+        }));
+    };
+    StaffViewComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    Object.defineProperty(StaffViewComponent.prototype, "title", {
+        get: function () {
+            return this.id;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    StaffViewComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.params = Object.assign({}, params, {
+            sort: this.activeSort || 'regDate:desc'
+        });
+        var typeId = this.params.id.split('-')[0];
+        this.staffService.fetch(this.params).subscribe(function (payload) {
+            var columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+            if (payload.data.columnOptions) {
+                columnOptions = payload.data.columnOptions.columns;
+            }
+            var objects = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_utils__["b" /* parseResponseObjects */])(payload.objects);
+            _this.loading = false;
+            _this.list = objects[typeId] ? objects[typeId].list : [];
+            _this.meta = objects[typeId] ? objects[typeId].meta : {};
+            _this.actions = objects.actions;
+            _this.columns = columnOptions;
+        }, function (error) { return console.log(error); });
+    };
+    StaffViewComponent.prototype.refresh = function () {
+        this.loadData(this.params);
+    };
+    StaffViewComponent.prototype.goToPage = function (params) {
+        this.loadData(params);
+    };
+    StaffViewComponent.prototype.onSort = function ($event) {
+        this.activeSort = $event;
+        this.refresh();
+    };
+    StaffViewComponent.prototype.onAction = function ($event) {
+        alert($event.action.caption);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], StaffViewComponent.prototype, "captionsVisible", void 0);
+    StaffViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'staff-view',
+            template: "\n        <list-page\n            [title]=\"title\"\n            [selectable]=\"true\"\n            [headerVisible]=\"true\"\n            [titleVisible]=\"true\"\n            [actionsVisible]=\"true\"\n            [captionsVisible]=\"true\"\n            [activeSort]=\"activeSort\"\n            [list]=\"list\"\n            [meta]=\"meta\"\n            [actions]=\"actions\"\n            [columns]=\"columns\"\n            (action)=\"onAction($event)\"\n            (refresh)=\"refresh($event)\"\n            (sort)=\"onSort($event)\"\n            (goToPage)=\"goToPage($event)\">\n        </list-page>\n    ",
+            host: {
+                '[class.view]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__staff_service__["a" /* StaffService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__staff_service__["a" /* StaffService */]) === 'function' && _d) || Object])
+    ], StaffViewComponent);
+    return StaffViewComponent;
+    var _a, _b, _c, _d;
+}());
+
+
+/***/ },
+
+/***/ 358:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffActions; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var StaffActions = (function () {
+    function StaffActions() {
+    }
+    StaffActions.prototype.fetchOrganizations = function (organizations) {
+        return {
+            type: StaffActions.FETCH_ORGANIZATIONS,
+            payload: { organizations: organizations }
+        };
+    };
+    StaffActions.prototype.fetchEmployees = function (employees) {
+        return {
+            type: StaffActions.FETCH_EMPLOYEES,
+            payload: { employees: employees }
+        };
+    };
+    StaffActions.FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
+    StaffActions.FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
+    StaffActions = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], StaffActions);
+    return StaffActions;
+}());
+
+
+/***/ },
+
+/***/ 359:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_notification__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(76);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IncomingFormComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var IncomingFormComponent = (function () {
+    function IncomingFormComponent(store, router, route, environmentActions, incomingService, notifyService) {
+        this.store = store;
+        this.router = router;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.incomingService = incomingService;
+        this.notifyService = notifyService;
+        this.subs = [];
+        this.isReady = false;
+        this.isNew = true;
+        this.isEditable = false;
+        this.isValid = true;
+        this.actions = {};
+        this.errors = {};
+    }
+    IncomingFormComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var id = _this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
+            _this.loadIncoming(id);
+        }));
+    };
+    IncomingFormComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    IncomingFormComponent.prototype.loadIncoming = function (id) {
+        var _this = this;
+        this.incomingService.fetchIncomingById(id).subscribe(function (_a) {
+            var incoming = _a.incoming, actions = _a.actions;
+            _this.incoming = incoming;
+            _this.actions = actions || {};
+            _this.isNew = _this.incoming.id == '';
+            _this.isEditable = _this.isNew || _this.incoming.editable;
+            _this.isReady = true;
+            _this.isValid = true;
+        }, function (error) { return _this.handleXhrError(error); });
+    };
+    IncomingFormComponent.prototype.handleXhrError = function (errorResponse) {
+        this.notifyService.error(errorResponse.message).show().remove(2000);
+    };
+    IncomingFormComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'incoming-form',
+            template: __webpack_require__(877)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__services__["a" /* WorkflowIncomingService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5__services__["a" /* WorkflowIncomingService */]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */]) === 'function' && _f) || Object])
+    ], IncomingFormComponent);
+    return IncomingFormComponent;
+    var _a, _b, _c, _d, _e, _f;
+}());
+
+
+/***/ },
+
+/***/ 360:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return IncomingViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var IncomingViewComponent = (function () {
+    function IncomingViewComponent(store, route, router, environmentActions, incomingService) {
+        this.store = store;
+        this.route = route;
+        this.router = router;
+        this.environmentActions = environmentActions;
+        this.incomingService = incomingService;
+        this.embedded = false;
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.actions = [];
+        this.columns = [];
+        this.subs = [];
+        this.title = 'incoming-view';
+        this.meta = {};
+        this.keyWord = '';
+        this.loading = true;
+        this.activeSort = '';
+        this.params = {};
+    }
+    IncomingViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            _this.loadData(Object.assign({}, params, {
+                page: _this.meta.page
+            }));
+        }));
+    };
+    IncomingViewComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    IncomingViewComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.params = Object.assign({}, params, {
+            id: 'incoming-view',
+            sort: this.activeSort || 'regDate:desc'
+        });
+        var typeId = 'incoming';
+        this.incomingService.fetch(this.params).subscribe(function (payload) {
+            var columnOptions = payload.data.columnOptions.columns;
+            var objects = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_utils__["b" /* parseResponseObjects */])(payload.objects);
+            _this.loading = false;
+            _this.list = objects[typeId] ? objects[typeId].list : [];
+            _this.meta = objects[typeId] ? objects[typeId].meta : {};
+            _this.actions = objects.actions;
+            _this.columns = columnOptions;
+        }, function (error) { return console.log(error); });
+    };
+    IncomingViewComponent.prototype.refresh = function () {
+        this.loadData(this.params);
+    };
+    IncomingViewComponent.prototype.goToPage = function (params) {
+        this.loadData(params);
+    };
+    IncomingViewComponent.prototype.onSort = function ($event) {
+        this.activeSort = $event;
+        this.refresh();
+    };
+    IncomingViewComponent.prototype.onAction = function ($event) {
+        this.incomingService.doAction($event.action.customID).subscribe(function (payload) {
+            var resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], IncomingViewComponent.prototype, "captionsVisible", void 0);
+    IncomingViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'incoming-view',
+            template: "\n        <list-page\n            [title]=\"title\"\n            [selectable]=\"true\"\n            [headerVisible]=\"true\"\n            [titleVisible]=\"true\"\n            [actionsVisible]=\"true\"\n            [captionsVisible]=\"true\"\n            [activeSort]=\"activeSort\"\n            [list]=\"list\"\n            [meta]=\"meta\"\n            [actions]=\"actions\"\n            [columns]=\"columns\"\n            (action)=\"onAction($event)\"\n            (refresh)=\"refresh($event)\"\n            (sort)=\"onSort($event)\"\n            (goToPage)=\"goToPage($event)\">\n        </list-page>\n    ",
+            host: {
+                '[class.view]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__services__["a" /* WorkflowIncomingService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__services__["a" /* WorkflowIncomingService */]) === 'function' && _e) || Object])
+    ], IncomingViewComponent);
+    return IncomingViewComponent;
+    var _a, _b, _c, _d, _e;
+}());
+
+
+/***/ },
+
+/***/ 361:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(23);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowIndexComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var WorkflowIndexComponent = (function () {
+    function WorkflowIndexComponent(store, environmentActions) {
+        this.store = store;
+        this.environmentActions = environmentActions;
+        this.subs = [];
+    }
+    WorkflowIndexComponent.prototype.ngOnInit = function () {
+        this.store.dispatch(this.environmentActions.setNavUrl('', '/Workflow/p?id=outline'));
+    };
+    WorkflowIndexComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    WorkflowIndexComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'workflow-index',
+            template: '<h1>workflow-index</h1>'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */]) === 'function' && _b) || Object])
+    ], WorkflowIndexComponent);
+    return WorkflowIndexComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 362:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_notification__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(76);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return OfficeMemoFormComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var OfficeMemoFormComponent = (function () {
+    function OfficeMemoFormComponent(store, router, route, environmentActions, officeMemoService, notifyService) {
+        this.store = store;
+        this.router = router;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.officeMemoService = officeMemoService;
+        this.notifyService = notifyService;
+        this.subs = [];
+        this.isReady = false;
+        this.isNew = true;
+        this.isEditable = false;
+        this.isValid = true;
+        this.actions = {};
+        this.errors = {};
+    }
+    OfficeMemoFormComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var id = _this.router.routerState.snapshot.root.queryParams['id'] || undefined;
+            _this.loadOfficeMemo(id);
+        }));
+    };
+    OfficeMemoFormComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    OfficeMemoFormComponent.prototype.loadOfficeMemo = function (id) {
+        var _this = this;
+        this.officeMemoService.fetchOfficeMemoById(id).subscribe(function (_a) {
+            var officeMemo = _a.officeMemo, actions = _a.actions;
+            _this.officeMemo = officeMemo;
+            _this.actions = actions || {};
+            _this.isNew = _this.officeMemo.id == '';
+            _this.isEditable = _this.isNew || _this.officeMemo.editable;
+            _this.isReady = true;
+            _this.isValid = true;
+        }, function (error) { return _this.handleXhrError(error); });
+    };
+    OfficeMemoFormComponent.prototype.handleXhrError = function (errorResponse) {
+        this.notifyService.error(errorResponse.message).show().remove(2000);
+    };
+    OfficeMemoFormComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'office-memo-form',
+            template: __webpack_require__(878)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__services__["c" /* WorkflowOfficeMemoService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5__services__["c" /* WorkflowOfficeMemoService */]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */]) === 'function' && _f) || Object])
+    ], OfficeMemoFormComponent);
+    return OfficeMemoFormComponent;
+    var _a, _b, _c, _d, _e, _f;
+}());
+
+
+/***/ },
+
+/***/ 363:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return OfficeMemoViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var OfficeMemoViewComponent = (function () {
+    function OfficeMemoViewComponent(store, route, environmentActions, officeMemoService) {
+        this.store = store;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.officeMemoService = officeMemoService;
+        this.embedded = false;
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.actions = [];
+        this.columns = [];
+        this.subs = [];
+        this.title = 'office-memo-view';
+        this.meta = {};
+        this.keyWord = '';
+        this.loading = true;
+        this.activeSort = '';
+        this.params = {};
+    }
+    OfficeMemoViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            _this.loadData(Object.assign({}, params, {
+                page: _this.meta.page
+            }));
+        }));
+    };
+    OfficeMemoViewComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    OfficeMemoViewComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.params = Object.assign({}, params, {
+            id: 'officememo-view',
+            sort: this.activeSort || 'regDate:desc'
+        });
+        var typeId = 'officememo';
+        this.officeMemoService.fetch(this.params).subscribe(function (payload) {
+            var columnOptions = payload.data.columnOptions.columns;
+            var objects = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_utils__["b" /* parseResponseObjects */])(payload.objects);
+            _this.loading = false;
+            _this.list = objects[typeId] ? objects[typeId].list : [];
+            _this.meta = objects[typeId] ? objects[typeId].meta : {};
+            _this.actions = objects.actions;
+            _this.columns = columnOptions;
+        }, function (error) { return console.log(error); });
+    };
+    OfficeMemoViewComponent.prototype.refresh = function () {
+        this.loadData(this.params);
+    };
+    OfficeMemoViewComponent.prototype.goToPage = function (params) {
+        this.loadData(params);
+    };
+    OfficeMemoViewComponent.prototype.onSort = function ($event) {
+        this.activeSort = $event;
+        this.refresh();
+    };
+    OfficeMemoViewComponent.prototype.onAction = function ($event) {
+        this.officeMemoService.doAction($event.action.customID).subscribe(function (payload) {
+            var resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OfficeMemoViewComponent.prototype, "captionsVisible", void 0);
+    OfficeMemoViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'office-memo-view',
+            template: "\n        <list-page\n            [title]=\"title\"\n            [selectable]=\"true\"\n            [headerVisible]=\"true\"\n            [titleVisible]=\"true\"\n            [actionsVisible]=\"true\"\n            [captionsVisible]=\"true\"\n            [activeSort]=\"activeSort\"\n            [list]=\"list\"\n            [meta]=\"meta\"\n            [actions]=\"actions\"\n            [columns]=\"columns\"\n            (action)=\"onAction($event)\"\n            (refresh)=\"refresh($event)\"\n            (sort)=\"onSort($event)\"\n            (goToPage)=\"goToPage($event)\">\n        </list-page>\n    ",
+            host: {
+                '[class.view]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__services__["c" /* WorkflowOfficeMemoService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__services__["c" /* WorkflowOfficeMemoService */]) === 'function' && _d) || Object])
+    ], OfficeMemoViewComponent);
+    return OfficeMemoViewComponent;
+    var _a, _b, _c, _d;
+}());
+
+
+/***/ },
+
+/***/ 364:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__shared_notification__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(76);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return OutgoingFormComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var OutgoingFormComponent = (function () {
+    function OutgoingFormComponent(store, router, route, environmentActions, outgoingService, notifyService) {
+        this.store = store;
+        this.router = router;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.outgoingService = outgoingService;
+        this.notifyService = notifyService;
+        this.subs = [];
+        this.isReady = false;
+        this.isNew = true;
+        this.isEditable = false;
+        this.isValid = true;
+        this.actions = {};
+        this.errors = {};
+    }
+    OutgoingFormComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            var id = _this.router.routerState.snapshot.root.queryParams['id'] || undefined;
+            _this.loadOutgoing(id);
+        }));
+    };
+    OutgoingFormComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    OutgoingFormComponent.prototype.loadOutgoing = function (id) {
+        var _this = this;
+        this.outgoingService.fetchOutgoingById(id).subscribe(function (_a) {
+            var outgoing = _a.outgoing, actions = _a.actions;
+            _this.outgoing = outgoing;
+            _this.actions = actions || {};
+            _this.isNew = _this.outgoing.id == '';
+            _this.isEditable = _this.isNew || _this.outgoing.editable;
+            _this.isReady = true;
+            _this.isValid = true;
+        }, function (error) { return _this.handleXhrError(error); });
+    };
+    OutgoingFormComponent.prototype.handleXhrError = function (errorResponse) {
+        this.notifyService.error(errorResponse.message).show().remove(2000);
+    };
+    OutgoingFormComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'outgoing-form',
+            template: __webpack_require__(879)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5__services__["b" /* WorkflowOutgoingService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5__services__["b" /* WorkflowOutgoingService */]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__shared_notification__["b" /* NotificationService */]) === 'function' && _f) || Object])
+    ], OutgoingFormComponent);
+    return OutgoingFormComponent;
+    var _a, _b, _c, _d, _e, _f;
+}());
+
+
+/***/ },
+
+/***/ 365:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return OutgoingViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var OutgoingViewComponent = (function () {
+    function OutgoingViewComponent(store, route, environmentActions, outgoingService) {
+        this.store = store;
+        this.route = route;
+        this.environmentActions = environmentActions;
+        this.outgoingService = outgoingService;
+        this.embedded = false;
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.actions = [];
+        this.columns = [];
+        this.subs = [];
+        this.title = 'outgoing-view';
+        this.meta = {};
+        this.keyWord = '';
+        this.loading = true;
+        this.activeSort = '';
+        this.params = {};
+    }
+    OutgoingViewComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.subs.push(this.route.params.subscribe(function (params) {
+            _this.loadData(Object.assign({}, params, {
+                page: _this.meta.page
+            }));
+        }));
+    };
+    OutgoingViewComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    OutgoingViewComponent.prototype.loadData = function (params) {
+        var _this = this;
+        this.loading = true;
+        this.params = Object.assign({}, params, {
+            id: 'outgoing-view',
+            sort: this.activeSort || 'regDate:desc'
+        });
+        var typeId = 'outgoing';
+        this.outgoingService.fetch(this.params).subscribe(function (payload) {
+            var columnOptions = payload.data.columnOptions.columns;
+            var objects = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_utils__["b" /* parseResponseObjects */])(payload.objects);
+            _this.loading = false;
+            _this.list = objects[typeId] ? objects[typeId].list : [];
+            _this.meta = objects[typeId] ? objects[typeId].meta : {};
+            _this.actions = objects.actions;
+            _this.columns = columnOptions;
+        }, function (error) { return console.log(error); });
+    };
+    OutgoingViewComponent.prototype.refresh = function () {
+        this.loadData(this.params);
+    };
+    OutgoingViewComponent.prototype.goToPage = function (params) {
+        this.loadData(params);
+    };
+    OutgoingViewComponent.prototype.onSort = function ($event) {
+        this.activeSort = $event;
+        this.refresh();
+    };
+    OutgoingViewComponent.prototype.onAction = function ($event) {
+        this.outgoingService.doAction($event.action.customID).subscribe(function (payload) {
+            var resp = payload.objects[0];
+            alert(resp.name + ' : ' + resp.value);
+        });
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "embedded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OutgoingViewComponent.prototype, "captionsVisible", void 0);
+    OutgoingViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'outgoing-view',
+            template: "\n        <list-page\n            [title]=\"title\"\n            [selectable]=\"true\"\n            [headerVisible]=\"true\"\n            [titleVisible]=\"true\"\n            [actionsVisible]=\"true\"\n            [captionsVisible]=\"true\"\n            [activeSort]=\"activeSort\"\n            [list]=\"list\"\n            [meta]=\"meta\"\n            [actions]=\"actions\"\n            [columns]=\"columns\"\n            (action)=\"onAction($event)\"\n            (refresh)=\"refresh($event)\"\n            (sort)=\"onSort($event)\"\n            (goToPage)=\"goToPage($event)\">\n        </list-page>\n    ",
+            host: {
+                '[class.view]': 'true',
+                '[class.load]': 'loading'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* ActivatedRoute */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__services__["b" /* WorkflowOutgoingService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__services__["b" /* WorkflowOutgoingService */]) === 'function' && _d) || Object])
+    ], OutgoingViewComponent);
+    return OutgoingViewComponent;
+    var _a, _b, _c, _d;
+}());
+
+
+/***/ },
+
+/***/ 366:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ws_service__ = __webpack_require__(367);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkspaceComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var WorkspaceComponent = (function () {
+    function WorkspaceComponent(store, environmentActions, wsService) {
+        this.store = store;
+        this.environmentActions = environmentActions;
+        this.wsService = wsService;
+        this.subs = [];
+        this.isReady = false;
+    }
+    WorkspaceComponent.prototype.ngOnInit = function () {
+    };
+    WorkspaceComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    WorkspaceComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'WorkSpaceComponent',
+            template: '<h1>Workspace component</h1>'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__actions__["a" /* EnvironmentActions */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ws_service__["a" /* WorkspaceService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__ws_service__["a" /* WorkspaceService */]) === 'function' && _c) || Object])
+    ], WorkspaceComponent);
+    return WorkspaceComponent;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 367:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkspaceService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var WorkspaceService = (function () {
+    function WorkspaceService(http, appService) {
+        this.http = http;
+        this.appService = appService;
+    }
+    WorkspaceService.prototype.fetchApps = function () {
+        var _this = this;
+        return this.http.get('/p?id=apps', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return response.json().objects; })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkspaceService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object])
+    ], WorkspaceService);
+    return WorkspaceService;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 368:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AppActions; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AppActions = (function () {
+    function AppActions() {
+    }
+    AppActions.prototype.fetchUserProfile = function () {
+        return {
+            type: AppActions.FETCH_USER_PROFILE
+        };
+    };
+    AppActions.prototype.fetchUserProfileFailed = function (error) {
+        return {
+            type: AppActions.FETCH_USER_PROFILE_FAILED,
+            payload: error
+        };
+    };
+    AppActions.prototype.fetchUserProfileFulfilled = function (payload) {
+        return {
+            type: AppActions.FETCH_USER_PROFILE_FULFILLED,
+            payload: payload
+        };
+    };
+    AppActions.prototype.updateUserProfile = function (userProfile) {
+        return {
+            type: AppActions.UPDATE_USER_PROFILE,
+            payload: {
+                userProfile: userProfile
+            }
+        };
+    };
+    AppActions.prototype.updateUserProfileFailed = function (error) {
+        return {
+            type: AppActions.UPDATE_USER_PROFILE_FAILED,
+            payload: error
+        };
+    };
+    AppActions.prototype.updateUserProfileFulfilled = function (userProfile) {
+        return {
+            type: AppActions.UPDATE_USER_PROFILE_FULFILLED,
+            payload: {
+                userProfile: userProfile
+            }
+        };
+    };
+    AppActions.FETCH_USER_PROFILE = 'FETCH_USER_PROFILE';
+    AppActions.FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
+    AppActions.FETCH_USER_PROFILE_FULFILLED = 'FETCH_USER_PROFILE_FULFILLED';
+    AppActions.UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+    AppActions.UPDATE_USER_PROFILE_FAILED = 'UPDATE_USER_PROFILE_FAILED';
+    AppActions.UPDATE_USER_PROFILE_FULFILLED = 'UPDATE_USER_PROFILE_FULFILLED';
+    AppActions = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], AppActions);
+    return AppActions;
+}());
+
+
+/***/ },
+
+/***/ 369:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return EnvironmentActions; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var EnvironmentActions = (function () {
+    function EnvironmentActions() {
+    }
+    EnvironmentActions.prototype.search = function (keyWord) {
+        return {
+            type: EnvironmentActions.SEARCH,
+            payload: { keyWord: keyWord }
+        };
+    };
+    EnvironmentActions.prototype.resetSearch = function () {
+        return {
+            type: EnvironmentActions.RESET_SEARCH
+        };
+    };
+    EnvironmentActions.prototype.toggleNav = function () {
+        return {
+            type: EnvironmentActions.TOGGLE_NAV
+        };
+    };
+    EnvironmentActions.prototype.toggleSearch = function () {
+        return {
+            type: EnvironmentActions.TOGGLE_SEARCH
+        };
+    };
+    EnvironmentActions.prototype.hideNav = function () {
+        return {
+            type: EnvironmentActions.HIDE_NAV
+        };
+    };
+    EnvironmentActions.prototype.setRedirectUrl = function (redirectUrl) {
+        return {
+            type: EnvironmentActions.SET_REDIRECT_URL,
+            payload: { redirectUrl: redirectUrl }
+        };
+    };
+    EnvironmentActions.prototype.setApps = function (apps) {
+        return {
+            type: EnvironmentActions.SET_APPS,
+            payload: { apps: apps }
+        };
+    };
+    EnvironmentActions.prototype.setNavUrl = function (rootSegment, navUrl) {
+        return {
+            type: EnvironmentActions.SET_NAV_URL,
+            payload: { rootSegment: rootSegment, navUrl: navUrl }
+        };
+    };
+    EnvironmentActions.SEARCH = 'SEARCH';
+    EnvironmentActions.RESET_SEARCH = 'RESET_SEARCH';
+    EnvironmentActions.TOGGLE_NAV = 'TOGGLE_NAV';
+    EnvironmentActions.TOGGLE_SEARCH = 'TOGGLE_SEARCH';
+    EnvironmentActions.HIDE_NAV = 'HIDE_NAV';
+    EnvironmentActions.SET_REDIRECT_URL = 'SET_REDIRECT_URL';
+    EnvironmentActions.SET_NAV_URL = 'NAV_URL';
+    EnvironmentActions.SET_APPS = 'SET_APPS';
+    EnvironmentActions = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], EnvironmentActions);
+    return EnvironmentActions;
+}());
+
+
+/***/ },
+
+/***/ 370:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services__ = __webpack_require__(33);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AuthGuard; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AuthGuard = (function () {
+    function AuthGuard(appService, router) {
+        this.appService = appService;
+        this.router = router;
+    }
+    AuthGuard.prototype.canActivate = function (next, state) {
+        if (this.appService.isLogged) {
+            return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].of(true);
+        }
+        return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].of(true);
+    };
+    AuthGuard = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_3__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__services__["b" /* AppService */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _b) || Object])
+    ], AuthGuard);
+    return AuthGuard;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 371:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Error404; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var Error404 = (function () {
+    function Error404() {
+    }
+    Error404 = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[error404]',
+            template: '404'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], Error404);
+    return Error404;
+}());
+
+
+/***/ },
+
+/***/ 372:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return LoginComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var LoginComponent = (function () {
+    function LoginComponent() {
+    }
+    LoginComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[login]',
+            template: ''
+        }), 
+        __metadata('design:paramtypes', [])
+    ], LoginComponent);
+    return LoginComponent;
+}());
+
+
+/***/ },
+
+/***/ 373:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_forms__ = __webpack_require__(167);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__shared_notification__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return UserProfileComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+var UserProfileComponent = (function () {
+    function UserProfileComponent(store, http, router, formBuilder, ng2Translate, appService, translateService, notifyService) {
+        var _this = this;
+        this.store = store;
+        this.http = http;
+        this.router = router;
+        this.formBuilder = formBuilder;
+        this.ng2Translate = ng2Translate;
+        this.appService = appService;
+        this.translateService = translateService;
+        this.notifyService = notifyService;
+        this.user = null;
+        this.changePassword = false;
+        this.language = 'RUS';
+        this.pageSizes = [10, 20, 30, 40, 50];
+        this.errors = {};
+        this.sub = this.store.select('authed').subscribe(function (state) {
+            _this.user = state.userProfile;
+            _this.pageSize = state.pageSize;
+            _this.language = state.language;
+            _this.languages = state.languages;
+            if (_this.user) {
+                _this.form = formBuilder.group({
+                    login: [_this.user.login],
+                    pwd: [],
+                    pwd_new: [],
+                    pwd_confirm: [],
+                    email: [_this.user.email]
+                });
+            }
+        });
+    }
+    UserProfileComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    UserProfileComponent.prototype.toggleChangePassword = function () {
+        this.changePassword = !this.changePassword;
+    };
+    UserProfileComponent.prototype.updateUserProfile = function () {
+        var _this = this;
+        var noty = this.notifyService.process(this.ng2Translate.instant('wait_while_document_save')).show();
+        this.appService.updateUserProfile(this.form.value).subscribe(function (data) {
+            _this.errors = {};
+            noty.remove();
+            _this.router.navigate(['/tasks']);
+        }, function (error) {
+            _this.errors = {};
+            noty.remove();
+            if (error.validation) {
+                for (var _i = 0, _a = error.validation.errors; _i < _a.length; _i++) {
+                    var err = _a[_i];
+                    _this.errors[err.field] = err.message;
+                }
+            }
+        });
+    };
+    UserProfileComponent.prototype.changeLang = function ($event) {
+        var _this = this;
+        var langCode = $event.target.value;
+        var url = '/Staff/p?id=change-session-val-action&lang=' + langCode;
+        return this.http.post(url, {}, { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return response.json(); })
+            .subscribe(function (data) {
+            _this.ng2Translate.reloadLang(langCode).subscribe(function (r) {
+                _this.ng2Translate.use(langCode);
+            });
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_8__utils_utils__["f" /* createCookie */])('lang', langCode, 365);
+        });
+    };
+    UserProfileComponent.prototype.close = function () {
+        window.history.back();
+    };
+    UserProfileComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[user-profile]',
+            template: __webpack_require__(887),
+            providers: [__WEBPACK_IMPORTED_MODULE_3__angular_forms__["c" /* FormBuilder */]]
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__angular_forms__["c" /* FormBuilder */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__angular_forms__["c" /* FormBuilder */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__["TranslateService"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5_ng2_translate_ng2_translate__["TranslateService"]) === 'function' && _e) || Object, (typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_7__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_7__services__["b" /* AppService */]) === 'function' && _f) || Object, (typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__services__["c" /* TranslateService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_7__services__["c" /* TranslateService */]) === 'function' && _g) || Object, (typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_6__shared_notification__["b" /* NotificationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_6__shared_notification__["b" /* NotificationService */]) === 'function' && _h) || Object])
+    ], UserProfileComponent);
+    return UserProfileComponent;
+    var _a, _b, _c, _d, _e, _f, _g, _h;
+}());
+
+
+/***/ },
+
+/***/ 374:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return User; });
+var User = (function () {
+    function User() {
+        this.id = '';
+        this.name = '@anonymous';
+    }
+    return User;
+}());
+
+
+/***/ },
+
+/***/ 375:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AppService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var AppService = (function () {
+    function AppService(http) {
+        this.http = http;
+        this.thumbnailSupportedFormat = ['jpeg', 'jpg', 'png', 'gif'];
+        this.isLogged = false;
+        this.language = 'RUS';
+        var ck = document.cookie.match('(lang)=(.*?)($|;|,(?! ))');
+        if (ck) {
+            this.language = ck[2];
+        }
+    }
+    AppService.prototype.fetchUserProfile = function () {
+        var _this = this;
+        return this.http.get('p?id=userprofile', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) {
+            var res = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            var pageSize = 20;
+            if (res.pagesize) {
+                pageSize = res.pagesize;
+            }
+            _this.isLogged = true;
+            _this.language = res.currentLang;
+            _this.employee = res.employee;
+            _this.workspaceUrl = res.workspaceUrl;
+            return {
+                userProfile: res.employee,
+                languages: res.language.list[0].localizedName,
+                pageSize: pageSize,
+                language: res.currentLang || _this.language,
+                workspaceUrl: res.workspaceUrl
+            };
+        })
+            .catch(function (error) { return _this.handleError(error); });
+    };
+    AppService.prototype.updateUserProfile = function (userForm) {
+        return this.http.post('p?id=userprofile', __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["c" /* serializeObj */])(userForm), { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return response.json(); })
+            .catch(function (error) { return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["d" /* transformPostResponse */])(error)); });
+    };
+    AppService.prototype.logout = function () {
+        window.location.href = this.workspaceUrl;
+    };
+    AppService.prototype.handleError = function (error) {
+        if (error.status === 401) {
+            this.logout();
+        }
+        return __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__["Observable"].throw(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["d" /* transformPostResponse */])(error));
+    };
+    AppService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object])
+    ], AppService);
+    return AppService;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 376:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DropdownToggleComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var DropdownToggleComponent = (function () {
+    function DropdownToggleComponent() {
+        this.toggle = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    DropdownToggleComponent.prototype.onClick = function ($event) {
+        $event.preventDefault();
+        this.toggle.emit($event);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.dropdown-toggle'), 
+        __metadata('design:type', Object)
+    ], DropdownToggleComponent.prototype, "true", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('click', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownToggleComponent.prototype, "onClick", null);
+    DropdownToggleComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[dropdown-toggle]',
+            template: "<ng-content></ng-content>"
+        }), 
+        __metadata('design:paramtypes', [])
+    ], DropdownToggleComponent);
+    return DropdownToggleComponent;
+}());
+
+
+/***/ },
+
+/***/ 377:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notification__ = __webpack_require__(378);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return NotificationService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NotificationService = (function () {
+    function NotificationService() {
+        this.emitter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    NotificationService.prototype.getEmitter = function () {
+        return this.emitter;
+    };
+    NotificationService.prototype.info = function (message) {
+        return this.add({ type: 'info', message: message });
+    };
+    NotificationService.prototype.success = function (message) {
+        return this.add({ type: 'success', message: message });
+    };
+    NotificationService.prototype.error = function (message) {
+        return this.add({ type: 'error', message: message });
+    };
+    NotificationService.prototype.process = function (message) {
+        return this.add({ type: 'process', message: message });
+    };
+    NotificationService.prototype.add = function (options) {
+        var noty = new __WEBPACK_IMPORTED_MODULE_1__notification__["a" /* Notification */](options.type, options.message);
+        this.emitter.emit({ command: 'add', notify: noty });
+        return noty;
+    };
+    NotificationService.prototype.removeAll = function () {
+        this.emitter.emit({ command: 'cleanAll' });
+    };
+    NotificationService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], NotificationService);
+    return NotificationService;
+}());
+
+
+/***/ },
+
+/***/ 378:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Notification; });
+
+var Notification = (function () {
+    function Notification(type, message) {
+        this.emitter = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.display = false;
+        this.type = type;
+        this.message = message;
+    }
+    Notification.prototype.getEmitter = function () {
+        return this.emitter;
+    };
+    Notification.prototype.show = function () {
+        this.display = true;
+        return this;
+    };
+    Notification.prototype.hide = function () {
+        this.display = false;
+        return this;
+    };
+    Notification.prototype.set = function (options) {
+        for (var key in options) {
+            if (key === 'message') {
+                this.message = options[key];
+            }
+            else if (key === 'type') {
+                this.type = options[key];
+            }
+        }
+        return this;
+    };
+    Notification.prototype.dismiss = function () {
+        if (this.delay === 'click') {
+            this.emitter.emit({ dismiss: true, notify: this, promise: this.promise });
+        }
+    };
+    Notification.prototype.remove = function (delay) {
+        var _this = this;
+        if (delay === void 0) { delay = 0; }
+        this.delay = delay;
+        if (delay === 'click') {
+        }
+        else if (delay > 0) {
+            setTimeout(function () {
+                _this.emitter.emit({ dismiss: true, notify: _this, promise: _this.promise });
+            }, delay);
+        }
+        else {
+            this.emitter.emit({ dismiss: true, notify: this, promise: this.promise });
+        }
+        return this.promise;
+    };
+    return Notification;
+}());
+
+
+/***/ },
+
+/***/ 379:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Tab; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var Tab = (function () {
+    function Tab() {
+        this.active = false;
+        this.pinned = false;
+        this.select = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('tabTitle'), 
+        __metadata('design:type', String)
+    ], Tab.prototype, "title", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], Tab.prototype, "icon", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], Tab.prototype, "active", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], Tab.prototype, "pinned", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], Tab.prototype, "select", void 0);
+    Tab = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'tab',
+            template: "\n      <div [hidden]=\"!active && !pinned\">\n        <ng-content></ng-content>\n      </div>\n    "
+        }), 
+        __metadata('design:paramtypes', [])
+    ], Tab);
+    return Tab;
+}());
+
+
+/***/ },
+
+/***/ 513:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var FromObservable_1 = __webpack_require__(899);
+exports.from = FromObservable_1.FromObservable.create;
+//# sourceMappingURL=from.js.map
+
+/***/ },
+
+/***/ 516:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var mergeAll_1 = __webpack_require__(164);
+/**
+ * Converts a higher-order Observable into a first-order Observable by
+ * concatenating the inner Observables in order.
+ *
+ * <span class="informal">Flattens an Observable-of-Observables by putting one
+ * inner Observable after the other.</span>
+ *
+ * <img src="./img/concatAll.png" width="100%">
+ *
+ * Joins every Observable emitted by the source (a higher-order Observable), in
+ * a serial fashion. It subscribes to each inner Observable only after the
+ * previous inner Observable has completed, and merges all of their values into
+ * the returned observable.
+ *
+ * __Warning:__ If the source Observable emits Observables quickly and
+ * endlessly, and the inner Observables it emits generally complete slower than
+ * the source emits, you can run into memory issues as the incoming Observables
+ * collect in an unbounded buffer.
+ *
+ * Note: `concatAll` is equivalent to `mergeAll` with concurrency parameter set
+ * to `1`.
+ *
+ * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var higherOrder = clicks.map(ev => Rx.Observable.interval(1000).take(4));
+ * var firstOrder = higherOrder.concatAll();
+ * firstOrder.subscribe(x => console.log(x));
+ *
+ * @see {@link combineAll}
+ * @see {@link concat}
+ * @see {@link concatMap}
+ * @see {@link concatMapTo}
+ * @see {@link exhaust}
+ * @see {@link mergeAll}
+ * @see {@link switch}
+ * @see {@link zipAll}
+ *
+ * @return {Observable} An Observable emitting values from all the inner
+ * Observables concatenated.
+ * @method concatAll
+ * @owner Observable
+ */
+function concatAll() {
+    return this.lift(new mergeAll_1.MergeAllOperator(1));
+}
+exports.concatAll = concatAll;
+//# sourceMappingURL=concatAll.js.map
+
+/***/ },
+
+/***/ 518:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subscriber_1 = __webpack_require__(14);
+/**
+ * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
+ * @param {function} predicate a function for determining if an item meets a specified condition.
+ * @param {any} [thisArg] optional object to use for `this` in the callback
+ * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
+ * @method every
+ * @owner Observable
+ */
+function every(predicate, thisArg) {
+    return this.lift(new EveryOperator(predicate, thisArg, this));
+}
+exports.every = every;
+var EveryOperator = (function () {
+    function EveryOperator(predicate, thisArg, source) {
+        this.predicate = predicate;
+        this.thisArg = thisArg;
+        this.source = source;
+    }
+    EveryOperator.prototype.call = function (observer, source) {
+        return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
+    };
+    return EveryOperator;
+}());
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var EverySubscriber = (function (_super) {
+    __extends(EverySubscriber, _super);
+    function EverySubscriber(destination, predicate, thisArg, source) {
+        _super.call(this, destination);
+        this.predicate = predicate;
+        this.thisArg = thisArg;
+        this.source = source;
+        this.index = 0;
+        this.thisArg = thisArg || this;
+    }
+    EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
+        this.destination.next(everyValueMatch);
+        this.destination.complete();
+    };
+    EverySubscriber.prototype._next = function (value) {
+        var result = false;
+        try {
+            result = this.predicate.call(this.thisArg, value, this.index++, this.source);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        if (!result) {
+            this.notifyComplete(false);
+        }
+    };
+    EverySubscriber.prototype._complete = function () {
+        this.notifyComplete(true);
+    };
+    return EverySubscriber;
+}(Subscriber_1.Subscriber));
+//# sourceMappingURL=every.js.map
+
+/***/ },
+
+/***/ 528:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared_module__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_application_app__ = __webpack_require__(678);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_navbar_navbar__ = __webpack_require__(683);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_nav_nav__ = __webpack_require__(682);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_nav_nav_tree__ = __webpack_require__(681);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_user_profile_user_profile__ = __webpack_require__(373);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_login__ = __webpack_require__(372);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_404__ = __webpack_require__(371);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_shared__ = __webpack_require__(686);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_routing__ = __webpack_require__(676);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__store__ = __webpack_require__(726);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__auth_guard__ = __webpack_require__(370);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AppModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var AppModule = (function () {
+    function AppModule() {
+    }
+    AppModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_core__["NgModule"])({
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_4__components_application_app__["a" /* AppComponent */]],
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_4__components_application_app__["a" /* AppComponent */],
+                __WEBPACK_IMPORTED_MODULE_5__components_navbar_navbar__["a" /* NavbarComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__components_nav_nav__["a" /* NavComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__components_nav_nav_tree__["a" /* NavTreeComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__components_user_profile_user_profile__["a" /* UserProfileComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__components_login__["a" /* LoginComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__components_404__["a" /* Error404 */],
+                __WEBPACK_IMPORTED_MODULE_11__components_shared__["a" /* ErrorMessageComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__components_shared__["b" /* SelectionComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__components_shared__["c" /* OrganizationInputComponent */], __WEBPACK_IMPORTED_MODULE_11__components_shared__["d" /* EmployeeInputComponent */], __WEBPACK_IMPORTED_MODULE_11__components_shared__["e" /* TagsInputComponent */]
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["b" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__["TranslateModule"].forRoot({
+                    provide: __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__["TranslateLoader"],
+                    useFactory: function (trs) { return new CustomTranslateLoader(trs); },
+                    deps: [__WEBPACK_IMPORTED_MODULE_14__services__["c" /* TranslateService */]]
+                }),
+                __WEBPACK_IMPORTED_MODULE_12__app_routing__["a" /* AppRoutingModule */],
+                __WEBPACK_IMPORTED_MODULE_3__shared_module__["a" /* SharedModule */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_13__store__["a" /* APP_STORE */],
+                __WEBPACK_IMPORTED_MODULE_14__services__["b" /* AppService */], __WEBPACK_IMPORTED_MODULE_14__services__["d" /* DataService */], __WEBPACK_IMPORTED_MODULE_14__services__["c" /* TranslateService */],
+                __WEBPACK_IMPORTED_MODULE_15__actions__["b" /* AppActions */], __WEBPACK_IMPORTED_MODULE_15__actions__["a" /* EnvironmentActions */],
+                __WEBPACK_IMPORTED_MODULE_16__auth_guard__["a" /* AuthGuard */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], AppModule);
+    return AppModule;
+}());
+var CustomTranslateLoader = (function () {
+    function CustomTranslateLoader(translateService) {
+        this.translateService = translateService;
+    }
+    CustomTranslateLoader.prototype.getTranslation = function (lang) {
+        return this.translateService.fetchTranslations();
+    };
+    return CustomTranslateLoader;
+}());
+if (false) {
+    enableProdMode();
+}
+
+
+/***/ },
+
+/***/ 53:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return PRIMARY_OUTLET; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return NavigationCancelingError; });
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+/**
+ * @whatItDoes Name of the primary outlet.
+ *
+ * @stable
+ */
+var PRIMARY_OUTLET = 'primary';
+var NavigationCancelingError = (function (_super) {
+    __extends(NavigationCancelingError, _super);
+    function NavigationCancelingError(message) {
+        _super.call(this, message);
+        this.message = message;
+        this.stack = (new Error(message)).stack;
+    }
+    NavigationCancelingError.prototype.toString = function () { return this.message; };
+    return NavigationCancelingError;
+}(Error));
+//# sourceMappingURL=shared.js.map
+
+/***/ },
+
+/***/ 54:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__ = __webpack_require__(249);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatAll__ = __webpack_require__(516);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatAll__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__ = __webpack_require__(518);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_last__ = __webpack_require__(910);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_last___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_last__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeAll__ = __webpack_require__(164);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeAll__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__shared__ = __webpack_require__(53);
+/* harmony export (immutable) */ exports["h"] = shallowEqualArrays;
+/* harmony export (immutable) */ exports["d"] = shallowEqual;
+/* harmony export (immutable) */ exports["a"] = flatten;
+/* unused harmony export first */
+/* harmony export (immutable) */ exports["i"] = last;
+/* unused harmony export and */
+/* harmony export (immutable) */ exports["g"] = merge;
+/* harmony export (immutable) */ exports["c"] = forEach;
+/* harmony export (immutable) */ exports["e"] = waitForMap;
+/* harmony export (immutable) */ exports["f"] = andObservables;
+/* harmony export (immutable) */ exports["b"] = wrapIntoObservable;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+
+
+function shallowEqualArrays(a, b) {
+    if (a.length !== b.length)
+        return false;
+    for (var i = 0; i < a.length; ++i) {
+        if (!shallowEqual(a[i], b[i]))
+            return false;
+    }
+    return true;
+}
+function shallowEqual(a, b) {
+    var k1 = Object.keys(a);
+    var k2 = Object.keys(b);
+    if (k1.length != k2.length) {
+        return false;
+    }
+    var key;
+    for (var i = 0; i < k1.length; i++) {
+        key = k1[i];
+        if (a[key] !== b[key]) {
+            return false;
+        }
+    }
+    return true;
+}
+function flatten(a) {
+    var target = [];
+    for (var i = 0; i < a.length; ++i) {
+        for (var j = 0; j < a[i].length; ++j) {
+            target.push(a[i][j]);
+        }
+    }
+    return target;
+}
+function first(a) {
+    return a.length > 0 ? a[0] : null;
+}
+function last(a) {
+    return a.length > 0 ? a[a.length - 1] : null;
+}
+function and(bools) {
+    return bools.reduce(function (a, b) { return a && b; }, true);
+}
+function merge(m1, m2) {
+    var m = {};
+    for (var attr in m1) {
+        if (m1.hasOwnProperty(attr)) {
+            m[attr] = m1[attr];
+        }
+    }
+    for (var attr in m2) {
+        if (m2.hasOwnProperty(attr)) {
+            m[attr] = m2[attr];
+        }
+    }
+    return m;
+}
+function forEach(map, callback) {
+    for (var prop in map) {
+        if (map.hasOwnProperty(prop)) {
+            callback(map[prop], prop);
+        }
+    }
+}
+function waitForMap(obj, fn) {
+    var waitFor = [];
+    var res = {};
+    forEach(obj, function (a, k) {
+        if (k === __WEBPACK_IMPORTED_MODULE_8__shared__["a" /* PRIMARY_OUTLET */]) {
+            waitFor.push(__WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(fn(k, a), function (_) {
+                res[k] = _;
+                return _;
+            }));
+        }
+    });
+    forEach(obj, function (a, k) {
+        if (k !== __WEBPACK_IMPORTED_MODULE_8__shared__["a" /* PRIMARY_OUTLET */]) {
+            waitFor.push(__WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(fn(k, a), function (_) {
+                res[k] = _;
+                return _;
+            }));
+        }
+    });
+    if (waitFor.length > 0) {
+        var concatted$ = __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_concatAll__["concatAll"].call(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"].apply(void 0, waitFor));
+        var last$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_last__["last"].call(concatted$);
+        return __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(last$, function () { return res; });
+    }
+    else {
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(res);
+    }
+}
+function andObservables(observables) {
+    var merged$ = __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeAll__["mergeAll"].call(observables);
+    return __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_every__["every"].call(merged$, function (result) { return result === true; });
+}
+function wrapIntoObservable(value) {
+    if (value instanceof __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"]) {
+        return value;
+    }
+    else if (value instanceof Promise) {
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_fromPromise__["fromPromise"])(value);
+    }
+    else {
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(value);
+    }
+}
+//# sourceMappingURL=collection.js.map
+
+/***/ },
+
+/***/ 645:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_from__ = __webpack_require__(513);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_from___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_from__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__ = __webpack_require__(514);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_concatAll__ = __webpack_require__(516);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_concatAll___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_operator_concatAll__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_first__ = __webpack_require__(909);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_first___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_operator_first__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__ = __webpack_require__(165);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_util_EmptyError__ = __webpack_require__(253);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_rxjs_util_EmptyError___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_rxjs_util_EmptyError__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__router_config_loader__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__utils_collection__ = __webpack_require__(54);
+/* harmony export (immutable) */ exports["a"] = applyRedirects;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+var NoMatch = (function () {
+    function NoMatch(segmentGroup) {
+        if (segmentGroup === void 0) { segmentGroup = null; }
+        this.segmentGroup = segmentGroup;
+    }
+    return NoMatch;
+}());
+var AbsoluteRedirect = (function () {
+    function AbsoluteRedirect(segments) {
+        this.segments = segments;
+    }
+    return AbsoluteRedirect;
+}());
+function noMatch(segmentGroup) {
+    return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"](function (obs) { return obs.error(new NoMatch(segmentGroup)); });
+}
+function absoluteRedirect(segments) {
+    return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"](function (obs) { return obs.error(new AbsoluteRedirect(segments)); });
+}
+function canLoadFails(route) {
+    return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"](function (obs) { return obs.error(new __WEBPACK_IMPORTED_MODULE_10__shared__["b" /* NavigationCancelingError */]("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+}
+function applyRedirects(injector, configLoader, urlTree, config) {
+    return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
+}
+var ApplyRedirects = (function () {
+    function ApplyRedirects(injector, configLoader, urlTree, config) {
+        this.injector = injector;
+        this.configLoader = configLoader;
+        this.urlTree = urlTree;
+        this.config = config;
+        this.allowRedirects = true;
+    }
+    ApplyRedirects.prototype.apply = function () {
+        var _this = this;
+        var expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]);
+        var urlTrees$ = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); });
+        return __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__["_catch"].call(urlTrees$, function (e) {
+            if (e instanceof AbsoluteRedirect) {
+                // after an absolute redirect we do not apply any more redirects!
+                _this.allowRedirects = false;
+                var group = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */]([], (_a = {}, _a[__WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]] = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](e.segments, {}), _a));
+                // we need to run matching, so we can fetch all lazy-loaded modules
+                return _this.match(group);
+            }
+            else if (e instanceof NoMatch) {
+                throw _this.noMatchError(e);
+            }
+            else {
+                throw e;
+            }
+            var _a;
+        });
+    };
+    ApplyRedirects.prototype.match = function (segmentGroup) {
+        var _this = this;
+        var expanded$ = this.expandSegmentGroup(this.injector, this.config, segmentGroup, __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]);
+        var mapped$ = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup); });
+        return __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__["_catch"].call(mapped$, function (e) {
+            if (e instanceof NoMatch) {
+                throw _this.noMatchError(e);
+            }
+            else {
+                throw e;
+            }
+        });
+    };
+    ApplyRedirects.prototype.noMatchError = function (e) {
+        return new Error("Cannot match any routes: '" + e.segmentGroup + "'");
+    };
+    ApplyRedirects.prototype.createUrlTree = function (rootCandidate) {
+        var root = rootCandidate.segments.length > 0 ?
+            new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */]([], (_a = {}, _a[__WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]] = rootCandidate, _a)) :
+            rootCandidate;
+        return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["b" /* UrlTree */](root, this.urlTree.queryParams, this.urlTree.fragment);
+        var _a;
+    };
+    ApplyRedirects.prototype.expandSegmentGroup = function (injector, routes, segmentGroup, outlet) {
+        if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+            return __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(this.expandChildren(injector, routes, segmentGroup), function (children) { return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */]([], children); });
+        }
+        else {
+            return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
+        }
+    };
+    ApplyRedirects.prototype.expandChildren = function (injector, routes, segmentGroup) {
+        var _this = this;
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__utils_collection__["e" /* waitForMap */])(segmentGroup.children, function (childOutlet, child) { return _this.expandSegmentGroup(injector, routes, child, childOutlet); });
+    };
+    ApplyRedirects.prototype.expandSegment = function (injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+        var _this = this;
+        var routes$ = __WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"].apply(void 0, routes);
+        var processedRoutes$ = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(routes$, function (r) {
+            var expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+            return __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__["_catch"].call(expanded$, function (e) {
+                if (e instanceof NoMatch)
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(null);
+                else
+                    throw e;
+            });
+        });
+        var concattedProcessedRoutes$ = __WEBPACK_IMPORTED_MODULE_4_rxjs_operator_concatAll__["concatAll"].call(processedRoutes$);
+        var first$ = __WEBPACK_IMPORTED_MODULE_5_rxjs_operator_first__["first"].call(concattedProcessedRoutes$, function (s) { return !!s; });
+        return __WEBPACK_IMPORTED_MODULE_3_rxjs_operator_catch__["_catch"].call(first$, function (e, _) {
+            if (e instanceof __WEBPACK_IMPORTED_MODULE_8_rxjs_util_EmptyError__["EmptyError"]) {
+                throw new NoMatch(segmentGroup);
+            }
+            else {
+                throw e;
+            }
+        });
+    };
+    ApplyRedirects.prototype.expandSegmentAgainstRoute = function (injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+        if (getOutlet(route) !== outlet)
+            return noMatch(segmentGroup);
+        if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+            return noMatch(segmentGroup);
+        if (route.redirectTo === undefined) {
+            return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+        }
+        else {
+            return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+        }
+    };
+    ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+        if (route.path === '**') {
+            return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
+        }
+        else {
+            return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+        }
+    };
+    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (route) {
+        var newSegments = applyRedirectCommands([], route.redirectTo, {});
+        if (route.redirectTo.startsWith('/')) {
+            return absoluteRedirect(newSegments);
+        }
+        else {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](newSegments, {}));
+        }
+    };
+    ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+        var _a = match(segmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
+        if (!matched)
+            return noMatch(segmentGroup);
+        var newSegments = applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
+        if (route.redirectTo.startsWith('/')) {
+            return absoluteRedirect(newSegments);
+        }
+        else {
+            return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+        }
+    };
+    ApplyRedirects.prototype.matchSegmentAgainstRoute = function (injector, rawSegmentGroup, route, segments) {
+        var _this = this;
+        if (route.path === '**') {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](segments, {}));
+        }
+        else {
+            var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments_1 = _a.consumedSegments, lastChild = _a.lastChild;
+            if (!matched)
+                return noMatch(rawSegmentGroup);
+            var rawSlicedSegments_1 = segments.slice(lastChild);
+            var childConfig$ = this.getChildConfig(injector, route);
+            return __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(childConfig$, function (routerConfig) {
+                var childInjector = routerConfig.injector;
+                var childConfig = routerConfig.routes;
+                var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
+                if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+                    var expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
+                    return __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(expanded$, function (children) { return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](consumedSegments_1, children); });
+                }
+                else if (childConfig.length === 0 && slicedSegments.length === 0) {
+                    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](consumedSegments_1, {}));
+                }
+                else {
+                    var expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */], true);
+                    return __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(expanded$, function (cs) { return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](consumedSegments_1.concat(cs.segments), cs.children); });
+                }
+            });
+        }
+    };
+    ApplyRedirects.prototype.getChildConfig = function (injector, route) {
+        var _this = this;
+        if (route.children) {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_9__router_config_loader__["a" /* LoadedRouterConfig */](route.children, injector, null));
+        }
+        else if (route.loadChildren) {
+            return __WEBPACK_IMPORTED_MODULE_7_rxjs_operator_mergeMap__["mergeMap"].call(runGuards(injector, route), function (shouldLoad) {
+                if (shouldLoad) {
+                    if (route._loadedConfig) {
+                        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(route._loadedConfig);
+                    }
+                    else {
+                        return __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(_this.configLoader.load(injector, route.loadChildren), function (r) {
+                            route._loadedConfig = r;
+                            return r;
+                        });
+                    }
+                }
+                else {
+                    return canLoadFails(route);
+                }
+            });
+        }
+        else {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_9__router_config_loader__["a" /* LoadedRouterConfig */]([], injector, null));
+        }
+    };
+    return ApplyRedirects;
+}());
+function runGuards(injector, route) {
+    var canLoad = route.canLoad;
+    if (!canLoad || canLoad.length === 0)
+        return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_rxjs_observable_of__["of"])(true);
+    var obs = __WEBPACK_IMPORTED_MODULE_6_rxjs_operator_map__["map"].call(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_from__["from"])(canLoad), function (c) {
+        var guard = injector.get(c);
+        if (guard.canLoad) {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__utils_collection__["b" /* wrapIntoObservable */])(guard.canLoad(route));
+        }
+        else {
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__utils_collection__["b" /* wrapIntoObservable */])(guard(route));
+        }
+    });
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__utils_collection__["f" /* andObservables */])(obs);
+}
+function match(segmentGroup, route, segments) {
+    var noMatch = { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+    if (route.path === '') {
+        if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
+            return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+        }
+        else {
+            return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+        }
+    }
+    var path = route.path;
+    var parts = path.split('/');
+    var positionalParamSegments = {};
+    var consumedSegments = [];
+    var currentIndex = 0;
+    for (var i = 0; i < parts.length; ++i) {
+        if (currentIndex >= segments.length)
+            return noMatch;
+        var current = segments[currentIndex];
+        var p = parts[i];
+        var isPosParam = p.startsWith(':');
+        if (!isPosParam && p !== current.path)
+            return noMatch;
+        if (isPosParam) {
+            positionalParamSegments[p.substring(1)] = current;
+        }
+        consumedSegments.push(current);
+        currentIndex++;
+    }
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+        return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+    }
+    return { matched: true, consumedSegments: consumedSegments, lastChild: currentIndex, positionalParamSegments: positionalParamSegments };
+}
+function applyRedirectCommands(segments, redirectTo, posParams) {
+    var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+    if (r === '') {
+        return [];
+    }
+    else {
+        return createSegments(redirectTo, r.split('/'), segments, posParams);
+    }
+}
+function createSegments(redirectTo, parts, segments, posParams) {
+    return parts.map(function (p) { return p.startsWith(':') ? findPosParam(p, posParams, redirectTo) :
+        findOrCreateSegment(p, segments); });
+}
+function findPosParam(part, posParams, redirectTo) {
+    var paramName = part.substring(1);
+    var pos = posParams[paramName];
+    if (!pos)
+        throw new Error("Cannot redirect to '" + redirectTo + "'. Cannot find '" + part + "'.");
+    return pos;
+}
+function findOrCreateSegment(part, segments) {
+    var idx = 0;
+    for (var _i = 0, segments_1 = segments; _i < segments_1.length; _i++) {
+        var s = segments_1[_i];
+        if (s.path === part) {
+            segments.splice(idx);
+            return s;
+        }
+        idx++;
+    }
+    return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["c" /* UrlSegment */](part, {});
+}
+function split(segmentGroup, consumedSegments, slicedSegments, config) {
+    if (slicedSegments.length > 0 &&
+        containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+        var s = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](consumedSegments, createChildrenForEmptySegments(config, new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](slicedSegments, segmentGroup.children)));
+        return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
+    }
+    else if (slicedSegments.length === 0 &&
+        containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
+        var s = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        return { segmentGroup: mergeTrivialChildren(s), slicedSegments: slicedSegments };
+    }
+    else {
+        return { segmentGroup: segmentGroup, slicedSegments: slicedSegments };
+    }
+}
+function mergeTrivialChildren(s) {
+    if (s.numberOfChildren === 1 && s.children[__WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]]) {
+        var c = s.children[__WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]];
+        return new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */](s.segments.concat(c.segments), c.children);
+    }
+    else {
+        return s;
+    }
+}
+function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var res = {};
+    for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+        var r = routes_1[_i];
+        if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
+            res[getOutlet(r)] = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */]([], {});
+        }
+    }
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_12__utils_collection__["g" /* merge */])(children, res);
+}
+function createChildrenForEmptySegments(routes, primarySegmentGroup) {
+    var res = {};
+    res[__WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]] = primarySegmentGroup;
+    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+        var r = routes_2[_i];
+        if (r.path === '' && getOutlet(r) !== __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]) {
+            res[getOutlet(r)] = new __WEBPACK_IMPORTED_MODULE_11__url_tree__["a" /* UrlSegmentGroup */]([], {});
+        }
+    }
+    return res;
+}
+function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+    return routes
+        .filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r) &&
+        getOutlet(r) !== __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */]; })
+        .length > 0;
+}
+function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r); }).length > 0;
+}
+function emptyPathRedirect(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+        return false;
+    return r.path === '' && r.redirectTo !== undefined;
+}
+function getOutlet(route) {
+    return route.outlet ? route.outlet : __WEBPACK_IMPORTED_MODULE_10__shared__["a" /* PRIMARY_OUTLET */];
+}
+//# sourceMappingURL=apply_redirects.js.map
+
+/***/ },
+
+/***/ 646:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ exports["a"] = validateConfig;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+function validateConfig(config) {
+    config.forEach(validateNode);
+}
+function validateNode(route) {
+    if (Array.isArray(route)) {
+        throw new Error("Invalid route configuration: Array cannot be specified");
+    }
+    if (!!route.redirectTo && !!route.children) {
+        throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
+    }
+    if (!!route.redirectTo && !!route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and loadChildren cannot be used together");
+    }
+    if (!!route.children && !!route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + route.path + "': children and loadChildren cannot be used together");
+    }
+    if (!!route.redirectTo && !!route.component) {
+        throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
+    }
+    if (route.redirectTo === undefined && !route.component && !route.children &&
+        !route.loadChildren) {
+        throw new Error("Invalid configuration of route '" + route.path + "': one of the following must be provided (component or redirectTo or children or loadChildren)");
+    }
+    if (route.path === undefined) {
+        throw new Error("Invalid route configuration: routes must have path specified");
+    }
+    if (route.path.startsWith('/')) {
+        throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
+    }
+    if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
+        var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+        throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+    }
+    if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+        throw new Error("Invalid configuration of route '" + route.path + "': pathMatch can only be set to 'prefix' or 'full'");
+    }
+}
+//# sourceMappingURL=config.js.map
+
+/***/ },
+
+/***/ 647:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_state__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_tree__ = __webpack_require__(221);
+/* harmony export (immutable) */ exports["a"] = createRouterState;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+function createRouterState(curr, prevState) {
+    var root = createNode(curr._root, prevState ? prevState._root : undefined);
+    return new __WEBPACK_IMPORTED_MODULE_1__router_state__["a" /* RouterState */](root, curr);
+}
+function createNode(curr, prevState) {
+    if (prevState && equalRouteSnapshots(prevState.value.snapshot, curr.value)) {
+        var value = prevState.value;
+        value._futureSnapshot = curr.value;
+        var children = createOrReuseChildren(curr, prevState);
+        return new __WEBPACK_IMPORTED_MODULE_2__utils_tree__["b" /* TreeNode */](value, children);
+    }
+    else {
+        var value = createActivatedRoute(curr.value);
+        var children = curr.children.map(function (c) { return createNode(c); });
+        return new __WEBPACK_IMPORTED_MODULE_2__utils_tree__["b" /* TreeNode */](value, children);
+    }
+}
+function createOrReuseChildren(curr, prevState) {
+    return curr.children.map(function (child) {
+        for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
+            var p = _a[_i];
+            if (equalRouteSnapshots(p.value.snapshot, child.value)) {
+                return createNode(child, p);
+            }
+        }
+        return createNode(child);
+    });
+}
+function createActivatedRoute(c) {
+    return new __WEBPACK_IMPORTED_MODULE_1__router_state__["b" /* ActivatedRoute */](new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"](c.url), new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"](c.params), new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"](c.queryParams), new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"](c.fragment), new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"](c.data), c.outlet, c.component, c);
+}
+function equalRouteSnapshots(a, b) {
+    return a._routeConfig === b._routeConfig;
+}
+//# sourceMappingURL=create_router_state.js.map
+
+/***/ },
+
+/***/ 648:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_collection__ = __webpack_require__(54);
+/* harmony export (immutable) */ exports["a"] = createUrlTree;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+function createUrlTree(route, urlTree, commands, queryParams, fragment) {
+    if (commands.length === 0) {
+        return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
+    }
+    var normalizedCommands = normalizeCommands(commands);
+    validateCommands(normalizedCommands);
+    if (navigateToRoot(normalizedCommands)) {
+        return tree(urlTree.root, new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */]([], {}), urlTree, queryParams, fragment);
+    }
+    var startingPosition = findStartingPosition(normalizedCommands, urlTree, route);
+    var segmentGroup = startingPosition.processChildren ?
+        updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands) :
+        updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands);
+    return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
+}
+function validateCommands(n) {
+    if (n.isAbsolute && n.commands.length > 0 && isMatrixParams(n.commands[0])) {
+        throw new Error('Root segment cannot have matrix parameters');
+    }
+    var c = n.commands.filter(function (c) { return typeof c === 'object' && c.outlets !== undefined; });
+    if (c.length > 0 && c[0] !== n.commands[n.commands.length - 1]) {
+        throw new Error('{outlets:{}} has to be the last command');
+    }
+}
+function isMatrixParams(command) {
+    return typeof command === 'object' && command.outlets === undefined &&
+        command.segmentPath === undefined;
+}
+function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
+    if (urlTree.root === oldSegmentGroup) {
+        return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["b" /* UrlTree */](newSegmentGroup, stringify(queryParams), fragment);
+    }
+    else {
+        return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["b" /* UrlTree */](replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
+    }
+}
+function replaceSegment(current, oldSegment, newSegment) {
+    var children = {};
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(current.children, function (c, outletName) {
+        if (c === oldSegment) {
+            children[outletName] = newSegment;
+        }
+        else {
+            children[outletName] = replaceSegment(c, oldSegment, newSegment);
+        }
+    });
+    return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](current.segments, children);
+}
+function navigateToRoot(normalizedChange) {
+    return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 &&
+        normalizedChange.commands[0] == '/';
+}
+var NormalizedNavigationCommands = (function () {
+    function NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, commands) {
+        this.isAbsolute = isAbsolute;
+        this.numberOfDoubleDots = numberOfDoubleDots;
+        this.commands = commands;
+    }
+    return NormalizedNavigationCommands;
+}());
+function normalizeCommands(commands) {
+    if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] == '/') {
+        return new NormalizedNavigationCommands(true, 0, commands);
+    }
+    var numberOfDoubleDots = 0;
+    var isAbsolute = false;
+    var res = [];
+    var _loop_1 = function(i) {
+        var c = commands[i];
+        if (typeof c === 'object' && c.outlets !== undefined) {
+            var r_1 = {};
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(c.outlets, function (commands, name) {
+                if (typeof commands === 'string') {
+                    r_1[name] = commands.split('/');
+                }
+                else {
+                    r_1[name] = commands;
+                }
+            });
+            res.push({ outlets: r_1 });
+            return "continue";
+        }
+        if (typeof c === 'object' && c.segmentPath !== undefined) {
+            res.push(c.segmentPath);
+            return "continue";
+        }
+        if (!(typeof c === 'string')) {
+            res.push(c);
+            return "continue";
+        }
+        if (i === 0) {
+            var parts = c.split('/');
+            for (var j = 0; j < parts.length; ++j) {
+                var cc = parts[j];
+                if (j == 0 && cc == '.') {
+                }
+                else if (j == 0 && cc == '') {
+                    isAbsolute = true;
+                }
+                else if (cc == '..') {
+                    numberOfDoubleDots++;
+                }
+                else if (cc != '') {
+                    res.push(cc);
+                }
+            }
+        }
+        else {
+            res.push(c);
+        }
+    };
+    for (var i = 0; i < commands.length; ++i) {
+        _loop_1(i);
+    }
+    return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
+}
+var Position = (function () {
+    function Position(segmentGroup, processChildren, index) {
+        this.segmentGroup = segmentGroup;
+        this.processChildren = processChildren;
+        this.index = index;
+    }
+    return Position;
+}());
+function findStartingPosition(normalizedChange, urlTree, route) {
+    if (normalizedChange.isAbsolute) {
+        return new Position(urlTree.root, true, 0);
+    }
+    else if (route.snapshot._lastPathIndex === -1) {
+        return new Position(route.snapshot._urlSegment, true, 0);
+    }
+    else {
+        var modifier = isMatrixParams(normalizedChange.commands[0]) ? 0 : 1;
+        var index = route.snapshot._lastPathIndex + modifier;
+        return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, normalizedChange.numberOfDoubleDots);
+    }
+}
+function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
+    var g = group;
+    var ci = index;
+    var dd = numberOfDoubleDots;
+    while (dd > ci) {
+        dd -= ci;
+        g = g.parent;
+        if (!g) {
+            throw new Error('Invalid number of \'../\'');
+        }
+        ci = g.segments.length;
+    }
+    return new Position(g, false, ci - dd);
+}
+function getPath(command) {
+    return "" + command;
+}
+function getOutlets(commands) {
+    if (!(typeof commands[0] === 'object'))
+        return (_a = {}, _a[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]] = commands, _a);
+    if (commands[0].outlets === undefined)
+        return (_b = {}, _b[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]] = commands, _b);
+    return commands[0].outlets;
+    var _a, _b;
+}
+function updateSegmentGroup(segmentGroup, startIndex, commands) {
+    if (!segmentGroup) {
+        segmentGroup = new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */]([], {});
+    }
+    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+        return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
+    }
+    var m = prefixedWith(segmentGroup, startIndex, commands);
+    var slicedCommands = commands.slice(m.lastIndex);
+    if (m.match && slicedCommands.length === 0) {
+        return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, {});
+    }
+    else if (m.match && !segmentGroup.hasChildren()) {
+        return createNewSegmentGroup(segmentGroup, startIndex, commands);
+    }
+    else if (m.match) {
+        return updateSegmentGroupChildren(segmentGroup, 0, slicedCommands);
+    }
+    else {
+        return createNewSegmentGroup(segmentGroup, startIndex, commands);
+    }
+}
+function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
+    if (commands.length === 0) {
+        return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, {});
+    }
+    else {
+        var outlets_1 = getOutlets(commands);
+        var children_1 = {};
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(outlets_1, function (commands, outlet) {
+            if (commands !== null) {
+                children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
+            }
+        });
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(segmentGroup.children, function (child, childOutlet) {
+            if (outlets_1[childOutlet] === undefined) {
+                children_1[childOutlet] = child;
+            }
+        });
+        return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, children_1);
+    }
+}
+function prefixedWith(segmentGroup, startIndex, commands) {
+    var currentCommandIndex = 0;
+    var currentPathIndex = startIndex;
+    var noMatch = { match: false, lastIndex: 0 };
+    while (currentPathIndex < segmentGroup.segments.length) {
+        if (currentCommandIndex >= commands.length)
+            return noMatch;
+        var path = segmentGroup.segments[currentPathIndex];
+        var curr = getPath(commands[currentCommandIndex]);
+        var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
+        if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
+            if (!compare(curr, next, path))
+                return noMatch;
+            currentCommandIndex += 2;
+        }
+        else {
+            if (!compare(curr, {}, path))
+                return noMatch;
+            currentCommandIndex++;
+        }
+        currentPathIndex++;
+    }
+    return { match: true, lastIndex: currentCommandIndex };
+}
+function createNewSegmentGroup(segmentGroup, startIndex, commands) {
+    var paths = segmentGroup.segments.slice(0, startIndex);
+    var i = 0;
+    while (i < commands.length) {
+        if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+            var children = createNewSegmentChldren(commands[i].outlets);
+            return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](paths, children);
+        }
+        // if we start with an object literal, we need to reuse the path part from the segment
+        if (i === 0 && isMatrixParams(commands[0])) {
+            var p = segmentGroup.segments[startIndex];
+            paths.push(new __WEBPACK_IMPORTED_MODULE_1__url_tree__["c" /* UrlSegment */](p.path, commands[0]));
+            i++;
+            continue;
+        }
+        var curr = getPath(commands[i]);
+        var next = (i < commands.length - 1) ? commands[i + 1] : null;
+        if (curr && next && isMatrixParams(next)) {
+            paths.push(new __WEBPACK_IMPORTED_MODULE_1__url_tree__["c" /* UrlSegment */](curr, stringify(next)));
+            i += 2;
+        }
+        else {
+            paths.push(new __WEBPACK_IMPORTED_MODULE_1__url_tree__["c" /* UrlSegment */](curr, {}));
+            i++;
+        }
+    }
+    return new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */](paths, {});
+}
+function createNewSegmentChldren(outlets) {
+    var children = {};
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(outlets, function (commands, outlet) {
+        if (commands !== null) {
+            children[outlet] = createNewSegmentGroup(new __WEBPACK_IMPORTED_MODULE_1__url_tree__["a" /* UrlSegmentGroup */]([], {}), 0, commands);
+        }
+    });
+    return children;
+}
+function stringify(params) {
+    var res = {};
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["c" /* forEach */])(params, function (v, k) { return res[k] = "" + v; });
+    return res;
+}
+function compare(path, params, segment) {
+    return path == segment.path && __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__utils_collection__["d" /* shallowEqual */])(params, segment.parameters);
+}
+//# sourceMappingURL=create_url_tree.js.map
+
+/***/ },
+
+/***/ 649:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__directives_router_link__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__directives_router_link_active__ = __webpack_require__(344);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__directives_router_outlet__ = __webpack_require__(345);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__router__ = __webpack_require__(151);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__router_module__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__router_outlet_map__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__router_state__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__private_export__ = __webpack_require__(650);
+/* unused harmony reexport RouterLink */
+/* unused harmony reexport RouterLinkWithHref */
+/* unused harmony reexport RouterLinkActive */
+/* unused harmony reexport RouterOutlet */
+/* unused harmony reexport NavigationCancel */
+/* unused harmony reexport NavigationError */
+/* unused harmony reexport NavigationStart */
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_3__router__["a"]; });
+/* unused harmony reexport RoutesRecognized */
+/* unused harmony reexport NavigationEnd */
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_4__router_module__["b"]; });
+/* unused harmony reexport provideRoutes */
+/* unused harmony reexport RouterOutletMap */
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_6__router_state__["b"]; });
+/* unused harmony reexport ActivatedRouteSnapshot */
+/* unused harmony reexport RouterState */
+/* unused harmony reexport RouterStateSnapshot */
+/* unused harmony reexport PRIMARY_OUTLET */
+/* unused harmony reexport DefaultUrlSerializer */
+/* unused harmony reexport UrlSegment */
+/* unused harmony reexport UrlSerializer */
+/* unused harmony reexport UrlTree */
+/* unused harmony namespace reexport */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ },
+
+/***/ 650:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router_config_loader__ = __webpack_require__(152);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__router_module__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_collection__ = __webpack_require__(54);
+/* unused harmony export __router_private__ */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+var __router_private__ = {
+    ROUTER_PROVIDERS: __WEBPACK_IMPORTED_MODULE_1__router_module__["a" /* ROUTER_PROVIDERS */],
+    ROUTES: __WEBPACK_IMPORTED_MODULE_0__router_config_loader__["c" /* ROUTES */],
+    flatten: __WEBPACK_IMPORTED_MODULE_2__utils_collection__["a" /* flatten */]
+};
+//# sourceMappingURL=private_export.js.map
+
+/***/ },
+
+/***/ 651:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_of__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_state__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__utils_collection__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__utils_tree__ = __webpack_require__(221);
+/* harmony export (immutable) */ exports["a"] = recognize;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+
+
+
+
+
+var NoMatch = (function () {
+    function NoMatch() {
+    }
+    return NoMatch;
+}());
+var InheritedFromParent = (function () {
+    function InheritedFromParent(parent, snapshot, params, data, resolve) {
+        this.parent = parent;
+        this.snapshot = snapshot;
+        this.params = params;
+        this.data = data;
+        this.resolve = resolve;
+    }
+    Object.defineProperty(InheritedFromParent.prototype, "allParams", {
+        get: function () {
+            return this.parent ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(this.parent.allParams, this.params) : this.params;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InheritedFromParent.prototype, "allData", {
+        get: function () { return this.parent ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(this.parent.allData, this.data) : this.data; },
+        enumerable: true,
+        configurable: true
+    });
+    InheritedFromParent.empty = function (snapshot) {
+        return new InheritedFromParent(null, snapshot, {}, {}, new __WEBPACK_IMPORTED_MODULE_2__router_state__["c" /* InheritedResolve */](null, {}));
+    };
+    return InheritedFromParent;
+}());
+function recognize(rootComponentType, config, urlTree, url) {
+    return new Recognizer(rootComponentType, config, urlTree, url).recognize();
+}
+var Recognizer = (function () {
+    function Recognizer(rootComponentType, config, urlTree, url) {
+        this.rootComponentType = rootComponentType;
+        this.config = config;
+        this.urlTree = urlTree;
+        this.url = url;
+    }
+    Recognizer.prototype.recognize = function () {
+        try {
+            var rootSegmentGroup = split(this.urlTree.root, [], [], this.config).segmentGroup;
+            var children = this.processSegmentGroup(this.config, rootSegmentGroup, InheritedFromParent.empty(null), __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]);
+            var root = new __WEBPACK_IMPORTED_MODULE_2__router_state__["d" /* ActivatedRouteSnapshot */]([], Object.freeze({}), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, {}, __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */], this.rootComponentType, null, this.urlTree.root, -1, __WEBPACK_IMPORTED_MODULE_2__router_state__["c" /* InheritedResolve */].empty);
+            var rootNode = new __WEBPACK_IMPORTED_MODULE_6__utils_tree__["b" /* TreeNode */](root, children);
+            return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_rxjs_observable_of__["of"])(new __WEBPACK_IMPORTED_MODULE_2__router_state__["e" /* RouterStateSnapshot */](this.url, rootNode));
+        }
+        catch (e) {
+            return new __WEBPACK_IMPORTED_MODULE_0_rxjs_Observable__["Observable"](function (obs) { return obs.error(e); });
+        }
+    };
+    Recognizer.prototype.processSegmentGroup = function (config, segmentGroup, inherited, outlet) {
+        if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+            return this.processChildren(config, segmentGroup, inherited);
+        }
+        else {
+            return this.processSegment(config, segmentGroup, 0, segmentGroup.segments, inherited, outlet);
+        }
+    };
+    Recognizer.prototype.processChildren = function (config, segmentGroup, inherited) {
+        var _this = this;
+        var children = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__url_tree__["d" /* mapChildrenIntoArray */])(segmentGroup, function (child, childOutlet) { return _this.processSegmentGroup(config, child, inherited, childOutlet); });
+        checkOutletNameUniqueness(children);
+        sortActivatedRouteSnapshots(children);
+        return children;
+    };
+    Recognizer.prototype.processSegment = function (config, segmentGroup, pathIndex, segments, inherited, outlet) {
+        for (var _i = 0, config_1 = config; _i < config_1.length; _i++) {
+            var r = config_1[_i];
+            try {
+                return this.processSegmentAgainstRoute(r, segmentGroup, pathIndex, segments, inherited, outlet);
+            }
+            catch (e) {
+                if (!(e instanceof NoMatch))
+                    throw e;
+            }
+        }
+        throw new NoMatch();
+    };
+    Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, pathIndex, segments, inherited, outlet) {
+        if (route.redirectTo)
+            throw new NoMatch();
+        if ((route.outlet ? route.outlet : __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]) !== outlet)
+            throw new NoMatch();
+        var newInheritedResolve = new __WEBPACK_IMPORTED_MODULE_2__router_state__["c" /* InheritedResolve */](inherited.resolve, getResolve(route));
+        if (route.path === '**') {
+            var params = segments.length > 0 ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["i" /* last */])(segments).parameters : {};
+            var snapshot_1 = new __WEBPACK_IMPORTED_MODULE_2__router_state__["d" /* ActivatedRouteSnapshot */](segments, Object.freeze(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(inherited.allParams, params)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, newInheritedResolve);
+            return [new __WEBPACK_IMPORTED_MODULE_6__utils_tree__["b" /* TreeNode */](snapshot_1, [])];
+        }
+        var _a = match(rawSegment, route, segments, inherited.snapshot), consumedSegments = _a.consumedSegments, parameters = _a.parameters, lastChild = _a.lastChild;
+        var rawSlicedSegments = segments.slice(lastChild);
+        var childConfig = getChildConfig(route);
+        var _b = split(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _b.segmentGroup, slicedSegments = _b.slicedSegments;
+        var snapshot = new __WEBPACK_IMPORTED_MODULE_2__router_state__["d" /* ActivatedRouteSnapshot */](consumedSegments, Object.freeze(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(inherited.allParams, parameters)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, newInheritedResolve);
+        var newInherited = route.component ?
+            InheritedFromParent.empty(snapshot) :
+            new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
+        if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+            var children = this.processChildren(childConfig, segmentGroup, newInherited);
+            return [new __WEBPACK_IMPORTED_MODULE_6__utils_tree__["b" /* TreeNode */](snapshot, children)];
+        }
+        else if (childConfig.length === 0 && slicedSegments.length === 0) {
+            return [new __WEBPACK_IMPORTED_MODULE_6__utils_tree__["b" /* TreeNode */](snapshot, [])];
+        }
+        else {
+            var children = this.processSegment(childConfig, segmentGroup, pathIndex + lastChild, slicedSegments, newInherited, __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]);
+            return [new __WEBPACK_IMPORTED_MODULE_6__utils_tree__["b" /* TreeNode */](snapshot, children)];
+        }
+    };
+    return Recognizer;
+}());
+function sortActivatedRouteSnapshots(nodes) {
+    nodes.sort(function (a, b) {
+        if (a.value.outlet === __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */])
+            return -1;
+        if (b.value.outlet === __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */])
+            return 1;
+        return a.value.outlet.localeCompare(b.value.outlet);
+    });
+}
+function getChildConfig(route) {
+    if (route.children) {
+        return route.children;
+    }
+    else if (route.loadChildren) {
+        return route._loadedConfig.routes;
+    }
+    else {
+        return [];
+    }
+}
+function match(segmentGroup, route, segments, parent) {
+    if (route.path === '') {
+        if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
+            throw new NoMatch();
+        }
+        else {
+            var params = parent ? parent.params : {};
+            return { consumedSegments: [], lastChild: 0, parameters: params };
+        }
+    }
+    var path = route.path;
+    var parts = path.split('/');
+    var posParameters = {};
+    var consumedSegments = [];
+    var currentIndex = 0;
+    for (var i = 0; i < parts.length; ++i) {
+        if (currentIndex >= segments.length)
+            throw new NoMatch();
+        var current = segments[currentIndex];
+        var p = parts[i];
+        var isPosParam = p.startsWith(':');
+        if (!isPosParam && p !== current.path)
+            throw new NoMatch();
+        if (isPosParam) {
+            posParameters[p.substring(1)] = current.path;
+        }
+        consumedSegments.push(current);
+        currentIndex++;
+    }
+    if (route.pathMatch === 'full' &&
+        (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+        throw new NoMatch();
+    }
+    var parameters = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(posParameters, consumedSegments[consumedSegments.length - 1].parameters);
+    return { consumedSegments: consumedSegments, lastChild: currentIndex, parameters: parameters };
+}
+function checkOutletNameUniqueness(nodes) {
+    var names = {};
+    nodes.forEach(function (n) {
+        var routeWithSameOutletName = names[n.value.outlet];
+        if (routeWithSameOutletName) {
+            var p = routeWithSameOutletName.url.map(function (s) { return s.toString(); }).join('/');
+            var c = n.value.url.map(function (s) { return s.toString(); }).join('/');
+            throw new Error("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
+        }
+        names[n.value.outlet] = n.value;
+    });
+}
+function getSourceSegmentGroup(segmentGroup) {
+    var s = segmentGroup;
+    while (s._sourceSegment) {
+        s = s._sourceSegment;
+    }
+    return s;
+}
+function getPathIndexShift(segmentGroup) {
+    var s = segmentGroup;
+    var res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    while (s._sourceSegment) {
+        s = s._sourceSegment;
+        res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    }
+    return res - 1;
+}
+function split(segmentGroup, consumedSegments, slicedSegments, config) {
+    if (slicedSegments.length > 0 &&
+        containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+        var s = new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */](consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */](slicedSegments, segmentGroup.children)));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments: [] };
+    }
+    else if (slicedSegments.length === 0 &&
+        containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
+        var s = new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments: slicedSegments };
+    }
+    else {
+        var s = new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */](segmentGroup.segments, segmentGroup.children);
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        return { segmentGroup: s, slicedSegments: slicedSegments };
+    }
+}
+function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var res = {};
+    for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+        var r = routes_1[_i];
+        if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet(r)]) {
+            var s = new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */]([], {});
+            s._sourceSegment = segmentGroup;
+            s._segmentIndexShift = segmentGroup.segments.length;
+            res[getOutlet(r)] = s;
+        }
+    }
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_collection__["g" /* merge */])(children, res);
+}
+function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
+    var res = {};
+    res[__WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]] = primarySegment;
+    primarySegment._sourceSegment = segmentGroup;
+    primarySegment._segmentIndexShift = consumedSegments.length;
+    for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+        var r = routes_2[_i];
+        if (r.path === '' && getOutlet(r) !== __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]) {
+            var s = new __WEBPACK_IMPORTED_MODULE_4__url_tree__["a" /* UrlSegmentGroup */]([], {});
+            s._sourceSegment = segmentGroup;
+            s._segmentIndexShift = consumedSegments.length;
+            res[getOutlet(r)] = s;
+        }
+    }
+    return res;
+}
+function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+    return routes
+        .filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) &&
+        getOutlet(r) !== __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */]; })
+        .length > 0;
+}
+function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); }).length > 0;
+}
+function emptyPathMatch(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+        return false;
+    return r.path === '' && r.redirectTo === undefined;
+}
+function getOutlet(route) {
+    return route.outlet ? route.outlet : __WEBPACK_IMPORTED_MODULE_3__shared__["a" /* PRIMARY_OUTLET */];
+}
+function getData(route) {
+    return route.data ? route.data : {};
+}
+function getResolve(route) {
+    return route.resolve ? route.resolve : {};
+}
+//# sourceMappingURL=recognize.js.map
+
+/***/ },
+
+/***/ 652:
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+exports.compose = function () {
+    var functions = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        functions[_i - 0] = arguments[_i];
+    }
+    return function (arg) {
+        if (functions.length === 0) {
+            return arg;
+        }
+        var last = functions[functions.length - 1];
+        var rest = functions.slice(0, -1);
+        return rest.reduceRight(function (composed, fn) { return fn(composed); }, last(arg));
+    };
+};
+
+
+/***/ },
+
+/***/ 659:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_module__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__reference_routing__ = __webpack_require__(661);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reference_actions__ = __webpack_require__(355);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__reference_service__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_index_index__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_view__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_form__ = __webpack_require__(352);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+var ReferenceModule = (function () {
+    function ReferenceModule() {
+    }
+    ReferenceModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_5__components_index_index__["a" /* ReferenceIndexComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__components_view__["a" /* ReferenceViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__components_form__["a" /* ReferenceFormComponent */]
+            ],
+            exports: [],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_2__reference_routing__["a" /* ReferenceRoutingModule */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_3__reference_actions__["a" /* ReferenceActions */],
+                __WEBPACK_IMPORTED_MODULE_4__reference_service__["a" /* ReferenceService */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ReferenceModule);
+    return ReferenceModule;
+}());
+
+
+/***/ },
+
+/***/ 660:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__reference_actions__ = __webpack_require__(355);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return referenceReducer; });
+
+;
+var initialState = {
+    tags: [],
+    taskTypes: [],
+    requestTypes: [],
+    fetchFail: false
+};
+var referenceReducer = function (state, _a) {
+    if (state === void 0) { state = initialState; }
+    var type = _a.type, payload = _a.payload;
+    switch (type) {
+        case __WEBPACK_IMPORTED_MODULE_0__reference_actions__["a" /* ReferenceActions */].FETCH_TAGS:
+            return Object.assign({}, state, {
+                tags: payload.tags
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__reference_actions__["a" /* ReferenceActions */].FETCH_TASK_TYPES:
+            return Object.assign({}, state, {
+                taskTypes: payload.taskTypes
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__reference_actions__["a" /* ReferenceActions */].FETCH_REQUEST_TYPES:
+            return Object.assign({}, state, {
+                requestTypes: payload.requestTypes
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__reference_actions__["a" /* ReferenceActions */].FETCH_REFERENCE_FAILED:
+            return Object.assign({}, state, {
+                fetchFail: true
+            });
+        default:
+            return state;
+    }
+};
+
+
+/***/ },
+
+/***/ 661:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_index_index__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_view__ = __webpack_require__(354);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_form__ = __webpack_require__(352);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ReferenceRoutingModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var routes = [
+    { path: 'reference', component: __WEBPACK_IMPORTED_MODULE_2__components_index_index__["a" /* ReferenceIndexComponent */] },
+    { path: 'reference/view/:id', component: __WEBPACK_IMPORTED_MODULE_3__components_view__["a" /* ReferenceViewComponent */] },
+    { path: 'reference/form/:id', component: __WEBPACK_IMPORTED_MODULE_4__components_form__["a" /* ReferenceFormComponent */] }
+];
+var ReferenceRoutingModule = (function () {
+    function ReferenceRoutingModule() {
+    }
+    ReferenceRoutingModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forChild(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ReferenceRoutingModule);
+    return ReferenceRoutingModule;
+}());
+
+
+/***/ },
+
+/***/ 662:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Employee */
+var Employee = (function () {
+    function Employee() {
+        this.id = '';
+        this.name = '@anonymous';
+    }
+    return Employee;
+}());
+
+
+/***/ },
+
+/***/ 663:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__organization__ = __webpack_require__(664);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__employee__ = __webpack_require__(662);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__organization__["a"]; });
+/* unused harmony namespace reexport */
+
+
+
+
+/***/ },
+
+/***/ 664:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Organization; });
+var Organization = (function () {
+    function Organization() {
+        this.id = '';
+    }
+    return Organization;
+}());
+
+
+/***/ },
+
+/***/ 665:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_module__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__staff_routing__ = __webpack_require__(667);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__staff_actions__ = __webpack_require__(358);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__staff_service__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_index_index__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_view__ = __webpack_require__(357);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+var StaffModule = (function () {
+    function StaffModule() {
+    }
+    StaffModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_5__components_index_index__["a" /* StaffIndexComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__components_view__["a" /* StaffViewComponent */]
+            ],
+            exports: [],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_2__staff_routing__["a" /* StaffRoutingModule */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_3__staff_actions__["a" /* StaffActions */],
+                __WEBPACK_IMPORTED_MODULE_4__staff_service__["a" /* StaffService */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], StaffModule);
+    return StaffModule;
+}());
+
+
+/***/ },
+
+/***/ 666:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__staff_actions__ = __webpack_require__(358);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return staffReducer; });
+
+;
+var initialState = {
+    organizations: [],
+    employees: []
+};
+var staffReducer = function (state, _a) {
+    if (state === void 0) { state = initialState; }
+    var type = _a.type, payload = _a.payload;
+    switch (type) {
+        case __WEBPACK_IMPORTED_MODULE_0__staff_actions__["a" /* StaffActions */].FETCH_ORGANIZATIONS:
+            return Object.assign({}, state, {
+                organizations: payload.organizations
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__staff_actions__["a" /* StaffActions */].FETCH_EMPLOYEES:
+            return Object.assign({}, state, {
+                employees: payload.employees
+            });
+        default:
+            return state;
+    }
+};
+
+
+/***/ },
+
+/***/ 667:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_index_index__ = __webpack_require__(356);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_view__ = __webpack_require__(357);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return StaffRoutingModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var routes = [
+    { path: 'staff', component: __WEBPACK_IMPORTED_MODULE_2__components_index_index__["a" /* StaffIndexComponent */] },
+    { path: 'staff/:id', component: __WEBPACK_IMPORTED_MODULE_3__components_view__["a" /* StaffViewComponent */] }
+];
+var StaffRoutingModule = (function () {
+    function StaffRoutingModule() {
+    }
+    StaffRoutingModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forChild(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], StaffRoutingModule);
+    return StaffRoutingModule;
+}());
+
+
+/***/ },
+
+/***/ 668:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowIncomingService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var WorkflowIncomingService = (function () {
+    function WorkflowIncomingService(http, appService, dataService) {
+        this.http = http;
+        this.appService = appService;
+        this.dataService = dataService;
+    }
+    WorkflowIncomingService.prototype.fetch = function (params, retry) {
+        if (retry === void 0) { retry = 1; }
+        return this.dataService.get('/Workflow/p', params, retry);
+    };
+    WorkflowIncomingService.prototype.fetchIncomings = function (queryParams) {
+        var _this = this;
+        if (queryParams === void 0) { queryParams = {}; }
+        return this.http.get('/Workflow/p?id=incoming-view', {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(queryParams)
+        })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            return data;
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowIncomingService.prototype.fetchIncomingById = function (id) {
+        var _this = this;
+        var url = '/Workflow/p?id=incoming-form&docid=' + (id !== 'new' ? id : '');
+        return this.http.get(url, { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            var incoming = data.incoming;
+            if (!incoming.id) {
+                incoming.id = '';
+            }
+            if (data.fsid) {
+                incoming.fsid = data.fsid;
+            }
+            if (data.ACL) {
+                incoming.acl = data.ACL;
+            }
+            if (data.attachment) {
+                incoming.attachments = data.attachment.list;
+            }
+            return {
+                incoming: incoming,
+                actions: data.actions
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowIncomingService.prototype.doAction = function (actionId) {
+        var _this = this;
+        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["d" /* transformPostResponse */])(response); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowIncomingService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */]) === 'function' && _c) || Object])
+    ], WorkflowIncomingService);
+    return WorkflowIncomingService;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 669:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowOfficeMemoService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var WorkflowOfficeMemoService = (function () {
+    function WorkflowOfficeMemoService(http, appService, dataService) {
+        this.http = http;
+        this.appService = appService;
+        this.dataService = dataService;
+    }
+    WorkflowOfficeMemoService.prototype.fetch = function (params, retry) {
+        if (retry === void 0) { retry = 1; }
+        return this.dataService.get('/Workflow/p', params, retry);
+    };
+    WorkflowOfficeMemoService.prototype.fetchOfficeMemos = function (queryParams) {
+        var _this = this;
+        if (queryParams === void 0) { queryParams = {}; }
+        return this.http.get('/Workflow/p?id=officememo-view', {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(queryParams)
+        })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            return data;
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOfficeMemoService.prototype.fetchOfficeMemoById = function (id) {
+        var _this = this;
+        var url = '/Workflow/p?id=officememo-form&docid=' + (id !== 'new' ? id : '');
+        return this.http.get(url, { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            var officememo = data.officememo;
+            if (!officememo.id) {
+                officememo.id = '';
+            }
+            if (data.fsid) {
+                officememo.fsid = data.fsid;
+            }
+            if (data.ACL) {
+                officememo.acl = data.ACL;
+            }
+            if (data.attachment) {
+                officememo.attachments = data.attachment.list;
+            }
+            return {
+                officememo: officememo,
+                actions: data.actions
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOfficeMemoService.prototype.doAction = function (actionId) {
+        var _this = this;
+        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["d" /* transformPostResponse */])(response); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOfficeMemoService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */]) === 'function' && _c) || Object])
+    ], WorkflowOfficeMemoService);
+    return WorkflowOfficeMemoService;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 670:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowOutgoingService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var WorkflowOutgoingService = (function () {
+    function WorkflowOutgoingService(http, appService, dataService) {
+        this.http = http;
+        this.appService = appService;
+        this.dataService = dataService;
+    }
+    WorkflowOutgoingService.prototype.fetch = function (params, retry) {
+        if (retry === void 0) { retry = 1; }
+        return this.dataService.get('/Workflow/p', params, retry);
+    };
+    WorkflowOutgoingService.prototype.fetchOutgoings = function (queryParams) {
+        var _this = this;
+        if (queryParams === void 0) { queryParams = {}; }
+        return this.http.get('/Workflow/p?id=outgoing-view', {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(queryParams)
+        })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            return data;
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOutgoingService.prototype.fetchOutgoingById = function (id) {
+        var _this = this;
+        var url = '/Workflow/p?id=outgoing-form&docid=' + (id !== 'new' ? id : '');
+        return this.http.get(url, { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) {
+            var data = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["b" /* parseResponseObjects */])(response.json().objects);
+            var outgoing = data.outgoing;
+            if (!outgoing.id) {
+                outgoing.id = '';
+            }
+            if (data.fsid) {
+                outgoing.fsid = data.fsid;
+            }
+            if (data.ACL) {
+                outgoing.acl = data.ACL;
+            }
+            if (data.attachment) {
+                outgoing.attachments = data.attachment.list;
+            }
+            return {
+                outgoing: outgoing,
+                actions: data.actions
+            };
+        })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOutgoingService.prototype.doAction = function (actionId) {
+        var _this = this;
+        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])() })
+            .map(function (response) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["d" /* transformPostResponse */])(response); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    WorkflowOutgoingService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["b" /* AppService */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["d" /* DataService */]) === 'function' && _c) || Object])
+    ], WorkflowOutgoingService);
+    return WorkflowOutgoingService;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 671:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_module__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__workflow_routing__ = __webpack_require__(673);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_index_index__ = __webpack_require__(361);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_incoming_incoming_view__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_incoming_incoming_form__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_outgoing_outgoing_view__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_outgoing_outgoing_form__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_office_memo_office_memo_view__ = __webpack_require__(363);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_office_memo_office_memo_form__ = __webpack_require__(362);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services__ = __webpack_require__(76);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+var WorkflowModule = (function () {
+    function WorkflowModule() {
+    }
+    WorkflowModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_3__components_index_index__["a" /* WorkflowIndexComponent */],
+                __WEBPACK_IMPORTED_MODULE_4__components_incoming_incoming_view__["a" /* IncomingViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_5__components_incoming_incoming_form__["a" /* IncomingFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_6__components_outgoing_outgoing_view__["a" /* OutgoingViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_7__components_outgoing_outgoing_form__["a" /* OutgoingFormComponent */],
+                __WEBPACK_IMPORTED_MODULE_8__components_office_memo_office_memo_view__["a" /* OfficeMemoViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_9__components_office_memo_office_memo_form__["a" /* OfficeMemoFormComponent */]
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_2__workflow_routing__["a" /* WorkflowRoutingModule */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_10__services__["a" /* WorkflowIncomingService */],
+                __WEBPACK_IMPORTED_MODULE_10__services__["b" /* WorkflowOutgoingService */],
+                __WEBPACK_IMPORTED_MODULE_10__services__["c" /* WorkflowOfficeMemoService */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], WorkflowModule);
+    return WorkflowModule;
+}());
+
+
+/***/ },
+
+/***/ 672:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return workflowReducer; });
+;
+var initialState = {};
+var workflowReducer = function (state, _a) {
+    if (state === void 0) { state = initialState; }
+    var type = _a.type, payload = _a.payload;
+    return state;
+};
+
+
+/***/ },
+
+/***/ 673:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_index_index__ = __webpack_require__(361);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_incoming_incoming_view__ = __webpack_require__(360);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_incoming_incoming_form__ = __webpack_require__(359);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_outgoing_outgoing_view__ = __webpack_require__(365);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_outgoing_outgoing_form__ = __webpack_require__(364);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_office_memo_office_memo_view__ = __webpack_require__(363);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_office_memo_office_memo_form__ = __webpack_require__(362);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkflowRoutingModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+var routes = [
+    { path: 'workflow', component: __WEBPACK_IMPORTED_MODULE_2__components_index_index__["a" /* WorkflowIndexComponent */] },
+    { path: 'incoming-view', component: __WEBPACK_IMPORTED_MODULE_3__components_incoming_incoming_view__["a" /* IncomingViewComponent */] },
+    { path: 'incoming-form', component: __WEBPACK_IMPORTED_MODULE_4__components_incoming_incoming_form__["a" /* IncomingFormComponent */] },
+    { path: 'outgoing-view', component: __WEBPACK_IMPORTED_MODULE_5__components_outgoing_outgoing_view__["a" /* OutgoingViewComponent */] },
+    { path: 'outgoing-form', component: __WEBPACK_IMPORTED_MODULE_6__components_outgoing_outgoing_form__["a" /* OutgoingFormComponent */] },
+    { path: 'officememo-view', component: __WEBPACK_IMPORTED_MODULE_7__components_office_memo_office_memo_view__["a" /* OfficeMemoViewComponent */] },
+    { path: 'officememo-form', component: __WEBPACK_IMPORTED_MODULE_8__components_office_memo_office_memo_form__["a" /* OfficeMemoFormComponent */] }
+];
+var WorkflowRoutingModule = (function () {
+    function WorkflowRoutingModule() {
+    }
+    WorkflowRoutingModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forChild(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], WorkflowRoutingModule);
+    return WorkflowRoutingModule;
+}());
+
+
+/***/ },
+
+/***/ 674:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared_module__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ws_routing__ = __webpack_require__(675);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ws_component__ = __webpack_require__(366);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ws_service__ = __webpack_require__(367);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkspaceModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var WorkspaceModule = (function () {
+    function WorkspaceModule() {
+    }
+    WorkspaceModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_3__ws_component__["a" /* WorkspaceComponent */]
+            ],
+            imports: [
+                __WEBPACK_IMPORTED_MODULE_1__shared_module__["a" /* SharedModule */],
+                __WEBPACK_IMPORTED_MODULE_2__ws_routing__["a" /* WorkspaceRoutingModule */]
+            ],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_4__ws_service__["a" /* WorkspaceService */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], WorkspaceModule);
+    return WorkspaceModule;
+}());
+
+
+/***/ },
+
+/***/ 675:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ws_component__ = __webpack_require__(366);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return WorkspaceRoutingModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var routes = [
+    { path: 'workspace', component: __WEBPACK_IMPORTED_MODULE_2__ws_component__["a" /* WorkspaceComponent */] }
+];
+var WorkspaceRoutingModule = (function () {
+    function WorkspaceRoutingModule() {
+    }
+    WorkspaceRoutingModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forChild(routes)],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */]],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], WorkspaceRoutingModule);
+    return WorkspaceRoutingModule;
+}());
+
+
+/***/ },
+
+/***/ 676:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__auth_guard__ = __webpack_require__(370);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_user_profile_user_profile__ = __webpack_require__(373);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_login__ = __webpack_require__(372);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_404__ = __webpack_require__(371);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_workspace_ws_module__ = __webpack_require__(674);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_reference_reference_module__ = __webpack_require__(659);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_staff_staff_module__ = __webpack_require__(665);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_workflow_workflow_module__ = __webpack_require__(671);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AppRoutingModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+var routes = [
+    { path: '', redirectTo: 'workspace', pathMatch: 'full' },
+    { path: 'user-profile', component: __WEBPACK_IMPORTED_MODULE_3__components_user_profile_user_profile__["a" /* UserProfileComponent */], canActivate: [__WEBPACK_IMPORTED_MODULE_2__auth_guard__["a" /* AuthGuard */]] },
+    { path: 'login', component: __WEBPACK_IMPORTED_MODULE_4__components_login__["a" /* LoginComponent */] },
+    { path: '**', component: __WEBPACK_IMPORTED_MODULE_5__components_404__["a" /* Error404 */] }
+];
+var AppRoutingModule = (function () {
+    function AppRoutingModule() {
+    }
+    AppRoutingModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */].forRoot(routes, { useHash: true })],
+            exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* RouterModule */],
+                __WEBPACK_IMPORTED_MODULE_6__modules_workspace_ws_module__["a" /* WorkspaceModule */],
+                __WEBPACK_IMPORTED_MODULE_7__modules_reference_reference_module__["a" /* ReferenceModule */],
+                __WEBPACK_IMPORTED_MODULE_8__modules_staff_staff_module__["a" /* StaffModule */],
+                __WEBPACK_IMPORTED_MODULE_9__modules_workflow_workflow_module__["a" /* WorkflowModule */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], AppRoutingModule);
+    return AppRoutingModule;
+}());
+
+
+/***/ },
+
+/***/ 677:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AclComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AclComponent = (function () {
+    function AclComponent() {
+        this.acl = {};
+    }
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], AclComponent.prototype, "acl", void 0);
+    AclComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'acl',
+            template: __webpack_require__(880)
+        }), 
+        __metadata('design:paramtypes', [])
+    ], AclComponent);
+    return AclComponent;
+}());
+
+
+/***/ },
+
+/***/ 678:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models__ = __webpack_require__(691);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AppComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var AppComponent = (function () {
+    function AppComponent(store, environmentActions, appActions, appService, translate) {
+        var _this = this;
+        this.store = store;
+        this.environmentActions = environmentActions;
+        this.appActions = appActions;
+        this.appService = appService;
+        this.translate = translate;
+        this.subs = [];
+        this.isReady = false;
+        this.loggedUser = new __WEBPACK_IMPORTED_MODULE_5__models__["a" /* User */]();
+        this.HEADER_TITLE = 'Projects';
+        this.isNavCollapsed = false;
+        this.isSearchOpen = false;
+        this.isMobileDevice = false;
+        this.subs.push(this.store.select('authed').subscribe(function (data) {
+            _this.loggedUser = data.userProfile;
+        }));
+        this.subs.push(this.store.select('reference'));
+        this.subs.push(this.store.select('environment').subscribe(function (state) {
+            _this.isSearchOpen = state.isSearchOpen;
+            _this.isNavCollapsed = !state.isNavOpen;
+        }));
+    }
+    AppComponent.prototype.resize = function (window) { this.onResize(window); };
+    ;
+    Object.defineProperty(AppComponent.prototype, "device", {
+        get: function () { return this.isMobileDevice; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(AppComponent.prototype, "toggleNavVisible", {
+        get: function () { return this.isNavCollapsed; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(AppComponent.prototype, "toggleSearch", {
+        get: function () { return this.isSearchOpen; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.appService.fetchUserProfile().subscribe(function (data) {
+            _this.store.dispatch(_this.appActions.fetchUserProfileFulfilled(data));
+        });
+        this.isMobileDevice = this.isMobile();
+        var userLang = navigator.language.split('-')[0];
+        userLang = /(ru|en)/gi.test(userLang) ? userLang : 'en';
+        this.translate.setDefaultLang('en');
+        this.translate.use('en');
+        this.translate.get('brand').subscribe(function (value) {
+            _this.HEADER_TITLE = value;
+            _this.isReady = true;
+        });
+    };
+    AppComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    AppComponent.prototype.hideNav = function (event) {
+        this.store.dispatch({ type: __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */].HIDE_NAV });
+        event.preventDefault();
+    };
+    AppComponent.prototype.isMobile = function () {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    };
+    AppComponent.prototype.onResize = function (window) {
+        this.isMobileDevice = window.innerWidth <= 1024 || this.isMobile();
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('window:resize', ['$event.target']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], AppComponent.prototype, "resize", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.phone'), 
+        __metadata('design:type', Object)
+    ], AppComponent.prototype, "device", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.side-nav-toggle'), 
+        __metadata('design:type', Object)
+    ], AppComponent.prototype, "toggleNavVisible", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.search-open'), 
+        __metadata('design:type', Object)
+    ], AppComponent.prototype, "toggleSearch", null);
+    AppComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'app',
+            template: __webpack_require__(881)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["a" /* EnvironmentActions */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__actions__["b" /* AppActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__actions__["b" /* AppActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_4__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__services__["b" /* AppService */]) === 'function' && _d) || Object, (typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__["TranslateService"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2_ng2_translate_ng2_translate__["TranslateService"]) === 'function' && _e) || Object])
+    ], AppComponent);
+    return AppComponent;
+    var _a, _b, _c, _d, _e;
+}());
+
+
+/***/ },
+
+/***/ 679:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services__ = __webpack_require__(33);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AttachmentsComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AttachmentsComponent = (function () {
+    function AttachmentsComponent(http, uploadService) {
+        this.http = http;
+        this.uploadService = uploadService;
+        this.editable = false;
+        this.upload = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.delete = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.progress = 0;
+    }
+    AttachmentsComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.sub = this.uploadService.progress$.subscribe(function (progress) {
+            if (progress && progress < 100) {
+                _this.progress = progress;
+            }
+            else {
+                _this.progress = 0;
+            }
+        });
+    };
+    AttachmentsComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    AttachmentsComponent.prototype.isThumbnailSupported = function (att) {
+        if (att.extension) {
+            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.extension) != -1;
+        }
+        else {
+            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.realFileName.toLowerCase().split('.').pop()) != -1;
+        }
+    };
+    Object.defineProperty(AttachmentsComponent.prototype, "isHidden", {
+        get: function () {
+            return !this.editable && !this.model.attachments;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AttachmentsComponent.prototype.uploadFile = function (files) {
+        var _this = this;
+        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.model.fsid }, files).subscribe(function (response) {
+            _this.upload.emit({ response: response, files: files });
+        });
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], AttachmentsComponent.prototype, "model", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], AttachmentsComponent.prototype, "editable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], AttachmentsComponent.prototype, "upload", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], AttachmentsComponent.prototype, "delete", void 0);
+    AttachmentsComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'attachments',
+            template: __webpack_require__(882),
+            providers: [__WEBPACK_IMPORTED_MODULE_2__services__["a" /* UploadService */]],
+            host: {
+                '[class.hidden]': 'isHidden'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services__["a" /* UploadService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services__["a" /* UploadService */]) === 'function' && _b) || Object])
+    ], AttachmentsComponent);
+    return AttachmentsComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 680:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ListPageComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ListPageComponent = (function () {
+    function ListPageComponent() {
+        this.title = '';
+        this.selectable = true;
+        this.headerVisible = true;
+        this.titleVisible = true;
+        this.actionsVisible = true;
+        this.captionsVisible = true;
+        this.activeSort = 'regDate:desc';
+        this.list = [];
+        this.meta = {};
+        this.actions = [];
+        this.columns = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' }];
+        this.action = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.refresh = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.sort = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.goToPage = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    ListPageComponent.prototype.onAction = function (action, $event) {
+        this.action.emit({ action: action, e: $event });
+    };
+    ListPageComponent.prototype.onRefresh = function () {
+        this.refresh.emit(true);
+    };
+    ListPageComponent.prototype.onGoToPage = function ($event) {
+        this.goToPage.emit($event);
+    };
+    ListPageComponent.prototype.onSort = function ($event) {
+        this.sort.emit($event);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], ListPageComponent.prototype, "title", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ListPageComponent.prototype, "selectable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ListPageComponent.prototype, "headerVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ListPageComponent.prototype, "titleVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ListPageComponent.prototype, "actionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], ListPageComponent.prototype, "captionsVisible", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], ListPageComponent.prototype, "activeSort", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Array)
+    ], ListPageComponent.prototype, "list", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], ListPageComponent.prototype, "meta", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Array)
+    ], ListPageComponent.prototype, "actions", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Array)
+    ], ListPageComponent.prototype, "columns", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], ListPageComponent.prototype, "action", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], ListPageComponent.prototype, "refresh", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], ListPageComponent.prototype, "sort", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], ListPageComponent.prototype, "goToPage", void 0);
+    ListPageComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'list-page',
+            template: __webpack_require__(883),
+            host: {
+                '[class.list-page]': 'true'
+            }
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ListPageComponent);
+    return ListPageComponent;
+}());
+
+
+/***/ },
+
+/***/ 681:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(16);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return NavTreeComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NavTreeComponent = (function () {
+    function NavTreeComponent(router) {
+        this.router = router;
+        this.entries = [];
+        this.rootSegment = '/';
+    }
+    NavTreeComponent.prototype.isActive = function (instruction) {
+        return this.router.isActive(this.router.createUrlTree(instruction), true);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], NavTreeComponent.prototype, "entries", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], NavTreeComponent.prototype, "rootSegment", void 0);
+    NavTreeComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[nb-nav-tree]',
+            template: __webpack_require__(884)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */]) === 'function' && _a) || Object])
+    ], NavTreeComponent);
+    return NavTreeComponent;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 682:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return NavComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+var NavComponent = (function () {
+    function NavComponent(router, http, store) {
+        var _this = this;
+        this.router = router;
+        this.http = http;
+        this.store = store;
+        this.outline = [];
+        this.loading = true;
+        this.rootSegment = '/';
+        this.sub = store.select('environment').subscribe(function (state) {
+            _this.rootSegment = state.rootSegment;
+            _this.loadNav(state.navUrl);
+        });
+    }
+    NavComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    NavComponent.prototype.loadNav = function (navUrl) {
+        var _this = this;
+        this.loading = true;
+        this.http.get(navUrl, { headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__utils_utils__["a" /* xhrHeaders */])() })
+            .retry(3)
+            .map(function (response) { return response.json(); })
+            .map(function (_a) {
+            var objects = _a.objects;
+            return objects.filter(function (it) { return it.outlines && it.entries; });
+        })
+            .subscribe(function (outline) {
+            _this.loading = false;
+            _this.outline = outline;
+        });
+    };
+    NavComponent.prototype.isActive = function (instruction) {
+        return this.router.isActive(this.router.createUrlTree(instruction), true);
+    };
+    NavComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[nb-nav]',
+            template: __webpack_require__(885)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__ngrx_store__["a" /* Store */]) === 'function' && _c) || Object])
+    ], NavComponent);
+    return NavComponent;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 683:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__actions__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_user__ = __webpack_require__(374);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return NavbarComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+var NavbarComponent = (function () {
+    function NavbarComponent(store, environmentActions, appService) {
+        var _this = this;
+        this.store = store;
+        this.environmentActions = environmentActions;
+        this.appService = appService;
+        this.keyup$ = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["Subject"]();
+        this.headerTitle = 'Projects';
+        this.logoUrl = 'img/logo.png';
+        this.keyWord = '';
+        this.apps = [];
+        this.subs = [];
+        this.subs.push(this.store.select('environment').subscribe(function (state) {
+            _this.keyWord = state.keyWord;
+            _this.apps = state.apps;
+        }));
+    }
+    NavbarComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.keyup$
+            .debounceTime(250)
+            .map(function (event) { return event.target.value; })
+            .distinctUntilChanged()
+            .subscribe(function (value) { return _this.search(value); });
+    };
+    NavbarComponent.prototype.ngOnDestroy = function () {
+        this.subs.map(function (s) { return s.unsubscribe(); });
+    };
+    Object.defineProperty(NavbarComponent.prototype, "workspaceUrl", {
+        get: function () {
+            return this.appService.workspaceUrl;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    NavbarComponent.prototype.searchFocus = function () {
+        this.store.dispatch(this.environmentActions.toggleSearch());
+    };
+    NavbarComponent.prototype.searchBlur = function () {
+        this.store.dispatch(this.environmentActions.hideNav());
+    };
+    NavbarComponent.prototype.search = function (value) {
+        this.store.dispatch(this.environmentActions.search(value));
+    };
+    NavbarComponent.prototype.toggleNav = function () {
+        this.store.dispatch(this.environmentActions.toggleNav());
+    };
+    NavbarComponent.prototype.logout = function (event) {
+        event.preventDefault();
+        window.location.href = 'Logout';
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_5__models_user__["a" /* User */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_5__models_user__["a" /* User */]) === 'function' && _a) || Object)
+    ], NavbarComponent.prototype, "user", void 0);
+    NavbarComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'navbar',
+            template: __webpack_require__(886)
+        }), 
+        __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__ngrx_store__["a" /* Store */]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_4__actions__["a" /* EnvironmentActions */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_4__actions__["a" /* EnvironmentActions */]) === 'function' && _c) || Object, (typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_3__services__["b" /* AppService */]) === 'function' && _d) || Object])
+    ], NavbarComponent);
+    return NavbarComponent;
+    var _a, _b, _c, _d;
+}());
+
+
+/***/ },
+
+/***/ 684:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return EmployeeInputComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var EmployeeInputComponent = (function () {
+    function EmployeeInputComponent(store) {
+        this.store = store;
+        this.placeHolder = '';
+        this.multiple = false;
+        this.editable = false;
+        this.allowClear = false;
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.ids = [];
+        this.employees = [];
+        this.selectedEmps = [];
+    }
+    Object.defineProperty(EmployeeInputComponent.prototype, "_ids", {
+        set: function (ids) {
+            this.ids = ids;
+            this.checkSelected();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    EmployeeInputComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.sub = this.store.select('staff').subscribe(function (state) {
+            _this.employees = state.employees;
+            _this.checkSelected();
+        });
+    };
+    EmployeeInputComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    EmployeeInputComponent.prototype.checkSelected = function () {
+        var _this = this;
+        if (this.ids && this.employees) {
+            this.selectedEmps = this.employees.filter(function (it) { return _this.ids.indexOf(it.userID) != -1; });
+        }
+    };
+    EmployeeInputComponent.prototype.onSelect = function (selectedEmps) {
+        this.change.emit(selectedEmps);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('ids'), 
+        __metadata('design:type', Array), 
+        __metadata('design:paramtypes', [Array])
+    ], EmployeeInputComponent.prototype, "_ids", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], EmployeeInputComponent.prototype, "placeHolder", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], EmployeeInputComponent.prototype, "multiple", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], EmployeeInputComponent.prototype, "editable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], EmployeeInputComponent.prototype, "allowClear", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], EmployeeInputComponent.prototype, "change", void 0);
+    EmployeeInputComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'employee-input',
+            template: "\n        <selection\n            class=\"employee-input\"\n            [items]=\"employees\"\n            [selectedItems]=\"selectedEmps\"\n            [disabled]=\"!editable\"\n            [searchable]=\"true\"\n            [allowClear]=\"allowClear\"\n            [multiple]=\"multiple\"\n            [placeHolder]=\"placeHolder\"\n            (change)=\"onSelect($event)\">\n        </selection>\n    "
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object])
+    ], EmployeeInputComponent);
+    return EmployeeInputComponent;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 685:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ErrorMessageComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ErrorMessageComponent = (function () {
+    function ErrorMessageComponent() {
+        this.error = {};
+    }
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], ErrorMessageComponent.prototype, "error", void 0);
+    ErrorMessageComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'error-message',
+            template: "\n        <div class=\"error-message__message\" *ngIf=\"error\">\n            {{error.message | translate}}\n        </div>\n    ",
+            host: {
+                '[class.error-message]': 'true',
+                '[class.show]': 'error'
+            }
+        }), 
+        __metadata('design:paramtypes', [])
+    ], ErrorMessageComponent);
+    return ErrorMessageComponent;
+}());
+
+
+/***/ },
+
+/***/ 686:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__error_message__ = __webpack_require__(685);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__organization_input__ = __webpack_require__(687);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__tags_input__ = __webpack_require__(689);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__employee_input__ = __webpack_require__(684);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__selection_component__ = __webpack_require__(688);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__error_message__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_1__organization_input__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "e", function() { return __WEBPACK_IMPORTED_MODULE_2__tags_input__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "d", function() { return __WEBPACK_IMPORTED_MODULE_3__employee_input__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_4__selection_component__["a"]; });
+
+
+
+
+
+
+
+/***/ },
+
+/***/ 687:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_staff_staff_service__ = __webpack_require__(223);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_staff_models__ = __webpack_require__(663);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return OrganizationInputComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var OrganizationInputComponent = (function () {
+    function OrganizationInputComponent(staffService) {
+        this.staffService = staffService;
+        this.placeHolder = '';
+        this.editable = false;
+        this.allowClear = false;
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.organizations = [];
+        this.meta = { page: 0, totalPages: 1 };
+        this.allLoaded = false;
+        this.firstLoad = true;
+    }
+    OrganizationInputComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        if (!this.org && this.id) {
+            this.staffService.fetchOrganizations({ ids: this.id }).subscribe(function (payload) {
+                _this.org = payload.organizations[0];
+            });
+        }
+    };
+    OrganizationInputComponent.prototype.load = function ($load) {
+        if ($load.first && this.firstLoad) {
+            this.loadOrganizations();
+            this.firstLoad = false;
+        }
+        else if ($load.next && !this.allLoaded) {
+            if (this.meta && this.meta.page < this.meta.totalPages) {
+                this.loadOrganizations(this.meta.page + 1);
+            }
+            else {
+                this.allLoaded = true;
+            }
+        }
+        else if (typeof $load.search === 'string') {
+            this.loadOrganizations(1, $load.search, true);
+        }
+    };
+    OrganizationInputComponent.prototype.loadOrganizations = function (page, keyWord, isSearch) {
+        var _this = this;
+        if (page === void 0) { page = 1; }
+        if (keyWord === void 0) { keyWord = ''; }
+        if (isSearch === void 0) { isSearch = false; }
+        this.staffService.fetchOrganizations({ page: page, keyword: keyWord }).subscribe(function (payload) {
+            if (isSearch) {
+                _this.organizations = payload.organizations;
+            }
+            else {
+                _this.organizations = _this.organizations.concat(payload.organizations);
+            }
+            _this.meta = payload.meta;
+        });
+    };
+    OrganizationInputComponent.prototype.onSelect = function (m) {
+        this.org = m;
+        this.change.emit(this.org);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], OrganizationInputComponent.prototype, "id", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__modules_staff_models__["a" /* Organization */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__modules_staff_models__["a" /* Organization */]) === 'function' && _a) || Object)
+    ], OrganizationInputComponent.prototype, "org", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], OrganizationInputComponent.prototype, "placeHolder", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OrganizationInputComponent.prototype, "editable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], OrganizationInputComponent.prototype, "allowClear", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], OrganizationInputComponent.prototype, "change", void 0);
+    OrganizationInputComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'organization-input',
+            template: "\n        <selection\n            class=\"organization-input\"\n            [items]=\"organizations\"\n            [selectedItems]=\"org? [org] : []\"\n            [disabled]=\"!editable\"\n            [searchable]=\"true\"\n            [allowClear]=\"allowClear\"\n            [placeHolder]=\"placeHolder\"\n            (load)=\"load($event)\"\n            (change)=\"onSelect($event)\">\n        </selection>\n    "
+        }), 
+        __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__modules_staff_staff_service__["a" /* StaffService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__modules_staff_staff_service__["a" /* StaffService */]) === 'function' && _b) || Object])
+    ], OrganizationInputComponent);
+    return OrganizationInputComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 688:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return SelectionComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SelectionComponent = (function () {
+    function SelectionComponent(renderer) {
+        this.renderer = renderer;
+        this.selectedItems = [];
+        this.idKey = 'id';
+        this.textKey = 'name';
+        this.multiple = false;
+        this.disabled = false;
+        this.allowClear = false;
+        this.searchable = false;
+        this.contentLoadable = false;
+        this.tabIndex = 0;
+        this.checkmarkIconClass = 'fa fa-check';
+        this.placeHolder = '';
+        this.notFoundText = 'Not found';
+        this.load = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.items = [];
+        this._items = [];
+        this.selectedItemIds = [];
+        this.isOpen = false;
+        this.isFocused = false;
+        this.selfClick = false;
+        this.firstOpen = true;
+        this.keyWord = '';
+        this.showNotFound = false;
+        this.SEARCH_MODE = 0;
+        this.MOVE_MODE = 1;
+        this.cursorMode = 1;
+        this.cursorPosition = -1;
+    }
+    Object.defineProperty(SelectionComponent.prototype, "_tabIndex", {
+        get: function () { return -1; },
+        enumerable: true,
+        configurable: true
+    });
+    SelectionComponent.prototype.onFocus = function ($event) {
+        if (this.disabled) {
+            return;
+        }
+        this.isFocused = true;
+    };
+    SelectionComponent.prototype.onBlur = function ($event) {
+        if (this.disabled || this.selfClick) {
+            return;
+        }
+        this.close();
+        this.clearSearchInput();
+    };
+    SelectionComponent.prototype.onClick = function ($event) {
+        this.selfClick = true;
+    };
+    SelectionComponent.prototype.onMouseDown = function ($event) {
+        this.selfClick = true;
+    };
+    SelectionComponent.prototype.onKeyDown = function ($event) {
+        if (this.disabled) {
+            return;
+        }
+        this.handleEvent($event);
+    };
+    Object.defineProperty(SelectionComponent.prototype, "__items", {
+        set: function (items) {
+            this.items = items;
+            this._items = items;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    SelectionComponent.prototype.ngOnInit = function () {
+        if (this.disabled) {
+            return;
+        }
+        if (this.multiple) {
+            this.filterItems();
+        }
+        this.resetCursor();
+        this.checkSelected();
+    };
+    SelectionComponent.prototype.ngOnDestroy = function () {
+        this.removeListenGlobal();
+    };
+    Object.defineProperty(SelectionComponent.prototype, "isAllowClear", {
+        get: function () {
+            return this.allowClear && this.selectedItems.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(SelectionComponent.prototype, "hasSelected", {
+        get: function () {
+            return this.selectedItems.length;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    SelectionComponent.prototype.initListenGlobal = function () {
+        var _this = this;
+        this.documentClickListener = this.renderer.listenGlobal('body', 'click', function () {
+            if (!_this.selfClick) {
+                _this.close();
+                _this.clearSearchInput();
+            }
+            else {
+                _this.selfClick = false;
+            }
+        });
+        this.documentKeyUpListener = this.renderer.listenGlobal('body', 'keyup', function (event) {
+            if (event.code === 'Escape') {
+                _this.close();
+                _this.clearSearchInput();
+            }
+        });
+    };
+    SelectionComponent.prototype.removeListenGlobal = function () {
+        if (!this.disabled) {
+            this.documentClickListener && this.documentClickListener();
+            this.documentKeyUpListener && this.documentKeyUpListener();
+        }
+    };
+    SelectionComponent.prototype.emitChange = function () {
+        if (this.multiple) {
+            this.change.emit(this.selectedItems);
+        }
+        else {
+            this.change.emit(this.selectedItems[0]);
+        }
+    };
+    SelectionComponent.prototype.checkSelected = function () {
+        var _this = this;
+        this.selectedItemIds = this.selectedItems.map(function (it) { return it[_this.idKey]; });
+    };
+    SelectionComponent.prototype.add = function (item) {
+        var _this = this;
+        if (this.multiple) {
+            if (this.selectedItems.filter(function (it) { return it[_this.idKey] == item[_this.idKey]; }).length === 0) {
+                this.selectedItems.push(item);
+                this.selectedItemIds = this.selectedItems.map(function (it) { return it[_this.idKey]; });
+            }
+        }
+        else {
+            this.selectedItems = [item];
+            this.selectedItemIds = [item[this.idKey]];
+            this.close();
+        }
+        this.emitChange();
+        this.clearSearchInput();
+        this.filterItems();
+    };
+    SelectionComponent.prototype.remove = function (item, $event) {
+        var _this = this;
+        if (!this.multiple) {
+            return;
+        }
+        $event.stopPropagation();
+        $event.preventDefault();
+        if (this.multiple) {
+            this.selectedItems = this.selectedItems.filter(function (it) { return it[_this.idKey] != item[_this.idKey]; });
+            this.selectedItemIds = this.selectedItems.map(function (it) { return it[_this.idKey]; });
+        }
+        else {
+            this.selectedItems = [];
+            this.selectedItemIds = [];
+        }
+        this.emitChange();
+        this.clearSearchInput();
+        this.filterItems();
+    };
+    SelectionComponent.prototype.clear = function ($event) {
+        if (this.selectedItemIds.length || this.selectedItems.length) {
+            $event.stopPropagation();
+            this.selectedItems = [];
+            this.selectedItemIds = [];
+            this.emitChange();
+            this.clearSearchInput();
+            this.filterItems();
+        }
+    };
+    SelectionComponent.prototype.clearSearchInput = function () {
+        if (this.searchable && this.searchInput) {
+            this.searchInput.nativeElement.value = '';
+        }
+    };
+    SelectionComponent.prototype.filterItems = function (keyWord) {
+        var _this = this;
+        if (!this.contentLoadable && keyWord) {
+            this._items = this.items.filter(function (it) {
+                return it[_this.textKey].toLowerCase().indexOf(keyWord) != -1;
+            });
+        }
+        else if (this.multiple) {
+            this._items = this.items.filter(function (it) {
+                return _this.selectedItemIds.indexOf(it[_this.idKey]) == -1;
+            });
+        }
+        else {
+            this._items = this.items;
+        }
+        if (this._items.length === 0 || this._items.length !== this.items.length) {
+            this.resetCursor();
+        }
+        this.selectFirst();
+    };
+    SelectionComponent.prototype.search = function (keyWord) {
+        if (this.keyWord !== keyWord) {
+            if (this.contentLoadable) {
+                this.load.emit({ search: keyWord });
+            }
+            else {
+                this.filterItems(keyWord);
+            }
+            this.keyWord = keyWord;
+            this.open();
+        }
+    };
+    SelectionComponent.prototype.handleEvent = function ($event) {
+        if ($event.type === 'keydown') {
+            var keyCode = $event.key;
+            if (keyCode === 'Enter') {
+                if (this.cursorId && this.canMove()) {
+                    this.addOnCursor();
+                }
+                else {
+                    this.toggleOpen($event);
+                }
+                return;
+            }
+            else if (keyCode === 'Escape' || keyCode === 'Tab') {
+                if (this.isOpen) {
+                    this.close();
+                }
+                this.clearSearchInput();
+                return;
+            }
+            else if (keyCode === 'Delete') {
+                this.clear($event);
+                return;
+            }
+            if (this.cursorMode === this.SEARCH_MODE) {
+                if ('ArrowUp' === keyCode || 'ArrowDown' === keyCode) {
+                    this.cursorMode = this.MOVE_MODE;
+                }
+                else if ($event.target.value === '' && ('ArrowLeft' === keyCode || 'ArrowRight' === keyCode)) {
+                    this.cursorMode = this.MOVE_MODE;
+                }
+            }
+            if (this.cursorMode === this.MOVE_MODE && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(keyCode) != -1) {
+                $event.preventDefault();
+                this.move(keyCode);
+            }
+        }
+        else if ($event.type === 'keyup' && $event.target.name === 'search') {
+            $event.stopPropagation();
+            this.cursorMode = this.SEARCH_MODE;
+            this.search($event.target.value.toLowerCase());
+        }
+        else {
+            console.log('SelectionComponent::handleEvent > unknown', $event);
+        }
+    };
+    SelectionComponent.prototype.move = function (direction) {
+        if (!this.canMove()) {
+            return;
+        }
+        switch (direction) {
+            case 'ArrowUp':
+                if (this.cursorPosition === -1) {
+                    this.cursorPosition = this._items.length - 1;
+                }
+                else {
+                    this.cursorPosition--;
+                    if (this.cursorPosition < 0) {
+                        this.cursorPosition = this._items.length - 1;
+                    }
+                }
+                break;
+            case 'ArrowDown':
+                if (this.cursorPosition === -1) {
+                    this.cursorPosition = 0;
+                }
+                else {
+                    this.cursorPosition++;
+                    if (this.cursorPosition >= this._items.length) {
+                        this.cursorPosition = 0;
+                    }
+                }
+                break;
+            case 'ArrowLeft':
+                this.cursorPosition = 0;
+                break;
+            case 'ArrowRight':
+                this.cursorPosition = this._items.length - 1;
+                break;
+            default:
+                return;
+        }
+        this.cursorId = this._items[this.cursorPosition][this.idKey];
+    };
+    SelectionComponent.prototype.canMove = function () {
+        return this.isOpen && this._items.length > 0;
+    };
+    SelectionComponent.prototype.addOnCursor = function () {
+        this.add(this._items[this.cursorPosition]);
+    };
+    SelectionComponent.prototype.resetCursor = function () {
+        this.cursorId = null;
+        this.cursorPosition = -1;
+        this.cursorMode = this.MOVE_MODE;
+    };
+    SelectionComponent.prototype.selectFirst = function () {
+        if (this.cursorMode === this.SEARCH_MODE && this._items.length > 0) {
+            this.cursorId = this._items[0].id;
+            this.cursorPosition = 0;
+            this.cursorMode = this.MOVE_MODE;
+        }
+    };
+    SelectionComponent.prototype.open = function () {
+        if (!this.isOpen) {
+            this.initListenGlobal();
+        }
+        this.isOpen = true;
+        this.isFocused = true;
+        if (this.firstOpen) {
+            this.load.emit({ first: true });
+            this.firstOpen = false;
+        }
+    };
+    SelectionComponent.prototype.close = function () {
+        this.isOpen = false;
+        this.isFocused = false;
+        this.resetCursor();
+        this.removeListenGlobal();
+    };
+    SelectionComponent.prototype.toggleOpen = function ($event) {
+        $event.preventDefault();
+        if (this.isOpen) {
+            this.close();
+        }
+        else {
+            this.open();
+        }
+    };
+    SelectionComponent.prototype.onScroll = function ($event) {
+        var _a = $event.target, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight, scrollTop = _a.scrollTop;
+        if ((scrollHeight - clientHeight) == scrollTop) {
+            this.load.emit({ next: true });
+        }
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('tabIndex'), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "_tabIndex", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('focus', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], SelectionComponent.prototype, "onFocus", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('blur', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], SelectionComponent.prototype, "onBlur", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('click', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], SelectionComponent.prototype, "onClick", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('mousedown', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], SelectionComponent.prototype, "onMouseDown", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('keydown', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], SelectionComponent.prototype, "onKeyDown", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('items'), 
+        __metadata('design:type', Object), 
+        __metadata('design:paramtypes', [Object])
+    ], SelectionComponent.prototype, "__items", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "selectedItems", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], SelectionComponent.prototype, "idKey", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], SelectionComponent.prototype, "textKey", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], SelectionComponent.prototype, "descriptionKey", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "multiple", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "disabled", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "allowClear", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "searchable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "contentLoadable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "tabIndex", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "checkmarkIconClass", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], SelectionComponent.prototype, "placeHolder", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], SelectionComponent.prototype, "notFoundText", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "load", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], SelectionComponent.prototype, "change", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('searchInput'), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === 'function' && _a) || Object)
+    ], SelectionComponent.prototype, "searchInput", void 0);
+    SelectionComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'selection',
+            template: "\n        <div class=\"select selection input\" [class.is-multiple]=\"multiple\" *ngIf=\"disabled\">\n            <div class=\"selection-item\"\n                  [ngClass]=\"m._itemClass\"\n                  [ngStyle]=\"m._itemStyle\"\n                  *ngFor=\"let m of selectedItems\">\n                <div class=\"selection-item-text\">{{m | localizedName:textKey}}</div>\n                <div class=\"selection-item-description\" *ngIf=\"descriptionKey\">{{m[descriptionKey]}}</div>\n            </div>\n        </div>\n        <div class=\"select selection\"\n              [class.open]=\"isOpen\"\n              [class.is-focused]=\"isFocused\"\n              [class.is-multiple]=\"multiple\"\n              [class.allow-clear]=\"isAllowClear\"\n              [class.has-selected]=\"hasSelected\"\n              *ngIf=\"!disabled\">\n            <div class=\"select-selection input\" (click)=\"toggleOpen($event)\">\n                <span class=\"selection-item\"\n                      [ngClass]=\"m._itemClass\"\n                      [ngStyle]=\"m._itemStyle\"\n                      (click)=\"remove(m, $event)\"\n                      *ngFor=\"let m of selectedItems\">\n                    <span class=\"selection-item-text\">{{m | localizedName:textKey}}</span>\n                    <span class=\"selection-item-description\" *ngIf=\"descriptionKey\">{{m[descriptionKey]}}</span>\n                </span>\n                <input *ngIf=\"searchable\"\n                    #searchInput\n                    class=\"select-search-input\"\n                    name=\"search\"\n                    value=\"\"\n                    autocomplete=\"off\"\n                    [tabindex]=\"tabIndex\"\n                    (focus)=\"onFocus($event)\"\n                    (blur)=\"onBlur($event)\"\n                    (keyup)=\"handleEvent($event)\" />\n                <span class=\"placeholder\">{{placeHolder}}</span>\n                <span class=\"select-clear\" (click)=\"clear($event)\">&times;</span>\n                <div class=\"select-search-not-found\" *ngIf=\"showNotFound && notFoundText\">{{notFoundText}}</div>\n            </div>\n            <div class=\"select-dropdown\">\n                <ul class=\"select-list scroll-shadow\" (scroll)=\"onScroll($event)\">\n                    <li class=\"select-option\"\n                          [class.selected]=\"selectedItemIds.indexOf(m[idKey]) !== -1\"\n                          [class.focus]=\"cursorId === m[idKey]\"\n                          (click)=\"add(m)\"\n                          *ngFor=\"let m of _items\">\n                        <i class=\"select-checkmark-icon\"></i>\n                        <div [ngClass]=\"m._itemClass\" [ngStyle]=\"m._itemStyle\">\n                            <div class=\"selection-item-text\">{{m | localizedName:textKey}}</div>\n                            <div class=\"selection-item-description\" *ngIf=\"descriptionKey\">{{m[descriptionKey]}}</div>\n                        </div>\n                    </li>\n                </ul>\n            </div>\n        </div>\n    ",
+            changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush
+        }), 
+        __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === 'function' && _b) || Object])
+    ], SelectionComponent);
+    return SelectionComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 689:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return TagsInputComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TagsInputComponent = (function () {
+    function TagsInputComponent(store) {
+        this.store = store;
+        this.ids = [];
+        this.placeHolder = '';
+        this.editable = false;
+        this.allowClear = false;
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.items = [];
+        this.selectedTags = [];
+    }
+    TagsInputComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.sub = this.store.select('reference').subscribe(function (state) {
+            _this.items = state.tags;
+            _this.items.map(function (it) {
+                it._itemStyle = { color: it.color };
+                it._itemClass = 'tag';
+            });
+            if (_this.ids) {
+                _this.selectedTags = state.tags.filter(function (it) { return _this.ids.indexOf(it.id) != -1; });
+            }
+        });
+    };
+    TagsInputComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    TagsInputComponent.prototype.onSelect = function (selectedTags) {
+        this.change.emit(selectedTags);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Array)
+    ], TagsInputComponent.prototype, "ids", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], TagsInputComponent.prototype, "placeHolder", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], TagsInputComponent.prototype, "editable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], TagsInputComponent.prototype, "allowClear", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], TagsInputComponent.prototype, "change", void 0);
+    TagsInputComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'tags-input',
+            template: "\n        <selection\n            class=\"tags-input\"\n            [items]=\"items\"\n            [selectedItems]=\"selectedTags\"\n            [disabled]=\"!editable\"\n            [searchable]=\"true\"\n            [allowClear]=\"allowClear\"\n            [multiple]=\"true\"\n            [placeHolder]=\"placeHolder\"\n            (change)=\"onSelect($event)\">\n        </selection>\n    "
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["a" /* Store */]) === 'function' && _a) || Object])
+    ], TagsInputComponent);
+    return TagsInputComponent;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 690:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* unused harmony export Attachment */
+var Attachment = (function () {
+    function Attachment() {
+        this.id = '';
+    }
+    return Attachment;
+}());
+
+
+/***/ },
+
+/***/ 691:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__attachment__ = __webpack_require__(690);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__user__ = __webpack_require__(374);
+/* unused harmony namespace reexport */
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__user__["a"]; });
+
+
+
+
+/***/ },
+
+/***/ 692:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DateDurationPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var DateDurationPipe = (function () {
+    function DateDurationPipe() {
+    }
+    DateDurationPipe.prototype.transform = function (dateStart, dateEnd) {
+        if (!dateStart && !dateEnd) {
+            return '';
+        }
+        var sd, ed, dd;
+        if (dateStart === 'now') {
+            sd = __WEBPACK_IMPORTED_MODULE_1_moment__();
+        }
+        else {
+            sd = __WEBPACK_IMPORTED_MODULE_1_moment__(dateStart, 'DD.MM.YYYY');
+        }
+        ed = __WEBPACK_IMPORTED_MODULE_1_moment__(dateEnd, 'DD.MM.YYYY');
+        dd = ed.diff(sd, 'days');
+        return dd ? "(" + dd.toString() + ")" : '';
+    };
+    DateDurationPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'dateDuration' }), 
+        __metadata('design:paramtypes', [])
+    ], DateDurationPipe);
+    return DateDurationPipe;
+}());
+
+
+/***/ },
+
+/***/ 693:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DateFormatPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var DateFormatPipe = (function () {
+    function DateFormatPipe() {
+    }
+    DateFormatPipe.prototype.transform = function (date, format) {
+        if (!date) {
+            return '';
+        }
+        if (!format) {
+            format = 'DD.MM.YYYY HH:mm';
+        }
+        var md = __WEBPACK_IMPORTED_MODULE_1_moment__(date, format);
+        if (md.isValid()) {
+            return md.format(format);
+        }
+        return '';
+    };
+    DateFormatPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'dateFmt' }), 
+        __metadata('design:paramtypes', [])
+    ], DateFormatPipe);
+    return DateFormatPipe;
+}());
+
+
+/***/ },
+
+/***/ 694:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__date_format_pipe__ = __webpack_require__(693);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__date_duration_pipe__ = __webpack_require__(692);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__text_transform_pipe__ = __webpack_require__(697);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__values_pipe__ = __webpack_require__(698);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__keys_pipe__ = __webpack_require__(695);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__localized_name_pipe__ = __webpack_require__(696);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__date_format_pipe__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__date_duration_pipe__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__text_transform_pipe__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "f", function() { return __WEBPACK_IMPORTED_MODULE_3__values_pipe__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "e", function() { return __WEBPACK_IMPORTED_MODULE_4__keys_pipe__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "d", function() { return __WEBPACK_IMPORTED_MODULE_5__localized_name_pipe__["a"]; });
+
+
+
+
+
+
+
+
+/***/ },
+
+/***/ 695:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return KeysPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var KeysPipe = (function () {
+    function KeysPipe() {
+    }
+    KeysPipe.prototype.transform = function (value, args) {
+        var keys = [];
+        for (var key in value) {
+            keys.push(key);
+        }
+        return keys;
+    };
+    KeysPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'keys' }), 
+        __metadata('design:paramtypes', [])
+    ], KeysPipe);
+    return KeysPipe;
+}());
+
+
+/***/ },
+
+/***/ 696:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services__ = __webpack_require__(33);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return LocalizedNamePipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var LocalizedNamePipe = (function () {
+    function LocalizedNamePipe(appService) {
+        this.appService = appService;
+    }
+    LocalizedNamePipe.prototype.transform = function (model, field, locale) {
+        if (model) {
+            var _field = field || 'name', _locale = locale || this.appService.language;
+            if (model.localizedName) {
+                return model.localizedName[_locale] || model[_field];
+            }
+            else if (model[_field]) {
+                if (model[_field].localizedName) {
+                    return model[_field].localizedName[_locale] || model[_field];
+                }
+                else {
+                    return model[_field];
+                }
+            }
+        }
+        return '';
+    };
+    LocalizedNamePipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'localizedName' }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services__["b" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__services__["b" /* AppService */]) === 'function' && _a) || Object])
+    ], LocalizedNamePipe);
+    return LocalizedNamePipe;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 697:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return TextTransformPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TextTransformPipe = (function () {
+    function TextTransformPipe() {
+    }
+    TextTransformPipe.prototype.transform = function (text, transform) {
+        switch (transform) {
+            case 'L':
+                return text.toLowerCase();
+            case 'U':
+                return text.toUpperCase();
+            default:
+                return text;
+        }
+    };
+    TextTransformPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'text' }), 
+        __metadata('design:paramtypes', [])
+    ], TextTransformPipe);
+    return TextTransformPipe;
+}());
+
+
+/***/ },
+
+/***/ 698:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ValuesPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ValuesPipe = (function () {
+    function ValuesPipe() {
+    }
+    ValuesPipe.prototype.transform = function (values, args) {
+        return Object.keys(values).map(function (key) { return values[key]; });
+    };
+    ValuesPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'values' }), 
+        __metadata('design:paramtypes', [])
+    ], ValuesPipe);
+    return ValuesPipe;
+}());
+
+
+/***/ },
+
+/***/ 699:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_app_actions__ = __webpack_require__(368);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return authedReducer; });
+
+;
+var initialState = {
+    userProfile: null,
+    languages: {},
+    pageSize: 20,
+    language: 'RUS'
+};
+var authedReducer = function (state, _a) {
+    if (state === void 0) { state = initialState; }
+    var type = _a.type, payload = _a.payload;
+    switch (type) {
+        case __WEBPACK_IMPORTED_MODULE_0__actions_app_actions__["a" /* AppActions */].FETCH_USER_PROFILE_FULFILLED:
+            return Object.assign({}, state, {
+                userProfile: payload.userProfile,
+                languages: payload.languages,
+                pageSize: payload.pageSize,
+                language: payload.language
+            });
+        default:
+            return state;
+    }
+};
+
+
+/***/ },
+
+/***/ 700:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__ = __webpack_require__(369);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return environmentReducer; });
+
+;
+var initialState = {
+    isMobile: false,
+    isNavOpen: true,
+    isSearchOpen: false,
+    redirectUrl: '/tasks',
+    apps: [
+        { name: 'Reference', url: '/reference' },
+        { name: 'Staff', url: '/staff' },
+        { name: 'Workflow', url: '/workflow' },
+        { name: 'WorkSpace', url: '/workspace' }
+    ],
+    rootSegment: '',
+    navUrl: 'p?id=outline',
+    keyWord: ''
+};
+var environmentReducer = function (state, _a) {
+    if (state === void 0) { state = initialState; }
+    var type = _a.type, payload = _a.payload;
+    switch (type) {
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].SEARCH:
+            return Object.assign({}, state, {
+                keyWord: payload.keyWord
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].RESET_SEARCH:
+            return Object.assign({}, state, {
+                keyWord: ''
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].TOGGLE_NAV:
+            return Object.assign({}, state, {
+                isNavOpen: !state.isNavOpen
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].TOGGLE_SEARCH:
+            return Object.assign({}, state, {
+                isSearchOpen: !state.isSearchOpen
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].HIDE_NAV:
+            return Object.assign({}, state, {
+                isNavOpen: true,
+                isSearchOpen: false
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].SET_REDIRECT_URL:
+            return Object.assign({}, state, {
+                redirectUrl: payload.redirectUrl
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].SET_APPS:
+            return Object.assign({}, state, {
+                apps: payload.apps
+            });
+        case __WEBPACK_IMPORTED_MODULE_0__actions_environment_actions__["a" /* EnvironmentActions */].SET_NAV_URL:
+            return Object.assign({}, state, {
+                rootSegment: payload.rootSegment,
+                navUrl: payload.navUrl
+            });
+        default:
+            return state;
+    }
+};
+
+
+/***/ },
+
+/***/ 701:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authed_reducer__ = __webpack_require__(699);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__environment_reducer__ = __webpack_require__(700);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__authed_reducer__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__environment_reducer__["a"]; });
+
+
+
+
+/***/ },
+
+/***/ 702:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_service__ = __webpack_require__(375);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_utils__ = __webpack_require__(26);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DataService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var DataService = (function () {
+    function DataService(http, appService) {
+        this.http = http;
+        this.appService = appService;
+    }
+    DataService.prototype.get = function (url, params, retry) {
+        var _this = this;
+        if (params === void 0) { params = {}; }
+        if (retry === void 0) { retry = 1; }
+        return this.http.get(url, {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params)
+        })
+            .retry(retry)
+            .map(function (response) { return response.json(); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    DataService.prototype.post = function (url, params, data) {
+        var _this = this;
+        if (params === void 0) { params = {}; }
+        return this.http.post(url, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["c" /* serializeObj */])(data), {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params)
+        })
+            .map(function (response) { return response.json(); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    DataService.prototype.put = function (url, params, data) {
+        var _this = this;
+        if (params === void 0) { params = {}; }
+        return this.http.put(url, data, {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params)
+        })
+            .map(function (response) { return response.json(); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    DataService.prototype.delete = function (url, params) {
+        var _this = this;
+        if (params === void 0) { params = {}; }
+        return this.http.delete(url, {
+            headers: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["a" /* xhrHeaders */])(),
+            search: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_utils__["e" /* createURLSearchParams */])(params)
+        })
+            .map(function (response) { return response.json(); })
+            .catch(function (error) { return _this.appService.handleError(error); });
+    };
+    DataService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__app_service__["a" /* AppService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__app_service__["a" /* AppService */]) === 'function' && _b) || Object])
+    ], DataService);
+    return DataService;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 703:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(22);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return TranslateService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var TranslateService = (function () {
+    function TranslateService(http) {
+        this.http = http;
+    }
+    TranslateService.prototype.fetchTranslations = function (modulePath) {
+        if (modulePath === void 0) { modulePath = ''; }
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_http__["Headers"]({
+            'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+            'Accept': 'application/json'
+        });
+        var translationsUrl = (modulePath ? modulePath + '/' : '') + 'p?id=common-captions';
+        return this.http.get(translationsUrl, { headers: headers })
+            .retry(3)
+            .map(function (response) { return response.json().captions; });
+    };
+    TranslateService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["Http"]) === 'function' && _a) || Object])
+    ], TranslateService);
+    return TranslateService;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 704:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return UploadService; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var UploadService = (function () {
+    function UploadService() {
+        var _this = this;
+        this.progress$ = __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["Observable"].create(function (observer) {
+            _this.progressObserver = observer;
+        }).share();
+    }
+    UploadService.prototype.makeFileRequest = function (url, params, files) {
+        var _this = this;
+        return __WEBPACK_IMPORTED_MODULE_1_rxjs_Observable__["Observable"].create(function (observer) {
+            var formData = new FormData(), xhr = new XMLHttpRequest();
+            for (var i = 0; i < files.length; i++) {
+                formData.append('uploads[]', files[i], files[i].name);
+            }
+            if (params) {
+                for (var k in params) {
+                    formData.append(k, params[k]);
+                }
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        observer.next(JSON.parse(xhr.response));
+                        observer.complete();
+                    }
+                    else {
+                        observer.error(xhr.response);
+                    }
+                }
+            };
+            xhr.upload.onprogress = function (event) {
+                var progress = Math.round(event.loaded / event.total * 100);
+                _this.progressObserver.next(progress);
+            };
+            xhr.open('POST', url, true);
+            xhr.send(formData);
+        });
+    };
+    UploadService = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [])
+    ], UploadService);
+    return UploadService;
+}());
+
+
+/***/ },
+
+/***/ 705:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DatepickerDirective; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var Pikaday = __webpack_require__(257);
+var DatepickerDirective = (function () {
+    function DatepickerDirective(elementRef) {
+        this.elementRef = elementRef;
+        this.format = 'DD.MM.YYYY';
+        this.yearRange = 30;
+        this.firstDay = 1;
+        this.select = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+    }
+    DatepickerDirective.prototype.ngOnInit = function () {
+        var _this = this;
+        this.picker = new Pikaday({
+            field: this.elementRef.nativeElement,
+            minDate: this.minDate,
+            maxDate: this.maxDate,
+            firstDay: this.firstDay,
+            yearRange: this.yearRange,
+            format: this.format,
+            onSelect: function () {
+                _this.elementRef.nativeElement.value = _this.picker.toString();
+                _this.select.emit(_this.picker.toString(_this.format));
+            }
+        });
+    };
+    DatepickerDirective.prototype.ngOnDestroy = function () {
+        this.picker.destroy();
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], DatepickerDirective.prototype, "format", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], DatepickerDirective.prototype, "minDate", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], DatepickerDirective.prototype, "maxDate", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Number)
+    ], DatepickerDirective.prototype, "yearRange", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Number)
+    ], DatepickerDirective.prototype, "firstDay", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], DatepickerDirective.prototype, "select", void 0);
+    DatepickerDirective = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[datepicker]'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === 'function' && _a) || Object])
+    ], DatepickerDirective);
+    return DatepickerDirective;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 706:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return AutofocusDirective; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AutofocusDirective = (function () {
+    function AutofocusDirective(element) {
+        this.element = element;
+    }
+    AutofocusDirective.prototype.ngOnInit = function () {
+        this.element.nativeElement.focus();
+    };
+    AutofocusDirective = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[autofocus]'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === 'function' && _a) || Object])
+    ], AutofocusDirective);
+    return AutofocusDirective;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 707:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return TextareaAutoSizeDirective; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TextareaAutoSizeDirective = (function () {
+    function TextareaAutoSizeDirective(element) {
+        this.element = element;
+        this.minRows = 3;
+        this.el = this.element.nativeElement;
+    }
+    TextareaAutoSizeDirective.prototype.onInput = function (textArea) {
+        this.resize();
+    };
+    Object.defineProperty(TextareaAutoSizeDirective.prototype, "_minRows", {
+        set: function (rows) {
+            if (+rows > 0)
+                this.minRows = +rows;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TextareaAutoSizeDirective.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        setTimeout(function () { _this.resize(); }, 0);
+    };
+    TextareaAutoSizeDirective.prototype.resize = function () {
+        var lineHeight = parseFloat(window.getComputedStyle(this.el, null).getPropertyValue('line-height'));
+        this.el.rows = this.minRows;
+        var rows = Math.ceil((this.el.scrollHeight - this.el.offsetHeight) / lineHeight);
+        this.el.rows = this.minRows + rows;
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('input', ['$event.target']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], TextareaAutoSizeDirective.prototype, "onInput", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('rows'), 
+        __metadata('design:type', Number), 
+        __metadata('design:paramtypes', [Number])
+    ], TextareaAutoSizeDirective.prototype, "_minRows", null);
+    TextareaAutoSizeDirective = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: 'textarea[autosize]'
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === 'function' && _a) || Object])
+    ], TextareaAutoSizeDirective);
+    return TextareaAutoSizeDirective;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 708:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dropdown_toggle_component__ = __webpack_require__(376);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return DropdownComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var DropdownComponent = (function () {
+    function DropdownComponent(renderer) {
+        var _this = this;
+        this.renderer = renderer;
+        this.open = false;
+        this.mouseEvent = false;
+        this.tabIndex = 0;
+        this.dropdownToggle = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.selfClick = false;
+        this.focused = false;
+        this.delay = 500;
+        this.documentClickListener = this.renderer.listenGlobal('body', 'click', function () {
+            if (!_this.selfClick) {
+                _this.open = false;
+            }
+            else {
+                _this.selfClick = false;
+            }
+        });
+        this.documentKeyupListener = this.renderer.listenGlobal('body', 'keyup', function (event) {
+            if (event.code === 'Escape') {
+                _this.open = false;
+            }
+        });
+    }
+    Object.defineProperty(DropdownComponent.prototype, "isOpen", {
+        get: function () { return this.open; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(DropdownComponent.prototype, "isFocused", {
+        get: function () { return this.focused; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(DropdownComponent.prototype, "_tabIndex", {
+        get: function () { return this.tabIndex; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    DropdownComponent.prototype.onMouseEnter = function ($event) {
+        var _this = this;
+        if (this.mouseEvent) {
+            clearTimeout(this.time);
+            this.time = setTimeout(function () { return _this.open = true; }, this.delay);
+        }
+    };
+    DropdownComponent.prototype.onMouseLeave = function ($event) {
+        var _this = this;
+        if (this.mouseEvent) {
+            clearTimeout(this.time);
+            this.time = setTimeout(function () { return _this.open = false; }, this.delay);
+        }
+    };
+    DropdownComponent.prototype.onClick = function ($event) {
+        this.selfClick = true;
+    };
+    DropdownComponent.prototype.onFocus = function ($event) {
+        $event.preventDefault();
+        this.focused = true;
+    };
+    DropdownComponent.prototype.onBlur = function ($event) {
+        $event.preventDefault();
+        this.focused = false;
+        this.open = false;
+    };
+    DropdownComponent.prototype.onKeyDown = function ($event) {
+        if ($event.key === 'Enter') {
+            this.open = true;
+        }
+        else if ($event.key === 'ArrowUp') {
+            console.log('ArrowUp');
+        }
+        else if ($event.key === 'ArrowDown') {
+            console.log('ArrowDown');
+        }
+    };
+    DropdownComponent.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        this.toggleComponent.forEach(function (it) { return it.toggle.subscribe(function (event) {
+            _this.toggleDropdown(event);
+        }); });
+    };
+    DropdownComponent.prototype.ngOnDestroy = function () {
+        this.documentClickListener();
+        this.documentKeyupListener();
+    };
+    DropdownComponent.prototype.toggleDropdown = function (event) {
+        event.preventDefault();
+        this.open = !this.open;
+        this.dropdownToggle.emit(this.open);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.dropdown'), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "true", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.open'), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "isOpen", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.focus'), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "isFocused", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('tabIndex'), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "_tabIndex", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('mouseenter', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onMouseEnter", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('mouseleave', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onMouseLeave", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('click', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onClick", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('focus', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onFocus", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('blur', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onBlur", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostListener"])('keydown', ['$event']), 
+        __metadata('design:type', Function), 
+        __metadata('design:paramtypes', [Object]), 
+        __metadata('design:returntype', void 0)
+    ], DropdownComponent.prototype, "onKeyDown", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ContentChildren"])(__WEBPACK_IMPORTED_MODULE_1__dropdown_toggle_component__["a" /* DropdownToggleComponent */]), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["QueryList"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["QueryList"]) === 'function' && _a) || Object)
+    ], DropdownComponent.prototype, "toggleComponent", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "open", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "mouseEvent", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "tabIndex", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], DropdownComponent.prototype, "dropdownToggle", void 0);
+    DropdownComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: '[dropdown]',
+            template: "<ng-content></ng-content>"
+        }), 
+        __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === 'function' && _b) || Object])
+    ], DropdownComponent);
+    return DropdownComponent;
+    var _a, _b;
+}());
+
+
+/***/ },
+
+/***/ 709:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dropdown_component__ = __webpack_require__(708);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dropdown_toggle_component__ = __webpack_require__(376);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__dropdown_component__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__dropdown_toggle_component__["a"]; });
+
+
+
+
+/***/ },
+
+/***/ 710:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__img_view_service__ = __webpack_require__(224);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ImgViewComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ImgViewComponent = (function () {
+    function ImgViewComponent(imgViewService) {
+        var _this = this;
+        this.imgViewService = imgViewService;
+        this.show = false;
+        this.sub = this.imgViewService.getEmitter().subscribe(function (item) {
+            _this.url = item.url;
+            _this.show = true;
+        });
+    }
+    ImgViewComponent.prototype.ngOnDestroy = function () {
+        this.sub.unsubscribe();
+    };
+    ImgViewComponent.prototype.onEsc = function ($event) {
+        $event.preventDefault();
+        this.hide($event);
+    };
+    ImgViewComponent.prototype.hide = function ($event) {
+        this.show = false;
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], ImgViewComponent.prototype, "url", void 0);
+    ImgViewComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'img-view',
+            template: "\n        <div class=\"img-view-overlay\" (click)=\"hide($event)\">\n            <div class=\"img-view-close\">&times;</div>\n        </div>\n        <div class=\"img-view-content\">\n            <img class=\"img-view-content-img\" [src]=\"url\" />\n        </div>\n    ",
+            host: {
+                '[class.img-view]': 'true',
+                '[class.show]': 'show',
+                '[tabIndex]': '0',
+                '(keyup.esc)': 'onEsc($event)'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__img_view_service__["a" /* ImgViewService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__img_view_service__["a" /* ImgViewService */]) === 'function' && _a) || Object])
+    ], ImgViewComponent);
+    return ImgViewComponent;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 711:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__img_view_service__ = __webpack_require__(224);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return ImgViewDirective; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var ImgViewDirective = (function () {
+    function ImgViewDirective(imgViewService) {
+        this.imgViewService = imgViewService;
+    }
+    ImgViewDirective.prototype.show = function ($event) {
+        this.imgViewService.show(this.url);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], ImgViewDirective.prototype, "url", void 0);
+    ImgViewDirective = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Directive"])({
+            selector: '[img-view]',
+            host: {
+                '(click)': 'show($event)'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__img_view_service__["a" /* ImgViewService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__img_view_service__["a" /* ImgViewService */]) === 'function' && _a) || Object])
+    ], ImgViewDirective);
+    return ImgViewDirective;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 712:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__img_view_component__ = __webpack_require__(710);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__img_view_directive__ = __webpack_require__(711);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__img_view_service__ = __webpack_require__(224);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_0__img_view_component__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__img_view_directive__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__img_view_service__["a"]; });
+
+
+
+
+
+/***/ },
+
+/***/ 713:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__markdown_converter__ = __webpack_require__(225);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__markdown_editor__ = __webpack_require__(714);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__marked_pipe__ = __webpack_require__(715);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_0__markdown_converter__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_1__markdown_editor__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_2__marked_pipe__["a"]; });
+
+
+
+
+
+/***/ },
+
+/***/ 714:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__markdown_converter__ = __webpack_require__(225);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MarkdownEditorComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var MarkdownEditorComponent = (function () {
+    function MarkdownEditorComponent(renderer, mdc) {
+        this.renderer = renderer;
+        this.mdc = mdc;
+        this.editable = true;
+        this.markdown = '';
+        this.updateTimeout = 150;
+        this.writeLabel = 'Write';
+        this.previewLabel = 'Preview';
+        this.update = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.focus = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.blur = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.onFullscreen = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.fullscreen = false;
+        this.splitMode = false;
+        this.hasValue = false;
+        this.isMdMode = true;
+        this.isPreviewMode = false;
+        this.helpVisible = false;
+    }
+    Object.defineProperty(MarkdownEditorComponent.prototype, "_edit", {
+        get: function () { return this.editable; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(MarkdownEditorComponent.prototype, "_fullscreen", {
+        get: function () { return this.fullscreen; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(MarkdownEditorComponent.prototype, "_splitMode", {
+        get: function () { return this.splitMode; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(MarkdownEditorComponent.prototype, "_helpVisible", {
+        get: function () { return this.helpVisible; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    Object.defineProperty(MarkdownEditorComponent.prototype, "_hasValue", {
+        get: function () { return this.hasValue; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    MarkdownEditorComponent.prototype.ngOnInit = function () {
+        this.html = this.mdc.toHtml(this.markdown);
+        this.hasValue = this.markdown.length > 0;
+        this._markdown = this.markdown;
+        if (this.editable) {
+            this.setActiveMdMode();
+        }
+        else {
+            this.setActivePreviewMode();
+        }
+    };
+    MarkdownEditorComponent.prototype.onEsc = function ($event) {
+        $event.preventDefault();
+        if (this.fullscreen) {
+            this.toggleFullscreen();
+        }
+    };
+    MarkdownEditorComponent.prototype.focusMdTextArea = function () {
+        var _this = this;
+        if (this.mdTextArea) {
+            setTimeout(function () {
+                _this.renderer.invokeElementMethod(_this.mdTextArea.nativeElement, 'focus');
+            }, 0);
+        }
+    };
+    MarkdownEditorComponent.prototype.setActiveMdMode = function () {
+        this.isMdMode = true;
+        this.isPreviewMode = false;
+        this.splitMode = false;
+        this.focusMdTextArea();
+    };
+    MarkdownEditorComponent.prototype.setActivePreviewMode = function () {
+        this.isPreviewMode = true;
+        this.isMdMode = false;
+        this.splitMode = false;
+    };
+    MarkdownEditorComponent.prototype.toggleFullscreen = function () {
+        this.fullscreen = !this.fullscreen;
+        this.onFullscreen.emit(this.fullscreen);
+        this.focusMdTextArea();
+    };
+    MarkdownEditorComponent.prototype.toggleSplitMode = function () {
+        this.splitMode = !this.splitMode;
+        this.isMdMode = this.splitMode !== true;
+        this.isPreviewMode = false;
+        this.focusMdTextArea();
+    };
+    MarkdownEditorComponent.prototype.toggleHelp = function () {
+        this.helpVisible = !this.helpVisible;
+    };
+    MarkdownEditorComponent.prototype.updateValue = function (value) {
+        var _this = this;
+        clearTimeout(this.timeout);
+        this.hasValue = value.trim().length > 0;
+        this.timeout = setTimeout(function () {
+            _this.update.emit(value.trim());
+            _this.html = _this.mdc.toHtml(value.trim());
+        }, this.updateTimeout);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.md-editor'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "true", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.edit'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "_edit", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.fullscreen'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "_fullscreen", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.split-mode'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "_splitMode", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.help-is-visible'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "_helpVisible", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.has-value'), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "_hasValue", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], MarkdownEditorComponent.prototype, "editable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], MarkdownEditorComponent.prototype, "markdown", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], MarkdownEditorComponent.prototype, "placeHolder", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Number)
+    ], MarkdownEditorComponent.prototype, "updateTimeout", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], MarkdownEditorComponent.prototype, "writeLabel", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', String)
+    ], MarkdownEditorComponent.prototype, "previewLabel", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "update", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "focus", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "blur", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], MarkdownEditorComponent.prototype, "onFullscreen", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ViewChild"])('mdTextArea'), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["ElementRef"]) === 'function' && _a) || Object)
+    ], MarkdownEditorComponent.prototype, "mdTextArea", void 0);
+    MarkdownEditorComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'markdown-editor',
+            template: "\n        <div class=\"md-editor-container\">\n            <div class=\"md-editor__tabs\" [class.md-active]=\"isMdMode\" [class.preview-active]=\"isPreviewMode\">\n                <div class=\"md-editor__placeholder\" *ngIf=\"placeHolder\">{{placeHolder}}</div>\n                <div class=\"md-editor__tab-title-md\" *ngIf=\"editable\" (click)=\"setActiveMdMode()\">\n                    {{writeLabel}}\n                    <a class=\"md-editor-site\" href=\"https://daringfireball.net/projects/markdown/syntax\" tabindex=\"-1\" (click)=\"false\" title=\"Markdown\" target=\"blank\" rel=\"noreferrer\">\n                        <img height=\"14px\" src=\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAUCAYAAAGblg/ZAAAACXBIWXMAAAsSAAALEgHS3X78AAAAFXpUWHRBdXRob3IAAAiZy01NycwDAAYmAg7P7sJVAAABUklEQVRIx2NgYGAwAuL/SBhCwAAjmsB6RmwqYOA/Ni0MyIYuQGKj0MicB1D2YZgYyMh/aHYhg6sMuIyFeYwJh4vhAFmBMJocK05voQcEPkcSBf5jseUrEGvhUYMRe8iSyTgsQQcxuAz4j0fMHMr/i6zmCpomUjFFBhgSjCZCAD2lIEfnQixijNiiHD3AtKDRyEBMNCJ7gZFAWkFW8x+bF9BBClqcM+LKGOjOewDNGOhOZkbin8CXEnElpN9QtiOupEwMno8uRmk6uESNpEwJvkKpD5ANY6aGIdgcwwUtfWHyV6FipJqDNRSwhQCuDJGAVMEwEFHmMRJRJjKQ4gBiQpJkBzARYfB3IDZG4psA8Q8caj8CsSIOT4DElIH4M7lxtwOIdxIZx7VY5NtwVQhkJR4kXzFBcwC6/B0g5gFiISB+QkoipCtggjbSrg6A3aBS0AAACVPtjHPTRNQAAAAASUVORK5CYII=\" alt=\"md\" />\n                    </a>\n                </div>\n                <div class=\"md-editor__tab-title-preview\" *ngIf=\"editable\" (click)=\"setActivePreviewMode()\">{{previewLabel}}</div>\n                <div class=\"md-editor__btn-split-mode\" *ngIf=\"editable\" (click)=\"toggleSplitMode()\">\n                    <i class=\"fa fa-columns\"></i>\n                </div>\n                <div class=\"md-editor__btn-fullscreen\" *ngIf=\"editable\" (click)=\"toggleFullscreen()\">\n                    <i class=\"fa fa-expand\"></i>\n                </div>\n                <div class=\"md-editor__btn-help\" *ngIf=\"editable\" (click)=\"toggleHelp()\">\n                    <i class=\"fa fa-question\"></i>\n                </div>\n                <div class=\"md-editor__tab-content\">\n                    <div class=\"md-editor__markdown\" *ngIf=\"editable\">\n                        <textarea class=\"md-editor__area\"\n                            #mdTextArea\n                            name=\"md\"\n                            rows=\"3\"\n                            autosize\n                            (keyup)=\"updateValue($event.target.value)\"\n                            (focus)=\"focus.emit($event)\"\n                            (blur)=\"updateValue($event.target.value)\">{{_markdown}}</textarea>\n                        <!-- <div class=\"md-editor__area\" tabindex=\"0\" draggable=\"false\"\n                            #mdTextArea\n                            [contentEditable]=\"editable\"\n                            (drop)=\"false\"\n                            (keyup)=\"updateValue($event.target)\"\n                            (focus)=\"focus.emit($event)\"\n                            (blur)=\"updateValue($event.target)\"\n                            innerHTML=\"{{_markdown}}\">\n                        </div> -->\n                    </div>\n                    <div class=\"md-editor__preview\" innerHTML=\"{{html}}\"></div>\n                </div>\n            </div>\n            <div class=\"md-editor__help\" [class.show]=\"helpVisible\">\n                <div class=\"md-editor__help-list\">\n                    <div class=\"md-editor__help-item\">\n                        <h1 class=\"md-editor__help-item-h\"># H1</h1>\n                        <h2 class=\"md-editor__help-item-h\">## H2</h2>\n                        <h3 class=\"md-editor__help-item-h\">### H3</h3>\n                    </div>\n                    <div class=\"md-editor__help-item\">\n                        <em>_italic_</em><br/>\n                        <em>*italic*</em><br/>\n                        <strong>__bold__</strong><br/>\n                        <strong>**bold**</strong><br/>\n                        <code>`monospace`</code>\n                    </div>\n                    <div class=\"md-editor__help-item\">\n                        ---\n                        <hr/>\n                    </div>\n                    <div class=\"md-editor__help-item\">\n                        <div class=\"md-editor__help-item-md\">\n                            - 1<br/>- 2<br/>- 3\n                        </div>\n                        <div class=\"md-editor__help-item-html\">\n                            <ul>\n                                <li>1</li>\n                                <li>2</li>\n                                <li>3</li>\n                            </ul>\n                        </div>\n                    </div>\n                    <!-- <div class=\"md-editor__help-item\">\n                        <div class=\"md-editor__help-item-md\">\n                            &gt; blockquote<br/>&gt; Abc<br/>&gt; 123<br/>\n                        </div>\n                        <div class=\"md-editor__help-item-html\">\n                            <blockquote>\n                                <p>blockquote<br>Abc<br>123</p>\n                            </blockquote>\n                        </div>\n                    </div>\n                    <div class=\"md-editor__help-item\">\n                        <div class=\"md-editor__help-item-md\">\n                            1. n1<br/>2. n2<br/>3. n3\n                        </div>\n                        <div class=\"md-editor__help-item-html\">\n                            <ol>\n                                <li>n1</li>\n                                <li>n2</li>\n                                <li>n3</li>\n                            </ol>\n                        </div>\n                    </div> -->\n                    <div class=\"md-editor__help-item\">\n                        [link](http://google.com)<br/>\n                        <a href=\"http://google.com\">link</a>\n                    </div>\n                </div>\n            </div>\n        </div>\n    ",
+            host: {
+                'tabindex': '-1',
+                '(keyup.esc)': 'onEsc($event)'
+            }
+        }), 
+        __metadata('design:paramtypes', [(typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["Renderer"]) === 'function' && _b) || Object, (typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_1__markdown_converter__["a" /* MarkdownConverter */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__markdown_converter__["a" /* MarkdownConverter */]) === 'function' && _c) || Object])
+    ], MarkdownEditorComponent);
+    return MarkdownEditorComponent;
+    var _a, _b, _c;
+}());
+
+
+/***/ },
+
+/***/ 715:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__markdown_converter__ = __webpack_require__(225);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MarkedPipe; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var MarkedPipe = (function () {
+    function MarkedPipe(mdc) {
+        this.mdc = mdc;
+    }
+    MarkedPipe.prototype.transform = function (text) {
+        return this.mdc.toHtml(text);
+    };
+    MarkedPipe = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Pipe"])({ name: 'marked' }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__markdown_converter__["a" /* MarkdownConverter */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__markdown_converter__["a" /* MarkdownConverter */]) === 'function' && _a) || Object])
+    ], MarkedPipe);
+    return MarkedPipe;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 716:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__notification_service__ = __webpack_require__(377);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return NotificationComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var NotificationComponent = (function () {
+    function NotificationComponent(notifyService) {
+        this.notifyService = notifyService;
+        this.notifications = [];
+    }
+    Object.defineProperty(NotificationComponent.prototype, "isHidden", {
+        get: function () { return this.notifications.length == 0; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    NotificationComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.listener = this.notifyService.getEmitter().subscribe(function (item) {
+            switch (item.command) {
+                case 'cleanAll':
+                    _this.notifications = [];
+                    break;
+                case 'add':
+                    _this.addNotify(item.notify);
+                    break;
+                default:
+                    break;
+            }
+        });
+    };
+    NotificationComponent.prototype.ngOnDestroy = function () {
+        if (this.listener) {
+            this.notifications.map(function (it) { return it.getEmitter().unsubscribe(); });
+            this.listener.unsubscribe();
+        }
+    };
+    NotificationComponent.prototype.addNotify = function (notify) {
+        var _this = this;
+        this.notifications.push(notify);
+        notify.getEmitter().subscribe(function (item) { return _this.notifyEmitter(item); });
+    };
+    NotificationComponent.prototype.notifyEmitter = function (data) {
+        if (data.dismiss) {
+            var index = this.notifications.indexOf(data.notify);
+            this.notifications.splice(index, 1);
+            data.notify.getEmitter().unsubscribe();
+        }
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.nb-notify'), 
+        __metadata('design:type', Object)
+    ], NotificationComponent.prototype, "true", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.hidden'), 
+        __metadata('design:type', Object)
+    ], NotificationComponent.prototype, "isHidden", null);
+    NotificationComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'notification',
+            template: "\n        <div class=\"nb-notify-entry-{{notify.type}}\"\n            [class.dismiss-click]=\"notify.delay == 'click'\"\n            [style.display]=\"notify.display ? 'block': 'none'\"\n            (click)=\"notify.dismiss()\"\n            *ngFor=\"let notify of notifications\">\n            {{notify.message}}\n        </div>\n    "
+        }), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__notification_service__["a" /* NotificationService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__notification_service__["a" /* NotificationService */]) === 'function' && _a) || Object])
+    ], NotificationComponent);
+    return NotificationComponent;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 717:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pagination__ = __webpack_require__(718);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__pagination__["a"]; });
+
+
+
+/***/ },
+
+/***/ 718:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return PaginationComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var PaginationComponent = (function () {
+    function PaginationComponent() {
+        this.currentPage = 0;
+        this.totalPages = 0;
+        this.maxPageControl = 5;
+        this.change = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.startPage = 0;
+        this.stopPage = 0;
+        this.pages = [];
+    }
+    Object.defineProperty(PaginationComponent.prototype, "isHidden", {
+        get: function () { return this.totalPages < 2; },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    PaginationComponent.prototype.ngOnChanges = function () {
+        this.pagination();
+    };
+    PaginationComponent.prototype.setPage = function (page, $event) {
+        $event.preventDefault();
+        this.change.emit({ page: page });
+    };
+    PaginationComponent.prototype.pagination = function () {
+        this.pages = [];
+        if (this.totalPages <= 1) {
+            return;
+        }
+        var perPage = Math.floor(this.maxPageControl / 2);
+        this.startPage = (this.currentPage - perPage);
+        this.stopPage = (this.currentPage + perPage);
+        if (this.startPage <= perPage) {
+            this.startPage = 1;
+        }
+        else if (this.currentPage == this.totalPages) {
+            this.startPage = this.totalPages - this.maxPageControl;
+        }
+        if (this.stopPage > (this.totalPages - perPage)) {
+            this.stopPage = this.totalPages;
+        }
+        else if (this.currentPage == 1) {
+            this.stopPage = this.maxPageControl + 1;
+        }
+        if ((this.maxPageControl + perPage) >= this.totalPages) {
+            this.startPage = 1;
+            this.stopPage = this.totalPages;
+        }
+        for (var p = this.startPage; p <= this.stopPage; p++) {
+            this.pages.push(p);
+        }
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('hidden'), 
+        __metadata('design:type', Object)
+    ], PaginationComponent.prototype, "isHidden", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('page'), 
+        __metadata('design:type', Number)
+    ], PaginationComponent.prototype, "currentPage", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Number)
+    ], PaginationComponent.prototype, "totalPages", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Number)
+    ], PaginationComponent.prototype, "maxPageControl", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], PaginationComponent.prototype, "change", void 0);
+    PaginationComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'pagination',
+            template: "\n        <div class=\"pagination\" *ngIf=\"totalPages > 1\">\n            <a href=\"#\" *ngIf=\"startPage > 1\" (click)=\"setPage(1, $event)\">1</a>\n            <span *ngIf=\"startPage > 1\">...</span>\n            <a [class.page-active]=\"p == currentPage\" href=\"#\" *ngFor=\"let p of pages\" (click)=\"setPage(p, $event)\">{{p}}</a>\n            <span *ngIf=\"stopPage < totalPages\">...</span>\n            <a *ngIf=\"stopPage < totalPages\" href=\"#\" (click)=\"setPage(totalPages, $event)\">{{totalPages}}</a>\n        </div>\n    ",
+            changeDetection: __WEBPACK_IMPORTED_MODULE_0__angular_core__["ChangeDetectionStrategy"].OnPush
+        }), 
+        __metadata('design:paramtypes', [])
+    ], PaginationComponent);
+    return PaginationComponent;
+}());
+
+
+/***/ },
+
+/***/ 719:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__img_view__ = __webpack_require__(712);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pagination__ = __webpack_require__(717);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__directives_autofocus_directive__ = __webpack_require__(706);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__directives_textarea_autosize_directive__ = __webpack_require__(707);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__datepicker_datepicker__ = __webpack_require__(705);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__dropdown__ = __webpack_require__(709);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__tabs__ = __webpack_require__(723);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__switch_button__ = __webpack_require__(721);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__notification__ = __webpack_require__(114);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__markdown__ = __webpack_require__(713);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__tree_indentation_tree_indentation_component__ = __webpack_require__(725);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__sort_control_sort_control_component__ = __webpack_require__(720);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return SharedModule; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var SharedModule = (function () {
+    function SharedModule() {
+    }
+    SharedModule = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["NgModule"])({
+            declarations: [
+                __WEBPACK_IMPORTED_MODULE_3__pagination__["a" /* PaginationComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__notification__["a" /* NotificationComponent */],
+                __WEBPACK_IMPORTED_MODULE_4__directives_autofocus_directive__["a" /* AutofocusDirective */],
+                __WEBPACK_IMPORTED_MODULE_5__directives_textarea_autosize_directive__["a" /* TextareaAutoSizeDirective */],
+                __WEBPACK_IMPORTED_MODULE_6__datepicker_datepicker__["a" /* DatepickerDirective */],
+                __WEBPACK_IMPORTED_MODULE_8__tabs__["a" /* Tabs */], __WEBPACK_IMPORTED_MODULE_8__tabs__["b" /* Tab */],
+                __WEBPACK_IMPORTED_MODULE_7__dropdown__["a" /* DropdownComponent */], __WEBPACK_IMPORTED_MODULE_7__dropdown__["b" /* DropdownToggleComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__markdown__["a" /* MarkdownEditorComponent */], __WEBPACK_IMPORTED_MODULE_11__markdown__["b" /* MarkedPipe */],
+                __WEBPACK_IMPORTED_MODULE_9__switch_button__["a" /* SwitchButtonComponent */],
+                __WEBPACK_IMPORTED_MODULE_2__img_view__["a" /* ImgViewDirective */], __WEBPACK_IMPORTED_MODULE_2__img_view__["b" /* ImgViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__tree_indentation_tree_indentation_component__["a" /* TreeIndentationComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__sort_control_sort_control_component__["a" /* SortControlComponent */]
+            ],
+            exports: [
+                __WEBPACK_IMPORTED_MODULE_3__pagination__["a" /* PaginationComponent */],
+                __WEBPACK_IMPORTED_MODULE_10__notification__["a" /* NotificationComponent */],
+                __WEBPACK_IMPORTED_MODULE_4__directives_autofocus_directive__["a" /* AutofocusDirective */],
+                __WEBPACK_IMPORTED_MODULE_5__directives_textarea_autosize_directive__["a" /* TextareaAutoSizeDirective */],
+                __WEBPACK_IMPORTED_MODULE_6__datepicker_datepicker__["a" /* DatepickerDirective */],
+                __WEBPACK_IMPORTED_MODULE_8__tabs__["a" /* Tabs */], __WEBPACK_IMPORTED_MODULE_8__tabs__["b" /* Tab */],
+                __WEBPACK_IMPORTED_MODULE_7__dropdown__["a" /* DropdownComponent */], __WEBPACK_IMPORTED_MODULE_7__dropdown__["b" /* DropdownToggleComponent */],
+                __WEBPACK_IMPORTED_MODULE_11__markdown__["a" /* MarkdownEditorComponent */], __WEBPACK_IMPORTED_MODULE_11__markdown__["b" /* MarkedPipe */],
+                __WEBPACK_IMPORTED_MODULE_9__switch_button__["a" /* SwitchButtonComponent */],
+                __WEBPACK_IMPORTED_MODULE_2__img_view__["a" /* ImgViewDirective */], __WEBPACK_IMPORTED_MODULE_2__img_view__["b" /* ImgViewComponent */],
+                __WEBPACK_IMPORTED_MODULE_12__tree_indentation_tree_indentation_component__["a" /* TreeIndentationComponent */],
+                __WEBPACK_IMPORTED_MODULE_13__sort_control_sort_control_component__["a" /* SortControlComponent */]
+            ],
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */]],
+            providers: [
+                __WEBPACK_IMPORTED_MODULE_10__notification__["b" /* NotificationService */],
+                __WEBPACK_IMPORTED_MODULE_2__img_view__["c" /* ImgViewService */],
+                __WEBPACK_IMPORTED_MODULE_11__markdown__["c" /* MarkdownConverter */]
+            ]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SharedModule);
+    return SharedModule;
+}());
+
+
+/***/ },
+
+/***/ 720:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return SortControlComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SortControlComponent = (function () {
+    function SortControlComponent() {
+        this.direction = 'both';
+        this.active = '';
+        this.name = '';
+        this.sort = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this._dir = 0;
+        this.NONE = 0;
+        this.ASC = -1;
+        this.DESC = 1;
+    }
+    SortControlComponent.prototype.ngOnInit = function () {
+        this.onChanges();
+    };
+    SortControlComponent.prototype.ngOnChanges = function () {
+        this.onChanges();
+    };
+    SortControlComponent.prototype.onChanges = function () {
+        var sp = this.active.split(':');
+        if (sp[0] === this.name) {
+            if (sp[1] === 'asc') {
+                this._dir = this.ASC;
+            }
+            else if (sp[1] === 'desc') {
+                this._dir = this.DESC;
+            }
+            else {
+                this._dir = this.NONE;
+            }
+        }
+        else {
+            this.active = '';
+            this._dir = this.NONE;
+        }
+    };
+    SortControlComponent.prototype.onClick = function ($event) {
+        var sort = '';
+        if (this.direction === 'both') {
+            if (this._dir === this.NONE) {
+                sort = this.name + ':asc';
+            }
+            else if (this._dir === this.ASC) {
+                sort = this.name + ':desc';
+            }
+            else if (this._dir === this.DESC) {
+                sort = '';
+            }
+        }
+        else if (this.direction === 'asc') {
+            if (this._dir !== this.ASC) {
+                sort = this.name + ':asc';
+            }
+        }
+        else if (this.direction === 'desc') {
+            if (this._dir !== this.DESC) {
+                sort = this.name + ':desc';
+            }
+        }
+        this.sort.emit(sort);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SortControlComponent.prototype, "direction", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SortControlComponent.prototype, "active", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SortControlComponent.prototype, "name", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], SortControlComponent.prototype, "sort", void 0);
+    SortControlComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'sort-control',
+            template: "<ng-content></ng-content>",
+            host: {
+                '[class.sort-control]': 'true',
+                '[class.both]': 'direction === "both"',
+                '[class.asc]': 'direction === "asc"',
+                '[class.desc]': 'direction === "desc"',
+                '[class.is-asc]': '_dir === ASC',
+                '[class.is-desc]': '_dir === DESC',
+                '(click)': 'onClick($event)'
+            }
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SortControlComponent);
+    return SortControlComponent;
+}());
+
+
+/***/ },
+
+/***/ 721:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__switch_button__ = __webpack_require__(722);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__switch_button__["a"]; });
+
+
+
+/***/ },
+
+/***/ 722:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return SwitchButtonComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var SwitchButtonComponent = (function () {
+    function SwitchButtonComponent() {
+        this.class = 'input';
+        this.name = 'swb' + Math.random();
+        this.multi = false;
+        this.disabled = false;
+        this.checkDefault = true;
+    }
+    SwitchButtonComponent.prototype.ngAfterContentInit = function () {
+        var _this = this;
+        [].concat(this.items).forEach(function (it) {
+            if (_this.checkDefault && it && it.value == _this.model[_this.value]) {
+                _this.checkDefault = false;
+            }
+        });
+    };
+    SwitchButtonComponent.prototype.select = function (value) {
+        this.model[this.value] = value;
+    };
+    SwitchButtonComponent.prototype.isSelected = function (item) {
+        return item.value == this.model[this.value] || (this.checkDefault && item.default);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["HostBinding"])('class.switch-button'), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "true", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "model", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "value", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "items", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "class", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "name", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "multi", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Object)
+    ], SwitchButtonComponent.prototype, "disabled", void 0);
+    SwitchButtonComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'switch-button',
+            template: "\n        <label\n             [ngClass]=\"class\"\n             [class.active]=\"isSelected(item)\"\n             [class.disabled]=\"disabled || item.disabled\"\n             *ngFor=\"let item of items\">\n            <input\n                type=\"{{multi ? 'checkbox' : 'radio'}}\"\n                name=\"{{name}}\"\n                value=\"{{item.value}}\"\n                [checked]=\"isSelected(item)\"\n                [disabled]=\"disabled || item.disabled\"\n                (change)=\"select(item.value)\" />\n            <i class=\"fa fa-{{item.icon}}\" *ngIf=\"item.icon\"></i>\n            <span>{{item.text}}</span>\n        </label>\n    "
+        }), 
+        __metadata('design:paramtypes', [])
+    ], SwitchButtonComponent);
+    return SwitchButtonComponent;
+}());
+
+
+/***/ },
+
+/***/ 723:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tabs__ = __webpack_require__(724);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tab__ = __webpack_require__(379);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__tabs__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__tab__["a"]; });
+
+
+
+
+/***/ },
+
+/***/ 724:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__tab__ = __webpack_require__(379);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Tabs; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var Tabs = (function () {
+    function Tabs() {
+    }
+    Tabs.prototype.ngAfterContentInit = function () {
+        var activeTabs = this.tabs.filter(function (tab) { return tab.active; });
+        if (activeTabs.length === 0) {
+            this.selectTab(this.tabs.first);
+        }
+    };
+    Tabs.prototype.selectTab = function (tab) {
+        this.tabs.forEach(function (tab) { return tab.active = false; });
+        tab.active = true;
+        tab.select.emit(true);
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["ContentChildren"])(__WEBPACK_IMPORTED_MODULE_1__tab__["a" /* Tab */]), 
+        __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_0__angular_core__["QueryList"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_0__angular_core__["QueryList"]) === 'function' && _a) || Object)
+    ], Tabs.prototype, "tabs", void 0);
+    Tabs = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'tabs',
+            template: "\n        <ul class=\"nav nav-tabs\">\n            <li *ngFor=\"let tab of tabs\" (click)=\"selectTab(tab)\" [class.pinned]=\"tab.pinned\" [class.active]=\"tab.active\">\n                <a href=\"#\" (click)=\"$event.preventDefault()\">\n                    <i class=\"{{tab.icon}}\" *ngIf=\"tab.icon\"></i>\n                    {{tab.title}}\n                </a>\n            </li>\n        </ul>\n        <ng-content></ng-content>\n    "
+        }), 
+        __metadata('design:paramtypes', [])
+    ], Tabs);
+    return Tabs;
+    var _a;
+}());
+
+
+/***/ },
+
+/***/ 725:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return TreeIndentationComponent; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var TreeIndentationComponent = (function () {
+    function TreeIndentationComponent() {
+        this.expandable = false;
+        this.expanded = false;
+        this.toggle = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
+        this.levels = [];
+    }
+    Object.defineProperty(TreeIndentationComponent.prototype, "_levels", {
+        set: function (levels) {
+            this.levels = levels ? levels.split('') : [];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ;
+    TreeIndentationComponent.prototype.onClick = function ($event) {
+        if (this.expandable) {
+            $event.preventDefault();
+            $event.stopPropagation();
+            this.toggle.emit($event);
+        }
+    };
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], TreeIndentationComponent.prototype, "expandable", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
+        __metadata('design:type', Boolean)
+    ], TreeIndentationComponent.prototype, "expanded", void 0);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])('level'), 
+        __metadata('design:type', String), 
+        __metadata('design:paramtypes', [String])
+    ], TreeIndentationComponent.prototype, "_levels", null);
+    __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Output"])(), 
+        __metadata('design:type', Object)
+    ], TreeIndentationComponent.prototype, "toggle", void 0);
+    TreeIndentationComponent = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
+            selector: 'tree-indentation',
+            template: "\n        <i class=\"tree-indentation_indent\"\n            [class.has-sibling]=\"_level == '1'\"\n            [class.is-last]=\"isLast\"\n            *ngFor=\"let _level of levels; let isLast = last;\">\n        </i><i class=\"tree-indentation_icon fa\"></i>\n        <span class=\"tree-indentation_content\"><ng-content></ng-content></span>\n    ",
+            host: {
+                '[class.tree-indentation]': 'true',
+                '[class.is-expandable]': 'expandable',
+                '[class.is-expanded]': 'expanded',
+                '(click)': 'onClick($event)'
+            }
+        }), 
+        __metadata('design:paramtypes', [])
+    ], TreeIndentationComponent);
+    return TreeIndentationComponent;
+}());
+
+
+/***/ },
+
+/***/ 726:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(727);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__store__["a"]; });
+
+
+
+/***/ },
+
+/***/ 727:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngrx_core_compose__ = __webpack_require__(652);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ngrx_core_compose___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__ngrx_core_compose__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngrx_store__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngrx_store_logger__ = __webpack_require__(874);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngrx_store_logger___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_ngrx_store_logger__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__reducers__ = __webpack_require__(701);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_reference_reference_reducer__ = __webpack_require__(660);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_staff_staff_reducer__ = __webpack_require__(666);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_workflow_workflow_reducer__ = __webpack_require__(672);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return APP_STORE; });
+
+
+
+
+
+
+
+var logger = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_ngrx_store_logger__["storeLogger"])({
+    level: 'log',
+    collapsed: true,
+    duration: true,
+    timestamp: true
+});
+var APP_STORE = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__ngrx_store__["b" /* provideStore */])(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__ngrx_core_compose__["compose"])(logger, __WEBPACK_IMPORTED_MODULE_1__ngrx_store__["c" /* combineReducers */])({
+    environment: __WEBPACK_IMPORTED_MODULE_3__reducers__["a" /* environmentReducer */],
+    authed: __WEBPACK_IMPORTED_MODULE_3__reducers__["b" /* authedReducer */],
+    reference: __WEBPACK_IMPORTED_MODULE_4__modules_reference_reference_reducer__["a" /* referenceReducer */],
+    staff: __WEBPACK_IMPORTED_MODULE_5__modules_staff_staff_reducer__["a" /* staffReducer */],
+    workflow: __WEBPACK_IMPORTED_MODULE_6__modules_workflow_workflow_reducer__["a" /* workflowReducer */]
+}));
+
+
+/***/ },
+
+/***/ 75:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__utils_collection__ = __webpack_require__(54);
+/* harmony export (immutable) */ exports["e"] = createEmptyUrlTree;
+/* harmony export (immutable) */ exports["f"] = containsTree;
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return UrlTree; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return UrlSegmentGroup; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return UrlSegment; });
+/* unused harmony export equalSegments */
+/* unused harmony export equalPath */
+/* harmony export (immutable) */ exports["d"] = mapChildrenIntoArray;
+/* harmony export (binding) */ __webpack_require__.d(exports, "g", function() { return UrlSerializer; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "h", function() { return DefaultUrlSerializer; });
+/* unused harmony export serializePaths */
+/* unused harmony export encode */
+/* unused harmony export decode */
+/* unused harmony export serializePath */
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+
+
+function createEmptyUrlTree() {
+    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
+}
+function containsTree(container, containee, exact) {
+    if (exact) {
+        return equalSegmentGroups(container.root, containee.root);
+    }
+    else {
+        return containsSegmentGroup(container.root, containee.root);
+    }
+}
+function equalSegmentGroups(container, containee) {
+    if (!equalPath(container.segments, containee.segments))
+        return false;
+    if (container.numberOfChildren !== containee.numberOfChildren)
+        return false;
+    for (var c in containee.children) {
+        if (!container.children[c])
+            return false;
+        if (!equalSegmentGroups(container.children[c], containee.children[c]))
+            return false;
+    }
+    return true;
+}
+function containsSegmentGroup(container, containee) {
+    return containsSegmentGroupHelper(container, containee, containee.segments);
+}
+function containsSegmentGroupHelper(container, containee, containeePaths) {
+    if (container.segments.length > containeePaths.length) {
+        var current = container.segments.slice(0, containeePaths.length);
+        if (!equalPath(current, containeePaths))
+            return false;
+        if (containee.hasChildren())
+            return false;
+        return true;
+    }
+    else if (container.segments.length === containeePaths.length) {
+        if (!equalPath(container.segments, containeePaths))
+            return false;
+        for (var c in containee.children) {
+            if (!container.children[c])
+                return false;
+            if (!containsSegmentGroup(container.children[c], containee.children[c]))
+                return false;
+        }
+        return true;
+    }
+    else {
+        var current = containeePaths.slice(0, container.segments.length);
+        var next = containeePaths.slice(container.segments.length);
+        if (!equalPath(container.segments, current))
+            return false;
+        if (!container.children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]])
+            return false;
+        return containsSegmentGroupHelper(container.children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]], containee, next);
+    }
+}
+/**
+ * @whatItDoes Represents the parsed URL.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'template.html'})
+ * class MyComponent {
+ *   constructor(router: Router) {
+ *     const tree: UrlTree =
+ * router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
+ *     const f = tree.fragment; // return 'fragment'
+ *     const q = tree.queryParams; // returns {debug: 'true'}
+ *     const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+ *     const s: UrlSegment[] = g.segments; // returns 2 segments 'team' and '33'
+ *     g.children[PRIMARY_OUTLET].segments; // returns 2 segments 'user' and 'victor'
+ *     g.children['support'].segments; // return 1 segment 'help'
+ *   }
+ * }
+ * ```
+ *
+ * @description
+ *
+ * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+ * serialized tree.
+ * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
+ *
+ * @stable
+ */
+var UrlTree = (function () {
+    /**
+     * @internal
+     */
+    function UrlTree(
+        /**
+        * The root segment group of the URL tree.
+         */
+        root, 
+        /**
+         * The query params of the URL.
+         */
+        queryParams, 
+        /**
+         * The fragment of the URL.
+         */
+        fragment) {
+        this.root = root;
+        this.queryParams = queryParams;
+        this.fragment = fragment;
+    }
+    /**
+     * @docsNotRequired
+     */
+    UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
+    return UrlTree;
+}());
+/**
+ * @whatItDoes Represents the parsed URL segment.
+ *
+ * See {@link UrlTree} for more information.
+ *
+ * @stable
+ */
+var UrlSegmentGroup = (function () {
+    function UrlSegmentGroup(
+        /**
+         * The URL segments of this group. See {@link UrlSegment} for more information.
+         */
+        segments, 
+        /**
+         * The list of children of this group.
+         */
+        children) {
+        var _this = this;
+        this.segments = segments;
+        this.children = children;
+        /**
+         * The parent node in the url tree.
+         */
+        this.parent = null;
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_collection__["c" /* forEach */])(children, function (v, k) { return v.parent = _this; });
+    }
+    /**
+     * Return true if the segment has child segments
+     */
+    UrlSegmentGroup.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+    Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
+        /**
+         * Returns the number of child sements.
+         */
+        get: function () { return Object.keys(this.children).length; },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @docsNotRequired
+     */
+    UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
+    return UrlSegmentGroup;
+}());
+/**
+ * @whatItDoes Represents a single URL segment.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'template.html'})
+ * class MyComponent {
+ *   constructor(router: Router) {
+ *     const tree: UrlTree = router.parseUrl('/team;id=33');
+ *     const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+ *     const s: UrlSegment[] = g.segments;
+ *     s[0].path; // returns 'team'
+ *     s[0].parameters; // returns {id: 33}
+ *   }
+ * }
+ * ```
+ *
+ * @description
+ *
+ * A UrlSegment is a part of a URL between the two slashes. It contains a path and
+ * the matrix parameters associated with the segment.
+ *
+ * @stable
+ */
+var UrlSegment = (function () {
+    function UrlSegment(
+        /**
+         * The part part of a URL segment.
+         */
+        path, 
+        /**
+         * The matrix parameters associated with a segment.
+         */
+        parameters) {
+        this.path = path;
+        this.parameters = parameters;
+    }
+    /**
+     * @docsNotRequired
+     */
+    UrlSegment.prototype.toString = function () { return serializePath(this); };
+    return UrlSegment;
+}());
+function equalSegments(a, b) {
+    if (a.length !== b.length)
+        return false;
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i].path !== b[i].path)
+            return false;
+        if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_collection__["d" /* shallowEqual */])(a[i].parameters, b[i].parameters))
+            return false;
+    }
+    return true;
+}
+function equalPath(a, b) {
+    if (a.length !== b.length)
+        return false;
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i].path !== b[i].path)
+            return false;
+    }
+    return true;
+}
+function mapChildrenIntoArray(segment, fn) {
+    var res = [];
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_collection__["c" /* forEach */])(segment.children, function (child, childOutlet) {
+        if (childOutlet === __WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]) {
+            res = res.concat(fn(child, childOutlet));
+        }
+    });
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_collection__["c" /* forEach */])(segment.children, function (child, childOutlet) {
+        if (childOutlet !== __WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]) {
+            res = res.concat(fn(child, childOutlet));
+        }
+    });
+    return res;
+}
+/**
+ * @whatItDoes Serializes and deserializes a URL string into a URL tree.
+ *
+ * @description The url serialization strategy is customizable. You can
+ * make all URLs case insensitive by providing a custom UrlSerializer.
+ *
+ * See {@link DefaultUrlSerializer} for an example of a URL serializer.
+ *
+ * @stable
+ */
+var UrlSerializer = (function () {
+    function UrlSerializer() {
+    }
+    return UrlSerializer;
+}());
+/**
+ * @whatItDoes A default implementation of the {@link UrlSerializer}.
+ *
+ * @description
+ *
+ * Example URLs:
+ *
+ * ```
+ * /inbox/33(popup:compose)
+ * /inbox/33;open=true/messages/44
+ * ```
+ *
+ * DefaultUrlSerializer uses parentheses to serialize secondary segments (e.g., popup:compose), the
+ * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
+ * specify route specific parameters.
+ *
+ * @stable
+ */
+var DefaultUrlSerializer = (function () {
+    function DefaultUrlSerializer() {
+    }
+    /**
+     * Parse a url into a {@link UrlTree}.
+     */
+    DefaultUrlSerializer.prototype.parse = function (url) {
+        var p = new UrlParser(url);
+        return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
+    };
+    /**
+     * Converts a {@link UrlTree} into a url.
+     */
+    DefaultUrlSerializer.prototype.serialize = function (tree) {
+        var segment = "/" + serializeSegment(tree.root, true);
+        var query = serializeQueryParams(tree.queryParams);
+        var fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
+        return "" + segment + query + fragment;
+    };
+    return DefaultUrlSerializer;
+}());
+function serializePaths(segment) {
+    return segment.segments.map(function (p) { return serializePath(p); }).join('/');
+}
+function serializeSegment(segment, root) {
+    if (segment.hasChildren() && root) {
+        var primary = segment.children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]] ?
+            serializeSegment(segment.children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]], false) :
+            '';
+        var children_1 = [];
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__utils_collection__["c" /* forEach */])(segment.children, function (v, k) {
+            if (k !== __WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]) {
+                children_1.push(k + ":" + serializeSegment(v, false));
+            }
+        });
+        if (children_1.length > 0) {
+            return primary + "(" + children_1.join('//') + ")";
+        }
+        else {
+            return "" + primary;
+        }
+    }
+    else if (segment.hasChildren() && !root) {
+        var children = mapChildrenIntoArray(segment, function (v, k) {
+            if (k === __WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]) {
+                return [serializeSegment(segment.children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]], false)];
+            }
+            else {
+                return [(k + ":" + serializeSegment(v, false))];
+            }
+        });
+        return serializePaths(segment) + "/(" + children.join('//') + ")";
+    }
+    else {
+        return serializePaths(segment);
+    }
+}
+function encode(s) {
+    return encodeURIComponent(s);
+}
+function decode(s) {
+    return decodeURIComponent(s);
+}
+function serializePath(path) {
+    return "" + encode(path.path) + serializeParams(path.parameters);
+}
+function serializeParams(params) {
+    return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
+}
+function serializeQueryParams(params) {
+    var strs = pairs(params).map(function (p) { return (encode(p.first) + "=" + encode(p.second)); });
+    return strs.length > 0 ? "?" + strs.join("&") : '';
+}
+var Pair = (function () {
+    function Pair(first, second) {
+        this.first = first;
+        this.second = second;
+    }
+    return Pair;
+}());
+function pairs(obj) {
+    var res = [];
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            res.push(new Pair(prop, obj[prop]));
+        }
+    }
+    return res;
+}
+var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
+function matchSegments(str) {
+    SEGMENT_RE.lastIndex = 0;
+    var match = str.match(SEGMENT_RE);
+    return match ? match[0] : '';
+}
+var QUERY_PARAM_RE = /^[^=\?&#]+/;
+function matchQueryParams(str) {
+    QUERY_PARAM_RE.lastIndex = 0;
+    var match = str.match(SEGMENT_RE);
+    return match ? match[0] : '';
+}
+var QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
+function matchUrlQueryParamValue(str) {
+    QUERY_PARAM_VALUE_RE.lastIndex = 0;
+    var match = str.match(QUERY_PARAM_VALUE_RE);
+    return match ? match[0] : '';
+}
+var UrlParser = (function () {
+    function UrlParser(url) {
+        this.url = url;
+        this.remaining = url;
+    }
+    UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
+    UrlParser.prototype.capture = function (str) {
+        if (!this.remaining.startsWith(str)) {
+            throw new Error("Expected \"" + str + "\".");
+        }
+        this.remaining = this.remaining.substring(str.length);
+    };
+    UrlParser.prototype.parseRootSegment = function () {
+        if (this.remaining.startsWith('/')) {
+            this.capture('/');
+        }
+        if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
+            return new UrlSegmentGroup([], {});
+        }
+        else {
+            return new UrlSegmentGroup([], this.parseChildren());
+        }
+    };
+    UrlParser.prototype.parseChildren = function () {
+        if (this.remaining.length == 0) {
+            return {};
+        }
+        if (this.peekStartsWith('/')) {
+            this.capture('/');
+        }
+        var paths = [];
+        if (!this.peekStartsWith('(')) {
+            paths.push(this.parseSegments());
+        }
+        while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
+            this.capture('/');
+            paths.push(this.parseSegments());
+        }
+        var children = {};
+        if (this.peekStartsWith('/(')) {
+            this.capture('/');
+            children = this.parseParens(true);
+        }
+        var res = {};
+        if (this.peekStartsWith('(')) {
+            res = this.parseParens(false);
+        }
+        if (paths.length > 0 || Object.keys(children).length > 0) {
+            res[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]] = new UrlSegmentGroup(paths, children);
+        }
+        return res;
+    };
+    UrlParser.prototype.parseSegments = function () {
+        var path = matchSegments(this.remaining);
+        if (path === '' && this.peekStartsWith(';')) {
+            throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
+        }
+        this.capture(path);
+        var matrixParams = {};
+        if (this.peekStartsWith(';')) {
+            matrixParams = this.parseMatrixParams();
+        }
+        return new UrlSegment(decode(path), matrixParams);
+    };
+    UrlParser.prototype.parseQueryParams = function () {
+        var params = {};
+        if (this.peekStartsWith('?')) {
+            this.capture('?');
+            this.parseQueryParam(params);
+            while (this.remaining.length > 0 && this.peekStartsWith('&')) {
+                this.capture('&');
+                this.parseQueryParam(params);
+            }
+        }
+        return params;
+    };
+    UrlParser.prototype.parseFragment = function () {
+        if (this.peekStartsWith('#')) {
+            return decodeURI(this.remaining.substring(1));
+        }
+        else {
+            return null;
+        }
+    };
+    UrlParser.prototype.parseMatrixParams = function () {
+        var params = {};
+        while (this.remaining.length > 0 && this.peekStartsWith(';')) {
+            this.capture(';');
+            this.parseParam(params);
+        }
+        return params;
+    };
+    UrlParser.prototype.parseParam = function (params) {
+        var key = matchSegments(this.remaining);
+        if (!key) {
+            return;
+        }
+        this.capture(key);
+        var value = '';
+        if (this.peekStartsWith('=')) {
+            this.capture('=');
+            var valueMatch = matchSegments(this.remaining);
+            if (valueMatch) {
+                value = valueMatch;
+                this.capture(value);
+            }
+        }
+        params[decode(key)] = decode(value);
+    };
+    UrlParser.prototype.parseQueryParam = function (params) {
+        var key = matchQueryParams(this.remaining);
+        if (!key) {
+            return;
+        }
+        this.capture(key);
+        var value = '';
+        if (this.peekStartsWith('=')) {
+            this.capture('=');
+            var valueMatch = matchUrlQueryParamValue(this.remaining);
+            if (valueMatch) {
+                value = valueMatch;
+                this.capture(value);
+            }
+        }
+        params[decode(key)] = decode(value);
+    };
+    UrlParser.prototype.parseParens = function (allowPrimary) {
+        var segments = {};
+        this.capture('(');
+        while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+            var path = matchSegments(this.remaining);
+            var next = this.remaining[path.length];
+            // if is is not one of these characters, then the segment was unescaped
+            // or the group was not closed
+            if (next !== '/' && next !== ')' && next !== ';') {
+                throw new Error("Cannot parse url '" + this.url + "'");
+            }
+            var outletName = void 0;
+            if (path.indexOf(':') > -1) {
+                outletName = path.substr(0, path.indexOf(':'));
+                this.capture(outletName);
+                this.capture(':');
+            }
+            else if (allowPrimary) {
+                outletName = __WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */];
+            }
+            var children = this.parseChildren();
+            segments[outletName] = Object.keys(children).length === 1 ? children[__WEBPACK_IMPORTED_MODULE_0__shared__["a" /* PRIMARY_OUTLET */]] :
+                new UrlSegmentGroup([], children);
+            if (this.peekStartsWith('//')) {
+                this.capture('//');
+            }
+        }
+        this.capture(')');
+        return segments;
+    };
+    return UrlParser;
+}());
+//# sourceMappingURL=url_tree.js.map
+
+/***/ },
+
+/***/ 76:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__incoming_service__ = __webpack_require__(668);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__outgoing_service__ = __webpack_require__(670);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__office_memo_service__ = __webpack_require__(669);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__incoming_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "b", function() { return __WEBPACK_IMPORTED_MODULE_1__outgoing_service__["a"]; });
+/* harmony namespace reexport (by used) */ __webpack_require__.d(exports, "c", function() { return __WEBPACK_IMPORTED_MODULE_2__office_memo_service__["a"]; });
+
+
+
+
+
+/***/ },
+
+/***/ 874:
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var logger = console;
+var INIT_ACTION = "@ngrx/store/init";
+var repeat = function (str, times) { return (new Array(times + 1)).join(str); };
+var pad = function (num, maxLength) { return repeat("0", maxLength - num.toString().length) + num; };
+var formatTime = function (time) { return ("@ " + pad(time.getHours(), 2) + ":" + pad(time.getMinutes(), 2) + ":" + pad(time.getSeconds(), 2) + "." + pad(time.getMilliseconds(), 3)); };
+var timer = typeof performance !== "undefined" && typeof performance.now === "function" ? performance : Date;
+var getLogLevel = function (level, action, payload, type) {
+    switch (typeof level) {
+        case "object":
+            return typeof level[type] === "function" ? level[type].apply(level, payload) : level[type];
+        case "function":
+            return level(action);
+        default:
+            return level;
+    }
+};
+var printBuffer = function (options) { return function (logBuffer) {
+    var actionTransformer = options.actionTransformer, collapsed = options.collapsed, colors = options.colors, timestamp = options.timestamp, duration = options.duration, level = options.level;
+    logBuffer.forEach(function (logEntry, key) {
+        var started = logEntry.started, startedTime = logEntry.startedTime, action = logEntry.action, error = logEntry.error;
+        var prevState = logEntry.prevState.nextState ? logEntry.prevState.nextState : '(Empty)';
+        var took = logEntry.took, nextState = logEntry.nextState;
+        var nextEntry = logBuffer[key + 1];
+        if (nextEntry) {
+            nextState = nextEntry.prevState;
+            took = nextEntry.started - started;
+        }
+        var formattedAction = actionTransformer(action);
+        var isCollapsed = (typeof collapsed === "function") ? collapsed(function () { return nextState; }, action) : collapsed;
+        var formattedTime = formatTime(startedTime);
+        var titleCSS = colors.title ? "color: " + colors.title(formattedAction) + ";" : null;
+        var title = "action " + (timestamp ? formattedTime : "") + " " + formattedAction.type + " " + (duration ? "(in " + took.toFixed(2) + " ms)" : "");
+        try {
+            if (isCollapsed) {
+                if (colors.title)
+                    logger.groupCollapsed("%c " + title, titleCSS);
+                else
+                    logger.groupCollapsed(title);
+            }
+            else {
+                if (colors.title)
+                    logger.group("%c " + title, titleCSS);
+                else
+                    logger.group(title);
+            }
+        }
+        catch (e) {
+            logger.log(title);
+        }
+        var prevStateLevel = getLogLevel(level, formattedAction, [prevState], "prevState");
+        var actionLevel = getLogLevel(level, formattedAction, [formattedAction], "action");
+        var errorLevel = getLogLevel(level, formattedAction, [error, prevState], "error");
+        var nextStateLevel = getLogLevel(level, formattedAction, [nextState], "nextState");
+        if (prevStateLevel) {
+            if (colors.prevState)
+                logger[prevStateLevel]("%c prev state", "color: " + colors.prevState(prevState) + "; font-weight: bold", prevState);
+            else
+                logger[prevStateLevel]("prev state", prevState);
+        }
+        if (actionLevel) {
+            if (colors.action)
+                logger[actionLevel]("%c action", "color: " + colors.action(formattedAction) + "; font-weight: bold", formattedAction);
+            else
+                logger[actionLevel]("action", formattedAction);
+        }
+        if (error && errorLevel) {
+            if (colors.error)
+                logger[errorLevel]("%c error", "color: " + colors.error(error, prevState) + "; font-weight: bold", error);
+            else
+                logger[errorLevel]("error", error);
+        }
+        if (nextStateLevel) {
+            if (colors.nextState)
+                logger[nextStateLevel]("%c next state", "color: " + colors.nextState(nextState) + "; font-weight: bold", nextState);
+            else
+                logger[nextStateLevel]("next state", nextState);
+        }
+        try {
+            logger.groupEnd();
+        }
+        catch (e) {
+            logger.log("\u2014\u2014 log end \u2014\u2014");
+        }
+    });
+    logBuffer.length = 0;
+}; };
+exports.storeLogger = function (opts) {
+    if (opts === void 0) { opts = {}; }
+    return function (reducer) {
+        var log = {};
+        var ua = typeof window !== 'undefined' && window.navigator.userAgent ? window.navigator.userAgent : '';
+        var ms_ie = false;
+        //fix for action display in IE
+        var old_ie = ua.indexOf('MSIE ');
+        var new_ie = ua.indexOf('Trident/');
+        if ((old_ie > -1) || (new_ie > -1)) {
+            ms_ie = true;
+        }
+        var defaults = {
+            level: "log",
+            collapsed: false,
+            duration: true,
+            timestamp: true,
+            stateTransformer: function (state) { return state; },
+            actionTransformer: function (actn) { return actn; },
+            colors: ms_ie ? {} : {
+                title: function () { return "#000000"; },
+                prevState: function () { return "#9E9E9E"; },
+                action: function () { return "#03A9F4"; },
+                nextState: function () { return "#4CAF50"; },
+                error: function () { return "#F20404"; },
+            }
+        };
+        var options = Object.assign({}, defaults, opts);
+        var stateTransformer = options.stateTransformer;
+        var buffer = printBuffer(options);
+        return function (state, action) {
+            var preLog = {
+                started: timer.now(),
+                startedTime: new Date(),
+                prevState: stateTransformer(log),
+                action: action
+            };
+            var nextState = reducer(state, action);
+            var postLog = {
+                took: timer.now() - preLog.started,
+                nextState: stateTransformer(nextState)
+            };
+            log = Object.assign({}, preLog, postLog);
+            //ignore init action fired by store and devtools
+            if (action.type !== INIT_ACTION) {
+                buffer([log]);
+            }
+            return nextState;
+        };
+    };
+};
+
+
+/***/ },
+
+/***/ 876:
+/***/ function(module, exports) {
+
+module.exports = "<form class=\"form\" *ngIf=\"isReady\">\n    <header class=\"content-header\">\n        <div class=\"content-actions\">\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\n                <i class=\"fa fa-chevron-left\"></i>\n                <span>{{'close' | translate}}</span>\n            </button>\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSave\" [disabled]=\"!isValid\" (click)=\"save()\">\n                {{'save_close' | translate}}\n            </button>\n            <div *ngIf=\"canDelete\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\n                <div dropdown-toggle>\n                    <span class=\"btn\">...</span>\n                </div>\n                <div class=\"dropdown-menu\">\n                    <ul class=\"menu\">\n                        <li>\n                            <a class=\"menu-item\" (click)=\"delete()\">{{'delete' | translate}}</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <h1 class=\"header-title\">\n            {{title | translate}}\n        </h1>\n    </header>\n    <section class=\"content-body\">\n        <tabs>\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\n                <div class=\"fieldset\">\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'name' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"text\" name=\"name\" [(ngModel)]=\"model.name\" class=\"span8\" />\n                        </div>\n                    </div>\n                </div>\n            </tab>\n            <tab class=\"tab-pane\" tabTitle=\"{{'acl_tab_title' | translate}}\" icon=\"fa fa-share-alt\" *ngIf=\"false && !isNew\">\n                <acl [acl]=\"model.acl\"></acl>\n            </tab>\n        </tabs>\n    </section>\n    <footer class=\"content-footer\">\n        <div class=\"record-author\" *ngIf=\"model.authorId\">\n            <span>{{'author' | translate}}</span>\n            <!--<employee-input [ids]=\"[model.authorId]\"></employee-input>-->\n            <span>{{model.regDate}}</span>\n        </div>\n    </footer>\n</form>\n"
+
+/***/ },
+
+/***/ 877:
+/***/ function(module, exports) {
+
+module.exports = "<form class=\"form\" *ngIf=\"isReady\">\n    <header class=\"content-header\">\n        <div class=\"content-actions\">\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\n                <i class=\"fa fa-chevron-left\"></i>\n                <span>{{'close' | translate}}</span>\n            </button>\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSave\" [disabled]=\"!isValid\" (click)=\"save()\">\n                {{'save_close' | translate}}\n            </button>\n            <div *ngIf=\"canDelete\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\n                <div dropdown-toggle>\n                    <span class=\"btn\">...</span>\n                </div>\n                <div class=\"dropdown-menu\">\n                    <ul class=\"menu\">\n                        <li>\n                            <a class=\"menu-item\" (click)=\"delete()\">{{'delete' | translate}}</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <h1 class=\"header-title\">\n            {{title | translate}}\n        </h1>\n    </header>\n    <section class=\"content-body\">\n        <tabs>\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\n                <div class=\"fieldset\">\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'applied_reg_date' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"date\" name=\"appliedRegDate\" class=\"span2\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'doc_language' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"docLanguage\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'doc_type' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"docType\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'sender' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"sender\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'sender_applied_reg_date' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"date\" name=\"senderAppliedRegDate\" class=\"span2\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'summary' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <textarea type=\"text\" name=\"summary\" class=\"span8\">{{incoming.summary}}</textarea>\n                        </div>\n                    </div>\n                </div>\n                <attachments [editable]=\"isEditable\" [model]=\"incoming\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\n            </tab>\n            <tab class=\"tab-pane\" tabTitle=\"{{'acl_tab_title' | translate}}\" icon=\"fa fa-share-alt\" *ngIf=\"!isNew\">\n                <acl [acl]=\"incoming.acl\"></acl>\n            </tab>\n        </tabs>\n    </section>\n    <footer class=\"content-footer\">\n        <div class=\"record-author\" *ngIf=\"incoming.authorId\">\n            <span>{{'author' | translate}}</span>\n            <!--<employee-input [ids]=\"[incoming.authorId]\"></employee-input>-->\n            <span>{{incoming.regDate}}</span>\n        </div>\n    </footer>\n</form>\n"
+
+/***/ },
+
+/***/ 878:
+/***/ function(module, exports) {
+
+module.exports = "<form class=\"form\" *ngIf=\"isReady\">\n    <header class=\"content-header\">\n        <div class=\"content-actions\">\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\n                <i class=\"fa fa-chevron-left\"></i>\n                <span>{{'close' | translate}}</span>\n            </button>\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSave\" [disabled]=\"!isValid\" (click)=\"save()\">\n                {{'save_close' | translate}}\n            </button>\n            <div *ngIf=\"canDelete\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\n                <div dropdown-toggle>\n                    <span class=\"btn\">...</span>\n                </div>\n                <div class=\"dropdown-menu\">\n                    <ul class=\"menu\">\n                        <li>\n                            <a class=\"menu-item\" (click)=\"delete()\">{{'delete' | translate}}</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <h1 class=\"header-title\">\n            {{'office_memo' | translate}}\n        </h1>\n    </header>\n    <section class=\"content-body\">\n        <tabs>\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\n                <div class=\"fieldset\">\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'applied_reg_date' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"date\" name=\"appliedRegDate\" class=\"span2\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'doc_language' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"docLanguage\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'summary' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <textarea type=\"text\" name=\"summary\" class=\"span8\">{{officeMemo.summary}}</textarea>\n                        </div>\n                    </div>\n                </div>\n                <attachments [editable]=\"isEditable\" [model]=\"officeMemo\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\n            </tab>\n            <tab class=\"tab-pane\" tabTitle=\"{{'acl_tab_title' | translate}}\" icon=\"fa fa-share-alt\" *ngIf=\"!isNew\">\n                <acl [acl]=\"officeMemo.acl\"></acl>\n            </tab>\n        </tabs>\n    </section>\n    <footer class=\"content-footer\">\n        <div class=\"record-author\" *ngIf=\"officeMemo.authorId\">\n            <span>{{'author' | translate}}</span>\n            <!--<employee-input [ids]=\"[officeMemo.authorId]\"></employee-input>-->\n            <span>{{officeMemo.regDate}}</span>\n        </div>\n    </footer>\n</form>\n"
+
+/***/ },
+
+/***/ 879:
+/***/ function(module, exports) {
+
+module.exports = "<form class=\"form\" *ngIf=\"isReady\">\n    <header class=\"content-header\">\n        <div class=\"content-actions\">\n            <button class=\"btn-back\" type=\"button\" title=\"{{'close' | translate}}\" (click)=\"close($event)\">\n                <i class=\"fa fa-chevron-left\"></i>\n                <span>{{'close' | translate}}</span>\n            </button>\n            <button class=\"btn btn-primary\" type=\"button\" *ngIf=\"canSave\" [disabled]=\"!isValid\" (click)=\"save()\">\n                {{'save_close' | translate}}\n            </button>\n            <div *ngIf=\"canDelete\" dropdown class=\"buttons\" [tabIndex]=\"-1\">\n                <div dropdown-toggle>\n                    <span class=\"btn\">...</span>\n                </div>\n                <div class=\"dropdown-menu\">\n                    <ul class=\"menu\">\n                        <li>\n                            <a class=\"menu-item\" (click)=\"delete()\">{{'delete' | translate}}</a>\n                        </li>\n                    </ul>\n                </div>\n            </div>\n        </div>\n        <h1 class=\"header-title\">\n            {{'outgoing' | translate}}\n        </h1>\n    </header>\n    <section class=\"content-body\">\n        <tabs>\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\n                <div class=\"fieldset\">\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'applied_reg_date' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"date\" name=\"appliedRegDate\" class=\"span2\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'doc_language' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"docLanguage\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'doc_type' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"docType\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'sender' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"sender\" class=\"span8\">\n                                \n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'sender_applied_reg_date' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"date\" name=\"senderAppliedRegDate\" class=\"span2\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'summary' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <textarea type=\"text\" name=\"summary\" class=\"span8\">{{outgoing.summary}}</textarea>\n                        </div>\n                    </div>\n                </div>\n                <attachments [editable]=\"isEditable\" [model]=\"outgoing\" (upload)=\"addAttachment($event)\" (delete)=\"deleteAttachment($event)\"></attachments>\n            </tab>\n            <tab class=\"tab-pane\" tabTitle=\"{{'acl_tab_title' | translate}}\" icon=\"fa fa-share-alt\" *ngIf=\"!isNew\">\n                <acl [acl]=\"outgoing.acl\"></acl>\n            </tab>\n        </tabs>\n    </section>\n    <footer class=\"content-footer\">\n        <div class=\"record-author\" *ngIf=\"outgoing.authorId\">\n            <span>{{'author' | translate}}</span>\n            <!--<employee-input [ids]=\"[outgoing.authorId]\"></employee-input>-->\n            <span>{{outgoing.regDate}}</span>\n        </div>\n    </footer>\n</form>\n"
+
+/***/ },
+
+/***/ 880:
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"fieldset\">\n    <div class=\"form-group\">\n        <div class=\"control-label\">\n            {{'editors' | translate}}\n        </div>\n        <div class=\"controls\">\n            <div class=\"input-placeholder\">\n                <ul class=\"acl-list list-style-none\" *ngIf=\"acl.editors\">\n                    <li class=\"acl-list-item\" *ngFor=\"let editor of acl.editors | values\">{{editor}}</li>\n                </ul>\n            </div>\n        </div>\n    </div>\n    <div class=\"form-group\">\n        <div class=\"control-label\">\n            {{'readers' | translate}}\n        </div>\n        <div class=\"controls\">\n            <div class=\"input-placeholder\">\n                <ul class=\"acl-list list-style-none\" *ngIf=\"acl.readers\">\n                    <li class=\"acl-list-item\" *ngFor=\"let reader of acl.readers | values\">{{reader}}</li>\n                </ul>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+
+/***/ 881:
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"layout\" [class.hidden]=\"!isReady\">\n    <div class=\"content-overlay\" (mousedown)=\"hideNav($event)\" (touchstart)=\"hideNav($event)\"></div>\n    <navbar [user]=\"loggedUser\"></navbar>\n    <section class=\"container\">\n        <nav nb-nav class=\"aside side-nav\"></nav>\n        <main class=\"content\">\n            <router-outlet></router-outlet>\n        </main>\n    </section>\n</div>\n<div class=\"app-loading\" *ngIf=\"!isReady\">\n    <img class=\"brand-logo\" alt=\"logo\" src=\"{{'img/logo.png'}}\" />Loading...\n</div>\n<img-view></img-view>\n<notification></notification>\n"
+
+/***/ },
+
+/***/ 882:
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"attachments\">\n    <i class=\"fa fa-paperclip\" *ngIf=\"!editable\"></i>\n    <label class=\"btn btn-upload\" title=\"{{'attach_file' | translate}}\" tabindex=\"0\" *ngIf=\"editable\">\n        <i class=\"fa fa-paperclip\"></i>\n        <span>{{'attach_file' | translate}}</span>\n        <input type=\"file\" (change)=\"uploadFile($event.target.files)\" style=\"display:none;\"/>\n    </label>\n    <div class=\"attachment-list\" *ngIf=\"!isHidden\">\n        <div class=\"attachment-list__item\" *ngFor=\"let att of model.attachments\">\n            <div class=\"attachment\">\n                <a class=\"attachment__link\" title=\"{{att.realFileName}}\" href=\"{{model.url}}&attachment={{att.id}}\">\n                    {{att.realFileName}}\n                </a>\n                <img img-view *ngIf=\"isThumbnailSupported(att)\" [url]=\"att.base64 || model.url + '&attachment=' + att.id\" [src]=\"att.base64 || model.url + '&attachment=' + att.id + '&_thumbnail'\" />\n                <span class=\"attachment__size\">{{model.size}}</span>\n                <button type=\"button\" class=\"btn btn-sm btn-link btn-remove\" *ngIf=\"editable\" (click)=\"delete.emit(att)\">\n                    <i class=\"fa fa-times\"></i>\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+
+/***/ 883:
+/***/ function(module, exports) {
+
+module.exports = "<div class=\"content-header\" *ngIf=\"headerVisible\">\n    <h1 class=\"header-title\" *ngIf=\"titleVisible\">\n        {{title | translate}}<sup *ngIf=\"!loading && meta.count\">({{meta.count}})</sup>\n    </h1>\n    <div class=\"content-actions\" *ngIf=\"actionsVisible\">\n        <button class=\"btn\" type=\"button\" (click)=\"onAction(action, $event)\" *ngFor=\"let action of actions\">\n            <i class=\"action {{action.icon}}\" *ngIf=\"action.icon\"></i>\n            <span>{{action.caption | translate}}</span>\n        </button>\n        <button class=\"btn btn-refresh\" type=\"button\" (click)=\"onRefresh()\">\n            <i class=\"fa fa-refresh\"></i>\n        </button>\n        <pagination [totalPages]=\"meta.totalPages\" [page]=\"meta.page\" (change)=\"onGoToPage($event)\"></pagination>\n    </div>\n</div>\n<div class=\"content-body\">\n    <div class=\"view\">\n        <header class=\"entries-head\" *ngIf=\"captionsVisible\">\n            <div class=\"head-wrap\">\n                <label class=\"entry-select\" *ngIf=\"selectable\">\n                    <input type=\"checkbox\" class=\"all\" />\n                </label>\n                <div class=\"entry-captions\">\n                    <div [class]=\"column.className\" *ngFor=\"let column of columns\">\n                        <sort-control *ngIf=\"column.sort\" [direction]=\"column.sort\" [name]=\"column.value\" [active]=\"activeSort\" (sort)=\"onSort($event)\">\n                            {{column.name | translate}}\n                        </sort-control>\n                        <span *ngIf=\"!column.sort\">{{column.name | translate}}</span>\n                    </div>\n                </div>\n            </div>\n        </header>\n        <div class=\"entries\">\n            <div class=\"entry-wrap\" *ngFor=\"let model of list\">\n                <div class=\"entry\">\n                    <label class=\"entry-select\" *ngIf=\"selectable\">\n                        <input type=\"checkbox\" name=\"docid\" [value]=\"model.id\" />\n                    </label>\n                    <a class=\"entry-link\" [routerLink]=\"['/reference/form', model.kind + '-form']\" [queryParams]=\"{ docid: model.id }\">\n                        <div class=\"entry-fields\">\n                            <div [class]=\"column.className\" [ngSwitch]=\"column.type\" *ngFor=\"let column of columns\">\n                                <span *ngSwitchCase=\"'localizedName'\" class=\"localized-name\">\n                                    {{model | localizedName:column.value}}\n                                </span>\n                                <span *ngSwitchDefault>\n                                    {{model[column.value]}}\n                                </span>\n                            </div>\n                        </div>\n                    </a>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>\n"
+
+/***/ },
+
+/***/ 884:
+/***/ function(module, exports) {
+
+module.exports = "<ul>\n    <li [class.side-tree-collapsible]=\"entry.entries\" *ngFor=\"let entry of entries\">\n        <a class=\"nav-link\" [title]=\"entry.hint\" [routerLink]=\"[rootSegment, entry.customID]\" [class.active]=\"isActive([rootSegment, entry.customID])\">\n            <i class=\"fa fa-file-o\"></i>\n            <span>{{entry.caption | translate}}</span>\n        </a>\n        <nav nb-nav-tree [rootSegment]=\"rootSegment\" [entries]=\"entry.entries\" *ngIf=\"entry.entries\"></nav>\n    </li>\n</ul>\n"
+
+/***/ },
+
+/***/ 885:
+/***/ function(module, exports) {
+
+module.exports = "<section [attr.data-nav]=\"section.customID\" class=\"side-tree-collapsible\" *ngFor=\"let section of outline\">\n    <header data-role=\"side-tree-toggle\" *ngIf=\"section.caption\">\n        <i class=\"side-tree-toggle fa\"></i>\n        <span>{{section.caption | translate}}</span>\n    </header>\n    <nav nb-nav-tree [rootSegment]=\"rootSegment\" [entries]=\"section.entries\" *ngIf=\"section.entries\"></nav>\n</section>\n"
+
+/***/ },
+
+/***/ 886:
+/***/ function(module, exports) {
+
+module.exports = "<header class=\"header navbar\">\n    <div class=\"container\">\n        <div class=\"navbar-header\">\n            <button class=\"btn-side-nav-toggle\" type=\"button\" (click)=\"toggleNav()\"></button>\n            <img class=\"brand-logo\" alt=\"logo\" src=\"{{logoUrl}}\" />\n            <span class=\"brand-title\">{{headerTitle}}</span>\n        </div>\n        <nav class=\"navbar-nav navbar-right\">\n            <ul class=\"nav nav-inline navbar-right\">\n                <li dropdown [tabIndex]=\"-1\" class=\"dropdown\">\n                    <a dropdown-toggle href=\"#\" class=\"dropdown-toggle\">\n                        <i class=\"fa fa-user\"></i>\n                    </a>\n                    <ul class=\"dropdown-menu right\">\n                        <li *ngIf=\"user\">\n                            <a class=\"user-profile\" [routerLink]=\"['/user-profile']\">\n                                <i class=\"fa fa-user\"></i>\n                                <span>{{user.name}}</span>\n                            </a>\n                        </li>\n                        <li class=\"divider\" *ngIf=\"apps.length\"></li>\n                        <li *ngFor=\"let app of apps\">\n                            <a [routerLink]=\"[app.url]\" class=\"nav-item nav-link\">{{app.name}}</a>\n                        </li>\n                        <li class=\"divider\"></li>\n                        <li>\n                            <a class=\"ws\" href=\"{{workspaceUrl}}\">\n                                <i class=\"fa fa-th\"></i>\n                                <span>{{'workspace' | translate}}</span>\n                            </a>\n                        </li>\n                    </ul>\n                </li>\n            </ul>\n            <form class=\"navbar-form navbar-search\">\n                <input type=\"search\" class=\"q\" name=\"keyword\" value=\"{{keyWord}}\" placeholder=\"{{'search' | translate}}\" required autocomplete=\"off\" (keyup)=\"keyup$.next($event)\" (focus)=\"searchFocus()\" (blur)=\"searchBlur($event.target)\"\n                />\n                <button type=\"reset\" (click)=\"search('')\"><i class=\"fa fa-times\"></i></button>\n                <input type=\"submit\" value=\"search\" />\n            </form>\n        </nav>\n    </div>\n</header>\n"
+
+/***/ },
+
+/***/ 887:
+/***/ function(module, exports) {
+
+module.exports = "<form class=\"form form-userprofile\" autocomplete=\"off\" *ngIf=\"user\">\n    <header class=\"content-header\">\n        <div class=\"content-actions\">\n            <button class=\"btn-back\" type=\"button\" (click)=\"close($event)\">\n                <i class=\"fa fa-chevron-left\"></i>\n                <span>{{'close' | translate}}</span>\n            </button>\n            <button class=\"btn btn-primary\" type=\"button\" (click)=\"updateUserProfile()\">\n                {{'save_close' | translate}}\n            </button>\n        </div>\n        <h1 class=\"header-title\">\n            {{'employee' | translate}} / {{user.name}}\n        </h1>\n    </header>\n    <section class=\"content-body\">\n        <tabs>\n            <tab class=\"tab-pane\" tabTitle=\"{{'properties' | translate}}\">\n                <!--<fieldset class=\"fieldset fieldset-user-avatar\">\n                            <img class=\"user-avatar\" src=\"img/avatar.png\"/>\n                </fieldset>-->\n                <fieldset class=\"fieldset fieldset-user-fields\">\n                    <!-- <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'user_name' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <span class=\"input-placeholder\">\n                                {{user.name}}\n                            </span>\n                        </div>\n                    </div> -->\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'login_name' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <input type=\"text\" class=\"span4\" ngControl=\"login\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"!changePassword\">\n                        <div class=\"control-label\"></div>\n                        <div class=\"controls\">\n                            <span class=\"btn btn-xs\" (click)=\"toggleChangePassword()\">{{'change_password' | translate}}</span>\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\n                        <div class=\"control-label\">\n                            {{'password' | translate}}\n                        </div>\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd\">\n                            <input type=\"password\" name=\"pwd\" class=\"span4\" [class.invalid]=\"errors.pwd\" ngControl=\"pwd\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\n                        <div class=\"control-label\">\n                            {{'password_new' | translate}}\n                        </div>\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_new\">\n                            <input type=\"password\" name=\"pwd_new\" class=\"span4\" [class.invalid]=\"errors.pwd_new\" ngControl=\"pwd_new\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"changePassword\">\n                        <div class=\"control-label\">\n                            {{'password_confirm' | translate}}\n                        </div>\n                        <div class=\"controls\" [class.has-error]=\"errors.pwd_confirm\">\n                            <input type=\"password\" name=\"pwd_confirm\" class=\"span4\" [class.invalid]=\"errors.pwd_confirm\" ngControl=\"pwd_confirm\" />\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'email' | translate}}\n                        </div>\n                        <div class=\"controls\" [class.has-error]=\"errors.email\">\n                            <input type=\"email\" name=\"email\" class=\"span4\" [class.invalid]=\"errors.email\" ngControl=\"email\" />\n                            <div class=\"error-message\">{{errors.email | translate}}</div>\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"user.organization\">\n                        <div class=\"control-label\">\n                            {{'org_name' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <span class=\"input-placeholder\">\n                                {{user.organization}}\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"user.department\">\n                        <div class=\"control-label\">\n                            {{'department' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <span class=\"input-placeholder\">\n                                {{user.department}}\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"user.position\">\n                        <div class=\"control-label\">\n                            {{'position' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <span class=\"input-placeholder\">\n                                {{user.position}}\n                            </span>\n                        </div>\n                    </div>\n                    <div class=\"form-group\" *ngIf=\"user.roles\">\n                        <div class=\"control-label\">\n                            {{'roles' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <ul class=\"input-placeholder list-style-none\">\n                                <li *ngFor=\"let role of user.roles\">{{role.localizedName[language]}}</li>\n                            </ul>\n                        </div>\n                    </div>\n                </fieldset>\n            </tab>\n            <tab class=\"tab-pane\" tabTitle=\"{{'interface' | translate}}\">\n                <fieldset class=\"fieldset\">\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'limit_view' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"pagesize\" class=\"span2\" (change)=\"changePageSize($event)\">\n                                <option value=\"{{ps}}\" [selected]=\"ps == pageSize\" *ngFor=\"let ps of pageSizes\">{{ps}}</option>\n                            </select>\n                        </div>\n                    </div>\n                    <div class=\"form-group\">\n                        <div class=\"control-label\">\n                            {{'interface_lang' | translate}}\n                        </div>\n                        <div class=\"controls\">\n                            <select name=\"lang\" class=\"span2\" (change)=\"changeLang($event)\">\n                                <option value=\"{{langCode}}\" [selected]=\"langCode == language\" *ngFor=\"let langCode of languages | keys\">\n                                    {{languages[langCode]}}\n                                </option>\n                            </select>\n                        </div>\n                    </div>\n                    <!-- <div class=\"form-group\">\n                        <div class=\"control-label\"></div>\n                        <div class=\"controls\">\n                            <a href=\"javascript:void(0)\" data-toggle-theme=\"theme1\" class=\"input-placeholder\">\n                                {{'change_skin' | translate}}\n                            </a>\n                        </div>\n                    </div> -->\n                </fieldset>\n            </tab>\n        </tabs>\n    </section>\n</form>\n"
+
+/***/ },
+
+/***/ 896:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Observable_1 = __webpack_require__(3);
+var ScalarObservable_1 = __webpack_require__(512);
+var EmptyObservable_1 = __webpack_require__(163);
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @extends {Ignored}
+ * @hide true
+ */
+var ArrayLikeObservable = (function (_super) {
+    __extends(ArrayLikeObservable, _super);
+    function ArrayLikeObservable(arrayLike, scheduler) {
+        _super.call(this);
+        this.arrayLike = arrayLike;
+        this.scheduler = scheduler;
+        if (!scheduler && arrayLike.length === 1) {
+            this._isScalar = true;
+            this.value = arrayLike[0];
+        }
+    }
+    ArrayLikeObservable.create = function (arrayLike, scheduler) {
+        var length = arrayLike.length;
+        if (length === 0) {
+            return new EmptyObservable_1.EmptyObservable();
+        }
+        else if (length === 1) {
+            return new ScalarObservable_1.ScalarObservable(arrayLike[0], scheduler);
+        }
+        else {
+            return new ArrayLikeObservable(arrayLike, scheduler);
+        }
+    };
+    ArrayLikeObservable.dispatch = function (state) {
+        var arrayLike = state.arrayLike, index = state.index, length = state.length, subscriber = state.subscriber;
+        if (subscriber.closed) {
+            return;
+        }
+        if (index >= length) {
+            subscriber.complete();
+            return;
+        }
+        subscriber.next(arrayLike[index]);
+        state.index = index + 1;
+        this.schedule(state);
+    };
+    ArrayLikeObservable.prototype._subscribe = function (subscriber) {
+        var index = 0;
+        var _a = this, arrayLike = _a.arrayLike, scheduler = _a.scheduler;
+        var length = arrayLike.length;
+        if (scheduler) {
+            return scheduler.schedule(ArrayLikeObservable.dispatch, 0, {
+                arrayLike: arrayLike, index: index, length: length, subscriber: subscriber
+            });
+        }
+        else {
+            for (var i = 0; i < length && !subscriber.closed; i++) {
+                subscriber.next(arrayLike[i]);
+            }
+            subscriber.complete();
+        }
+    };
+    return ArrayLikeObservable;
+}(Observable_1.Observable));
+exports.ArrayLikeObservable = ArrayLikeObservable;
+//# sourceMappingURL=ArrayLikeObservable.js.map
+
+/***/ },
+
+/***/ 899:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var isArray_1 = __webpack_require__(99);
+var isPromise_1 = __webpack_require__(527);
+var PromiseObservable_1 = __webpack_require__(511);
+var IteratorObservable_1 = __webpack_require__(900);
+var ArrayObservable_1 = __webpack_require__(119);
+var ArrayLikeObservable_1 = __webpack_require__(896);
+var iterator_1 = __webpack_require__(250);
+var Observable_1 = __webpack_require__(3);
+var observeOn_1 = __webpack_require__(520);
+var observable_1 = __webpack_require__(251);
+var isArrayLike = (function (x) { return x && typeof x.length === 'number'; });
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @extends {Ignored}
+ * @hide true
+ */
+var FromObservable = (function (_super) {
+    __extends(FromObservable, _super);
+    function FromObservable(ish, scheduler) {
+        _super.call(this, null);
+        this.ish = ish;
+        this.scheduler = scheduler;
+    }
+    /**
+     * Creates an Observable from an Array, an array-like object, a Promise, an
+     * iterable object, or an Observable-like object.
+     *
+     * <span class="informal">Converts almost anything to an Observable.</span>
+     *
+     * <img src="./img/from.png" width="100%">
+     *
+     * Convert various other objects and data types into Observables. `from`
+     * converts a Promise or an array-like or an
+     * [iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable)
+     * object into an Observable that emits the items in that promise or array or
+     * iterable. A String, in this context, is treated as an array of characters.
+     * Observable-like objects (contains a function named with the ES2015 Symbol
+     * for Observable) can also be converted through this operator.
+     *
+     * @example <caption>Converts an array to an Observable</caption>
+     * var array = [10, 20, 30];
+     * var result = Rx.Observable.from(array);
+     * result.subscribe(x => console.log(x));
+     *
+     * @example <caption>Convert an infinite iterable (from a generator) to an Observable</caption>
+     * function* generateDoubles(seed) {
+     *   var i = seed;
+     *   while (true) {
+     *     yield i;
+     *     i = 2 * i; // double it
+     *   }
+     * }
+     *
+     * var iterator = generateDoubles(3);
+     * var result = Rx.Observable.from(iterator).take(10);
+     * result.subscribe(x => console.log(x));
+     *
+     * @see {@link create}
+     * @see {@link fromEvent}
+     * @see {@link fromEventPattern}
+     * @see {@link fromPromise}
+     *
+     * @param {ObservableInput<T>} ish A subscribable object, a Promise, an
+     * Observable-like, an Array, an iterable or an array-like object to be
+     * converted.
+     * @param {Scheduler} [scheduler] The scheduler on which to schedule the
+     * emissions of values.
+     * @return {Observable<T>} The Observable whose values are originally from the
+     * input object that was converted.
+     * @static true
+     * @name from
+     * @owner Observable
+     */
+    FromObservable.create = function (ish, scheduler) {
+        if (ish != null) {
+            if (typeof ish[observable_1.$$observable] === 'function') {
+                if (ish instanceof Observable_1.Observable && !scheduler) {
+                    return ish;
+                }
+                return new FromObservable(ish, scheduler);
+            }
+            else if (isArray_1.isArray(ish)) {
+                return new ArrayObservable_1.ArrayObservable(ish, scheduler);
+            }
+            else if (isPromise_1.isPromise(ish)) {
+                return new PromiseObservable_1.PromiseObservable(ish, scheduler);
+            }
+            else if (typeof ish[iterator_1.$$iterator] === 'function' || typeof ish === 'string') {
+                return new IteratorObservable_1.IteratorObservable(ish, scheduler);
+            }
+            else if (isArrayLike(ish)) {
+                return new ArrayLikeObservable_1.ArrayLikeObservable(ish, scheduler);
+            }
+        }
+        throw new TypeError((ish !== null && typeof ish || ish) + ' is not observable');
+    };
+    FromObservable.prototype._subscribe = function (subscriber) {
+        var ish = this.ish;
+        var scheduler = this.scheduler;
+        if (scheduler == null) {
+            return ish[observable_1.$$observable]().subscribe(subscriber);
+        }
+        else {
+            return ish[observable_1.$$observable]().subscribe(new observeOn_1.ObserveOnSubscriber(subscriber, scheduler, 0));
+        }
+    };
+    return FromObservable;
+}(Observable_1.Observable));
+exports.FromObservable = FromObservable;
+//# sourceMappingURL=FromObservable.js.map
+
+/***/ },
+
+/***/ 900:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var root_1 = __webpack_require__(60);
+var Observable_1 = __webpack_require__(3);
+var iterator_1 = __webpack_require__(250);
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @extends {Ignored}
+ * @hide true
+ */
+var IteratorObservable = (function (_super) {
+    __extends(IteratorObservable, _super);
+    function IteratorObservable(iterator, scheduler) {
+        _super.call(this);
+        this.scheduler = scheduler;
+        if (iterator == null) {
+            throw new Error('iterator cannot be null.');
+        }
+        this.iterator = getIterator(iterator);
+    }
+    IteratorObservable.create = function (iterator, scheduler) {
+        return new IteratorObservable(iterator, scheduler);
+    };
+    IteratorObservable.dispatch = function (state) {
+        var index = state.index, hasError = state.hasError, iterator = state.iterator, subscriber = state.subscriber;
+        if (hasError) {
+            subscriber.error(state.error);
+            return;
+        }
+        var result = iterator.next();
+        if (result.done) {
+            subscriber.complete();
+            return;
+        }
+        subscriber.next(result.value);
+        state.index = index + 1;
+        if (subscriber.closed) {
+            return;
+        }
+        this.schedule(state);
+    };
+    IteratorObservable.prototype._subscribe = function (subscriber) {
+        var index = 0;
+        var _a = this, iterator = _a.iterator, scheduler = _a.scheduler;
+        if (scheduler) {
+            return scheduler.schedule(IteratorObservable.dispatch, 0, {
+                index: index, iterator: iterator, subscriber: subscriber
+            });
+        }
+        else {
+            do {
+                var result = iterator.next();
+                if (result.done) {
+                    subscriber.complete();
+                    break;
+                }
+                else {
+                    subscriber.next(result.value);
+                }
+                if (subscriber.closed) {
+                    break;
+                }
+            } while (true);
+        }
+    };
+    return IteratorObservable;
+}(Observable_1.Observable));
+exports.IteratorObservable = IteratorObservable;
+var StringIterator = (function () {
+    function StringIterator(str, idx, len) {
+        if (idx === void 0) { idx = 0; }
+        if (len === void 0) { len = str.length; }
+        this.str = str;
+        this.idx = idx;
+        this.len = len;
+    }
+    StringIterator.prototype[iterator_1.$$iterator] = function () { return (this); };
+    StringIterator.prototype.next = function () {
+        return this.idx < this.len ? {
+            done: false,
+            value: this.str.charAt(this.idx++)
+        } : {
+            done: true,
+            value: undefined
+        };
+    };
+    return StringIterator;
+}());
+var ArrayIterator = (function () {
+    function ArrayIterator(arr, idx, len) {
+        if (idx === void 0) { idx = 0; }
+        if (len === void 0) { len = toLength(arr); }
+        this.arr = arr;
+        this.idx = idx;
+        this.len = len;
+    }
+    ArrayIterator.prototype[iterator_1.$$iterator] = function () { return this; };
+    ArrayIterator.prototype.next = function () {
+        return this.idx < this.len ? {
+            done: false,
+            value: this.arr[this.idx++]
+        } : {
+            done: true,
+            value: undefined
+        };
+    };
+    return ArrayIterator;
+}());
+function getIterator(obj) {
+    var i = obj[iterator_1.$$iterator];
+    if (!i && typeof obj === 'string') {
+        return new StringIterator(obj);
+    }
+    if (!i && obj.length !== undefined) {
+        return new ArrayIterator(obj);
+    }
+    if (!i) {
+        throw new TypeError('object is not iterable');
+    }
+    return obj[iterator_1.$$iterator]();
+}
+var maxSafeInteger = Math.pow(2, 53) - 1;
+function toLength(o) {
+    var len = +o.length;
+    if (isNaN(len)) {
+        return 0;
+    }
+    if (len === 0 || !numberIsFinite(len)) {
+        return len;
+    }
+    len = sign(len) * Math.floor(Math.abs(len));
+    if (len <= 0) {
+        return 0;
+    }
+    if (len > maxSafeInteger) {
+        return maxSafeInteger;
+    }
+    return len;
+}
+function numberIsFinite(value) {
+    return typeof value === 'number' && root_1.root.isFinite(value);
+}
+function sign(value) {
+    var valueAsNumber = +value;
+    if (valueAsNumber === 0) {
+        return valueAsNumber;
+    }
+    if (isNaN(valueAsNumber)) {
+        return valueAsNumber;
+    }
+    return valueAsNumber < 0 ? -1 : 1;
+}
+//# sourceMappingURL=IteratorObservable.js.map
+
+/***/ },
+
+/***/ 909:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subscriber_1 = __webpack_require__(14);
+var EmptyError_1 = __webpack_require__(253);
+/**
+ * Emits only the first value (or the first value that meets some condition)
+ * emitted by the source Observable.
+ *
+ * <span class="informal">Emits only the first value. Or emits only the first
+ * value that passes some test.</span>
+ *
+ * <img src="./img/first.png" width="100%">
+ *
+ * If called with no arguments, `first` emits the first value of the source
+ * Observable, then completes. If called with a `predicate` function, `first`
+ * emits the first value of the source that matches the specified condition. It
+ * may also take a `resultSelector` function to produce the output value from
+ * the input value, and a `defaultValue` to emit in case the source completes
+ * before it is able to emit a valid value. Throws an error if `defaultValue`
+ * was not provided and a matching element is not found.
+ *
+ * @example <caption>Emit only the first click that happens on the DOM</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var result = clicks.first();
+ * result.subscribe(x => console.log(x));
+ *
+ * @example <caption>Emits the first click that happens on a DIV</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var result = clicks.first(ev => ev.target.tagName === 'DIV');
+ * result.subscribe(x => console.log(x));
+ *
+ * @see {@link filter}
+ * @see {@link find}
+ * @see {@link take}
+ *
+ * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+ * callback if the Observable completes before any `next` notification was sent.
+ *
+ * @param {function(value: T, index: number, source: Observable<T>): boolean} [predicate]
+ * An optional function called with each item to test for condition matching.
+ * @param {function(value: T, index: number): R} [resultSelector] A function to
+ * produce the value on the output Observable based on the values
+ * and the indices of the source Observable. The arguments passed to this
+ * function are:
+ * - `value`: the value that was emitted on the source.
+ * - `index`: the "index" of the value from the source.
+ * @param {R} [defaultValue] The default value emitted in case no valid value
+ * was found on the source.
+ * @return {Observable<T|R>} an Observable of the first item that matches the
+ * condition.
+ * @method first
+ * @owner Observable
+ */
+function first(predicate, resultSelector, defaultValue) {
+    return this.lift(new FirstOperator(predicate, resultSelector, defaultValue, this));
+}
+exports.first = first;
+var FirstOperator = (function () {
+    function FirstOperator(predicate, resultSelector, defaultValue, source) {
+        this.predicate = predicate;
+        this.resultSelector = resultSelector;
+        this.defaultValue = defaultValue;
+        this.source = source;
+    }
+    FirstOperator.prototype.call = function (observer, source) {
+        return source._subscribe(new FirstSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+    };
+    return FirstOperator;
+}());
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var FirstSubscriber = (function (_super) {
+    __extends(FirstSubscriber, _super);
+    function FirstSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+        _super.call(this, destination);
+        this.predicate = predicate;
+        this.resultSelector = resultSelector;
+        this.defaultValue = defaultValue;
+        this.source = source;
+        this.index = 0;
+        this.hasCompleted = false;
+    }
+    FirstSubscriber.prototype._next = function (value) {
+        var index = this.index++;
+        if (this.predicate) {
+            this._tryPredicate(value, index);
+        }
+        else {
+            this._emit(value, index);
+        }
+    };
+    FirstSubscriber.prototype._tryPredicate = function (value, index) {
+        var result;
+        try {
+            result = this.predicate(value, index, this.source);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        if (result) {
+            this._emit(value, index);
+        }
+    };
+    FirstSubscriber.prototype._emit = function (value, index) {
+        if (this.resultSelector) {
+            this._tryResultSelector(value, index);
+            return;
+        }
+        this._emitFinal(value);
+    };
+    FirstSubscriber.prototype._tryResultSelector = function (value, index) {
+        var result;
+        try {
+            result = this.resultSelector(value, index);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        this._emitFinal(result);
+    };
+    FirstSubscriber.prototype._emitFinal = function (value) {
+        var destination = this.destination;
+        destination.next(value);
+        destination.complete();
+        this.hasCompleted = true;
+    };
+    FirstSubscriber.prototype._complete = function () {
+        var destination = this.destination;
+        if (!this.hasCompleted && typeof this.defaultValue !== 'undefined') {
+            destination.next(this.defaultValue);
+            destination.complete();
+        }
+        else if (!this.hasCompleted) {
+            destination.error(new EmptyError_1.EmptyError);
+        }
+    };
+    return FirstSubscriber;
+}(Subscriber_1.Subscriber));
+//# sourceMappingURL=first.js.map
+
+/***/ },
+
+/***/ 91:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__shared__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__url_tree__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_collection__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__utils_tree__ = __webpack_require__(221);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return RouterState; });
+/* harmony export (immutable) */ exports["f"] = createEmptyState;
+/* unused harmony export createEmptyStateSnapshot */
+/* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return ActivatedRoute; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "c", function() { return InheritedResolve; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "d", function() { return ActivatedRouteSnapshot; });
+/* harmony export (binding) */ __webpack_require__.d(exports, "e", function() { return RouterStateSnapshot; });
+/* harmony export (immutable) */ exports["g"] = advanceActivatedRoute;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+
+
+
+
+
+/**
+ * @whatItDoes Represents the state of the router.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'template.html'})
+ * class MyComponent {
+ *   constructor(router: Router) {
+ *     const state: RouterState = router.routerState;
+ *     const root: ActivatedRoute = state.root;
+ *     const child = root.firstChild;
+ *     const id: Observable<string> = child.params.map(p => p.id);
+ *     //...
+ *   }
+ * }
+ * ```
+ *
+ * @description
+ * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+ * segments,
+ * the extracted parameters, and the resolved data.
+ *
+ * See {@link ActivatedRoute} for more information.
+ *
+ * @stable
+ */
+var RouterState = (function (_super) {
+    __extends(RouterState, _super);
+    /**
+     * @internal
+     */
+    function RouterState(root, 
+        /**
+         * The current snapshot of the router state.
+         */
+        snapshot) {
+        _super.call(this, root);
+        this.snapshot = snapshot;
+        setRouterStateSnapshot(this, root);
+    }
+    RouterState.prototype.toString = function () { return this.snapshot.toString(); };
+    return RouterState;
+}(__WEBPACK_IMPORTED_MODULE_4__utils_tree__["a" /* Tree */]));
+function createEmptyState(urlTree, rootComponent) {
+    var snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+    var emptyUrl = new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"]([new __WEBPACK_IMPORTED_MODULE_2__url_tree__["c" /* UrlSegment */]('', {})]);
+    var emptyParams = new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"]({});
+    var emptyData = new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"]({});
+    var emptyQueryParams = new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"]({});
+    var fragment = new __WEBPACK_IMPORTED_MODULE_0_rxjs_BehaviorSubject__["BehaviorSubject"]('');
+    var activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, __WEBPACK_IMPORTED_MODULE_1__shared__["a" /* PRIMARY_OUTLET */], rootComponent, snapshot.root);
+    activated.snapshot = snapshot.root;
+    return new RouterState(new __WEBPACK_IMPORTED_MODULE_4__utils_tree__["b" /* TreeNode */](activated, []), snapshot);
+}
+function createEmptyStateSnapshot(urlTree, rootComponent) {
+    var emptyParams = {};
+    var emptyData = {};
+    var emptyQueryParams = {};
+    var fragment = '';
+    var activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, __WEBPACK_IMPORTED_MODULE_1__shared__["a" /* PRIMARY_OUTLET */], rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
+    return new RouterStateSnapshot('', new __WEBPACK_IMPORTED_MODULE_4__utils_tree__["b" /* TreeNode */](activated, []));
+}
+/**
+ * @whatItDoes Contains the information about a route associated with a component loaded in an
+ * outlet.
+ * ActivatedRoute can also be used to traverse the router state tree.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'./my-component.html'})
+ * class MyComponent {
+ *   constructor(route: ActivatedRoute) {
+ *     const id: Observable<string> = route.params.map(p => p.id);
+ *     const url: Observable<string> = route.url.map(s => s.join(''));
+ *     const user = route.data.map(d => d.user); //includes `data` and `resolve`
+ *   }
+ * }
+ * ```
+ *
+ * @stable
+ */
+var ActivatedRoute = (function () {
+    /**
+     * @internal
+     */
+    function ActivatedRoute(
+        /**
+         *  The URL segments matched by this route. The observable will emit a new value when
+         *  the array of segments changes.
+         */
+        url, 
+        /**
+         * The matrix parameters scoped to this route. The observable will emit a new value when
+         * the set of the parameters changes.
+         */
+        params, 
+        /**
+         * The query parameters shared by all the routes. The observable will emit a new value when
+         * the set of the parameters changes.
+         */
+        queryParams, 
+        /**
+         * The URL fragment shared by all the routes. The observable will emit a new value when
+         * the URL fragment changes.
+         */
+        fragment, 
+        /**
+         * The static and resolved data of this route. The observable will emit a new value when
+         * any of the resolvers returns a new object.
+         */
+        data, 
+        /**
+         * The outlet name of the route. It's a constant.
+         */
+        outlet, 
+        /**
+         * The component of the route. It's a constant.
+         */
+        component, // TODO: vsavkin: remove |string
+        futureSnapshot) {
+        this.url = url;
+        this.params = params;
+        this.queryParams = queryParams;
+        this.fragment = fragment;
+        this.data = data;
+        this.outlet = outlet;
+        this.component = component;
+        this._futureSnapshot = futureSnapshot;
+    }
+    Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+        /**
+         * The configuration used to match this route.
+         */
+        get: function () { return this._futureSnapshot.routeConfig; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "root", {
+        /**
+         * The root of the router state.
+         */
+        get: function () { return this._routerState.root; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "parent", {
+        /**
+         * The parent of this route in the router state tree.
+         */
+        get: function () { return this._routerState.parent(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
+        /**
+         * The first child of this route in the router state tree.
+         */
+        get: function () { return this._routerState.firstChild(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "children", {
+        /**
+         * The children of this route in the router state tree.
+         */
+        get: function () { return this._routerState.children(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
+        /**
+         * The path from the root of the router state tree to this route.
+         */
+        get: function () { return this._routerState.pathFromRoot(this); },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @docsNotRequired
+     */
+    ActivatedRoute.prototype.toString = function () {
+        return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
+    };
+    return ActivatedRoute;
+}());
+/**
+ * @internal
+ */
+var InheritedResolve = (function () {
+    function InheritedResolve(parent, current) {
+        this.parent = parent;
+        this.current = current;
+        /**
+         * @internal
+         */
+        this.resolvedData = {};
+    }
+    Object.defineProperty(InheritedResolve.prototype, "flattenedResolvedData", {
+        /**
+         * @internal
+         */
+        get: function () {
+            return this.parent ? __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_collection__["g" /* merge */])(this.parent.flattenedResolvedData, this.resolvedData) :
+                this.resolvedData;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InheritedResolve, "empty", {
+        get: function () { return new InheritedResolve(null, {}); },
+        enumerable: true,
+        configurable: true
+    });
+    return InheritedResolve;
+}());
+/**
+ * @whatItDoes Contains the information about a route associated with a component loaded in an
+ * outlet
+ * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
+ * state tree.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'./my-component.html'})
+ * class MyComponent {
+ *   constructor(route: ActivatedRoute) {
+ *     const id: string = route.snapshot.params.id;
+ *     const url: string = route.snapshot.url.join('');
+ *     const user = route.snapshot.data.user;
+ *   }
+ * }
+ * ```
+ *
+ * @stable
+ */
+var ActivatedRouteSnapshot = (function () {
+    /**
+     * @internal
+     */
+    function ActivatedRouteSnapshot(
+        /**
+         *  The URL segments matched by this route.
+         */
+        url, 
+        /**
+         * The matrix parameters scoped to this route.
+         */
+        params, 
+        /**
+         * The query parameters shared by all the routes.
+         */
+        queryParams, 
+        /**
+         * The URL fragment shared by all the routes.
+         */
+        fragment, 
+        /**
+         * The static and resolved data of this route.
+         */
+        data, 
+        /**
+         * The outlet name of the route.
+         */
+        outlet, 
+        /**
+         * The component of the route.
+         */
+        component, routeConfig, urlSegment, lastPathIndex, resolve) {
+        this.url = url;
+        this.params = params;
+        this.queryParams = queryParams;
+        this.fragment = fragment;
+        this.data = data;
+        this.outlet = outlet;
+        this.component = component;
+        this._routeConfig = routeConfig;
+        this._urlSegment = urlSegment;
+        this._lastPathIndex = lastPathIndex;
+        this._resolve = resolve;
+    }
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+        /**
+         * The configuration used to match this route.
+         */
+        get: function () { return this._routeConfig; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
+        /**
+         * The root of the router state.
+         */
+        get: function () { return this._routerState.root; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
+        /**
+         * The parent of this route in the router state tree.
+         */
+        get: function () { return this._routerState.parent(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
+        /**
+         * The first child of this route in the router state tree.
+         */
+        get: function () { return this._routerState.firstChild(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
+        /**
+         * The children of this route in the router state tree.
+         */
+        get: function () { return this._routerState.children(this); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
+        /**
+         * The path from the root of the router state tree to this route.
+         */
+        get: function () { return this._routerState.pathFromRoot(this); },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @docsNotRequired
+     */
+    ActivatedRouteSnapshot.prototype.toString = function () {
+        var url = this.url.map(function (s) { return s.toString(); }).join('/');
+        var matched = this._routeConfig ? this._routeConfig.path : '';
+        return "Route(url:'" + url + "', path:'" + matched + "')";
+    };
+    return ActivatedRouteSnapshot;
+}());
+/**
+ * @whatItDoes Represents the state of the router at a moment in time.
+ *
+ * @howToUse
+ *
+ * ```
+ * @Component({templateUrl:'template.html'})
+ * class MyComponent {
+ *   constructor(router: Router) {
+ *     const state: RouterState = router.routerState;
+ *     const snapshot: RouterStateSnapshot = state.snapshot;
+ *     const root: ActivatedRouteSnapshot = snapshot.root;
+ *     const child = root.firstChild;
+ *     const id: Observable<string> = child.params.map(p => p.id);
+ *     //...
+ *   }
+ * }
+ * ```
+ *
+ * @description
+ * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
+ * the "consumed" URL segments, the extracted parameters, and the resolved data.
+ *
+ * @stable
+ */
+var RouterStateSnapshot = (function (_super) {
+    __extends(RouterStateSnapshot, _super);
+    /**
+     * @internal
+     */
+    function RouterStateSnapshot(
+        /** The url from which this snapshot was created */
+        url, root) {
+        _super.call(this, root);
+        this.url = url;
+        setRouterStateSnapshot(this, root);
+    }
+    RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
+    return RouterStateSnapshot;
+}(__WEBPACK_IMPORTED_MODULE_4__utils_tree__["a" /* Tree */]));
+function setRouterStateSnapshot(state, node) {
+    node.value._routerState = state;
+    node.children.forEach(function (c) { return setRouterStateSnapshot(state, c); });
+}
+function serializeNode(node) {
+    var c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
+    return "" + node.value + c;
+}
+/**
+ * The expectation is that the activate route is created with the right set of parameters.
+ * So we push new values into the observables only when they are not the initial values.
+ * And we detect that by checking if the snapshot field is set.
+ */
+function advanceActivatedRoute(route) {
+    if (route.snapshot) {
+        if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_collection__["d" /* shallowEqual */])(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
+            route.queryParams.next(route._futureSnapshot.queryParams);
+        }
+        if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
+            route.fragment.next(route._futureSnapshot.fragment);
+        }
+        if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_collection__["d" /* shallowEqual */])(route.snapshot.params, route._futureSnapshot.params)) {
+            route.params.next(route._futureSnapshot.params);
+            route.data.next(route._futureSnapshot.data);
+        }
+        if (!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__utils_collection__["h" /* shallowEqualArrays */])(route.snapshot.url, route._futureSnapshot.url)) {
+            route.url.next(route._futureSnapshot.url);
+        }
+        route.snapshot = route._futureSnapshot;
+    }
+    else {
+        route.snapshot = route._futureSnapshot;
+        // this is for resolved data
+        route.data.next(route._futureSnapshot.data);
+    }
+}
+//# sourceMappingURL=router_state.js.map
+
+/***/ },
+
+/***/ 910:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subscriber_1 = __webpack_require__(14);
+var EmptyError_1 = __webpack_require__(253);
+/**
+ * Returns an Observable that emits only the last item emitted by the source Observable.
+ * It optionally takes a predicate function as a parameter, in which case, rather than emitting
+ * the last item from the source Observable, the resulting Observable will emit the last item
+ * from the source Observable that satisfies the predicate.
+ *
+ * <img src="./img/last.png" width="100%">
+ *
+ * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+ * callback if the Observable completes before any `next` notification was sent.
+ * @param {function} predicate - the condition any source emitted item has to satisfy.
+ * @return {Observable} an Observable that emits only the last item satisfying the given condition
+ * from the source, or an NoSuchElementException if no such items are emitted.
+ * @throws - Throws if no items that match the predicate are emitted by the source Observable.
+ * @method last
+ * @owner Observable
+ */
+function last(predicate, resultSelector, defaultValue) {
+    return this.lift(new LastOperator(predicate, resultSelector, defaultValue, this));
+}
+exports.last = last;
+var LastOperator = (function () {
+    function LastOperator(predicate, resultSelector, defaultValue, source) {
+        this.predicate = predicate;
+        this.resultSelector = resultSelector;
+        this.defaultValue = defaultValue;
+        this.source = source;
+    }
+    LastOperator.prototype.call = function (observer, source) {
+        return source._subscribe(new LastSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+    };
+    return LastOperator;
+}());
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var LastSubscriber = (function (_super) {
+    __extends(LastSubscriber, _super);
+    function LastSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+        _super.call(this, destination);
+        this.predicate = predicate;
+        this.resultSelector = resultSelector;
+        this.defaultValue = defaultValue;
+        this.source = source;
+        this.hasValue = false;
+        this.index = 0;
+        if (typeof defaultValue !== 'undefined') {
+            this.lastValue = defaultValue;
+            this.hasValue = true;
+        }
+    }
+    LastSubscriber.prototype._next = function (value) {
+        var index = this.index++;
+        if (this.predicate) {
+            this._tryPredicate(value, index);
+        }
+        else {
+            if (this.resultSelector) {
+                this._tryResultSelector(value, index);
+                return;
+            }
+            this.lastValue = value;
+            this.hasValue = true;
+        }
+    };
+    LastSubscriber.prototype._tryPredicate = function (value, index) {
+        var result;
+        try {
+            result = this.predicate(value, index, this.source);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        if (result) {
+            if (this.resultSelector) {
+                this._tryResultSelector(value, index);
+                return;
+            }
+            this.lastValue = value;
+            this.hasValue = true;
+        }
+    };
+    LastSubscriber.prototype._tryResultSelector = function (value, index) {
+        var result;
+        try {
+            result = this.resultSelector(value, index);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        this.lastValue = result;
+        this.hasValue = true;
+    };
+    LastSubscriber.prototype._complete = function () {
+        var destination = this.destination;
+        if (this.hasValue) {
+            destination.next(this.lastValue);
+            destination.complete();
+        }
+        else {
+            destination.error(new EmptyError_1.EmptyError);
+        }
+    };
+    return LastSubscriber;
+}(Subscriber_1.Subscriber));
+//# sourceMappingURL=last.js.map
+
+/***/ },
+
+/***/ 912:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subscriber_1 = __webpack_require__(14);
+/**
+ * Applies an accumulator function over the source Observable, and returns the
+ * accumulated result when the source completes, given an optional seed value.
+ *
+ * <span class="informal">Combines together all values emitted on the source,
+ * using an accumulator function that knows how to join a new source value into
+ * the accumulation from the past.</span>
+ *
+ * <img src="./img/reduce.png" width="100%">
+ *
+ * Like
+ * [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce),
+ * `reduce` applies an `accumulator` function against an accumulation and each
+ * value of the source Observable (from the past) to reduce it to a single
+ * value, emitted on the output Observable. Note that `reduce` will only emit
+ * one value, only when the source Observable completes. It is equivalent to
+ * applying operator {@link scan} followed by operator {@link last}.
+ *
+ * Returns an Observable that applies a specified `accumulator` function to each
+ * item emitted by the source Observable. If a `seed` value is specified, then
+ * that value will be used as the initial value for the accumulator. If no seed
+ * value is specified, the first item of the source is used as the seed.
+ *
+ * @example <caption>Count the number of click events that happened in 5 seconds</caption>
+ * var clicksInFiveSeconds = Rx.Observable.fromEvent(document, 'click')
+ *   .takeUntil(Rx.Observable.interval(5000));
+ * var ones = clicksInFiveSeconds.mapTo(1);
+ * var seed = 0;
+ * var count = ones.reduce((acc, one) => acc + one, seed);
+ * count.subscribe(x => console.log(x));
+ *
+ * @see {@link count}
+ * @see {@link expand}
+ * @see {@link mergeScan}
+ * @see {@link scan}
+ *
+ * @param {function(acc: R, value: T): R} accumulator The accumulator function
+ * called on each source value.
+ * @param {R} [seed] The initial accumulation value.
+ * @return {Observable<R>} An observable of the accumulated values.
+ * @return {Observable<R>} An Observable that emits a single value that is the
+ * result of accumulating the values emitted by the source Observable.
+ * @method reduce
+ * @owner Observable
+ */
+function reduce(accumulator, seed) {
+    return this.lift(new ReduceOperator(accumulator, seed));
+}
+exports.reduce = reduce;
+var ReduceOperator = (function () {
+    function ReduceOperator(accumulator, seed) {
+        this.accumulator = accumulator;
+        this.seed = seed;
+    }
+    ReduceOperator.prototype.call = function (subscriber, source) {
+        return source._subscribe(new ReduceSubscriber(subscriber, this.accumulator, this.seed));
+    };
+    return ReduceOperator;
+}());
+exports.ReduceOperator = ReduceOperator;
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var ReduceSubscriber = (function (_super) {
+    __extends(ReduceSubscriber, _super);
+    function ReduceSubscriber(destination, accumulator, seed) {
+        _super.call(this, destination);
+        this.accumulator = accumulator;
+        this.hasValue = false;
+        this.acc = seed;
+        this.accumulator = accumulator;
+        this.hasSeed = typeof seed !== 'undefined';
+    }
+    ReduceSubscriber.prototype._next = function (value) {
+        if (this.hasValue || (this.hasValue = this.hasSeed)) {
+            this._tryReduce(value);
+        }
+        else {
+            this.acc = value;
+            this.hasValue = true;
+        }
+    };
+    ReduceSubscriber.prototype._tryReduce = function (value) {
+        var result;
+        try {
+            result = this.accumulator(this.acc, value);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        this.acc = result;
+    };
+    ReduceSubscriber.prototype._complete = function () {
+        if (this.hasValue || this.hasSeed) {
+            this.destination.next(this.acc);
+        }
+        this.destination.complete();
+    };
+    return ReduceSubscriber;
+}(Subscriber_1.Subscriber));
+exports.ReduceSubscriber = ReduceSubscriber;
+//# sourceMappingURL=reduce.js.map
+
+/***/ },
+
+/***/ 936:
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(168);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(528);
+
+
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
+
+
+/***/ }
+
+},[936]);
+//# sourceMappingURL=app.js.map

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-import { AppService } from '../../../services';
+import { AppService, DataService } from '../../../services';
 import { Outgoing } from '../models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
@@ -10,8 +10,13 @@ export class WorkflowOutgoingService {
 
     constructor(
         private http: Http,
-        private appService: AppService
+        private appService: AppService,
+        private dataService: DataService
     ) { }
+
+    fetch(params: any, retry = 1) {
+        return this.dataService.get('/Workflow/p', params, retry);
+    }
 
     fetchOutgoings(queryParams = {}) {
         return this.http.get('/Workflow/p?id=outgoing-view', {

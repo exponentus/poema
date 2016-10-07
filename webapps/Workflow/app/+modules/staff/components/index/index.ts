@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
@@ -10,8 +10,6 @@ import { EnvironmentActions } from '../../../../actions';
 
 export class StaffIndexComponent {
 
-    private subs: any = [];
-
     constructor(
         private store: Store<any>,
         private environmentActions: EnvironmentActions
@@ -19,9 +17,5 @@ export class StaffIndexComponent {
 
     ngOnInit() {
         this.store.dispatch(this.environmentActions.setNavUrl('/staff', '/Staff/p?id=outline'));
-    }
-
-    ngOnDestroy() {
-        this.subs.map(s => s.unsubscribe());
     }
 }

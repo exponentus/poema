@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { AppService } from '../../services';
+import { AppService, DataService } from '../../services';
 import { Organization, Employee } from './models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
@@ -10,8 +10,13 @@ export class StaffService {
 
     constructor(
         private http: Http,
-        private appService: AppService
+        private appService: AppService,
+        private dataService: DataService
     ) { }
+
+    fetch(params: any, retry = 1) {
+        return this.dataService.get('/Staff/p', params, retry);
+    }
 
     fetchList(params: any) {
         return this.http.get('/Staff/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
