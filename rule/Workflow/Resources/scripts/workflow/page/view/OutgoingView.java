@@ -22,8 +22,14 @@ public class OutgoingView extends AbstractWorkflowView {
         addContent(getViewPage(new OutgoingDAO(session), formData));
 
         _ColumnOptions columnOptions = new _ColumnOptions();
-        columnOptions.add("name", "name", "localizedName", "both", "vw-name");
-        columnOptions.add("type", "type", "localizedName", "both", "");
+        columnOptions.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        columnOptions.add("", "attachment", "icon", "", "vw-icon");
+        columnOptions.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
+        columnOptions.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
+        columnOptions.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
+        columnOptions.add("sender", "sender", "localizedName", "both", "vw-sender");
+        columnOptions.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
+        columnOptions.add("summary", "summary", "text", "", "vw-summary");
 
         addContent("columnOptions", columnOptions);
     }
