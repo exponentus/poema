@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 export class NavTreeComponent {
     @Input() entries = [];
     @Input() rootSegment = '/';
+    @Input() expandedEntryIds = [];
+    @Output() toggle = new EventEmitter();
 
     constructor(
         private router: Router
@@ -16,5 +18,13 @@ export class NavTreeComponent {
 
     isActive(instruction: any[]): boolean {
         return this.router.isActive(this.router.createUrlTree(instruction), true);
+    }
+
+    toggleCollapsible(id, $event) {
+        if ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+        }
+        this.toggle.emit(id);
     }
 }

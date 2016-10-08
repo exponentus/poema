@@ -1,0 +1,89 @@
+<div class="top-entry" [class.is-last]="isLast" *ngFor="let m of children; let isLast = last">
+    <div class="entry-wrap" *ngIf="m">
+        <div class="entry" *ngIf="m.kind == 'task'">
+            <label class="entry-select" *ngIf="selectable">
+                <input type="checkbox" name="task-id" value="{{m.id}}" />
+            </label>
+            <a class="entry-link" [routerLink]="['/task', m.id]">
+                <div class="entry-fields">
+                    <div class="task-list__reg-number">
+                        <tree-indentation
+                            [expandable]="m.hasSubtasks || m.hasRequests"
+                            [expanded]="expandedIds.indexOf(m.id) != -1"
+                            [level]="level + (isLast ? '0' : '1')"
+                            (toggle)="toggleExpanded(m.id)">
+                            {{m.regNumber}}
+                        </tree-indentation>
+                    </div>
+                    <div class="task-list__title">
+                        <span>{{m.title}}</span>
+                    </div>
+                    <div class="vw-icon">
+                        <i class="fa fa-paperclip" *ngIf="m.hasAttachments"></i>
+                    </div>
+                    <div class="task-list__status">
+                        <span class="status-{{m.status | text:'L'}}">{{m.status | text:'L' | translate}}</span>
+                    </div>
+                    <div class="task-list__priority">
+                        <span class="priority-{{m.priority | text:'L'}}">{{m.priority | text:'L' | translate}}</span>
+                    </div>
+                    <div class="task-list__assignee">
+                        <employee-input [ids]="[m.assigneeUserId]"></employee-input>
+                    </div>
+                    <div class="task-list__start_date">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>
+                    <div class="task-list__due_date">
+                        <span>{{m.dueDate | dateFmt:'DD.MM.YYYY'}}</span>
+                        <span>{{m.startDate | dateDuration:m.dueDate}}</span>
+                    </div>
+                    <div class="task-list__tags">
+                        <tags-input [ids]="m.tagIds"></tags-input>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="entry" *ngIf="m.kind == 'request'">
+            <label class="entry-select" *ngIf="selectable">
+                <input type="checkbox" value="{{m.id}}" />
+            </label>
+            <a class="entry-link" [routerLink]="['/requests', m.id]">
+                <div class="entry-fields">
+                    <div class="task-list__request_type">
+                        <tree-indentation [level]="level + (isLast ? '0' : '1')">
+                            {{m.requestType | localizedName}}
+                            <span class="request__time">{{m.regDate}}</span>
+                            <span class="request__comment">{{m.comment}}</span>
+                            <span class="request__attachments" *ngIf="m.attachments && m.attachments.length">
+                                <i class="fa fa-paperclip"></i>
+                            </span>
+                            <span class="accepted" *ngIf="m.resolution == 'ACCEPTED'">
+                                <i class="fa fa-check"></i>
+                                {{'accepted' | translate}}
+                            </span>
+                            <span class="declined" *ngIf="m.resolution == 'DECLINED'">
+                                <i class="fa fa-times"></i>
+                                {{'declined' | translate}}
+                            </span>
+                            <span class="request__resolution_time">{{m.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
+                        </tree-indentation>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="entry" *ngIf="m.kind == 'comment'">
+            <label class="entry-select">
+                <input type="checkbox" value="{{m.id}}" />
+            </label>
+            <div class="entry-link">
+                <div class="entry-fields">
+                    <div class="task-list__comment_comment">{{m.comment}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <task-tree *ngIf="m.children"
+        [level]="level + (isLast ? '0' : '1')"
+        [rootId]="m.id"
+        [children]="m.children"
+        [selectable]="selectable">
+    </task-tree>
+</div>

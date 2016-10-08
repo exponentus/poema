@@ -8,8 +8,6 @@ import {
 } from '../reducers';
 
 import { referenceReducer as reference } from '../+modules/reference/reference.reducer';
-import { staffReducer as staff } from '../+modules/staff/staff.reducer';
-import { workflowReducer as workflow } from '../+modules/workflow/workflow.reducer';
 
 const logger = storeLogger({
     level: 'log', // 'console' | 'warn' | 'error' | 'info'; default log
@@ -22,8 +20,6 @@ export const APP_STORE = provideStore(
     compose(logger, combineReducers)({
         environment,
         authed,
-        reference,
-        staff,
-        workflow
+        reference
     })
 );

@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 
-import { AppService, DataService } from '../../services';
+import { DataService } from '../../services';
 import { Tag, TaskType, RequestType } from './models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
 @Injectable()
 export class ReferenceService {
 
     constructor(
-        private http: Http,
-        private appService: AppService,
         private dataService: DataService
     ) { }
 
@@ -19,51 +15,33 @@ export class ReferenceService {
     }
 
     fetchOne(params: any) {
-        return this.http.get('/Reference/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
-            .retry(3)
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                return data;
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch(params);
     }
 
     fetchTags() {
-        return this.http.get('/Reference/p?id=tags', { headers: xhrHeaders() })
-            .retry(3)
-            .map(response => response.json().objects[0])
-            .map(data => {
-                return {
-                    tags: <Tag[]>data.list,
-                    meta: data.meta
-                };
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch({ id: 'tags' }, 2).map(payload => {
+            return {
+                tags: <Tag[]>payload.list,
+                meta: payload.meta
+            }
+        });
     }
 
     fetchTaskTypes() {
-        return this.http.get('/Reference/p?id=tasktypes', { headers: xhrHeaders() })
-            .retry(3)
-            .map(response => response.json().objects[0])
-            .map(data => {
-                return {
-                    taskTypes: <TaskType[]>data.list,
-                    meta: data.meta
-                };
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch({ id: 'tasktypes' }, 2).map(payload => {
+            return {
+                taskTypes: <TaskType[]>payload.list,
+                meta: payload.meta
+            }
+        });
     }
 
     fetchRequestTypes() {
-        return this.http.get('/Reference/p?id=request-types', { headers: xhrHeaders() })
-            .retry(3)
-            .map(response => response.json().objects[0])
-            .map(data => {
-                return {
-                    requestTypes: <RequestType[]>data.list,
-                    meta: data.meta
-                };
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch({ id: 'request-types' }, 2).map(payload => {
+            return {
+                requestTypes: <RequestType[]>payload.list,
+                meta: payload.meta
+            }
+        });
     }
 }

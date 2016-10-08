@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Organization, Employee } from './models';
+import { Organization, Employee } from '../models';
 
 @Injectable()
 export class StaffActions {
 
     static FETCH_ORGANIZATIONS = 'FETCH_ORGANIZATIONS';
     static FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
+
 
     //===================================
     //  FETCH

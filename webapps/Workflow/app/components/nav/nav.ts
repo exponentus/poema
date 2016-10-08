@@ -1,10 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 
-import { IEnvironmentState } from '../../reducers';
-import { xhrHeaders } from '../../utils/utils';
+import { DataService } from '../../services';
 
 @Component({
     selector: '[nb-nav]',
@@ -12,31 +9,30 @@ import { xhrHeaders } from '../../utils/utils';
 })
 
 export class NavComponent {
+    @Input() rootSegment: string = '/';
+    @Input() outlineUrl: string = 'p?id=outline';
+
+    private storageKey;
+    private expandedEntryIds = [];
     private outline = [];
     private loading = true;
-    private rootSegment = '/';
-    private sub: any;
 
     constructor(
         private router: Router,
-        private http: Http,
-        private store: Store<any>
-    ) {
-        this.sub = store.select('environment').subscribe((state: IEnvironmentState) => {
-            this.rootSegment = state.rootSegment;
-            this.loadNav(state.navUrl);
-        });
+        private dataService: DataService
+    ) { }
+
+    ngOnInit() {
+        this.storageKey = this.rootSegment.replace(/\//g, '') + '-side-tree-toggle';
+        let oreo = localStorage.getItem(this.storageKey);
+        this.expandedEntryIds = oreo ? oreo.split(',') : [];
+
+        this.loadNav(this.outlineUrl);
     }
 
-    ngOnDestroy() {
-        this.sub.unsubscribe();
-    }
-
-    loadNav(navUrl: string) {
+    loadNav(url: string) {
         this.loading = true;
-        this.http.get(navUrl, { headers: xhrHeaders() })
-            .retry(3)
-            .map(response => response.json())
+        this.dataService.get(url, {}, 2)
             .map(({objects}) => objects.filter(it => it.outlines && it.entries))
             .subscribe(outline => {
                 this.loading = false;
@@ -46,5 +42,16 @@ export class NavComponent {
 
     isActive(instruction: any[]): boolean {
         return this.router.isActive(this.router.createUrlTree(instruction), true);
+    }
+
+    toggleCollapsible(id) {
+        let index = this.expandedEntryIds.indexOf(id);
+        if (index > -1) {
+            this.expandedEntryIds.splice(index, 1);
+        } else {
+            this.expandedEntryIds.push(id);
+        }
+
+        localStorage.setItem(this.storageKey, this.expandedEntryIds.join(','));
     }
 }

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 
 import { WorkflowRoutingModule } from './workflow.routing';
-import { WorkflowIndexComponent } from './components/index/index';
+import { WorkflowContainerComponent } from './components/container';
 import { IncomingViewComponent } from './components/incoming/incoming-view';
 import { IncomingFormComponent } from './components/incoming/incoming-form';
 import { OutgoingViewComponent } from './components/outgoing/outgoing-view';
@@ -19,7 +19,7 @@ import {
 
 @NgModule({
     declarations: [
-        WorkflowIndexComponent,
+        WorkflowContainerComponent,
         IncomingViewComponent,
         IncomingFormComponent,
         OutgoingViewComponent,

@@ -1,6 +1,6 @@
-import { Organization, Employee } from './models';
+import { Organization, Employee } from '../models';
 
-import { StaffActions } from './staff.actions';
+import { StaffActions } from '../actions';
 
 export interface IStaffState {
     organizations: Organization[],

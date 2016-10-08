@@ -10,8 +10,8 @@ export class EnvironmentActions {
     static TOGGLE_SEARCH = 'TOGGLE_SEARCH';
     static HIDE_NAV = 'HIDE_NAV';
     static SET_REDIRECT_URL = 'SET_REDIRECT_URL';
-    static SET_NAV_URL = 'NAV_URL';
     static SET_APPS = 'SET_APPS';
+    static SET_CURRENT_MODULE = 'SET_CURRENT_MODULE';
 
     search(keyWord): Action {
         return {
@@ -58,10 +58,10 @@ export class EnvironmentActions {
         };
     }
 
-    setNavUrl(rootSegment: string, navUrl: any): Action {
+    setCurrentModule(moduleId: string): Action {
         return {
-            type: EnvironmentActions.SET_NAV_URL,
-            payload: { rootSegment, navUrl }
+            type: EnvironmentActions.SET_CURRENT_MODULE,
+            payload: { moduleId }
         };
     }
 }

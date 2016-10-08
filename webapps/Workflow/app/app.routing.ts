@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './auth.guard';
+
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { Error404 } from './components/404';
@@ -11,6 +12,7 @@ import { WorkspaceModule } from './+modules/workspace/ws.module';
 import { ReferenceModule } from './+modules/reference/reference.module';
 import { StaffModule } from './+modules/staff/staff.module';
 import { WorkflowModule } from './+modules/workflow/workflow.module';
+// import { ProjectsModule } from './+modules/projects/projects.module';
 
 const routes: Routes = [
     { path: '', redirectTo: 'workspace', pathMatch: 'full' },
@@ -31,7 +33,8 @@ const routes: Routes = [
         WorkspaceModule,
         ReferenceModule,
         StaffModule,
-        WorkflowModule
+        WorkflowModule,
+        // ProjectsModule
     ]
 })
 

@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 })
 
 export class ListPageComponent {
-
     @Input() title: string = '';
     @Input() selectable: boolean = true; // show checkboxes
     @Input() headerVisible: boolean = true;

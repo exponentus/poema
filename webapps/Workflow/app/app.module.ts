@@ -11,18 +11,9 @@ import { SharedModule } from './shared.module';
 //
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
-import { NavComponent } from './components/nav/nav';
-import { NavTreeComponent } from './components/nav/nav-tree';
 import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import { Error404 } from './components/404';
-import {
-    SelectionComponent,
-    OrganizationInputComponent,
-    EmployeeInputComponent,
-    TagsInputComponent,
-    ErrorMessageComponent
-} from './components/shared';
 
 import { AppRoutingModule } from './app.routing';
 import { APP_STORE } from './store';
@@ -36,14 +27,9 @@ import { AuthGuard } from './auth.guard';
     declarations: [
         AppComponent,
         NavbarComponent,
-        NavComponent,
-        NavTreeComponent,
         UserProfileComponent,
         LoginComponent,
-        Error404,
-        ErrorMessageComponent,
-        SelectionComponent,
-        OrganizationInputComponent, EmployeeInputComponent, TagsInputComponent
+        Error404
     ],
     imports: [
         BrowserModule,

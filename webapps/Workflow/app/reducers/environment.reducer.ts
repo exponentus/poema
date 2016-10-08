@@ -6,8 +6,7 @@ export interface IEnvironmentState {
     isSearchOpen: boolean,
     redirectUrl: any,
     apps: any[],
-    rootSegment: string,
-    navUrl: string,
+    moduleId: string,
     keyWord: string
 };
 
@@ -20,10 +19,10 @@ const initialState: IEnvironmentState = {
         { name: 'Reference', url: '/reference' },
         { name: 'Staff', url: '/staff' },
         { name: 'Workflow', url: '/workflow' },
+        // { name: 'Projects', url: '/' },
         { name: 'WorkSpace', url: '/workspace' }
     ],
-    rootSegment: '',
-    navUrl: 'p?id=outline',
+    moduleId: '',
     keyWord: ''
 };
 
@@ -58,11 +57,8 @@ export const environmentReducer = (state = initialState, {type, payload}): IEnvi
             return Object.assign({}, state, {
                 apps: payload.apps
             });
-        case EnvironmentActions.SET_NAV_URL:
-            return Object.assign({}, state, {
-                rootSegment: payload.rootSegment,
-                navUrl: payload.navUrl
-            });
+        case EnvironmentActions.SET_CURRENT_MODULE:
+            return Object.assign({}, state, payload.moduleId);
         default:
             return state;
     }

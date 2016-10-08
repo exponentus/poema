@@ -6,16 +6,25 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TranslateModule } from 'ng2-translate/ng2-translate';
 
 import { SharedModule as _SharedModule } from './shared/shared.module';
+
+import { NavComponent } from './components/nav/nav';
+import { NavTreeComponent } from './components/nav/nav-tree';
+import { SelectionComponent } from './components/selection/selection';
 import { AclComponent } from './components/acl/acl';
 import { AttachmentsComponent } from './components/attachment/attachments';
 import { ListPageComponent } from './components/list-page/list-page';
+import { ErrorMessageComponent } from './components/shared';
 import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe } from './pipes';
 
 @NgModule({
     declarations: [
+        NavComponent,
+        NavTreeComponent,
+        SelectionComponent,
         AclComponent,
         AttachmentsComponent,
         ListPageComponent,
+        ErrorMessageComponent,
         DateFormatPipe,
         DateDurationPipe,
         TextTransformPipe,
@@ -29,9 +38,13 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         ReactiveFormsModule,
         FormsModule,
         TranslateModule,
+        NavComponent,
+        NavTreeComponent,
+        SelectionComponent,
         AclComponent,
         AttachmentsComponent,
         ListPageComponent,
+        ErrorMessageComponent,
         _SharedModule,
         DateFormatPipe,
         DateDurationPipe,

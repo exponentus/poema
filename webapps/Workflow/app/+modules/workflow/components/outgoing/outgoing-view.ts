@@ -34,7 +34,6 @@ import { parseResponseObjects } from '../../../../utils/utils';
 })
 
 export class OutgoingViewComponent {
-
     @Input() embedded: boolean = false;
     @Input() selectable: boolean = true;
     @Input() headerVisible: boolean = true;

@@ -1,16 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
 
-import { AppService, DataService } from '../../services';
+import { DataService } from '../../services';
 import { Organization, Employee } from './models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects } from '../../utils/utils';
 
 @Injectable()
 export class StaffService {
 
     constructor(
-        private http: Http,
-        private appService: AppService,
         private dataService: DataService
     ) { }
 
@@ -18,43 +14,21 @@ export class StaffService {
         return this.dataService.get('/Staff/p', params, retry);
     }
 
-    fetchList(params: any) {
-        return this.http.get('/Staff/p', { headers: xhrHeaders(), search: createURLSearchParams(params) })
-            .retry(3)
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                return {
-                    data: data,
-                    columnOptions: response.json().data.columnOptions ? response.json().data.columnOptions.columns : null
-                };
-            })
-            .catch(error => this.appService.handleError(error));
-    }
-
     fetchOrganizations(queryParams = {}) {
-        return this.http.get('/Staff/p?id=get-organizations', {
-            headers: xhrHeaders(),
-            search: createURLSearchParams(queryParams)
-        })
-            .map(response => response.json().objects[0])
-            .map(data => {
-                return {
-                    organizations: <Organization[]>data.list,
-                    meta: data.meta
-                }
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch({ id: 'get-organizations' }, 2).map(payload => {
+            return {
+                organizations: <Organization[]>payload.list,
+                meta: payload.meta
+            }
+        });
     }
 
     fetchEmployees() {
-        return this.http.get('/Staff/p?id=employees', { headers: xhrHeaders() })
-            .retry(3)
-            .map(response => response.json().objects[0])
-            .map(data => {
-                return {
-                    employees: <Employee[]>data.list
-                }
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.fetch({ id: 'employees' }, 2).map(payload => {
+            return {
+                employees: <Employee[]>payload.list,
+                meta: payload.meta
+            }
+        });
     }
 }
