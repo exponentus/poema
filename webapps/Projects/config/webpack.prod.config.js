@@ -81,7 +81,6 @@ module.exports = {
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             helpers.root('') // location of your src
         ),
-        // new CompressionPlugin({regExp: /\.css$|\.html$|\.js$|\.map$/, threshold: 1500}),
         // new CopyWebpackPlugin([{from: './src/index.html', to: 'index.html'}]),
         // new DedupePlugin(),
         new DefinePlugin({
@@ -101,6 +100,12 @@ module.exports = {
                 keep_fnames: true
             },
             comments: false
+        }),
+        new CompressionPlugin({
+            asset: '[path].gz[query]',
+            algorithm: 'gzip',
+            regExp: /\.js$|\.map$/,
+            threshold: 1500
         }),
         new webpack.LoaderOptionsPlugin({
             minimize: true,

@@ -2,6 +2,7 @@ const path = require('path');
 // Webpack and its plugins
 const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 // const CopyWebpackPlugin  = require('copy-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
@@ -71,6 +72,12 @@ module.exports = {
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             helpers.root('') // location of your src
         ),
+        new CompressionPlugin({
+            asset: '[path].gz[query]',
+            algorithm: 'gzip',
+            regExp: /\.js$|\.map$/,
+            threshold: 1500
+        }),
         new DefinePlugin({
             'webpack': {
                 'ENV': JSON.stringify(metadata.ENV)

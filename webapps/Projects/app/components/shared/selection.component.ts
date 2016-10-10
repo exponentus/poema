@@ -160,7 +160,7 @@ export class SelectionComponent {
     }
 
     ngOnDestroy() {
-        this.removeListenGlobal();
+        this.close();
     }
 
     // ===
