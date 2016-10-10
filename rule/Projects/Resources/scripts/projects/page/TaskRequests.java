@@ -228,9 +228,8 @@ public class TaskRequests extends _DoForm {
 					return;
 				}
 			} else {
-				if ("implement".equals(request.getRequestType().getName())) {
-					task.setStatus(TaskStatusType.PROCESSING);
-				}
+				task.setStatus(TaskStatusType.PROCESSING);
+
 			}
 			taskDAO.update(task);
 
