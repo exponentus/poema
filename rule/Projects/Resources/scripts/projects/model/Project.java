@@ -25,6 +25,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +42,7 @@ import staff.model.Organization;
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
 public class Project extends SecureAppEntity<UUID> {
 
+	@FTSearchable
 	@Column(length = 140)
 	private String name;
 
@@ -71,6 +73,7 @@ public class Project extends SecureAppEntity<UUID> {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date finishDate;
 
+	@FTSearchable
 	@Column(length = 2048)
 	private String comment;
 
