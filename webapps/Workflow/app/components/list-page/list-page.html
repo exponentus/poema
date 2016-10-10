@@ -36,7 +36,7 @@
                     <label class="entry-select" *ngIf="selectable">
                         <input type="checkbox" name="docid" [value]="model.id" />
                     </label>
-                    <a class="entry-link" [routerLink]="['/reference/form', model.kind + '-form']" [queryParams]="{ docid: model.id }">
+                    <a class="entry-link" [routerLink]="['./', model.id]">
                         <div class="entry-fields">
                             <div [class]="column.className" [ngSwitch]="column.type" *ngFor="let column of columns">
                                 <span *ngSwitchCase="'localizedName'" class="localized-name">

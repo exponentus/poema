@@ -12,17 +12,17 @@ import { WorkspaceModule } from './+modules/workspace/ws.module';
 import { ReferenceModule } from './+modules/reference/reference.module';
 import { StaffModule } from './+modules/staff/staff.module';
 import { WorkflowModule } from './+modules/workflow/workflow.module';
-// import { ProjectsModule } from './+modules/projects/projects.module';
+import { ProjectsModule } from './+modules/projects/projects.module';
 
 const routes: Routes = [
-    { path: '', redirectTo: 'workspace', pathMatch: 'full' },
+    { path: '', redirectTo: 'Workspace', pathMatch: 'full' },
     { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     // lazy loading
-    // { path: 'workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule', canActivate: [AuthGuard] },
-    // { path: 'reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
-    // { path: 'staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
-    // { path: 'workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
+    // { path: 'Workspace', loadChildren: './+modules/workspace/ws.module#WorkspaceModule', canActivate: [AuthGuard] },
+    // { path: 'Reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
+    // { path: 'Staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
+    // { path: 'Workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
     { path: '**', component: Error404 }
 ];
 

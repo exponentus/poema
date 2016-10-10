@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../actions';
 import { WorkspaceService } from './ws.service';
@@ -16,7 +17,10 @@ import { WorkspaceService } from './ws.service';
 export class WorkspaceComponent {
 
     constructor(
+        private store: Store<any>,
         private environmentActions: EnvironmentActions,
         private wsService: WorkspaceService
-    ) { }
+    ) {
+        this.store.dispatch(environmentActions.setCurrentModule('Workspace'));
+    }
 }

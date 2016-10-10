@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { DataService } from '../../services';
 
@@ -9,7 +8,7 @@ import { DataService } from '../../services';
 })
 
 export class NavComponent {
-    @Input() rootSegment: string = '/';
+    @Input() module: string = '';
     @Input() outlineUrl: string = 'p?id=outline';
 
     private storageKey;
@@ -18,12 +17,11 @@ export class NavComponent {
     private loading = true;
 
     constructor(
-        private router: Router,
         private dataService: DataService
     ) { }
 
     ngOnInit() {
-        this.storageKey = this.rootSegment.replace(/\//g, '') + '-side-tree-toggle';
+        this.storageKey = this.module + '-side-tree-toggle';
         let oreo = localStorage.getItem(this.storageKey);
         this.expandedEntryIds = oreo ? oreo.split(',') : [];
 
@@ -38,10 +36,6 @@ export class NavComponent {
                 this.loading = false;
                 this.outline = outline;
             });
-    }
-
-    isActive(instruction: any[]): boolean {
-        return this.router.isActive(this.router.createUrlTree(instruction), true);
     }
 
     toggleCollapsible(id) {

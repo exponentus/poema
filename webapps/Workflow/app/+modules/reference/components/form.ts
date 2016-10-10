@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
 import { ReferenceService } from '../reference.service';
+import { parseResponseObjects } from '../../../utils/utils';
 
 @Component({
     selector: 'reference-form',
@@ -38,8 +39,10 @@ export class ReferenceFormComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
-            let formId = params['id'];
-            let modelId = this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
+            let viewId = params['viewId'];
+            let formId = viewId.replace('-view', '-form');
+            let docId = params['docId'];
+            let modelId = docId; // this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
             this.id = formId;
             this.loadData({ id: formId, docid: modelId });
         }));
@@ -59,10 +62,12 @@ export class ReferenceFormComponent {
 
         this.referenceService.fetchOne(params).subscribe(
             payload => {
+                let objects = parseResponseObjects(payload.objects);
+
                 this.isReady = true;
                 this.loading = false;
-                this.fsid = payload.fsid;
-                this.model = payload[params.id.split('-')[0]];
+                this.fsid = objects.fsid;
+                this.model = objects[params.id.split('-')[0]];
             },
             error => console.log(error)
         );

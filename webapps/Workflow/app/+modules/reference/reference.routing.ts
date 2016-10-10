@@ -6,11 +6,11 @@ import { ReferenceViewComponent } from './components/view';
 import { ReferenceFormComponent } from './components/form';
 
 const routes: Routes = [{
-    path: 'reference', component: ReferenceContainerComponent,
+    path: 'Reference', component: ReferenceContainerComponent,
     children: [
-        { path: '', redirectTo: 'view/country-view', pathMatch: 'full' },
-        { path: 'view/:id', component: ReferenceViewComponent },
-        { path: 'form/:id', component: ReferenceFormComponent }
+        { path: '', redirectTo: 'country-view', pathMatch: 'full' },
+        { path: ':viewId', component: ReferenceViewComponent },
+        { path: ':viewId/:docId', component: ReferenceFormComponent }
     ]
 }];
 

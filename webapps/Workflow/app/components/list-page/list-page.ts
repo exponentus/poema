@@ -39,9 +39,15 @@ export class ListPageComponent {
     @Output() refresh = new EventEmitter();
     @Output() sort = new EventEmitter();
     @Output() goToPage = new EventEmitter();
+    @Output() openUrl = new EventEmitter();
+
+    onOpenUrl(url, $event) {
+        $event.preventDefault();
+        this.openUrl.emit(url);
+    }
 
     onAction(action, $event) {
-        this.action.emit({action, e: $event});
+        this.action.emit({ action, e: $event });
     }
 
     onRefresh() {

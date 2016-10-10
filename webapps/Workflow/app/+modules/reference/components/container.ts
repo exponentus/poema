@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { EnvironmentActions } from '../../../actions';
 
 @Component({
     selector: 'reference-container',
     template: `
         <nav class="aside side-nav"
             nb-nav
-            rootSegment="/reference/view"
+            module="Reference"
             outlineUrl="/Reference/p?id=outline">
         </nav>
         <main class="content">
@@ -14,4 +17,12 @@ import { Component } from '@angular/core';
     `
 })
 
-export class ReferenceContainerComponent { }
+export class ReferenceContainerComponent {
+
+    constructor(
+        private store: Store<any>,
+        private environmentActions: EnvironmentActions
+    ) {
+        this.store.dispatch(environmentActions.setCurrentModule('Reference'));
+    }
+}

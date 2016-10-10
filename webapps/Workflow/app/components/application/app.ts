@@ -2,8 +2,8 @@ import { Component, HostBinding, HostListener, OnInit, OnDestroy } from '@angula
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { EnvironmentActions, AppActions } from '../../actions';
-import { IAuthedState, IEnvironmentState } from '../../reducers';
+import { EnvironmentActions } from '../../actions';
+import { IEnvironmentState } from '../../reducers';
 import { AppService } from '../../services';
 import { User } from '../../models';
 
@@ -17,7 +17,7 @@ export class AppComponent {
     isReady: boolean = false;
     loggedUser: User = new User();
     language: any;
-    HEADER_TITLE: string = 'Projects';
+    HEADER_TITLE: string = '';
     isNavCollapsed: boolean = false;
     isSearchOpen: boolean = false;
     isMobileDevice: boolean = false;
@@ -30,25 +30,19 @@ export class AppComponent {
     constructor(
         private store: Store<any>,
         private environmentActions: EnvironmentActions,
-        private appActions: AppActions,
         private appService: AppService,
         public translate: TranslateService
     ) {
-        this.subs.push(this.store.select('authed').subscribe((data: IAuthedState) => {
-            this.loggedUser = data.userProfile;
-        }));
-
-        this.subs.push(this.store.select('reference'));
-
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;
+            this.loggedUser = state.userProfile;
         }));
     }
 
     ngOnInit() {
         this.appService.fetchUserProfile().subscribe(data => {
-            this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
+            this.store.dispatch(this.environmentActions.fetchUserProfile(data));
         });
 
         this.isMobileDevice = this.isMobile();
@@ -65,6 +59,8 @@ export class AppComponent {
             this.HEADER_TITLE = value;
             this.isReady = true;
         });
+
+        this.onResize(window);
     }
 
     ngOnDestroy() {

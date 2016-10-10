@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { WorkspaceComponent } from './ws.component';
 
 const routes: Routes = [
-    { path: 'workspace', component: WorkspaceComponent }
+    { path: 'Workspace', component: WorkspaceComponent }
 ];
 
 @NgModule({

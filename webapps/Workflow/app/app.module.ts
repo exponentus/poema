@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
 // shared
 import { SharedModule } from './shared.module';
 
-//
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
 import { UserProfileComponent } from './components/user-profile/user-profile';
@@ -18,7 +17,7 @@ import { Error404 } from './components/404';
 import { AppRoutingModule } from './app.routing';
 import { APP_STORE } from './store';
 import { AppService, DataService, TranslateService } from './services';
-import { AppActions, EnvironmentActions } from './actions';
+import { EnvironmentActions } from './actions';
 
 import { AuthGuard } from './auth.guard';
 
@@ -44,7 +43,7 @@ import { AuthGuard } from './auth.guard';
     providers: [
         APP_STORE,
         AppService, DataService, TranslateService,
-        AppActions, EnvironmentActions,
+        EnvironmentActions,
         AuthGuard
     ]
 })

@@ -10,7 +10,7 @@ import { OfficeMemoViewComponent } from './components/office-memo/office-memo-vi
 import { OfficeMemoFormComponent } from './components/office-memo/office-memo-form';
 
 const routes: Routes = [{
-    path: 'workflow', component: WorkflowContainerComponent,
+    path: 'Workflow', component: WorkflowContainerComponent,
     children: [
         { path: '', redirectTo: 'incoming-view', pathMatch: 'full' },
         { path: 'incoming-view', component: IncomingViewComponent },

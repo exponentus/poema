@@ -21,6 +21,7 @@ import { parseResponseObjects } from '../../../utils/utils';
             [meta]="meta"
             [actions]="actions"
             [columns]="columns"
+            (openUrl)="onOpenUrl($event)"
             (action)="onAction($event)"
             (refresh)="refresh($event)"
             (sort)="onSort($event)"
@@ -62,7 +63,7 @@ export class ReferenceViewComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
-            let id = params['id'];
+            let id = params['viewId'];
             if (id) {
                 this.id = id;
                 this.loadData(Object.assign({}, params, {
@@ -122,5 +123,9 @@ export class ReferenceViewComponent {
 
     onAction($event) {
         alert($event.action.caption);
+    }
+
+    onOpenUrl($event) {
+        console.log($event);
     }
 }

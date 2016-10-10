@@ -12,6 +12,7 @@ export class EnvironmentActions {
     static SET_REDIRECT_URL = 'SET_REDIRECT_URL';
     static SET_APPS = 'SET_APPS';
     static SET_CURRENT_MODULE = 'SET_CURRENT_MODULE';
+    static USER_PROFILE = 'USER_PROFILE';
 
     search(keyWord): Action {
         return {
@@ -61,7 +62,14 @@ export class EnvironmentActions {
     setCurrentModule(moduleId: string): Action {
         return {
             type: EnvironmentActions.SET_CURRENT_MODULE,
-            payload: { moduleId }
+            payload: moduleId
+        };
+    }
+
+    fetchUserProfile(data): Action {
+        return {
+            type: EnvironmentActions.USER_PROFILE,
+            payload: data
         };
     }
 }

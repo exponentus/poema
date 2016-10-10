@@ -5,7 +5,7 @@ import { StaffContainerComponent } from './components/container';
 import { StaffViewComponent } from './components/view';
 
 const routes: Routes = [{
-    path: 'staff', component: StaffContainerComponent,
+    path: 'Staff', component: StaffContainerComponent,
     children: [
         { path: '', redirectTo: 'organization-view', pathMatch: 'full' },
         { path: ':id', component: StaffViewComponent }

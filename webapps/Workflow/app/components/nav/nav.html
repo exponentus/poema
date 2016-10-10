@@ -8,7 +8,7 @@
         <span>{{section.caption | translate}}</span>
     </header>
     <nav nb-nav-tree
-        [rootSegment]="rootSegment"
+        [module]="module"
         [entries]="section.entries"
         [expandedEntryIds]="expandedEntryIds"
         (toggle)="toggleCollapsible($event)">

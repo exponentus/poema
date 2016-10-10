@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 })
 
 export class NavTreeComponent {
+    @Input() module: string = '';
     @Input() entries = [];
-    @Input() rootSegment = '/';
     @Input() expandedEntryIds = [];
     @Output() toggle = new EventEmitter();
 

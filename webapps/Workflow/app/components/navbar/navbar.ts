@@ -16,9 +16,10 @@ import { User } from '../../models/user';
 export class NavbarComponent {
     @Input() user: User;
     keyup$ = new Subject<KeyboardEvent>();
-    headerTitle: string = 'Projects';
+    headerTitle: string = '';
     logoUrl: string = 'img/logo.png';
     keyWord: string = '';
+    moduleId: string = '';
     private apps: any = [];
     private subs: any = [];
 
@@ -30,6 +31,9 @@ export class NavbarComponent {
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.keyWord = state.keyWord;
             this.apps = state.apps;
+            this.moduleId = state.moduleId;
+            //
+            this.headerTitle = this.moduleId;
         }));
     }
 

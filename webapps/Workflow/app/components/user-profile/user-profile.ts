@@ -10,7 +10,7 @@ import {
     AppService,
     TranslateService as translateService
 } from '../../services';
-import { IAuthedState } from '../../reducers';
+import { IEnvironmentState } from '../../reducers';
 import { User } from '../../models';
 import { xhrHeaders, createCookie } from '../../utils/utils';
 
@@ -41,7 +41,7 @@ export class UserProfileComponent {
         private translateService: translateService,
         private notifyService: NotificationService
     ) {
-        this.sub = this.store.select('authed').subscribe((state: IAuthedState) => {
+        this.sub = this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.user = state.userProfile;
             this.pageSize = state.pageSize;
             this.language = state.language;
