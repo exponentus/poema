@@ -15,7 +15,8 @@ import { Project } from '../../models/project';
     host: {
         '[class.view]': 'true',
         '[class.load]': 'loading'
-    }
+    },
+    providers: [StaffService, ProjectService]
 })
 
 export class ProjectsComponent {
@@ -45,22 +46,22 @@ export class ProjectsComponent {
     ) { }
 
     ngOnInit() {
-        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
-            if (this.keyWord != state.keyWord) {
-                this.loadData({
-                    keyWord: state.keyWord
-                });
-            }
-            this.keyWord = state.keyWord;
-        }));
+        // this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+        //     if (this.keyWord != state.keyWord) {
+        //         this.loadData({
+        //             keyWord: state.keyWord
+        //         });
+        //     }
+        //     this.keyWord = state.keyWord;
+        // }));
 
-        this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
-            if (state) {
-                this.projects = state.projects;
-                this.meta = state.meta;
-                this.loading = state.loading;
-            }
-        }));
+        // this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
+        //     if (state) {
+        //         this.projects = state.projects;
+        //         this.meta = state.meta;
+        //         this.loading = state.loading;
+        //     }
+        // }));
         this.loadData();
     }
 
@@ -69,6 +70,7 @@ export class ProjectsComponent {
     }
 
     loadData(params?) {
+        this.loading = true;
         this.store.dispatch(this.envActions.setRedirectUrl('/projects'));
 
         // this.params = params;
@@ -86,6 +88,9 @@ export class ProjectsComponent {
                             p.customer = orgs.filter(org => org.id == p.customerId)[0];
                         }
                     });
+                    this.loading = false;
+                    this.projects = data.projects;
+                    this.meta = data.meta;
                 }
             );
         });

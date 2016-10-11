@@ -32,6 +32,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -56,6 +57,7 @@ public class Task extends SecureAppEntity<UUID> {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task parent;
 
+	@FTSearchable
 	@Column(name = "reg_number", length = 140)
 	private String regNumber;
 
@@ -76,12 +78,15 @@ public class Task extends SecureAppEntity<UUID> {
 	@Column(length = 10)
 	private TaskPriorityType priority = TaskPriorityType.NORMAL;
 
+	@FTSearchable
 	@Column(length = 140)
 	private String title;
 
+	@FTSearchable
 	@Column(length = 1024, name = "cancel_comment")
 	private String cancellationComment;
 
+	@FTSearchable
 	@Column(columnDefinition = "TEXT")
 	private String body;
 

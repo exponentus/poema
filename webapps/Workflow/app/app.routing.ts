@@ -34,7 +34,7 @@ const routes: Routes = [
         ReferenceModule,
         StaffModule,
         WorkflowModule,
-        // ProjectsModule
+        ProjectsModule
     ]
 })
 

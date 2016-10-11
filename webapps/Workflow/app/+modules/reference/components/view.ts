@@ -92,7 +92,7 @@ export class ReferenceViewComponent {
 
         this.referenceService.fetch(this.params).subscribe(
             payload => {
-                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name', valueAsClass: '' }];
                 if (payload.data.columnOptions) {
                     columnOptions = payload.data.columnOptions.columns;
                 }

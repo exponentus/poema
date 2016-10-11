@@ -9,8 +9,8 @@ const routes: Routes = [{
     path: 'Reference', component: ReferenceContainerComponent,
     children: [
         { path: '', redirectTo: 'country-view', pathMatch: 'full' },
-        { path: ':viewId', component: ReferenceViewComponent },
-        { path: ':viewId/:docId', component: ReferenceFormComponent }
+        { path: ':viewId/:docId', component: ReferenceFormComponent },
+        { path: ':viewId', component: ReferenceViewComponent }
     ]
 }];
 

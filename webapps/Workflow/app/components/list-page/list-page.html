@@ -38,13 +38,9 @@
                     </label>
                     <a class="entry-link" [routerLink]="['./', model.id]">
                         <div class="entry-fields">
-                            <div [class]="column.className" [ngSwitch]="column.type" *ngFor="let column of columns">
-                                <span *ngSwitchCase="'localizedName'" class="localized-name">
-                                    {{model | localizedName:column.value}}
-                                </span>
-                                <span *ngSwitchDefault>
-                                    {{model[column.value]}}
-                                </span>
+                            <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns">
+                                <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
+                                <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>
                     </a>

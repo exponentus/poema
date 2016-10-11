@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { EnvironmentActions } from '../../../actions';
 
 @Component({
     selector: 'projects-container',
@@ -10,4 +13,12 @@ import { Component } from '@angular/core';
     `
 })
 
-export class ProjectsContainerComponent { }
+export class ProjectsContainerComponent {
+
+    constructor(
+        private store: Store<any>,
+        private environmentActions: EnvironmentActions
+    ) {
+        this.store.dispatch(environmentActions.setCurrentModule('Projects'));
+    }
+}

@@ -1,37 +1,31 @@
 <ul>
     <li>
-        <a [routerLink]="['/tasks']" class="nav-link" [class.active]="isActive(['/']) || isActive(['/tasks'])">
+        <a [routerLink]="['/Projects', 'tasks']" class="nav-link" [class.active]="isActive(['/']) || isActive(['/Projects/tasks'])">
             <i class="fa fa-list"></i>
             <span>{{'tasks_all' | translate}}</span>
         </a>
     </li>
     <li>
-        <a [routerLink]="['/tasks', 'my']" class="nav-link" [class.active]="isActive(['/tasks/my'])">
+        <a [routerLink]="['/Projects', 'tasks', 'my']" class="nav-link" [class.active]="isActive(['/Projects/tasks/my'])">
             <i class="fa fa-pencil"></i>
             <span>{{'my_tasks' | translate}}</span>
         </a>
     </li>
     <li>
-        <a [routerLink]="['/tasks', 'inbox']" class="nav-link" [class.active]="isActive(['/tasks/inbox'])">
+        <a [routerLink]="['/Projects', 'tasks', 'inbox']" class="nav-link" [class.active]="isActive(['/Projects/tasks/inbox'])">
             <i class="fa fa-inbox"></i>
             <span>{{'tasks_assigned_to_me' | translate}}</span>
         </a>
     </li>
-    <!-- <li>
-        <a [routerLink]="['/']" class="nav-link">
-            <i class="fa fa-dashboard"></i>
-            <span>{{'dashboard' | translate}}</span>
-        </a>
-    </li> -->
     <li class="divider"></li>
     <li>
-        <a [routerLink]="['/projects']" class="nav-link" [class.active]="isActive(['/projects'])">
+        <a [routerLink]="['/Projects', 'projects']" class="nav-link" [class.active]="isActive(['/Projects/projects'])">
             <i class="fa fa-puzzle-piece"></i>
             <span>{{'projects' | translate}}</span>
         </a>
         <ul>
             <li *ngFor="let project of projects">
-                <a [routerLink]="['/projects', project.id, 'tasks']" class="nav-link" [class.active]="isActive(['/projects/' + project.id + '/tasks'])">
+                <a [routerLink]="['/Projects', 'projects', project.id, 'tasks']" class="nav-link" [class.active]="isActive(['/Projects/projects/' + project.id + '/tasks'])">
                     <i class="fa fa-file-text-o"></i>
                     <span>{{project.name}}</span>
                 </a>

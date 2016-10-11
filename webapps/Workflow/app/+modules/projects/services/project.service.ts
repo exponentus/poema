@@ -25,7 +25,7 @@ export class ProjectService {
     }
 
     fetchProjects(queryParams = {}) {
-        return this.http.get('p?id=project-view', {
+        return this.http.get('/Projects/p?id=project-view', {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
@@ -40,7 +40,7 @@ export class ProjectService {
     }
 
     fetchProjectById(projectId: string) {
-        let url = 'p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
+        let url = '/Projects/p?id=project-form&projectId=' + (projectId !== 'new' ? projectId : '');
 
         return this.http.get(url, { headers: xhrHeaders() })
             .map(response => {
@@ -67,7 +67,7 @@ export class ProjectService {
     }
 
     saveProject(project: Project) {
-        let url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
+        let url = '/Projects/p?id=project-form&projectId=' + (project.id ? project.id : '');
 
         return this.http.post(url, serializeObj(project), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
@@ -75,14 +75,14 @@ export class ProjectService {
     }
 
     deleteProject(projects: Project[]) {
-        let url = 'p?id=project-view&projectIds=' + projects.map(it => it.id).join(',');
+        let url = '/Projects/p?id=project-view&projectIds=' + projects.map(it => it.id).join(',');
 
         return this.http.delete(url, { headers: xhrHeaders() })
             .catch(error => this.appService.handleError(error));
     }
 
     deleteProjectAttachment(project: Project, attachment: Attachment) {
-        let url = 'p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid;
+        let url = '/Projects/p?id=project-form&projectId=' + project.id + '&attachmentId=' + attachment.id + '&fsid=' + project.fsid;
 
         return this.http.delete(url, { headers: xhrHeaders() })
             .catch(error => this.appService.handleError(error));

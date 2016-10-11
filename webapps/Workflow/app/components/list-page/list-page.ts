@@ -33,7 +33,7 @@ export class ListPageComponent {
      * @param sort - desc, asc, both
      * @param className - css class name
      */
-    @Input() columns: any[] = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name' }];
+    @Input() columns: any[] = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name', valueAsClass: '' }];
 
     @Output() action = new EventEmitter();
     @Output() refresh = new EventEmitter();

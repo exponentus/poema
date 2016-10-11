@@ -23,7 +23,7 @@ const initialState: IEnvironmentState = {
         { name: 'Reference', url: '/Reference' },
         { name: 'Staff', url: '/Staff' },
         { name: 'Workflow', url: '/Workflow' },
-        // { name: 'Projects', url: '/' },
+        { name: 'Projects', url: '/Projects' },
         { name: 'WorkSpace', url: '/Workspace' }
     ],
     moduleId: '',

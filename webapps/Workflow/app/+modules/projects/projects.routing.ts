@@ -9,9 +9,9 @@ import { TaskComponent } from './components/task/task';
 import { RequestComponent } from './components/request/request';
 
 const routes: Routes = [{
-    path: '', component: ProjectsContainerComponent,
+    path: 'Projects', component: ProjectsContainerComponent,
     children: [
-        { path: '', redirectTo: 'tasks', pathMatch: 'full' },
+        { path: '', redirectTo: 'projects', pathMatch: 'full' },
         { path: 'projects/:projectId/tasks', component: TasksComponent },
         { path: 'projects/:projectId', component: ProjectComponent },
         { path: 'projects', component: ProjectsComponent },

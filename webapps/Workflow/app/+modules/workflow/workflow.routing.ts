@@ -13,12 +13,14 @@ const routes: Routes = [{
     path: 'Workflow', component: WorkflowContainerComponent,
     children: [
         { path: '', redirectTo: 'incoming-view', pathMatch: 'full' },
+        { path: 'incoming-view/:id', component: IncomingFormComponent },
         { path: 'incoming-view', component: IncomingViewComponent },
-        { path: 'incoming-form', component: IncomingFormComponent },
+        //
+        { path: 'outgoing-view/:id', component: OutgoingFormComponent },
         { path: 'outgoing-view', component: OutgoingViewComponent },
-        { path: 'outgoing-form', component: OutgoingFormComponent },
-        { path: 'officememo-view', component: OfficeMemoViewComponent },
-        { path: 'officememo-form', component: OfficeMemoFormComponent }
+        //
+        { path: 'officememo-view/:id', component: OfficeMemoFormComponent },
+        { path: 'officememo-view', component: OfficeMemoViewComponent }
     ]
 }];
 

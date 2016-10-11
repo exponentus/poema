@@ -13,17 +13,18 @@ import { WorkflowIncomingService } from '../../services';
 })
 
 export class IncomingFormComponent {
+    private isReady = false;
+    private isNew = true;
+    private isEditable = false;
+    private isValid = true;
+    private title: 'incoming';
+    private incoming: any;
+
+    private actions: any = {};
+    private errors: any = {};
+    private redirectUrl: any;
+
     private subs: any = [];
-    isReady = false;
-    isNew = true;
-    isEditable = false;
-    isValid = true;
-    title: 'incoming';
-    incoming: any;
-    projectStatusTypes: any;
-    actions: any = {};
-    errors: any = {};
-    redirectUrl: any;
 
     constructor(
         private store: Store<any>,
@@ -37,7 +38,7 @@ export class IncomingFormComponent {
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
             let id = this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
-            this.loadIncoming(id);
+            this.loadIncoming(params['incomingId']);
         }));
     }
 
