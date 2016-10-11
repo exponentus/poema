@@ -23,7 +23,30 @@ import java.util.UUID;
 @Entity
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
+
+// ?
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = Project.ORGANIZATION_SHORT,
+                attributeNodes = @NamedAttributeNode(value = "customer", subgraph = "customer"),
+                subgraphs = @NamedSubgraph(name = "customer", attributeNodes = {
+                        @NamedAttributeNode("id"),
+                        @NamedAttributeNode("name"),
+                        @NamedAttributeNode("localizedName")
+                })
+        ),
+        @NamedEntityGraph(name = Project.ATTACHMENT_SHORT,
+                attributeNodes = @NamedAttributeNode(value = "attachments", subgraph = "attachments"),
+                subgraphs = @NamedSubgraph(name = "attachments", attributeNodes = {
+                        @NamedAttributeNode("realFileName"),
+                        @NamedAttributeNode("size")
+                })
+        )
+})
+
 public class Project extends SecureAppEntity<UUID> {
+
+    public final static String ORGANIZATION_SHORT = "PROJECT.ORGANIZATION_SHORT";
+    public final static String ATTACHMENT_SHORT = "PROJECT.ATTACHMENT_SHORT";
 
     @FTSearchable
     @Column(length = 140)
