@@ -25,8 +25,8 @@ import com.exponentus.messaging.email.Memo;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
-import com.exponentus.rest.pojo.Outcome;
-import com.exponentus.rest.pojo.ServerServiceExceptionType;
+import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.rest.outgoingpojo.constants.ServerServiceExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validator;
 
@@ -47,7 +47,7 @@ public class PromoService extends RestProvider {
 	}
 
 	public static Response processSimpleMessage(_Session session, String recipient, String email, String subj, String msg, String captcha) {
-		Outcome res = new Outcome();
+		Outcome res = new Outcome("");
 		AppEnv appEnv = session.getAppEnv();
 		LanguageCode lang = session.getLang();
 		ArrayList<String> e = validateSimpleMailForm(email, subj, msg, captcha);

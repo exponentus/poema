@@ -65,6 +65,8 @@ public class ExpiredTracking extends _DoScheduledTask {
 					}
 				}
 			}
+		} else {
+			logger.warningLogEntry("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
 		}
 	}
 
