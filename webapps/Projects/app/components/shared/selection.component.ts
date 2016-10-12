@@ -133,6 +133,7 @@ export class SelectionComponent {
     private selectedItemIds: string[] = [];
     private isOpen = false;
     private isFocused = false;
+    private isInitialized = false;
     private selfClick = false;
     private firstOpen = true;
     private keyWord = '';
@@ -151,6 +152,8 @@ export class SelectionComponent {
             return;
         }
 
+        this.isInitialized = true;
+
         if (this.multiple) {
             this.filterItems();
         }
@@ -160,7 +163,9 @@ export class SelectionComponent {
     }
 
     ngOnDestroy() {
-        this.close();
+        if (this.isInitialized) {
+            this.close();
+        }
     }
 
     // ===
@@ -249,6 +254,7 @@ export class SelectionComponent {
     clear($event) {
         if (this.selectedItemIds.length || this.selectedItems.length) {
             $event.stopPropagation();
+            this.selfClick = false;
             this.selectedItems = [];
             this.selectedItemIds = [];
             this.emitChange();
