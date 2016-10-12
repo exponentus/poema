@@ -47,10 +47,11 @@ import {
                 <div class="select-search-not-found" *ngIf="showNotFound && notFoundText">{{notFoundText}}</div>
             </div>
             <div class="select-dropdown">
-                <ul class="select-list scroll-shadow" (scroll)="onScroll($event)">
+                <ul class="select-list scroll-shadow" #selectList (scroll)="onScroll($event)">
                     <li class="select-option"
                           [class.selected]="selectedItemIds.indexOf(m[idKey]) !== -1"
                           [class.focus]="cursorId === m[idKey]"
+                          [attr.data-id]="m[idKey]"
                           (click)="add(m)"
                           *ngFor="let m of _items">
                         <i class="select-checkmark-icon"></i>
@@ -67,7 +68,7 @@ import {
 })
 
 export class SelectionComponent {
-    @HostBinding('tabIndex') get _tabIndex() { return -1; /* this.tabIndex; */ }
+    @HostBinding('tabIndex') get _tabIndex() { return -1; }
 
     @HostListener('focus', ['$event']) public onFocus($event: MouseEvent): void {
         if (this.disabled) {
@@ -75,7 +76,6 @@ export class SelectionComponent {
         }
 
         this.isFocused = true;
-        // this.renderer.invokeElementMethod(this.searchInput.nativeElement, 'focus');
     }
 
     @HostListener('blur', ['$event']) public onBlur($event: MouseEvent): void {
@@ -125,6 +125,7 @@ export class SelectionComponent {
     @Output() change = new EventEmitter<any>();
 
     @ViewChild('searchInput') searchInput: ElementRef;
+    @ViewChild('selectList') selectList: ElementRef;
 
     private documentClickListener;
     private documentKeyUpListener;
@@ -384,6 +385,7 @@ export class SelectionComponent {
         }
 
         this.cursorId = this._items[this.cursorPosition][this.idKey];
+        this.scrollToCursor();
     }
 
     canMove() {
@@ -392,6 +394,12 @@ export class SelectionComponent {
 
     addOnCursor() {
         this.add(this._items[this.cursorPosition]);
+    }
+
+    scrollToCursor() {
+        let listEl = this.selectList.nativeElement;
+        let node = listEl.querySelector(`[data-id="${this.cursorId}"]`);
+        listEl.scrollTop = node.offsetTop - (listEl.clientHeight / 2);
     }
 
     resetCursor() {
