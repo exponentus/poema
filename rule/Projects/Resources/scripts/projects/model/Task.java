@@ -30,9 +30,10 @@ import javax.validation.constraints.NotNull;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.rest.outgoingpojo.IPayload;
+import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,6 +45,7 @@ import reference.model.Tag;
 import reference.model.TaskType;
 
 @JsonRootName("task")
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "tasks")
@@ -345,5 +347,11 @@ public class Task extends SecureAppEntity<UUID> {
 	@Override
 	public String getViewText() {
 		return title;
+	}
+
+	@JsonIgnore
+	public IPayload getMock() {
+		Task obj = new Task();
+		return obj;
 	}
 }

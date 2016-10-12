@@ -15,11 +15,11 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 
 @RequestHandler("task-view")
-public class TaskRequest extends AbstractRequestHandler<ViewRequest> {
+public class TaskViewObjHandler extends AbstractRequestHandler<ViewRequest> {
 
 	@Override
-	public void doRequest(_Session ses, ViewRequest vr) {
-		TaskView view = vr.getView(TaskView.class);
+	public void doGet(_Session ses, ViewRequest vr) {
+		TaskViewObj view = vr.getView(TaskViewObj.class);
 		String[] expandedIds = view.getExpandedIds();
 		List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 		int pageSize = ses.pageSize;
@@ -30,6 +30,21 @@ public class TaskRequest extends AbstractRequestHandler<ViewRequest> {
 		_SortParams sortParams = (_SortParams) view.getSorting();
 
 		addContent(taskDAO.findAllWithChildren(taskFilter, sortParams, pageNum, pageSize, expandedIdList));
+
+	}
+
+	@Override
+	public void doPost(_Session ses, ViewRequest request) {
+
+	}
+
+	@Override
+	public void doPut(_Session ses, ViewRequest request) {
+
+	}
+
+	@Override
+	public void doDelete(_Session ses, ViewRequest request) {
 
 	}
 

@@ -30,10 +30,10 @@ import projects.model.constants.TaskStatusType;
 import reference.dao.TaskTypeDAO;
 
 @RequestHandler("task-form")
-public class TaskForm extends AbstractRequestHandler<FormRequest> {
+public class TaskFormObjHandler extends AbstractRequestHandler<FormRequest> {
 
 	@Override
-	public void doRequest(_Session ses, FormRequest fr) {
+	public void doGet(_Session ses, FormRequest fr) {
 		IUser<Long> user = ses.getUser();
 		Task task = fr.getEntity(Task.class);
 
@@ -116,6 +116,25 @@ public class TaskForm extends AbstractRequestHandler<FormRequest> {
 
 		addContent(task);
 		// addContent(getActionBar(ses, task));
+
+	}
+
+	@Override
+	public void doPost(_Session ses, FormRequest request) {
+		Task task = request.getEntity(Task.class);
+		System.out.println(task);
+
+	}
+
+	@Override
+	public void doPut(_Session ses, FormRequest request) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void doDelete(_Session ses, FormRequest request) {
+		// TODO Auto-generated method stub
 
 	}
 
