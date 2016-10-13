@@ -1,65 +1,52 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 
-import { AppService, DataService } from '../../../services';
+import { DataService } from '../../../services';
 import { Outgoing } from '../models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
+import { API_URL } from '../workflow.routing';
 
 @Injectable()
 export class WorkflowOutgoingService {
 
     constructor(
-        private http: Http,
-        private appService: AppService,
         private dataService: DataService
     ) { }
 
-    fetch(params: any, retry = 1) {
-        return this.dataService.get('/Workflow/p', params, retry);
-    }
-
-    fetchOutgoings(queryParams = {}) {
-        return this.http.get('/Workflow/p?id=outgoing-view', {
-            headers: xhrHeaders(),
-            search: createURLSearchParams(queryParams)
-        })
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                return data;
-            })
-            .catch(error => this.appService.handleError(error));
+    fetchOutgoings(params = {}) {
+        return this.dataService.get(`${API_URL}/outgoings`, params);
     }
 
     fetchOutgoingById(id: string) {
-        let url = '/Workflow/p?id=outgoing-form&docid=' + (id !== 'new' ? id : '');
-
-        return this.http.get(url, { headers: xhrHeaders() })
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                let outgoing = <any>data.outgoing;
-                if (!outgoing.id) {
-                    outgoing.id = '';
-                }
-                if (data.fsid) {
-                    outgoing.fsid = data.fsid;
-                }
-                if (data.ACL) {
-                    outgoing.acl = data.ACL;
-                }
-                if (data.attachment) {
-                    outgoing.attachments = data.attachment.list;
-                }
-                return {
-                    outgoing: <Outgoing>outgoing,
-                    actions: data.actions
-                }
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.dataService.get(`${API_URL}/outgoings/${id}`);
     }
 
-    doAction(actionId: string) {
-        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
-            .catch(error => this.appService.handleError(error));
+    saveOutgoing(outgoing: Outgoing, params = {}) {
+        if (outgoing.id) {
+            return this.updateOutgoing(outgoing, params);
+        } else {
+            return this.addOutgoing(outgoing, params);
+        }
+    }
+
+    private addOutgoing(outgoing: Outgoing, params = {}) {
+        return this.dataService.post(`${API_URL}/outgoings`, params, outgoing);
+    }
+
+    private updateOutgoing(outgoing: Outgoing, params = {}) {
+        return this.dataService.put(`${API_URL}/outgoings/${outgoing.id}`, params, outgoing);
+    }
+
+    deleteOutgoing(outgoing: Outgoing) {
+        return this.dataService.delete(`${API_URL}/outgoings/${outgoing.id}`);
+    }
+
+    doOutgoingAction(id: string, actionId: string) {
+        let outgoing = {
+            summary: 'hello world'
+        };
+        return this.dataService.apiPut(`${API_URL}/outgoings/${id}/${actionId}`, null, outgoing);
+    }
+
+    doOutgoingListAction(ids: string[], actionId: string) {
+        return this.dataService.put(`${API_URL}/outgoings/${actionId}`, { ids }, {});
     }
 }

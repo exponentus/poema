@@ -1,8 +1,9 @@
 import {
     Component, OnInit, OnDestroy, Input, Output, HostBinding,
     HostListener, Renderer, EventEmitter, ElementRef, ViewChild,
-    ChangeDetectionStrategy
+    ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
+import { Http, Headers } from '@angular/http';
 
 @Component({
     selector: 'selection',
@@ -24,14 +25,6 @@ import {
               [class.has-selected]="hasSelected"
               *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
-                <span class="selection-item"
-                      [ngClass]="m._itemClass"
-                      [ngStyle]="m._itemStyle"
-                      (click)="remove(m, $event)"
-                      *ngFor="let m of selectedItems">
-                    <span class="selection-item-text">{{m | localizedName:textKey}}</span>
-                    <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>
-                </span>
                 <input *ngIf="searchable"
                     #searchInput
                     class="select-search-input"
@@ -42,6 +35,16 @@ import {
                     (focus)="onFocus($event)"
                     (blur)="onBlur($event)"
                     (keyup)="handleEvent($event)" />
+                <div class="select-selected-items">
+                    <span class="selection-item"
+                        [ngClass]="m._itemClass"
+                        [ngStyle]="m._itemStyle"
+                        (click)="remove(m, $event)"
+                        *ngFor="let m of selectedItems">
+                        <span class="selection-item-text">{{m | localizedName:textKey}}</span>
+                        <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>
+                    </span>
+                </div>
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
                 <div class="select-search-not-found" *ngIf="showNotFound && notFoundText">{{notFoundText}}</div>
@@ -53,7 +56,7 @@ import {
                           [class.focus]="cursorId === m[idKey]"
                           [attr.data-id]="m[idKey]"
                           (click)="add(m)"
-                          *ngFor="let m of _items">
+                          *ngFor="let m of filteredItems">
                         <i class="select-checkmark-icon"></i>
                         <div [ngClass]="m._itemClass" [ngStyle]="m._itemStyle">
                             <div class="selection-item-text">{{m | localizedName:textKey}}</div>
@@ -103,9 +106,8 @@ export class SelectionComponent {
         this.handleEvent($event);
     }
 
-    @Input('items') set __items(items: any) {
-        this.items = items;
-        this._items = items;
+    @Input('items') set __items(items: any[]) {
+        this.setItems(items);
     };
     @Input() selectedItems: any = [];
     @Input() idKey: string = 'id';
@@ -116,6 +118,11 @@ export class SelectionComponent {
     @Input() allowClear = false;
     @Input() searchable = false;
     @Input() contentLoadable = false;
+    @Input() contentUrl;
+    @Input() contentPath;
+    @Input() totalPagesPath;
+    @Input() pageParam = 'page';
+    @Input() searchParam = 'keyWord';
     @Input() tabIndex = 0;
     @Input() checkmarkIconClass = 'fa fa-check';
     @Input() placeHolder: string = '';
@@ -130,15 +137,19 @@ export class SelectionComponent {
     private documentClickListener;
     private documentKeyUpListener;
     private items: any = [];
-    private _items: any = [];
+    private filteredItems: any = [];
     private selectedItemIds: string[] = [];
     private isOpen = false;
     private isFocused = false;
     private isInitialized = false;
     private selfClick = false;
     private firstOpen = true;
-    private keyWord = '';
     private showNotFound = false;
+
+    private loading = true;
+    private page = 0;
+    private totalPages = 1;
+    private keyWord = '';
 
     private SEARCH_MODE = 0;
     private MOVE_MODE = 1;
@@ -146,7 +157,11 @@ export class SelectionComponent {
     private cursorId;
     private cursorPosition = -1;
 
-    constructor(private renderer: Renderer) { }
+    constructor(
+        private http: Http,
+        private renderer: Renderer,
+        private ref: ChangeDetectorRef
+    ) { }
 
     ngOnInit() {
         if (this.disabled) {
@@ -213,6 +228,17 @@ export class SelectionComponent {
         }
     }
 
+    setItems(items: any[]) {
+        this.items = items;
+        this.filterItems();
+    }
+
+    appendToItems(items: any[]) {
+        this.items = this.items.concat(items);
+        this.filterItems();
+        this.ref.markForCheck();
+    }
+
     checkSelected() {
         this.selectedItemIds = this.selectedItems.map(it => it[this.idKey]);
     }
@@ -250,6 +276,7 @@ export class SelectionComponent {
         this.emitChange();
         this.clearSearchInput();
         this.filterItems();
+        this.close();
     }
 
     clear($event) {
@@ -270,20 +297,21 @@ export class SelectionComponent {
         }
     }
 
+    // ===
     filterItems(keyWord?: string) {
         if (!this.contentLoadable && keyWord) {
-            this._items = this.items.filter(it => {
+            this.filteredItems = this.items.filter(it => {
                 return it[this.textKey].toLowerCase().indexOf(keyWord) != -1;
             });
         } else if (this.multiple) {
-            this._items = this.items.filter(it => {
+            this.filteredItems = this.items.filter(it => {
                 return this.selectedItemIds.indexOf(it[this.idKey]) == -1;
             });
         } else {
-            this._items = this.items;
+            this.filteredItems = this.items;
         }
 
-        if (this._items.length === 0 || this._items.length !== this.items.length) {
+        if (this.filteredItems.length === 0 || this.filteredItems.length !== this.items.length) {
             this.resetCursor();
         }
 
@@ -293,7 +321,7 @@ export class SelectionComponent {
     search(keyWord) {
         if (this.keyWord !== keyWord) {
             if (this.contentLoadable) {
-                this.load.emit({ search: keyWord });
+                this.fetchContent({ search: keyWord });
             } else {
                 this.filterItems(keyWord);
             }
@@ -356,11 +384,11 @@ export class SelectionComponent {
         switch (direction) {
             case 'ArrowUp':
                 if (this.cursorPosition === -1) {
-                    this.cursorPosition = this._items.length - 1;
+                    this.cursorPosition = this.filteredItems.length - 1;
                 } else {
                     this.cursorPosition--;
                     if (this.cursorPosition < 0) {
-                        this.cursorPosition = this._items.length - 1;
+                        this.cursorPosition = this.filteredItems.length - 1;
                     }
                 }
                 break;
@@ -369,7 +397,7 @@ export class SelectionComponent {
                     this.cursorPosition = 0;
                 } else {
                     this.cursorPosition++;
-                    if (this.cursorPosition >= this._items.length) {
+                    if (this.cursorPosition >= this.filteredItems.length) {
                         this.cursorPosition = 0;
                     }
                 }
@@ -378,22 +406,22 @@ export class SelectionComponent {
                 this.cursorPosition = 0;
                 break;
             case 'ArrowRight':
-                this.cursorPosition = this._items.length - 1;
+                this.cursorPosition = this.filteredItems.length - 1;
                 break;
             default:
                 return;
         }
 
-        this.cursorId = this._items[this.cursorPosition][this.idKey];
+        this.cursorId = this.filteredItems[this.cursorPosition][this.idKey];
         this.scrollToCursor();
     }
 
     canMove() {
-        return this.isOpen && this._items.length > 0;
+        return this.isOpen && this.filteredItems.length > 0;
     }
 
     addOnCursor() {
-        this.add(this._items[this.cursorPosition]);
+        this.add(this.filteredItems[this.cursorPosition]);
     }
 
     scrollToCursor() {
@@ -409,11 +437,60 @@ export class SelectionComponent {
     }
 
     selectFirst() {
-        if (this.cursorMode === this.SEARCH_MODE && this._items.length > 0) {
-            this.cursorId = this._items[0].id;
+        if (this.cursorMode === this.SEARCH_MODE && this.filteredItems.length > 0) {
+            this.cursorId = this.filteredItems[0].id;
             this.cursorPosition = 0;
             this.cursorMode = this.MOVE_MODE;
         }
+    }
+
+    // ===
+    fetchContent($event) {
+        this.load.emit($event);
+
+        //
+        if (this.totalPages <= this.page) {
+            return;
+        }
+
+        if ($event.first === true) {
+            this.page = 1;
+        } else if ($event.next === true) {
+            this.page++;
+        } else if ($event.search) {
+
+        }
+
+        if (!this.contentUrl) {
+            return;
+        }
+
+        this.loading = true;
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', 'Accept': 'application/json' });
+        let url = `${this.contentUrl}&${this.pageParam}=${this.page}&${this.searchParam}=${encodeURIComponent(this.keyWord)}`;
+
+        this.http.get(url, { headers: headers })
+            .map(response => response.json())
+            .subscribe(payload => {
+                this.loading = false;
+
+                // destructuring
+                // read items
+                let itemPaths = this.contentPath.split('.');
+                let _list = payload;
+                for (let it of itemPaths) {
+                    _list = _list[it];
+                }
+                // read totalPages
+                let pagePaths = this.totalPagesPath.split('.');
+                let _totalPages = payload;
+                for (let it of pagePaths) {
+                    _totalPages = _totalPages[it];
+                }
+
+                this.totalPages = _totalPages;
+                this.appendToItems(_list);
+            });
     }
 
     // ===
@@ -424,8 +501,8 @@ export class SelectionComponent {
         this.isOpen = true;
         this.isFocused = true;
         if (this.firstOpen) {
-            this.load.emit({ first: true });
             this.firstOpen = false;
+            this.fetchContent({ first: true });
         }
     }
 
@@ -448,7 +525,7 @@ export class SelectionComponent {
     onScroll($event) {
         let {scrollHeight, clientHeight, scrollTop} = $event.target;
         if ((scrollHeight - clientHeight) == scrollTop) { // scroll end
-            this.load.emit({ next: true });
+            this.fetchContent({ next: true });
         }
     }
 }

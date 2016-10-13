@@ -7,6 +7,13 @@ export function xhrHeaders() {
     });
 }
 
+export function xhrJsonHeaders() {
+    return new Headers({
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
+    });
+}
+
 export function createURLSearchParams(params): URLSearchParams {
     let searchParams: URLSearchParams = new URLSearchParams();
 

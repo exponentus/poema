@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import { AppService } from './app.service';
-import { xhrHeaders, createURLSearchParams, serializeObj } from '../utils/utils';
+import { xhrHeaders, xhrJsonHeaders, createURLSearchParams, serializeObj } from '../utils/utils';
 
 @Injectable()
 export class DataService {
@@ -43,6 +43,35 @@ export class DataService {
     delete(url: string, params = {}) {
         return this.http.delete(url, {
             headers: xhrHeaders(),
+            search: createURLSearchParams(params)
+        })
+            .map(response => response.json())
+            .catch(error => this.appService.handleError(error));
+    }
+
+    //
+    apiGet(url: string, params = {}, retry = 1) {
+        return this.http.get(url, {
+            headers: xhrJsonHeaders(),
+            search: createURLSearchParams(params)
+        })
+            .retry(retry)
+            .map(response => response.json())
+            .catch(error => this.appService.handleError(error));
+    }
+
+    apiPost(url: string, params = {}, data: any) {
+        return this.http.post(url, JSON.stringify(data), {
+            headers: xhrJsonHeaders(),
+            search: createURLSearchParams(params)
+        })
+            .map(response => response.json())
+            .catch(error => this.appService.handleError(error));
+    }
+
+    apiPut(url: string, params = {}, data: any) {
+        return this.http.put(url, JSON.stringify(data), {
+            headers: xhrJsonHeaders(),
             search: createURLSearchParams(params)
         })
             .map(response => response.json())

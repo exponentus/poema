@@ -81,15 +81,40 @@ export class IncomingViewComponent {
         });
         let typeId = 'incoming';
 
-        this.incomingService.fetch(this.params).subscribe(
+        this.incomingService.fetchIncomings(this.params).subscribe(
             payload => {
-                let objects = parseResponseObjects(payload.objects);
 
-                this.list = objects[typeId] ? objects[typeId].list : [];
-                this.meta = objects[typeId] ? objects[typeId].meta : {};
+                // this.meta = objects[typeId] ? objects[typeId].meta : {};
 
-                this.actions = payload.data.actionBar.actions;
-                this.columns = payload.data.columnOptions.columns;
+                // this.actions = payload.data.actionBar.actions;
+                this.actions = [
+                    {
+                        "isOn": "ON",
+                        "caption": "Add",
+                        "hint": "",
+                        "type": "CUSTOM_ACTION",
+                        "customID": "new_outgoing",
+                        "url": "p?id=outgoing-form"
+                    },
+                    {
+                        "isOn": "ON",
+                        "caption": "Delete",
+                        "hint": "",
+                        "type": "DELETE_DOCUMENT",
+                        "customID": "delete_document",
+                        "url": ""
+                    }
+                ];
+
+                this.columns = payload.payload.columnOptions.columns;
+                let list = payload.payload.incomings;
+                this.list = list.result;
+                this.meta = {
+                    count: list.count,
+                    keyWord: list.keyWord,
+                    page: list.pageNum,
+                    totalPages: list.maxPage
+                };
                 this.loading = false;
             },
             error => console.log(error)
@@ -110,7 +135,7 @@ export class IncomingViewComponent {
     }
 
     onAction($event) {
-        this.incomingService.doAction($event.action.customID).subscribe(payload => {
+        this.incomingService.doIncomingAction('12312321', $event.action.customID).subscribe(payload => {
             let resp = payload.objects[0];
             alert(resp.name + ' : ' + resp.value);
         });

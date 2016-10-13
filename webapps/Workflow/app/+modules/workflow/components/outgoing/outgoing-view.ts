@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { WorkflowOutgoingService } from '../../services';
-import { parseResponseObjects } from '../../../../utils/utils';
 
 @Component({
     selector: 'outgoing-view',
@@ -80,15 +79,35 @@ export class OutgoingViewComponent {
         });
         let typeId = 'outgoing';
 
-        this.outgoingService.fetch(this.params).subscribe(
+        this.outgoingService.fetchOutgoings(this.params).subscribe(
             payload => {
-                let objects = parseResponseObjects(payload.objects);
+                this.list = payload.payload.incomings;
 
-                this.list = objects[typeId] ? objects[typeId].list : [];
-                this.meta = objects[typeId] ? objects[typeId].meta : {};
+                // let objects = parseResponseObjects(payload.objects);
 
-                this.actions = payload.data.actionBar.actions;
-                this.columns = payload.data.columnOptions.columns;
+                // this.list = objects[typeId] ? objects[typeId].list : [];
+                // this.meta = objects[typeId] ? objects[typeId].meta : {};
+
+                // this.actions = payload.data.actionBar.actions;
+                this.actions = [
+                    {
+                        "isOn": "ON",
+                        "caption": "Add",
+                        "hint": "",
+                        "type": "CUSTOM_ACTION",
+                        "customID": "new_outgoing",
+                        "url": "p?id=outgoing-form"
+                    },
+                    {
+                        "isOn": "ON",
+                        "caption": "Delete",
+                        "hint": "",
+                        "type": "DELETE_DOCUMENT",
+                        "customID": "delete_document",
+                        "url": ""
+                    }
+                ];
+                this.columns = payload.payload.columnOptions.columns;
                 this.loading = false;
             },
             error => console.log(error)
@@ -109,7 +128,7 @@ export class OutgoingViewComponent {
     }
 
     onAction($event) {
-        this.outgoingService.doAction($event.action.customID).subscribe(payload => {
+        this.outgoingService.doOutgoingAction('13123', $event.action.customID).subscribe(payload => {
             let resp = payload.objects[0];
             alert(resp.name + ' : ' + resp.value);
         });

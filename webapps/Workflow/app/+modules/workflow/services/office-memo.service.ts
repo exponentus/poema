@@ -1,65 +1,52 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
 
-import { AppService, DataService } from '../../../services';
+import { DataService } from '../../../services';
 import { OfficeMemo } from '../models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
+import { API_URL } from '../workflow.routing';
 
 @Injectable()
 export class WorkflowOfficeMemoService {
 
     constructor(
-        private http: Http,
-        private appService: AppService,
         private dataService: DataService
     ) { }
 
-    fetch(params: any, retry = 1) {
-        return this.dataService.get('/Workflow/p', params, retry);
-    }
-
-    fetchOfficeMemos(queryParams = {}) {
-        return this.http.get('/Workflow/p?id=officememo-view', {
-            headers: xhrHeaders(),
-            search: createURLSearchParams(queryParams)
-        })
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                return data;
-            })
-            .catch(error => this.appService.handleError(error));
+    fetchOfficeMemos(params = {}) {
+        return this.dataService.get(`${API_URL}/office-memos`, params);
     }
 
     fetchOfficeMemoById(id: string) {
-        let url = '/Workflow/p?id=officememo-form&docid=' + (id !== 'new' ? id : '');
-
-        return this.http.get(url, { headers: xhrHeaders() })
-            .map(response => {
-                let data = parseResponseObjects(response.json().objects);
-                let officememo = <any>data.officememo;
-                if (!officememo.id) {
-                    officememo.id = '';
-                }
-                if (data.fsid) {
-                    officememo.fsid = data.fsid;
-                }
-                if (data.ACL) {
-                    officememo.acl = data.ACL;
-                }
-                if (data.attachment) {
-                    officememo.attachments = data.attachment.list;
-                }
-                return {
-                    officememo: <OfficeMemo>officememo,
-                    actions: data.actions
-                }
-            })
-            .catch(error => this.appService.handleError(error));
+        return this.dataService.get(`${API_URL}/office-memos/${id}`);
     }
 
-    doAction(actionId: string) {
-        return this.http.put('/Workflow/p?id=incoming-view&_action=' + actionId, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
-            .catch(error => this.appService.handleError(error));
+    saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {
+        if (officeMemo.id) {
+            return this.updateOfficeMemo(officeMemo, params);
+        } else {
+            return this.addOfficeMemo(officeMemo, params);
+        }
+    }
+
+    private addOfficeMemo(officeMemo: OfficeMemo, params = {}) {
+        return this.dataService.post(`${API_URL}/office-memos`, params, officeMemo);
+    }
+
+    private updateOfficeMemo(officeMemo: OfficeMemo, params = {}) {
+        return this.dataService.put(`${API_URL}/office-memos/${officeMemo.id}`, params, officeMemo);
+    }
+
+    deleteOfficeMemo(officeMemo: OfficeMemo) {
+        return this.dataService.delete(`${API_URL}/office-memos/${officeMemo.id}`);
+    }
+
+    doOfficeMemoAction(id: string, actionId: string) {
+        let officeMemo = {
+            summary: 'hello world'
+        };
+        return this.dataService.apiPut(`${API_URL}/office-memos/${id}/${actionId}`, null, officeMemo);
+    }
+
+    doOfficeMemoListAction(ids: string[], actionId: string) {
+        return this.dataService.put(`${API_URL}/office-memos/${actionId}`, { ids }, {});
     }
 }
