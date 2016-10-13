@@ -45,7 +45,6 @@ import reference.model.Tag;
 import reference.model.TaskType;
 
 @JsonRootName("task")
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "tasks")

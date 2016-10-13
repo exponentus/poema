@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.exponentus.rest.incomingpojo.view.ViewRequest;
+import com.exponentus.rest.incomingpojo.Income;
 import com.exponentus.rest.runtime.AbstractRequestHandler;
 import com.exponentus.rest.runtime.RequestHandler;
 import com.exponentus.scripting._Session;
@@ -15,11 +15,11 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 
 @RequestHandler("task-view")
-public class TaskViewObjHandler extends AbstractRequestHandler<ViewRequest> {
+public class TaskViewObjHandler extends AbstractRequestHandler {
 
 	@Override
-	public void doGet(_Session ses, ViewRequest vr) {
-		TaskViewObj view = vr.getView(TaskViewObj.class);
+	public void doGet(_Session ses, Income income) {
+		TaskViewObj view = income.getPayload(TaskViewObj.class);
 		String[] expandedIds = view.getExpandedIds();
 		List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 		int pageSize = ses.pageSize;
@@ -34,17 +34,17 @@ public class TaskViewObjHandler extends AbstractRequestHandler<ViewRequest> {
 	}
 
 	@Override
-	public void doPost(_Session ses, ViewRequest request) {
+	public void doPost(_Session ses, Income request) {
 
 	}
 
 	@Override
-	public void doPut(_Session ses, ViewRequest request) {
+	public void doPut(_Session ses, Income request) {
 
 	}
 
 	@Override
-	public void doDelete(_Session ses, ViewRequest request) {
+	public void doDelete(_Session ses, Income request) {
 
 	}
 

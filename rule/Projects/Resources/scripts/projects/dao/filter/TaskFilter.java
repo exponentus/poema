@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.exponentus.rest.incomingpojo.view.Filter;
+import com.exponentus.runtimeobj.Filter;
 
 import projects.model.Project;
 import projects.model.Task;
