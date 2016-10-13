@@ -83,9 +83,6 @@ export class IncomingViewComponent {
 
         this.incomingService.fetchIncomings(this.params).subscribe(
             payload => {
-
-                // this.meta = objects[typeId] ? objects[typeId].meta : {};
-
                 // this.actions = payload.data.actionBar.actions;
                 this.actions = [
                     {

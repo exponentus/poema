@@ -86,9 +86,10 @@ export class ReferenceViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
+            id: this.id,
             sort: this.activeSort || 'regDate:desc'
         });
-        let typeId = this.params.id.split('-')[0];
+        let typeId = this.id.split('-')[0];
 
         this.referenceService.fetch(this.params).subscribe(
             payload => {

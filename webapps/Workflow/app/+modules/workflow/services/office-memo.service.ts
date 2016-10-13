@@ -12,7 +12,7 @@ export class WorkflowOfficeMemoService {
     ) { }
 
     fetchOfficeMemos(params = {}) {
-        return this.dataService.get(`${API_URL}/office-memos`, params);
+        return this.dataService.apiGet(`${API_URL}/office-memos`, params);
     }
 
     fetchOfficeMemoById(id: string) {
