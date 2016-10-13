@@ -12,7 +12,7 @@ export class WorkflowOutgoingService {
     ) { }
 
     fetchOutgoings(params = {}) {
-        return this.dataService.get(`${API_URL}/outgoings`, params);
+        return this.dataService.apiGet(`${API_URL}/outgoings`, params);
     }
 
     fetchOutgoingById(id: string) {

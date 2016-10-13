@@ -1,64 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nextbase>
-	<hostname>localhost</hostname>
-	<port></port>
-	<orgname>Avanti's projects</orgname>
-	<applications>
-		<app>
-			<name mode="on">Administrator</name>
-		</app>
-		<app>
-			<name mode="on">Staff</name>
-		</app>
-		<app>
-			<name mode="on">Reference</name>
-		</app>
-		<app>
+    <hostname>localhost</hostname>
+    <port></port>
+    <orgname>Avanti's projects</orgname>
+    <applications>
+        <app>
+            <name mode="on">Administrator</name>
+        </app>
+        <app>
+            <name mode="on">Staff</name>
+        </app>
+        <app>
+            <name mode="on">Reference</name>
+        </app>
+        <app>
             <name mode="on">Discussing</name>
         </app>
-		<app>
-			<name mode="on">Workspace</name>
-		</app>
-		<app>
-			<name mode="on">Projects</name>
-			 <rest mode="on">
-           <urlmapping></urlmapping>
+        <app>
+            <name mode="on">Workspace</name>
+        </app>
+        <app>
+            <name mode="on">Projects</name>
+            <rest mode="on">
+                <urlmapping>/api/*</urlmapping>
                 <allowcors>*</allowcors>
                 <services>
                     <class>projects.services.ProjectsService</class>
                 </services>
             </rest>
-		</app>
-		<app>
-            <name mode="on">Workflow</name>
         </app>
-       <app>
+        <app>
+            <name mode="on">Workflow</name>
+            <rest mode="on">
+                <urlmapping>/api/*</urlmapping>
+                <services>
+                    <class>workflow.services.incoming.IncomingsService</class>
+                    <class>workflow.services.incoming.IncomingService</class>
+                    <class>workflow.services.OutgoingsService</class>
+                    <class>workflow.services.OfficeMemoService</class>
+                </services>
+            </rest>
+        </app>
+        <app>
             <name mode="on">Welcome</name>
         </app>
-	</applications>
-	<langs>
-		<!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
-		<entry>RUS</entry>
-		<entry>KAZ</entry>
-		<entry>ENG</entry>
-		<entry>SPA</entry>
-		<entry>POR</entry>
-		<entry>BUL</entry>
-	</langs>
-	<mail mode="ON">
-		<smtphost>smtp.mail.ru</smtphost>
-		<defaultsender>mynameis.m@mail.ru</defaultsender>
-		<auth>true</auth>
-		<smtpport>465</smtpport>
-		<smtpuser>mynameis.m@mail.ru</smtpuser>
-		<smtppassword>mynameis.mmynameis.m</smtppassword>
-	</mail>
-	<slack mode="ON">
-		<token></token>
-	</slack>
-	<tls mode="OFF">
-		<port>38700</port>
-		<certfile>server.crt</certfile>
-		<certkeyfile>server.key</certkeyfile>
-	</tls>
+    </applications>
+    <langs>
+        <!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
+        <entry>RUS</entry>
+        <entry>KAZ</entry>
+        <entry>ENG</entry>
+        <entry>SPA</entry>
+        <entry>POR</entry>
+        <entry>BUL</entry>
+    </langs>
+    <mail mode="ON">
+        <smtphost>smtp.mail.ru</smtphost>
+        <defaultsender>mynameis.m@mail.ru</defaultsender>
+        <auth>true</auth>
+        <smtpport>465</smtpport>
+        <smtpuser>mynameis.m@mail.ru</smtpuser>
+        <smtppassword>mynameis.mmynameis.m</smtppassword>
+    </mail>
+    <slack mode="ON">
+        <token></token>
+    </slack>
+    <tls mode="OFF">
+        <port>38700</port>
+        <certfile>server.crt</certfile>
+        <certkeyfile>server.key</certkeyfile>
+    </tls>
 </nextbase>

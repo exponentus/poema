@@ -81,13 +81,6 @@ export class OfficeMemoViewComponent {
 
         this.officeMemoService.fetchOfficeMemos(this.params).subscribe(
             payload => {
-                this.list = payload.payload.incomings;
-
-                // let objects = parseResponseObjects(payload.objects);
-
-                // this.list = objects[typeId] ? objects[typeId].list : [];
-                // this.meta = objects[typeId] ? objects[typeId].meta : {};
-
                 // this.actions = payload.data.actionBar.actions;
                 this.actions = [
                     {
@@ -108,6 +101,14 @@ export class OfficeMemoViewComponent {
                     }
                 ];
                 this.columns = payload.payload.columnOptions.columns;
+                let list = payload.payload.officememos;
+                this.list = list.result;
+                this.meta = {
+                    count: list.count,
+                    keyWord: list.keyWord,
+                    page: list.pageNum,
+                    totalPages: list.maxPage
+                };
                 this.loading = false;
             },
             error => console.log(error)
