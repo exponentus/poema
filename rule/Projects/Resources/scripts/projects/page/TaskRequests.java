@@ -218,6 +218,7 @@ public class TaskRequests extends _DoForm {
 						return;
 					}
 					task.setDueDate(newDueDate);
+					task.setStatus(TaskStatusType.PROCESSING);
 					break;
 				case "cancel":
 					task.setStatus(TaskStatusType.CANCELLED);
