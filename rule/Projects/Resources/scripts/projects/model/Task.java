@@ -32,7 +32,6 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.rest.outgoingpojo.IPayload;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -348,9 +347,4 @@ public class Task extends SecureAppEntity<UUID> {
 		return title;
 	}
 
-	@JsonIgnore
-	public IPayload getMock() {
-		Task obj = new Task();
-		return obj;
-	}
 }

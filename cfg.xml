@@ -12,6 +12,7 @@
 		</app>
 		<app>
 			<name mode="on">Reference</name>
+			 <rest mode="on"/>
 		</app>
 		<app>
             <name mode="on">Discussing</name>
