@@ -26,7 +26,6 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
-import com.exponentus.rest.outgoingpojo.constants.ServerServiceExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validator;
 
@@ -53,7 +52,7 @@ public class PromoService extends RestProvider {
 		ArrayList<String> e = validateSimpleMailForm(email, subj, msg, captcha);
 
 		if (e.size() > 0) {
-			res.setMessage(ServerServiceExceptionType.FORMDATA_INCORRECT.name(), lang);
+			res.setMessage("FORMDATA_INCORRECT", lang);
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(res.setMessages(e, lang)).build();
 		}
 
@@ -70,11 +69,11 @@ public class PromoService extends RestProvider {
 				res.addMessage("message_has_sent_succesfully", lang);
 				return Response.status(HttpServletResponse.SC_OK).entity(res).build();
 			} else {
-				res.setMessage(ServerServiceExceptionType.MESSAGE_HAS_NOT_SENT.name(), lang);
+				res.setMessage("MESSAGE_HAS_NOT_SENT", lang);
 				return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang)).build();
 			}
 		} catch (MsgException e1) {
-			res.setMessage(ServerServiceExceptionType.MESSAGE_HAS_NOT_SENT.name(), lang);
+			res.setMessage("MESSAGE_HAS_NOT_SENT", lang);
 			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang)).build();
 		}
 
@@ -86,7 +85,7 @@ public class PromoService extends RestProvider {
 
 		if (!_Validator.checkEmail(email)) {
 			isValid = false;
-			errors.add(ServerServiceExceptionType.EMAIL_IS_INCORRECT.name());
+			errors.add("EMAIL_IS_INCORRECT");
 		}
 		/*
 		 * if (subj.isEmpty() || subj.length() > 256) { isValid = false;
