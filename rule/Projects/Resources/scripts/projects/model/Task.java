@@ -342,9 +342,4 @@ public class Task extends SecureAppEntity<UUID> {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&taskId=" + getIdentifier();
 	}
 
-	@Override
-	public String getViewText() {
-		return title;
-	}
-
 }
