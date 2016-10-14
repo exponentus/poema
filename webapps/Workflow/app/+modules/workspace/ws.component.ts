@@ -9,20 +9,20 @@ import { WorkspaceService } from './ws.service';
     template: `
         <main class="content">
             <h1>WorkSpaceComponent</h1>
-                <div class="span4" *ngFor="let opt of options">
-                    <selection
-                        class="employee-input"
-                        [contentUrl]="opt.contentUrl"
-                        [contentPath]="opt.contentPath"
-                        [totalPagesPath]="opt.totalPagesPath"
-                        [disabled]="false"
-                        [searchable]="true"
-                        [allowClear]="true"
-                        [multiple]="opt.multiple"
-                        placeHolder="place holder"
-                        (change)="onSelect($event)">
-                    </selection>
-                </div>
+            <div class="span4" *ngFor="let opt of options">
+                <selection
+                    class="employee-input"
+                    [contentUrl]="opt.contentUrl"
+                    [contentPath]="opt.contentPath"
+                    [totalPagesPath]="opt.totalPagesPath"
+                    [disabled]="false"
+                    [searchable]="true"
+                    [allowClear]="true"
+                    [multiple]="opt.multiple"
+                    placeHolder="place holder"
+                    (change)="onSelect($event)">
+                </selection>
+            </div>
             <router-outlet></router-outlet>
         </main>
     `

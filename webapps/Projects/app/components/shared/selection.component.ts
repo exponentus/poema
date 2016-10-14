@@ -96,6 +96,9 @@ export class SelectionComponent {
 
     @HostListener('mousedown', ['$event']) public onMouseDown($event: MouseEvent): void {
         this.selfClick = true;
+        setTimeout(() => {
+            this.selfClick = false;
+        }, 50);
     }
 
     @HostListener('keydown', ['$event']) public onKeyDown($event: KeyboardEvent): void {
