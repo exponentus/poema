@@ -22,13 +22,8 @@
         </app>
         <app>
             <name mode="on">Projects</name>
-            <rest mode="on">
-                <urlmapping>/api/*</urlmapping>
-                <allowcors>*</allowcors>
-                <services>
-                    <class>projects.services.ProjectsService</class>
-                </services>
-            </rest>
+            <rest mode="on"/>
+           
         </app>
         <app>
             <name mode="on">Workflow</name>
