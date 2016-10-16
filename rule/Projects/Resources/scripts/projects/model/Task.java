@@ -57,7 +57,7 @@ public class Task extends SecureAppEntity<UUID> {
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task parent;
 
-	@FTSearchable
+	@FTSearchable(ignoreLang = true)
 	@Column(name = "reg_number", length = 140)
 	private String regNumber;
 
