@@ -1,4 +1,4 @@
-package projects.view;
+package projects.rest.view;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,11 +15,11 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 
 @RequestHandler("task-view")
-public class TaskViewObjHandler extends HandlerAdapter {
+public class TaskViewObjHandlerDemo extends HandlerAdapter {
 
 	@Override
 	public void doPost(_Session ses, Income income) {
-		TaskViewObj view = income.getPayload(TaskViewObj.class);
+		TaskViewObjDemo view = income.getPayload(TaskViewObjDemo.class);
 		String[] expandedIds = view.getExpandedIds();
 		List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 		int pageSize = ses.pageSize;

@@ -1,4 +1,4 @@
-package projects.view;
+package projects.rest.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ import projects.dao.filter.TaskFilter;
 import projects.model.Task;
 
 @JsonRootName("task-view")
-public class TaskViewObj extends SimpleViewObj<Task> {
+public class TaskViewObjDemo extends SimpleViewObj<Task> {
 
 	@JsonIgnore
 	public Object getMock() {
-		TaskViewObj obj = new TaskViewObj();
+		TaskViewObjDemo obj = new TaskViewObjDemo();
 		List<Task> taskList = new ArrayList<>();
 		Task task = new Task();
 		taskList.add(task);
