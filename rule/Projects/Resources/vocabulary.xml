@@ -189,7 +189,7 @@
         <entry lang="ENG">Cancel task</entry>
     </sentence>
     <sentence mode="on" keyword="acknowledged_task">
-        <entry lang="RUS">Acknowledged</entry>
+        <entry lang="RUS">Принято в работу</entry>
         <entry lang="ENG">Acknowledged</entry>
     </sentence>
     <sentence mode="on" keyword="send_task">
