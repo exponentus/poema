@@ -6,6 +6,7 @@ package workflow.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -30,9 +31,12 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
     private Approval approval;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "office_memo_attachments", joinColumns = {
-            @JoinColumn(name = "office_memo_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id", referencedColumnName = "id")})
+    @JoinTable(name = "office_memo_attachments",
+            joinColumns = {@JoinColumn(name = "office_memo_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "office_memo_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"office_memo_id", "attachment_id"}))
+    @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
     @Column(nullable = false, length = 128)

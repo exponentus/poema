@@ -82,7 +82,7 @@
                             <xsl:value-of select="viewcontent/senderappliedregdate"/>
                         </div>
                         <div class="vw-content">
-                            <xsl:value-of select="viewcontent/summary"/>
+                            <xsl:value-of select="viewcontent/title"/>
                         </div>
                     </div>
                 </a>

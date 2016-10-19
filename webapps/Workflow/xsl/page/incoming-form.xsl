@@ -92,11 +92,11 @@
                             </div>
                             <div class="form-group">
                                 <div class="control-label">
-                                    <xsl:value-of select="//captions/summary/@caption"/>
+                                    <xsl:value-of select="//captions/title/@caption"/>
                                 </div>
                                 <div class="controls">
-                                    <textarea type="text" name="summary" value="{fields/summary}" class="span8">
-                                        <xsl:value-of select="fields/summary"/>
+                                    <textarea type="text" name="title" value="{fields/title}" class="span8">
+                                        <xsl:value-of select="fields/title"/>
                                     </textarea>
                                 </div>
                             </div>

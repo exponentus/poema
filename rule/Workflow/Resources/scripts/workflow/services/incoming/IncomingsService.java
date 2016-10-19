@@ -12,7 +12,6 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import workflow.dao.IncomingDAO;
-import workflow.model.Incoming;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
@@ -23,7 +22,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Path("incomings")
@@ -31,7 +29,7 @@ public class IncomingsService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getView(@Context UriInfo uriInfo) {
+    public Response get(@Context UriInfo uriInfo) {
         Map<String, Object> payload = new HashMap<>();
 
         _Session session = getSession();
@@ -40,13 +38,12 @@ public class IncomingsService extends RestProvider {
         int pageNum = formData.getNumberValueSilently("page", 0);
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
-        List<Incoming> list = incomingDAO.findAll(pageNum, pageSize);
-        ViewPage vp = new ViewPage<>(list, list.size(), pageSize, pageNum);
+        ViewPage vp = incomingDAO.findViewPage(pageNum, pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
         _Action newDocAction = new _Action("add_new", "", "new_incoming");
-        newDocAction.setURL("p?id=incoming-form");
+        newDocAction.setURL("new");
         actionBar.addAction(newDocAction);
         actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
@@ -61,10 +58,13 @@ public class IncomingsService extends RestProvider {
         colOpts.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
         colOpts.add("summary", "summary", "text", "", "vw-summary");
 
+        payload.put("actionBar", actionBar);
         payload.put("columnOptions", colOpts);
-        payload.put("incomings", vp);
+        payload.put("view", vp);
+        payload.put("title", "incoming_documents");
 
         Outcome outcome = new Outcome();
+        outcome.setId("incomings");
         outcome.setPayload(payload);
 
         return Response.ok(outcome).build();
@@ -75,7 +75,7 @@ public class IncomingsService extends RestProvider {
         sd.setName(getClass().getName());
         ServiceMethod m = new ServiceMethod();
         m.setMethod(HttpMethod.GET);
-        m.setURL("/" + sd.getAppName() + sd.getUrlMapping());
+        m.setURL("/" + sd.getAppName() + sd.getUrlMapping() + "/incomings");
         sd.addMethod(m);
         return sd;
     }

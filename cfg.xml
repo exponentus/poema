@@ -32,8 +32,9 @@
                 <services>
                     <class>workflow.services.incoming.IncomingsService</class>
                     <class>workflow.services.incoming.IncomingService</class>
-                    <class>workflow.services.OutgoingsService</class>
-                    <class>workflow.services.OfficeMemoService</class>
+                    <!--<class>workflow.services.incoming.IncomingActionsService</class>-->
+                    <class>workflow.services.outgoing.OutgoingsService</class>
+                    <class>workflow.services.officememo.OfficeMemoService</class>
                 </services>
             </rest>
         </app>

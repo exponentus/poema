@@ -5,7 +5,11 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
+import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting.actions._Action;
+import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.scripting.actions._ActionType;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
@@ -14,17 +18,28 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("incomings")
+@Path("incomings/{id}")
 public class IncomingService extends RestProvider {
 
     @GET
-    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
-        IncomingDAO incomingDAO = new IncomingDAO(ses);
-        Incoming entity = incomingDAO.findById(id);
-        return Response.ok(new ViewPage<>(entity)).build();
+        Incoming entity;
+
+        if ("new".equals(id)) {
+            entity = new Incoming();
+        } else {
+            IncomingDAO incomingDAO = new IncomingDAO(ses);
+            entity = incomingDAO.findById(id);
+        }
+
+        Outcome outcome = new Outcome();
+        outcome.setId(id);
+        outcome.addPayload("incoming", entity);
+        outcome.addPayload("actionBar", getActionBar(ses, entity));
+
+        return Response.ok(outcome).build();
     }
 
     @POST
@@ -43,12 +58,11 @@ public class IncomingService extends RestProvider {
     }
 
     @PUT
-    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Incoming incoming) {
 
-        System.out.println(incoming.getSummary());
+        System.out.println(incoming.getTitle());
 
         _Session ses = getSession();
         IncomingDAO incomingDAO = new IncomingDAO(ses);
@@ -62,7 +76,6 @@ public class IncomingService extends RestProvider {
     }
 
     @DELETE
-    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
@@ -76,6 +89,18 @@ public class IncomingService extends RestProvider {
             }
         }
         return Response.noContent().build();
+    }
+
+    private _ActionBar getActionBar(_Session session, Incoming incoming) {
+        _ActionBar actionBar = new _ActionBar(session);
+        // if (incoming.isEditable()) {
+        actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+        if (!incoming.isNew()) {
+            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+        }
+        // }
+
+        return actionBar;
     }
 
     @Override

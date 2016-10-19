@@ -45,7 +45,7 @@ export class IncomingViewComponent {
     private columns = [];
     private subs: any = [];
 
-    title = 'incoming-view';
+    title = 'incomings';
     list: any[];
     meta: any = {};
     keyWord: string = '';
@@ -83,34 +83,16 @@ export class IncomingViewComponent {
 
         this.incomingService.fetchIncomings(this.params).subscribe(
             payload => {
-                // this.actions = payload.data.actionBar.actions;
-                this.actions = [
-                    {
-                        "isOn": "ON",
-                        "caption": "Add",
-                        "hint": "",
-                        "type": "CUSTOM_ACTION",
-                        "customID": "new_outgoing",
-                        "url": "p?id=outgoing-form"
-                    },
-                    {
-                        "isOn": "ON",
-                        "caption": "Delete",
-                        "hint": "",
-                        "type": "DELETE_DOCUMENT",
-                        "customID": "delete_document",
-                        "url": ""
-                    }
-                ];
-
+                this.title = payload.payload.title;
+                this.actions = payload.payload.actionBar.actions;
                 this.columns = payload.payload.columnOptions.columns;
-                let list = payload.payload.incomings;
-                this.list = list.result;
+                let view = payload.payload.view;
+                this.list = view.result;
                 this.meta = {
-                    count: list.count,
-                    keyWord: list.keyWord,
-                    page: list.pageNum,
-                    totalPages: list.maxPage
+                    count: view.count,
+                    keyWord: view.keyWord,
+                    page: view.pageNum,
+                    totalPages: view.maxPage
                 };
                 this.loading = false;
             },
@@ -132,9 +114,14 @@ export class IncomingViewComponent {
     }
 
     onAction($event) {
-        this.incomingService.doIncomingAction('12312321', $event.action.customID).subscribe(payload => {
-            let resp = payload.objects[0];
-            alert(resp.name + ' : ' + resp.value);
-        });
+        // this.incomingService.doIncomingAction('12312321', $event.action.customID).subscribe(payload => {
+        //     let resp = payload.objects[0];
+        //     alert(resp.name + ' : ' + resp.value);
+        // });
+        if ($event.action.url) {
+            this.router.navigate([$event.action.url], { relativeTo: this.route });
+        } else {
+            console.log($event);
+        }
     }
 }

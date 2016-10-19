@@ -1,16 +1,14 @@
 package workflow.dao;
 
-import java.util.UUID;
-
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.scripting._Session;
-
 import workflow.model.Incoming;
+
+import java.util.UUID;
 
 public class IncomingDAO extends DAO<Incoming, UUID> {
 
-	public IncomingDAO(_Session session) {
-		super(Incoming.class, session);
-	}
-
+    public IncomingDAO(_Session session) {
+        super(Incoming.class, session);
+    }
 }

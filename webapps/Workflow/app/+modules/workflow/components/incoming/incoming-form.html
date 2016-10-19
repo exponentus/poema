@@ -1,7 +1,7 @@
 <form class="form" *ngIf="isReady">
     <header class="content-header">
         <div class="content-actions">
-            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+            <button class="btn-back" type="button" (click)="close($event)">
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
@@ -21,8 +21,14 @@
                 </div>
             </div>
         </div>
-        <h1 class="header-title">
-            {{title | translate}}
+        <h1 class="header-title task-header-title">
+            <div class="header-title-flex">
+                <label class="header-title-label">
+                    <div>{{'incoming' | translate}}</div>
+                </label>
+                <div class="task-reg-number" *ngIf="incoming.regNumber">{{incoming.regNumber}}</div>
+                <input [class.invalid]="errors.title" [autofocus]="isEditable" required name="title" maxlength="140" placeholder="{{'title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.title" />
+            </div>
         </h1>
     </header>
     <section class="content-body">
@@ -31,62 +37,127 @@
                 <div class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
-                            {{'applied_reg_date' | translate}}
-                        </div>
-                        <div class="controls">
-                            <input type="date" name="appliedRegDate" class="span2" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'doc_language' | translate}}
-                        </div>
-                        <div class="controls">
-                            <select name="docLanguage" class="span8">
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'doc_type' | translate}}
-                        </div>
-                        <div class="controls">
-                            <select name="docType" class="span8">
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
                             {{'sender' | translate}}
                         </div>
-                        <div class="controls">
-                            <select name="sender" class="span8">
-                                
-                            </select>
+                        <div class="controls" [class.has-error]="errors.sender">
+                            <selection
+                                class="span8"
+                                [selectedItems]="incoming.sender"
+                                [contentUrl]="'/Staff/p?id=organization-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setSender($event)">
+                            </selection>
+                            <error-message [error]="errors.priority"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'sender_reg_number' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.senderRegNumber">
+                            <input class="span4" name="title" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.senderRegNumber" />
+                            <error-message [error]="errors.senderRegNumber"></error-message>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="control-label">
                             {{'sender_applied_reg_date' | translate}}
                         </div>
-                        <div class="controls">
-                            <input type="date" name="senderAppliedRegDate" class="span2" />
+                        <div class="controls" [class.has-error]="errors.senderAppliedRegDate">
+                            <div class="span2" *ngIf="!isEditable">
+                                <span class="input">{{incoming.senderAppliedRegDate}}</span>
+                            </div>
+                            <div class="span2" *ngIf="isEditable">
+                                <input datepicker class="span2" name="senderAppliedRegDate" (select)="setSenderAppliedRegDate($event)" [(ngModel)]="incoming.senderAppliedRegDate" />
+                            </div>
+                            <error-message [error]="errors.senderAppliedRegDate"></error-message>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            {{'summary' | translate}}
+                            {{'doc_language' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.docLanguage">
+                            <selection
+                                class="span8"
+                                [selectedItems]="incoming.docLanguage"
+                                [contentUrl]="'/Reference/p?id=documentlanguage-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setDocLanguage($event)">
+                            </selection>
+                            <error-message [error]="errors.docLanguage"></error-message>
+                        </div>
+                    </div>
+                        <div class="form-group">
+                        <div class="control-label">
+                            {{'doc_type' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.docType">
+                            <selection
+                                class="span8"
+                                [selectedItems]="incoming.docType"
+                                [contentUrl]="'/Reference/p?id=documenttype-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setDocType($event)">
+                            </selection>
+                            <error-message [error]="errors.docType"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'response_to' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.responseTo">
+                            <selection
+                                class="span8"
+                                [selectedItems]="incoming.responseTo"
+                                [contentUrl]="'/Workflow/api/outgoings?'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setResponseTo($event)">
+                            </selection>
+                            <error-message [error]="errors.responseTo"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group" [class.has-error]="errors.body">
+                        <div class="control-label">
+                            {{'body' | translate}}
                         </div>
                         <div class="controls">
-                            <textarea type="text" name="summary" class="span8">{{incoming.summary}}</textarea>
+                            <markdown-editor
+                                writeLabel="{{'markdown_write' | translate}}"
+                                previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="incoming.body || ''"
+                                [editable]="isEditable"
+                                [updateTimeout]="300"
+                                (update)="setIncomingBody($event)">
+                            </markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
                         </div>
                     </div>
                 </div>
-                <attachments [editable]="isEditable" [model]="incoming" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments
+                    [editable]="isEditable"
+                    [model]="incoming"
+                    (upload)="addAttachment($event)"
+                    (delete)="deleteAttachment($event)">
+                </attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasExecution">
+                <!--<tasks [tasks]="[incoming]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>-->
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="incoming.acl">
                 <acl [acl]="incoming.acl"></acl>
             </tab>
         </tabs>

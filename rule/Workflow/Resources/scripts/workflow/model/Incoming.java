@@ -1,194 +1,145 @@
 package workflow.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.system.IEmployee;
-import com.exponentus.dataengine.system.IExtUserDAO;
-import com.exponentus.env.Environment;
-import com.exponentus.scripting._Session;
-import com.exponentus.util.TimeUtil;
-
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentType;
 import staff.model.Organization;
 import workflow.model.embedded.Control;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+@JsonRootName("incoming")
 @Entity
 @Table(name = "incomings")
 @NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
 public class Incoming extends SecureAppEntity<UUID> {
 
-	@Column(name = "reg_number")
-	private String regNumber;
+    @Column(nullable = false)
+    private String title = "";
 
-	@Column(name = "applied_reg_date")
-	private Date appliedRegDate;
+    @Column(name = "reg_number")
+    private String regNumber;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "incoming_attachments", joinColumns = { @JoinColumn(name = "incoming_id", referencedColumnName = "id") }, inverseJoinColumns = {
-	        @JoinColumn(name = "attachment_id", referencedColumnName = "id") })
-	private List<Attachment> attachments = new ArrayList<>();
+    @Column(name = "applied_reg_date")
+    private Date appliedRegDate;
 
-	private Organization sender;
+    private Organization sender;
 
-	@Column(name = "sender_reg_number")
-	private String senderRegNumber;
+    @Column(name = "sender_reg_number")
+    private String senderRegNumber;
 
-	@Column(name = "sender_applied_reg_date")
-	private Date senderAppliedRegDate;
+    @Column(name = "sender_applied_reg_date")
+    private Date senderAppliedRegDate;
 
-	@Column(nullable = false)
-	private String summary = "";
+    private DocumentLanguage docLanguage;
 
-	private DocumentLanguage docLanguage;
+    private DocumentType docType;
 
-	private DocumentType docType;
+    private Outgoing responseTo;
 
-	private Outgoing responseTo;
+    @FTSearchable
+    @Column(columnDefinition = "TEXT")
+    private String body;
 
-	@Embedded
-	private Control control = new Control();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "incoming_attachments",
+            joinColumns = {@JoinColumn(name = "incoming_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "incoming_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"incoming_id", "attachment_id"}))
+    @CascadeOnDelete
+    private List<Attachment> attachments = new ArrayList<>();
 
-	public String getRegNumber() {
-		return regNumber;
-	}
+    @Embedded
+    private Control control = new Control();
 
-	public void setRegNumber(String regNumber) {
-		this.regNumber = regNumber;
-	}
+    public String getRegNumber() {
+        return regNumber;
+    }
 
-	public Date getAppliedRegDate() {
-		return appliedRegDate;
-	}
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
 
-	public void setAppliedRegDate(Date appliedRegDate) {
-		this.appliedRegDate = appliedRegDate;
-	}
+    public Date getAppliedRegDate() {
+        return appliedRegDate;
+    }
 
-	public Organization getSender() {
-		return sender;
-	}
+    public void setAppliedRegDate(Date appliedRegDate) {
+        this.appliedRegDate = appliedRegDate;
+    }
 
-	public void setSender(Organization sender) {
-		this.sender = sender;
-	}
+    public Organization getSender() {
+        return sender;
+    }
 
-	public String getSenderRegNumber() {
-		return senderRegNumber;
-	}
+    public void setSender(Organization sender) {
+        this.sender = sender;
+    }
 
-	public void setSenderRegNumber(String senderRegNumber) {
-		this.senderRegNumber = senderRegNumber;
-	}
+    public String getSenderRegNumber() {
+        return senderRegNumber;
+    }
 
-	public Date getSenderAppliedRegDate() {
-		return senderAppliedRegDate;
-	}
+    public void setSenderRegNumber(String senderRegNumber) {
+        this.senderRegNumber = senderRegNumber;
+    }
 
-	public void setSenderAppliedRegDate(Date senderAppliedRegDate) {
-		this.senderAppliedRegDate = senderAppliedRegDate;
-	}
+    public Date getSenderAppliedRegDate() {
+        return senderAppliedRegDate;
+    }
 
-	public String getSummary() {
-		return summary;
-	}
+    public void setSenderAppliedRegDate(Date senderAppliedRegDate) {
+        this.senderAppliedRegDate = senderAppliedRegDate;
+    }
 
-	@Override
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	@Override
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+    @Override
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
-	public DocumentLanguage getDocLanguage() {
-		return docLanguage;
-	}
+    @Override
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
 
-	public void setDocLanguage(DocumentLanguage docLanguage) {
-		this.docLanguage = docLanguage;
-	}
+    public DocumentLanguage getDocLanguage() {
+        return docLanguage;
+    }
 
-	public DocumentType getDocType() {
-		return docType;
-	}
+    public void setDocLanguage(DocumentLanguage docLanguage) {
+        this.docLanguage = docLanguage;
+    }
 
-	public void setDocType(DocumentType docType) {
-		this.docType = docType;
-	}
+    public DocumentType getDocType() {
+        return docType;
+    }
 
-	public Outgoing getResponseTo() {
-		return responseTo;
-	}
+    public void setDocType(DocumentType docType) {
+        this.docType = docType;
+    }
 
-	public void setResponseTo(Outgoing responseTo) {
-		this.responseTo = responseTo;
-	}
+    public Outgoing getResponseTo() {
+        return responseTo;
+    }
 
-	@Override
-	public String getShortXMLChunk(_Session ses) {
-		return getFullXMLChunk(ses);
-	}
-
-	@Override
-	public String getFullXMLChunk(_Session ses) {
-		StringBuilder chunk = new StringBuilder(1000);
-		chunk.append("<regdate>" + TimeUtil.dateTimeToStringSilently(regDate) + "</regdate>");
-		IExtUserDAO eDao = Environment.getExtUserDAO();
-		IEmployee user = eDao.getEmployee(author);
-		if (user != null) {
-			chunk.append("<author>" + user.getName() + "</author>");
-		} else {
-			chunk.append("<author>" + author + "</author>");
-		}
-
-		chunk.append("<regnumber>" + regNumber + "</regnumber>");
-		chunk.append("<appliedregdate>" + TimeUtil.dateTimeToStringSilently(appliedRegDate) + "</appliedregdate>");
-		if (docLanguage != null) {
-			chunk.append("<doclanguage id=\"" + docLanguage.getId() + "\">" + docLanguage.getLocalizedName(ses.getLang()) + "</doclanguage>");
-		}
-		if (docType != null) {
-			chunk.append("<doctype id=\"" + docType.getId() + "\">" + docType.getLocalizedName(ses.getLang()) + "</doctype>");
-		}
-		if (sender != null) {
-			chunk.append("<sender id=\"" + sender.getId() + "\">" + sender.getLocalizedName(ses.getLang()) + "</sender>");
-		}
-		chunk.append("<senderappliedregdate>" + TimeUtil.dateTimeToStringSilently(senderAppliedRegDate) + "</senderappliedregdate>");
-		chunk.append("<summary>" + summary + "</summary>");
-
-		if (getAttachments() != null && !attachments.isEmpty()) {
-			chunk.append("<attachments>");
-			for (Attachment att : attachments) {
-				String downloadUrl = this.getURL() + "&amp;attachment=" + att.getId() + "&amp;fileid=" + att.getRealFileName();
-				chunk.append("<attachment id=\"" + att.getId() + "\">");
-				chunk.append("<url>" + downloadUrl + "</url>");
-				chunk.append(att.getShortXMLChunk(ses));
-				chunk.append("</attachment>");
-			}
-			chunk.append("</attachments>");
-		}
-		return chunk.toString();
-	}
+    public void setResponseTo(Outgoing responseTo) {
+        this.responseTo = responseTo;
+    }
 }

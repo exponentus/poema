@@ -109,7 +109,7 @@ public class IncomingForm extends _DoForm {
             entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
             entity.setSender(organizationDAO.findById(formData.getValue("sender")));
             entity.setSenderAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("senderAppliedRegDate")));
-            entity.setSummary(formData.getValue("summary"));
+            entity.setTitle(formData.getValue("summary"));
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {

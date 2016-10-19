@@ -20,19 +20,7 @@ export class WorkflowOutgoingService {
     }
 
     saveOutgoing(outgoing: Outgoing, params = {}) {
-        if (outgoing.id) {
-            return this.updateOutgoing(outgoing, params);
-        } else {
-            return this.addOutgoing(outgoing, params);
-        }
-    }
-
-    private addOutgoing(outgoing: Outgoing, params = {}) {
-        return this.dataService.post(`${API_URL}/outgoings`, params, outgoing);
-    }
-
-    private updateOutgoing(outgoing: Outgoing, params = {}) {
-        return this.dataService.put(`${API_URL}/outgoings/${outgoing.id}`, params, outgoing);
+        return this.dataService.post(`${API_URL}/outgoings/${outgoing.id}`, params, outgoing);
     }
 
     deleteOutgoing(outgoing: Outgoing) {
@@ -41,12 +29,12 @@ export class WorkflowOutgoingService {
 
     doOutgoingAction(id: string, actionId: string) {
         let outgoing = {
-            summary: 'hello world'
+            title: 'hello world'
         };
         return this.dataService.apiPut(`${API_URL}/outgoings/${id}/${actionId}`, null, outgoing);
     }
 
-    doOutgoingListAction(ids: string[], actionId: string) {
+    doOutgoingsAction(ids: string[], actionId: string) {
         return this.dataService.put(`${API_URL}/outgoings/${actionId}`, { ids }, {});
     }
 }

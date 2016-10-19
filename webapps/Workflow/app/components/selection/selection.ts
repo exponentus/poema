@@ -109,10 +109,16 @@ export class SelectionComponent {
         this.handleEvent($event);
     }
 
-    @Input('items') set __items(items: any[]) {
+    @Input('items') set _items(items: any[]) {
         this.setItems(items);
     };
-    @Input() selectedItems: any = [];
+    @Input('selectedItems') set _selectedItems(selectedItems: any[]) {
+        if (typeof selectedItems === 'Array') {
+            this.selectedItems = selectedItems;
+        } else {
+            this.selectedItems = selectedItems ? [selectedItems] : [];
+        }
+    };
     @Input() idKey: string = 'id';
     @Input() textKey: string = 'name';
     @Input() descriptionKey: string;
@@ -140,6 +146,7 @@ export class SelectionComponent {
     private documentClickListener;
     private documentKeyUpListener;
     private items: any = [];
+    private selectedItems: any = [];
     private filteredItems: any = [];
     private selectedItemIds: string[] = [];
     private isOpen = false;

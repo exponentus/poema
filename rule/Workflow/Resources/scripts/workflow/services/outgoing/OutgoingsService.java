@@ -1,4 +1,4 @@
-package workflow.services;
+package workflow.services.outgoing;
 
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
@@ -9,8 +9,11 @@ import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
-import workflow.dao.OfficeMemoDAO;
-import workflow.model.OfficeMemo;
+import com.exponentus.scripting.actions._Action;
+import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.scripting.actions._ActionType;
+import workflow.dao.OutgoingDAO;
+import workflow.model.Outgoing;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -19,11 +22,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Path("office-memos")
-public class OfficeMemoService extends RestProvider {
+@Path("outgoings")
+public class OutgoingsService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,23 +37,33 @@ public class OfficeMemoService extends RestProvider {
         int pageSize = session.pageSize;
         int pageNum = formData.getNumberValueSilently("page", 0);
 
-        OfficeMemoDAO dao = new OfficeMemoDAO(session);
-        List<OfficeMemo> list = dao.findAll(pageNum, pageSize);
-        ViewPage vp = new ViewPage<>(list, list.size(), pageSize, pageNum);
+        OutgoingDAO dao = new OutgoingDAO(session);
+        ViewPage vp = dao.findViewPage(pageNum, pageSize);
+
+        //
+        _ActionBar actionBar = new _ActionBar(session);
+        _Action newDocAction = new _Action("add_new", "", "new_incoming");
+        newDocAction.setURL("new");
+        actionBar.addAction(newDocAction);
+        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
         // column options
         _ColumnOptions colOpts = new _ColumnOptions();
         colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
         colOpts.add("", "attachment", "icon", "", "vw-icon");
-        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
-        colOpts.add("approval", "approval", "localizedName", "both", "vw-name");
-        colOpts.add("content", "content", "text", "both", "vw-content");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
+        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
+        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
+        colOpts.add("recipient", "recipient", "localizedName", "both", "vw-recipient");
         colOpts.add("summary", "summary", "text", "", "vw-summary");
 
+        payload.put("actionBar", actionBar);
         payload.put("columnOptions", colOpts);
-        payload.put("officememos", vp);
+        payload.put("view", vp);
+        payload.put("title", "outgoing_documents");
 
         Outcome outcome = new Outcome();
+        outcome.setId("outgoings");
         outcome.setPayload(payload);
 
         return Response.ok(outcome).build();
@@ -62,20 +74,20 @@ public class OfficeMemoService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity = dao.findById(id);
+        OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+        Outgoing entity = outgoingDAO.findById(id);
         return Response.ok(new ViewPage<>(entity)).build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(OfficeMemo officeMemo) {
+    public Response add(Outgoing incoming) {
         _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity;
+        OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+        Outgoing entity;
         try {
-            entity = dao.add(officeMemo);
+            entity = outgoingDAO.add(incoming);
         } catch (SecureException e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
@@ -86,12 +98,15 @@ public class OfficeMemoService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, OfficeMemo officeMemo) {
+    public Response update(@PathParam("id") String id, Outgoing incoming) {
+
+        System.out.println(incoming.getSummary());
+
         _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity;
+        OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+        Outgoing entity;
         try {
-            entity = dao.update(officeMemo);
+            entity = outgoingDAO.update(incoming);
         } catch (SecureException e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
@@ -103,8 +118,8 @@ public class OfficeMemoService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity = dao.findById(id);
+        OutgoingDAO dao = new OutgoingDAO(ses);
+        Outgoing entity = dao.findById(id);
         if (entity != null) {
             try {
                 dao.delete(entity);
