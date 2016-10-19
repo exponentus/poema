@@ -3,90 +3,134 @@
     <sentence mode="on" keyword="brand">
         <entry lang="RUS">Poema</entry>
         <entry lang="ENG">Poema</entry>
+	<entry lang="POR">Poema</entry>
+	<entry lang="SPA">Poema</entry>
     </sentence>    
     <sentence mode="on" keyword="loading">
         <entry lang="RUS">Загрузка</entry>
         <entry lang="ENG">Loading</entry>
+	<entry lang="POR">A carregar</entry>
+	<entry lang="SPA">Cargando</entry>
     </sentence>
     <sentence mode="on" keyword="editors">
         <entry lang="RUS">Редакторы</entry>
         <entry lang="ENG">Editors</entry>
+	<entry lang="POR">Editores</entry>
+	<entry lang="SPA">Editores</entry>
     </sentence>
     <sentence mode="on" keyword="readers">
         <entry lang="RUS">Читатели</entry>
         <entry lang="ENG">Readers</entry>
+	<entry lang="POR">Leitores</entry>
+	<entry lang="SPA">Lectores</entry>
     </sentence>
     <sentence mode="on" keyword="inbox">
         <entry lang="RUS">Входящие</entry>
         <entry lang="ENG">Inbox</entry>
+	<entry lang="POR">Caixa de entrada</entry>
+	<entry lang="SPA">Correo entrante</entry>
     </sentence>
     <sentence mode="on" keyword="today">
         <entry lang="RUS">Сегодня</entry>
         <entry lang="ENG">Today</entry>
+	<entry lang="POR">Hoje</entry>
+	<entry lang="SPA">Hoy</entry>
     </sentence>
     <sentence mode="on" keyword="week">
         <entry lang="RUS">Неделя</entry>
         <entry lang="ENG">Week</entry>
+	<entry lang="POR">Semana</entry>
+	<entry lang="SPA">Semana</entry>
     </sentence>
     <sentence mode="on" keyword="all">
         <entry lang="RUS">Все</entry>
         <entry lang="ENG">All</entry>
+	<entry lang="POR">Tudo</entry>
+        <entry lang="SPA">Todo</entry>
     </sentence>
     <sentence mode="on" keyword="completed">
         <entry lang="RUS">Завершенные</entry>
         <entry lang="ENG">Completed</entry>
+	<entry lang="POR">Concluída</entry>
+        <entry lang="SPA">Terminada</entry>
     </sentence>
     <sentence mode="on" keyword="tasks_all">
         <entry lang="RUS">Все задания</entry>
         <entry lang="ENG">All tasks</entry>
+	<entry lang="POR">Todas a tarefas</entry>
+        <entry lang="SPA">Todas las tareas</entry>
     </sentence>
     <sentence mode="on" keyword="my_tasks">
         <entry lang="RUS">Мои задания</entry>
         <entry lang="ENG">My tasks</entry>
+	 <entry lang="POR">As minhas tarefas</entry>
+        <entry lang="SPA">Mis tareas</entry>
     </sentence>
     <sentence mode="on" keyword="tasks_assigned_to_me">
         <entry lang="RUS">Назначенные мне</entry>
         <entry lang="ENG">Assigned to me</entry>
+	<entry lang="POR">Atribuidas a mim</entry>
+        <entry lang="SPA">Asignadas a mi</entry>
     </sentence>
     <sentence mode="on" keyword="dashboard">
         <entry lang="RUS">Dashboard</entry>
         <entry lang="ENG">Dashboard</entry>
+	<entry lang="POR">Painel de controlo</entry>
+        <entry lang="SPA">Panel de control</entry>
     </sentence>
     <sentence mode="on" keyword="projects">
         <entry lang="RUS">Проекты</entry>
         <entry lang="ENG">Projects</entry>
+	<entry lang="POR">Projetos</entry>
+        <entry lang="SPA">Proyectos</entry>
     </sentence>
     <sentence mode="on" keyword="tasks">
         <entry lang="RUS">Задачи</entry>
         <entry lang="ENG">Tasks</entry>
+	<entry lang="POR">Tarefas</entry>
+        <entry lang="SPA">Tareas</entry>
     </sentence>
     <sentence mode="on" keyword="task">
         <entry lang="RUS">Задача</entry>
         <entry lang="ENG">Task</entry>
+	<entry lang="POR">Tarefa</entry>
+        <entry lang="SPA">Tarea</entry>
     </sentence>
     <sentence mode="on" keyword="project">
         <entry lang="RUS">Проект</entry>
         <entry lang="ENG">Project</entry>
+	<entry lang="POR">Projeto</entry>
+        <entry lang="SPA">Proyecto</entry>
     </sentence>
     <sentence mode="on" keyword="new_project">
         <entry lang="RUS">Новый проект</entry>
         <entry lang="ENG">New project</entry>
+	<entry lang="POR">Novo projeto</entry>
+        <entry lang="SPA">Nuevo proyecto</entry>
     </sentence>
     <sentence mode="on" keyword="new_task">
         <entry lang="RUS">Новая задача</entry>
         <entry lang="ENG">New task</entry>
+	<entry lang="POR">Nova tarefa</entry>
+        <entry lang="SPA">Nueva tarea</entry>
     </sentence>
     <sentence mode="on" keyword="task_title">
         <entry lang="RUS">Название задачи</entry>
         <entry lang="ENG">Task name</entry>
+	<entry lang="POR">Título da tarefa</entry>
+        <entry lang="SPA">Título de la tarea</entry>
     </sentence>
     <sentence mode="on" keyword="task_type">
         <entry lang="RUS">Тип задачи</entry>
         <entry lang="ENG">Task type</entry>
+	<entry lang="POR">Tipo de tarefa</entry>
+        <entry lang="SPA">Tipo de tarea</entry>
     </sentence>
     <sentence mode="on" keyword="priority">
         <entry lang="RUS">Приоритет</entry>
         <entry lang="ENG">Priority</entry>
+	<entry lang="POR">Prioridade</entry>
+        <entry lang="SPA">Prioridad</entry>
     </sentence>
     <sentence mode="on" keyword="assignee_user">
         <entry lang="RUS">Исполнитель</entry>
