@@ -27,7 +27,16 @@
                     <div>{{'incoming' | translate}}</div>
                 </label>
                 <div class="task-reg-number" *ngIf="incoming.regNumber">{{incoming.regNumber}}</div>
-                <input [class.invalid]="errors.title" [autofocus]="isEditable" required name="title" maxlength="140" placeholder="{{'title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.title" />
+                <input [class.invalid]="errors.title"
+                    name="title"
+                    maxlength="140"
+                    placeholder="{{'title' | translate}}"
+                    [autofocus]="isEditable"
+                    autocomplete="off"
+                    required
+                    [readonly]="!isEditable"
+                    (keyup)="validateForm()"
+                    [(ngModel)]="incoming.title" />
             </div>
         </h1>
     </header>
@@ -58,7 +67,7 @@
                             {{'sender_reg_number' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.senderRegNumber">
-                            <input class="span4" name="title" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.senderRegNumber" />
+                            <input class="span4" name="title" autocomplete="off" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.senderRegNumber" />
                             <error-message [error]="errors.senderRegNumber"></error-message>
                         </div>
                     </div>
@@ -121,8 +130,8 @@
                                 class="span8"
                                 [selectedItems]="incoming.responseTo"
                                 [contentUrl]="'/Workflow/api/outgoings?'"
-                                [contentPath]="'objects.1.list'"
-                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [contentPath]="'payload.view.result'"
+                                [totalPagesPath]="'payload.view.maxPage'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setResponseTo($event)">
