@@ -68,6 +68,21 @@ body:not(.side-nav-toggle) .aside+.content {
     box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
 }
 
+.record-author {
+    color: #666;
+    font-size: .9em;
+    padding: 8px;
+}
+
+.record-author .employee-input,
+.record-author .input {
+    border: 0;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
 pagination:empty {
     display: none;
 }
