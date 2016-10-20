@@ -19,6 +19,7 @@ import reference.dao.DocumentLanguageDAO;
 import reference.dao.DocumentTypeDAO;
 import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
+import workflow.dao.OutgoingDAO;
 import workflow.model.Incoming;
 
 import javax.servlet.http.HttpServletResponse;
@@ -74,6 +75,7 @@ public class IncomingService extends RestProvider {
         OrganizationDAO organizationDAO = new OrganizationDAO(ses);
         DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
         DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
+        OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
         IncomingDAO incomingDAO = new IncomingDAO(ses);
         Incoming entity;
 
@@ -100,6 +102,11 @@ public class IncomingService extends RestProvider {
             entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
         } else {
             entity.setSender(null);
+        }
+        if (incomingForm.getResponseTo() != null) {
+            entity.setResponseTo(outgoingDAO.findById(incomingForm.getResponseTo().getId()));
+        } else {
+            entity.setResponseTo(null);
         }
         entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
         entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());

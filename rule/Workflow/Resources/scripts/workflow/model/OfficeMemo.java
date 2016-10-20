@@ -7,6 +7,7 @@ package workflow.model;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
@@ -32,6 +33,11 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
     @ManyToOne(optional = true)
     private Approval approval;
 
+    @Column(nullable = false, length = 128)
+    private String summary = "";
+
+    private String content = "";
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinTable(name = "office_memo_attachments",
             joinColumns = {@JoinColumn(name = "office_memo_id")},
@@ -40,23 +46,6 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
             uniqueConstraints = @UniqueConstraint(columnNames = {"office_memo_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
-
-    @Column(nullable = false, length = 128)
-    private String summary = "";
-
-    private String content = "";
-
-    public List<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    public void setContent(String briefContent) {
-        this.content = briefContent;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
 
     public String getRegNumber() {
         return regNumber;
@@ -82,16 +71,32 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
         this.approval = approval;
     }
 
+    @JsonSetter("approval")
+    public void setApprovalId(UUID id) {
+        if (id != null) {
+            approval = new Approval();
+            approval.setId(id);
+        }
+    }
+
     public String getSummary() {
         return summary;
     }
 
-    public Date getRegDate() {
-        return regDate;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String briefContent) {
+        this.content = briefContent;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
     }
 
     public void setAttachments(List<Attachment> attachments) {

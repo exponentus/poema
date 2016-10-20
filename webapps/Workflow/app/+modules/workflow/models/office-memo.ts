@@ -5,7 +5,7 @@ export class OfficeMemo {
     regNumber: string;
     appliedRegDate: Date;
     approval: Approval;
-    title: string;
+    summary: string;
     content: string;
     attachments: any; // Attachment[]
 }

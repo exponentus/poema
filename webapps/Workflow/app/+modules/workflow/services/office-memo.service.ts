@@ -28,6 +28,11 @@ export class WorkflowOfficeMemoService {
         return this.dataService.delete(`${API_URL}/office-memos/${officeMemo.id}`);
     }
 
+    deleteOfficeMemoAttachment(officeMemo: OfficeMemo, attachment: Attachment, params = {}) {
+        let url = `${API_URL}/office-memos/${officeMemo.id}/attachments/${attachment.id}`;
+        return this.dataService.delete(url, params);
+    }
+
     doOfficeMemoAction(id: string, actionId: string) {
         let officeMemo = {
             title: 'hello world'

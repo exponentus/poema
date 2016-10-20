@@ -1,110 +1,111 @@
 package workflow.services.officememo;
 
-import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.IAppFile;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
-import com.exponentus.scripting._ColumnOptions;
+import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import com.exponentus.user.IUser;
+import workflow.dao.ApprovalDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import java.util.List;
 
-@Path("office-memos")
+@Path("office-memos/{id}")
 public class OfficeMemoService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getView(@Context UriInfo uriInfo) {
-        _Session session = getSession();
-        _WebFormData formData = new _WebFormData(uriInfo.getQueryParameters(), httpRequest.getHeader("referer"));
-        int pageSize = session.pageSize;
-        int pageNum = formData.getNumberValueSilently("page", 0);
+    public Response getById(@PathParam("id") String id) {
+        _Session ses = getSession();
+        OfficeMemo entity;
 
-        OfficeMemoDAO dao = new OfficeMemoDAO(session);
-        ViewPage vp = dao.findViewPage(pageNum, pageSize);
-
-        //
-        _ActionBar actionBar = new _ActionBar(session);
-        _Action newDocAction = new _Action("add_new", "", "new_incoming");
-        newDocAction.setURL("new");
-        actionBar.addAction(newDocAction);
-        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
-
-        // column options
-        _ColumnOptions colOpts = new _ColumnOptions();
-        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        colOpts.add("", "attachment", "icon", "", "vw-icon");
-        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
-        colOpts.add("approval", "approval", "localizedName", "both", "vw-name");
-        colOpts.add("content", "content", "text", "both", "vw-content");
-        colOpts.add("summary", "summary", "text", "", "vw-summary");
+        if ("new".equals(id)) {
+            entity = new OfficeMemo();
+        } else {
+            OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
+            entity = officeMemoDAO.findById(id);
+        }
 
         Outcome outcome = new Outcome();
-        outcome.setId("office-memos");
-        outcome.addPayload("title", "office_memo");
-        outcome.addPayload("actionBar", actionBar);
-        outcome.addPayload("columnOptions", colOpts);
-        outcome.addPayload("view", vp);
+        outcome.setId(id);
+        outcome.addPayload("officeMemo", entity);
+        outcome.addPayload("actionBar", getActionBar(ses, entity));
 
         return Response.ok(outcome).build();
     }
 
     @GET
-    @Path("{id}")
+    @Path("attachments/{attachmentId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") String id) {
-        _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity = dao.findById(id);
-        return Response.ok(new ViewPage<>(entity)).build();
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachId) {
+
+        return Response.ok().build();
     }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(OfficeMemo officeMemo) {
+    public Response save(@PathParam("id") String id, @QueryParam("fsid") String fsId, OfficeMemo form) {
         _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-        OfficeMemo entity;
-        try {
-            entity = dao.add(officeMemo);
-        } catch (SecureException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
-        }
-        return Response.ok(new ViewPage<>(entity)).build();
-    }
 
-    @PUT
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, OfficeMemo officeMemo) {
-        _Session ses = getSession();
-        OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+        _Validation validation = validate(form);
+        if (validation.hasError()) {
+            // return error
+            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+        }
+
+        ApprovalDAO approvalDAO = new ApprovalDAO(ses);
+        OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
         OfficeMemo entity;
+
+        boolean isNew = "new".equals(id);
+        if (isNew) {
+            entity = new OfficeMemo();
+        } else {
+            entity = officeMemoDAO.findById(id);
+        }
+
+        entity.setAppliedRegDate(form.getAppliedRegDate());
+        if (form.getApproval() != null) {
+            entity.setApproval(approvalDAO.findById(form.getApproval().getId()));
+        } else {
+            entity.setApproval(null);
+        }
+        entity.setSummary(form.getSummary());
+        entity.setContent(form.getContent());
+        entity.setAttachments(getActualAttachments(ses, fsId, entity.getAttachments()));
+
         try {
-            entity = dao.update(officeMemo);
+            if (isNew) {
+                IUser<Long> user = ses.getUser();
+                entity.addReaderEditor(user);
+                entity = officeMemoDAO.add(entity);
+            } else {
+                entity = officeMemoDAO.update(entity);
+            }
+
         } catch (SecureException e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
-        return Response.ok(new ViewPage<>(entity)).build();
+        return Response.ok(entity).build();
     }
 
     @DELETE
-    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
@@ -120,14 +121,46 @@ public class OfficeMemoService extends RestProvider {
         return Response.noContent().build();
     }
 
-    @PUT
-    @Path("{id}/action1")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response doAction(@PathParam("id") String id) {
+    private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
+        _ActionBar actionBar = new _ActionBar(session);
+        // if (incoming.isEditable()) {
+        actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+        if (!entity.isNew() && entity.isEditable()) {
+            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+        }
+        // }
 
-        System.out.println(id);
+        return actionBar;
+    }
 
-        return Response.noContent().build();
+    private _Validation validate(OfficeMemo entity) {
+        _Validation ve = new _Validation();
+
+        if (entity.getSummary() == null || entity.getSummary().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+
+        return ve;
+    }
+
+    // TODO refactor
+    protected List<Attachment> getActualAttachments(_Session ses, String fsId, List<Attachment> atts) {
+        _FormAttachments formFiles = ses.getFormAttachments(fsId);
+
+        for (TempFile tmpFile : formFiles.getFiles()) {
+            Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
+            a.setFieldName(a.getDefaultFormName());
+            atts.add(a);
+        }
+
+        List<TempFile> toDelete = formFiles.getDeletedFiles();
+        if (toDelete.size() > 0) {
+            for (IAppFile fn : toDelete) {
+                atts.remove(fn);
+            }
+        }
+
+        return atts;
     }
 
     @Override
