@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
@@ -55,6 +55,7 @@ export class OutgoingViewComponent {
     constructor(
         private store: Store<any>,
         private route: ActivatedRoute,
+        private router: Router,
         private environmentActions: EnvironmentActions,
         private outgoingService: WorkflowOutgoingService
     ) { }
@@ -74,7 +75,6 @@ export class OutgoingViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
-            id: 'outgoing-view',
             sort: this.activeSort || 'regDate:desc'
         });
         let typeId = 'outgoing';
@@ -112,9 +112,14 @@ export class OutgoingViewComponent {
     }
 
     onAction($event) {
-        this.outgoingService.doOutgoingAction('13123', $event.action.customID).subscribe(payload => {
-            let resp = payload.objects[0];
-            alert(resp.name + ' : ' + resp.value);
-        });
+        // this.incomingService.doIncomingAction('12312321', $event.action.customID).subscribe(payload => {
+        //     let resp = payload.objects[0];
+        //     alert(resp.name + ' : ' + resp.value);
+        // });
+        if ($event.action.url) {
+            this.router.navigate([$event.action.url], { relativeTo: this.route });
+        } else {
+            console.log($event);
+        }
     }
 }

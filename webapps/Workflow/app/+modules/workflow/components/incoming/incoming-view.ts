@@ -76,7 +76,6 @@ export class IncomingViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
-            id: 'incoming-view',
             sort: this.activeSort || 'regDate:desc'
         });
         let typeId = 'incoming';

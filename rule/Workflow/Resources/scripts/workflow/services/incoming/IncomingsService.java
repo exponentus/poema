@@ -7,6 +7,7 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -38,7 +39,7 @@ public class IncomingsService extends RestProvider {
         int pageNum = formData.getNumberValueSilently("page", 0);
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
-        ViewPage vp = incomingDAO.findViewPage(pageNum, pageSize);
+        ViewPage vp = incomingDAO.findViewPage(pageNum, pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
 
         //
         _ActionBar actionBar = new _ActionBar(session);

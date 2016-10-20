@@ -11,7 +11,6 @@ import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -57,6 +56,12 @@ public class IncomingService extends RestProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, @QueryParam("fsid") String fsId, Incoming incomingForm) {
         _Session ses = getSession();
+
+        _Validation validation = validate(incomingForm);
+        if (validation.hasError()) {
+            // return error
+            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+        }
 
         OrganizationDAO organizationDAO = new OrganizationDAO(ses);
         DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
@@ -137,11 +142,11 @@ public class IncomingService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(_WebFormData formData) {
+    private _Validation validate(Incoming incomingForm) {
         _Validation ve = new _Validation();
 
-        if (formData.getValueSilently("summary").isEmpty()) {
-            ve.addError("summary", "required", "field_is_empty");
+        if (incomingForm.getTitle() == null || incomingForm.getTitle().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
         }
 
         return ve;

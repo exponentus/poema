@@ -120,9 +120,9 @@ export class IncomingFormComponent {
     handleValidationError(error: any) {
         let errors = {};
 
-        if (error.validation) {
+        if (error.errors) {
             this.isValid = false;
-            for (let err of error.validation.errors) {
+            for (let err of error.errors) {
                 errors[err.field] = {
                     message: err.message,
                     error: err.error
