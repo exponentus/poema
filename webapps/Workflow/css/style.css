@@ -32,6 +32,16 @@ body:not(.side-nav-toggle) .aside+.content {
     float: right;
 }
 
+.header-reg-number {
+    background: #f5f5f5;
+    border-radius: 2px;
+    color: #607D8B;
+    display: inline-block;
+    margin: 0 4px;
+    padding: 4px;
+    white-space: nowrap;
+}
+
 .header-title.header-title-flex,
 .task-header-title {
     padding: 6px 10px;

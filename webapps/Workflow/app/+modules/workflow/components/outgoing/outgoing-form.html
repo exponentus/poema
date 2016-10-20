@@ -26,7 +26,7 @@
                 <label class="header-title-label">
                     <div>{{'outgoing' | translate}}</div>
                 </label>
-                <div class="task-reg-number" *ngIf="outgoing.regNumber">{{outgoing.regNumber}}</div>
+                <div class="header-reg-number" *ngIf="outgoing.regNumber">{{outgoing.regNumber}}</div>
                 <input [class.invalid]="errors.title"
                     name="title"
                     maxlength="140"

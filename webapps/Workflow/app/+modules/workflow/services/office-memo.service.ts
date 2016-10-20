@@ -21,7 +21,11 @@ export class WorkflowOfficeMemoService {
     }
 
     saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {
-        return this.dataService.post(`${API_URL}/office-memos/${officeMemo.id}`, params, officeMemo);
+        let url = `${API_URL}/office-memos/${officeMemo.id ? officeMemo.id : 'new'}`;
+        let payload = Object.assign(officeMemo, {
+            approval: officeMemo.approval ? officeMemo.approval.id : null
+        });
+        return this.dataService.apiPost(url, params, { officeMemo: payload });
     }
 
     deleteOfficeMemo(officeMemo: OfficeMemo) {

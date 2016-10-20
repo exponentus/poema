@@ -76,6 +76,11 @@ public class OutgoingService extends RestProvider {
             entity = outgoingDAO.findById(id);
         }
 
+        // TODO remove
+        if (entity.getRegNumber() == null) {
+            entity.setRegNumber("RG-O-" + Math.random());
+        }
+        //
         entity.setTitle(outgoingForm.getTitle());
         entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
         if (outgoingForm.getDocLanguage() != null) {

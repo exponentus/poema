@@ -86,6 +86,11 @@ public class IncomingService extends RestProvider {
             entity = incomingDAO.findById(id);
         }
 
+        // TODO remove
+        if (entity.getRegNumber() == null) {
+            entity.setRegNumber("RG-I-" + Math.random());
+        }
+        //
         entity.setTitle(incomingForm.getTitle());
         entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
         if (incomingForm.getDocLanguage() != null) {

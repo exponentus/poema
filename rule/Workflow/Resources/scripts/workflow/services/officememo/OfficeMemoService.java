@@ -80,6 +80,11 @@ public class OfficeMemoService extends RestProvider {
             entity = officeMemoDAO.findById(id);
         }
 
+        // TODO remove
+        if (entity.getRegNumber() == null) {
+            entity.setRegNumber("RG-OM-" + Math.random());
+        }
+        //
         entity.setAppliedRegDate(form.getAppliedRegDate());
         if (form.getApproval() != null) {
             entity.setApproval(approvalDAO.findById(form.getApproval().getId()));

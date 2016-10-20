@@ -26,7 +26,7 @@
                 <label class="header-title-label">
                     <div>{{'office_memo' | translate}}</div>
                 </label>
-                <div class="task-reg-number" *ngIf="officeMemo.regNumber">{{officeMemo.regNumber}}</div>
+                <div class="header-reg-number" *ngIf="officeMemo.regNumber">{{officeMemo.regNumber}}</div>
             </div>
         </h1>
     </header>
@@ -42,7 +42,7 @@
                             <selection
                                 class="span8"
                                 [selectedItems]="officeMemo.approval"
-                                [contentUrl]="'/Workflow/approvals'"
+                                [contentUrl]="'/Workflow/approvals?'"
                                 [contentPath]="'objects.1.list'"
                                 [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
@@ -71,7 +71,7 @@
                             {{'summary' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.summary">
-                            <textarea name="approval" [(ngModel)]="officeMemo.summary"></textarea>
+                            <textarea class="span8" name="approval" [(ngModel)]="officeMemo.summary"></textarea>
                             <error-message [error]="errors.summary"></error-message>
                         </div>
                     </div>
