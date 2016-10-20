@@ -21,8 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("office-memos")
 public class OfficeMemoService extends RestProvider {
@@ -30,8 +28,6 @@ public class OfficeMemoService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getView(@Context UriInfo uriInfo) {
-        Map<String, Object> payload = new HashMap<>();
-
         _Session session = getSession();
         _WebFormData formData = new _WebFormData(uriInfo.getQueryParameters(), httpRequest.getHeader("referer"));
         int pageSize = session.pageSize;
@@ -56,14 +52,12 @@ public class OfficeMemoService extends RestProvider {
         colOpts.add("content", "content", "text", "both", "vw-content");
         colOpts.add("summary", "summary", "text", "", "vw-summary");
 
-        payload.put("actionBar", actionBar);
-        payload.put("columnOptions", colOpts);
-        payload.put("view", vp);
-        payload.put("title", "office_memo");
-
         Outcome outcome = new Outcome();
         outcome.setId("office-memos");
-        outcome.setPayload(payload);
+        outcome.addPayload("title", "office_memo");
+        outcome.addPayload("actionBar", actionBar);
+        outcome.addPayload("columnOptions", colOpts);
+        outcome.addPayload("view", vp);
 
         return Response.ok(outcome).build();
     }

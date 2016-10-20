@@ -21,11 +21,22 @@ export class WorkflowOutgoingService {
     }
 
     saveOutgoing(outgoing: Outgoing, params = {}) {
-        return this.dataService.post(`${API_URL}/outgoings/${outgoing.id}`, params, outgoing);
+        let url = `${API_URL}/outgoings/${outgoing.id ? outgoing.id : 'new'}`;
+        let payload = Object.assign(outgoing, {
+            recipient: outgoing.recipient ? outgoing.recipient.id : null,
+            docLanguage: outgoing.docLanguage ? outgoing.docLanguage.id : null,
+            docType: outgoing.docType ? outgoing.docType.id : null
+        });
+        return this.dataService.apiPost(url, params, { outgoing: payload });
     }
 
     deleteOutgoing(outgoing: Outgoing) {
         return this.dataService.delete(`${API_URL}/outgoings/${outgoing.id}`);
+    }
+
+    deleteOutgoingAttachment(outgoing: Outgoing, attachment: Attachment, params = {}) {
+        let url = `${API_URL}/outgoings/${outgoing.id}/attachments/${attachment.id}`;
+        return this.dataService.delete(url, params);
     }
 
     doOutgoingAction(id: string, actionId: string) {

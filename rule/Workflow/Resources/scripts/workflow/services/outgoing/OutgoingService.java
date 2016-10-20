@@ -1,4 +1,4 @@
-package workflow.services.incoming;
+package workflow.services.outgoing;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.IAppFile;
@@ -18,8 +18,8 @@ import com.exponentus.user.IUser;
 import reference.dao.DocumentLanguageDAO;
 import reference.dao.DocumentTypeDAO;
 import staff.dao.OrganizationDAO;
-import workflow.dao.IncomingDAO;
-import workflow.model.Incoming;
+import workflow.dao.OutgoingDAO;
+import workflow.model.Outgoing;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -27,45 +27,37 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("incomings/{id}")
-public class IncomingService extends RestProvider {
+@Path("outgoings/{id}")
+public class OutgoingService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
-        Incoming entity;
+        Outgoing entity;
 
         if ("new".equals(id)) {
-            entity = new Incoming();
+            entity = new Outgoing();
         } else {
-            IncomingDAO incomingDAO = new IncomingDAO(ses);
-            entity = incomingDAO.findById(id);
+            OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+            entity = outgoingDAO.findById(id);
         }
 
         Outcome outcome = new Outcome();
         outcome.setId(id);
-        outcome.addPayload("incoming", entity);
+        outcome.addPayload("outgoing", entity);
         outcome.addPayload("actionBar", getActionBar(ses, entity));
 
         return Response.ok(outcome).build();
     }
 
-    @GET
-    @Path("attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getAttachment(@PathParam("attachmentId") String id) {
-
-        return Response.ok().build();
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, @QueryParam("fsid") String fsId, Incoming incomingForm) {
+    public Response save(@PathParam("id") String id, @QueryParam("fsid") String fsId, Outgoing outgoingForm) {
         _Session ses = getSession();
 
-        _Validation validation = validate(incomingForm);
+        _Validation validation = validate(outgoingForm);
         if (validation.hasError()) {
             // return error
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
@@ -74,46 +66,43 @@ public class IncomingService extends RestProvider {
         OrganizationDAO organizationDAO = new OrganizationDAO(ses);
         DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
         DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
-        IncomingDAO incomingDAO = new IncomingDAO(ses);
-        Incoming entity;
+        OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+        Outgoing entity;
 
         boolean isNew = "new".equals(id);
         if (isNew) {
-            entity = new Incoming();
+            entity = new Outgoing();
         } else {
-            entity = incomingDAO.findById(id);
+            entity = outgoingDAO.findById(id);
         }
 
-        entity.setTitle(incomingForm.getTitle());
-        entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
-        if (incomingForm.getDocLanguage() != null) {
-            entity.setDocLanguage(documentLanguageDAO.findById(incomingForm.getDocLanguage().getId()));
+        entity.setTitle(outgoingForm.getTitle());
+        entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
+        if (outgoingForm.getDocLanguage() != null) {
+            entity.setDocLanguage(documentLanguageDAO.findById(outgoingForm.getDocLanguage().getId()));
         } else {
             entity.setDocLanguage(null);
         }
-        if (incomingForm.getDocType() != null) {
-            entity.setDocType(documentTypeDAO.findById(incomingForm.getDocType().getId()));
+        if (outgoingForm.getDocType() != null) {
+            entity.setDocType(documentTypeDAO.findById(outgoingForm.getDocType().getId()));
         } else {
             entity.setDocType(null);
         }
-        if (incomingForm.getSender() != null) {
-            entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
+        if (outgoingForm.getRecipient() != null) {
+            entity.setRecipient(organizationDAO.findById(outgoingForm.getRecipient().getId()));
         } else {
-            entity.setSender(null);
+            entity.setRecipient(null);
         }
-        entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
-        entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
-        entity.setBody(incomingForm.getBody());
-        entity.setControl(incomingForm.getControl());
+        entity.setBody(outgoingForm.getBody());
         entity.setAttachments(getActualAttachments(ses, fsId, entity.getAttachments()));
 
         try {
             if (isNew) {
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
-                entity = incomingDAO.add(entity);
+                entity = outgoingDAO.add(entity);
             } else {
-                entity = incomingDAO.update(entity);
+                entity = outgoingDAO.update(entity);
             }
 
         } catch (SecureException e) {
@@ -126,8 +115,8 @@ public class IncomingService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
-        IncomingDAO dao = new IncomingDAO(ses);
-        Incoming entity = dao.findById(id);
+        OutgoingDAO dao = new OutgoingDAO(ses);
+        Outgoing entity = dao.findById(id);
         if (entity != null) {
             try {
                 dao.delete(entity);
@@ -138,7 +127,7 @@ public class IncomingService extends RestProvider {
         return Response.noContent().build();
     }
 
-    private _ActionBar getActionBar(_Session session, Incoming entity) {
+    private _ActionBar getActionBar(_Session session, Outgoing entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
         actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
@@ -150,10 +139,10 @@ public class IncomingService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Incoming incomingForm) {
+    private _Validation validate(Outgoing outgoingForm) {
         _Validation ve = new _Validation();
 
-        if (incomingForm.getTitle() == null || incomingForm.getTitle().isEmpty()) {
+        if (outgoingForm.getTitle() == null || outgoingForm.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
 

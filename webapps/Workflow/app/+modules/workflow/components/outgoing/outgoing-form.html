@@ -1,7 +1,7 @@
 <form class="form" *ngIf="isReady">
     <header class="content-header">
         <div class="content-actions">
-            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+            <button class="btn-back" type="button" (click)="close($event)">
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
@@ -21,8 +21,23 @@
                 </div>
             </div>
         </div>
-        <h1 class="header-title">
-            {{'outgoing' | translate}}
+        <h1 class="header-title task-header-title">
+            <div class="header-title-flex">
+                <label class="header-title-label">
+                    <div>{{'outgoing' | translate}}</div>
+                </label>
+                <div class="task-reg-number" *ngIf="outgoing.regNumber">{{outgoing.regNumber}}</div>
+                <input [class.invalid]="errors.title"
+                    name="title"
+                    maxlength="140"
+                    placeholder="{{'title' | translate}}"
+                    [autofocus]="isEditable"
+                    autocomplete="off"
+                    required
+                    [readonly]="!isEditable"
+                    (keyup)="validateForm()"
+                    [(ngModel)]="outgoing.title" />
+            </div>
         </h1>
     </header>
     <section class="content-body">
@@ -31,62 +46,100 @@
                 <div class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
+                            {{'recipient' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.recipient">
+                            <selection
+                                class="span8"
+                                [selectedItems]="outgoing.recipient"
+                                [contentUrl]="'/Staff/p?id=organization-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setRecipient($event)">
+                            </selection>
+                            <error-message [error]="errors.priority"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
                             {{'applied_reg_date' | translate}}
                         </div>
-                        <div class="controls">
-                            <input type="date" name="appliedRegDate" class="span2" />
+                        <div class="controls" [class.has-error]="errors.appliedRegDate">
+                            <div class="span2" *ngIf="!isEditable">
+                                <span class="input">{{outgoing.appliedRegDate}}</span>
+                            </div>
+                            <div class="span2" *ngIf="isEditable">
+                                <input datepicker class="span2" name="appliedRegDate" (select)="setAppliedRegDate($event)" [(ngModel)]="outgoing.appliedRegDate" />
+                            </div>
+                            <error-message [error]="errors.appliedRegDate"></error-message>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="control-label">
                             {{'doc_language' | translate}}
                         </div>
-                        <div class="controls">
-                            <select name="docLanguage" class="span8">
-                                
-                            </select>
+                        <div class="controls" [class.has-error]="errors.docLanguage">
+                            <selection
+                                class="span8"
+                                [selectedItems]="outgoing.docLanguage"
+                                [contentUrl]="'/Reference/p?id=documentlanguage-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setDocLanguage($event)">
+                            </selection>
+                            <error-message [error]="errors.docLanguage"></error-message>
                         </div>
                     </div>
-                    <div class="form-group">
+                        <div class="form-group">
                         <div class="control-label">
                             {{'doc_type' | translate}}
                         </div>
-                        <div class="controls">
-                            <select name="docType" class="span8">
-                                
-                            </select>
+                        <div class="controls" [class.has-error]="errors.docType">
+                            <selection
+                                class="span8"
+                                [selectedItems]="outgoing.docType"
+                                [contentUrl]="'/Reference/p?id=documenttype-view'"
+                                [contentPath]="'objects.1.list'"
+                                [totalPagesPath]="'objects.1.meta.totalPages'"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setDocType($event)">
+                            </selection>
+                            <error-message [error]="errors.docType"></error-message>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" [class.has-error]="errors.body">
                         <div class="control-label">
-                            {{'sender' | translate}}
+                            {{'body' | translate}}
                         </div>
                         <div class="controls">
-                            <select name="sender" class="span8">
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'sender_applied_reg_date' | translate}}
-                        </div>
-                        <div class="controls">
-                            <input type="date" name="senderAppliedRegDate" class="span2" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'title' | translate}}
-                        </div>
-                        <div class="controls">
-                            <textarea type="text" name="title" class="span8">{{outgoing.title}}</textarea>
+                            <markdown-editor
+                                writeLabel="{{'markdown_write' | translate}}"
+                                previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="outgoing.body || ''"
+                                [editable]="isEditable"
+                                [updateTimeout]="300"
+                                (update)="setOutgoingBody($event)">
+                            </markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
                         </div>
                     </div>
                 </div>
-                <attachments [editable]="isEditable" [model]="outgoing" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <attachments
+                    [editable]="isEditable"
+                    [model]="outgoing"
+                    (upload)="addAttachment($event)"
+                    (delete)="deleteAttachment($event)">
+                </attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasExecution">
+                <!--<tasks [tasks]="[outgoing]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>-->
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="outgoing.acl">
                 <acl [acl]="outgoing.acl"></acl>
             </tab>
         </tabs>

@@ -104,7 +104,7 @@ public class OutgoingForm extends _DoForm {
             entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLanguage")));
             entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
             entity.setRecipient(organizationDAO.findById(formData.getValue("recipient")));
-            entity.setSummary(formData.getValue("summary"));
+            entity.setTitle(formData.getValue("summary"));
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {

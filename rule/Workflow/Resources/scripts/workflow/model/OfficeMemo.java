@@ -6,6 +6,7 @@ package workflow.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
 @NamedQuery(name = "OfficeMemo.findAll", query = "SELECT m FROM OfficeMemo AS m ORDER BY m.regDate")

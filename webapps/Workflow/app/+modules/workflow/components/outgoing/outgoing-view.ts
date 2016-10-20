@@ -44,7 +44,7 @@ export class OutgoingViewComponent {
     private columns = [];
     private subs: any = [];
 
-    title = 'outgoing-view';
+    title = 'outgoings';
     list: any[];
     meta: any = {};
     keyWord: string = '';

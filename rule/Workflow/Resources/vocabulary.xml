@@ -54,7 +54,7 @@
         <entry lang="RUS">Заголовок</entry>
         <entry lang="ENG">Title</entry>
     </sentence>
-    <sentence mode="on" keyword="summary">
+    <sentence mode="on" keyword="title">
         <entry lang="RUS">Краткое содержание</entry>
         <entry lang="ENG">Summary</entry>
     </sentence>

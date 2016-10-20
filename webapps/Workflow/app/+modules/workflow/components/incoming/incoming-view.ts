@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions';
 import { WorkflowIncomingService } from '../../services';
-import { parseResponseObjects } from '../../../../utils/utils';
 
 @Component({
     selector: 'incoming-view',

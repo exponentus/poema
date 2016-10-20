@@ -7,7 +7,6 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -22,8 +21,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("incomings")
 public class IncomingsService extends RestProvider {
@@ -31,8 +28,6 @@ public class IncomingsService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@Context UriInfo uriInfo) {
-        Map<String, Object> payload = new HashMap<>();
-
         _Session session = getSession();
         _WebFormData formData = new _WebFormData(uriInfo.getQueryParameters(), httpRequest.getHeader("referer"));
         int pageSize = session.pageSize;
@@ -59,14 +54,12 @@ public class IncomingsService extends RestProvider {
         colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
         colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
 
-        payload.put("actionBar", actionBar);
-        payload.put("columnOptions", colOpts);
-        payload.put("view", vp);
-        payload.put("title", "incoming_documents");
-
         Outcome outcome = new Outcome();
         outcome.setId("incomings");
-        outcome.setPayload(payload);
+        outcome.addPayload("title", "incoming_documents");
+        outcome.addPayload("actionBar", actionBar);
+        outcome.addPayload("columnOptions", colOpts);
+        outcome.addPayload("view", vp);
 
         return Response.ok(outcome).build();
     }
