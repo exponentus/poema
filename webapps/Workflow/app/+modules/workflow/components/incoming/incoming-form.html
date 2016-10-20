@@ -67,7 +67,7 @@
                             {{'sender_reg_number' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.senderRegNumber">
-                            <input class="span4" name="title" autocomplete="off" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.senderRegNumber" />
+                            <input class="span4" name="senderRegNumber" autocomplete="off" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="incoming.senderRegNumber" />
                             <error-message [error]="errors.senderRegNumber"></error-message>
                         </div>
                     </div>

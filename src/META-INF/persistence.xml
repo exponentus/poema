@@ -174,14 +174,25 @@
         <class>reference.model.DocumentLanguage</class>
         <class>reference.model.DocumentType</class>
         <class>reference.model.ControlType</class>
+        <class>reference.model.DeliveryType</class>
+        <class>reference.model.TaskType</class>
+        <class>reference.model.Tag</class>
+        <class>reference.model.RequestType</class>
         <!-- The application module entities -->
         <class>workflow.model.Approval</class>  
         <class>workflow.model.Approver</class>  
         <class>workflow.model.Block</class>
         <class>workflow.model.OfficeMemo</class>
         <class>workflow.model.Incoming</class>
+        <class>workflow.model.IN</class>
         <class>workflow.model.Outgoing</class>
         <class>workflow.model.Assignment</class>
+        <!-- Projects module entities -->
+        <class>projects.model.Project</class>
+        <class>projects.model.Task</class>
+        <class>projects.model.Request</class>
+        <class>projects.model.Comment</class>
+        <class>projects.model.Dashboard</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>  
         <class>com.exponentus.common.model.AttachmentThumbnail</class> 

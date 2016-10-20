@@ -50,13 +50,13 @@ public class IncomingsService extends RestProvider {
         // column options
         _ColumnOptions colOpts = new _ColumnOptions();
         colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        colOpts.add("title", "title", "text", "", "vw-title");
         colOpts.add("", "attachment", "icon", "", "vw-icon");
-        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
-        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
-        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
         colOpts.add("sender", "sender", "localizedName", "both", "vw-sender");
         colOpts.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
-        colOpts.add("summary", "summary", "text", "", "vw-summary");
+        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
+        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
 
         payload.put("actionBar", actionBar);
         payload.put("columnOptions", colOpts);

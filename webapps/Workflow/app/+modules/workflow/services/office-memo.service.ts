@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../../services';
+import { Attachment } from '../../../models';
 import { OfficeMemo } from '../models';
 import { API_URL } from '../workflow.routing';
 
@@ -15,8 +16,8 @@ export class WorkflowOfficeMemoService {
         return this.dataService.apiGet(`${API_URL}/office-memos`, params);
     }
 
-    fetchOfficeMemoById(id: string) {
-        return this.dataService.get(`${API_URL}/office-memos/${id}`);
+    fetchOfficeMemoById(id: string, params = {}) {
+        return this.dataService.get(`${API_URL}/office-memos/${id}`, params);
     }
 
     saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {

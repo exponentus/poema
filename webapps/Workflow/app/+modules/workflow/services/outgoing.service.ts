@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../../services';
+import { Attachment } from '../../../models';
 import { Outgoing } from '../models';
 import { API_URL } from '../workflow.routing';
 
@@ -15,8 +16,8 @@ export class WorkflowOutgoingService {
         return this.dataService.apiGet(`${API_URL}/outgoings`, params);
     }
 
-    fetchOutgoingById(id: string) {
-        return this.dataService.get(`${API_URL}/outgoings/${id}`);
+    fetchOutgoingById(id: string, params = {}) {
+        return this.dataService.get(`${API_URL}/outgoings/${id}`, params);
     }
 
     saveOutgoing(outgoing: Outgoing, params = {}) {

@@ -10,21 +10,26 @@ import javax.persistence.Enumerated;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.sun.istack.internal.Nullable;
 import reference.model.ControlType;
 import workflow.model.constants.ControlStatusType;
 
 @Embeddable
 public class Control {
+	@Nullable
 	private ControlType controlType;
 
+	@Nullable
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "due_date")
 	private Date dueDate;
 
+	@Nullable
 	@Enumerated(EnumType.STRING)
 	@Column(length = 16)
 	private ControlStatusType status = ControlStatusType.UNKNOWN;
 
+	@Nullable
 	private List<AssigneeEntry> assignees;
 
 	public ControlType getControlType() {

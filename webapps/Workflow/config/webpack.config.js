@@ -56,7 +56,7 @@ module.exports = {
         }]
     },
     output: {
-        path: helpers.root('ngjs'),
+        path: helpers.root('js'),
         publicPath: '/',
         filename: '[name].js',
         chunkFilename: '[id].[hash].chunk.js'

@@ -4,6 +4,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentType;
@@ -85,6 +86,14 @@ public class Incoming extends SecureAppEntity<UUID> {
         this.sender = sender;
     }
 
+    @JsonSetter("sender")
+    public void setSenderId(UUID id) {
+        if (id != null) {
+            sender = new Organization();
+            sender.setId(id);
+        }
+    }
+
     public String getSenderRegNumber() {
         return senderRegNumber;
     }
@@ -110,13 +119,13 @@ public class Incoming extends SecureAppEntity<UUID> {
     }
 
     @Override
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
+    public List<Attachment> getAttachments() {
+        return attachments;
     }
 
     @Override
-    public List<Attachment> getAttachments() {
-        return attachments;
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 
     public DocumentLanguage getDocLanguage() {
@@ -127,6 +136,14 @@ public class Incoming extends SecureAppEntity<UUID> {
         this.docLanguage = docLanguage;
     }
 
+    @JsonSetter("docLanguage")
+    public void setDocLanguageId(UUID id) {
+        if (id != null) {
+            docLanguage = new DocumentLanguage();
+            docLanguage.setId(id);
+        }
+    }
+
     public DocumentType getDocType() {
         return docType;
     }
@@ -135,11 +152,43 @@ public class Incoming extends SecureAppEntity<UUID> {
         this.docType = docType;
     }
 
+    @JsonSetter("docType")
+    public void setDocTypeId(UUID id) {
+        if (id != null) {
+            docType = new DocumentType();
+            docType.setId(id);
+        }
+    }
+
     public Outgoing getResponseTo() {
         return responseTo;
     }
 
     public void setResponseTo(Outgoing responseTo) {
         this.responseTo = responseTo;
+    }
+
+    @JsonSetter("responseTo")
+    public void setResponseToId(UUID id) {
+        if (id != null) {
+            responseTo = new Outgoing();
+            responseTo.setId(id);
+        }
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public Control getControl() {
+        return control;
+    }
+
+    public void setControl(Control control) {
+        this.control = control;
     }
 }

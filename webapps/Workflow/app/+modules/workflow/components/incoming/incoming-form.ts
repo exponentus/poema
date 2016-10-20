@@ -8,7 +8,7 @@ import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
 import { WorkflowIncomingService } from '../../services';
 import { Attachment } from '../../../../models';
-import { Outgoing } from '../../models';
+import { Incoming, Outgoing } from '../../models';
 import { imgToBase64 } from '../../../../utils/utils';
 
 @Component({
@@ -22,7 +22,7 @@ export class IncomingFormComponent {
     private isEditable = false;
     private isValid = true;
     private incoming: any;
-    private payload: any;
+    private fsId: string = '1111111';
 
     private actions: any = [];
     private errors: any = {};
@@ -53,9 +53,8 @@ export class IncomingFormComponent {
 
     // ===
     loadIncoming(id: string) {
-        this.incomingService.fetchIncomingById(id).subscribe(
+        this.incomingService.fetchIncomingById(id, { fsid: this.fsId }).subscribe(
             payload => {
-                this.payload = payload.payload;
                 this.incoming = payload.payload.incoming;
                 this.actions = payload.payload.actionBar.actions || [];
                 this.isNew = this.incoming.id == '';
@@ -84,7 +83,7 @@ export class IncomingFormComponent {
     //
     save() {
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
-        this.incomingService.saveIncoming(this.incoming).subscribe(
+        this.incomingService.saveIncoming(this.incoming, { fsid: this.fsId }).subscribe(
             response => {
                 noty.set({ type: 'success', message: response.message }).remove(1500);
                 this.close();

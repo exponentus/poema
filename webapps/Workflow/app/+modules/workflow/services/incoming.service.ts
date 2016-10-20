@@ -13,15 +13,22 @@ export class WorkflowIncomingService {
     ) { }
 
     fetchIncomings(params = {}) {
-        return this.dataService.apiGet(`${API_URL}/incomings`, params);
+        return this.dataService.get(`${API_URL}/incomings`, params);
     }
 
-    fetchIncomingById(id: string) {
-        return this.dataService.get(`${API_URL}/incomings/${id}`);
+    fetchIncomingById(id: string, params = {}) {
+        return this.dataService.get(`${API_URL}/incomings/${id}`, params);
     }
 
     saveIncoming(incoming: Incoming, params = {}) {
-        return this.dataService.apiPost(`${API_URL}/incomings/${incoming.id}`, params, { incoming: incoming });
+        let url = `${API_URL}/incomings/${incoming.id ? incoming.id : 'new'}`;
+        let payload = Object.assign(incoming, {
+            sender: incoming.sender ? incoming.sender.id : null,
+            docLanguage: incoming.docLanguage ? incoming.docLanguage.id : null,
+            docType: incoming.docType ? incoming.docType.id : null,
+            responseTo: incoming.responseTo ? incoming.responseTo.id : null
+        });
+        return this.dataService.apiPost(url, params, { incoming: payload });
     }
 
     deleteIncoming(incoming: Incoming) {

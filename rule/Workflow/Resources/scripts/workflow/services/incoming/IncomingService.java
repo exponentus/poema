@@ -1,15 +1,24 @@
 package workflow.services.incoming;
 
-import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.IAppFile;
+import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._Validation;
+import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import com.exponentus.user.IUser;
+import reference.dao.DocumentLanguageDAO;
+import reference.dao.DocumentTypeDAO;
+import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
@@ -17,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("incomings/{id}")
 public class IncomingService extends RestProvider {
@@ -45,34 +55,58 @@ public class IncomingService extends RestProvider {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(Incoming incoming) {
+    public Response save(@PathParam("id") String id, @QueryParam("fsid") String fsId, Incoming incomingForm) {
         _Session ses = getSession();
+
+        OrganizationDAO organizationDAO = new OrganizationDAO(ses);
+        DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
+        DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
         IncomingDAO incomingDAO = new IncomingDAO(ses);
         Incoming entity;
+
+        boolean isNew = "new".equals(id);
+        if (isNew) {
+            entity = new Incoming();
+        } else {
+            entity = incomingDAO.findById(id);
+        }
+
+        entity.setTitle(incomingForm.getTitle());
+        entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
+        if (incomingForm.getDocLanguage() != null) {
+            entity.setDocLanguage(documentLanguageDAO.findById(incomingForm.getDocLanguage().getId()));
+        } else {
+            entity.setDocLanguage(null);
+        }
+        if (incomingForm.getDocType() != null) {
+            entity.setDocType(documentTypeDAO.findById(incomingForm.getDocType().getId()));
+        } else {
+            entity.setDocType(null);
+        }
+        if (incomingForm.getSender() != null) {
+            entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
+        } else {
+            entity.setSender(null);
+        }
+        entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
+        entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
+        entity.setBody(incomingForm.getBody());
+        entity.setControl(incomingForm.getControl());
+        entity.setAttachments(getActualAttachments(ses, fsId, entity.getAttachments()));
+
         try {
-            entity = incomingDAO.add(incoming);
+            if (isNew) {
+                IUser<Long> user = ses.getUser();
+                entity.addReaderEditor(user);
+                entity = incomingDAO.add(entity);
+            } else {
+                entity = incomingDAO.update(entity);
+            }
+
         } catch (SecureException e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
-        return Response.ok(new ViewPage<>(entity)).build();
-    }
-
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, Incoming incoming) {
-
-        System.out.println(incoming.getTitle());
-
-        _Session ses = getSession();
-        IncomingDAO incomingDAO = new IncomingDAO(ses);
-        Incoming entity;
-        try {
-            entity = incomingDAO.update(incoming);
-        } catch (SecureException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
-        }
-        return Response.ok(new ViewPage<>(entity)).build();
+        return Response.ok(entity).build();
     }
 
     @DELETE
@@ -91,16 +125,45 @@ public class IncomingService extends RestProvider {
         return Response.noContent().build();
     }
 
-    private _ActionBar getActionBar(_Session session, Incoming incoming) {
+    private _ActionBar getActionBar(_Session session, Incoming entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
         actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
-        if (!incoming.isNew()) {
+        if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
         }
         // }
 
         return actionBar;
+    }
+
+    private _Validation validate(_WebFormData formData) {
+        _Validation ve = new _Validation();
+
+        if (formData.getValueSilently("summary").isEmpty()) {
+            ve.addError("summary", "required", "field_is_empty");
+        }
+
+        return ve;
+    }
+
+    protected List<Attachment> getActualAttachments(_Session ses, String fsId, List<Attachment> atts) {
+        _FormAttachments formFiles = ses.getFormAttachments(fsId);
+
+        for (TempFile tmpFile : formFiles.getFiles()) {
+            Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
+            a.setFieldName(a.getDefaultFormName());
+            atts.add(a);
+        }
+
+        List<TempFile> toDelete = formFiles.getDeletedFiles();
+        if (toDelete.size() > 0) {
+            for (IAppFile fn : toDelete) {
+                atts.remove(fn);
+            }
+        }
+
+        return atts;
     }
 
     @Override

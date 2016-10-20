@@ -36,8 +36,8 @@
                         <img class="brand-logo" alt="logo" src="img/logo.png" />Loading...
                     </div>
                 </app>
-                <script src="ngjs/vendor.js.gz"></script>
-                <script src="ngjs/app.js.gz"></script>
+                <script src="js/vendor.js.gz"></script>
+                <script src="js/app.js.gz"></script>
             </body>
         </html>
     </xsl:template>

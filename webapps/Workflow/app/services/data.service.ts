@@ -18,6 +18,7 @@ export class DataService {
             search: createURLSearchParams(params)
         })
             .retry(retry)
+            .take(1)
             .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
@@ -56,6 +57,7 @@ export class DataService {
             search: createURLSearchParams(params)
         })
             .retry(retry)
+            .take(1)
             .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
