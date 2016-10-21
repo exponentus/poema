@@ -109,7 +109,7 @@ public class IncomingForm extends _DoForm {
             entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
             entity.setSender(organizationDAO.findById(formData.getValue("sender")));
             entity.setSenderAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("senderAppliedRegDate")));
-            entity.setSummary(formData.getValue("summary"));
+            entity.setTitle(formData.getValue("title"));
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {
@@ -167,9 +167,9 @@ public class IncomingForm extends _DoForm {
     private _Validation validate(_WebFormData formData, LanguageCode lang) {
         _Validation ve = new _Validation();
 
-        if (formData.getValueSilently("summary").isEmpty()) {
-            ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
-        }
+//        if (formData.getValueSilently("summary").isEmpty()) {
+//            ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
+//        }
 
         return ve;
     }

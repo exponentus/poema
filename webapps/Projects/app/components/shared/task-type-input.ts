@@ -10,7 +10,7 @@ import { TaskType } from '../../models';
         <selection
             class="task-type-input"
             [items]="taskTypes"
-            [selectedItems]="taskType ? [taskType] : []"
+            [selectedItems]="taskType"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"

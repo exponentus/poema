@@ -58,6 +58,8 @@ export class AppService {
     handleError(error: any) {
         if (error.status === 401) {
             this.logout();
+        } else if (error.status === 401) {
+            console.log(error);
         }
         return Observable.throw(transformPostResponse(error));
     }

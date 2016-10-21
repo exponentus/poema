@@ -6,6 +6,9 @@ package workflow.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
 @NamedQuery(name = "OfficeMemo.findAll", query = "SELECT m FROM OfficeMemo AS m ORDER BY m.regDate")
@@ -29,28 +33,19 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
     @ManyToOne(optional = true)
     private Approval approval;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "office_memo_attachments", joinColumns = {
-            @JoinColumn(name = "office_memo_id", referencedColumnName = "id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id", referencedColumnName = "id")})
-    private List<Attachment> attachments = new ArrayList<>();
-
     @Column(nullable = false, length = 128)
     private String summary = "";
 
     private String content = "";
 
-    public List<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    public void setContent(String briefContent) {
-        this.content = briefContent;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "office_memo_attachments",
+            joinColumns = {@JoinColumn(name = "office_memo_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "office_memo_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"office_memo_id", "attachment_id"}))
+    @CascadeOnDelete
+    private List<Attachment> attachments = new ArrayList<>();
 
     public String getRegNumber() {
         return regNumber;
@@ -76,16 +71,32 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
         this.approval = approval;
     }
 
+    @JsonSetter("approval")
+    public void setApprovalId(UUID id) {
+        if (id != null) {
+            approval = new Approval();
+            approval.setId(id);
+        }
+    }
+
     public String getSummary() {
         return summary;
     }
 
-    public Date getRegDate() {
-        return regDate;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String briefContent) {
+        this.content = briefContent;
+    }
+
+    public List<Attachment> getAttachments() {
+        return attachments;
     }
 
     public void setAttachments(List<Attachment> attachments) {

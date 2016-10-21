@@ -20,19 +20,11 @@
         <entry lang="RUS">Исходящий документ</entry>
         <entry lang="ENG">Outgoing document</entry>
     </sentence>
-    <sentence mode="on" keyword="outgoing">
-        <entry lang="RUS">Исходящий документ</entry>
-        <entry lang="ENG">Outgoing document</entry>
-    </sentence>
+
     <sentence mode="on" keyword="signer">
         <entry lang="RUS">Подписывающий</entry>
         <entry lang="ENG">Signer</entry>
     </sentence>
-    <sentence mode="on" keyword="officememo">
-        <entry lang="RUS">Служебная записка</entry>
-        <entry lang="ENG">Officememo</entry>
-    </sentence>
-
     <sentence mode="on" keyword="reg_documents">
         <entry lang="RUS">Регистрационные документы</entry>
         <entry lang="KAZ">Регистрационные документы</entry>
@@ -58,7 +50,11 @@
         <entry lang="RUS">Дата</entry>
         <entry lang="ENG">Date</entry>
     </sentence>
-    <sentence mode="on" keyword="summary">
+    <sentence mode="on" keyword="title">
+        <entry lang="RUS">Заголовок</entry>
+        <entry lang="ENG">Title</entry>
+    </sentence>
+    <sentence mode="on" keyword="title">
         <entry lang="RUS">Краткое содержание</entry>
         <entry lang="ENG">Summary</entry>
     </sentence>

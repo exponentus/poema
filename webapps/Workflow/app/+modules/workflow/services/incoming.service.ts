@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../../services';
+import { Attachment } from '../../../models';
 import { Incoming } from '../models';
 import { API_URL } from '../workflow.routing';
 
@@ -12,41 +13,41 @@ export class WorkflowIncomingService {
     ) { }
 
     fetchIncomings(params = {}) {
-        return this.dataService.apiGet(`${API_URL}/incomings`, params);
+        return this.dataService.get(`${API_URL}/incomings`, params);
     }
 
-    fetchIncomingById(id: string) {
-        return this.dataService.get(`${API_URL}/incomings/${id}`);
+    fetchIncomingById(id: string, params = {}) {
+        return this.dataService.get(`${API_URL}/incomings/${id}`, params);
     }
 
     saveIncoming(incoming: Incoming, params = {}) {
-        if (incoming.id) {
-            return this.updateIncoming(incoming, params);
-        } else {
-            return this.addIncoming(incoming, params);
-        }
-    }
-
-    private addIncoming(incoming: Incoming, params = {}) {
-        return this.dataService.post(`${API_URL}/incomings`, params, incoming);
-    }
-
-    private updateIncoming(incoming: Incoming, params = {}) {
-        return this.dataService.put(`${API_URL}/incomings/${incoming.id}`, params, incoming);
+        let url = `${API_URL}/incomings/${incoming.id ? incoming.id : 'new'}`;
+        let payload = Object.assign(incoming, {
+            sender: incoming.sender ? incoming.sender.id : null,
+            docLanguage: incoming.docLanguage ? incoming.docLanguage.id : null,
+            docType: incoming.docType ? incoming.docType.id : null,
+            responseTo: incoming.responseTo ? incoming.responseTo.id : null
+        });
+        return this.dataService.apiPost(url, params, { incoming: payload });
     }
 
     deleteIncoming(incoming: Incoming) {
         return this.dataService.delete(`${API_URL}/incomings/${incoming.id}`);
     }
 
+    deleteIncomingAttachment(incoming: Incoming, attachment: Attachment, params = {}) {
+        let url = `${API_URL}/incomings/${incoming.id}/attachments/${attachment.id}`;
+        return this.dataService.delete(url, params);
+    }
+
     doIncomingAction(id: string, actionId: string) {
         let incoming = {
-            summary: 'hello world'
+            title: 'hello world'
         };
         return this.dataService.apiPut(`${API_URL}/incomings/${id}/${actionId}`, null, incoming);
     }
 
-    doIncomingListAction(ids: string[], actionId: string) {
+    doIncomingsAction(ids: string[], actionId: string) {
         return this.dataService.put(`${API_URL}/incomings/${actionId}`, { ids }, {});
     }
 }

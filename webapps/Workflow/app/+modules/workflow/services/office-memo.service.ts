@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../../services';
+import { Attachment } from '../../../models';
 import { OfficeMemo } from '../models';
 import { API_URL } from '../workflow.routing';
 
@@ -15,38 +16,35 @@ export class WorkflowOfficeMemoService {
         return this.dataService.apiGet(`${API_URL}/office-memos`, params);
     }
 
-    fetchOfficeMemoById(id: string) {
-        return this.dataService.get(`${API_URL}/office-memos/${id}`);
+    fetchOfficeMemoById(id: string, params = {}) {
+        return this.dataService.get(`${API_URL}/office-memos/${id}`, params);
     }
 
     saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {
-        if (officeMemo.id) {
-            return this.updateOfficeMemo(officeMemo, params);
-        } else {
-            return this.addOfficeMemo(officeMemo, params);
-        }
-    }
-
-    private addOfficeMemo(officeMemo: OfficeMemo, params = {}) {
-        return this.dataService.post(`${API_URL}/office-memos`, params, officeMemo);
-    }
-
-    private updateOfficeMemo(officeMemo: OfficeMemo, params = {}) {
-        return this.dataService.put(`${API_URL}/office-memos/${officeMemo.id}`, params, officeMemo);
+        let url = `${API_URL}/office-memos/${officeMemo.id ? officeMemo.id : 'new'}`;
+        let payload = Object.assign(officeMemo, {
+            approval: officeMemo.approval ? officeMemo.approval.id : null
+        });
+        return this.dataService.apiPost(url, params, { officeMemo: payload });
     }
 
     deleteOfficeMemo(officeMemo: OfficeMemo) {
         return this.dataService.delete(`${API_URL}/office-memos/${officeMemo.id}`);
     }
 
+    deleteOfficeMemoAttachment(officeMemo: OfficeMemo, attachment: Attachment, params = {}) {
+        let url = `${API_URL}/office-memos/${officeMemo.id}/attachments/${attachment.id}`;
+        return this.dataService.delete(url, params);
+    }
+
     doOfficeMemoAction(id: string, actionId: string) {
         let officeMemo = {
-            summary: 'hello world'
+            title: 'hello world'
         };
         return this.dataService.apiPut(`${API_URL}/office-memos/${id}/${actionId}`, null, officeMemo);
     }
 
-    doOfficeMemoListAction(ids: string[], actionId: string) {
+    doOfficeMemosAction(ids: string[], actionId: string) {
         return this.dataService.put(`${API_URL}/office-memos/${actionId}`, { ids }, {});
     }
 }

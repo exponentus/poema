@@ -3,7 +3,8 @@
     width: 26px;
 }
 
-.vw-name {
+.vw-name,
+.vw-title {
     min-width: 200px;
     width: 200px;
 }

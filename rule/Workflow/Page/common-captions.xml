@@ -11,6 +11,8 @@
     <caption name="close"/>
     <caption name="filter"/>
     <caption name="wait_while_document_save"/>
+    <caption name="markdown_write"/>
+    <caption name="markdown_preview"/>
 
     <caption name="attach_file"/>
     <caption name="properties"/>
@@ -62,8 +64,6 @@
     <caption name="doc_type"/>
     <caption name="sender_applied_reg_date"/>
 
-    <caption name="officememo"/>
-
     <caption name="notes"/>
     <caption name="body"/>
     <caption name="files"/>
@@ -86,7 +86,7 @@
     <caption name="writtenoff"/>
     <caption name="active"/>
     <caption name="inactive"/>
-    <caption name="summary"/>
+    <caption name="title"/>
     <caption name="signer"/>
     <caption name="incoming"/>
     <caption name="outgoing"/>
