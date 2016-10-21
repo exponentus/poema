@@ -10,7 +10,7 @@ import { RequestType } from '../../models';
         <selection
             class="request-type-input"
             [items]="requestTypes"
-            [selectedItems]="requestType ? [requestType] : []"
+            [selectedItems]="requestType"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"

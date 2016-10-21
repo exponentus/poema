@@ -36,14 +36,14 @@ import { Http, Headers } from '@angular/http';
                     (blur)="onBlur($event)"
                     (keyup)="handleEvent($event)" />
                 <div class="select-selected-items">
-                    <span class="selection-item"
+                    <div class="selection-item"
                         [ngClass]="m._itemClass"
                         [ngStyle]="m._itemStyle"
                         (click)="remove(m, $event)"
                         *ngFor="let m of selectedItems">
-                        <span class="selection-item-text">{{m | localizedName:textKey}}</span>
-                        <span class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</span>
-                    </span>
+                        <div class="selection-item-text">{{m | localizedName:textKey}}</div>
+                        <div class="selection-item-description" *ngIf="descriptionKey">{{m[descriptionKey]}}</div>
+                    </div>
                 </div>
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
@@ -109,10 +109,16 @@ export class SelectionComponent {
         this.handleEvent($event);
     }
 
-    @Input('items') set __items(items: any[]) {
+    @Input('items') set _items(items: any[]) {
         this.setItems(items);
     };
-    @Input() selectedItems: any = [];
+    @Input('selectedItems') set _selectedItems(selectedItems: any[]) {
+        if (Array.isArray(selectedItems)) {
+            this.selectedItems = selectedItems;
+        } else {
+            this.selectedItems = selectedItems ? [selectedItems] : [];
+        }
+    };
     @Input() idKey: string = 'id';
     @Input() textKey: string = 'name';
     @Input() descriptionKey: string;
@@ -140,6 +146,7 @@ export class SelectionComponent {
     private documentClickListener;
     private documentKeyUpListener;
     private items: any = [];
+    private selectedItems: any = [];
     private filteredItems: any = [];
     private selectedItemIds: string[] = [];
     private isOpen = false;

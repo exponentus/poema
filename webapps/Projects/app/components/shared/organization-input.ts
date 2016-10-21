@@ -9,7 +9,7 @@ import { Organization } from '../../models';
         <selection
             class="organization-input"
             [items]="organizations"
-            [selectedItems]="org? [org] : []"
+            [selectedItems]="org"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"

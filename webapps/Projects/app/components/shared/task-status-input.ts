@@ -8,7 +8,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
         <selection
             class="task-status-input"
             [items]="statusList"
-            [selectedItems]="status ? status : []"
+            [selectedItems]="status"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"

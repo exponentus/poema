@@ -10,7 +10,7 @@ import { Project } from '../../models';
         <selection
             class="project-input"
             [items]="projects"
-            [selectedItems]="project ? [project] : []"
+            [selectedItems]="project"
             [disabled]="!editable"
             [searchable]="true"
             [allowClear]="allowClear"
