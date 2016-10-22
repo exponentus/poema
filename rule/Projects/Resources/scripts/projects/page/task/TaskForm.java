@@ -59,20 +59,25 @@ public class TaskForm extends _DoForm {
 		if (!id.isEmpty()) {
 			TaskDAO taskDAO = new TaskDAO(session);
 			task = taskDAO.findById(id);
+			if (task != null) {
+				if (formData.containsField("attachment")) {
+					doGetAttachment(session, formData, task);
+					return;
+				}
 
-			if (formData.containsField("attachment")) {
-				doGetAttachment(session, formData, task);
+				if (task.getParent() != null) {
+					addContent("parentTask", task.getParent());
+				}
+
+				addContent(task.getAttachments());
+				addContent(new ACL(task));
+
+				ViewPage<Task> vp = taskDAO.findTaskChildren(task);
+				// task.setChildren(new LinkedList<>(vp.getResult()));
+			} else {
+				setNotFound();
 				return;
 			}
-
-			if (task.getParent() != null) {
-				addContent("parentTask", task.getParent());
-			}
-			addContent(task.getAttachments());
-			addContent(new ACL(task));
-
-			ViewPage<Task> vp = taskDAO.findTaskChildren(task);
-			// task.setChildren(new LinkedList<>(vp.getResult()));
 		} else {
 			task = new Task();
 			task.setAuthor(user);
