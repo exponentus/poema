@@ -159,8 +159,8 @@
     <sentence mode="on" keyword="finish_date">
         <entry lang="RUS">Дата завершения</entry>
         <entry lang="ENG">Completion date</entry>
-	<entry lang="POR">Data de conclusión</entry>
-        <entry lang="SPA">Fecha de rematery>
+	   <entry lang="POR">Data de conclusión</entry>
+        <entry lang="SPA">Fecha de rematery</entry>
     </sentence>
     <sentence mode="on" keyword="body">
         <entry lang="RUS">Описание</entry>
