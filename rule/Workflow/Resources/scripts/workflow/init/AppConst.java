@@ -6,6 +6,6 @@ public class AppConst {
 	public static String NAME_ENG = "Workflow";
 	public static String NAME_RUS = "Документооборот";
 	public static String NAME_KAZ = "Документооборот";
-	public static String DEFAULT_PAGE = "officememo-view";
+	public static String DEFAULT_PAGE = "index";
 	public static String FT_INDEX_SCOPE = "";
 }
