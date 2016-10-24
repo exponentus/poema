@@ -513,4 +513,12 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
+    <sentence mode="on" keyword="notify_about_overdued_task">
+        <entry lang="RUS">Уведомление о просроченном задании</entry>
+        <entry lang="ENG">Notify about a expired task</entry>
+        <entry lang="KAZ">Уведомление о просроченном задании</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+
 </vocabulary>
