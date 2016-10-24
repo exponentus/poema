@@ -17,7 +17,7 @@ export class WorkflowOutgoingService {
     }
 
     fetchOutgoingById(id: string, params = {}) {
-        return this.dataService.get(`${API_URL}/outgoings/${id}`, params);
+        return this.dataService.apiGet(`${API_URL}/outgoings/${id}`, params);
     }
 
     saveOutgoing(outgoing: Outgoing, params = {}) {

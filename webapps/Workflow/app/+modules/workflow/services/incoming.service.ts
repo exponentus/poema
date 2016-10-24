@@ -13,11 +13,11 @@ export class WorkflowIncomingService {
     ) { }
 
     fetchIncomings(params = {}) {
-        return this.dataService.get(`${API_URL}/incomings`, params);
+        return this.dataService.apiGet(`${API_URL}/incomings`, params);
     }
 
     fetchIncomingById(id: string, params = {}) {
-        return this.dataService.get(`${API_URL}/incomings/${id}`, params);
+        return this.dataService.apiGet(`${API_URL}/incomings/${id}`, params);
     }
 
     saveIncoming(incoming: Incoming, params = {}) {
