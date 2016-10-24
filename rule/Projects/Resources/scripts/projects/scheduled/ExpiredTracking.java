@@ -1,13 +1,23 @@
 package projects.scheduled;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
+import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.MessageType;
+import com.exponentus.messaging.email.MailAgent;
+import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduledTask;
+import com.exponentus.user.IUser;
 
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.model.Task;
@@ -47,6 +57,7 @@ public class ExpiredTracking extends _DoScheduledTask {
 						try {
 							tDao.update(task);
 							logger.infoLogEntry("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
+							sendNotify(session, task);
 						} catch (SecureException e) {
 							setError(e);
 						}
@@ -68,6 +79,45 @@ public class ExpiredTracking extends _DoScheduledTask {
 		} else {
 			logger.warningLogEntry("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
 		}
+	}
+
+	private void sendNotify(_Session session, Task task) {
+		try {
+			UserDAO userDAO = new UserDAO(session);
+			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			String msgTemplate = "task_overdued";
+			User user = null;
+
+			Memo memo = new Memo();
+			memo.addVar("assignee", assigneeUser.getUserName());
+			memo.addVar("regNumber", task.getRegNumber());
+			memo.addVar("title", task.getTitle());
+			memo.addVar("content", task.getBody());
+			memo.addVar("author", task.getAuthor().getUserName());
+
+			LanguageCode lang = EnvConst.getDefaultLang();
+			try {
+				user = (User) assigneeUser;
+				lang = user.getDefaultLang();
+			} catch (ClassCastException e) {
+
+			}
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+
+			if (user != null) {
+				List<String> recipients = new ArrayList<>();
+				recipients.add(assigneeUser.getEmail());
+				recipients.add(task.getAuthor().getEmail());
+				MailAgent ma = new MailAgent();
+				AppEnv appEnv = session.getAppEnv();
+				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_overdued_task", lang),
+				        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
+			}
+		} catch (Exception e) {
+			logger.errorLogEntry(e);
+		}
+
 	}
 
 }
