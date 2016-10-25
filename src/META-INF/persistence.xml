@@ -188,6 +188,7 @@
         <class>workflow.model.IN</class>
         <class>workflow.model.Outgoing</class>
         <class>workflow.model.Assignment</class>
+        <class>workflow.model.embedded.AssigneeEntry</class>
         <!-- Projects module entities -->
         <class>projects.model.Project</class>
         <class>projects.model.Task</class>

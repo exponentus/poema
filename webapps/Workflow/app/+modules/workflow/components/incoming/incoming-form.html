@@ -52,8 +52,8 @@
                             <selection
                                 class="span8"
                                 [selectedItems]="incoming.sender"
-                                [contentUrl]="'/Staff/p?id=organization-view'"
-                                [contentPath]="'objects.1.list'"
+                                [url]="'/Staff/p?id=organization-view'"
+                                [listPath]="'objects.1.list'"
                                 [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
@@ -93,8 +93,8 @@
                             <selection
                                 class="span8"
                                 [selectedItems]="incoming.docLanguage"
-                                [contentUrl]="'/Reference/p?id=documentlanguage-view'"
-                                [contentPath]="'objects.1.list'"
+                                [url]="'/Reference/p?id=documentlanguage-view'"
+                                [listPath]="'objects.1.list'"
                                 [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
@@ -111,8 +111,8 @@
                             <selection
                                 class="span8"
                                 [selectedItems]="incoming.docType"
-                                [contentUrl]="'/Reference/p?id=documenttype-view'"
-                                [contentPath]="'objects.1.list'"
+                                [url]="'/Reference/p?id=documenttype-view'"
+                                [listPath]="'objects.1.list'"
                                 [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
@@ -129,8 +129,8 @@
                             <selection
                                 class="span8"
                                 [selectedItems]="incoming.responseTo"
-                                [contentUrl]="'/Workflow/api/outgoings?'"
-                                [contentPath]="'payload.view.result'"
+                                [url]="'/Workflow/api/outgoings?'"
+                                [listPath]="'payload.view.result'"
                                 [totalPagesPath]="'payload.view.maxPage'"
                                 textKey="regNumber"
                                 descriptionKey="title"

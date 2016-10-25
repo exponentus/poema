@@ -30,6 +30,7 @@
     width: 180px;
 }
 
+.vw-recipient,
 .vw-sender {
     min-width: 190px;
     width: 190px;
@@ -37,4 +38,10 @@
 
 .vw-content {
     min-width: 260px;
+    width: 25%;
+}
+
+.vw-summary {
+    min-width: 260px;
+    width: 20%;
 }

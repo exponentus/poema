@@ -142,7 +142,7 @@ public class OfficeMemoService extends RestProvider {
         _Validation ve = new _Validation();
 
         if (entity.getSummary() == null || entity.getSummary().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
+            ve.addError("summary", "required", "field_is_empty");
         }
 
         return ve;

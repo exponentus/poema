@@ -17,31 +17,4 @@ export class ReferenceService {
     fetchOne(params: any) {
         return this.fetch(params);
     }
-
-    fetchTags() {
-        return this.fetch({ id: 'tags' }, 2).map(payload => {
-            return {
-                tags: <Tag[]>payload.list,
-                meta: payload.meta
-            }
-        });
-    }
-
-    fetchTaskTypes() {
-        return this.fetch({ id: 'tasktypes' }, 2).map(payload => {
-            return {
-                taskTypes: <TaskType[]>payload.list,
-                meta: payload.meta
-            }
-        });
-    }
-
-    fetchRequestTypes() {
-        return this.fetch({ id: 'request-types' }, 2).map(payload => {
-            return {
-                requestTypes: <RequestType[]>payload.list,
-                meta: payload.meta
-            }
-        });
-    }
 }

@@ -2,6 +2,10 @@ import { Outgoing } from './outgoing';
 
 export class Incoming {
     id: string = '';
+    isNew: boolean = true;
+    editable: boolean = false;
+    children: any[];
+
     regNumber: string;
     appliedRegDate: Date;
     sender: any; // Organization;

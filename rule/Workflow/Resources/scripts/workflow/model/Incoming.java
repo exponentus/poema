@@ -59,7 +59,8 @@ public class Incoming extends SecureAppEntity<UUID> {
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
-    @Embedded
+    //@Embedded
+    @Transient
     private Control control = new Control();
 
     public String getRegNumber() {
