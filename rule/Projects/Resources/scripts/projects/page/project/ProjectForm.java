@@ -12,6 +12,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -169,6 +170,9 @@ public class ProjectForm extends _DoForm {
 		} catch (SecureException e) {
 			setError(e);
 		} catch (_Exception | DatabaseException e) {
+			setBadRequest();
+			logError(e);
+		} catch (DAOException e) {
 			setBadRequest();
 			logError(e);
 		}

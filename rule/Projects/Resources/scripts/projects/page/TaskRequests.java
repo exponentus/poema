@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
@@ -178,7 +179,7 @@ public class TaskRequests extends _DoForm {
 			taskDAO.update(task);
 
 			new Messages(session).sendOfNewRequest(request, task);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			logError(e);
 			setBadRequest();
 		}

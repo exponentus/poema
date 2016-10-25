@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.exponentus.common.dao.AttachmentDAO;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.LanguageCode;
@@ -141,6 +142,9 @@ public class Comments extends _DoForm {
 			setBadRequest();
 			logError(e);
 		} catch (MsgException e) {
+			setBadRequest();
+			logError(e);
+		} catch (DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
