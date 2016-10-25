@@ -1,40 +1,48 @@
 package workflow.model.embedded;
 
+import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
-import javax.persistence.Column;
-
+@Entity
+@Table(name = "control_assignees")
 public class AssigneeEntry {
-	private Long assignee;
 
-	@Column(name = "reset_time")
-	private Date resetTime;
+    @Id
+    @GeneratedValue(generator = "uuid-gen")
+    @org.eclipse.persistence.annotations.Convert("uuidConverter")
+    @Column(name = "id", nullable = false)
+    protected UUID id;
 
-	@Column(name = "resetter_info")
-	private String resetterInfo;
+    private Long assignee;
 
-	public Long getAssignee() {
-		return assignee;
-	}
+    @Column(name = "reset_time")
+    private Date resetTime;
 
-	public void setAssignee(Long assignee) {
-		this.assignee = assignee;
-	}
+    @Column(name = "resetter_info")
+    private String resetterInfo;
 
-	public Date getResetTime() {
-		return resetTime;
-	}
+    public Long getAssignee() {
+        return assignee;
+    }
 
-	public void setResetTime(Date resetTime) {
-		this.resetTime = resetTime;
-	}
+    public void setAssignee(Long assignee) {
+        this.assignee = assignee;
+    }
 
-	public String getResetterInfo() {
-		return resetterInfo;
-	}
+    public Date getResetTime() {
+        return resetTime;
+    }
 
-	public void setResetterInfo(String resetterInfo) {
-		this.resetterInfo = resetterInfo;
-	}
+    public void setResetTime(Date resetTime) {
+        this.resetTime = resetTime;
+    }
 
+    public String getResetterInfo() {
+        return resetterInfo;
+    }
+
+    public void setResetterInfo(String resetterInfo) {
+        this.resetterInfo = resetterInfo;
+    }
 }

@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 
 import { AppService } from './app.service';
 import { xhrHeaders, xhrJsonHeaders, createURLSearchParams, serializeObj } from '../utils/utils';
+
+function processResponse(response: Response) {
+    if (response.status === 204) {
+        return {};
+    }
+    return response.json();
+}
 
 @Injectable()
 export class DataService {
@@ -46,7 +53,7 @@ export class DataService {
             headers: xhrHeaders(),
             search: createURLSearchParams(params)
         })
-            .map(response => response.json())
+            .map(response => processResponse(response))
             .catch(error => this.appService.handleError(error));
     }
 

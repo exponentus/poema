@@ -8,7 +8,7 @@ import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
 import { WorkflowOfficeMemoService } from '../../services';
 import { Attachment } from '../../../../models';
-import { Incoming, Outgoing } from '../../models';
+import { OfficeMemo } from '../../models';
 import { imgToBase64 } from '../../../../utils/utils';
 
 @Component({
@@ -21,8 +21,8 @@ export class OfficeMemoFormComponent {
     private isNew = true;
     private isEditable = false;
     private isValid = true;
-    private officeMemo: any;
-    private fsId: string = '1111111';
+    private officeMemo: OfficeMemo;
+    private fsId: string;
 
     private actions: any = [];
     private errors: any = {};
@@ -43,7 +43,7 @@ export class OfficeMemoFormComponent {
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
             let id = params['id']; // this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
-            this.loadIncoming(id);
+            this.loadData(id);
         }));
     }
 
@@ -52,12 +52,13 @@ export class OfficeMemoFormComponent {
     }
 
     // ===
-    loadIncoming(id: string) {
+    loadData(id: string) {
         this.officeMemoService.fetchOfficeMemoById(id, { fsid: this.fsId }).subscribe(
             payload => {
                 this.officeMemo = payload.payload.officeMemo;
                 this.actions = payload.payload.actionBar.actions || [];
-                this.isNew = this.officeMemo.id == '';
+                this.fsId = payload.payload.fsId;
+                this.isNew = this.officeMemo.isNew;
                 this.isEditable = this.isNew || this.officeMemo.editable;
                 this.isReady = true;
                 this.isValid = true;
@@ -134,23 +135,13 @@ export class OfficeMemoFormComponent {
     }
 
     //
-    setRecipient(org: any /* Organization */) {
-        this.officeMemo.recipient = org;
+    setApproval(approval: any) {
+        this.officeMemo.approval = approval;
         this.validateForm();
     }
 
     setAppliedRegDate(appliedRegDate: Date) {
         this.officeMemo.appliedRegDate = appliedRegDate;
-        this.validateForm();
-    }
-
-    setDocLanguage(docLanguage: any) {
-        this.officeMemo.docLanguage = docLanguage;
-        this.validateForm();
-    }
-
-    setDocType(docType: any) {
-        this.officeMemo.docType = docType;
         this.validateForm();
     }
 
@@ -164,9 +155,6 @@ export class OfficeMemoFormComponent {
         att.realFileName = data.response.files[0];
         if (!this.officeMemo.attachments) {
             this.officeMemo.attachments = [];
-        }
-        if (!this.officeMemo.fsid) {
-            this.officeMemo.fsid = '' + Date.now();
         }
         if (!data.files[0].type.match('image.*')) {
             this.officeMemo.attachments.push(att);

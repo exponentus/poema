@@ -1,5 +1,9 @@
 export class Outgoing {
     id: string = '';
+    isNew: boolean = true;
+    editable: boolean = false;
+    children: any[];
+
     regNumber: string;
     appliedRegDate: Date;
     recipient: any; // Organization;

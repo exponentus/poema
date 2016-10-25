@@ -4,6 +4,7 @@ import { DataService } from '../../../services';
 import { Attachment } from '../../../models';
 import { Outgoing } from '../models';
 import { API_URL } from '../workflow.routing';
+import { mdFormat } from '../../../utils/time.utils';
 
 @Injectable()
 export class WorkflowOutgoingService {
@@ -23,6 +24,7 @@ export class WorkflowOutgoingService {
     saveOutgoing(outgoing: Outgoing, params = {}) {
         let url = `${API_URL}/outgoings/${outgoing.id ? outgoing.id : 'new'}`;
         let payload = Object.assign(outgoing, {
+            appliedRegDate: mdFormat(outgoing.appliedRegDate, 'DD.MM.YYYY HH:mm'),
             recipient: outgoing.recipient ? outgoing.recipient.id : null,
             docLanguage: outgoing.docLanguage ? outgoing.docLanguage.id : null,
             docType: outgoing.docType ? outgoing.docType.id : null

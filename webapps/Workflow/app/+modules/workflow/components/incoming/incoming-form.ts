@@ -21,8 +21,8 @@ export class IncomingFormComponent {
     private isNew = true;
     private isEditable = false;
     private isValid = true;
-    private incoming: any;
-    private fsId: string = '1111111';
+    private incoming: Incoming;
+    private fsId: string;
 
     private actions: any = [];
     private errors: any = {};
@@ -57,7 +57,8 @@ export class IncomingFormComponent {
             payload => {
                 this.incoming = payload.payload.incoming;
                 this.actions = payload.payload.actionBar.actions || [];
-                this.isNew = this.incoming.id == '';
+                this.fsId = payload.payload.fsId;
+                this.isNew = this.incoming.isNew;
                 this.isEditable = this.isNew || this.incoming.editable;
                 this.isReady = true;
                 this.isValid = true;
@@ -169,9 +170,6 @@ export class IncomingFormComponent {
         att.realFileName = data.response.files[0];
         if (!this.incoming.attachments) {
             this.incoming.attachments = [];
-        }
-        if (!this.incoming.fsid) {
-            this.incoming.fsid = '' + Date.now();
         }
         if (!data.files[0].type.match('image.*')) {
             this.incoming.attachments.push(att);

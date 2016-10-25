@@ -127,8 +127,8 @@ export class SelectionComponent {
     @Input() allowClear = false;
     @Input() searchable = false;
     @Input() contentLoadable = false;
-    @Input() contentUrl;
-    @Input() contentPath;
+    @Input() url;
+    @Input() listPath;
     @Input() totalPagesPath;
     @Input() pageParam = 'page';
     @Input() searchParam = 'keyWord';
@@ -471,13 +471,13 @@ export class SelectionComponent {
 
         }
 
-        if (!this.contentUrl) {
+        if (!this.url) {
             return;
         }
 
         this.loading = true;
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', 'Accept': 'application/json' });
-        let url = `${this.contentUrl}&${this.pageParam}=${this.page}&${this.searchParam}=${encodeURIComponent(this.keyWord)}`;
+        let url = `${this.url}&${this.pageParam}=${this.page}&${this.searchParam}=${encodeURIComponent(this.keyWord)}`;
 
         this.http.get(url, { headers: headers })
             .map(response => response.json())
@@ -486,7 +486,7 @@ export class SelectionComponent {
 
                 // destructuring
                 // read items
-                let itemPaths = this.contentPath.split('.');
+                let itemPaths = this.listPath.split('.');
                 let _list = payload;
                 for (let it of itemPaths) {
                     _list = _list[it];

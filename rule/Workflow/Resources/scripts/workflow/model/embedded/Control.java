@@ -1,67 +1,58 @@
 package workflow.model.embedded;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import com.sun.istack.internal.Nullable;
 import reference.model.ControlType;
 import workflow.model.constants.ControlStatusType;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
 @Embeddable
 public class Control {
-	@Nullable
-	private ControlType controlType;
 
-	@Nullable
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "due_date")
-	private Date dueDate;
+    private ControlType controlType;
 
-	@Nullable
-	@Enumerated(EnumType.STRING)
-	@Column(length = 16)
-	private ControlStatusType status = ControlStatusType.UNKNOWN;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "control_due_date", nullable = true)
+    private Date dueDate;
 
-	@Nullable
-	private List<AssigneeEntry> assignees;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "control_status", length = 16)
+    private ControlStatusType status = ControlStatusType.UNKNOWN;
 
-	public ControlType getControlType() {
-		return controlType;
-	}
+    @OneToMany
+    @JoinColumn
+    private List<AssigneeEntry> assignees;
 
-	public void setControlType(ControlType controlType) {
-		this.controlType = controlType;
-	}
+    public ControlType getControlType() {
+        return controlType;
+    }
 
-	public Date getDueDate() {
-		return dueDate;
-	}
+    public void setControlType(ControlType controlType) {
+        this.controlType = controlType;
+    }
 
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
+    public Date getDueDate() {
+        return dueDate;
+    }
 
-	public ControlStatusType getStatus() {
-		return status;
-	}
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
 
-	public void setStatus(ControlStatusType status) {
-		this.status = status;
-	}
+    public ControlStatusType getStatus() {
+        return status;
+    }
 
-	public List<AssigneeEntry> getAssignees() {
-		return assignees;
-	}
+    public void setStatus(ControlStatusType status) {
+        this.status = status;
+    }
 
-	public void setAssignees(List<AssigneeEntry> assignees) {
-		this.assignees = assignees;
-	}
+    public List<AssigneeEntry> getAssignees() {
+        return assignees;
+    }
 
+    public void setAssignees(List<AssigneeEntry> assignees) {
+        this.assignees = assignees;
+    }
 }
