@@ -21,11 +21,9 @@
                 </div>
             </div>
         </div>
-        <h1 class="header-title task-header-title">
-            <div class="header-title-flex">
-                <label class="header-title-label">
-                    <div>{{'incoming' | translate}}</div>
-                </label>
+        <h1 class="header-title">
+            <div class="header-title-inner">
+                <label class="header-title-label">{{'incoming' | translate}}</label>
                 <div class="header-reg-number" *ngIf="incoming.regNumber">{{incoming.regNumber}}</div>
                 <input [class.invalid]="errors.title"
                     name="title"
@@ -34,9 +32,10 @@
                     [autofocus]="isEditable"
                     autocomplete="off"
                     required
-                    [readonly]="!isEditable"
                     (keyup)="validateForm()"
-                    [(ngModel)]="incoming.title" />
+                    [(ngModel)]="incoming.title"
+                    *ngIf="isEditable" />
+                <span *ngIf="!isEditable">{{incoming.title}}</span>
             </div>
         </h1>
     </header>
@@ -91,7 +90,7 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.docLanguage">
                             <selection
-                                class="span8"
+                                class="span4"
                                 [selectedItems]="incoming.docLanguage"
                                 [url]="'/Reference/p?id=documentlanguage-view'"
                                 [listPath]="'objects.1.list'"

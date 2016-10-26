@@ -21,12 +21,10 @@
                 </div>
             </div>
         </div>
-        <h1 class="header-title task-header-title">
-            <div class="header-title-flex">
-                <label class="header-title-label">
-                    <div>{{'office_memo' | translate}}</div>
-                </label>
-                <div class="header-reg-number" *ngIf="officeMemo.regNumber">{{officeMemo.regNumber}}</div>
+        <h1 class="header-title">
+            <div class="header-title-inner">
+                <label class="header-title-label">{{'office_memo' | translate}}</label>
+                <span class="header-reg-number" *ngIf="officeMemo.regNumber">{{officeMemo.regNumber}}</span>
             </div>
         </h1>
     </header>

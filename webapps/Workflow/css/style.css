@@ -10,87 +10,13 @@ body:not(.side-nav-toggle) .aside+.content {
     margin-left: 280px;
 }
 
-.view {
-    min-width: 800px;
-}
-
-.form .content-actions {
-    border-bottom: 1px solid #e6e6e6;
-    border-top: 1px solid transparent;
-    margin: 0;
-    padding: 6px;
-    vertical-align: middle;
-}
-
-.content-actions .btn-back {
-    border-radius: 2px;
-    margin: 0 6px 0 0;
-    width: auto;
+.content-actions .buttons {
+    display: inline-block;
+    vertical-align: top;
 }
 
 .content-actions .pagination {
     float: right;
-}
-
-.header-reg-number {
-    background: #f5f5f5;
-    border-radius: 2px;
-    color: #607D8B;
-    display: inline-block;
-    margin: 0 4px;
-    padding: 4px;
-    white-space: nowrap;
-}
-
-.header-title.header-title-flex,
-.task-header-title {
-    padding: 6px 10px;
-}
-
-.header-title-flex {
-    align-items: center;
-    display: flex;
-}
-
-.header-title-flex>label {
-    color: #777;
-    font-size: .8em;
-    margin: 0 6px 0 0;
-    padding: 7px;
-    white-space: nowrap;
-}
-
-.header-title-flex>input {
-    /*font-size: .9em;*/
-    font-family: 'Segoe UI';
-    line-height: 1.4;
-    min-height: auto;
-}
-
-.header-title-flex>input:not(:focus):not(:hover),
-.header-title-flex>input[readonly] {
-    border-color: transparent;
-}
-
-.header-title-flex input.ng-invalid {
-    /*box-shadow: 0 0 1px rgba(51, 51, 51, 0.5);*/
-    border-color: #FF5722 !important;
-    box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
-}
-
-.record-author {
-    color: #666;
-    font-size: .9em;
-    padding: 8px;
-}
-
-.record-author .employee-input,
-.record-author .input {
-    border: 0;
-    display: inline;
-    margin: 0;
-    padding: 0;
-    vertical-align: baseline;
 }
 
 pagination:empty {
@@ -102,10 +28,6 @@ pagination:empty {
     vertical-align: top;
 }
 
-.entry-wrap.active .entry {
-    background: #eee;
-}
-
 .side-nav .nav-link.router-link-active {
     background-color: rgba(0, 127, 255, .1);
     box-shadow: inset 0 0 0 1px #89bcec;
@@ -114,37 +36,4 @@ pagination:empty {
 
 .entry-link.router-link-active {
     background-color: #f5f5f5;
-}
-
-
-/* .vw- */
-
-.vw-icon {
-    min-width: 22px;
-    text-align: center;
-    width: 22px;
-}
-
-.vw-date {
-    min-width: 105px;
-    width: 105px;
-}
-
-.content-actions .buttons {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.form .content-footer {
-    background: #f5f5f5;
-    margin-top: 1em;
-}
-
-.has-error .input,
-.has-error input[required]:not(:focus),
-.has-error select.required:invalid,
-.has-error select[required]:invalid,
-.has-error textarea[required]:not(:focus) {
-    box-shadow: 0 0 1px rgba(255, 0, 0, 0.3);
-    border-color: #FF845D;
 }

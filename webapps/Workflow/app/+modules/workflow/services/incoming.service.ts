@@ -24,7 +24,7 @@ export class WorkflowIncomingService {
 
     saveIncoming(incoming: Incoming, params = {}) {
         let url = `${API_URL}/incomings/${incoming.id ? incoming.id : 'new'}`;
-        let payload = Object.assign(incoming, {
+        let payload = Object.assign({}, incoming, {
             appliedRegDate: mdFormat(incoming.appliedRegDate, DATE_TIME_FORMAT),
             senderAppliedRegDate: mdFormat(incoming.senderAppliedRegDate, DATE_TIME_FORMAT),
             sender: incoming.sender ? incoming.sender.id : null,

@@ -24,7 +24,7 @@ export class WorkflowOfficeMemoService {
 
     saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {
         let url = `${API_URL}/office-memos/${officeMemo.id ? officeMemo.id : 'new'}`;
-        let payload = Object.assign(officeMemo, {
+        let payload = Object.assign({}, officeMemo, {
             appliedRegDate: mdFormat(officeMemo.appliedRegDate, DATE_TIME_FORMAT),
             approval: officeMemo.approval ? officeMemo.approval.id : null
         });

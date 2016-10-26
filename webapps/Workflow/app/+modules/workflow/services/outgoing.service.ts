@@ -24,7 +24,7 @@ export class WorkflowOutgoingService {
 
     saveOutgoing(outgoing: Outgoing, params = {}) {
         let url = `${API_URL}/outgoings/${outgoing.id ? outgoing.id : 'new'}`;
-        let payload = Object.assign(outgoing, {
+        let payload = Object.assign({}, outgoing, {
             appliedRegDate: mdFormat(outgoing.appliedRegDate, DATE_TIME_FORMAT),
             recipient: outgoing.recipient ? outgoing.recipient.id : null,
             docLanguage: outgoing.docLanguage ? outgoing.docLanguage.id : null,
