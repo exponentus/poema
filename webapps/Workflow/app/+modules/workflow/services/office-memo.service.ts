@@ -4,6 +4,7 @@ import { DataService } from '../../../services';
 import { Attachment } from '../../../models';
 import { OfficeMemo } from '../models';
 import { API_URL } from '../workflow.routing';
+import { DATE_TIME_FORMAT } from '../../../constants/constants';
 import { mdFormat } from '../../../utils/time.utils';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class WorkflowOfficeMemoService {
     saveOfficeMemo(officeMemo: OfficeMemo, params = {}) {
         let url = `${API_URL}/office-memos/${officeMemo.id ? officeMemo.id : 'new'}`;
         let payload = Object.assign(officeMemo, {
-            appliedRegDate: mdFormat(officeMemo.appliedRegDate, 'DD.MM.YYYY HH:mm'),
+            appliedRegDate: mdFormat(officeMemo.appliedRegDate, DATE_TIME_FORMAT),
             approval: officeMemo.approval ? officeMemo.approval.id : null
         });
         return this.dataService.apiPost(url, params, { officeMemo: payload });

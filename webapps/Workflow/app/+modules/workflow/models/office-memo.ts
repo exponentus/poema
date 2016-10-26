@@ -7,7 +7,6 @@ export class OfficeMemo {
     children: any[];
 
     regNumber: string;
-    recipient: any;
     appliedRegDate: Date;
     approval: Approval;
     summary: string;
