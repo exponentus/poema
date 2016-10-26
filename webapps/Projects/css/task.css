@@ -32,11 +32,13 @@
     padding: 8px;
 }
 
-.record-author .employee-input,
+.record-author employee-input,
 .record-author .input {
     border: 0;
-    display: inline;
+    display: inline-block;
+    line-height: 1;
     margin: 0;
+    min-height: auto;
     padding: 0;
     vertical-align: baseline;
 }

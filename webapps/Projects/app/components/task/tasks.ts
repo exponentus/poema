@@ -13,7 +13,7 @@ import { Task } from '../../models/task';
     selector: 'tasks',
     templateUrl: './tasks.html',
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })

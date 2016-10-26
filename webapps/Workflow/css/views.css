@@ -1,12 +1,9 @@
-.view {
-    min-width: 800px;
-}
-
 .entry-wrap.active .entry {
     background: #eee;
 }
 
 .vw-icon {
+    max-width: 22px;
     min-width: 22px;
     text-align: center;
     width: 22px;
@@ -19,6 +16,7 @@
 }
 
 .vw-reg-number {
+    max-width: 130px;
     min-width: 130px;
     width: 130px;
 }

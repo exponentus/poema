@@ -14,7 +14,7 @@ import { Project } from '../../models/project';
     selector: 'projects',
     templateUrl: './projects.html',
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })

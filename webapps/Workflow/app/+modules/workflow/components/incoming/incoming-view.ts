@@ -27,7 +27,7 @@ import { WorkflowIncomingService } from '../../services';
         </list-page>
     `,
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })

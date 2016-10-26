@@ -27,7 +27,7 @@ import { WorkflowOutgoingService } from '../../services';
         </list-page>
     `,
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })

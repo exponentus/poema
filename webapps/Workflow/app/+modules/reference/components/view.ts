@@ -29,7 +29,7 @@ import { parseResponseObjects } from '../../../utils/utils';
         </list-page>
     `,
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })
