@@ -21,16 +21,17 @@ import staff.dao.OrganizationDAO;
 import staff.model.Organization;
 import workflow.model.Incoming;
 
-@Command(name = "load_in_nsf")
-public class LoadIncomingsFromNSF extends _DoPatch {
+@Command(name = "import_in_nsf")
+public class ImportIncomingsFromNSF extends _DoPatch {
 	private static final String DOMINO_HOST = "localhost";
 	private static final String DOMINO_USER = "developer";
-	private static final String DOMINO_USER_PWD = "123";
+	private static final String DOMINO_USER_PWD = "12345";
 	private static final String IN_DATABASE = "SmartDoc_BRK\\incoming.nsf";
 
 	@Override
 	public void doTask(_Session ses) {
 		List<Organization> entities = new ArrayList<>();
+		OrganizationDAO oDao = new OrganizationDAO(ses);
 		try {
 			Session dominoSession = NotesFactory.createSession(DOMINO_HOST, DOMINO_USER, DOMINO_USER_PWD);
 			Database inDb = dominoSession.getDatabase(dominoSession.getServerName(), IN_DATABASE);
@@ -43,19 +44,34 @@ public class LoadIncomingsFromNSF extends _DoPatch {
 				String form = doc.getItemValueString("Form");
 				if (form.equals("IN")) {
 					Incoming inc = new Incoming();
-					inc.setRegNumber(doc.getItemValueString("Vn"));
-					inc.setAppliedRegDate(doc.getFirstItem("Dvn").getDateTimeValue().toJavaDate());
-					// inc.setAuthor(doc.getItemValueString("Vn"));
-					inc.setBody(doc.getItemValueString("Vn"));
-					// inc.setControl(doc.getItemValueString("Vn"));
-					// inc.setDocLanguage(doc.getItemValueString("Vn"));
-					// inc.setDocType(doc.getItemValueString("Vn"));
-					inc.setSender(null);
-					inc.setForm(null);
-					inc.setReaders(null);
-					inc.setResponseTo(null);
-					inc.setSenderRegNumber(null);
-					inc.setTitle(form);
+					String vn = doc.getItemValueString("Vn");
+					if (vn != null) {
+						inc.setRegNumber(vn);
+						inc.setAppliedRegDate(doc.getFirstItem("Dvn").getDateTimeValue().toJavaDate());
+						// inc.setAuthor(doc.getItemValueString("Vn"));
+						inc.setSenderAppliedRegDate(doc.getFirstItem("Din").getDateTimeValue().toJavaDate());
+						inc.setSenderRegNumber(doc.getItemValueString("In"));
+						String corrId = doc.getItemValueString("CorrID");
+						if (!corrId.isEmpty()) {
+							Organization org = oDao.findByExtKey(corrId);
+							if (org != null) {
+								inc.setSender(org);
+							}
+						}
+
+						inc.setBody(doc.getItemValueString("Vn"));
+						// inc.setControl(doc.getItemValueString("Vn"));
+						// inc.setDocLanguage(doc.getItemValueString("Vn"));
+						// inc.setDocType(doc.getItemValueString("Vn"));
+
+						inc.setForm(null);
+						inc.setReaders(null);
+						inc.setResponseTo(null);
+						inc.setSenderRegNumber(null);
+						inc.setTitle(form);
+					} else {
+						System.out.println(doc.getUniversalID() + " has been skipped ");
+					}
 				}
 				tmpEntry = vec.getNextEntry();
 				entry.recycle();
@@ -64,9 +80,10 @@ public class LoadIncomingsFromNSF extends _DoPatch {
 
 		} catch (NotesException e) {
 			logger.errorLogEntry(e);
+		} catch (Exception e) {
+			logger.errorLogEntry(e);
 		}
 
-		OrganizationDAO oDao = new OrganizationDAO(ses);
 		for (Organization org : entities) {
 			try {
 				oDao.add(org);

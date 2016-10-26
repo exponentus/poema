@@ -200,6 +200,8 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>  
         <class>com.exponentus.common.model.AttachmentThumbnail</class> 
+         <!-- Because of suppose importing data from Domino -->
+         <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit> 
     

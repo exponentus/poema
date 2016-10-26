@@ -40,9 +40,7 @@
                 </services>
             </rest>
         </app>
-        <app>
-            <name mode="on">Welcome</name>
-        </app>
+       
     </applications>
     <langs>
         <!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
