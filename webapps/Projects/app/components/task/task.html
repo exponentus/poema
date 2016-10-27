@@ -46,7 +46,7 @@
                     <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
                 </label>
                 <div class="task-reg-number" *ngIf="task.regNumber">{{task.regNumber}}</div>
-                <input [class.invalid]="errors.title" autofocus required name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
+                <input [class.invalid]="errors.title" autofocus autocomplete="off" required name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
             </div>
         </h1>
     </header>

@@ -1,4 +1,5 @@
 /* .project-list */
+
 .project-list__name {
     min-width: 80px;
     width: 20%;
@@ -32,4 +33,29 @@
 .project-list__tester {
     min-width: 130px;
     width: 130px;
+}
+
+@media ( max-width: 768px) {
+    .project-list .entries-head {
+        display: none;
+    }
+    .project-list .entry-select {
+        display: none;
+    }
+    .project-list .entry-select + .entry-link {
+        padding-left: 0;
+    }
+    .project-list__name {
+        width: 75%;
+    }
+    .project-list__status {
+        width: 20%;
+    }
+    .entry-fields > .project-list__customer,
+    .entry-fields > .project-list__finish_date,
+    .entry-fields > .project-list__manager,
+    .entry-fields > .project-list__programmer,
+    .entry-fields > .project-list__tester {
+        display: none;
+    }
 }

@@ -11,6 +11,8 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import projects.model.Request;
+import projects.model.Task;
 import workflow.dao.IncomingDAO;
 
 import javax.ws.rs.GET;
@@ -53,6 +55,23 @@ public class IncomingsService extends RestProvider {
         colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
         colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
         colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
+
+        // test
+        colOpts.add(Task.class, "regNumber", "text", "vw-reg-number");
+        colOpts.add(Task.class, "title", "text", "vw-title");
+        colOpts.add(Task.class, "hasAttachments", "attachment", "vw-icon");
+        colOpts.add(Task.class, "status", "text", "vw-status");
+        colOpts.add(Task.class, "priority", "text", "vw-priority");
+        colOpts.add(Task.class, "assignee", "localizedName", "vw-assignee");
+        colOpts.add(Task.class, "startDate", "date", "vw-date");
+        colOpts.add(Task.class, "dueDate", "date", "vw-date");
+
+        colOpts.add(Request.class, "regDate", "date", "request__time");
+        colOpts.add(Request.class, "comment", "text", "request__comment");
+        colOpts.add(Request.class, "attachments", "attachment", "request__attachments");
+        colOpts.add(Request.class, "resolution", "text", "");
+        colOpts.add(Request.class, "resolutionTime", "date", "request__resolution_time");
+        //
 
         Outcome outcome = new Outcome();
         outcome.setId("incomings");

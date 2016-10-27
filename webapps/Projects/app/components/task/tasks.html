@@ -55,6 +55,9 @@
             </div>
         </header>
         <div class="entries">
+            <div class="entries-is-empty" *ngIf="!tasks.length">
+                {{'empty' | translate}}
+            </div>
             <div class="top-entry" [class.is-last]="isLast" *ngFor="let task of tasks; let isLast = last">
                 <div class="entry-wrap">
                     <div class="entry">

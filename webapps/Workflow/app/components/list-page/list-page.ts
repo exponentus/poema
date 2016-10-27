@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -7,7 +7,8 @@ import { Store } from '@ngrx/store';
     templateUrl: './list-page.html',
     host: {
         '[class.list-page]': 'true'
-    }
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ListPageComponent {
@@ -27,13 +28,18 @@ export class ListPageComponent {
     @Input() actions: any[] = [];
     /**
      * columns
+     * {
+     *  root: {name, value, type, sort, className},
+     *  'entity kind': {value, type, className} // optional
+     * }
      * @param name - column name
      * @param value - model field name
      * @param type - text, date, localizedName
      * @param sort - desc, asc, both
      * @param className - css class name
+     * @param valueAsClass - add value as class {valueAsClass + model[value]}
      */
-    @Input() columns: any[] = [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name', valueAsClass: '' }];
+    @Input() columns = { root: [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name', valueAsClass: '' }] };
 
     @Output() action = new EventEmitter();
     @Output() refresh = new EventEmitter();

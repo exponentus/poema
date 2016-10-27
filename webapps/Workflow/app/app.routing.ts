@@ -23,6 +23,7 @@ const routes: Routes = [
     // { path: 'Reference', loadChildren: './+modules/reference/reference.module#ReferenceModule', canActivate: [AuthGuard] },
     // { path: 'Staff', loadChildren: './+modules/staff/staff.module#StaffModule', canActivate: [AuthGuard] },
     // { path: 'Workflow', loadChildren: './+modules/workflow/workflow.module#WorkflowModule', canActivate: [AuthGuard] },
+    // { path: 'Projects', loadChildren: './+modules/projects/projects.module#ProjectsModule', canActivate: [AuthGuard] }
     { path: '**', component: Error404 }
 ];
 

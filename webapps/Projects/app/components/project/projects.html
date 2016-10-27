@@ -41,6 +41,9 @@
             </div>
         </header>
         <div class="entries">
+            <div class="entries-is-empty" *ngIf="!projects.length">
+                {{'empty' | translate}}
+            </div>
             <div class="entry-wrap" *ngFor="let project of projects">
                 <div class="entry">
                     <label class="entry-select" *ngIf="selectable">

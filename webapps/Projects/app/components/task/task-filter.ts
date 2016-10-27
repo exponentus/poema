@@ -7,19 +7,25 @@ import { TaskType, Employee, Tag } from '../../models';
 @Component({
     selector: 'task-filter',
     template: `
-        <div class="task-filter__icon"><i class="fa fa-filter"></i></div>
-        <task-status-input [status]="taskStatus" editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (change)="setTaskStatus($event)"></task-status-input>
-        <task-type-input [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (change)="setTaskType($event)"></task-type-input>
-        <employee-input [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (change)="setAssigneeUser($event)"></employee-input>
-        <tags-input [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (change)="setTags($event)"></tags-input>
+        <div class="filter-box__icon" (click)="toggle($event)"><i class="fa fa-filter"></i></div>
+        <div class="filter__items">
+            <task-status-input class="filter__items_item" [status]="taskStatus" editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (change)="setTaskStatus($event)"></task-status-input>
+            <task-type-input class="filter__items_item" [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (change)="setTaskType($event)"></task-type-input>
+            <employee-input class="filter__items_item" [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (change)="setAssigneeUser($event)"></employee-input>
+            <tags-input class="filter__items_item" [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (change)="setTags($event)"></tags-input>
+        </div>
     `,
     host: {
-        '[class.task-filter]': 'true'
+        '[class.filter-box]': 'true',
+        '[class.open]': 'isOpen',
+        '[class.has-value]': 'isFiltered'
     }
 })
 
 export class TaskFilterComponent {
     @Output() change = new EventEmitter<any>();
+
+    private isOpen: boolean = false;
 
     private taskStatus: string = '';
     private taskTypeId: string = '';
@@ -43,6 +49,14 @@ export class TaskFilterComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+    }
+
+    toggle() {
+        this.isOpen = !this.isOpen;
+    }
+
+    get isFiltered() {
+        return this.taskStatus.length || this.taskTypeId || this.assigneeUserId || this.tagIds.length;
     }
 
     setTaskStatus(taskStatus: string) {

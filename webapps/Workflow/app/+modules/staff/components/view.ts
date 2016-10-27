@@ -42,7 +42,7 @@ export class StaffViewComponent {
     @Input() captionsVisible: boolean = true;
 
     private actions = [];
-    private columns = [];
+    private columns = {};
     private subs: any = [];
 
     list: any[];
@@ -91,7 +91,7 @@ export class StaffViewComponent {
 
         this.staffService.fetch(this.params).subscribe(
             payload => {
-                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }];
+                let columnOptions = { root: [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }] };
                 if (payload.data.columnOptions) {
                     columnOptions = payload.data.columnOptions.columns;
                 }

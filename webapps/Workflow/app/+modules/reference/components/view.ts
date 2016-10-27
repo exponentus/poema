@@ -43,7 +43,7 @@ export class ReferenceViewComponent {
     @Input() captionsVisible: boolean = true;
 
     private actions = [];
-    private columns = [];
+    private columns = {};
     private subs: any = [];
 
     list: any[];
@@ -93,7 +93,7 @@ export class ReferenceViewComponent {
 
         this.referenceService.fetch(this.params).subscribe(
             payload => {
-                let columnOptions = [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name', valueAsClass: '' }];
+                let columnOptions = { root: [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name', valueAsClass: '' }] };
                 if (payload.data.columnOptions) {
                     columnOptions = payload.data.columnOptions.columns;
                 }
