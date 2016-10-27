@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
+import com.exponentus.legacy.domino.DominoEnvConst;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoPatch;
 import com.exponentus.scriptprocessor.tasks.Command;
@@ -23,17 +24,15 @@ import workflow.model.Incoming;
 
 @Command(name = "import_in_nsf")
 public class ImportIncomingsFromNSF extends _DoPatch {
-	private static final String DOMINO_HOST = "localhost";
-	private static final String DOMINO_USER = "developer";
-	private static final String DOMINO_USER_PWD = "12345";
-	private static final String IN_DATABASE = "SmartDoc_BRK\\incoming.nsf";
+	private static final String IN_DATABASE = DominoEnvConst.APPLICATION_DIRECTORY + "incoming.nsf";
 
 	@Override
 	public void doTask(_Session ses) {
 		List<Organization> entities = new ArrayList<>();
 		OrganizationDAO oDao = new OrganizationDAO(ses);
 		try {
-			Session dominoSession = NotesFactory.createSession(DOMINO_HOST, DOMINO_USER, DOMINO_USER_PWD);
+			Session dominoSession = NotesFactory.createSession(DominoEnvConst.DOMINO_HOST, DominoEnvConst.DOMINO_USER,
+			        DominoEnvConst.DOMINO_USER_PWD);
 			Database inDb = dominoSession.getDatabase(dominoSession.getServerName(), IN_DATABASE);
 			View view = inDb.getView("(AllUNID)");
 			ViewEntryCollection vec = view.getAllEntries();

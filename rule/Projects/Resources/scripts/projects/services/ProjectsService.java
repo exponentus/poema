@@ -13,6 +13,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
@@ -68,7 +69,7 @@ public class ProjectsService extends RestProvider {
 		Task entity = null;
 		try {
 			entity = taskDAO.update(task);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 		return Response.ok(new ViewPage<>(entity)).build();

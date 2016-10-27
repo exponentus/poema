@@ -188,7 +188,7 @@ public class Comments extends _DoForm {
 
 		try {
 			commentDAO.update(comment);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			logError(e);
 			setBadRequest();
 		}

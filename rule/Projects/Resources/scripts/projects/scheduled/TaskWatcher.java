@@ -2,6 +2,7 @@ package projects.scheduled;
 
 import java.util.Date;
 
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
@@ -34,7 +35,7 @@ public class TaskWatcher extends _DoScheduledTask {
 					tDao.update(task);
 					logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
 					new Messages(session).sendToAssignee(task);
-				} catch (SecureException e) {
+				} catch (SecureException | DAOException e) {
 					setError(e);
 
 				}

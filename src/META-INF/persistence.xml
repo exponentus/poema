@@ -17,7 +17,7 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>com.exponentus.common.model.RecycleBin</class>
-         <!-- Because of suppose importing from Domino -->
+         <!-- Because of it suppose importing from Domino -->
          <class>administrator.model.Collation</class>
     </persistence-unit>
 
@@ -47,6 +47,8 @@
         <class>reference.model.OrgCategory</class>
         <!-- Obligatory the application module entities -->
         <class>administrator.model.Language</class>
+        <!-- Because of it suppose importing from Domino -->
+        <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -78,9 +80,12 @@
         <class>reference.model.ControlType</class>
         <class>reference.model.Tag</class>
         <class>reference.model.OrgCategory</class>
+        <class>reference.model.DocumentSubject</class>
         <!-- Specific Reference module entities -->
         <class>reference.model.TaskType</class>
         <class>reference.model.RequestType</class>
+        <!-- Because of it suppose importing from Domino -->
+        <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -181,6 +186,7 @@
         <class>reference.model.TaskType</class>
         <class>reference.model.Tag</class>
         <class>reference.model.RequestType</class>
+         <class>reference.model.DocumentSubject</class>
         <!-- The application module entities -->
         <class>workflow.model.Approval</class>  
         <class>workflow.model.Approver</class>  

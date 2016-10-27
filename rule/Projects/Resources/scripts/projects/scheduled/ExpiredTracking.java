@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -58,7 +59,7 @@ public class ExpiredTracking extends _DoScheduledTask {
 							tDao.update(task);
 							logger.infoLogEntry("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
 							sendNotify(session, task);
-						} catch (SecureException e) {
+						} catch (SecureException | DAOException e) {
 							setError(e);
 						}
 					}
@@ -70,7 +71,7 @@ public class ExpiredTracking extends _DoScheduledTask {
 						try {
 							tDao.update(task);
 							logger.infoLogEntry("The task \"" + task.getRegNumber() + "\" was unmarked as \"" + tag.getName() + "\"");
-						} catch (SecureException e) {
+						} catch (SecureException | DAOException e) {
 							setError(e);
 						}
 					}

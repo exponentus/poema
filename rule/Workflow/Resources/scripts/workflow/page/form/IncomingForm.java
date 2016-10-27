@@ -160,7 +160,7 @@ public class IncomingForm extends _DoForm {
 
 		try {
 			dao.update(entity);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}

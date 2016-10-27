@@ -197,7 +197,7 @@ public class ProjectForm extends _DoForm {
 
 		try {
 			dao.update(project);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}

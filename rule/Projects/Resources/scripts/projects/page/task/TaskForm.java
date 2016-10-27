@@ -321,7 +321,7 @@ public class TaskForm extends _DoForm {
 
 		try {
 			dao.update(task);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
@@ -429,6 +429,9 @@ public class TaskForm extends _DoForm {
 		} catch (DatabaseException e) {
 			setBadRequest();
 			logError(e);
+		} catch (DAOException e) {
+			setBadRequest();
+			logError(e);
 		}
 	}
 
@@ -450,7 +453,7 @@ public class TaskForm extends _DoForm {
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
-		} catch (DatabaseException e) {
+		} catch (DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
@@ -478,7 +481,7 @@ public class TaskForm extends _DoForm {
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
-		} catch (DatabaseException e) {
+		} catch (DAOException e) {
 			setBadRequest();
 			logError(e);
 		}

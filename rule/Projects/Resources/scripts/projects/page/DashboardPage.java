@@ -81,7 +81,7 @@ public class DashboardPage extends _DoPage {
 			project.setId(UUID.fromString(projectId));
 			dashboard.getProjects().remove(project);
 			dashboardDAO.update(dashboard);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}

@@ -241,7 +241,7 @@ public class TaskRequests extends _DoForm {
 			requestDAO.update(request);
 
 			new Messages(session).sendMessageOfRequestDecision(request);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
@@ -269,7 +269,7 @@ public class TaskRequests extends _DoForm {
 			request.getAttachments().remove(attachment);
 
 			requestDAO.update(request);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
