@@ -2,11 +2,11 @@ body {
     min-height: 100vh;
 }
 
-body:not(.side-nav-toggle) .aside+.content {
+body:not(.side-nav-toggle) .aside + .content {
     margin-left: 0;
 }
 
-.body:not(.side-nav-toggle) .aside+.content {
+.body:not(.side-nav-toggle) .aside + .content {
     margin-left: 280px;
 }
 
@@ -15,15 +15,7 @@ body:not(.side-nav-toggle) .aside+.content {
     vertical-align: top;
 }
 
-.content-actions .pagination {
-    float: right;
-}
-
-pagination:empty {
-    display: none;
-}
-
-.nav-inline>li {
+.nav-inline > li {
     display: inline-block;
     vertical-align: top;
 }
