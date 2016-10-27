@@ -7,6 +7,7 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import administrator.tasks.ImportExtUserNSF;
 import reference.tasks.ImportDocumentSubjNSF;
 import reference.tasks.ImportPositionNSF;
+import reference.tasks.InsertUndefinedGag;
 import staff.tasks.ImportDepFromNSF;
 import staff.tasks.ImportEmpFromNSF;
 import staff.tasks.ImportOrgsFromNSF;
@@ -17,33 +18,37 @@ public class PopulatingSD extends _DoPatch {
 
 	@Override
 	public void doTask(_Session ses) {
-		logger.infoLogEntry("step1-------------import names.nsf");
+		logger.infoLogEntry("step 1 -------------import names.nsf");
 		ImportExtUserNSF step1 = new ImportExtUserNSF();
 		step1.doTask(ses);
 
-		logger.infoLogEntry("step2-------------import Positions");
-		ImportPositionNSF step2 = new ImportPositionNSF();
+		logger.infoLogEntry("step 2 -------------inser dummy Reference entries");
+		InsertUndefinedGag step2 = new InsertUndefinedGag();
 		step2.doTask(ses);
 
-		logger.infoLogEntry("step3-------------import Document subjects");
-		ImportDocumentSubjNSF step3 = new ImportDocumentSubjNSF();
+		logger.infoLogEntry("step 3 -------------import Positions");
+		ImportPositionNSF step3 = new ImportPositionNSF();
 		step3.doTask(ses);
 
-		logger.infoLogEntry("step4-------------import Correspondents");
-		ImportOrgsFromNSF step4 = new ImportOrgsFromNSF();
+		logger.infoLogEntry("step 4 -------------import Document subjects");
+		ImportDocumentSubjNSF step4 = new ImportDocumentSubjNSF();
 		step4.doTask(ses);
 
-		logger.infoLogEntry("step5-------------import RVZ");
-		ImportRvzFromNSF step5 = new ImportRvzFromNSF();
+		logger.infoLogEntry("step 5 -------------import Correspondents");
+		ImportOrgsFromNSF step5 = new ImportOrgsFromNSF();
 		step5.doTask(ses);
 
-		logger.infoLogEntry("step6-------------import Departaments");
-		ImportDepFromNSF step6 = new ImportDepFromNSF();
+		logger.infoLogEntry("step 6 -------------import RVZ");
+		ImportRvzFromNSF step6 = new ImportRvzFromNSF();
 		step6.doTask(ses);
 
-		logger.infoLogEntry("step7-------------import Employees");
-		ImportEmpFromNSF step7 = new ImportEmpFromNSF();
+		logger.infoLogEntry("step 7 -------------import Departments");
+		ImportDepFromNSF step7 = new ImportDepFromNSF();
 		step7.doTask(ses);
+
+		logger.infoLogEntry("step 8-------------import Employees");
+		ImportEmpFromNSF step8 = new ImportEmpFromNSF();
+		step8.doTask(ses);
 
 		logger.infoLogEntry("done...");
 	}
