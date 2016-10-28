@@ -14,6 +14,7 @@
     <caption name="close"/>
     <caption name="search"/>
     <caption name="filter"/>
+    <caption name="view_no_entries"/>
     <caption name="wait_while_document_save"/>
     <caption name="loading"/>
     <caption name="required"/>

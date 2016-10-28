@@ -79,7 +79,6 @@ body:not(.side-nav-toggle) .aside + .content {
 
 .side-nav .nav-link > i {
     color: #565656;
-    font-size: 20px;
 }
 
 .side-nav .nav-link.router-link-active {
