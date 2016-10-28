@@ -46,7 +46,7 @@ public class OutgoingsService extends RestProvider {
         // column options
         _ColumnOptions colOpts = new _ColumnOptions();
         colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("", "attachment", "attachment", "", "vw-icon");
         colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
         colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
         colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
@@ -56,9 +56,9 @@ public class OutgoingsService extends RestProvider {
         Outcome outcome = new Outcome();
         outcome.setId("outgoings");
         outcome.addPayload("title", "outgoing_documents");
-        outcome.addPayload("actionBar", actionBar);
-        outcome.addPayload("columnOptions", colOpts);
-        outcome.addPayload("view", vp);
+        outcome.addPayload(actionBar);
+        outcome.addPayload(colOpts);
+        outcome.addPayload(vp);
 
         return Response.ok(outcome).build();
     }

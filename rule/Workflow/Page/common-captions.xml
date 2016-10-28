@@ -14,7 +14,10 @@
     <caption name="wait_while_document_save"/>
     <caption name="markdown_write"/>
     <caption name="markdown_preview"/>
+    <caption name="editors"/>
+    <caption name="readers"/>
 
+    <caption name="acl_tab_title"/>
     <caption name="attach_file"/>
     <caption name="properties"/>
     <caption name="interface"/>

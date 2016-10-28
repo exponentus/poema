@@ -143,4 +143,9 @@ public class Outgoing extends SecureAppEntity<UUID> {
     public void setBody(String body) {
         this.body = body;
     }
+
+    @Override
+    public String getURL() {
+        return "outgoings/" + getIdentifier();
+    }
 }

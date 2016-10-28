@@ -192,4 +192,9 @@ public class Incoming extends SecureAppEntity<UUID> {
     public void setControl(Control control) {
         this.control = control;
     }
+
+    @Override
+    public String getURL() {
+        return "incomings/" + getIdentifier();
+    }
 }
