@@ -92,12 +92,13 @@
                 </div>
                 <attachments
                     [editable]="isEditable"
-                    [model]="officeMemo"
+                    [attachments]="officeMemo.attachments"
+                    [fsId]="fsId"
                     (upload)="addAttachment($event)"
                     (delete)="deleteAttachment($event)">
                 </attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasExecution">
+            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasResponses">
                 <!--<tasks [tasks]="[officeMemo]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>-->
             </tab>
             <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="officeMemo.acl">

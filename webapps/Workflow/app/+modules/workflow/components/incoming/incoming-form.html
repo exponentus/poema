@@ -129,8 +129,6 @@
                                 class="span8"
                                 [selectedItems]="incoming.responseTo"
                                 [url]="'/Workflow/api/outgoings?'"
-                                [listPath]="'payload.view.result'"
-                                [totalPagesPath]="'payload.view.maxPage'"
                                 textKey="regNumber"
                                 descriptionKey="title"
                                 [disabled]="!isEditable"
@@ -151,7 +149,7 @@
                                 [markdown]="incoming.body || ''"
                                 [editable]="isEditable"
                                 [updateTimeout]="300"
-                                (update)="setIncomingBody($event)">
+                                (update)="setBody($event)">
                             </markdown-editor>
                             <error-message [error]="errors.body"></error-message>
                         </div>
@@ -159,12 +157,13 @@
                 </div>
                 <attachments
                     [editable]="isEditable"
-                    [model]="incoming"
+                    [attachments]="incoming.attachments"
+                    [fsId]="fsId"
                     (upload)="addAttachment($event)"
                     (delete)="deleteAttachment($event)">
                 </attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasExecution">
+            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasResponses">
                 <!--<tasks [tasks]="[incoming]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>-->
             </tab>
             <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="incoming.acl">

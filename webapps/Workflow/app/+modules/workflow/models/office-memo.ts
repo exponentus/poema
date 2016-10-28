@@ -1,11 +1,7 @@
+import { BaseModel } from '../../../models';
 import { Approval } from './approval';
 
-export class OfficeMemo {
-    id: string = '';
-    isNew: boolean = true;
-    editable: boolean = false;
-    children: any[];
-
+export class OfficeMemo extends BaseModel {
     regNumber: string;
     appliedRegDate: Date;
     approval: Approval;

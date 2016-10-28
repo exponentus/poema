@@ -7,6 +7,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
 import { WorkflowOfficeMemoService } from '../../services';
+import { API_URL } from '../../constants/constants';
 import { Attachment } from '../../../../models';
 import { OfficeMemo } from '../../models';
 import { imgToBase64 } from '../../../../utils/utils';
@@ -43,7 +44,8 @@ export class OfficeMemoFormComponent {
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
             let id = params['id']; // this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
-            this.loadData(id);
+            let fsId = 'fsid';
+            this.loadData(id, { fsid: fsId });
         }));
     }
 
@@ -52,24 +54,33 @@ export class OfficeMemoFormComponent {
     }
 
     // ===
-    loadData(id: string) {
-        this.officeMemoService.fetchOfficeMemoById(id, { fsid: this.fsId }).subscribe(
+    loadData(id: string, params: any) {
+        this.officeMemoService.fetchOfficeMemoById(id, params).subscribe(
             payload => {
-                this.officeMemo = payload.payload.officeMemo;
-                this.actions = payload.payload.actionBar.actions || [];
+                this.officeMemo = payload.payload.officememo;
+                this.officeMemo.acl = payload.payload.acl;
                 this.fsId = payload.payload.fsId;
+                this.actions = payload.payload._actionbar.actions || [];
                 this.isNew = this.officeMemo.isNew;
                 this.isEditable = this.isNew || this.officeMemo.editable;
                 this.isReady = true;
                 this.isValid = true;
+                //
+                if (this.officeMemo.attachments) {
+                    this.officeMemo.attachments.map(it => {
+                        let url = `${API_URL}office-memos/${this.officeMemo.id}/attachments/${it.id}`;
+                        it.url = url;
+                        it.thumbnailUrl = it.url + '?_thumbnail';
+                    });
+                }
             },
             error => this.handleXhrError(error)
         );
     }
 
     //
-    get hasExecution() {
-        return this.officeMemo.children;
+    get hasResponses() {
+        return this.officeMemo.responses;
     }
 
     // actions

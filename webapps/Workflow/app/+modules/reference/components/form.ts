@@ -27,7 +27,6 @@ export class ReferenceFormComponent {
     model: any;
     loading: boolean = true;
     id: string = '';
-    fsid: string = '';
 
     constructor(
         private store: Store<any>,
@@ -66,7 +65,6 @@ export class ReferenceFormComponent {
 
                 this.isReady = true;
                 this.loading = false;
-                this.fsid = objects.fsid;
                 this.model = objects[params.id.split('-')[0]];
             },
             error => console.log(error)

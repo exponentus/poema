@@ -40,12 +40,14 @@
                         <div class="entry-fields" *ngIf="columns[model.kind]">
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns[model.kind]">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
+                                <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>
                         <div class="entry-fields" *ngIf="!columns[model.kind]">
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns.root">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
+                                <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>

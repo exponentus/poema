@@ -7,6 +7,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { EnvironmentActions } from '../../../../actions';
 import { NotificationService } from '../../../../shared/notification';
 import { WorkflowIncomingService } from '../../services';
+import { API_URL } from '../../constants/constants';
 import { Attachment } from '../../../../models';
 import { Incoming, Outgoing } from '../../models';
 import { imgToBase64 } from '../../../../utils/utils';
@@ -43,7 +44,8 @@ export class IncomingFormComponent {
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
             let id = params['id']; // this.router.routerState.snapshot.root.queryParams['docid'] || undefined;
-            this.loadIncoming(id);
+            let fsId = 'fsid';
+            this.loadIncoming(id, { fsid: fsId });
         }));
     }
 
@@ -52,24 +54,33 @@ export class IncomingFormComponent {
     }
 
     // ===
-    loadIncoming(id: string) {
-        this.incomingService.fetchIncomingById(id, { fsid: this.fsId }).subscribe(
+    loadIncoming(id: string, params: any) {
+        this.incomingService.fetchIncomingById(id, params).subscribe(
             payload => {
                 this.incoming = payload.payload.incoming;
-                this.actions = payload.payload.actionBar.actions || [];
+                this.incoming.acl = payload.payload.acl;
                 this.fsId = payload.payload.fsId;
+                this.actions = payload.payload._actionbar.actions || [];
                 this.isNew = this.incoming.isNew;
                 this.isEditable = this.isNew || this.incoming.editable;
                 this.isReady = true;
                 this.isValid = true;
+                //
+                if (this.incoming.attachments) {
+                    this.incoming.attachments.map(it => {
+                        let url = `${API_URL}incomings/${this.incoming.id}/attachments/${it.id}`;
+                        it.url = url;
+                        it.thumbnailUrl = it.url + '?_thumbnail';
+                    });
+                }
             },
             error => this.handleXhrError(error)
         );
     }
 
     //
-    get hasExecution() {
-        return this.incoming.children;
+    get hasResponses() {
+        return this.incoming.responses;
     }
 
     // actions
@@ -160,7 +171,7 @@ export class IncomingFormComponent {
         this.validateForm();
     }
 
-    setIncomingBody(body: string) {
+    setBody(body: string) {
         this.incoming.body = body;
         this.validateForm();
     }
