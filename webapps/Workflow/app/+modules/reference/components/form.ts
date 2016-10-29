@@ -63,8 +63,9 @@ export class ReferenceFormComponent {
         this.referenceService.fetchOne(params).subscribe(
             payload => {
                 let objects = parseResponseObjects(payload.objects);
+                let kind = params.id.replace('-form', '').replace('-', '');
 
-                this.model = objects[params.id.split('-')[0]];
+                this.model = objects[kind];
                 this.formSchema = this.referenceService.getFormSchema(this.model.kind);
 
                 this.isReady = true;
@@ -79,6 +80,6 @@ export class ReferenceFormComponent {
     }
 
     submit($event) {
-        console.log($event);
+        console.log($event, this.model);
     }
 }

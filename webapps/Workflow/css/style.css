@@ -30,6 +30,11 @@ body:not(.side-nav-toggle) .aside + .content {
     background-color: #f5f5f5;
 }
 
+.fieldset > .legend {
+    background: transparent;
+    padding-bottom: 0;
+}
+
 .navbar {
     transition: all .25s;
 }

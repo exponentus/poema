@@ -324,9 +324,8 @@ const formSchemas = {
                 className: 'span2'
             }, {
                 type: 'checkbox',
-                label: 'hidden',
                 name: 'hidden',
-                values: ['true']
+                values: [{ value: 'true', label: 'hidden' }]
             }]
         }, {
             title: 'localized_names',

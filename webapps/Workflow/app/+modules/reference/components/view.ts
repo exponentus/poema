@@ -89,7 +89,7 @@ export class ReferenceViewComponent {
             id: this.id,
             sort: this.activeSort || 'regDate:desc'
         });
-        let typeId = this.id.split('-')[0];
+        let typeId = this.params.id.replace('-view', '').replace('-', '');
 
         this.referenceService.fetch(this.params).subscribe(
             payload => {
