@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -12,7 +12,8 @@ import { parseResponseObjects } from '../../../utils/utils';
     host: {
         '[class.form]': 'true',
         '[class.load]': 'loading'
-    }
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class ReferenceFormComponent {
@@ -22,16 +23,18 @@ export class ReferenceFormComponent {
     @Input() actionsVisible: boolean = true;
 
     private subs: any = [];
+    private formSchema: any = [];
 
     isReady = false;
-    model: any;
     loading: boolean = true;
+    model: any;
     id: string = '';
 
     constructor(
         private store: Store<any>,
         private route: ActivatedRoute,
         private router: Router,
+        private ref: ChangeDetectorRef,
         private environmentActions: EnvironmentActions,
         private referenceService: ReferenceService
     ) { }
@@ -63,11 +66,23 @@ export class ReferenceFormComponent {
             payload => {
                 let objects = parseResponseObjects(payload.objects);
 
+                this.model = objects[params.id.split('-')[0]];
+                this.formSchema = this.referenceService.getFormSchema(this.model.kind);
+
                 this.isReady = true;
                 this.loading = false;
-                this.model = objects[params.id.split('-')[0]];
+
+                this.ref.markForCheck();
             },
             error => console.log(error)
         );
+    }
+
+    close() {
+        this.router.navigate(['../'], { relativeTo: this.route });
+    }
+
+    submit($event) {
+        console.log($event);
     }
 }

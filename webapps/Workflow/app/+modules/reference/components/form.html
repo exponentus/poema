@@ -1,11 +1,11 @@
-<form class="form" *ngIf="isReady">
+<form class="form" *ngIf="isReady" #form>
     <header class="content-header">
         <div class="content-actions">
             <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="save()">
+            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="submit(form)">
                 {{'save_close' | translate}}
             </button>
             <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
@@ -21,34 +21,23 @@
                 </div>
             </div>
         </div>
-        <h1 class="header-title">
-            {{title | translate}}
-        </h1>
+        <h1 class="header-title">{{title | translate}}</h1>
     </header>
     <section class="content-body">
         <tabs>
-            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
-                <div class="fieldset">
-                    <div class="form-group">
+            <tab class="tab-pane" tabTitle="{{tab.tabTitle | translate}}" [active]="tab.active" *ngFor="let tab of formSchema">
+                <section class="fieldset" *ngFor="let fieldset of tab.fieldsets">
+                    <div class="legend" *ngIf="fieldset.title">{{fieldset.title | translate}}</div>
+                    <div class="form-group" *ngFor="let field of fieldset.fields">
                         <div class="control-label">
-                            {{'name' | translate}}
+                            {{field.label | translate}}
                         </div>
                         <div class="controls">
-                            <input type="text" name="name" [(ngModel)]="model.name" class="span8" />
+                            <input [type]="field.type" [name]="field.name" [value]="model[field.name]" [class]="field.className" />
                         </div>
                     </div>
-                </div>
-            </tab>
-            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="false && !isNew">
-                <acl [acl]="model.acl"></acl>
+                </section>
             </tab>
         </tabs>
     </section>
-    <footer class="content-footer">
-        <div class="record-author" *ngIf="model.authorId">
-            <span>{{'author' | translate}}</span>
-            <!--<employee-input [ids]="[model.authorId]"></employee-input>-->
-            <span>{{model.regDate}}</span>
-        </div>
-    </footer>
 </form>

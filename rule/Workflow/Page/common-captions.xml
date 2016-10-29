@@ -16,6 +16,7 @@
     <caption name="markdown_preview"/>
     <caption name="editors"/>
     <caption name="readers"/>
+    <caption name="localized_names"/>
 
     <caption name="acl_tab_title"/>
     <caption name="attach_file"/>

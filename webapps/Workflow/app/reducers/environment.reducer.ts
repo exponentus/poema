@@ -20,11 +20,11 @@ const initialState: IEnvironmentState = {
     isSearchOpen: false,
     redirectUrl: '/tasks',
     apps: [
-        { name: 'Reference', url: '/Reference' },
-        { name: 'Staff', url: '/Staff' },
-        { name: 'Workflow', url: '/Workflow' },
-        // { name: 'Projects', url: '/Projects' },
-        { name: 'WorkSpace', url: '/Workspace' }
+        { id: 'Reference', name: 'Reference', url: '/Reference' },
+        { id: 'Staff', name: 'Staff', url: '/Staff' },
+        { id: 'Workflow', name: 'Workflow', url: '/Workflow' },
+        { id: 'Projects', name: 'Projects', url: '/Projects' },
+        { id: 'WorkSpace', name: 'WorkSpace', url: '/Workspace' }
     ],
     moduleId: '',
     keyWord: '',
