@@ -35,13 +35,17 @@ body:not(.side-nav-toggle) .aside + .content {
 }
 
 .reference .navbar {
-    background: #d4e0e6;
+    background: #B2DFDB;
 }
 
 .staff .navbar {
-    background: #f7d7cc;
+    background: #DCEDC8;
 }
 
 .projects .navbar {
-    background: #dbeaf7;
+    background: #EDE7F6;
+}
+
+.workflow .navbar {
+    background: #C8E6C9;
 }

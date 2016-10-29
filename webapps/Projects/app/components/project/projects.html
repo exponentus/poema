@@ -41,7 +41,7 @@
             </div>
         </header>
         <div class="entries">
-            <div class="entries-is-empty" *ngIf="!loading && !projects.length">
+            <div class="view-empty" *ngIf="!loading && !projects.length">
                 {{'view_no_entries' | translate}}
             </div>
             <div class="entry-wrap" *ngFor="let project of projects">

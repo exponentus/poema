@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -12,8 +12,7 @@ import { parseResponseObjects } from '../../../utils/utils';
     host: {
         '[class.form]': 'true',
         '[class.load]': 'loading'
-    },
-    changeDetection: ChangeDetectionStrategy.OnPush
+    }
 })
 
 export class ReferenceFormComponent {
@@ -34,7 +33,6 @@ export class ReferenceFormComponent {
         private store: Store<any>,
         private route: ActivatedRoute,
         private router: Router,
-        private ref: ChangeDetectorRef,
         private environmentActions: EnvironmentActions,
         private referenceService: ReferenceService
     ) { }
@@ -71,8 +69,6 @@ export class ReferenceFormComponent {
 
                 this.isReady = true;
                 this.loading = false;
-
-                this.ref.markForCheck();
             },
             error => console.log(error)
         );
