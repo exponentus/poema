@@ -1,22 +1,14 @@
 package workflow.tasks;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.TempFile;
-import com.exponentus.env.Environment;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
@@ -24,31 +16,25 @@ import com.exponentus.user.IUser;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import lotus.domino.Document;
-import lotus.domino.EmbeddedObject;
 import lotus.domino.NotesException;
-import lotus.domino.RichTextItem;
 import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
 import reference.dao.DocumentLanguageDAO;
-import reference.dao.DocumentTypeDAO;
-import reference.model.DocumentLanguage;
-import reference.model.DocumentType;
 import staff.dao.OrganizationDAO;
-import staff.model.Organization;
+import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
+import workflow.model.Assignment;
 import workflow.model.Incoming;
 
-@Command(name = "import_in_nsf")
-public class ImportIncomingsFromNSF extends ImportNSF {
-	private static final String VID_CATEGORY = "01. Входящие";
-	private static final String TMP_FIELD_NAME = "tmp_file";
+@Command(name = "import_kr_nsf")
+public class SyncAssignmentNSF extends ImportNSF {
 
 	@Override
 	public void doTask(_Session ses) {
-		Map<String, Incoming> entities = new HashMap<>();
+		Map<String, Assignment> entities = new HashMap<>();
 		OrganizationDAO oDao = new OrganizationDAO(ses);
+		AssignmentDAO dao = new AssignmentDAO(ses);
 		IncomingDAO iDao = new IncomingDAO(ses);
-		DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
 		DocumentLanguageDAO dlDao = new DocumentLanguageDAO(ses);
 		UserDAO uDao = new UserDAO(ses);
 		Map<String, LanguageCode> docLangCollation = docLangCollationMapInit();
@@ -60,33 +46,30 @@ public class ImportIncomingsFromNSF extends ImportNSF {
 			while (entry != null) {
 				Document doc = entry.getDocument();
 				String form = doc.getItemValueString("Form");
-				if (form != null && form.equals("IN")) {
-					String unId = doc.getUniversalID();
-					Incoming inc = iDao.findByExtKey(unId);
-					if (inc == null) {
-						inc = new Incoming();
-					}
-					String vn = doc.getItemValueString("Vn");
-					if (vn != null) {
-						inc.setRegNumber(vn);
-						try {
-							inc.setAppliedRegDate(doc.getFirstItem("Dvn").getDateTimeValue().toJavaDate());
-						} catch (NotesException ne) {
-							logger.errorLogEntry(ne.text);
+				if (form != null && form.equals("KR")) {
+					String parent = doc.getParentDocumentUNID();
+					Incoming inc = iDao.findByExtKey(parent);
+					if (inc != null) {
+
+						String unId = doc.getUniversalID();
+						Assignment entity = dao.findByExtKey(unId);
+						if (entity == null) {
+							entity = new Assignment();
 						}
+						entity.setIncoming(inc);
+
 						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
-							inc.setAuthor(author);
+							entity.setAuthor(author);
 						} else {
-							inc.setAuthor(dummyUser);
+							entity.setAuthor(dummyUser);
 						}
 
-						String vid = doc.getItemValueString("Vid");
-						DocumentType docType = dtDao.findByNameAndCategory(VID_CATEGORY, vid);
-						if (docType != null) {
-							inc.setDocType(docType);
+						IUser<Long> authorRez = uDao.findByExtKey(doc.getItemValueString("AuthorRezNA"));
+						if (authorRez != null) {
+							entity.setAppliedAuthor(authorRez.getId());
 						} else {
-							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
+							entity.setAuthor(dummyUser);
 						}
 
 						String docLangVal = doc.getItemValueString("langName");
@@ -95,43 +78,15 @@ public class ImportIncomingsFromNSF extends ImportNSF {
 							logger.errorLogEntry("wrong reference ext value \"" + docLangVal + "\"");
 							intRefKey = LanguageCode.UNKNOWN;
 						}
-						DocumentLanguage docLang = dlDao.findByCode(intRefKey);
-						if (docLang != null) {
-							inc.setDocLanguage(docLang);
-						}
-						inc.setSenderAppliedRegDate(doc.getFirstItem("Din").getDateTimeValue().toJavaDate());
-						inc.setSenderRegNumber(doc.getItemValueString("In"));
-						String corrId = doc.getItemValueString("CorrID");
-						if (!corrId.isEmpty()) {
-							Organization org = oDao.findByExtKey(corrId);
-							if (org != null) {
-								inc.setSender(org);
-							}
-						}
-						inc.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 255));
-						inc.setBody(doc.getItemValueString("BriefContent"));
 
-						_FormAttachments files = new _FormAttachments(ses);
-						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
-						Vector<?> atts = body.getEmbeddedObjects();
-						for (int i = 0; i < atts.size(); i++) {
-							EmbeddedObject att = (EmbeddedObject) atts.elementAt(i);
-							if (att.getType() == EmbeddedObject.EMBED_ATTACHMENT) {
-								String path = ses.getTmpDir().getAbsolutePath() + File.separator + att.getSource();
-								att.extractFile(path);
-								files.addFile(new File(path), att.getSource(), TMP_FIELD_NAME);
-								Environment.fileToDelete.add(path);
-							}
-						}
+						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("Content"), 140));
+						entity.setBody(doc.getItemValueString("Content"));
 
-						List<Attachment> attachments = new ArrayList<>();
-						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
-							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
-							attachments.add(a);
-						}
-						inc.setAttachments(attachments);
-						entities.put(unId, inc);
+						entities.put(unId, entity);
+					} else {
+						logger.warningLogEntry("Incoming has not been found exists (" + parent + "), record was skipped");
 					}
+
 				}
 				tmpEntry = vec.getNextEntry();
 				entry.recycle();
@@ -144,8 +99,8 @@ public class ImportIncomingsFromNSF extends ImportNSF {
 			logger.errorLogEntry(e);
 		}
 		logger.infoLogEntry("has been found " + entities.size() + " records");
-		for (Entry<String, Incoming> entry : entities.entrySet()) {
-			save(iDao, entry.getValue(), entry.getKey());
+		for (Entry<String, Assignment> entry : entities.entrySet()) {
+			save(dao, entry.getValue(), entry.getKey());
 		}
 		logger.infoLogEntry("done...");
 	}
