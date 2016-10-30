@@ -30,6 +30,7 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.scripting.event._DoForm;
+import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import com.exponentus.user.SuperUser;
 import com.exponentus.util.TimeUtil;
@@ -83,7 +84,11 @@ public class TaskForm extends _DoForm {
 			task = new Task();
 			task.setAuthor(user);
 			TaskTypeDAO tDao = new TaskTypeDAO(session);
-			task.setTaskType(tDao.findByName("Programming"));
+			try {
+				task.setTaskType(tDao.findByName("Programming"));
+			} catch (DAOException e) {
+				Server.logger.errorLogEntry(e);
+			}
 			task.setStatus(TaskStatusType.OPEN);
 
 			String projectId = formData.getValueSilently("projectId");

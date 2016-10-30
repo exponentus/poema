@@ -43,15 +43,11 @@
         <entry lang="ENG">Document type</entry>
     </sentence>
     <sentence mode="on" keyword="sender_applied_reg_date">
-        <entry lang="RUS">Дата</entry>
-        <entry lang="ENG">Date</entry>
-    </sentence>
-    <sentence mode="on" keyword="sender_applied_reg_date">
-        <entry lang="RUS">Дата</entry>
+        <entry lang="RUS">Дата исходящего</entry>
         <entry lang="ENG">Date</entry>
     </sentence>
        <sentence mode="on" keyword=" sender_reg_number">
-        <entry lang="RUS">Исходящий регистрационны номер</entry>
+        <entry lang="RUS">Исходящий</entry>
         <entry lang="ENG">Outgoing registration number</entry>
     </sentence>   
     <sentence mode="on" keyword="title">

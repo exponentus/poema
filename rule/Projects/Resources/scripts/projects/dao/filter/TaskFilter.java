@@ -39,60 +39,68 @@ public class TaskFilter extends Filter {
 		this.project = project;
 	}
 
-	public void setProject(String projectId) {
+	public TaskFilter setProject(String projectId) {
 		if (projectId != null && !projectId.isEmpty()) {
 			Project project = new Project();
 			project.setId(UUID.fromString(projectId));
 			setProject(project);
 		}
+		return this;
 	}
 
 	public Task getParentTask() {
 		return parentTask;
 	}
 
-	public void setParentTask(Task parentTask) {
+	public TaskFilter setParentTask(Task parentTask) {
 		this.parentTask = parentTask;
+		return this;
 	}
 
-	public void setParentTask(String parentTaskId) {
+	public TaskFilter setParentTask(String parentTaskId) {
 		if (parentTaskId != null && !parentTaskId.isEmpty()) {
 			Task task = new Task();
 			task.setId(UUID.fromString(parentTaskId));
 			setParentTask(task);
 		}
+		return this;
 	}
 
 	public TaskType getTaskType() {
 		return taskType;
 	}
 
-	public void setTaskType(TaskType taskType) {
+	public TaskFilter setTaskType(TaskType taskType) {
 		this.taskType = taskType;
+		return this;
 	}
 
-	public void setTaskType(String id) {
+	public TaskFilter setTaskType(String id) {
 		if (id != null && !id.isEmpty()) {
 			TaskType tt = new TaskType();
 			tt.setId(UUID.fromString(id));
 			setTaskType(tt);
 		}
+		return this;
 	}
 
 	public TaskStatusType getStatus() {
 		return status;
+
 	}
 
-	public void setStatus(TaskStatusType status) {
+	public TaskFilter setStatus(TaskStatusType status) {
 		this.status = status;
+		return this;
 	}
 
 	public TaskPriorityType getPriority() {
 		return priority;
 	}
 
-	public void setPriority(TaskPriorityType priority) {
+	public TaskFilter setPriority(TaskPriorityType priority) {
 		this.priority = priority;
+		return this;
 	}
 
 	public boolean hasSearch() {
@@ -103,55 +111,62 @@ public class TaskFilter extends Filter {
 		return search;
 	}
 
-	public void setSearch(String search) {
+	public TaskFilter setSearch(String search) {
 		this.search = search;
+		return this;
 	}
 
 	public Long getAuthorId() {
 		return authorId;
 	}
 
-	public void setAuthorId(Long authorId) {
+	public TaskFilter setAuthorId(Long authorId) {
 		this.authorId = authorId;
+		return this;
 	}
 
 	public Long getAssigneeUserId() {
 		return assigneeUserId;
 	}
 
-	public void setAssigneeUserId(Long assigneeUserId) {
+	public TaskFilter setAssigneeUserId(Long assigneeUserId) {
 		this.assigneeUserId = assigneeUserId;
+		return this;
 	}
 
 	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public TaskFilter setStartDate(Date startDate) {
 		this.startDate = startDate;
+		return this;
 	}
 
 	public Date getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public TaskFilter setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
+		return this;
 	}
 
 	public List<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public TaskFilter setTags(List<Tag> tags) {
 		this.tags = tags;
+		return this;
 	}
 
 	public boolean isParentOnly() {
 		return isParentOnly;
 	}
 
-	public void setParentOnly(boolean parentOnly) {
+	public TaskFilter setParentOnly(boolean parentOnly) {
 		isParentOnly = parentOnly;
+		return this;
 	}
 }
