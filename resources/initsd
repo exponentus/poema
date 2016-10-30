@@ -1,0 +1,13 @@
+echo Load data from SmartDoc databases
+run task import_names_nsf
+run task prepare_storage
+run task fill_doc_langs
+run task import_positions_nsf
+run task import_har_nsf
+run task import_vid_nsf
+run task import_orgs_nsf
+run task import_rvz_nsf
+run task import_dep_nsf
+run task import_emp_nsf  
+#run task import_in_nsf
+echo SmartDoc data was populated
