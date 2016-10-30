@@ -58,7 +58,7 @@ const formSchemas = {
                 type: 'select',
                 label: 'org_category',
                 name: 'orgCategory',
-                url: '/Reference/p?id=orgcategory-view',
+                values: { url: '/Reference/p?id=orgcategory-view' },
                 className: 'span4',
                 required: true
             }, {
@@ -68,10 +68,14 @@ const formSchemas = {
                 className: 'span4',
                 required: true
             }, {
-                type: 'checkbox',
+                type: 'select',
                 label: 'labels',
                 name: 'labels',
-                values: []
+                values: {
+                    url: '/Staff/p?id=organization-label-view',
+                    multiple: true
+                },
+                className: 'span6'
             }]
         }, {
             title: 'localized_names',
@@ -90,7 +94,7 @@ const formSchemas = {
                 type: 'select',
                 label: 'organization',
                 name: 'organization',
-                url: '/Staff/p?id=organization-view',
+                values: { url: '/Staff/p?id=organization-view' },
                 className: 'span6',
                 required: true
             }, {
@@ -103,14 +107,14 @@ const formSchemas = {
                 type: 'select',
                 label: 'department_type',
                 name: 'departmentType',
-                url: '/Reference/p?id=departmenttype-view',
+                values: { url: '/Reference/p?id=departmenttype-view' },
                 className: 'span6'
             }]
         }, {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
-                className: 'span7',
+                className: 'span6',
                 languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
             }]
         }]
@@ -139,39 +143,36 @@ const formSchemas = {
                 type: 'select',
                 label: 'organization',
                 name: 'organization',
-                url: '/Staff/p?id=organization-view',
+                values: { url: '/Staff/p?id=organization-view' },
                 className: 'span6',
                 required: true
             }, {
                 type: 'select',
                 label: 'department',
                 name: 'department',
-                url: '/Staff/p?id=department-view',
+                values: { url: '/Staff/p?id=department-view' },
                 className: 'span6'
             }, {
                 type: 'select',
                 label: 'position',
                 name: 'position',
-                url: '/Reference/p?id=position-view',
+                values: { url: '/Reference/p?id=position-view' },
                 className: 'span6'
             }, {
-                type: 'checkbox',
+                type: 'select',
                 label: 'roles',
                 name: 'role',
-                values: []
+                values: {
+                    url: '/Staff/p?id=role-view',
+                    multiple: true
+                },
+                className: 'span6'
             }, {
                 type: 'text',
                 label: 'login',
                 name: 'login',
                 className: 'span6',
                 required: true
-            }]
-        }, {
-            title: 'localized_names',
-            fields: [{
-                type: 'localizedName',
-                className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
             }]
         }]
     }],

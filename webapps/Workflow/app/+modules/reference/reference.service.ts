@@ -58,7 +58,7 @@ const formSchemas = {
                 type: 'select',
                 label: 'code',
                 name: 'code',
-                values: ['KZ', 'RU', 'BY', 'UA', 'DE', 'FR', 'TR', 'US', 'CN', 'BG', 'GB', 'JP', 'ES', 'PT'],
+                values: { enum: ['KZ', 'RU', 'BY', 'UA', 'DE', 'FR', 'TR', 'US', 'CN', 'BG', 'GB', 'JP', 'ES', 'PT'] },
                 className: 'span2',
                 required: true
             }]
@@ -86,13 +86,13 @@ const formSchemas = {
                 label: 'type',
                 name: 'type',
                 className: 'span4',
-                url: '/Reference/p?id=regiontype-view',
+                values: { url: '/Reference/p?id=regiontype-view' },
                 required: true
             }, {
                 type: 'select',
                 label: 'country',
                 name: 'country',
-                url: '/Reference/p?id=country-view',
+                values: { url: '/Reference/p?id=country-view' },
                 className: 'span4',
                 required: true
             }]
@@ -120,7 +120,7 @@ const formSchemas = {
                 label: 'type',
                 name: 'region',
                 className: 'span7',
-                url: '/Reference/p?id=get-regions',
+                values: { url: '/Reference/p?id=get-regions' },
                 required: true
             }]
         }, {
@@ -147,19 +147,19 @@ const formSchemas = {
                 label: 'type',
                 name: 'localityType',
                 className: 'span7',
-                url: '/Reference/p?id=localitytype-view'
+                values: { url: '/Reference/p?id=localitytype-view' }
             }, {
                 type: 'select',
                 label: 'region',
                 name: 'region',
                 className: 'span7',
-                url: '/Reference/p?id=region-view'
+                values: { url: '/Reference/p?id=region-view' }
             }, {
                 type: 'select',
                 label: 'district',
                 name: 'district',
                 className: 'span7',
-                url: '/Reference/p?id=district-view'
+                values: { url: '/Reference/p?id=district-view' }
             }]
         }, {
             title: 'localized_names',
@@ -185,7 +185,7 @@ const formSchemas = {
                 label: 'locality',
                 name: 'locality',
                 className: 'span7',
-                url: '/Reference/p?id=locality-view'
+                values: { url: '/Reference/p?id=locality-view' }
             }]
         }, {
             title: 'localized_names',
@@ -210,7 +210,7 @@ const formSchemas = {
                 type: 'select',
                 label: 'code',
                 name: 'code',
-                values: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL'],
+                values: { enum: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL'] },
                 className: 'span2',
                 required: true
             }]

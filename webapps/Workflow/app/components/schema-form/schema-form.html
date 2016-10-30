@@ -18,19 +18,20 @@
                             </label>
                         </div>
                         <div *ngSwitchCase="'select'">
-                            <div *ngIf="field.values">
+                            <div *ngIf="field.values.enum">
                                 <select [name]="field.name" [ngClass]="field.className" [(ngModel)]="model[field.name]">
                                     <option value=""></option>
-                                    <option [value]="opt" [selected]="opt == model[field.name]" *ngFor="let opt of field.values">{{opt}}</option>
+                                    <option [value]="opt" [selected]="opt == model[field.name]" *ngFor="let opt of field.values.enum">{{opt}}</option>
                                 </select>
                             </div>
-                            <div *ngIf="field.url">
+                            <div *ngIf="field.values.url">
                                 <selection
                                     [ngClass]="field.className"
                                     [selectedItems]="model[field.name]"
-                                    [url]="field.url"
+                                    [url]="field.values.url"
                                     [listPath]="'objects.1.list'"
                                     [totalPagesPath]="'objects.1.meta.totalPages'"
+                                    [multiple]="field.values.multiple"
                                     [searchable]="true"
                                     (change)="model[field.name] = $event">
                                 </selection>
@@ -41,12 +42,15 @@
                                 <div class="form-group">
                                     <div class="control-label">{{lang | translate}}</div>
                                     <div class="controls">
-                                        <input type="text" [name]="lang.toLowerCase() + 'localizedname'" [value]="model.localizedName ? (model.localizedName[lang] || '') : ''" [ngClass]="field.className" />
+                                        <input type="text"
+                                            [name]="lang.toLowerCase() + 'localizedname'"
+                                            [(ngModel)]="model.localizedName[lang]"
+                                            [ngClass]="field.className" />
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <span *ngSwitchDefault>#{{field.type}}</span>
+                        <span *ngSwitchDefault>#{{field.type}} / #{{field.name}}</span>
                     </div>
                 </div>
             </div>

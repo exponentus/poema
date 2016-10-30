@@ -68,6 +68,10 @@ export class ReferenceFormComponent {
                 this.model = objects[kind];
                 this.formSchema = this.referenceService.getFormSchema(this.model.kind);
 
+                if (!this.model.localizedName) {
+                    this.model.localizedName = {};
+                }
+
                 this.isReady = true;
                 this.loading = false;
             },
