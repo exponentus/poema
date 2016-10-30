@@ -122,7 +122,7 @@
                                 [markdown]="outgoing.body || ''"
                                 [editable]="isEditable"
                                 [updateTimeout]="300"
-                                (update)="setOutgoingBody($event)">
+                                (update)="setBody($event)">
                             </markdown-editor>
                             <error-message [error]="errors.body"></error-message>
                         </div>
@@ -130,12 +130,13 @@
                 </div>
                 <attachments
                     [editable]="isEditable"
-                    [model]="outgoing"
+                    [attachments]="outgoing.attachments"
+                    [fsId]="fsId"
                     (upload)="addAttachment($event)"
                     (delete)="deleteAttachment($event)">
                 </attachments>
             </tab>
-            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasExecution">
+            <tab class="tab-pane" tabTitle="{{'execution' | translate}}" icon="fa fa-align-left" *ngIf="hasResponses">
                 <!--<tasks [tasks]="[outgoing]" [embedded]="true" [headerVisible]="false" [selectable]="false"></tasks>-->
             </tab>
             <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="outgoing.acl">

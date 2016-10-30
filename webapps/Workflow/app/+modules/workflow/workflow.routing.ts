@@ -9,8 +9,6 @@ import { OutgoingFormComponent } from './components/outgoing/outgoing-form';
 import { OfficeMemoViewComponent } from './components/office-memo/office-memo-view';
 import { OfficeMemoFormComponent } from './components/office-memo/office-memo-form';
 
-export const API_URL: string = '/Workflow/api';
-
 const routes: Routes = [{
     path: 'Workflow', component: WorkflowContainerComponent,
     children: [

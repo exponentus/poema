@@ -1,11 +1,7 @@
+import { BaseModel } from '../../../models';
 import { Outgoing } from './outgoing';
 
-export class Incoming {
-    id: string = '';
-    isNew: boolean = true;
-    editable: boolean = false;
-    children: any[];
-
+export class Incoming extends BaseModel {
     regNumber: string;
     appliedRegDate: Date;
     sender: any; // Organization;

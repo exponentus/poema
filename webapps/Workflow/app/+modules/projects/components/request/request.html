@@ -73,7 +73,7 @@
             </tab>
         </tabs>
         <div *ngIf="!editable && !request.attachments">
-            <attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+            <!--<attachments [model]="request" [editable]="editable" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>-->
         </div>
     </section>
     <section class="request__resol" *ngIf="canResolution">

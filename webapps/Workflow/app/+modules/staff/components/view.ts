@@ -62,7 +62,7 @@ export class StaffViewComponent {
 
     ngOnInit() {
         this.subs.push(this.route.params.subscribe(params => {
-            let id = params['id'];
+            let id = params['viewId'];
             if (id) {
                 this.id = id;
                 this.loadData(Object.assign({}, params, {
@@ -85,9 +85,10 @@ export class StaffViewComponent {
     loadData(params) {
         this.loading = true;
         this.params = Object.assign({}, params, {
+            id: this.id,
             sort: this.activeSort || 'regDate:desc'
         });
-        let typeId = this.params.id.split('-')[0];
+        let typeId = this.params.id.replace('-view', '').replace('-', '');
 
         this.staffService.fetch(this.params).subscribe(
             payload => {
@@ -122,5 +123,9 @@ export class StaffViewComponent {
 
     onAction($event) {
         alert($event.action.caption);
+    }
+
+    onOpenUrl($event) {
+        console.log($event);
     }
 }

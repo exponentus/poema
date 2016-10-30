@@ -82,9 +82,9 @@ export class IncomingViewComponent {
         this.incomingService.fetchIncomings(this.params).subscribe(
             payload => {
                 this.title = payload.payload.title;
-                this.actions = payload.payload.actionBar.actions;
-                this.columns = payload.payload.columnOptions.columns;
-                let view = payload.payload.view;
+                this.actions = payload.payload._actionbar.actions;
+                this.columns = payload.payload._columnoptions.columns;
+                let view = payload.payload.viewpage;
                 this.list = view.result;
                 this.meta = {
                     count: view.count,

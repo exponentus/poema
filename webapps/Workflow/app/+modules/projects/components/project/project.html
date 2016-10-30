@@ -107,7 +107,7 @@
                         </div>
                     </div>
                 </div>
-                <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+                <!--<attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>-->
             </tab>
             <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
                 <acl [acl]="project.acl"></acl>

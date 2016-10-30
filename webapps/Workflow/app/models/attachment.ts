@@ -7,4 +7,6 @@ export class Attachment {
     base64: string;
     author: string;
     regDate: Date;
+    url: string;
+    thumbnailUrl: string;
 }

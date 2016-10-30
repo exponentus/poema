@@ -7,11 +7,13 @@ import { StaffService } from './staff.service';
 
 import { StaffContainerComponent } from './components/container';
 import { StaffViewComponent } from './components/view';
+import { StaffFormComponent } from './components/form';
 
 @NgModule({
     declarations: [
         StaffContainerComponent,
-        StaffViewComponent
+        StaffViewComponent,
+        StaffFormComponent
     ],
     exports: [],
     imports: [

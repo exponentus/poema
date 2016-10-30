@@ -13,19 +13,20 @@ import { User } from '../../models';
 })
 
 export class AppComponent {
-    private subs: any = [];
-    isReady: boolean = false;
-    loggedUser: User = new User();
-    language: any;
-    HEADER_TITLE: string = '';
-    isNavCollapsed: boolean = false;
-    isSearchOpen: boolean = false;
-    isMobileDevice: boolean = false;
-
     @HostListener('window:resize', ['$event.target']) resize(window) { this.onResize(window); };
     @HostBinding('class.phone') get device() { return this.isMobileDevice; };
     @HostBinding('class.side-nav-toggle') get toggleNavVisible() { return this.isNavCollapsed; };
     @HostBinding('class.search-open') get toggleSearch() { return this.isSearchOpen; };
+
+    private subs: any = [];
+    isReady: boolean = false;
+    loggedUser: User = new User();
+    language: any;
+    moduleId: string = '';
+    HEADER_TITLE: string = '';
+    isNavCollapsed: boolean = false;
+    isSearchOpen: boolean = false;
+    isMobileDevice: boolean = false;
 
     constructor(
         private store: Store<any>,
@@ -34,6 +35,7 @@ export class AppComponent {
         public translate: TranslateService
     ) {
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.moduleId = state.moduleId;
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;
             this.loggedUser = state.userProfile;

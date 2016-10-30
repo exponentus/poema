@@ -1,1 +1,1 @@
-export const API_URL: string = '/Workflow/api';
+export const API_URL: string = '/Workflow/api/';

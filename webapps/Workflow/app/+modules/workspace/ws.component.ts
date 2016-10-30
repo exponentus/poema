@@ -1,79 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../actions';
+import { IEnvironmentState } from '../../reducers';
 import { WorkspaceService } from './ws.service';
 
 @Component({
     selector: 'WorkSpaceComponent',
     template: `
         <main class="content">
-            <h1>WorkSpaceComponent</h1>
-            <div class="span4" *ngFor="let opt of options">
-                <selection
-                    class="employee-input"
-                    [url]="opt.url"
-                    [listPath]="opt.listPath"
-                    [totalPagesPath]="opt.totalPagesPath"
-                    [disabled]="false"
-                    [searchable]="true"
-                    [allowClear]="true"
-                    [multiple]="opt.multiple"
-                    placeHolder="place holder"
-                    (change)="onSelect($event)">
-                </selection>
-            </div>
-            <router-outlet></router-outlet>
+            <section class="ws">
+                <section class="ws-apps">
+                    <div class="container">
+                        <div class="ws-app" *ngFor="let app of apps">
+                            <a class="ws-app-link" [routerLink]="[app.url]">
+                                <span class="ws-app-logo">
+                                    <img class="ws-app-logo" src="/{{app.id}}/img/logo.png" alt="logo" />
+                                </span>
+                                <span class="ws-app-type">{{app.id}}</span>
+                                <span class="ws-app-name">{{app.name}}</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </section>
         </main>
     `
 })
 
 export class WorkspaceComponent {
-
-    options = [
-        // {
-        //     url: "/Reference/p?id=tag-view",
-        //     listPath: "objects.1.list",
-        //     totalPagesPath: "objects.1.meta.totalPages",
-        //     multiple: true
-        // },
-        // {
-        //     url: "/Reference/p?id=tasktypes",
-        //     listPath: "objects.0.list",
-        //     totalPagesPath: "objects.0.meta.totalPages",
-        //     multiple: false
-        // },
-        // {
-        //     url: "/Staff/p?id=employees",
-        //     listPath: "objects.0.list",
-        //     totalPagesPath: "objects.0.meta.totalPages",
-        //     multiple: false
-        // },
-        // {
-        //     url: "/Reference/p?id=region-view",
-        //     listPath: "objects.1.list",
-        //     totalPagesPath: "objects.1.meta.totalPages",
-        //     multiple: false
-        // },
-        // {
-        //     url: "/Staff/p?id=role-view",
-        //     listPath: "objects.1.list",
-        //     totalPagesPath: "objects.1.meta.totalPages",
-        //     multiple: false
-        // },
-        // {
-        //     url: "/Reference/p?id=country-view",
-        //     listPath: "objects.1.list",
-        //     totalPagesPath: "objects.1.meta.totalPages",
-        //     multiple: false
-        // },
-        // {
-        //     url: "/Reference/p?id=citydistrict-view",
-        //     listPath: "objects.1.list",
-        //     totalPagesPath: "objects.1.meta.totalPages",
-        //     multiple: false
-        // }
-    ];
+    private apps: any = [];
+    private subs: any = [];
 
     constructor(
         private store: Store<any>,
@@ -81,9 +38,13 @@ export class WorkspaceComponent {
         private wsService: WorkspaceService
     ) {
         this.store.dispatch(environmentActions.setCurrentModule('Workspace'));
+
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            this.apps = state.apps;
+        }));
     }
 
-    onSelect($event) {
-        console.log('select', $event);
+    ngOnDestroy() {
+        this.subs.map(s => s.unsubscribe());
     }
 }

@@ -46,7 +46,7 @@ public class OfficeMemosService extends RestProvider {
         // column options
         _ColumnOptions colOpts = new _ColumnOptions();
         colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("", "attachment", "attachment", "", "vw-icon");
         colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
         colOpts.add("approval", "approval", "localizedName", "both", "vw-name");
         colOpts.add("content", "content", "text", "both", "vw-content");
@@ -55,9 +55,9 @@ public class OfficeMemosService extends RestProvider {
         Outcome outcome = new Outcome();
         outcome.setId("office-memos");
         outcome.addPayload("title", "office_memo");
-        outcome.addPayload("actionBar", actionBar);
-        outcome.addPayload("columnOptions", colOpts);
-        outcome.addPayload("view", vp);
+        outcome.addPayload(actionBar);
+        outcome.addPayload(colOpts);
+        outcome.addPayload(vp);
 
         return Response.ok(outcome).build();
     }

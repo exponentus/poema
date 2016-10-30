@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { DataService } from '../../../services';
 import { Attachment } from '../../../models';
 import { Outgoing } from '../models';
-import { API_URL } from '../workflow.routing';
+import { API_URL } from '../constants/constants';
 import { DATE_TIME_FORMAT } from '../../../constants/constants';
 import { mdFormat } from '../../../utils/time.utils';
 
@@ -15,15 +15,15 @@ export class WorkflowOutgoingService {
     ) { }
 
     fetchOutgoings(params = {}) {
-        return this.dataService.apiGet(`${API_URL}/outgoings`, params);
+        return this.dataService.apiGet(`${API_URL}outgoings`, params);
     }
 
     fetchOutgoingById(id: string, params = {}) {
-        return this.dataService.apiGet(`${API_URL}/outgoings/${id}`, params);
+        return this.dataService.apiGet(`${API_URL}outgoings/${id}`, params);
     }
 
     saveOutgoing(outgoing: Outgoing, params = {}) {
-        let url = `${API_URL}/outgoings/${outgoing.id ? outgoing.id : 'new'}`;
+        let url = `${API_URL}outgoings/${outgoing.id ? outgoing.id : 'new'}`;
         let payload = Object.assign({}, outgoing, {
             appliedRegDate: mdFormat(outgoing.appliedRegDate, DATE_TIME_FORMAT),
             recipient: outgoing.recipient ? outgoing.recipient.id : null,
@@ -34,11 +34,11 @@ export class WorkflowOutgoingService {
     }
 
     deleteOutgoing(outgoing: Outgoing) {
-        return this.dataService.delete(`${API_URL}/outgoings/${outgoing.id}`);
+        return this.dataService.delete(`${API_URL}outgoings/${outgoing.id}`);
     }
 
     deleteOutgoingAttachment(outgoing: Outgoing, attachment: Attachment, params = {}) {
-        let url = `${API_URL}/outgoings/${outgoing.id}/attachments/${attachment.id}`;
+        let url = `${API_URL}outgoings/${outgoing.id}/attachments/${attachment.id}`;
         return this.dataService.delete(url, params);
     }
 
@@ -46,10 +46,10 @@ export class WorkflowOutgoingService {
         let outgoing = {
             title: 'hello world'
         };
-        return this.dataService.apiPut(`${API_URL}/outgoings/${id}/${actionId}`, null, outgoing);
+        return this.dataService.apiPut(`${API_URL}outgoings/${id}/${actionId}`, null, outgoing);
     }
 
     doOutgoingsAction(ids: string[], actionId: string) {
-        return this.dataService.put(`${API_URL}/outgoings/${actionId}`, { ids }, {});
+        return this.dataService.put(`${API_URL}outgoings/${actionId}`, { ids }, {});
     }
 }

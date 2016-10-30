@@ -128,8 +128,8 @@ export class SelectionComponent {
     @Input() searchable = false;
     @Input() contentLoadable = false;
     @Input() url;
-    @Input() listPath;
-    @Input() totalPagesPath;
+    @Input() listPath = 'payload.viewpage.result';
+    @Input() totalPagesPath = 'payload.viewpage.maxPage';
     @Input() pageParam = 'page';
     @Input() searchParam = 'keyWord';
     @Input() tabIndex = 0;

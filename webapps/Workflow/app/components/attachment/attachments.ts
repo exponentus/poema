@@ -14,7 +14,8 @@ import { Attachment } from '../../models';
 })
 
 export class AttachmentsComponent {
-    @Input() model: any;
+    @Input() attachments: any[];
+    @Input() fsId: string;
     @Input() editable: boolean = false;
     @Output() upload = new EventEmitter<any>();
     @Output() delete = new EventEmitter<any>();
@@ -50,11 +51,11 @@ export class AttachmentsComponent {
     }
 
     get isHidden() {
-        return !this.editable && !this.model.attachments;
+        return !this.editable && !this.attachments;
     }
 
     uploadFile(files: File[]) {
-        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: this.model.fsid }, files).subscribe(response => {
+        this.uploadService.makeFileRequest('UploadFile?time=' + Date.now(), { fsid: (this.fsId) }, files).subscribe(response => {
             this.upload.emit({ response, files });
         });
     }

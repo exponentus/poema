@@ -102,4 +102,9 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
     }
+
+    @Override
+    public String getURL() {
+        return "office-memos/" + getIdentifier();
+    }
 }

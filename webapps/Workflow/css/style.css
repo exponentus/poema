@@ -29,3 +29,28 @@ body:not(.side-nav-toggle) .aside + .content {
 .entry-link.router-link-active {
     background-color: #f5f5f5;
 }
+
+.fieldset > .legend {
+    background: transparent;
+    padding-bottom: 0;
+}
+
+.navbar {
+    transition: all .25s;
+}
+
+.reference .navbar {
+    background: #B2DFDB;
+}
+
+.staff .navbar {
+    background: #ECEFF1;
+}
+
+.projects .navbar {
+    background: #EDE7F6;
+}
+
+.workflow .navbar {
+    background: #C8E6C9;
+}

@@ -3,11 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
-import { ReferenceService } from '../reference.service';
+import { StaffService } from '../staff.service';
 import { parseResponseObjects } from '../../../utils/utils';
 
 @Component({
-    selector: 'reference-form',
+    selector: 'staff-form',
     templateUrl: './form.html',
     host: {
         '[class.form]': 'true',
@@ -15,7 +15,7 @@ import { parseResponseObjects } from '../../../utils/utils';
     }
 })
 
-export class ReferenceFormComponent {
+export class StaffFormComponent {
     @Input() embedded: boolean = false;
     @Input() headerVisible: boolean = true;
     @Input() titleVisible: boolean = true;
@@ -34,7 +34,7 @@ export class ReferenceFormComponent {
         private route: ActivatedRoute,
         private router: Router,
         private environmentActions: EnvironmentActions,
-        private referenceService: ReferenceService
+        private staffService: StaffService
     ) { }
 
     ngOnInit() {
@@ -60,13 +60,13 @@ export class ReferenceFormComponent {
     loadData(params) {
         this.loading = true;
 
-        this.referenceService.fetchOne(params).subscribe(
+        this.staffService.fetchOne(params).subscribe(
             payload => {
                 let objects = parseResponseObjects(payload.objects);
                 let kind = params.id.replace('-form', '').replace('-', '');
 
                 this.model = objects[kind];
-                this.formSchema = this.referenceService.getFormSchema(this.model.kind);
+                this.formSchema = this.staffService.getFormSchema(this.model.kind);
 
                 this.isReady = true;
                 this.loading = false;

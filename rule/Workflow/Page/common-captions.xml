@@ -14,7 +14,11 @@
     <caption name="wait_while_document_save"/>
     <caption name="markdown_write"/>
     <caption name="markdown_preview"/>
+    <caption name="editors"/>
+    <caption name="readers"/>
+    <caption name="localized_names"/>
 
+    <caption name="acl_tab_title"/>
     <caption name="attach_file"/>
     <caption name="properties"/>
     <caption name="interface"/>
@@ -64,7 +68,9 @@
     <caption name="doc_language"/>
     <caption name="doc_type"/>
     <caption name="sender_applied_reg_date"/>
+    <caption name="org_category"/>
 
+    <caption name="name"/>
     <caption name="notes"/>
     <caption name="body"/>
     <caption name="files"/>

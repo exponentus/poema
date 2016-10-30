@@ -11,8 +11,6 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import projects.model.Request;
-import projects.model.Task;
 import workflow.dao.IncomingDAO;
 
 import javax.ws.rs.GET;
@@ -49,36 +47,19 @@ public class IncomingsService extends RestProvider {
         _ColumnOptions colOpts = new _ColumnOptions();
         colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
         colOpts.add("title", "title", "text", "", "vw-title");
-        colOpts.add("", "attachment", "icon", "", "vw-icon");
+        colOpts.add("", "attachment", "attachment", "", "vw-icon");
         colOpts.add("sender", "sender", "localizedName", "both", "vw-sender");
         colOpts.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
         colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
         colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
         colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
 
-        // test
-        colOpts.add(Task.class, "regNumber", "text", "vw-reg-number");
-        colOpts.add(Task.class, "title", "text", "vw-title");
-        colOpts.add(Task.class, "hasAttachments", "attachment", "vw-icon");
-        colOpts.add(Task.class, "status", "text", "vw-status");
-        colOpts.add(Task.class, "priority", "text", "vw-priority");
-        colOpts.add(Task.class, "assignee", "localizedName", "vw-assignee");
-        colOpts.add(Task.class, "startDate", "date", "vw-date");
-        colOpts.add(Task.class, "dueDate", "date", "vw-date");
-
-        colOpts.add(Request.class, "regDate", "date", "request__time");
-        colOpts.add(Request.class, "comment", "text", "request__comment");
-        colOpts.add(Request.class, "attachments", "attachment", "request__attachments");
-        colOpts.add(Request.class, "resolution", "text", "");
-        colOpts.add(Request.class, "resolutionTime", "date", "request__resolution_time");
-        //
-
         Outcome outcome = new Outcome();
         outcome.setId("incomings");
         outcome.addPayload("title", "incoming_documents");
-        outcome.addPayload("actionBar", actionBar);
-        outcome.addPayload("columnOptions", colOpts);
-        outcome.addPayload("view", vp);
+        outcome.addPayload(actionBar);
+        outcome.addPayload(colOpts);
+        outcome.addPayload(vp);
 
         return Response.ok(outcome).build();
     }
