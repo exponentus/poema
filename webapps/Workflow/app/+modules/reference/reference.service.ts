@@ -145,7 +145,7 @@ const formSchemas = {
             }, {
                 type: 'select',
                 label: 'type',
-                name: 'localitytype',
+                name: 'localityType',
                 className: 'span7',
                 url: '/Reference/p?id=localitytype-view'
             }, {
@@ -287,8 +287,8 @@ const formSchemas = {
                 required: true
             }, {
                 type: 'number',
-                label: 'defaulthours',
-                name: 'defaulthours',
+                label: 'default_hours',
+                name: 'defaultHours',
                 className: 'span1',
                 required: true
             }]
@@ -350,7 +350,7 @@ const formSchemas = {
                 type: 'text',
                 label: 'prefix',
                 name: 'prefix',
-                className: 'span3',
+                className: 'span2',
                 required: true
             }]
         }, {

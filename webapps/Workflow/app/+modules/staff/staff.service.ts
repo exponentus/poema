@@ -56,8 +56,8 @@ const formSchemas = {
                 required: true
             }, {
                 type: 'select',
-                label: 'orgcategory',
-                name: 'orgcategory',
+                label: 'org_category',
+                name: 'orgCategory',
                 url: '/Reference/p?id=orgcategory-view',
                 className: 'span4',
                 required: true
@@ -101,8 +101,8 @@ const formSchemas = {
                 required: true
             }, {
                 type: 'select',
-                label: 'departmenttype',
-                name: 'departmenttype',
+                label: 'department_type',
+                name: 'departmentType',
                 url: '/Reference/p?id=departmenttype-view',
                 className: 'span6'
             }]

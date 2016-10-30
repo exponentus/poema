@@ -68,7 +68,9 @@
     <caption name="doc_language"/>
     <caption name="doc_type"/>
     <caption name="sender_applied_reg_date"/>
+    <caption name="org_category"/>
 
+    <caption name="name"/>
     <caption name="notes"/>
     <caption name="body"/>
     <caption name="files"/>

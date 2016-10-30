@@ -1,0 +1,55 @@
+<tabs>
+    <tab class="tab-pane" tabTitle="{{tab.tabTitle | translate}}" [active]="tab.active" *ngFor="let tab of formSchema">
+        <section class="fieldset" *ngFor="let fieldset of tab.fieldsets">
+            <div class="legend" *ngIf="fieldset.title">{{fieldset.title | translate}}</div>
+            <div class="form-group" *ngFor="let field of fieldset.fields">
+                <div class="control-label" *ngIf="field.type != 'localizedName'">{{field.label | translate}}</div>
+                <div class="controls">
+                    <div [ngSwitch]="field.type">
+                        <input *ngSwitchCase="'text'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'number'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'date'" datepicker [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'color'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <textarea *ngSwitchCase="'textarea'" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className"></textarea>
+                        <div *ngSwitchCase="'checkbox'">
+                            <label class="input" [ngClass]="field.className" *ngFor="let cv of field.values">
+                                <input [type]="field.type" [name]="field.name" [value]="cv.value" />
+                                <span *ngIf="cv.label">{{cv.label}}</span>
+                            </label>
+                        </div>
+                        <div *ngSwitchCase="'select'">
+                            <div *ngIf="field.values">
+                                <select [name]="field.name" [ngClass]="field.className" [(ngModel)]="model[field.name]">
+                                    <option value=""></option>
+                                    <option [value]="opt" [selected]="opt == model[field.name]" *ngFor="let opt of field.values">{{opt}}</option>
+                                </select>
+                            </div>
+                            <div *ngIf="field.url">
+                                <selection
+                                    [ngClass]="field.className"
+                                    [selectedItems]="model[field.name]"
+                                    [url]="field.url"
+                                    [listPath]="'objects.1.list'"
+                                    [totalPagesPath]="'objects.1.meta.totalPages'"
+                                    [searchable]="true"
+                                    (change)="model[field.name] = $event">
+                                </selection>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="'localizedName'">
+                            <div *ngFor="let lang of field.languages">
+                                <div class="form-group">
+                                    <div class="control-label">{{lang | translate}}</div>
+                                    <div class="controls">
+                                        <input type="text" [name]="lang.toLowerCase() + 'localizedname'" [value]="model.localizedName ? (model.localizedName[lang] || '') : ''" [ngClass]="field.className" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span *ngSwitchDefault>#{{field.type}}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </tab>
+</tabs>
