@@ -1,5 +1,6 @@
 <section
      [attr.data-nav]="section.customID"
+     [class.loading]="loading"
      [class.side-tree-collapsible]="section.caption"
      [class.side-tree-collapsed]="expandedEntryIds.indexOf(section.customID) == -1"
      *ngFor="let section of outline">

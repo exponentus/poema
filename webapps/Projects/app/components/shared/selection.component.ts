@@ -23,6 +23,7 @@ import { Http, Headers } from '@angular/http';
               [class.is-multiple]="multiple"
               [class.allow-clear]="isAllowClear"
               [class.has-selected]="hasSelected"
+              [class.select-loading]="loading"
               *ngIf="!disabled">
             <div class="select-selection input" (click)="toggleOpen($event)">
                 <input *ngIf="searchable"
@@ -48,6 +49,7 @@ import { Http, Headers } from '@angular/http';
                 <span class="placeholder">{{placeHolder}}</span>
                 <span class="select-clear" (click)="clear($event)">&times;</span>
                 <div class="select-search-not-found" *ngIf="showNotFound && notFoundText">{{notFoundText}}</div>
+                <i class="loading-round select-loader-icon"></i>
             </div>
             <div class="select-dropdown">
                 <ul class="select-list scroll-shadow" #selectList (scroll)="onScroll($event)">
@@ -156,7 +158,7 @@ export class SelectionComponent {
     private firstOpen = true;
     private showNotFound = false;
 
-    private loading = true;
+    private loading = false;
     private page = 0;
     private totalPages = 1;
     private keyWord = '';
