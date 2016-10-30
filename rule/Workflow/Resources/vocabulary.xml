@@ -53,15 +53,12 @@
         <entry lang="RUS">Дата исходящего</entry>
         <entry lang="ENG">Date</entry>
     </sentence>
-       <sentence mode="on" keyword=" sender_reg_number">
+       <sentence mode="on" keyword="sender_reg_number">
         <entry lang="RUS">Исходящий</entry>
         <entry lang="RUS">Дата</entry>
         <entry lang="ENG">Date</entry>
     </sentence>
-    <sentence mode="on" keyword="sender_reg_number">
-        <entry lang="RUS">Исходящий регистрационны номер</entry>
-        <entry lang="ENG">Outgoing registration number</entry>
-    </sentence>
+   
     <sentence mode="on" keyword="title">
         <entry lang="RUS">Заголовок</entry>
         <entry lang="ENG">Title</entry>

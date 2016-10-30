@@ -1,12 +1,22 @@
 package workflow.tasks;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.TempFile;
+import com.exponentus.env.Environment;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
@@ -14,7 +24,9 @@ import com.exponentus.user.IUser;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import lotus.domino.Document;
+import lotus.domino.EmbeddedObject;
 import lotus.domino.NotesException;
+import lotus.domino.RichTextItem;
 import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
 import reference.dao.DocumentLanguageDAO;
@@ -29,6 +41,7 @@ import workflow.model.Incoming;
 @Command(name = "import_in_nsf")
 public class ImportIncomingsFromNSF extends ImportNSF {
 	private static final String VID_CATEGORY = "01. Входящие";
+	private static final String TMP_FIELD_NAME = "tmp_file";
 
 	@Override
 	public void doTask(_Session ses) {
@@ -73,7 +86,7 @@ public class ImportIncomingsFromNSF extends ImportNSF {
 						if (docType != null) {
 							inc.setDocType(docType);
 						} else {
-							logger.errorLogEntry("reference ext value has not been find \"" + vid + "\"");
+							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
 						}
 
 						String docLangVal = doc.getItemValueString("langName");
@@ -95,12 +108,28 @@ public class ImportIncomingsFromNSF extends ImportNSF {
 								inc.setSender(org);
 							}
 						}
+						inc.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 255));
+						inc.setBody(doc.getItemValueString("BriefContent"));
 
-						inc.setBody(doc.getItemValueString("Vn"));
-						// inc.setControl(doc.getItemValueString("Vn"));
-						// inc.setDocLanguage(doc.getItemValueString("Vn"));
-						// inc.setDocType(doc.getItemValueString("Vn"));
-						inc.setTitle(doc.getItemValueString("BriefContent"));
+						_FormAttachments files = new _FormAttachments(ses);
+						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
+						Vector<?> atts = body.getEmbeddedObjects();
+						for (int i = 0; i < atts.size(); i++) {
+							EmbeddedObject att = (EmbeddedObject) atts.elementAt(i);
+							if (att.getType() == EmbeddedObject.EMBED_ATTACHMENT) {
+								String path = ses.getTmpDir().getAbsolutePath() + File.separator + att.getSource();
+								att.extractFile(path);
+								files.addFile(new File(path), att.getSource(), TMP_FIELD_NAME);
+								Environment.fileToDelete.add(path);
+							}
+						}
+
+						List<Attachment> attachments = new ArrayList<>();
+						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
+							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
+							attachments.add(a);
+						}
+						inc.setAttachments(attachments);
 						entities.put(unId, inc);
 					}
 				}

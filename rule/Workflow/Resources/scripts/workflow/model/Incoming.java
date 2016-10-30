@@ -37,7 +37,7 @@ import workflow.model.embedded.Control;
 @NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
 public class Incoming extends SecureAppEntity<UUID> {
 
-	@Column(nullable = false, length = 1024)
+	@Column(nullable = false)
 	private String title = "";
 
 	@Column(name = "reg_number", unique = true)
