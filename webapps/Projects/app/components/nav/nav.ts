@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
-import { IProjectsState } from '../../reducers/projects.reducer';
-import { ProjectActions } from '../../actions/project.actions';
+import { INavState } from '../../reducers/nav.reducer';
+import { NavActions } from '../../actions/nav.actions';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 
@@ -20,16 +20,14 @@ export class NavComponent {
     constructor(
         private router: Router,
         private store: Store<any>,
-        private projectActions: ProjectActions,
+        private navActions: NavActions,
         private projectService: ProjectService
     ) { }
 
     ngOnInit() {
-        this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
-            this.projects = state.projects;
+        this.subs.push(this.store.select('nav').subscribe((state: INavState) => {
+            this.loadNavProjects();
         }));
-
-        this.loadNavProjects();
     }
 
     ngOnDestroy() {
@@ -42,7 +40,7 @@ export class NavComponent {
 
     loadNavProjects() {
         this.projectService.fetchProjects().subscribe(data => {
-            this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
+            this.projects = data.projects;
         });
     }
 }

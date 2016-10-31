@@ -78,7 +78,6 @@
                         {{'observers' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.observerUserIds">
-                        <!--<employee-input class="span8" [editable]="isEditable" [allowClear]="true" [multiple]="true" [ids]="task.observerUserIds" (change)="setObserver($event)"></employee-input>-->
                         <selection
                             class="span8"
                             [selectedItems]="task.observers"
@@ -106,7 +105,6 @@
                         {{'project' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.projectId">
-                        <!--<project-input class="span8" [editable]="isEditable" [id]="task.projectId" (change)="setProject($event)"></project-input>-->
                         <selection
                             class="span8"
                             [selectedItems]="task.project"
@@ -125,7 +123,6 @@
                         {{'task_type' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.taskTypeId">
-                        <!--<task-type-input class="span8" [editable]="isEditable" [id]="task.taskTypeId" (change)="setTaskType($event)"></task-type-input>-->
                         <selection
                             class="span8"
                             [selectedItems]="task.taskType"
@@ -153,7 +150,6 @@
                         {{'assignee_user' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.assigneeUserId">
-                        <!--<employee-input class="span8" [editable]="isEditable" [ids]="[task.assigneeUserId]" (change)="setAssigneeUser($event)"></employee-input>-->
                         <selection
                             class="employee-input span8"
                             [selectedItems]="task.assignee"
@@ -201,7 +197,7 @@
                         {{'tags' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.tagIds">
-                        <tags-input class="span8" [editable]="isEditable" [allowClear]="true" [ids]="task.tagIds" (change)="setTags($event)"></tags-input>
+                        <tags-input class="span8" [editable]="isEditable" [allowClear]="true" [selectedTags]="task.tags" (change)="setTags($event)"></tags-input>
                         <!--<selection
                             class="tags-input span8"
                             [selectedItems]="task.tags"
@@ -243,8 +239,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">
             <span>{{'author' | translate}}</span>
-            {{task.author?.name}}
-            <!--<employee-input [ids]="[task.authorId]"></employee-input>-->
+            <span>{{task.author?.name}}</span>
             <span>{{task.regDate}}</span>
         </div>
     </footer>

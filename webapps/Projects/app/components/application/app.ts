@@ -2,11 +2,11 @@ import { Component, HostBinding, HostListener, OnInit, OnDestroy } from '@angula
 import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { EnvironmentActions, AppActions, ReferenceActions, StaffActions } from '../../actions';
-import { AppService, ReferenceService, StaffService } from '../../services';
+import { EnvironmentActions, AppActions } from '../../actions';
+import { AppService, ReferenceService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { IAuthedState } from '../../reducers/authed.reducer';
-import { Tag, User } from '../../models';
+import { User } from '../../models';
 
 @Component({
     selector: 'app',
@@ -31,11 +31,8 @@ export class AppComponent {
     constructor(
         private store: Store<any>,
         private appActions: AppActions,
-        private referenceActions: ReferenceActions,
-        private staffActions: StaffActions,
         private appService: AppService,
         private referenceService: ReferenceService,
-        private staffService: StaffService,
         public translate: TranslateService
     ) {
         this.subs.push(this.store.select('authed').subscribe((data: IAuthedState) => {
@@ -53,10 +50,6 @@ export class AppComponent {
     ngOnInit() {
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.appActions.fetchUserProfileFulfilled(data));
-        });
-
-        this.referenceService.fetchTags().subscribe(payload => {
-            this.store.dispatch(this.referenceActions.fetchTags(payload.tags));
         });
 
         this.isMobileDevice = this.isMobile();

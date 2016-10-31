@@ -35,7 +35,6 @@
                             {{'customer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.customerId">
-                            <!--<organization-input class="span8" [editable]="isEditable" [id]="project.customerId" (change)="setCustomer($event)"></organization-input>-->
                             <selection
                                 class="organization-input span8"
                                 [selectedItems]="project.customer"
@@ -54,7 +53,6 @@
                             {{'manager' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.managerUserId">
-                            <!--<employee-input class="span8" [editable]="isEditable" [ids]="[project.managerUserId]" (change)="setManager($event)"></employee-input>-->
                             <selection
                                 class="span8"
                                 [selectedItems]="project.manager"
@@ -73,7 +71,6 @@
                             {{'programmer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.programmerUserId">
-                            <!--<employee-input class="span8" [editable]="isEditable" [ids]="[project.programmerUserId]" (change)="setProgrammer($event)"></employee-input>-->
                             <selection
                                 class="span8"
                                 [selectedItems]="project.programmer"
@@ -92,7 +89,6 @@
                             {{'tester' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.testerUserId">
-                            <!--<employee-input class="span8" [editable]="isEditable" [ids]="[project.testerUserId]" (change)="setTester($event)"></employee-input>-->
                             <selection
                                 class="span8"
                                 [selectedItems]="project.tester"
@@ -111,7 +107,6 @@
                             {{'observers' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.observerUserIds">
-                            <!--<employee-input class="span8" [editable]="isEditable" [multiple]="true" [allowClear]="true" [ids]="project.observerUserIds" (change)="setObserver($event)"></employee-input>-->
                             <selection
                                 class="span8"
                                 [selectedItems]="project.observers"
@@ -169,8 +164,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
-            {{project.author?.name}}
-            <!--<employee-input [ids]="[project.authorId]"></employee-input>-->
+            <span>{{project.author?.name}}</span>
             <span>{{project.regDate}}</span>
         </div>
     </footer>

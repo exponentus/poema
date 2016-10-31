@@ -7,7 +7,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { NotificationService } from '../../shared/notification';
 import { AppService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
-import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Project, Task, Tag, TaskType, Request, Comment, Employee, Attachment } from '../../models';
@@ -55,10 +54,6 @@ export class TaskComponent {
         private taskService: TaskService,
         private notifyService: NotificationService
     ) {
-        this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
-            this.comments = state.comments;
-        }));
-
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.redirectUrl = state.redirectUrl;
         }));
@@ -75,7 +70,6 @@ export class TaskComponent {
     }
 
     ngOnDestroy() {
-        this.store.dispatch({ type: TaskActions.TASK_UNLOAD });
         this.subs.map(s => s.unsubscribe());
     }
 
@@ -297,7 +291,7 @@ export class TaskComponent {
     //
     loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(payload => {
-            this.store.dispatch({ type: TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });
+
         });
     }
 

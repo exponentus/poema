@@ -29,7 +29,6 @@
                     </div>
                     <div class="task-list__assignee">
                         {{employees[task.assigneeUserId]?.name}}
-                        <!--<employee-input [ids]="[m.assigneeUserId]"></employee-input>-->
                     </div>
                     <div class="task-list__start_date">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>
                     <div class="task-list__due_date">
@@ -40,7 +39,6 @@
                         <span class="tag" [style.color]="tag.color" *ngFor="let tag of m.tags">
                             {{tag | localizedName}}
                         </span>
-                        <!--<tags-input [ids]="m.tagIds"></tags-input>-->
                     </div>
                 </div>
             </a>

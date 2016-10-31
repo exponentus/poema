@@ -5,8 +5,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
-import { ITaskState } from '../../reducers/task.reducer';
-import { IReferenceState } from '../../reducers/reference.reducer';
 import { TaskActions } from '../../actions';
 import { AppService, TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';

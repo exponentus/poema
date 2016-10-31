@@ -9,8 +9,12 @@ import { TaskType, Employee, Tag } from '../../models';
     template: `
         <div class="filter-box__icon" (click)="toggle($event)"><i class="fa fa-filter"></i></div>
         <div class="filter__items">
-            <task-status-input class="filter__items_item" [status]="taskStatus" editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (change)="setTaskStatus($event)"></task-status-input>
-            <!-- <task-type-input class="filter__items_item" [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (change)="setTaskType($event)"></task-type-input> -->
+            <task-status-input class="filter__items_item"
+                [status]="taskStatus"
+                editable="true"
+                allowClear="true"
+                placeHolder="{{'status' | translate}}"
+                (change)="setTaskStatus($event)"></task-status-input>
             <selection
                 class="filter__items_item"
                 [selectedItems]="taskType"
@@ -22,7 +26,6 @@ import { TaskType, Employee, Tag } from '../../models';
                 totalPagesPath="objects.0.meta.totalPages"
                 (change)="setTaskType($event)">
             </selection>
-            <!-- <employee-input class="filter__items_item" [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (change)="setAssigneeUser($event)"></employee-input> -->
             <selection
                 class="filter__items_item"
                 [selectedItems]="assigneeUser"
@@ -34,7 +37,13 @@ import { TaskType, Employee, Tag } from '../../models';
                 placeHolder="{{'assignee_user' | translate}}"
                 (change)="setAssigneeUser($event)">
             </selection>
-            <tags-input class="filter__items_item" [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (change)="setTags($event)"></tags-input>
+            <tags-input class="filter__items_item"
+                [selectedTags]="tags"
+                editable="true"
+                allowClear="true"
+                placeHolder="{{'tags' | translate}}"
+                withHidden="true"
+                (change)="setTags($event)"></tags-input>
         </div>
     `,
     host: {
@@ -53,7 +62,6 @@ export class TaskFilterComponent {
     private taskType: any = '';
     private assigneeUser: any = '';
     private tags: any[] = [];
-    private tagIds: string[];
 
     private sub: any;
 
@@ -66,7 +74,6 @@ export class TaskFilterComponent {
                 this.taskType = state.filter.taskType;
                 this.assigneeUser = state.filter.assigneeUser;
                 this.tags = state.filter.tags;
-                this.tagIds = this.tags.map(it => it.id);
             }
         });
     }
@@ -108,7 +115,6 @@ export class TaskFilterComponent {
 
     setTags(tags: Tag[]) {
         this.tags = tags;
-        this.tagIds = tags.map(it => it.id);
         this.updateFilter();
     }
 

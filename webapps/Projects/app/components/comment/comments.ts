@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { CommentComponent } from './comment';
 import { NotificationService } from '../../shared/notification';
 import { TaskService } from '../../services';
-import { ITaskState } from '../../reducers/task.reducer';
 import { Task, Comment } from '../../models';
 
 @Component({
