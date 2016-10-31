@@ -59,22 +59,6 @@ export class AppComponent {
             this.store.dispatch(this.referenceActions.fetchTags(payload.tags));
         });
 
-        this.referenceService.fetchTaskTypes().subscribe(payload => {
-            this.store.dispatch(this.referenceActions.fetchTaskTypes(payload.taskTypes));
-        });
-
-        this.referenceService.fetchRequestTypes().subscribe(payload => {
-            this.store.dispatch(this.referenceActions.fetchRequestTypes(payload.requestTypes));
-        });
-
-        this.staffService.fetchOrganizations().subscribe(payload => {
-            this.store.dispatch(this.staffActions.fetchOrganizations(payload.organizations));
-        });
-
-        this.staffService.fetchEmployees().subscribe(payload => {
-            this.store.dispatch(this.staffActions.fetchEmployees(payload.employees));
-        });
-
         this.isMobileDevice = this.isMobile();
 
         // ng2-translate

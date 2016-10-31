@@ -10,8 +10,30 @@ import { TaskType, Employee, Tag } from '../../models';
         <div class="filter-box__icon" (click)="toggle($event)"><i class="fa fa-filter"></i></div>
         <div class="filter__items">
             <task-status-input class="filter__items_item" [status]="taskStatus" editable="true" allowClear="true" placeHolder="{{'status' | translate}}" (change)="setTaskStatus($event)"></task-status-input>
-            <task-type-input class="filter__items_item" [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (change)="setTaskType($event)"></task-type-input>
-            <employee-input class="filter__items_item" [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (change)="setAssigneeUser($event)"></employee-input>
+            <!-- <task-type-input class="filter__items_item" [id]="taskTypeId" editable="true" allowClear="true" placeHolder="{{'task_type' | translate}}" (change)="setTaskType($event)"></task-type-input> -->
+            <selection
+                class="filter__items_item"
+                [selectedItems]="taskType"
+                allowClear="true"
+                [searchable]="true"
+                placeHolder="{{'task_type' | translate}}"
+                url="/Reference/p?id=tasktypes"
+                listPath="objects.0.list"
+                totalPagesPath="objects.0.meta.totalPages"
+                (change)="setTaskType($event)">
+            </selection>
+            <!-- <employee-input class="filter__items_item" [ids]="[assigneeUserId]" editable="true" allowClear="true" placeHolder="{{'assignee_user' | translate}}" (change)="setAssigneeUser($event)"></employee-input> -->
+            <selection
+                class="filter__items_item"
+                [selectedItems]="assigneeUser"
+                allowClear="true"
+                url="/Staff/p?id=employees"
+                listPath="objects.0.list"
+                totalPagesPath="objects.0.meta.totalPages"
+                [searchable]="true"
+                placeHolder="{{'assignee_user' | translate}}"
+                (change)="setAssigneeUser($event)">
+            </selection>
             <tags-input class="filter__items_item" [ids]="tagIds" editable="true" allowClear="true" placeHolder="{{'tags' | translate}}" (change)="setTags($event)"></tags-input>
         </div>
     `,
@@ -28,9 +50,10 @@ export class TaskFilterComponent {
     private isOpen: boolean = false;
 
     private taskStatus: string = '';
-    private taskTypeId: string = '';
-    private assigneeUserId: string = '';
-    private tagIds: string[] = [];
+    private taskType: any = '';
+    private assigneeUser: any = '';
+    private tags: any[] = [];
+    private tagIds: string[];
 
     private sub: any;
 
@@ -40,9 +63,10 @@ export class TaskFilterComponent {
         this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
             if (state) {
                 this.taskStatus = state.filter.taskStatus;
-                this.taskTypeId = state.filter.taskTypeId;
-                this.assigneeUserId = state.filter.assigneeUserId;
-                this.tagIds = state.filter.tagIds;
+                this.taskType = state.filter.taskType;
+                this.assigneeUser = state.filter.assigneeUser;
+                this.tags = state.filter.tags;
+                this.tagIds = this.tags.map(it => it.id);
             }
         });
     }
@@ -56,7 +80,7 @@ export class TaskFilterComponent {
     }
 
     get isFiltered() {
-        return this.taskStatus.length || this.taskTypeId || this.assigneeUserId || this.tagIds.length;
+        return this.taskStatus.length || this.taskType || this.assigneeUser || this.tags.length;
     }
 
     setTaskStatus(taskStatus: string) {
@@ -66,23 +90,24 @@ export class TaskFilterComponent {
 
     setTaskType(taskType: TaskType) {
         if (taskType) {
-            this.taskTypeId = taskType.id;
+            this.taskType = taskType;
         } else {
-            this.taskTypeId = '';
+            this.taskType = '';
         }
         this.updateFilter();
     }
 
-    setAssigneeUser(assigneeUsers: Employee) {
-        if (assigneeUsers) {
-            this.assigneeUserId = assigneeUsers.userID;
+    setAssigneeUser(assigneeUser: Employee) {
+        if (assigneeUser) {
+            this.assigneeUser = assigneeUser;
         } else {
-            this.assigneeUserId = '';
+            this.assigneeUser = '';
         }
         this.updateFilter();
     }
 
     setTags(tags: Tag[]) {
+        this.tags = tags;
         this.tagIds = tags.map(it => it.id);
         this.updateFilter();
     }
@@ -90,9 +115,9 @@ export class TaskFilterComponent {
     updateFilter() {
         this.change.emit({
             taskStatus: this.taskStatus,
-            taskTypeId: this.taskTypeId,
-            assigneeUserId: this.assigneeUserId,
-            tagIds: this.tagIds
+            taskType: this.taskType,
+            assigneeUser: this.assigneeUser,
+            tags: this.tags
         });
     }
 }

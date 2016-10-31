@@ -1,9 +1,10 @@
 import { Organization } from './organization';
 import { Attachment } from './attachment';
+import { Employee } from './employee';
 
 export class Project {
     id: string = '';
-    author: string;
+    author: any;
     authorId: string;
     regDate: Date;
     editable: boolean = false;
@@ -15,9 +16,13 @@ export class Project {
     status: string = 'DRAFT';
     customer: Organization;
     customerId: string;
+    manager: Employee;
     managerUserId: string;
+    programmer: Employee;
     programmerUserId: string;
+    tester: Employee;
     testerUserId: string;
+    observers: Employee[];
     observerUserIds: string[];
     comment: string;
     finishDate: Date;

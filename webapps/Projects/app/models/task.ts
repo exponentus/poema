@@ -1,10 +1,11 @@
 import { Attachment } from './attachment';
 import { Project } from './project';
 import { Request } from './request';
+import { Employee } from './employee';
 
 export class Task {
     id: string = '';
-    author: string;
+    author: any;
     authorId: string;
     regDate: Date;
     editable: boolean = false;
@@ -26,10 +27,12 @@ export class Task {
     regNumber: string;
     title: string;
     body: string;
+    assignee: Employee;
     assigneeUserId: string;
     startDate: Date;
     dueDate: Date;
     tagIds: string[];
+    observers: Employee[];
     observerUserIds: string[];
     customerObservation: boolean = false;
     cancellationComment: string;

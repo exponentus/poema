@@ -10,7 +10,7 @@ import { Comment } from '../../models';
             <div class="comment__avatar"></div>
             <div class="comment__details">
                 <span class="comment__author">
-                    <employee-input [editable]="false" [ids]="[comment.authorId]"></employee-input>
+                    <!-- <employee-input [editable]="false" [ids]="[comment.authorId]"></employee-input> -->
                 </span>
                 <span class="comment__time">{{comment.regDate}}</span>
                 <p class="comment__text" *ngIf="!edit" innerHTML="{{comment.comment | marked}}"></p>

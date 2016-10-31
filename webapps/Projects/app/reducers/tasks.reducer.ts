@@ -9,9 +9,9 @@ export interface ITasksState {
     loading: boolean,
     filter: {
         taskStatus: string,
-        taskTypeId: string,
-        assigneeUserId: string,
-        tagIds: string[]
+        taskType: any,
+        assigneeUser: any,
+        tags: any[]
     }
 };
 
@@ -22,9 +22,9 @@ const initialState: ITasksState = {
     loading: false,
     filter: {
         taskStatus: '',
-        taskTypeId: '',
-        assigneeUserId: '',
-        tagIds: []
+        taskType: null,
+        assigneeUser: null,
+        tags: []
     }
 };
 

@@ -87,7 +87,8 @@
                                     <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
                                 </div>
                                 <div class="task-list__assignee">
-                                    <employee-input [ids]="[task.assigneeUserId]"></employee-input>
+                                    {{employees[task.assigneeUserId]?.name}}
+                                    <!--<employee-input [ids]="[task.assigneeUserId]"></employee-input>-->
                                 </div>
                                 <div class="task-list__start_date">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>
                                 <div class="task-list__due_date">
@@ -95,7 +96,10 @@
                                     <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                                 </div>
                                 <div class="task-list__tags">
-                                    <tags-input [ids]="task.tagIds"></tags-input>
+                                    <span class="tag" [style.color]="tag.color" *ngFor="let tag of task.tags">
+                                        {{tag | localizedName}}
+                                    </span>
+                                    <!--<tags-input [ids]="task.tagIds"></tags-input>-->
                                 </div>
                             </div>
                         </a>
@@ -104,6 +108,7 @@
                 <task-tree
                     [rootId]="task.id"
                     [children]="task.children"
+                    [employees]="employees"
                     [selectable]="selectable">
                 </task-tree>
             </div>

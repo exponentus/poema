@@ -32,6 +32,7 @@ export class ProjectsComponent {
     title = 'projects';
     projects: Project[];
     meta: any = {};
+    employees: any = {};
     keyWord: string = '';
     loading: boolean = true;
     activeSort: string = 'name:asc';
@@ -73,26 +74,27 @@ export class ProjectsComponent {
     loadData(params?) {
         this.store.dispatch(this.envActions.setRedirectUrl('/projects'));
 
-        // this.params = params;
         this.params = Object.assign({}, params, {
             'sort': this.activeSort || 'name:asc'
         });
 
         this.store.dispatch(this.projectActions.fetchProjects());
         this.projectService.fetchProjects(this.params).subscribe(data => {
-            let customerIds = data.projects.map(it => it.customerId);
-            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(
-                payload => {
-                    let orgs = payload.organizations;
-                    data.projects.map(p => {
-                        if (p.customerId) {
-                            p.customer = orgs.filter(org => org.id == p.customerId)[0];
-                        }
-                    });
-                    this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
-                },
-                error => this.store.dispatch(this.projectActions.fetchProjectsFailed(error))
-            );
+            this.employees = data.data.employees;
+            // let customerIds = data.projects.map(it => it.customerId);
+            // this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(
+            //     payload => {
+            //         let orgs = payload.organizations;
+            //         data.projects.map(p => {
+            //             if (p.customerId) {
+            //                 p.customer = orgs.filter(org => org.id == p.customerId)[0];
+            //             }
+            //         });
+            //         this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
+            //     },
+            //     error => this.store.dispatch(this.projectActions.fetchProjectsFailed(error))
+            // );
+            this.store.dispatch(this.projectActions.fetchProjectsFulfilled(data.projects, data.meta));
         });
     }
 

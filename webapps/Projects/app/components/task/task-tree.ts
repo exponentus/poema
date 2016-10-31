@@ -18,6 +18,7 @@ export class TaskTreeComponent {
     @Input() children: any = [];
     @Input() expand: boolean = false;
     @Input() selectable: boolean = true;
+    @Input() employees: any = {};
 
     private expandedIds: string[] = [];
     private expanded: boolean = false;

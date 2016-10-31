@@ -34,11 +34,13 @@ export class TaskService {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
-            .map(response => response.json().objects[0])
+            .map(response => response.json())
             .map(data => {
+                let objs = data.objects[0];
                 return {
-                    tasks: <Task[]>data.list,
-                    meta: data.meta
+                    data: data.data,
+                    tasks: <Task[]>objs.list,
+                    meta: objs.meta
                 }
             })
             .catch(error => this.appService.handleError(error));
@@ -50,9 +52,24 @@ export class TaskService {
             .map(response => {
                 let json = response.json();
                 let data = parseResponseObjects(json.objects);
+                let emps = json.data.employees;
                 let task = <Task>data.task;
                 if (!task.id) {
                     task.id = '';
+                }
+                if (task.authorId) {
+                    task.author = json.data.employees[task.authorId];
+                }
+                if (task.assigneeUserId) {
+                    task.assignee = json.data.employees[task.assigneeUserId];
+                }
+                if (task.observerUserIds) {
+                    task.observers = [];
+                    for (let k in emps) {
+                        if (task.observerUserIds.indexOf(emps[k].userID) != -1) {
+                            task.observers.push(emps[k]);
+                        }
+                    }
                 }
                 if (data.fsid) {
                     task.fsid = data.fsid;

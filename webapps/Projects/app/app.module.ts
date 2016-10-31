@@ -30,12 +30,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile';
 import { LoginComponent } from './components/login';
 import {
     SelectionComponent,
-    OrganizationInputComponent,
-    ProjectInputComponent,
-    EmployeeInputComponent,
-    TaskTypeInputComponent,
     TagsInputComponent,
-    RequestTypeInputComponent,
     TaskStatusInputComponent,
     ErrorMessageComponent
 } from './components/shared';
@@ -73,12 +68,7 @@ import { AuthGuard } from './auth.guard';
         ErrorMessageComponent,
         AttachmentsComponent,
         SelectionComponent,
-        OrganizationInputComponent,
-        EmployeeInputComponent,
-        ProjectInputComponent,
-        TaskTypeInputComponent,
         TagsInputComponent,
-        RequestTypeInputComponent,
         TaskStatusInputComponent,
         ErrorMessageComponent
     ],
