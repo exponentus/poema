@@ -1,4 +1,4 @@
-package workflow.model;
+package workflow.model.embedded;
 
 /**
  * 
@@ -6,24 +6,21 @@ package workflow.model;
  */
 
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
 
 import workflow.model.constants.ApprovalStatusType;
 
 @Entity
 @Table(name = "approvals")
-@NamedQuery(name = "Approval.findAll", query = "SELECT m FROM Approval AS m ORDER BY m.regDate")
-public class Approval extends SecureAppEntity<UUID> {
+public class Approval extends SimpleAppEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = true, length = 10)
