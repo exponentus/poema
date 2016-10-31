@@ -1,6 +1,5 @@
 package projects.dao;
 
-import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
@@ -9,7 +8,6 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import projects.model.Project;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -75,16 +73,8 @@ public class ProjectDAO extends DAO<Project, UUID> {
             }
             int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
 
-            // EntityGraph<?> graph = em.getEntityGraph(Project.ATTACHMENT_SHORT);
-
-            // EntityGraph<?> graph = em.createEntityGraph(Project.class);
-            // graph.addSubgraph(Project.ORGANIZATION_SHORT);
-            // graph.addSubgraph(Project.ATTACHMENT_SHORT);
-
             TypedQuery<Project> typedQuery = em.createQuery(cq);
-            // typedQuery.setHint("javax.persistence.fetchgraph", em.getEntityGraph(Project.ORGANIZATION_SHORT));
-            // typedQuery.setHint("javax.persistence.fetchgraph", graph);
-            // typedQuery.setHint("javax.persistence.fetchgraph", graph);
+            // typedQuery.setHint("javax.persistence.fetchgraph", em.getEntityGraph(Project.SHORT_GRAPH));
             typedQuery.setFirstResult(firstRec);
             typedQuery.setMaxResults(pageSize);
 

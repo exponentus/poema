@@ -8,6 +8,13 @@ import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import projects.dao.ProjectDAO;
 import projects.model.Project;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ProjectView extends _DoPage {
 
@@ -21,6 +28,22 @@ public class ProjectView extends _DoPage {
         ProjectDAO projectDAO = new ProjectDAO(session);
         ViewPage<Project> vp = projectDAO.findProjects(keyWord, sortParams, pageNum, pageSize);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
+
+        //
+        EmployeeDAO empDao = new EmployeeDAO(session);
+        Map<Long, Employee> emps = new HashMap<>();
+        if (vp.getResult().size() > 0) {
+            List<Long> empIds = new ArrayList<>();
+            for (Project prj : vp.getResult()) {
+                empIds.add(prj.getManager());
+                empIds.add(prj.getProgrammer());
+                empIds.add(prj.getTester());
+            }
+            for (Employee e : empDao.findAllByUserIds(empIds)) {
+                emps.put(e.getUserID(), e);
+            }
+        }
+        addDataContent("employees", emps);
     }
 
     @Override

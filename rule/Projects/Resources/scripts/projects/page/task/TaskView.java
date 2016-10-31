@@ -12,11 +12,10 @@ import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TaskView extends _DoPage {
@@ -34,6 +33,17 @@ public class TaskView extends _DoPage {
 
         ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
+
+        //
+        EmployeeDAO empDao = new EmployeeDAO(session);
+        Map<Long, Employee> emps = new HashMap<>();
+        if (vp.getResult().size() > 0) {
+            List<Long> empIds = vp.getResult().stream().map(Task::getAssignee).collect(Collectors.toList());
+            for (Employee e : empDao.findAllByUserIds(empIds)) {
+                emps.put(e.getUserID(), e);
+            }
+        }
+        addDataContent("employees", emps);
     }
 
     @Override
