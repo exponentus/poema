@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -29,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentType;
 import staff.model.Organization;
-import workflow.model.embedded.Control;
 
 @JsonRootName("incoming")
 @Entity
@@ -72,10 +70,6 @@ public class Incoming extends SecureAppEntity<UUID> {
 	                        "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
-
-	// @Embedded
-	@Transient
-	private Control control = new Control();
 
 	public String getRegNumber() {
 		return regNumber;
@@ -197,14 +191,6 @@ public class Incoming extends SecureAppEntity<UUID> {
 
 	public void setBody(String body) {
 		this.body = body;
-	}
-
-	public Control getControl() {
-		return control;
-	}
-
-	public void setControl(Control control) {
-		this.control = control;
 	}
 
 	@Override

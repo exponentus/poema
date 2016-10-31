@@ -23,7 +23,6 @@ import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
 import reference.dao.ControlTypeDAO;
 import reference.model.ControlType;
-import staff.dao.OrganizationDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Assignment;
@@ -38,7 +37,6 @@ public class SyncAssignmentNSF extends ImportNSF {
 	@Override
 	public void doTask(_Session ses) {
 		Map<String, Assignment> entities = new HashMap<>();
-		OrganizationDAO oDao = new OrganizationDAO(ses);
 		AssignmentDAO dao = new AssignmentDAO(ses);
 		IncomingDAO iDao = new IncomingDAO(ses);
 		ControlTypeDAO ctDao = new ControlTypeDAO(ses);
@@ -89,25 +87,29 @@ public class SyncAssignmentNSF extends ImportNSF {
 							controlRefKey = ConvertorEnvConst.GAG_KEY;
 						}
 						ControlType controlType = ctDao.findByName(controlRefKey);
-						String controlStatus = doc.getItemValueString("AllControl");
-						if (controlStatus.equalsIgnoreCase("reset")) {
-							control.setStatus(ControlStatusType.COMPLETED);
-						} else {
-							control.setStatus(ControlStatusType.PROCESSING);
-						}
 						control.setControlType(controlType);
 						List<AssigneeEntry> ass = new ArrayList<>();
-						@SuppressWarnings("unchecked")
+						String otvExec = doc.getItemValueString("OtvExecNA");
 						Vector<String> intExecs = doc.getItemValue("IntExecNA");
 						for (String exec : intExecs) {
 							IUser<Long> e = uDao.findByExtKey(exec);
 							if (e != null) {
 								AssigneeEntry assigneeEntry = new AssigneeEntry();
 								assigneeEntry.setAssignee(e.getId());
+								if (otvExec.equals(exec)) {
+									assigneeEntry.setCoordinator(true);
+								}
 								ass.add(assigneeEntry);
 							}
 						}
-						control.setAssigneeEntries(ass);
+						String controlStatus = doc.getItemValueString("AllControl");
+						if (controlStatus.equalsIgnoreCase("reset")) {
+							control.setStatus(ControlStatusType.COMPLETED);
+
+							control.setAssigneeEntries(ass);
+						} else {
+							control.setStatus(ControlStatusType.PROCESSING);
+						}
 						entity.setControl(control);
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("Content"), 140));
 						entity.setBody(doc.getItemValueString("Content"));

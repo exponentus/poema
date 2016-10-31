@@ -1,5 +1,6 @@
 package workflow.model;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotNull;
 
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import workflow.model.embedded.Control;
 
@@ -36,6 +38,9 @@ public class Assignment extends SecureAppEntity<UUID> {
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
 	private String body;
+
+	@JsonProperty("observerUserIds")
+	private List<Long> observers;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinTable(name = "assignment_control")
@@ -71,6 +76,14 @@ public class Assignment extends SecureAppEntity<UUID> {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public List<Long> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
 	}
 
 	public Control getControl() {

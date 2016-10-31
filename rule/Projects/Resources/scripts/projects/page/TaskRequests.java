@@ -26,6 +26,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
+import reference.dao.RequestTypeDAO;
 import reference.model.RequestType;
 
 public class TaskRequests extends _DoForm {
@@ -161,9 +162,8 @@ public class TaskRequests extends _DoForm {
 				return;
 			}
 
-			RequestType requestType = new RequestType();
-			requestType.setId(UUID.fromString(requestTypeId));
-
+			RequestTypeDAO requestTypeDAO = new RequestTypeDAO(session);
+			RequestType requestType = requestTypeDAO.findById(requestTypeId);
 			Request request = new Request();
 			request.setTask(task);
 			request.setRequestType(requestType);
