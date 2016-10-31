@@ -1,48 +1,57 @@
 package workflow.model.embedded;
 
-import javax.persistence.*;
 import java.util.Date;
-import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
 
 @Entity
-@Table(name = "control_assignees")
-public class AssigneeEntry {
+@Table(name = "assignee_entries")
+public class AssigneeEntry extends SimpleAppEntity {
 
-    @Id
-    @GeneratedValue(generator = "uuid-gen")
-    @org.eclipse.persistence.annotations.Convert("uuidConverter")
-    @Column(name = "id", nullable = false)
-    protected UUID id;
+	@Column(name = "is_coordinator")
+	private boolean isCoordinator;
 
-    private Long assignee;
+	private Long assignee;
 
-    @Column(name = "reset_time")
-    private Date resetTime;
+	@Column(name = "reset_time")
+	private Date resetTime;
 
-    @Column(name = "resetter_info")
-    private String resetterInfo;
+	@Column(name = "resetter_info")
+	private String resetterInfo;
 
-    public Long getAssignee() {
-        return assignee;
-    }
+	public boolean isCoordinator() {
+		return isCoordinator;
+	}
 
-    public void setAssignee(Long assignee) {
-        this.assignee = assignee;
-    }
+	public void setCoordinator(boolean isCoordinator) {
+		this.isCoordinator = isCoordinator;
+	}
 
-    public Date getResetTime() {
-        return resetTime;
-    }
+	public Long getAssignee() {
+		return assignee;
+	}
 
-    public void setResetTime(Date resetTime) {
-        this.resetTime = resetTime;
-    }
+	public void setAssignee(Long assignee) {
+		this.assignee = assignee;
+	}
 
-    public String getResetterInfo() {
-        return resetterInfo;
-    }
+	public Date getResetTime() {
+		return resetTime;
+	}
 
-    public void setResetterInfo(String resetterInfo) {
-        this.resetterInfo = resetterInfo;
-    }
+	public void setResetTime(Date resetTime) {
+		this.resetTime = resetTime;
+	}
+
+	public String getResetterInfo() {
+		return resetterInfo;
+	}
+
+	public void setResetterInfo(String resetterInfo) {
+		this.resetterInfo = resetterInfo;
+	}
 }

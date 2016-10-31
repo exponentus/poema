@@ -1,4 +1,4 @@
-package workflow.model;
+package workflow.model.embedded;
 
 import java.util.Date;
 import java.util.UUID;

@@ -2,11 +2,13 @@ package workflow.model;
 
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -35,8 +37,9 @@ public class Assignment extends SecureAppEntity<UUID> {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
-	@Embedded
-	private Control control = new Control();
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinTable(name = "assignment_control")
+	private Control control;
 
 	public Long getAppliedAuthor() {
 		return appliedAuthor;

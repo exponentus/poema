@@ -1,4 +1,4 @@
-package workflow.model;
+package workflow.model.embedded;
 
 /**
  * 
