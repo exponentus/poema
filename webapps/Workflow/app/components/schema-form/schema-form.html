@@ -29,8 +29,8 @@
                                     [ngClass]="field.className"
                                     [selectedItems]="model[field.name]"
                                     [url]="field.values.url"
-                                    [listPath]="'objects.1.list'"
-                                    [totalPagesPath]="'objects.1.meta.totalPages'"
+                                    [listPath]="'objects.0.list'"
+                                    [totalPagesPath]="'objects.0.meta.totalPages'"
                                     [multiple]="field.values.multiple"
                                     [searchable]="true"
                                     (change)="model[field.name] = $event">
