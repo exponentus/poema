@@ -114,7 +114,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 
 						entities.put(unId, entity);
 					} else {
-						logger.warningLogEntry("Incoming has not been found exists (" + parent + "), record was skipped");
+						logger.warningLogEntry("parent Incoming has not been found (" + parent + "), record was skipped");
 					}
 
 				}
