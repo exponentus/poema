@@ -95,7 +95,24 @@ export class TaskService {
 
     saveTask(task: Task) {
         let url = 'p?id=task-form&taskId=' + (task.id ? task.id : '');
-        return this.http.post(url, serializeObj(task), { headers: xhrHeaders() })
+        let payload = {
+            fsid: task.fsid,
+            projectId: task.project ? task.project.id : '',
+            taskTypeId: task.taskType ? task.taskType.id : '',
+            status: task.status,
+            priority: task.priority,
+            regNumber: task.regNumber,
+            title: task.title,
+            body: task.body,
+            assigneeUserId: task.assignee ? task.assignee.userID : '',
+            startDate: task.startDate,
+            dueDate: task.dueDate,
+            tagIds: task.tags ? task.tags.map(it => it.id) : '',
+            observerUserIds: task.observers ? task.observers.map(it => it.userID) : '',
+            customerObservation: task.customerObservation
+        };
+
+        return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));
     }

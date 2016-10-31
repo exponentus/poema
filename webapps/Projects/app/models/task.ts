@@ -1,7 +1,4 @@
-import { Attachment } from './attachment';
-import { Project } from './project';
-import { Request } from './request';
-import { Employee } from './employee';
+import { Attachment, Project, Request, Employee, Tag, TaskType } from './index';
 
 export class Task {
     id: string = '';
@@ -21,6 +18,7 @@ export class Task {
     hasSubtasks: boolean;
     hasRequests: boolean;
     hasComments: boolean;
+    taskType: TaskType;
     taskTypeId: string;
     status: string = 'DRAFT';
     priority: string = 'NORMAL';
@@ -31,7 +29,7 @@ export class Task {
     assigneeUserId: string;
     startDate: Date;
     dueDate: Date;
-    tagIds: string[];
+    tags: Tag[];
     observers: Employee[];
     observerUserIds: string[];
     customerObservation: boolean = false;

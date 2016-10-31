@@ -177,7 +177,7 @@ export class TaskComponent {
         this.task.priority = task.priority;
         this.task.startDate = task.startDate;
         this.task.dueDate = task.dueDate;
-        this.task.tagIds = task.tagIds;
+        this.task.tags = task.tags;
     }
 
     // === tab toggle actions
@@ -367,6 +367,7 @@ export class TaskComponent {
     }
 
     setProject(project: Project) {
+        this.task.project = project;
         this.task.projectId = project.id;
         if (!this.task.id && !this.taskObsManualyChanged) {
             // TODO fetch observers
@@ -376,11 +377,13 @@ export class TaskComponent {
     }
 
     setTaskType(taskType: TaskType) {
+        this.task.taskType = taskType;
         this.task.taskTypeId = taskType.id;
         this.validateForm();
     }
 
     setAssigneeUser(assigneeUser: Employee) {
+        this.task.assignee = assigneeUser;
         this.task.assigneeUserId = assigneeUser.userID;
         this.validateForm();
     }
@@ -401,12 +404,13 @@ export class TaskComponent {
     }
 
     setTags(tags: Tag[]) {
-        this.task.tagIds = tags.map(it => it.id);
+        this.task.tags = tags;
         this.validateForm();
     }
 
     setObserver(observers: Employee[]) {
         this.taskObsManualyChanged = true;
+        this.task.observers = observers;
         this.task.observerUserIds = observers.map(it => it.userID);
     }
 

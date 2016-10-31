@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -114,7 +113,7 @@ public class Task extends SecureAppEntity<UUID> {
     private List<IAppEntity> children;
 
     //
-    // @JsonIgnore // need short graph in view
+    // TODO short graph
     public Project getProject() {
         return project;
     }
@@ -149,7 +148,7 @@ public class Task extends SecureAppEntity<UUID> {
         this.subtasks = subtasks;
     }
 
-    //@JsonIgnore // need short graph in view
+    // TODO short graph
     public TaskType getTaskType() {
         return taskType;
     }
@@ -233,7 +232,7 @@ public class Task extends SecureAppEntity<UUID> {
         this.dueDate = dueDate;
     }
 
-    // @JsonIgnore // need short graph in view
+    // TODO short graph
     public List<Tag> getTags() {
         return tags;
     }
@@ -266,6 +265,7 @@ public class Task extends SecureAppEntity<UUID> {
         return attachments.size() > 0;
     }
 
+    // TODO short graph
     @Override
     public List<Attachment> getAttachments() {
         return attachments;
@@ -276,20 +276,8 @@ public class Task extends SecureAppEntity<UUID> {
         this.attachments = attachments;
     }
 
-    public String getProjectId() {
-        return project != null ? project.getIdentifier() : null;
-    }
-
     public String getParentTaskId() {
         return parent != null ? parent.getIdentifier() : null;
-    }
-
-    public String getTaskTypeId() {
-        return taskType != null ? taskType.getIdentifier() : null;
-    }
-
-    public List<String> getTagIds() {
-        return tags != null ? tags.stream().map(Tag::getIdentifier).collect(Collectors.toList()) : null;
     }
 
     public boolean isCustomerObservation() {

@@ -91,8 +91,20 @@ export class ProjectService {
 
     saveProject(project: Project) {
         let url = 'p?id=project-form&projectId=' + (project.id ? project.id : '');
+        let payload = {
+            fsid: project.fsid,
+            name: project.name,
+            status: project.status,
+            customerId: project.customer ? project.customer.id : '',
+            managerUserId: project.manager ? project.manager.userID : '',
+            programmerUserId: project.programmer ? project.programmer.userID : '',
+            testerUserId: project.tester ? project.tester.userID : '',
+            observerUserIds: project.observers ? project.observers.map(it => it.userID) : '',
+            comment: project.comment,
+            finishDate: project.finishDate,
+        };
 
-        return this.http.post(url, serializeObj(project), { headers: xhrHeaders() })
+        return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));
     }

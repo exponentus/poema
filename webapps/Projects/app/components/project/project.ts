@@ -147,37 +147,38 @@ export class ProjectComponent {
     }
 
     setCustomer(customer: Organization) {
+        this.project.customer = customer;
         this.project.customerId = customer.id;
-        this.validateForm('customerId');
+        this.validateForm('customer');
     }
 
     setManager(employee: Employee) {
+        this.project.manager = employee;
         this.project.managerUserId = employee.userID;
         this.validateForm('managerUserId');
     }
 
     setProgrammer(employee: Employee) {
+        this.project.programmer = employee;
         this.project.programmerUserId = employee.userID;
         this.validateForm('programmerUserId');
     }
 
     setTester(employee: Employee) {
+        this.project.tester = employee;
         this.project.testerUserId = employee.userID;
         this.validateForm('testerUserId');
     }
 
     setObserver(observers: Employee[]) {
+        this.project.observers = observers;
         this.project.observerUserIds = observers.map(it => it.userID);
         this.validateForm('observerUserIds');
     }
 
     removeObserver(observer: Employee, $event) {
         $event.stopPropagation();
-        this.project.observerUserIds.forEach((id, index) => {
-            if (id === observer.userID) {
-                this.project.observerUserIds.splice(index, 1);
-            }
-        });
+        this.project.observers = this.project.observers.filter(it => it.id != observer.id);
     }
 
     setFinishDate(date) {

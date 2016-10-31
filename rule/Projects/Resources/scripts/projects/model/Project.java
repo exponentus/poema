@@ -115,13 +115,9 @@ public class Project extends SecureAppEntity<UUID> {
         this.primaryLanguage = primaryLanguage;
     }
 
-    //@JsonIgnore // need short graph in view
+    // TODO short graph
     public Organization getCustomer() {
         return customer;
-    }
-
-    public String getCustomerId() {
-        return customer != null ? customer.getIdentifier() : null;
     }
 
     public void setCustomer(Organization customer) {
@@ -188,8 +184,8 @@ public class Project extends SecureAppEntity<UUID> {
         return attachments.size() > 0;
     }
 
+    // TODO short graph
     @Override
-    // @JsonIgnore // need short graph in view
     public List<Attachment> getAttachments() {
         return attachments;
     }

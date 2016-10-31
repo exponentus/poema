@@ -58,7 +58,11 @@ const formSchemas = {
                 type: 'select',
                 label: 'org_category',
                 name: 'orgCategory',
-                values: { url: '/Reference/p?id=orgcategory-view' },
+                values: {
+                    url: '/Reference/p?id=orgcategory-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span4',
                 required: true
             }, {
@@ -72,8 +76,10 @@ const formSchemas = {
                 label: 'labels',
                 name: 'labels',
                 values: {
+                    multiple: true,
                     url: '/Staff/p?id=organization-label-view',
-                    multiple: true
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
                 },
                 className: 'span6'
             }]
@@ -94,7 +100,11 @@ const formSchemas = {
                 type: 'select',
                 label: 'organization',
                 name: 'organization',
-                values: { url: '/Staff/p?id=organization-view' },
+                values: {
+                    url: '/Staff/p?id=organization-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span6',
                 required: true
             }, {
@@ -107,7 +117,11 @@ const formSchemas = {
                 type: 'select',
                 label: 'department_type',
                 name: 'departmentType',
-                values: { url: '/Reference/p?id=departmenttype-view' },
+                values: {
+                    url: '/Reference/p?id=departmenttype-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span6'
             }]
         }, {
@@ -143,28 +157,42 @@ const formSchemas = {
                 type: 'select',
                 label: 'organization',
                 name: 'organization',
-                values: { url: '/Staff/p?id=organization-view' },
+                values: {
+                    url: '/Staff/p?id=organization-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span6',
                 required: true
             }, {
                 type: 'select',
                 label: 'department',
                 name: 'department',
-                values: { url: '/Staff/p?id=department-view' },
+                values: {
+                    url: '/Staff/p?id=department-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span6'
             }, {
                 type: 'select',
                 label: 'position',
                 name: 'position',
-                values: { url: '/Reference/p?id=position-view' },
+                values: {
+                    url: '/Reference/p?id=position-view',
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
+                },
                 className: 'span6'
             }, {
                 type: 'select',
                 label: 'roles',
                 name: 'role',
                 values: {
+                    multiple: true,
                     url: '/Staff/p?id=role-view',
-                    multiple: true
+                    listPath: "objects.1.list",
+                    totalPagesPath: "objects.1.meta.totalPages"
                 },
                 className: 'span6'
             }, {
