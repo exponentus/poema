@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.joda.time.LocalDate;
 
@@ -189,7 +190,13 @@ public class TaskForm extends _DoForm {
 				task.setProject(projectDAO.findById(formData.getValue("projectId")));
 				taskType = taskTypeDAO.findById(formData.getValue("taskTypeId"));
 			}
-			task.setTitle(formData.getValue("title"));
+
+			String title = formData.getValueSilently("title");
+			if (title.isEmpty()) {
+				// TODO here it needed to vanish from markdown symbols
+				title = StringUtils.abbreviate(formData.getValueSilently("body"), 140);
+			}
+			task.setTitle(title);
 			task.setTaskType(taskType);
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
 
@@ -244,9 +251,6 @@ public class TaskForm extends _DoForm {
 			}
 
 			if (isNew) {
-				if (task.getBody().isEmpty()) {
-					task.setBody("*" + task.getTitle() + "*");
-				}
 				if (task.getStatus() != TaskStatusType.DRAFT) {
 					task.addReader(assigneeUser);
 					task.addReaders(task.getObservers());
@@ -377,11 +381,13 @@ public class TaskForm extends _DoForm {
 		if (!isSubTask && formData.getValueSilently("taskTypeId").isEmpty()) {
 			ve.addError("taskTypeId", "required", getLocalizedWord("field_is_empty", lang));
 		}
-		if (formData.getValueSilently("title").isEmpty()) {
-			ve.addError("title", "required", getLocalizedWord("field_is_empty", lang));
-		} else if (formData.getValueSilently("title").length() > 140) {
-			ve.addError("title", "maxlen_140", getLocalizedWord("field_is_too_long", lang));
-		}
+		/*
+		 * if (formData.getValueSilently("title").isEmpty()) {
+		 * ve.addError("title", "required", getLocalizedWord("field_is_empty",
+		 * lang)); } else if (formData.getValueSilently("title").length() > 140)
+		 * { ve.addError("title", "maxlen_140",
+		 * getLocalizedWord("field_is_too_long", lang)); }
+		 */
 		if (formData.getValueSilently("body").length() > 10000) {
 			ve.addError("body", "maxlen_10000", getLocalizedWord("field_is_too_long", lang));
 		}
