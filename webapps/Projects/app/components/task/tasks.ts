@@ -77,11 +77,10 @@ export class TasksComponent {
 
         this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
             if (state) {
-                this.tasks = state.tasks;
+                // this.tasks = state.tasks;
                 this.meta = state.meta;
                 this.setFilter(state.filter);
                 this.expandedIds = state.expandedIds;
-                this.loading = state.loading;
             }
         }));
 
@@ -127,11 +126,13 @@ export class TasksComponent {
             'sort': this.activeSort || 'regDate:desc'
             // 'expandedIds': this.expandedIds
         });
-        this.store.dispatch(this.taskActions.fetchTasks());
+
         this.taskService.fetchTasks(this.params).subscribe(
             payload => {
                 this.employees = payload.data.employees;
-                this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
+                this.tasks = payload.tasks;
+                this.loading = false;
+                this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.meta));
             },
             error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
         );

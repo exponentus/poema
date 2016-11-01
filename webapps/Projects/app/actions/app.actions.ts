@@ -11,10 +11,6 @@ export class AppActions {
     static FETCH_USER_PROFILE_FAILED = 'FETCH_USER_PROFILE_FAILED';
     static FETCH_USER_PROFILE_FULFILLED = 'FETCH_USER_PROFILE_FULFILLED';
 
-    static UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
-    static UPDATE_USER_PROFILE_FAILED = 'UPDATE_USER_PROFILE_FAILED';
-    static UPDATE_USER_PROFILE_FULFILLED = 'UPDATE_USER_PROFILE_FULFILLED';
-
 
     //===================================
     //  FETCH
@@ -37,36 +33,6 @@ export class AppActions {
         return {
             type: AppActions.FETCH_USER_PROFILE_FULFILLED,
             payload: payload
-        };
-    }
-
-
-    //===================================
-    //  UPDATE
-    //-----------------------------------
-
-    updateUserProfile(userProfile: User): Action {
-        return {
-            type: AppActions.UPDATE_USER_PROFILE,
-            payload: {
-                userProfile
-            }
-        };
-    }
-
-    updateUserProfileFailed(error: any): Action {
-        return {
-            type: AppActions.UPDATE_USER_PROFILE_FAILED,
-            payload: error
-        };
-    }
-
-    updateUserProfileFulfilled(userProfile: User): Action {
-        return {
-            type: AppActions.UPDATE_USER_PROFILE_FULFILLED,
-            payload: {
-                userProfile
-            }
         };
     }
 }

@@ -39,8 +39,6 @@ export class AppComponent {
             this.loggedUser = data.userProfile;
         }));
 
-        this.subs.push(this.store.select('reference'));
-
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.isSearchOpen = state.isSearchOpen;
             this.isNavCollapsed = !state.isNavOpen;

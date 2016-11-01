@@ -109,10 +109,6 @@ export class RequestComponent {
         this.showDeclineDialog = true;
     }
 
-    cancel() {
-        this.store.dispatch({ type: TaskActions.TASK_REQUEST_CANCEL });
-    }
-
     sendRequest() {
         this.taskService.sendTaskRequest(this.request).subscribe(response => {
             this.notifyService.info(this.translate.instant('request_send_success')).show().remove(3000);
