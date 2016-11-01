@@ -1,10 +1,9 @@
 import { Attachment } from '../../../models/attachment';
-import { Project } from './project';
-import { Request } from './request';
+import { Project, Request, Employee, Tag, TaskType } from './index';
 
 export class Task {
     id: string = '';
-    author: string;
+    author: any;
     authorId: string;
     regDate: Date;
     editable: boolean = false;
@@ -20,16 +19,19 @@ export class Task {
     hasSubtasks: boolean;
     hasRequests: boolean;
     hasComments: boolean;
+    taskType: TaskType;
     taskTypeId: string;
     status: string = 'DRAFT';
     priority: string = 'NORMAL';
     regNumber: string;
     title: string;
     body: string;
+    assignee: Employee;
     assigneeUserId: string;
     startDate: Date;
     dueDate: Date;
-    tagIds: string[];
+    tags: Tag[];
+    observers: Employee[];
     observerUserIds: string[];
     customerObservation: boolean = false;
     cancellationComment: string;

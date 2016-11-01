@@ -41,6 +41,9 @@
             </div>
         </header>
         <div class="entries">
+            <div class="view-empty" *ngIf="!loading && !projects.length">
+                {{'view_no_entries' | translate}}
+            </div>
             <div class="entry-wrap" *ngFor="let project of projects">
                 <div class="entry">
                     <label class="entry-select" *ngIf="selectable">
@@ -56,16 +59,16 @@
                                 <span class="status-{{project.status | text:'L'}}">{{project.status | text:'L' | translate}}</span>
                             </div>
                             <div class="project-list__customer">
-                                <!--<organization-input [org]="project.customer"></organization-input>-->
+                                {{project.customer | localizedName}}
                             </div>
                             <div class="project-list__manager">
-                                <!--<employee-input [ids]="[project.managerUserId]"></employee-input>-->
+                                {{employees[project.managerUserId]?.name}}
                             </div>
                             <div class="project-list__programmer">
-                                <!--<employee-input [ids]="[project.programmerUserId]"></employee-input>-->
+                                {{employees[project.programmerUserId]?.name}}
                             </div>
                             <div class="project-list__tester">
-                                <!--<employee-input [ids]="[project.testerUserId]"></employee-input>-->
+                                {{employees[project.testerUserId]?.name}}
                             </div>
                             <div class="project-list__finish_date">
                                 {{project.finishDate | dateFmt:'DD.MM.YYYY'}}

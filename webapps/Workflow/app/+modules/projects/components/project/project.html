@@ -23,7 +23,7 @@
         </div>
         <h1 class="header-title header-title-flex">
             <label>{{title | translate}}</label>
-            <input [class.invalid]="errors.name" autofocus required name="name" maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
+            <input [class.invalid]="errors.name" autofocus autocomplete="off" required name="name" maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
         </h1>
     </header>
     <section class="content-body">
@@ -35,7 +35,16 @@
                             {{'customer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.customerId">
-                            <organization-input class="span8" [editable]="isEditable" [id]="project.customerId" (change)="setCustomer($event)"></organization-input>
+                            <selection
+                                class="organization-input span8"
+                                [selectedItems]="project.customer"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                url="/Staff/p?id=get-organizations"
+                                listPath="objects.0.list"
+                                totalPagesPath="objects.0.meta.totalPages"
+                                (change)="setCustomer($event)">
+                            </selection>
                             <error-message [error]="errors.customerId"></error-message>
                         </div>
                     </div>
@@ -44,7 +53,16 @@
                             {{'manager' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.managerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.managerUserId]" (change)="setManager($event)"></employee-input>
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.manager"
+                                url="/Staff/p?id=employees"
+                                listPath="objects.0.list"
+                                totalPagesPath="objects.0.meta.totalPages"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setManager($event)">
+                            </selection>
                             <error-message [error]="errors.managerUserId"></error-message>
                         </div>
                     </div>
@@ -53,7 +71,16 @@
                             {{'programmer' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.programmerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.programmerUserId]" (change)="setProgrammer($event)"></employee-input>
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.programmer"
+                                url="/Staff/p?id=employees"
+                                listPath="objects.0.list"
+                                totalPagesPath="objects.0.meta.totalPages"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setProgrammer($event)">
+                            </selection>
                             <error-message [error]="errors.programmerUserId"></error-message>
                         </div>
                     </div>
@@ -62,7 +89,16 @@
                             {{'tester' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.testerUserId">
-                            <employee-input class="span8" [editable]="isEditable" [ids]="[project.testerUserId]" (change)="setTester($event)"></employee-input>
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.tester"
+                                url="/Staff/p?id=employees"
+                                listPath="objects.0.list"
+                                totalPagesPath="objects.0.meta.totalPages"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setTester($event)">
+                            </selection>
                             <error-message [error]="errors.testerUserId"></error-message>
                         </div>
                     </div>
@@ -71,7 +107,18 @@
                             {{'observers' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.observerUserIds">
-                            <employee-input class="span8" [editable]="isEditable" [multiple]="true" [allowClear]="true" [ids]="project.observerUserIds" (change)="setObserver($event)"></employee-input>
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.observers"
+                                url="/Staff/p?id=employees"
+                                listPath="objects.0.list"
+                                totalPagesPath="objects.0.meta.totalPages"
+                                [disabled]="!isEditable"
+                                [allowClear]="true"
+                                [searchable]="true"
+                                [multiple]="true"
+                                (change)="setObserver($event)">
+                            </selection>
                             <error-message [error]="errors.observerUserIds"></error-message>
                         </div>
                     </div>
@@ -117,7 +164,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="project.authorId">
             <span>{{'author' | translate}}</span>
-            <employee-input [ids]="[project.authorId]"></employee-input>
+            <span>{{project.author?.name}}</span>
             <span>{{project.regDate}}</span>
         </div>
     </footer>

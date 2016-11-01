@@ -2,7 +2,10 @@ import { compose } from '@ngrx/core/compose';
 import { combineReducers, provideStore } from '@ngrx/store';
 import { storeLogger } from 'ngrx-store-logger';
 
-import { environmentReducer as environment } from '../reducers';
+import {
+    environmentReducer as environment,
+    navReducer as nav
+} from '../reducers';
 
 const logger = storeLogger({
     level: 'log', // 'console' | 'warn' | 'error' | 'info'; default log
@@ -13,6 +16,7 @@ const logger = storeLogger({
 
 export const APP_STORE = provideStore(
     compose(logger, combineReducers)({
-        environment
+        environment,
+        nav
     })
 );

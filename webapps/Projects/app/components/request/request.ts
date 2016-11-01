@@ -5,8 +5,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
-import { TaskActions } from '../../actions';
-import { AppService, TaskService } from '../../services';
+import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
 
 @Component({
@@ -35,7 +34,6 @@ export class RequestComponent {
         private router: Router,
         private route: ActivatedRoute,
         private translate: TranslateService,
-        private appService: AppService,
         private notifyService: NotificationService,
         private taskService: TaskService
     ) { }

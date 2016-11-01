@@ -55,6 +55,9 @@
             </div>
         </header>
         <div class="entries">
+            <div class="view-empty" *ngIf="!loading && !tasks.length">
+                {{'view_no_entries' | translate}}
+            </div>
             <div class="top-entry" [class.is-last]="isLast" *ngFor="let task of tasks; let isLast = last">
                 <div class="entry-wrap">
                     <div class="entry">
@@ -84,7 +87,7 @@
                                     <span class="priority-{{task.priority | text:'L'}}">{{task.priority | text:'L' | translate}}</span>
                                 </div>
                                 <div class="task-list__assignee">
-                                    <employee-input [ids]="[task.assigneeUserId]"></employee-input>
+                                    {{employees[task.assigneeUserId]?.name}}
                                 </div>
                                 <div class="task-list__start_date">{{task.startDate | dateFmt:'DD.MM.YYYY'}}</div>
                                 <div class="task-list__due_date">
@@ -92,7 +95,9 @@
                                     <span>{{task.startDate | dateDuration:task.dueDate}}</span>
                                 </div>
                                 <div class="task-list__tags">
-                                    <tags-input [ids]="task.tagIds"></tags-input>
+                                    <span class="tag" [style.color]="tag.color" *ngFor="let tag of task.tags">
+                                        {{tag | localizedName}}
+                                    </span>
                                 </div>
                             </div>
                         </a>
@@ -101,6 +106,7 @@
                 <task-tree
                     [rootId]="task.id"
                     [children]="task.children"
+                    [employees]="employees"
                     [selectable]="selectable">
                 </task-tree>
             </div>

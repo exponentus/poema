@@ -45,7 +45,17 @@
                         </div>
                         <div class="controls">
                             <div class="span8">
-                                <request-type-input [editable]="editable" placeHolder="{{'request_type' | translate}}" [requestType]="request.requestType" (change)="setRequestType($event)"></request-type-input>
+                                <selection
+                                    class="span8"
+                                    [selectedItems]="request.requestType"
+                                    [disabled]="!editable"
+                                    [searchable]="true"
+                                    placeHolder="{{'request_type' | translate}}"
+                                    url="/Reference/p?id=request-types"
+                                    listPath="objects.0.list"
+                                    totalPagesPath="objects.0.meta.totalPages"
+                                    (change)="setRequestType($event)">
+                                </selection>
                             </div>
                         </div>
                     </div>
@@ -104,7 +114,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="request.authorId">
             <span>{{'author' | translate}}</span>
-            <employee-input [ids]="[request.authorId]"></employee-input>
+            <!-- <employee-input [ids]="[request.authorId]"></employee-input> -->
             <span>{{request.regDate}}</span>
         </div>
     </footer>

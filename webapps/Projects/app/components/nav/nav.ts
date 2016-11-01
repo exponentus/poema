@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
 import { INavState } from '../../reducers/nav.reducer';
-import { NavActions } from '../../actions/nav.actions';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 
@@ -20,7 +19,6 @@ export class NavComponent {
     constructor(
         private router: Router,
         private store: Store<any>,
-        private navActions: NavActions,
         private projectService: ProjectService
     ) { }
 

@@ -1,5 +1,3 @@
-import { Tag } from '../models';
-
 import { NavActions } from '../actions/nav.actions';
 
 export interface INavState {

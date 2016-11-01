@@ -3,20 +3,18 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../../actions/environment.actions';
-import { StaffService } from '../../services/staff.service';
+import { NavActions } from '../../../../actions/nav.actions';
 import { ProjectService } from '../../services/project.service';
 import { IEnvironmentState } from '../../../../reducers/environment.reducer';
-import { IProjectsState } from '../../reducers/projects.reducer';
 import { Project } from '../../models/project';
 
 @Component({
     selector: 'projects',
     templateUrl: './projects.html',
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
-    },
-    providers: [StaffService, ProjectService]
+    }
 })
 
 export class ProjectsComponent {
@@ -32,6 +30,7 @@ export class ProjectsComponent {
     title = 'projects';
     projects: Project[];
     meta: any = {};
+    employees: any = {};
     keyWord: string = '';
     loading: boolean = true;
     activeSort: string = 'name:asc';
@@ -41,27 +40,20 @@ export class ProjectsComponent {
         private store: Store<any>,
         private router: Router,
         private envActions: EnvironmentActions,
-        private projectService: ProjectService,
-        private staffService: StaffService
+        private navActions: NavActions,
+        private projectService: ProjectService
     ) { }
 
     ngOnInit() {
-        // this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
-        //     if (this.keyWord != state.keyWord) {
-        //         this.loadData({
-        //             keyWord: state.keyWord
-        //         });
-        //     }
-        //     this.keyWord = state.keyWord;
-        // }));
+        this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
+            if (this.keyWord != state.keyWord) {
+                this.loadData({
+                    keyWord: state.keyWord
+                });
+            }
+            this.keyWord = state.keyWord;
+        }));
 
-        // this.subs.push(this.store.select('projects').subscribe((state: IProjectsState) => {
-        //     if (state) {
-        //         this.projects = state.projects;
-        //         this.meta = state.meta;
-        //         this.loading = state.loading;
-        //     }
-        // }));
         this.loadData();
     }
 
@@ -72,27 +64,17 @@ export class ProjectsComponent {
     loadData(params?) {
         this.loading = true;
         this.store.dispatch(this.envActions.setRedirectUrl('/projects'));
+        this.store.dispatch(this.navActions.reloadNav());
 
-        // this.params = params;
         this.params = Object.assign({}, params, {
             'sort': this.activeSort || 'name:asc'
         });
 
         this.projectService.fetchProjects(this.params).subscribe(data => {
-            let customerIds = data.projects.map(it => it.customerId);
-            this.staffService.fetchOrganizations({ ids: customerIds }).subscribe(
-                payload => {
-                    let orgs = payload.organizations;
-                    data.projects.map(p => {
-                        if (p.customerId) {
-                            p.customer = orgs.filter(org => org.id == p.customerId)[0];
-                        }
-                    });
-                    this.loading = false;
-                    this.projects = data.projects;
-                    this.meta = data.meta;
-                }
-            );
+            this.employees = data.data.employees;
+            this.projects = data.projects;
+            this.meta = data.meta;
+            this.loading = false;
         });
     }
 

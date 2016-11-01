@@ -4,51 +4,35 @@ import { TaskActions } from '../actions';
 
 export interface ITasksState {
     meta: {},
-    tasks: Task[],
     expandedIds: string[],
-    loading: boolean,
     filter: {
         taskStatus: string,
-        taskTypeId: string,
-        assigneeUserId: string,
-        tagIds: string[]
+        taskType: any,
+        assigneeUser: any,
+        tags: any[]
     }
 };
 
 const initialState: ITasksState = {
     meta: {},
-    tasks: [],
     expandedIds: [] = [],
-    loading: false,
     filter: {
         taskStatus: '',
-        taskTypeId: '',
-        assigneeUserId: '',
-        tagIds: []
+        taskType: null,
+        assigneeUser: null,
+        tags: []
     }
 };
 
 export const tasksReducer = (state = initialState, {type, payload}): ITasksState => {
     switch (type) {
-        case TaskActions.FETCH_TASKS:
-            return Object.assign({}, state, {
-                loading: true
-            });
         case TaskActions.FETCH_TASKS_FULFILLED:
             return Object.assign({}, state, {
-                tasks: payload.tasks,
-                meta: payload.meta,
-                loading: false
+                meta: payload.meta
             });
         case TaskActions.FETCH_TASKS_FAILED:
             return Object.assign({}, state, {
-                tasks: payload.tasks,
-                meta: payload.meta,
-                loading: false
-            });
-        case TaskActions.FETCH_TASK_FULFILLED:
-            return Object.assign({}, state, {
-                task: payload.task
+                meta: payload.meta
             });
         case TaskActions.TOGGLE_STREAM_EXPAND:
             let ind = state.expandedIds.indexOf(payload);

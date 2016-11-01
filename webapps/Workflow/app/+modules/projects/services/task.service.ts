@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { AppService } from '../../../services';
-import { Attachment } from '../../../models/attachment';
+import { AppService } from '../../../services/app.service';
+import { Attachment } from '../../../models';
 import { Task, Request, Comment } from '../models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
@@ -35,11 +35,13 @@ export class TaskService {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
-            .map(response => response.json().objects[0])
+            .map(response => response.json())
             .map(data => {
+                let objs = data.objects[0];
                 return {
-                    tasks: <Task[]>data.list,
-                    meta: data.meta
+                    data: data.data,
+                    tasks: <Task[]>objs.list,
+                    meta: objs.meta
                 }
             })
             .catch(error => this.appService.handleError(error));
@@ -51,9 +53,24 @@ export class TaskService {
             .map(response => {
                 let json = response.json();
                 let data = parseResponseObjects(json.objects);
+                let emps = json.data.employees;
                 let task = <Task>data.task;
                 if (!task.id) {
                     task.id = '';
+                }
+                if (task.authorId) {
+                    task.author = json.data.employees[task.authorId];
+                }
+                if (task.assigneeUserId) {
+                    task.assignee = json.data.employees[task.assigneeUserId];
+                }
+                if (task.observerUserIds) {
+                    task.observers = [];
+                    for (let k in emps) {
+                        if (task.observerUserIds.indexOf(emps[k].userID) != -1) {
+                            task.observers.push(emps[k]);
+                        }
+                    }
                 }
                 if (data.fsid) {
                     task.fsid = data.fsid;
@@ -79,7 +96,24 @@ export class TaskService {
 
     saveTask(task: Task) {
         let url = '/Projects/p?id=task-form&taskId=' + (task.id ? task.id : '');
-        return this.http.post(url, serializeObj(task), { headers: xhrHeaders() })
+        let payload = {
+            fsid: task.fsid,
+            projectId: task.project ? task.project.id : '',
+            taskTypeId: task.taskType ? task.taskType.id : '',
+            status: task.status ? task.status : '',
+            priority: task.priority ? task.priority : '',
+            regNumber: task.regNumber ? task.regNumber : '',
+            title: task.title ? task.title : '',
+            body: task.body ? task.body : '',
+            assigneeUserId: task.assignee ? task.assignee.userID : '',
+            startDate: task.startDate ? task.startDate : '',
+            dueDate: task.dueDate ? task.dueDate : '',
+            tagIds: task.tags ? task.tags.map(it => it.id) : '',
+            observerUserIds: task.observers ? task.observers.map(it => it.userID) : '',
+            customerObservation: task.customerObservation
+        };
+
+        return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));
     }
@@ -167,7 +201,7 @@ export class TaskService {
     }
 
     doDeclineRequest(request: Request, comment: string) {
-        let url = '/Projects/p?id=task-requests&requestId=' + request.id + '&comment=' + comment + '&_action=decline&fsid=' + request.fsid;
+        let url = 'p?id=task-requests&requestId=' + request.id + '&comment=' + comment + '&_action=decline&fsid=' + request.fsid;
         return this.http.put(url, '', { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));

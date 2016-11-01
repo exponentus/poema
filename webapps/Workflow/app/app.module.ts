@@ -17,7 +17,7 @@ import { Error404 } from './components/404';
 import { AppRoutingModule } from './app.routing';
 import { APP_STORE } from './store';
 import { AppService, DataService, TranslateService } from './services';
-import { EnvironmentActions } from './actions';
+import { EnvironmentActions, NavActions } from './actions';
 
 import { AuthGuard } from './auth.guard';
 
@@ -44,6 +44,7 @@ import { AuthGuard } from './auth.guard';
         APP_STORE,
         AppService, DataService, TranslateService,
         EnvironmentActions,
+        NavActions,
         AuthGuard
     ]
 })

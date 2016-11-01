@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
-import { AppService } from '../../../services';
-import { Attachment } from '../../../models/attachment';
+import { AppService } from '../../../services/app.service';
+import { Attachment } from '../../../models';
 import { Project } from '../models';
 import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
 
@@ -29,11 +29,13 @@ export class ProjectService {
             headers: xhrHeaders(),
             search: createURLSearchParams(queryParams)
         })
-            .map(response => response.json().objects[0])
+            .map(response => response.json())
             .map(data => {
+                let objs = data.objects[0];
                 return {
-                    projects: <Project[]>data.list,
-                    meta: data.meta
+                    data: data.data,
+                    projects: <Project[]>objs.list,
+                    meta: objs.meta
                 };
             })
             .catch(error => this.appService.handleError(error));
@@ -44,10 +46,32 @@ export class ProjectService {
 
         return this.http.get(url, { headers: xhrHeaders() })
             .map(response => {
-                let data = parseResponseObjects(response.json().objects);
+                let json = response.json();
+                let data = parseResponseObjects(json.objects);
+                let emps = json.data.employees;
                 let project = <Project>data.project;
                 if (!project.id) {
                     project.id = '';
+                }
+                if (project.authorId) {
+                    project.author = emps[project.authorId];
+                }
+                if (project.managerUserId) {
+                    project.manager = emps[project.managerUserId];
+                }
+                if (project.programmerUserId) {
+                    project.programmer = emps[project.programmerUserId];
+                }
+                if (project.testerUserId) {
+                    project.tester = emps[project.testerUserId];
+                }
+                if (project.observerUserIds) {
+                    project.observers = [];
+                    for (let k in emps) {
+                        if (project.observerUserIds.indexOf(emps[k].userID) != -1) {
+                            project.observers.push(emps[k]);
+                        }
+                    }
                 }
                 if (data.fsid) {
                     project.fsid = data.fsid;
@@ -68,8 +92,20 @@ export class ProjectService {
 
     saveProject(project: Project) {
         let url = '/Projects/p?id=project-form&projectId=' + (project.id ? project.id : '');
+        let payload = {
+            fsid: project.fsid,
+            name: project.name ? project.name : '',
+            status: project.status ? project.status : '',
+            customerId: project.customer ? project.customer.id : '',
+            managerUserId: project.manager ? project.manager.userID : '',
+            programmerUserId: project.programmer ? project.programmer.userID : '',
+            testerUserId: project.tester ? project.tester.userID : '',
+            observerUserIds: project.observers ? project.observers.map(it => it.userID) : '',
+            comment: project.comment ? project.comment : '',
+            finishDate: project.finishDate ? project.finishDate : '',
+        };
 
-        return this.http.post(url, serializeObj(project), { headers: xhrHeaders() })
+        return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
             .map(response => transformPostResponse(response))
             .catch(error => this.appService.handleError(error));
     }

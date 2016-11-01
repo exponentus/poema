@@ -148,37 +148,38 @@ export class ProjectComponent {
     }
 
     setCustomer(customer: Organization) {
-        this.project.customerId = customer.id;
-        this.validateForm('customerId');
+        this.project.customer = customer;
+        this.project.customerId = customer ? customer.id : '';
+        this.validateForm('customer');
     }
 
     setManager(employee: Employee) {
-        this.project.managerUserId = employee.userID;
+        this.project.manager = employee;
+        this.project.managerUserId = employee ? employee.userID : '';
         this.validateForm('managerUserId');
     }
 
     setProgrammer(employee: Employee) {
-        this.project.programmerUserId = employee.userID;
+        this.project.programmer = employee;
+        this.project.programmerUserId = employee ? employee.userID : '';
         this.validateForm('programmerUserId');
     }
 
     setTester(employee: Employee) {
-        this.project.testerUserId = employee.userID;
+        this.project.tester = employee;
+        this.project.testerUserId = employee ? employee.userID : '';
         this.validateForm('testerUserId');
     }
 
     setObserver(observers: Employee[]) {
-        this.project.observerUserIds = observers.map(it => it.userID);
+        this.project.observers = observers;
+        this.project.observerUserIds = observers ? observers.map(it => it.userID) : null;
         this.validateForm('observerUserIds');
     }
 
     removeObserver(observer: Employee, $event) {
         $event.stopPropagation();
-        this.project.observerUserIds.forEach((id, index) => {
-            if (id === observer.userID) {
-                this.project.observerUserIds.splice(index, 1);
-            }
-        });
+        this.project.observers = this.project.observers.filter(it => it.id != observer.id);
     }
 
     setFinishDate(date) {

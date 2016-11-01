@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared.module';
 
 import { ProjectsRoutingModule } from './projects.routing';
-import { ProjectActions, TaskActions } from './actions';
-import { ProjectService, TaskService } from './services';
+import { TaskActions } from './actions';
+import { ProjectService, TaskService, ReferenceService } from './services';
 
 import { ProjectsContainerComponent } from './components/container';
 import { NavComponent } from './components/nav/nav';
@@ -19,12 +19,7 @@ import { RequestComponent } from './components/request/request';
 import { RequestDeclineDialogComponent } from './components/request/request-decline-dialog';
 
 import {
-    OrganizationInputComponent,
-    ProjectInputComponent,
-    EmployeeInputComponent,
-    TaskTypeInputComponent,
     TagsInputComponent,
-    RequestTypeInputComponent,
     TaskStatusInputComponent
 } from './components/shared';
 
@@ -42,12 +37,7 @@ import {
         RequestComponent,
         RequestDeclineDialogComponent,
         //
-        OrganizationInputComponent,
-        ProjectInputComponent,
-        EmployeeInputComponent,
-        TaskTypeInputComponent,
         TagsInputComponent,
-        RequestTypeInputComponent,
         TaskStatusInputComponent
     ],
     exports: [],
@@ -58,8 +48,8 @@ import {
     providers: [
         ProjectService,
         TaskService,
-        ProjectActions,
-        TaskActions
+        TaskActions,
+        ReferenceService
     ]
 })
 

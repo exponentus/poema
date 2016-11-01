@@ -5,7 +5,6 @@ import { Store } from '@ngrx/store';
 import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../shared/notification';
-import { AppService } from '../../services';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
@@ -368,7 +367,7 @@ export class TaskComponent {
 
     setProject(project: Project) {
         this.task.project = project;
-        this.task.projectId = project.id;
+        this.task.projectId = project ? project.id : '';
         if (!this.task.id && !this.taskObsManualyChanged) {
             // TODO fetch observers
             this.task.observerUserIds = project.observerUserIds;
@@ -378,13 +377,13 @@ export class TaskComponent {
 
     setTaskType(taskType: TaskType) {
         this.task.taskType = taskType;
-        this.task.taskTypeId = taskType.id;
+        this.task.taskTypeId = taskType ? taskType.id : '';
         this.validateForm();
     }
 
     setAssigneeUser(assigneeUser: Employee) {
         this.task.assignee = assigneeUser;
-        this.task.assigneeUserId = assigneeUser.userID;
+        this.task.assigneeUserId = assigneeUser ? assigneeUser.userID : '';
         this.validateForm();
     }
 
@@ -411,7 +410,7 @@ export class TaskComponent {
     setObserver(observers: Employee[]) {
         this.taskObsManualyChanged = true;
         this.task.observers = observers;
-        this.task.observerUserIds = observers.map(it => it.userID);
+        this.task.observerUserIds = observers ? observers.map(it => it.userID) : null;
     }
 
     addAttachment(data) {

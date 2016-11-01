@@ -148,31 +148,31 @@ export class ProjectComponent {
 
     setCustomer(customer: Organization) {
         this.project.customer = customer;
-        this.project.customerId = customer.id;
+        this.project.customerId = customer ? customer.id : '';
         this.validateForm('customer');
     }
 
     setManager(employee: Employee) {
         this.project.manager = employee;
-        this.project.managerUserId = employee.userID;
+        this.project.managerUserId = employee ? employee.userID : '';
         this.validateForm('managerUserId');
     }
 
     setProgrammer(employee: Employee) {
         this.project.programmer = employee;
-        this.project.programmerUserId = employee.userID;
+        this.project.programmerUserId = employee ? employee.userID : '';
         this.validateForm('programmerUserId');
     }
 
     setTester(employee: Employee) {
         this.project.tester = employee;
-        this.project.testerUserId = employee.userID;
+        this.project.testerUserId = employee ? employee.userID : '';
         this.validateForm('testerUserId');
     }
 
     setObserver(observers: Employee[]) {
         this.project.observers = observers;
-        this.project.observerUserIds = observers.map(it => it.userID);
+        this.project.observerUserIds = observers ? observers.map(it => it.userID) : null;
         this.validateForm('observerUserIds');
     }
 

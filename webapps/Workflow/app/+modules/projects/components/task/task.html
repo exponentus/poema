@@ -46,7 +46,7 @@
                     <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
                 </label>
                 <div class="task-reg-number" *ngIf="task.regNumber">{{task.regNumber}}</div>
-                <input [class.invalid]="errors.title" autofocus required name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
+                <input [class.invalid]="errors.title" autofocus autocomplete="off" name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
             </div>
         </h1>
     </header>
@@ -78,7 +78,18 @@
                         {{'observers' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.observerUserIds">
-                        <employee-input class="span8" [editable]="isEditable" [allowClear]="true" [multiple]="true" [ids]="task.observerUserIds" (change)="setObserver($event)"></employee-input>
+                        <selection
+                            class="span8"
+                            [selectedItems]="task.observers"
+                            url="/Staff/p?id=employees"
+                            listPath="objects.0.list"
+                            totalPagesPath="objects.0.meta.totalPages"
+                            [disabled]="!isEditable"
+                            [allowClear]="true"
+                            [searchable]="true"
+                            [multiple]="true"
+                            (change)="setObserver($event)">
+                        </selection>
                         <error-message [error]="errors.observerUserIds"></error-message>
                     </div>
                 </div>
@@ -94,7 +105,16 @@
                         {{'project' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.projectId">
-                        <project-input class="span8" [editable]="isEditable" [id]="task.projectId" (change)="setProject($event)"></project-input>
+                        <selection
+                            class="span8"
+                            [selectedItems]="task.project"
+                            [disabled]="!isEditable"
+                            [searchable]="true"
+                            url="/Projects/p?id=project-view"
+                            listPath="objects.0.list"
+                            totalPagesPath="objects.0.meta.totalPages"
+                            (change)="setProject($event)">
+                        </selection>
                         <error-message [error]="errors.projectId"></error-message>
                     </div>
                 </div>
@@ -103,7 +123,16 @@
                         {{'task_type' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.taskTypeId">
-                        <task-type-input class="span8" [editable]="isEditable" [id]="task.taskTypeId" (change)="setTaskType($event)"></task-type-input>
+                        <selection
+                            class="span8"
+                            [selectedItems]="task.taskType"
+                            [disabled]="!isEditable"
+                            [searchable]="true"
+                            url="/Reference/p?id=tasktypes"
+                            listPath="objects.0.list"
+                            totalPagesPath="objects.0.meta.totalPages"
+                            (change)="setTaskType($event)">
+                        </selection>
                         <error-message [error]="errors.taskTypeId"></error-message>
                     </div>
                 </div>
@@ -121,7 +150,16 @@
                         {{'assignee_user' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.assigneeUserId">
-                        <employee-input class="span8" [editable]="isEditable" [ids]="[task.assigneeUserId]" (change)="setAssigneeUser($event)"></employee-input>
+                        <selection
+                            class="employee-input span8"
+                            [selectedItems]="task.assignee"
+                            url="/Staff/p?id=employees"
+                            listPath="objects.0.list"
+                            totalPagesPath="objects.0.meta.totalPages"
+                            [disabled]="!isEditable"
+                            [searchable]="true"
+                            (change)="setAssigneeUser($event)">
+                        </selection>
                         <error-message [error]="errors.assigneeUserId"></error-message>
                     </div>
                 </div>
@@ -159,7 +197,19 @@
                         {{'tags' | translate}}
                     </div>
                     <div class="controls" [class.has-error]="errors.tagIds">
-                        <tags-input class="span8" [editable]="isEditable" [allowClear]="true" [ids]="task.tagIds" (change)="setTags($event)"></tags-input>
+                        <tags-input class="span8" [editable]="isEditable" [allowClear]="true" [selectedTags]="task.tags" (change)="setTags($event)"></tags-input>
+                        <!--<selection
+                            class="tags-input span8"
+                            [selectedItems]="task.tags"
+                            url="/Reference/p?id=tags"
+                            listPath="objects.0.list"
+                            totalPagesPath="objects.0.meta.totalPages"
+                            [disabled]="!isEditable"
+                            [searchable]="true"
+                            [allowClear]="allowClear"
+                            [multiple]="true"
+                            (change)="setTags($event)">
+                        </selection>-->
                         <error-message [error]="errors.tagIds"></error-message>
                     </div>
                 </div>
@@ -189,7 +239,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="task.authorId">
             <span>{{'author' | translate}}</span>
-            <employee-input [ids]="[task.authorId]"></employee-input>
+            <span>{{task.author?.name}}</span>
             <span>{{task.regDate}}</span>
         </div>
     </footer>

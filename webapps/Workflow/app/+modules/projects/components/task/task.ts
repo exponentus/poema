@@ -6,7 +6,6 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 
 import { NotificationService } from '../../../../shared/notification';
 import { IEnvironmentState } from '../../../../reducers/environment.reducer';
-import { ITaskState } from '../../reducers/task.reducer';
 import { TaskActions } from '../../actions';
 import { TaskService } from '../../services';
 import { Attachment } from '../../../../models/attachment';
@@ -55,10 +54,6 @@ export class TaskComponent {
         private taskService: TaskService,
         private notifyService: NotificationService
     ) {
-        this.subs.push(this.store.select('task').subscribe((state: ITaskState) => {
-            this.comments = state.comments;
-        }));
-
         this.subs.push(this.store.select('environment').subscribe((state: IEnvironmentState) => {
             this.redirectUrl = state.redirectUrl;
         }));
@@ -75,7 +70,6 @@ export class TaskComponent {
     }
 
     ngOnDestroy() {
-        this.store.dispatch({ type: TaskActions.TASK_UNLOAD });
         this.subs.map(s => s.unsubscribe());
     }
 
@@ -183,7 +177,7 @@ export class TaskComponent {
         this.task.priority = task.priority;
         this.task.startDate = task.startDate;
         this.task.dueDate = task.dueDate;
-        this.task.tagIds = task.tagIds;
+        this.task.tags = task.tags;
     }
 
     // === tab toggle actions
@@ -297,7 +291,7 @@ export class TaskComponent {
     //
     loadComments(page = 1) {
         this.taskService.fetchComments(this.task, page).subscribe(payload => {
-            this.store.dispatch({ type: TaskActions.FETCH_TASK_COMMENTS_FULFILLED, payload: payload });
+
         });
     }
 
@@ -373,20 +367,24 @@ export class TaskComponent {
     }
 
     setProject(project: Project) {
-        this.task.projectId = project.id;
+        this.task.project = project;
+        this.task.projectId = project ? project.id : '';
         if (!this.task.id && !this.taskObsManualyChanged) {
+            // TODO fetch observers
             this.task.observerUserIds = project.observerUserIds;
         }
         this.validateForm();
     }
 
     setTaskType(taskType: TaskType) {
-        this.task.taskTypeId = taskType.id;
+        this.task.taskType = taskType;
+        this.task.taskTypeId = taskType ? taskType.id : '';
         this.validateForm();
     }
 
     setAssigneeUser(assigneeUser: Employee) {
-        this.task.assigneeUserId = assigneeUser.userID;
+        this.task.assignee = assigneeUser;
+        this.task.assigneeUserId = assigneeUser ? assigneeUser.userID : '';
         this.validateForm();
     }
 
@@ -406,13 +404,14 @@ export class TaskComponent {
     }
 
     setTags(tags: Tag[]) {
-        this.task.tagIds = tags.map(it => it.id);
+        this.task.tags = tags;
         this.validateForm();
     }
 
     setObserver(observers: Employee[]) {
         this.taskObsManualyChanged = true;
-        this.task.observerUserIds = observers.map(it => it.userID);
+        this.task.observers = observers;
+        this.task.observerUserIds = observers ? observers.map(it => it.userID) : null;
     }
 
     addAttachment(data) {

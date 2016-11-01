@@ -13,7 +13,7 @@ import { Task } from '../../models/task';
     selector: 'tasks',
     templateUrl: './tasks.html',
     host: {
-        '[class.view]': 'true',
+        '[class.loadable]': 'true',
         '[class.load]': 'loading'
     }
 })
@@ -30,6 +30,7 @@ export class TasksComponent {
     private subs: any = [];
     title: string;
     meta: any = {};
+    employees: any = {};
     keyWord: string = '';
     expandedIds: string[] = [];
     filter: any = {};
@@ -76,11 +77,10 @@ export class TasksComponent {
 
         this.subs.push(this.store.select('tasks').subscribe((state: ITasksState) => {
             if (state) {
-                this.tasks = state.tasks;
+                // this.tasks = state.tasks;
                 this.meta = state.meta;
-                this.filter = state.filter;
+                this.setFilter(state.filter);
                 this.expandedIds = state.expandedIds;
-                this.loading = state.loading;
             }
         }));
 
@@ -126,13 +126,26 @@ export class TasksComponent {
             'sort': this.activeSort || 'regDate:desc'
             // 'expandedIds': this.expandedIds
         });
-        this.store.dispatch(this.taskActions.fetchTasks());
+
         this.taskService.fetchTasks(this.params).subscribe(
             payload => {
-                this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.tasks, payload.meta));
+                this.employees = payload.data.employees;
+                this.tasks = payload.tasks;
+                this.loading = false;
+                this.store.dispatch(this.taskActions.fetchTasksFulfilled(payload.meta));
             },
             error => this.store.dispatch(this.taskActions.fetchTasksFailed(error))
         );
+    }
+
+    setFilter(filter) {
+        let _filter = {
+            taskStatus: filter.taskStatus,
+            taskTypeId: filter.taskType ? filter.taskType.id : '',
+            assigneeUserId: filter.assigneeUser ? filter.assigneeUser.userID : '',
+            tagIds: filter.tags ? filter.tags.map(it => it.id) : null
+        };
+        this.filter = _filter;
     }
 
     refresh() {
@@ -149,9 +162,10 @@ export class TasksComponent {
     }
 
     changeFilter(filter) {
-        this.filter = filter;
+        // this.filter = filter;
         this.store.dispatch(this.taskActions.setFilter(filter));
-        this.loadData(filter);
+        this.setFilter(filter);
+        this.loadData(this.filter);
     }
 
     toggleExpanded(id: string) {

@@ -1,5 +1,4 @@
-import { Task, Tag, TaskType, Employee } from '../models';
-
+import { TaskType, Employee } from '../models';
 import { TaskActions } from '../actions';
 
 export interface ITasksState {
@@ -7,8 +6,8 @@ export interface ITasksState {
     expandedIds: string[],
     filter: {
         taskStatus: string,
-        taskType: any,
-        assigneeUser: any,
+        taskType: TaskType,
+        assigneeUser: Employee[],
         tags: any[]
     }
 };
