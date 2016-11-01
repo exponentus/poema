@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../services';
-import { Organization, Employee } from './models';
 
 @Injectable()
 export class StaffService {
@@ -16,6 +15,10 @@ export class StaffService {
 
     fetchOne(params: any) {
         return this.fetch(params);
+    }
+
+    save(entity: any, params: any) {
+        return this.dataService.post('/Staff/' + entity.url.replace('&amp;', '&'), params, entity);
     }
 
     getFormSchema(kind: string): any[] {

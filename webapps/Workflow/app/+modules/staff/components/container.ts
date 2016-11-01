@@ -6,6 +6,7 @@ import { EnvironmentActions } from '../../../actions';
 @Component({
     selector: 'staff-container',
     template: `
+        <link rel="stylesheet" href="/Staff/css/all.min.css" />
         <nav class="aside side-nav"
             nb-nav
             module="Staff"

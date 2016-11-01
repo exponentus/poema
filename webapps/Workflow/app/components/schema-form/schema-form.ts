@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class SchemaFormComponent {
     @Input('schema') formSchema: any[] = [];
     @Input() model: any;
+    @Input() errors: any[] = [];
 }

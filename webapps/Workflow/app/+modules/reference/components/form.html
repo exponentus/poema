@@ -5,7 +5,7 @@
                 <i class="fa fa-chevron-left"></i>
                 <span>{{'close' | translate}}</span>
             </button>
-            <button class="btn btn-primary" type="button" (click)="submit(form)">
+            <button class="btn btn-primary" type="button" (click)="save(form)">
                 {{'save_close' | translate}}
             </button>
             <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
@@ -24,6 +24,6 @@
         <h1 class="header-title">{{title | translate}}</h1>
     </header>
     <section class="content-body">
-        <schema-form [(model)]="model" [schema]="formSchema"></schema-form>
+        <schema-form [(model)]="model" [errors]="errors" [schema]="formSchema"></schema-form>
     </section>
 </form>

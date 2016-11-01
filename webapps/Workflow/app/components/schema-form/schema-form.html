@@ -4,7 +4,7 @@
             <div class="legend" *ngIf="fieldset.title">{{fieldset.title | translate}}</div>
             <div class="form-group" *ngFor="let field of fieldset.fields">
                 <div class="control-label" *ngIf="field.type != 'localizedName'">{{field.label | translate}}</div>
-                <div class="controls">
+                <div class="controls" [class.has-error]="errors[field.name]">
                     <div [ngSwitch]="field.type">
                         <input *ngSwitchCase="'text'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
                         <input *ngSwitchCase="'number'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
@@ -52,6 +52,7 @@
                         </div>
                         <span *ngSwitchDefault>#{{field.type}} / #{{field.name}}</span>
                     </div>
+                    <error-message [error]="errors[field.name]"></error-message>
                 </div>
             </div>
         </section>

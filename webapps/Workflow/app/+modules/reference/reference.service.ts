@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { DataService } from '../../services';
-import { Tag, TaskType, RequestType } from './models';
 
 @Injectable()
 export class ReferenceService {
@@ -16,6 +15,10 @@ export class ReferenceService {
 
     fetchOne(params: any) {
         return this.fetch(params);
+    }
+
+    save(entity: any, params: any) {
+        return this.dataService.post('/Reference/' + entity.url.replace('&amp;', '&'), params, entity);
     }
 
     getFormSchema(kind: string): any[] {
@@ -84,7 +87,7 @@ const formSchemas = {
             }, {
                 type: 'select',
                 label: 'type',
-                name: 'type',
+                name: 'regiontype',
                 className: 'span4',
                 values: {
                     url: '/Reference/p?id=regiontype-view'
@@ -202,6 +205,31 @@ const formSchemas = {
                 values: {
                     url: '/Reference/p?id=locality-view'
                 }
+            }]
+        }, {
+            title: 'localized_names',
+            fields: [{
+                type: 'localizedName',
+                className: 'span7',
+                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+            }]
+        }]
+    }],
+    position: [{
+        tabTitle: 'properties',
+        active: true,
+        fieldsets: [{
+            fields: [{
+                type: 'text',
+                label: 'name',
+                name: 'name',
+                className: 'span7',
+                required: true
+            }, {
+                type: 'number',
+                label: 'rank',
+                name: 'rank',
+                className: 'span1'
             }]
         }, {
             title: 'localized_names',

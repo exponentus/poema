@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { TranslateService } from 'ng2-translate/ng2-translate';
 
+import { NotificationService } from '../../../shared/notification';
 import { EnvironmentActions } from '../../../actions';
 import { ReferenceService } from '../reference.service';
 import { parseResponseObjects } from '../../../utils/utils';
@@ -21,18 +23,26 @@ export class ReferenceFormComponent {
     @Input() titleVisible: boolean = true;
     @Input() actionsVisible: boolean = true;
 
-    private subs: any = [];
-    private formSchema: any = [];
+    private isReady = false;
+    private isNew = true;
+    private isEditable = false;
+    private isValid = true;
 
-    isReady = false;
-    loading: boolean = true;
-    model: any;
-    id: string = '';
+    private errors: any = {};
+    private fsId: string;
+    private formSchema: any = [];
+    private loading: boolean = true;
+    private model: any;
+    private id: string = '';
+
+    private subs: any = [];
 
     constructor(
         private store: Store<any>,
         private route: ActivatedRoute,
         private router: Router,
+        private translate: TranslateService,
+        private notifyService: NotificationService,
         private environmentActions: EnvironmentActions,
         private referenceService: ReferenceService
     ) { }
@@ -66,6 +76,7 @@ export class ReferenceFormComponent {
                 let kind = params.id.replace('-form', '').replace('-', '');
 
                 this.model = objects[kind];
+                this.fsId = payload.payload ? payload.payload.fsId : Date.now();
                 this.formSchema = this.referenceService.getFormSchema(this.model.kind);
 
                 if (!this.model.localizedName) {
@@ -79,11 +90,71 @@ export class ReferenceFormComponent {
         );
     }
 
+    save($event) {
+        console.log($event, this.model);
+
+        let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
+
+        // create localizedName field if exists
+        if (this.model.localizedName) {
+            for (let locale in this.model.localizedName) {
+                this.model[locale.toLowerCase() + 'localizedname'] = this.model.localizedName[locale];
+            }
+        }
+
+        this.referenceService.save(this.model, { fsid: this.fsId }).subscribe(
+            response => {
+                noty.set({ type: 'success', message: (response.message || response.captions.type) }).remove(1500);
+                this.close();
+            },
+            error => {
+                noty.remove();
+                this.handleXhrError(error);
+                this.handleValidationError(error);
+            }
+        );
+    }
+
     close() {
         this.router.navigate(['../'], { relativeTo: this.route });
     }
 
-    submit($event) {
-        console.log($event, this.model);
+    handleXhrError(errorResponse) {
+        this.notifyService.error(errorResponse.message).show().remove(2000);
+    }
+
+    handleValidationError(error: any) {
+        let errors = {};
+        let _errors = error.errors || (error.validation ? error.validation.errors : []);
+
+        if (_errors) {
+            this.isValid = false;
+            for (let err of _errors) {
+                errors[err.field] = {
+                    message: err.message,
+                    error: err.error
+                };
+            }
+        }
+
+        this.errors = errors;
+    }
+
+    // validate
+    validateForm(field?: string) {
+        for (let errField in this.errors) {
+            if (this.model[errField]) {
+                this.errors[errField] = false;
+            }
+        }
+
+        let isValid = true;
+        for (let errField in this.errors) {
+            if (this.errors[errField] !== false) {
+                isValid = false;
+                break;
+            }
+        }
+        this.isValid = isValid;
     }
 }
