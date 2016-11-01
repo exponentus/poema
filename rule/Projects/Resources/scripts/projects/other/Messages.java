@@ -1,7 +1,9 @@
 package projects.other;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.env.EnvConst;
@@ -38,7 +40,7 @@ public class Messages {
 	public void sendOfNewProject(Project project) {
 		try {
 			UserDAO userDAO = new UserDAO(session);
-			List<IUser<Long>> recipients = new ArrayList<>();
+			Set<IUser<Long>> recipients = new HashSet<>();
 			String msgTemplate = "new_project";
 
 			Memo memo = new Memo();
@@ -58,34 +60,22 @@ public class Messages {
 			memo.addVar("projectName", project.getName());
 			memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
 
+			List<String> mailRecipients = new ArrayList<>();
 			for (IUser<Long> u : recipients) {
-				User user = null;
 				try {
-					user = (User) u;
-					lang = user.getDefaultLang();
+					mailRecipients.add(((User) u).getEmail());
 				} catch (ClassCastException e) {
 
 				}
-
-				memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL() + "&lang=" + lang);
-
-				if (user != null) {
-					String slackAddr = user.getSlack();
-					if (slackAddr != null && !slackAddr.equals("")) {
-						SlackAgent sa = new SlackAgent();
-						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-						if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
-							break;
-						}
-					}
-
-					List<String> mailRecipients = new ArrayList<>();
-					mailRecipients.add(user.getEmail());
-					MailAgent ma = new MailAgent();
-					ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
-					        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
-				}
 			}
+
+			lang = project.getPrimaryLanguage();
+
+			memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL() + "&lang=" + lang);
+			MailAgent ma = new MailAgent();
+			ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
+			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
+
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}

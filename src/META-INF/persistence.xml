@@ -192,6 +192,7 @@
         <class>workflow.model.Incoming</class>
         <class>workflow.model.Outgoing</class>
         <class>workflow.model.Assignment</class>
+        <class>workflow.model.Report</class>
         <class>workflow.model.embedded.Approval</class>  
         <class>workflow.model.embedded.Approver</class>  
         <class>workflow.model.embedded.Block</class>

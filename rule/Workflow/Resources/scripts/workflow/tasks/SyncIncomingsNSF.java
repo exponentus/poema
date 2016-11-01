@@ -41,7 +41,7 @@ import workflow.model.Incoming;
 @Command(name = "import_in_nsf")
 public class SyncIncomingsNSF extends ImportNSF {
 	private static final String VID_CATEGORY = "01. Входящие";
-	private static final String TMP_FIELD_NAME = "tmp_file";
+	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
 
 	@Override
 	public void doTask(_Session ses) {

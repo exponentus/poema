@@ -1,4 +1,5 @@
 echo Synchronize data with SmartDoc
 run task import_in_nsf
 run task import_kr_nsf
+run task import_ki_nsf
 echo Synchronizing was finished

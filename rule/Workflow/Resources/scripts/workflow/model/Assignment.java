@@ -35,6 +35,10 @@ public class Assignment extends SecureAppEntity<UUID> {
 	@ManyToOne
 	private Incoming incoming;
 
+	@NotNull
+	@ManyToOne
+	private Assignment parent;
+
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
 	private String body;
@@ -68,6 +72,14 @@ public class Assignment extends SecureAppEntity<UUID> {
 
 	public void setIncoming(Incoming incoming) {
 		this.incoming = incoming;
+	}
+
+	public Assignment getParent() {
+		return parent;
+	}
+
+	public void setParent(Assignment parent) {
+		this.parent = parent;
 	}
 
 	public String getBody() {
