@@ -28,7 +28,7 @@
                         <span class="priority-{{m.priority | text:'L'}}">{{m.priority | text:'L' | translate}}</span>
                     </div>
                     <div class="task-list__assignee">
-                        {{employees[task.assigneeUserId]?.name}}
+                        {{employees[m.assigneeUserId]?.name}}
                     </div>
                     <div class="task-list__start_date">{{m.startDate | dateFmt:'DD.MM.YYYY'}}</div>
                     <div class="task-list__due_date">

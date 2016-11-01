@@ -28,6 +28,7 @@ export class NavComponent {
         this.subs.push(this.store.select('nav').subscribe((state: INavState) => {
             this.loadNavProjects();
         }));
+        this.loadNavProjects();
     }
 
     ngOnDestroy() {
