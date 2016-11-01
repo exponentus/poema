@@ -4,7 +4,7 @@
             <label class="entry-select" *ngIf="selectable">
                 <input type="checkbox" name="task-id" value="{{m.id}}" />
             </label>
-            <a class="entry-link" [routerLink]="['/task', m.id]">
+            <a class="entry-link" [routerLink]="['/Projects/task', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__reg-number">
                         <tree-indentation
@@ -47,7 +47,7 @@
             <label class="entry-select" *ngIf="selectable">
                 <input type="checkbox" value="{{m.id}}" />
             </label>
-            <a class="entry-link" [routerLink]="['/requests', m.id]">
+            <a class="entry-link" [routerLink]="['/Projects/requests', m.id]">
                 <div class="entry-fields">
                     <div class="task-list__request_type">
                         <tree-indentation [level]="level + (isLast ? '0' : '1')">

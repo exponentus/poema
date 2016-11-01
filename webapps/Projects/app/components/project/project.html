@@ -41,8 +41,6 @@
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 url="/Staff/p?id=get-organizations"
-                                listPath="objects.0.list"
-                                totalPagesPath="objects.0.meta.totalPages"
                                 (change)="setCustomer($event)">
                             </selection>
                             <error-message [error]="errors.customerId"></error-message>
@@ -57,8 +55,6 @@
                                 class="span8"
                                 [selectedItems]="project.manager"
                                 url="/Staff/p?id=employees"
-                                listPath="objects.0.list"
-                                totalPagesPath="objects.0.meta.totalPages"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setManager($event)">
@@ -75,8 +71,6 @@
                                 class="span8"
                                 [selectedItems]="project.programmer"
                                 url="/Staff/p?id=employees"
-                                listPath="objects.0.list"
-                                totalPagesPath="objects.0.meta.totalPages"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setProgrammer($event)">
@@ -93,8 +87,6 @@
                                 class="span8"
                                 [selectedItems]="project.tester"
                                 url="/Staff/p?id=employees"
-                                listPath="objects.0.list"
-                                totalPagesPath="objects.0.meta.totalPages"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setTester($event)">
@@ -111,8 +103,6 @@
                                 class="span8"
                                 [selectedItems]="project.observers"
                                 url="/Staff/p?id=employees"
-                                listPath="objects.0.list"
-                                totalPagesPath="objects.0.meta.totalPages"
                                 [disabled]="!isEditable"
                                 [allowClear]="true"
                                 [searchable]="true"

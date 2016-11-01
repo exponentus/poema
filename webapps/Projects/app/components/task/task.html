@@ -82,8 +82,6 @@
                             class="span8"
                             [selectedItems]="task.observers"
                             url="/Staff/p?id=employees"
-                            listPath="objects.0.list"
-                            totalPagesPath="objects.0.meta.totalPages"
                             [disabled]="!isEditable"
                             [allowClear]="true"
                             [searchable]="true"
@@ -111,8 +109,6 @@
                             [disabled]="!isEditable"
                             [searchable]="true"
                             url="/Projects/p?id=project-view"
-                            listPath="objects.0.list"
-                            totalPagesPath="objects.0.meta.totalPages"
                             (change)="setProject($event)">
                         </selection>
                         <error-message [error]="errors.projectId"></error-message>
@@ -129,8 +125,6 @@
                             [disabled]="!isEditable"
                             [searchable]="true"
                             url="/Reference/p?id=tasktypes"
-                            listPath="objects.0.list"
-                            totalPagesPath="objects.0.meta.totalPages"
                             (change)="setTaskType($event)">
                         </selection>
                         <error-message [error]="errors.taskTypeId"></error-message>
@@ -154,8 +148,6 @@
                             class="employee-input span8"
                             [selectedItems]="task.assignee"
                             url="/Staff/p?id=employees"
-                            listPath="objects.0.list"
-                            totalPagesPath="objects.0.meta.totalPages"
                             [disabled]="!isEditable"
                             [searchable]="true"
                             (change)="setAssigneeUser($event)">
@@ -202,8 +194,6 @@
                             class="tags-input span8"
                             [selectedItems]="task.tags"
                             url="/Reference/p?id=tags"
-                            listPath="objects.0.list"
-                            totalPagesPath="objects.0.meta.totalPages"
                             [disabled]="!isEditable"
                             [searchable]="true"
                             [allowClear]="allowClear"

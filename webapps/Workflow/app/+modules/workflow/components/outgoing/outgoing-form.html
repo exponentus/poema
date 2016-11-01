@@ -52,8 +52,6 @@
                                 class="span8"
                                 [selectedItems]="outgoing.recipient"
                                 [url]="'/Staff/p?id=organization-view'"
-                                [listPath]="'objects.1.list'"
-                                [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setRecipient($event)">
@@ -84,8 +82,6 @@
                                 class="span4"
                                 [selectedItems]="outgoing.docLanguage"
                                 [url]="'/Reference/p?id=documentlanguage-view'"
-                                [listPath]="'objects.1.list'"
-                                [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setDocLanguage($event)">
@@ -102,8 +98,6 @@
                                 class="span8"
                                 [selectedItems]="outgoing.docType"
                                 [url]="'/Reference/p?id=documenttype-view'"
-                                [listPath]="'objects.1.list'"
-                                [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setDocType($event)">

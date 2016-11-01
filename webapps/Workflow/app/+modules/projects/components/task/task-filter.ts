@@ -22,8 +22,6 @@ import { TaskType, Employee, Tag } from '../../models';
                 [searchable]="true"
                 placeHolder="{{'task_type' | translate}}"
                 url="/Reference/p?id=tasktypes"
-                listPath="objects.0.list"
-                totalPagesPath="objects.0.meta.totalPages"
                 (change)="setTaskType($event)">
             </selection>
             <selection
@@ -31,8 +29,6 @@ import { TaskType, Employee, Tag } from '../../models';
                 [selectedItems]="assigneeUser"
                 allowClear="true"
                 url="/Staff/p?id=employees"
-                listPath="objects.0.list"
-                totalPagesPath="objects.0.meta.totalPages"
                 [searchable]="true"
                 placeHolder="{{'assignee_user' | translate}}"
                 (change)="setAssigneeUser($event)">

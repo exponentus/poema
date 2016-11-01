@@ -130,8 +130,8 @@ export class SelectionComponent {
     @Input() searchable = false;
     @Input() contentLoadable = false;
     @Input() url;
-    @Input() listPath = 'payload.viewpage.result';
-    @Input() totalPagesPath = 'payload.viewpage.maxPage';
+    @Input() listPath = null;
+    @Input() totalPagesPath = null;
     @Input() pageParam = 'page';
     @Input() searchParam = 'keyWord';
     @Input() tabIndex = 0;
@@ -147,6 +147,7 @@ export class SelectionComponent {
 
     private documentClickListener;
     private documentKeyUpListener;
+
     private items: any = [];
     private selectedItems: any = [];
     private filteredItems: any = [];
@@ -486,6 +487,8 @@ export class SelectionComponent {
             .subscribe(payload => {
                 this.loading = false;
 
+                this.findViewPath(payload);
+
                 // destructuring
                 // read items
                 let itemPaths = this.listPath.split('.');
@@ -503,6 +506,28 @@ export class SelectionComponent {
                 this.totalPages = _totalPages;
                 this.appendToItems(_list);
             });
+    }
+
+    findViewPath(json: any) {
+        if (this.listPath) {
+            return;
+        }
+
+        if (json.payload && json.payload.viewpage) {
+            this.listPath = 'payload.viewpage.result'
+            this.totalPagesPath = 'payload.viewpage.maxPage';
+        } else if (json.objects) {
+            let i = 0;
+            for (let obj of json.objects) {
+                if (obj.list && obj.meta && obj.type) {
+                    this.listPath = `objects.${i}.list`;
+                    this.totalPagesPath = `objects.${i}.meta.totalPages`;
+                }
+                i++;
+            }
+        } else {
+            throw Error('not found list path');
+        }
     }
 
     // ===

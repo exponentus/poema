@@ -87,9 +87,7 @@ const formSchemas = {
                 name: 'type',
                 className: 'span4',
                 values: {
-                    url: '/Reference/p?id=regiontype-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=regiontype-view'
                 },
                 required: true
             }, {
@@ -97,9 +95,7 @@ const formSchemas = {
                 label: 'country',
                 name: 'country',
                 values: {
-                    url: '/Reference/p?id=country-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=country-view'
                 },
                 className: 'span4',
                 required: true
@@ -129,9 +125,7 @@ const formSchemas = {
                 name: 'region',
                 className: 'span7',
                 values: {
-                    url: '/Reference/p?id=get-regions',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=get-regions'
                 },
                 required: true
             }]
@@ -160,9 +154,7 @@ const formSchemas = {
                 name: 'localityType',
                 className: 'span7',
                 values: {
-                    url: '/Reference/p?id=localitytype-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=localitytype-view'
                 }
             }, {
                 type: 'select',
@@ -180,9 +172,7 @@ const formSchemas = {
                 name: 'district',
                 className: 'span7',
                 values: {
-                    url: '/Reference/p?id=district-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=district-view'
                 }
             }]
         }, {
@@ -210,9 +200,7 @@ const formSchemas = {
                 name: 'locality',
                 className: 'span7',
                 values: {
-                    url: '/Reference/p?id=locality-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=locality-view'
                 }
             }]
         }, {

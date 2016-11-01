@@ -59,9 +59,7 @@ const formSchemas = {
                 label: 'org_category',
                 name: 'orgCategory',
                 values: {
-                    url: '/Reference/p?id=orgcategory-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Reference/p?id=orgcategory-view'
                 },
                 className: 'span4',
                 required: true
@@ -77,9 +75,7 @@ const formSchemas = {
                 name: 'labels',
                 values: {
                     multiple: true,
-                    url: '/Staff/p?id=organization-label-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Staff/p?id=organization-label-view'
                 },
                 className: 'span6'
             }]
@@ -101,9 +97,7 @@ const formSchemas = {
                 label: 'organization',
                 name: 'organization',
                 values: {
-                    url: '/Staff/p?id=organization-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Staff/p?id=organization-view'
                 },
                 className: 'span6',
                 required: true
@@ -118,9 +112,7 @@ const formSchemas = {
                 label: 'department_type',
                 name: 'departmentType',
                 values: {
-                    url: '/Reference/p?id=departmenttype-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Reference/p?id=departmenttype-view'
                 },
                 className: 'span6'
             }]
@@ -158,9 +150,7 @@ const formSchemas = {
                 label: 'organization',
                 name: 'organization',
                 values: {
-                    url: '/Staff/p?id=organization-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Staff/p?id=organization-view'
                 },
                 className: 'span6',
                 required: true
@@ -169,9 +159,7 @@ const formSchemas = {
                 label: 'department',
                 name: 'department',
                 values: {
-                    url: '/Staff/p?id=department-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Staff/p?id=department-view'
                 },
                 className: 'span6'
             }, {
@@ -179,9 +167,7 @@ const formSchemas = {
                 label: 'position',
                 name: 'position',
                 values: {
-                    url: '/Reference/p?id=position-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Reference/p?id=position-view'
                 },
                 className: 'span6'
             }, {
@@ -190,9 +176,7 @@ const formSchemas = {
                 name: 'role',
                 values: {
                     multiple: true,
-                    url: '/Staff/p?id=role-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPages"
+                    url: '/Staff/p?id=role-view'
                 },
                 className: 'span6'
             }, {

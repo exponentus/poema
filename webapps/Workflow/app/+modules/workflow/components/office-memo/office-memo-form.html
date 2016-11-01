@@ -41,8 +41,6 @@
                                 class="span8"
                                 [selectedItems]="officeMemo.approval"
                                 [url]="'/Workflow/approvals?'"
-                                [listPath]="'objects.1.list'"
-                                [totalPagesPath]="'objects.1.meta.totalPages'"
                                 [disabled]="!isEditable"
                                 [searchable]="true"
                                 (change)="setApproval($event)">

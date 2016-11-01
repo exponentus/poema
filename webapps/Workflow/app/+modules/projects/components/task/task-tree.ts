@@ -31,7 +31,9 @@ export class TaskTreeComponent {
 
     ngOnInit() {
         this.sub = this.store.select('tasks').subscribe((state: ITasksState) => {
-            this.expandedIds = state.expandedIds;
+            if (state) {
+                this.expandedIds = state.expandedIds;
+            }
 
             if (this.expand || this.expandedIds.indexOf(this.rootId) != -1) {
                 this.expanded = true;
