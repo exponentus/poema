@@ -6,7 +6,6 @@ import { EnvironmentActions } from '../../../actions';
 @Component({
     selector: 'reference-container',
     template: `
-        <link rel="stylesheet" href="/Reference/css/all.min.css" />
         <nav class="aside side-nav"
             nb-nav
             module="Reference"

@@ -3,14 +3,19 @@
         [class.side-tree-collapsible]="entry.entries"
         [class.side-tree-collapsed]="expandedEntryIds.indexOf(entry.customID) == -1"
         *ngFor="let entry of entries">
-        <a class="nav-link" [title]="entry.hint" [routerLink]="['/' + module, entry.customID]" [class.active]="isActive(['/' + module + '/' + entry.customID])">
-            <i class="side-tree-toggle fa" data-role="side-tree-toggle" (click)="toggleCollapsible(entry.customID, $event)" *ngIf="entry.entries.length"></i>
+        <a class="nav-link"
+              [class.active]="isActive(['/' + module + '/' + entry.customID])"
+              [title]="entry.hint"
+              [routerLink]="['/' + module, entry.customID]"
+              (click)="onNavClick($event)">
+            <i class="side-tree-toggle fa" (click)="toggleCollapsible(entry.customID, $event)" *ngIf="entry.entries.length"></i>
             <i class="fa fa-file-o"></i><span>{{entry.caption | translate}}</span>
         </a>
         <nav nb-nav-tree
             [module]="module"
             [entries]="entry.entries"
             [expandedEntryIds]="expandedEntryIds"
+            (navClick)="onNavClick($event)"
             (toggle)="toggleCollapsible($event)"
             *ngIf="entry.entries.length">
         </nav>

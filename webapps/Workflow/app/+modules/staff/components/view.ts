@@ -92,7 +92,7 @@ export class StaffViewComponent {
 
         this.staffService.fetch(this.params).subscribe(
             payload => {
-                let columnOptions = { root: [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name' }] };
+                let columnOptions = { root: [{ name: 'name', value: 'name', type: 'localizedName', sort: 'both', className: 'vw-name', valueAsClass: '' }] };
                 if (payload.data.columnOptions) {
                     columnOptions = payload.data.columnOptions.columns;
                 }
@@ -122,7 +122,7 @@ export class StaffViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.caption);
+        console.log($event);
     }
 
     onOpenUrl($event) {

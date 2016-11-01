@@ -13,7 +13,7 @@
                         <textarea *ngSwitchCase="'textarea'" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className"></textarea>
                         <div *ngSwitchCase="'checkbox'">
                             <label class="input" [ngClass]="field.className" *ngFor="let cv of field.values">
-                                <input [type]="field.type" [name]="field.name" [value]="cv.value" />
+                                <input [type]="field.type" [name]="field.name" [value]="cv.value" [checked]="model[field.name] == cv.value" />
                                 <span *ngIf="cv.label">{{cv.label}}</span>
                             </label>
                         </div>

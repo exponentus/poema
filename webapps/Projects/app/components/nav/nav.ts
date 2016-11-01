@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
+import { EnvironmentActions } from '../../actions';
 import { INavState } from '../../reducers/nav.reducer';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
@@ -19,6 +20,7 @@ export class NavComponent {
     constructor(
         private router: Router,
         private store: Store<any>,
+        private environmentActions: EnvironmentActions,
         private projectService: ProjectService
     ) { }
 
@@ -35,6 +37,10 @@ export class NavComponent {
 
     isActive(instruction: any[]): boolean {
         return this.router.isActive(this.router.createUrlTree(instruction), true);
+    }
+
+    onNavClick() {
+        this.store.dispatch(this.environmentActions.hideNav());
     }
 
     loadNavProjects() {

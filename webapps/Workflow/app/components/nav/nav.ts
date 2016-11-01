@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 
+import { EnvironmentActions } from '../../actions';
 import { DataService } from '../../services';
 
 @Component({
@@ -17,6 +19,8 @@ export class NavComponent {
     private loading = true;
 
     constructor(
+        private store: Store<any>,
+        private environmentActions: EnvironmentActions,
         private dataService: DataService
     ) { }
 
@@ -36,6 +40,10 @@ export class NavComponent {
                 this.loading = false;
                 this.outline = outline;
             });
+    }
+
+    onNavClick() {
+        this.store.dispatch(this.environmentActions.hideNav());
     }
 
     toggleCollapsible(id) {

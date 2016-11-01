@@ -87,7 +87,7 @@ const formSchemas = {
             }, {
                 type: 'select',
                 label: 'type',
-                name: 'regiontype',
+                name: 'type',
                 className: 'span4',
                 values: {
                     url: '/Reference/p?id=regiontype-view'

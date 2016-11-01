@@ -12,6 +12,7 @@
         [module]="module"
         [entries]="section.entries"
         [expandedEntryIds]="expandedEntryIds"
+        (navClick)="onNavClick($event)"
         (toggle)="toggleCollapsible($event)">
     </nav>
 </section>

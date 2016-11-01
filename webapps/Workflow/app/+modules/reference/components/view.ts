@@ -123,7 +123,7 @@ export class ReferenceViewComponent {
     }
 
     onAction($event) {
-        alert($event.action.caption);
+        console.log($event);
     }
 
     onOpenUrl($event) {

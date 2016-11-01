@@ -10,6 +10,7 @@ export class NavTreeComponent {
     @Input() module: string = '';
     @Input() entries = [];
     @Input() expandedEntryIds = [];
+    @Output() navClick = new EventEmitter();
     @Output() toggle = new EventEmitter();
 
     constructor(
@@ -18,6 +19,10 @@ export class NavTreeComponent {
 
     isActive(instruction: any[]): boolean {
         return this.router.isActive(this.router.createUrlTree(instruction), true);
+    }
+
+    onNavClick() {
+        this.navClick.emit(true);
     }
 
     toggleCollapsible(id, $event) {
