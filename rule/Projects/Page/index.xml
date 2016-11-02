@@ -7,4 +7,6 @@
             <doscript source="JAVA_CLASS">projects.page.Index</doscript>
         </events>
     </element>
+    <caption name="brand"/>
+    <caption name="loading"/>
 </rule>
