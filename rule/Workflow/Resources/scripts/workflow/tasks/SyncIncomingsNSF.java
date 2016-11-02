@@ -130,6 +130,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 							attachments.add(a);
 						}
 						inc.setAttachments(attachments);
+						normalizeACL(uDao, inc, doc);
 						entities.put(unId, inc);
 					}
 				}

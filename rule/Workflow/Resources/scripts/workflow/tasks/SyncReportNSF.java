@@ -104,7 +104,7 @@ public class SyncReportNSF extends ImportNSF {
 							attachments.add(a);
 						}
 						entity.setAttachments(attachments);
-
+						normalizeACL(uDao, entity, doc);
 						entity = entities.put(doc.getUniversalID(), entity);
 					} else {
 						logger.warningLogEntry("parent has not been found (" + parent + "), record was skipped");

@@ -146,6 +146,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 			entity.setControl(control);
 			entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("Content"), 140));
 			entity.setBody(doc.getItemValueString("Content"));
+			normalizeACL(uDao, entity, doc);
 		} catch (NotesException e) {
 			logger.errorLogEntry(e);
 		} catch (Exception e) {
