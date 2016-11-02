@@ -41,7 +41,8 @@
         <body>
             <app class="body">
                 <div class="app-loading">
-                    <img class="brand-logo" alt="logo" src="img/logo.png"/>Loading...
+                    <img class="brand-logo" alt="logo" src="img/logo.png"/>
+                    <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
                 </div>
             </app>
             <script src="js/vendor.js.gz"></script>

@@ -43,6 +43,7 @@ div.task-list__title {
 }
 
 .task-list__tags .tag {
+    margin: 0 1px 1px 0;
     padding: 0 4px !important;
 }
 

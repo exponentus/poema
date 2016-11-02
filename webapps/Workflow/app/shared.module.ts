@@ -7,6 +7,7 @@ import { TranslateModule } from 'ng2-translate/ng2-translate';
 
 import { SharedModule as _SharedModule } from './shared/shared.module';
 
+import { NbModalService, NbModalComponent } from './components/nb-modal';
 import { SchemaFormComponent } from './components/schema-form/schema-form';
 import { NavComponent } from './components/nav/nav';
 import { NavTreeComponent } from './components/nav/nav-tree';
@@ -19,6 +20,7 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
 
 @NgModule({
     declarations: [
+        NbModalComponent,
         SchemaFormComponent,
         NavComponent,
         NavTreeComponent,
@@ -40,6 +42,7 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         ReactiveFormsModule,
         FormsModule,
         TranslateModule,
+        NbModalComponent,
         SchemaFormComponent,
         NavComponent,
         NavTreeComponent,
@@ -64,6 +67,9 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         FormsModule,
         TranslateModule,
         _SharedModule
+    ],
+    providers: [
+        NbModalService
     ]
 })
 

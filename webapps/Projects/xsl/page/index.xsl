@@ -34,7 +34,6 @@
                   content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css"/>
             <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css"/>
-            <!--<link rel="stylesheet" href="/SharedResources/nb/css/nb.min.css"/>-->
             <link rel="stylesheet" href="css/all.min.css"/>
             <style>
                 <![CDATA[
@@ -54,7 +53,8 @@
         <body>
             <app class="body">
                 <div class="app-loading">
-                    <img class="brand-logo" alt="logo" src="img/logo.png"/>Loading...
+                    <img class="brand-logo" alt="logo" src="img/logo.png"/>
+                    <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
                 </div>
             </app>
             <script src="js/vendor.js.gz"></script>
