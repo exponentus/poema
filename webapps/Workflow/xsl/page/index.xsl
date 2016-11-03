@@ -15,7 +15,7 @@
         <head>
             <base href=""/>
             <meta charset="utf-8"/>
-            <title></title>
+            <title><xsl:value-of select="//captions/brand/@caption"/></title>
             <link rel="shortcut icon" href="img/favicon.png"/>
             <meta name="format-detection" content="telephone=no"/>
             <meta name="viewport"

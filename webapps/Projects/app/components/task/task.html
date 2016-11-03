@@ -40,13 +40,12 @@
         </div>
         <h1 class="header-title task-header-title">
             <a *ngIf="parentTask" [routerLink]="['/task', parentTask.id]" class="parent-task-link">{{parentTask.title}}</a>
-            <div class="header-title-flex">
-                <label class="header-title-label">
-                    <div>{{title | translate}}</div>
-                    <span class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</span>
-                </label>
+            <div>
+                <div class="header-title-label">{{title | translate}}</div>
                 <div class="task-reg-number" *ngIf="task.regNumber">{{task.regNumber}}</div>
-                <input [class.invalid]="errors.title" autofocus autocomplete="off" name="title" maxlength="140" placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
+                <div class="task-status status-{{task.status | text:'L'}}">{{task.status | text:'L' | translate}}</div>
+                <input [class.invalid]="errors.title" autofocus autocomplete="off" name="title" maxlength="140"
+                    placeholder="{{'task_title' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="task.title" />
             </div>
         </h1>
     </header>

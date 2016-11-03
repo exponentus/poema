@@ -7,6 +7,7 @@ import { NotificationService } from '../../shared/notification';
 import { IEnvironmentState } from '../../reducers/environment.reducer';
 import { TaskService } from '../../services';
 import { Task, Request, RequestType, Attachment } from '../../models';
+import { imgToBase64 } from '../../utils/utils';
 
 @Component({
     selector: 'request',
@@ -143,18 +144,28 @@ export class RequestComponent {
         this.dueDate = date;
     }
 
-    addAttachment(file) {
+    addAttachment(data) {
         let att: Attachment = new Attachment();
-        att.realFileName = file.files[0];
+        att.realFileName = data.response.files[0];
         if (!this.request.attachments) {
             this.request.attachments = [];
         }
-        this.request.attachments.push(att);
+        if (!this.request.fsid) {
+            this.request.fsid = '' + Date.now();
+        }
+        if (!data.files[0].type.match('image.*')) {
+            this.request.attachments.push(att);
+        } else {
+            imgToBase64(data.files[0], (e2) => {
+                att.base64 = e2.target.result;
+                this.request.attachments.push(att);
+            });
+        }
     }
 
     deleteAttachment(attachment: Attachment) {
-        // this.taskService.deleteRequestAttachment(this.request, attachment).subscribe(r => {
-        this.request.attachments = this.request.attachments.filter(it => it.id != attachment.id);
-        // });
+        this.taskService.deleteRequestAttachment(this.request, attachment).subscribe(r => {
+            this.request.attachments = this.request.attachments.filter(it => it.id != attachment.id);
+        });
     }
 }

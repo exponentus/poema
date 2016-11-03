@@ -28,9 +28,14 @@ body:not(.side-nav-toggle) .aside + .content {
     float: right;
 }
 
+.header-title-label {
+    color: #777;
+    display: inline-block;
+}
+
 .header-title.header-title-flex,
 .task-header-title {
-    padding: 6px 10px;
+    padding: 10px;
 }
 
 .header-title-flex {
@@ -46,19 +51,20 @@ body:not(.side-nav-toggle) .aside + .content {
     white-space: nowrap;
 }
 
-.header-title-flex > input {
+.header-title input {
     /*font-size: .9em;*/
     font-family: 'Segoe UI';
     line-height: 1.4;
     min-height: auto;
+    padding: 4px 7px;
 }
 
-.header-title-flex > input:not(:focus):not(:hover),
-.header-title-flex > input[readonly] {
+.header-title > input:not(:focus):not(:hover),
+.header-title > input[readonly] {
     border-color: transparent;
 }
 
-.header-title-flex input.ng-invalid {
+.header-title input.ng-invalid {
     /*box-shadow: 0 0 1px rgba(51, 51, 51, 0.5);*/
     border-color: #FF5722 !important;
     box-shadow: 0 0 3px rgba(255, 0, 0, 0.5);
