@@ -53,6 +53,17 @@ public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
 		entity.setColor("#0080ff");
 		entities.add(entity);
 
+		entity = new Tag();
+		entity.setName("expired");
+		name = new HashMap<>();
+		name.put(LanguageCode.ENG, "Overdued");
+		name.put(LanguageCode.RUS, "Просроченный");
+		name.put(LanguageCode.KAZ, "Mерзімі өткен");
+		entity.setLocalizedName(name);
+		entity.setColor("#db0000");
+		entity.setHidden(true);
+		entities.add(entity);
+
 		return entities;
 	}
 
