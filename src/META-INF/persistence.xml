@@ -145,6 +145,42 @@
 		<class>projects.model.Dashboard</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 	</persistence-unit>
+	<persistence-unit name="HelpDesk" transaction-type="RESOURCE_LOCAL">
+		<!-- Obligatory the application module entities -->
+		<class>administrator.model.User</class>
+		<class>administrator.model.Application</class>
+		<class>administrator.model.Language</class>
+		<class>administrator.model.Sentence</class>
+		<class>administrator.model.embedded.UserApplication</class>
+		<!-- Common module entities -->
+		<class>com.exponentus.common.model.Attachment</class>
+		<class>com.exponentus.common.model.AttachmentThumbnail</class>
+		<!-- Common Staff module entities -->
+		<class>staff.model.Organization</class>
+		<class>staff.model.Department</class>
+		<class>staff.model.Employee</class>
+		<class>staff.model.Role</class>
+		<class>staff.model.OrganizationLabel</class>
+		<!-- Common Reference module entities -->
+		<class>reference.model.Position</class>
+		<class>reference.model.DepartmentType</class>
+		<class>reference.model.OrgCategory</class>
+		<class>reference.model.TaskType</class>
+		<class>reference.model.DocumentLanguage</class>
+		<class>reference.model.Tag</class>
+		<class>reference.model.RequestType</class>
+		<!-- Projects module entities -->
+		<class>projects.model.Project</class>
+		<class>projects.model.Task</class>
+		<class>projects.model.Request</class>
+		<class>projects.model.Comment</class>
+		<class>projects.model.Dashboard</class>
+		<!-- HelpDesk module entities -->
+		<class>	helpdesk.model.Demand</class>
+		<shared-cache-mode>NONE</shared-cache-mode>
+	</persistence-unit>
+
+	
 	<persistence-unit name="Discussing" transaction-type="RESOURCE_LOCAL">
 		<!-- Obligatory the application module entities -->
 		<class>administrator.model.Language</class>

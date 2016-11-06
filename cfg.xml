@@ -26,6 +26,11 @@
            
         </app>
         <app>
+            <name mode="on">HelpDesk</name>
+            <rest mode="on"/>
+           
+        </app>
+        <app>
             <name mode="on">Workflow</name>
             <rest mode="on">
                 <urlmapping>/api/*</urlmapping>

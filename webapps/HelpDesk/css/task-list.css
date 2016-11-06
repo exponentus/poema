@@ -1,0 +1,138 @@
+/* .task-list */
+
+.task-list {}
+
+div.task-list__reg-number {
+    min-width: 190px;
+    width: 190px;
+}
+
+div.task-list__title {
+    min-width: 80px;
+    width: 25%;
+}
+
+.task-list__status {
+    min-width: 100px;
+    width: 100px;
+}
+
+.task-list__priority {
+    min-width: 100px;
+    width: 100px;
+}
+
+.task-list__assignee {
+    min-width: 80px;
+    width: 10%;
+}
+
+.task-list__start_date {
+    min-width: 130px;
+    width: 130px;
+}
+
+.task-list__due_date {
+    min-width: 130px;
+    width: 130px;
+}
+
+.task-list__tags {
+    min-width: 80px;
+    width: 20%;
+}
+
+.task-list__tags .tag {
+    margin: 0 1px 1px 0;
+    padding: 0 4px !important;
+}
+
+
+/* .stream-level */
+
+.stream-level {
+    display: block;
+    transition: max-height .15s;
+}
+
+.stream-level.close {
+    max-height: 0;
+    overflow: hidden;
+}
+
+.stream-level.open {
+    max-height: 1000px;
+}
+
+@media ( max-width: 768px) {
+    .task-list .entries-head {
+        display: none;
+    }
+    .task-list .entry-select {
+        display: none;
+    }
+    .task-list .entry-select + .entry-link {
+        padding-left: 0;
+    }
+    /*.task-list .entry-link {
+        padding-bottom: 12px;
+        padding-top: 12px;
+    }*/
+    /*.task-list .entry-fields {
+        padding: 16px 4px;
+    }
+    .task-list .entry-fields > div {
+        border-left: 0;
+        margin: 0!important;
+        padding: 0!important;
+    }*/
+    /*.task-list .task-list__reg-number {
+        color: #31708f;
+        padding: 0 !important;
+        position: absolute;
+        left: 0;
+        min-width: 0;
+        top: 0;
+        width: 100%;
+    }*/
+    .task-list .entry-fields > div {
+        border-left: 0;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .task-list .task-list__reg-number {
+        min-width: 0;
+        width: 25%;
+    }
+    .task-list .task-list__title {
+        /*display: block;*/
+        /*width: 100%;*/
+        min-width: 0;
+        width: 50%;
+    }
+    .task-list .task-list__status,
+    .task-list .task-list__priority {
+        min-width: 0;
+        max-width: 70px;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 13%;
+    }
+    /*.task-list .entry-fields > .task-list__assignee {
+        bottom: 0;
+        display: block;
+        left: 0;
+        padding: 6px 4px 0 !important;
+        position: absolute;
+        width: 100%;
+    }
+    .task-list .entry-fields .task-list__assignee .input {
+        color: #31708f;
+    }*/
+    .task-list .entry-fields > .task-list__assignee,
+    .task-list .entry-fields > .task-list__start_date,
+    .task-list .entry-fields > .task-list__due_date,
+    .task-list .entry-fields > .task-list__tags {
+        display: none;
+    }
+}

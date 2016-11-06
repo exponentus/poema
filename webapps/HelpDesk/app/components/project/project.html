@@ -1,0 +1,161 @@
+<form class="form" *ngIf="isReady">
+    <header class="content-header">
+        <div class="content-actions">
+            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
+                <i class="fa fa-chevron-left"></i>
+                <span>{{'close' | translate}}</span>
+            </button>
+            <button class="btn btn-primary" type="button" *ngIf="canSave" [disabled]="!isValid" (click)="saveProject()">
+                {{'save_close' | translate}}
+            </button>
+            <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
+                <div dropdown-toggle>
+                    <span class="btn">...</span>
+                </div>
+                <div class="dropdown-menu">
+                    <ul class="menu">
+                        <li>
+                            <a class="menu-item" (click)="deleteProject()">{{'delete' | translate}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <h1 class="header-title header-title-flex">
+            <label>{{title | translate}}</label>
+            <input [class.invalid]="errors.name" autofocus autocomplete="off" required name="name" maxlength="140" placeholder="{{'name' | translate}}" [readonly]="!isEditable" (keyup)="validateForm()" [(ngModel)]="project.name" />
+        </h1>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab class="tab-pane" tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'customer' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.customerId">
+                            <selection
+                                class="organization-input span8"
+                                [selectedItems]="project.customer"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                url="/Staff/p?id=get-organizations"
+                                (change)="setCustomer($event)">
+                            </selection>
+                            <error-message [error]="errors.customerId"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'manager' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.managerUserId">
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.manager"
+                                url="/Staff/p?id=employees"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setManager($event)">
+                            </selection>
+                            <error-message [error]="errors.managerUserId"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'programmer' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.programmerUserId">
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.programmer"
+                                url="/Staff/p?id=employees"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setProgrammer($event)">
+                            </selection>
+                            <error-message [error]="errors.programmerUserId"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tester' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.testerUserId">
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.tester"
+                                url="/Staff/p?id=employees"
+                                [disabled]="!isEditable"
+                                [searchable]="true"
+                                (change)="setTester($event)">
+                            </selection>
+                            <error-message [error]="errors.testerUserId"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observerUserIds">
+                            <selection
+                                class="span8"
+                                [selectedItems]="project.observers"
+                                url="/Staff/p?id=employees"
+                                [disabled]="!isEditable"
+                                [allowClear]="true"
+                                [searchable]="true"
+                                [multiple]="true"
+                                (change)="setObserver($event)">
+                            </selection>
+                            <error-message [error]="errors.observerUserIds"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'status' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.status">
+                            <switch-button [disabled]="!isEditable" [model]="project" value="status" [items]="projectStatusTypes"></switch-button>
+                            <error-message [error]="errors.status"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'finish_date' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.finishDate">
+                            <div class="span2" *ngIf="!isEditable">
+                                <span class="input">{{project.finishDate}}</span>
+                            </div>
+                            <input class="span2" datepicker *ngIf="isEditable" name="finishDate" (select)="setFinishDate($event)" [(ngModel)]="project.finishDate" />
+                            <span>{{'now' | dateDuration:project.finishDate}}</span>
+                            <error-message [error]="errors.finishDate"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'comment' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.comment">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}" [markdown]="project.comment || ''" [editable]="isEditable" [updateTimeout]="300" (update)="setProjectComment($event)"></markdown-editor>
+                            <error-message [error]="errors.comment"></error-message>
+                        </div>
+                    </div>
+                </div>
+                <attachments [editable]="isEditable" [model]="project" (upload)="addAttachment($event)" (delete)="deleteAttachment($event)"></attachments>
+            </tab>
+            <tab class="tab-pane" tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="!isNew">
+                <acl [acl]="project.acl"></acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="project.authorId">
+            <span>{{'author' | translate}}</span>
+            <span>{{project.author?.name}}</span>
+            <span>{{project.regDate}}</span>
+        </div>
+    </footer>
+</form>

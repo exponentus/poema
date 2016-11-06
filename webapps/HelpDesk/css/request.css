@@ -1,0 +1,164 @@
+/* .request-list */
+.request-list {
+    list-style: none;
+    margin: 0;
+    padding: 8px 0 0;
+}
+
+.request-list__item {
+    margin: 0;
+    padding: 0;
+}
+
+/* .request */
+.request {
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+}
+
+.request__header {
+    display: block;
+    width: 20%;
+}
+
+.request__content {
+    display: inline-block;
+    width: 30%;
+}
+
+.request__type {
+    display: block;
+    font-size: .89em;
+    font-weight: bold;
+    padding: 8px;
+}
+
+.request__time {
+    color: #888;
+    display: inline-block;
+    padding: 0 8px;
+}
+
+.request__comment {
+    display: inline-block;
+    padding: 0 8px;
+}
+
+.request__attachments {
+    padding: 0 0 4px;
+}
+
+.request__attachments .attachments {
+    border: 0;
+    display: block;
+    padding: 0;
+}
+
+.request__attachments .attachments .attachment-list {
+    display: inline;
+}
+
+.request__resolution {
+    display: inline-block;
+    padding: 8px;
+}
+
+.request__resolution_time {
+    color: #666;
+    display: inline-block;
+}
+
+.request__resolution .accepted,
+.request__resolution .accepted .fa {
+    color: green;
+}
+
+.request__resolution .declined,
+.request__resolution .declined .fa {
+    color: red;
+}
+
+.header-title .request-resolution {}
+
+.request-resolution.accepted,
+.request-resolution.accepted .fa {
+    color: green;
+    font-size: 13px;
+}
+
+.request-resolution.declined,
+.request-resolution.declined .fa {
+    color: red;
+    font-size: 13px;
+}
+
+.request__resol {
+    border-top: 1px solid rgb(235, 235, 235);
+    padding-top: 8px;
+}
+
+.request__buttons {
+    display: inline-block;
+    max-width: 866px;
+    text-align: right;
+    width: 100%;
+}
+
+/* .request-composer */
+.request-composer {
+    background: rgba(255, 255, 255, .5);
+    display: none;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.request-composer.open {
+    display: block;
+}
+
+.request-composer > form {
+    background: #fff;
+    box-shadow: 0 0 3px #000;
+    position: relative;
+    top: 25%;
+    left: 0;
+    margin: 0 auto;
+    max-width: 98%;
+    width: 500px;
+}
+
+.request-composer header {
+    padding: 12px 16px 8px;
+}
+
+.request-composer section {
+    padding: 8px 16px;
+}
+
+.request-composer footer {
+    border-top: 1px solid #eee;
+    padding: 8px;
+    text-align: right;
+}
+
+.request-composer .rt-editor {
+    margin: 8px 0;
+    min-height: 60px;
+    padding: 4px;
+}
+
+.request-composer .attachments {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* */
+div.task-list__request_type {
+    /*padding-left: 20px;*/
+}

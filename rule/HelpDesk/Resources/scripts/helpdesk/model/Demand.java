@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedEntityGraphs;
@@ -21,8 +22,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -30,12 +29,12 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.localization.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import helpdesk.model.constants.DemandStatusType;
+import projects.model.Project;
+import reference.model.Tag;
 import staff.model.Organization;
 
 @JsonRootName("demand")
@@ -53,43 +52,32 @@ import staff.model.Organization;
 public class Demand extends SecureAppEntity<UUID> {
 	
 	public final static String SHORT_GRAPH = "Demand.SHORT_GRAPH";
+
+	private Project project;
 	
-	@FTSearchable
-	@Column(length = 140)
-	private String name;
+	@FTSearchable(ignoreLang = true)
+	@Column(name = "reg_number", length = 140)
+	private String regNumber;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 10)
 	private DemandStatusType status = DemandStatusType.UNKNOWN;
 	
-	@Column(name = "primary_lang")
-	private LanguageCode primaryLanguage;
+	private Date statusDate;
+	
+	@FTSearchable
+	@Column(length = 140)
+	private String title;
 	
 	private Organization customer;
 	
-	@JsonProperty("managerUserId")
-	private long manager;
-	
-	@JsonProperty("programmerUserId")
-	private long programmer;
-	
-	@JsonProperty("testerUserId")
-	private long tester;
-	
-	private long representative;
-	
-	@JsonProperty("observerUserIds")
-	private List<Long> observers;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date finishDate;
-	
 	@FTSearchable
-	@Column(length = 2048)
-	private String comment;
+	@Column(columnDefinition = "TEXT")
+	private String body;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "demand_tags")
+	private List<Tag> tags;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "demand_attachments", joinColumns = { @JoinColumn(name = "demand_id") }, inverseJoinColumns = {
@@ -98,103 +86,6 @@ public class Demand extends SecureAppEntity<UUID> {
 							"demand_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public DemandStatusType getStatus() {
-		return status;
-	}
-	
-	public void setStatus(DemandStatusType status) {
-		this.status = status;
-	}
-	
-	public LanguageCode getPrimaryLanguage() {
-		return primaryLanguage;
-	}
-	
-	public void setPrimaryLanguage(LanguageCode primaryLanguage) {
-		this.primaryLanguage = primaryLanguage;
-	}
-	
-	// TODO short graph
-	public Organization getCustomer() {
-		return customer;
-	}
-	
-	public void setCustomer(Organization customer) {
-		this.customer = customer;
-	}
-	
-	public long getManager() {
-		return manager;
-	}
-	
-	public void setManager(long manager) {
-		this.manager = manager;
-	}
-	
-	public long getProgrammer() {
-		return programmer;
-	}
-	
-	public void setProgrammer(long programmer) {
-		this.programmer = programmer;
-	}
-	
-	public long getTester() {
-		return tester;
-	}
-	
-	public void setTester(long tester) {
-		this.tester = tester;
-	}
-	
-	public long getRepresentative() {
-		return representative;
-	}
-	
-	public void setRepresentative(long representative) {
-		this.representative = representative;
-	}
-	
-	public List<Long> getObservers() {
-		return observers;
-	}
-	
-	public void setObservers(List<Long> observers) {
-		this.observers = observers;
-	}
-	
-	public Date getStartDate() {
-		return startDate;
-	}
-	
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-	
-	public Date getFinishDate() {
-		return finishDate;
-	}
-	
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
-	
-	public String getComment() {
-		return comment;
-	}
-	
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
 	
 	public boolean isHasAttachments() {
 		return attachments.size() > 0;
