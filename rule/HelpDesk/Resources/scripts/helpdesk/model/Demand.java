@@ -1,4 +1,4 @@
-package projects.model;
+package helpdesk.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,24 +35,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import projects.model.constants.ProjectStatusType;
+import helpdesk.model.constants.DemandStatusType;
 import staff.model.Organization;
 
-@JsonRootName("project")
+@JsonRootName("demand")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "projects")
-@NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
-@NamedEntityGraphs({ @NamedEntityGraph(name = Project.SHORT_GRAPH, attributeNodes = {
+@Table(name = "demands")
+@NamedQuery(name = "Demand.findAll", query = "SELECT m FROM Demand AS m ORDER BY m.regDate")
+@NamedEntityGraphs({ @NamedEntityGraph(name = Demand.SHORT_GRAPH, attributeNodes = {
 		@NamedAttributeNode(value = "customer", subgraph = "customer"),
 		@NamedAttributeNode(value = "attachments", subgraph = "attachments") }, subgraphs = {
 				@NamedSubgraph(name = "customer", attributeNodes = { @NamedAttributeNode("id"),
 						@NamedAttributeNode("name"), @NamedAttributeNode("localizedName") }),
 				@NamedSubgraph(name = "attachments", attributeNodes = { @NamedAttributeNode("id"),
 						@NamedAttributeNode("realFileName"), @NamedAttributeNode("size") }) }) })
-public class Project extends SecureAppEntity<UUID> {
+public class Demand extends SecureAppEntity<UUID> {
 	
-	public final static String SHORT_GRAPH = "Project.SHORT_GRAPH";
+	public final static String SHORT_GRAPH = "Demand.SHORT_GRAPH";
 	
 	@FTSearchable
 	@Column(length = 140)
@@ -60,7 +60,7 @@ public class Project extends SecureAppEntity<UUID> {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(length = 10)
-	private ProjectStatusType status = ProjectStatusType.UNKNOWN;
+	private DemandStatusType status = DemandStatusType.UNKNOWN;
 	
 	@Column(name = "primary_lang")
 	private LanguageCode primaryLanguage;
@@ -76,8 +76,7 @@ public class Project extends SecureAppEntity<UUID> {
 	@JsonProperty("testerUserId")
 	private long tester;
 	
-	@JsonProperty("representativesUserIds")
-	private List<Long> representatives;
+	private long representative;
 	
 	@JsonProperty("observerUserIds")
 	private List<Long> observers;
@@ -93,10 +92,10 @@ public class Project extends SecureAppEntity<UUID> {
 	private String comment;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "project_attachments", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
+	@JoinTable(name = "demand_attachments", joinColumns = { @JoinColumn(name = "demand_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "project_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"project_id", "attachment_id" }))
+					@Index(columnList = "demand_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"demand_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 	
@@ -108,11 +107,11 @@ public class Project extends SecureAppEntity<UUID> {
 		this.name = name;
 	}
 	
-	public ProjectStatusType getStatus() {
+	public DemandStatusType getStatus() {
 		return status;
 	}
 	
-	public void setStatus(ProjectStatusType status) {
+	public void setStatus(DemandStatusType status) {
 		this.status = status;
 	}
 	
@@ -156,15 +155,15 @@ public class Project extends SecureAppEntity<UUID> {
 	public void setTester(long tester) {
 		this.tester = tester;
 	}
-
-	public List<Long> getRepresentatives() {
-		return representatives;
+	
+	public long getRepresentative() {
+		return representative;
 	}
-
-	public void setRepresentatives(List<Long> representatives) {
-		this.representatives = representatives;
+	
+	public void setRepresentative(long representative) {
+		this.representative = representative;
 	}
-
+	
 	public List<Long> getObservers() {
 		return observers;
 	}
@@ -214,6 +213,6 @@ public class Project extends SecureAppEntity<UUID> {
 	
 	@Override
 	public String getURL() {
-		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&projectId=" + getIdentifier();
+		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&demandId=" + getIdentifier();
 	}
 }

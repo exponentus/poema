@@ -1,0 +1,524 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary>
+    <sentence mode="on" keyword="brand">
+        <entry lang="RUS">Poema</entry>
+        <entry lang="ENG">Poema</entry>
+        <entry lang="POR">Poema</entry>
+        <entry lang="SPA">Poema</entry>
+    </sentence>
+    <sentence mode="on" keyword="loading">
+        <entry lang="RUS">Загрузка</entry>
+        <entry lang="ENG">Loading</entry>
+        <entry lang="POR">A carregar</entry>
+        <entry lang="SPA">Cargando</entry>
+    </sentence>
+    <sentence mode="on" keyword="editors">
+        <entry lang="RUS">Редакторы</entry>
+        <entry lang="ENG">Editors</entry>
+        <entry lang="POR">Editores</entry>
+        <entry lang="SPA">Editores</entry>
+    </sentence>
+    <sentence mode="on" keyword="readers">
+        <entry lang="RUS">Читатели</entry>
+        <entry lang="ENG">Readers</entry>
+        <entry lang="POR">Leitores</entry>
+        <entry lang="SPA">Lectores</entry>
+    </sentence>
+    <sentence mode="on" keyword="inbox">
+        <entry lang="RUS">Входящие</entry>
+        <entry lang="ENG">Inbox</entry>
+        <entry lang="POR">Caixa de entrada</entry>
+        <entry lang="SPA">Correo entrante</entry>
+    </sentence>
+    <sentence mode="on" keyword="today">
+        <entry lang="RUS">Сегодня</entry>
+        <entry lang="ENG">Today</entry>
+        <entry lang="POR">Hoje</entry>
+        <entry lang="SPA">Hoy</entry>
+    </sentence>
+    <sentence mode="on" keyword="week">
+        <entry lang="RUS">Неделя</entry>
+        <entry lang="ENG">Week</entry>
+        <entry lang="POR">Semana</entry>
+        <entry lang="SPA">Semana</entry>
+    </sentence>
+    <sentence mode="on" keyword="all">
+        <entry lang="RUS">Все</entry>
+        <entry lang="ENG">All</entry>
+        <entry lang="POR">Tudo</entry>
+        <entry lang="SPA">Todo</entry>
+    </sentence>
+    <sentence mode="on" keyword="completed">
+        <entry lang="RUS">Завершенные</entry>
+        <entry lang="ENG">Completed</entry>
+        <entry lang="POR">Concluída</entry>
+        <entry lang="SPA">Terminada</entry>
+    </sentence>
+    <sentence mode="on" keyword="tasks_all">
+        <entry lang="RUS">Все задания</entry>
+        <entry lang="ENG">All tasks</entry>
+        <entry lang="POR">Todas a tarefas</entry>
+        <entry lang="SPA">Todas las tareas</entry>
+    </sentence>
+    <sentence mode="on" keyword="my_tasks">
+        <entry lang="RUS">Мои задания</entry>
+        <entry lang="ENG">My tasks</entry>
+        <entry lang="POR">As minhas tarefas</entry>
+        <entry lang="SPA">Mis tareas</entry>
+    </sentence>
+    <sentence mode="on" keyword="tasks_assigned_to_me">
+        <entry lang="RUS">Назначенные мне</entry>
+        <entry lang="ENG">Assigned to me</entry>
+        <entry lang="POR">Atribuidas a mim</entry>
+        <entry lang="SPA">Asignadas a mi</entry>
+    </sentence>
+    <sentence mode="on" keyword="dashboard">
+        <entry lang="RUS">Dashboard</entry>
+        <entry lang="ENG">Dashboard</entry>
+        <entry lang="POR">Painel de controlo</entry>
+        <entry lang="SPA">Panel de control</entry>
+    </sentence>
+    <sentence mode="on" keyword="projects">
+        <entry lang="RUS">Проекты</entry>
+        <entry lang="ENG">Projects</entry>
+        <entry lang="POR">Projetos</entry>
+        <entry lang="SPA">Proyectos</entry>
+    </sentence>
+    <sentence mode="on" keyword="tasks">
+        <entry lang="RUS">Задачи</entry>
+        <entry lang="ENG">Tasks</entry>
+        <entry lang="POR">Tarefas</entry>
+        <entry lang="SPA">Tareas</entry>
+    </sentence>
+    <sentence mode="on" keyword="task">
+        <entry lang="RUS">Задача</entry>
+        <entry lang="ENG">Task</entry>
+        <entry lang="POR">Tarefa</entry>
+        <entry lang="SPA">Tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="project">
+        <entry lang="RUS">Проект</entry>
+        <entry lang="ENG">Project</entry>
+        <entry lang="POR">Projeto</entry>
+        <entry lang="SPA">Proyecto</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_project">
+        <entry lang="RUS">Новый проект</entry>
+        <entry lang="ENG">New project</entry>
+        <entry lang="POR">Novo projeto</entry>
+        <entry lang="SPA">Nuevo proyecto</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_task">
+        <entry lang="RUS">Новая задача</entry>
+        <entry lang="ENG">New task</entry>
+        <entry lang="POR">Nova tarefa</entry>
+        <entry lang="SPA">Nueva tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="task_title">
+        <entry lang="RUS">Название задачи</entry>
+        <entry lang="ENG">Task name</entry>
+        <entry lang="POR">Título da tarefa</entry>
+        <entry lang="SPA">Título de la tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="task_type">
+        <entry lang="RUS">Тип задачи</entry>
+        <entry lang="ENG">Task type</entry>
+        <entry lang="POR">Tipo de tarefa</entry>
+        <entry lang="SPA">Tipo de tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="priority">
+        <entry lang="RUS">Приоритет</entry>
+        <entry lang="ENG">Priority</entry>
+        <entry lang="POR">Prioridade</entry>
+        <entry lang="SPA">Prioridad</entry>
+    </sentence>
+    <sentence mode="on" keyword="assignee_user">
+        <entry lang="RUS">Исполнитель</entry>
+        <entry lang="ENG">Assignee</entry>
+        <entry lang="POR">Executante</entry>
+        <entry lang="SPA">Ejecutor</entry>
+    </sentence>
+    <sentence mode="on" keyword="start_date">
+        <entry lang="RUS">Дата начала</entry>
+        <entry lang="ENG">Start date</entry>
+        <entry lang="POR">Data de início</entry>
+        <entry lang="SPA">Fecha de inicio</entry>
+    </sentence>
+    <sentence mode="on" keyword="due_date">
+        <entry lang="RUS">Дата окончания</entry>
+        <entry lang="ENG">Due date</entry>
+        <entry lang="POR">Data de vencimento</entry>
+        <entry lang="SPA">Fecha de finalización</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_due_date_help">
+        <entry lang="RUS">Новая дата окончания</entry>
+        <entry lang="ENG">New due date</entry>
+        <entry lang="POR">Nova data de vencimento</entry>
+        <entry lang="SPA">Nueva fecha de finalización</entry>
+    </sentence>
+    <sentence mode="on" keyword="finish_date">
+        <entry lang="RUS">Дата завершения</entry>
+        <entry lang="ENG">Completion date</entry>
+        <entry lang="POR">Data de conclusión</entry>
+        <entry lang="SPA">Fecha de rematery</entry>
+    </sentence>
+    <sentence mode="on" keyword="body">
+        <entry lang="RUS">Описание</entry>
+        <entry lang="ENG">Body</entry>
+        <entry lang="POR">Corpo</entry>
+        <entry lang="SPA">Cuerpo</entry>
+    </sentence>
+    <sentence mode="on" keyword="tags">
+        <entry lang="RUS">Метки</entry>
+        <entry lang="ENG">Tags</entry>
+        <entry lang="POR">Etiquetas</entry>
+        <entry lang="SPA">Etiquetas</entry>
+    </sentence>
+    <sentence mode="on" keyword="publish_to_customer">
+        <entry lang="RUS">Опубликовать заказчику</entry>
+        <entry lang="ENG">Publish to the customer</entry>
+        <entry lang="POR">Partilhar com o cliente</entry>
+        <entry lang="SPA">Compartir con el cliente</entry>
+    </sentence>
+    <sentence mode="on" keyword="acl_tab_title">
+        <entry lang="RUS">Доступ</entry>
+        <entry lang="ENG">ACL</entry>
+        <entry lang="POR">Controlo de acesso</entry>
+        <entry lang="SPA">Control de acceso</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="name">
+        <entry lang="RUS">Название</entry>
+        <entry lang="ENG">Name</entry>
+        <entry lang="POR">Nome</entry>
+        <entry lang="SPA">Nombre</entry>
+    </sentence>
+    <sentence mode="on" keyword="customer">
+        <entry lang="RUS">Заказчик</entry>
+        <entry lang="ENG">Customer</entry>
+        <entry lang="POR">Cliente</entry>
+        <entry lang="SPA">Cliente</entry>
+    </sentence>
+    <sentence mode="on" keyword="manager">
+        <entry lang="RUS">Менеджер</entry>
+        <entry lang="ENG">Manager</entry>
+        <entry lang="POR">Gestor</entry>
+        <entry lang="SPA">Gestor</entry>
+    </sentence>
+    <sentence mode="on" keyword="programmer">
+        <entry lang="RUS">Главный программист</entry>
+        <entry lang="ENG">Lead developer</entry>
+        <entry lang="POR">Líder de desenvolvimento</entry>
+        <entry lang="SPA">Lider de desarrollo</entry>
+    </sentence>
+    <sentence mode="on" keyword="tester">
+        <entry lang="RUS">Тестировщик</entry>
+        <entry lang="ENG">Tester</entry>
+        <entry lang="POR">Provador</entry>
+        <entry lang="SPA">Testeador</entry>
+    </sentence>
+    <sentence mode="on" keyword="observers">
+        <entry lang="RUS">Наблюдатели</entry>
+        <entry lang="ENG">Observers</entry>
+        <entry lang="POR">Observedarores</entry>
+        <entry lang="SPA">Observadores</entry>
+    </sentence>
+    <sentence mode="on" keyword="comment">
+        <entry lang="RUS">Комментарий</entry>
+        <entry lang="ENG">Comment</entry>
+        <entry lang="POR">Comentário</entry>
+        <entry lang="SPA">Comentario</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="delete">
+        <entry lang="RUS">Удалить</entry>
+        <entry lang="ENG">Delete</entry>
+        <entry lang="POR">Apagar</entry>
+        <entry lang="SPA">Borrar</entry>
+    </sentence>
+    <sentence mode="on" keyword="search">
+        <entry lang="RUS">Поиск</entry>
+        <entry lang="KAZ">Іздеу</entry>
+        <entry lang="ENG">Search</entry>
+        <entry lang="POR">Procurar</entry>
+        <entry lang="SPA">Buscar</entry>
+    </sentence>
+    <sentence mode="on" keyword="required">
+        <entry lang="RUS">Обязательно</entry>
+        <entry lang="KAZ">Обязательно</entry>
+        <entry lang="ENG">Required</entry>
+        <entry lang="POR">Obrigatório</entry>
+        <entry lang="SPA">Obligatorio</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_request">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Request</entry>
+        <entry lang="POR">Pedido</entry>
+        <entry lang="SPA">Solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="task_request">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Request</entry>
+        <entry lang="POR">Pedido</entry>
+        <entry lang="SPA">Solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="send_request">
+        <entry lang="RUS">Отправить запрос</entry>
+        <entry lang="ENG">Send request</entry>
+        <entry lang="POR">Enviar pedido</entry>
+        <entry lang="SPA">Enviar solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="complete_task">
+        <entry lang="RUS">Завершить задачу</entry>
+        <entry lang="ENG">Complete task</entry>
+        <entry lang="POR">Completar tarefa</entry>
+        <entry lang="SPA">Completar tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="cancel_task">
+        <entry lang="RUS">Отменить задачу</entry>
+        <entry lang="ENG">Cancel task</entry>
+        <entry lang="POR">Cancelar pedido</entry>
+        <entry lang="SPA">Anular solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="acknowledged_task">
+        <entry lang="RUS">Принято в работу</entry>
+        <entry lang="ENG">Acknowledged</entry>
+        <entry lang="POR">Recebida</entry>
+        <entry lang="SPA">Recibida</entry>
+    </sentence>
+    <sentence mode="on" keyword="send_task">
+        <entry lang="RUS">Отправить задачу</entry>
+        <entry lang="ENG">Send task</entry>
+        <entry lang="POR">Enviar tarefa</entry>
+        <entry lang="SPA">Enviar tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="add_comment">
+        <entry lang="RUS">Добавить комментарий</entry>
+        <entry lang="ENG">Add comment</entry>
+        <entry lang="POR">Adicionar comentario</entry>
+        <entry lang="SPA">Añadir comentario</entry>
+    </sentence>
+    <sentence mode="on" keyword="add_subtask">
+        <entry lang="RUS">Добавить подзадачу</entry>
+        <entry lang="ENG">Add subtask</entry>
+        <entry lang="POR">Adicionar sub-tarefa</entry>
+        <entry lang="SPA">Añadir subtarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="subtasks">
+        <entry lang="RUS">Подзадачи</entry>
+        <entry lang="ENG">Subtasks</entry>
+        <entry lang="POR">Sub-tarefas</entry>
+        <entry lang="SPA">Subtareas</entry>
+    </sentence>
+    <sentence mode="on" keyword="subtask">
+        <entry lang="RUS">Подзадача</entry>
+        <entry lang="ENG">Subtask</entry>
+        <entry lang="POR">Sub-tarefa</entry>
+        <entry lang="SPA">Sub-tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="new_subtask">
+        <entry lang="RUS">Новая подзадача</entry>
+        <entry lang="ENG">New subtask</entry>
+        <entry lang="POR">Nova sub-tarefa</entry>
+        <entry lang="SPA">Nueva subtarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="comments">
+        <entry lang="RUS">Комментарии</entry>
+        <entry lang="ENG">Comments</entry>
+        <entry lang="POR">Comentários</entry>
+        <entry lang="SPA">Comentarios</entry>
+    </sentence>
+    <sentence mode="on" keyword="requests">
+        <entry lang="RUS">Запросы</entry>
+        <entry lang="ENG">Requests</entry>
+        <entry lang="POR">Pedidos</entry>
+        <entry lang="SPA">Solicitudes</entry>
+    </sentence>
+    <sentence mode="on" keyword="execution">
+        <entry lang="RUS">Выполнение</entry>
+        <entry lang="ENG">Execution</entry>
+        <entry lang="POR">Execução</entry>
+        <entry lang="SPA">Ejecución</entry>
+    </sentence>
+    <sentence mode="on" keyword="cancel_reason">
+        <entry lang="RUS">Причина отмены</entry>
+        <entry lang="ENG">Cancel reason</entry>
+        <entry lang="POR">Cancelar motivo</entry>
+        <entry lang="SPA">Anular motivo</entry>
+    </sentence>
+    <sentence mode="on" keyword="decline_reason">
+        <entry lang="RUS">Причина отклонения</entry>
+        <entry lang="ENG">Decline reason</entry>
+        <entry lang="POR">Recusar motivo</entry>
+        <entry lang="SPA">Rechazar motivo</entry>
+    </sentence>
+    <sentence mode="on" keyword="request_type">
+        <entry lang="RUS">Тип запроса</entry>
+        <entry lang="ENG">Request type</entry>
+        <entry lang="POR">Tipo de pedido</entry>
+        <entry lang="SPA">Tipo de solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="request_time">
+        <entry lang="RUS">Дата запроса</entry>
+        <entry lang="ENG">Request date</entry>
+        <entry lang="POR">Data do pedido</entry>
+        <entry lang="SPA">Fecha de la solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="accept">
+        <entry lang="RUS">Принять</entry>
+        <entry lang="ENG">Accept</entry>
+        <entry lang="POR">Aceitar</entry>
+        <entry lang="SPA">Aceptar</entry>
+    </sentence>
+    <sentence mode="on" keyword="accepted">
+        <entry lang="RUS">Принято</entry>
+        <entry lang="ENG">Accepted</entry>
+        <entry lang="POR">Aceite</entry>
+        <entry lang="SPA">Aceptado</entry>
+    </sentence>
+    <sentence mode="on" keyword="decline">
+        <entry lang="RUS">Отклонить</entry>
+        <entry lang="ENG">Decline</entry>
+        <entry lang="POR">Recusar</entry>
+        <entry lang="SPA">Rechazar</entry>
+    </sentence>
+    <sentence mode="on" keyword="declined">
+        <entry lang="RUS">Отклонено</entry>
+        <entry lang="ENG">Declined</entry>
+        <entry lang="POR">Recusado</entry>
+        <entry lang="SPA">Rechazado</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="draft">
+        <entry lang="RUS">Черновик</entry>
+        <entry lang="ENG">Draft</entry>
+        <entry lang="POR">Rascunho</entry>
+        <entry lang="SPA">Boceto</entry>
+    </sentence>
+    <sentence mode="on" keyword="open">
+        <entry lang="RUS">Открытый</entry>
+        <entry lang="ENG">Open</entry>
+        <entry lang="POR">Aberto</entry>
+        <entry lang="SPA">Abierto</entry>
+    </sentence>
+    <sentence mode="on" keyword="active">
+        <entry lang="RUS">Активный</entry>
+        <entry lang="ENG">Active</entry>
+        <entry lang="POR">Ativo</entry>
+        <entry lang="SPA">Activo</entry>
+    </sentence>
+    <sentence mode="on" keyword="waiting">
+        <entry lang="RUS">Ожидание срока</entry>
+        <entry lang="ENG">On-hold</entry>
+        <entry lang="POR">À espera</entry>
+        <entry lang="SPA">En espera</entry>
+    </sentence>
+    <sentence mode="on" keyword="processing">
+        <entry lang="RUS">В работе</entry>
+        <entry lang="ENG">Processing</entry>
+        <entry lang="POR">Em processamento</entry>
+        <entry lang="SPA">En procesamiento</entry>
+    </sentence>
+    <sentence mode="on" keyword="pending">
+        <entry lang="RUS">Ожидание</entry>
+        <entry lang="ENG">Pending</entry>
+        <entry lang="POR">Pendente</entry>
+        <entry lang="SPA">Pendiente</entry>
+    </sentence>
+    <sentence mode="on" keyword="completed">
+        <entry lang="RUS">Завершен</entry>
+        <entry lang="ENG">Completed</entry>
+        <entry lang="POR">Concluído</entry>
+        <entry lang="SPA">Terminado</entry>
+    </sentence>
+    <sentence mode="on" keyword="cancelled">
+        <entry lang="RUS">Отменен</entry>
+        <entry lang="ENG">Cancelled</entry>
+        <entry lang="POR">Cancelado</entry>
+        <entry lang="SPA">Anulado</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="urgent">
+        <entry lang="RUS">Срочный</entry>
+        <entry lang="ENG">Urgent</entry>
+        <entry lang="POR">Urgente</entry>
+        <entry lang="SPA">Urgente</entry>
+    </sentence>
+    <sentence mode="on" keyword="high">
+        <entry lang="RUS">Высокий</entry>
+        <entry lang="ENG">High</entry>
+        <entry lang="POR">Alta</entry>
+        <entry lang="SPA">Alta</entry>
+    </sentence>
+    <sentence mode="on" keyword="medium">
+        <entry lang="RUS">Средний</entry>
+        <entry lang="ENG">Medium</entry>
+        <entry lang="POR">Média</entry>
+        <entry lang="SPA">Mediana</entry>
+    </sentence>
+    <sentence mode="on" keyword="normal">
+        <entry lang="RUS">Обычный</entry>
+        <entry lang="ENG">Normal</entry>
+        <entry lang="POR">Normal</entry>
+        <entry lang="SPA">Normal</entry>
+    </sentence>
+
+    <!-- messaging -->
+    <sentence mode="on" keyword="notify_about_new_project_short">
+        <entry lang="RUS">Уведомление о новом проекте</entry>
+        <entry lang="ENG">Notify about a new project</entry>
+        <entry lang="KAZ">Уведомление о новом проекте</entry>
+        <entry lang="POR">Notificar sobre um novo projeto</entry>
+        <entry lang="SPA">Notificarle acerca de un nuevo proyecto</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_new_task_short">
+        <entry lang="RUS">Уведомление о новом задании</entry>
+        <entry lang="ENG">Notify about a new task</entry>
+        <entry lang="KAZ">Уведомление о новом задании</entry>
+        <entry lang="POR">Notificar sobre uma nova tarefa</entry>
+        <entry lang="SPA">Notificarle acerca de una nueva tarea</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_task_request">
+        <entry lang="RUS">Уведомление о новом запросе</entry>
+        <entry lang="ENG">Notify about a new request</entry>
+        <entry lang="KAZ">Уведомление о новом запросе</entry>
+        <entry lang="POR">Notificar sobre um novo pedido</entry>
+        <entry lang="SPA">Notificarle sobre una nueva solicitud</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_finish_task">
+        <entry lang="RUS">Уведомление о завершении задачи</entry>
+        <entry lang="ENG">Notify about finishing task</entry>
+        <entry lang="KAZ">Уведомление о завершении задачи</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_request_resolution">
+        <entry lang="RUS">Уведомление о решении по запросу</entry>
+        <entry lang="ENG">Notify about a request decision</entry>
+        <entry lang="KAZ">Уведомление о решении по запросу</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_task_acknowledged">
+        <entry lang="RUS">Уведомление о принятии задания</entry>
+        <entry lang="ENG">Notify about a task acknowledging</entry>
+        <entry lang="KAZ">Уведомление о принятии задания</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_cancel_task">
+        <entry lang="RUS">Уведомление о отмене задания</entry>
+        <entry lang="ENG">Notify about a task cancellation</entry>
+        <entry lang="KAZ">Уведомление о отмене задания</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+    <sentence mode="on" keyword="notify_about_overdued_task">
+        <entry lang="RUS">Уведомление о просроченном задании</entry>
+        <entry lang="ENG">Notify about a expired task</entry>
+        <entry lang="KAZ">Уведомление о просроченном задании</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
+
+</vocabulary>

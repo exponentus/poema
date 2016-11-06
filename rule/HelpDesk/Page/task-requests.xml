@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rule mode="on">
+    <caching>NO_CACHING</caching>
+    <xsltfile>page/index.xsl</xsltfile>
+    <element mode="ON" type="SCRIPT">
+        <events>
+            <doscript source="JAVA_CLASS">projects.page.TaskRequests</doscript>
+        </events>
+    </element>
+</rule>
