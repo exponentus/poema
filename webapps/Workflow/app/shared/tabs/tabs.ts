@@ -1,15 +1,15 @@
-import { Component, ContentChildren, QueryList, AfterContentInit } from '@angular/core';
+import { Component, ContentChildren, Input, QueryList, AfterContentInit } from '@angular/core';
 
 import { Tab } from './tab';
 
 @Component({
     selector: 'tabs',
     template: `
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" *ngIf="!(hideTabBarIfOne && tabs.length === 1)">
             <li *ngFor="let tab of tabs" (click)="selectTab(tab)" [class.pinned]="tab.pinned" [class.active]="tab.active">
                 <a href="#" (click)="$event.preventDefault()">
                     <i class="{{tab.icon}}" *ngIf="tab.icon"></i>
-                    {{tab.title}}
+                    <span>{{tab.title}}</span>
                 </a>
             </li>
         </ul>
@@ -18,6 +18,7 @@ import { Tab } from './tab';
 })
 
 export class Tabs implements AfterContentInit {
+    @Input() hideTabBarIfOne: boolean = true;
     @ContentChildren(Tab) tabs: QueryList<Tab>;
 
     ngAfterContentInit() {

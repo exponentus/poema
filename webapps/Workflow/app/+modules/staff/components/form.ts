@@ -91,8 +91,6 @@ export class StaffFormComponent {
     }
 
     save($event) {
-        console.log($event, this.model);
-
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
 
         // create localizedName field if exists

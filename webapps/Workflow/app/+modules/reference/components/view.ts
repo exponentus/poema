@@ -7,6 +7,41 @@ import { ReferenceService } from '../reference.service';
 import { NbModalService } from '../../../components/nb-modal';
 import { parseResponseObjects } from '../../../utils/utils';
 
+const requestDeclineDialog = {
+    type: 'dialog',
+    className: 'request-decline-dialog',
+    title: 'decline',
+    model: {},
+    formSchema: [{
+        tabTitle: 'properties',
+        active: true,
+        fieldsets: [{
+            fields: [{
+                type: 'textarea',
+                hideLabel: true,
+                name: 'comment',
+                placeHolder: 'decline_reason',
+                className: 'span7',
+                required: true
+            }]
+        }]
+    }],
+    buttons: [{
+        label: 'cancel',
+        click: (modal, event) => {
+            console.log(modal, event, this);
+            modal.close();
+        }
+    }, {
+        label: 'decline',
+        className: 'btn-primary',
+        click: (modal, event) => {
+            console.log(modal, event, this);
+            modal.close();
+        }
+    }]
+};
+
 @Component({
     selector: 'reference-view',
     template: `
@@ -125,29 +160,7 @@ export class ReferenceViewComponent {
     }
 
     onAction($event) {
-        this.nbModalService.createModal({
-            title: $event.action.caption,
-            message: $event.action.caption,
-            buttons: [{
-                label: 'cancel',
-                click: (modal, $event) => {
-                    console.log(modal, $event, this);
-                    modal.close();
-                }
-            }, {
-                label: 'yes',
-                click: (modal, event) => {
-                    console.log(modal, event, this);
-                    alert('yes: ' + $event.action.caption);
-                    modal.close(1000);
-                    this.alert();
-                }
-            }]
-        }).show().close(5000);
-    }
-
-    alert() {
-        alert(this.id);
+        this.nbModalService.create(requestDeclineDialog).show();
     }
 
     onOpenUrl($event) {

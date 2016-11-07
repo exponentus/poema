@@ -6,7 +6,7 @@ import { EnvironmentActions } from '../../../actions';
 @Component({
     selector: 'reference-container',
     template: `
-        <nav class="aside side-nav"
+        <nav class="aside nb-scrollbar side-nav"
             nb-nav
             module="Reference"
             outlineUrl="/Reference/p?id=outline">

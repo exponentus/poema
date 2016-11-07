@@ -6,7 +6,7 @@ import { EnvironmentActions } from '../../../actions';
 @Component({
     selector: 'workflow-container',
     template: `
-        <nav class="aside side-nav"
+        <nav class="aside nb-scrollbar side-nav"
             nb-nav
             module="Workflow"
             outlineUrl="/Workflow/p?id=outline">

@@ -26,6 +26,8 @@ export class StaffService {
     }
 }
 
+const localizedNameCodes = ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL'];
+
 const formSchemas = {
     _default: [{
         tabTitle: 'properties',
@@ -42,8 +44,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -86,8 +89,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -123,8 +127,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span6',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -211,8 +216,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -236,8 +242,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }]

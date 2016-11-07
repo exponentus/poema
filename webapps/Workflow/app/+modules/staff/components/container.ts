@@ -6,7 +6,7 @@ import { EnvironmentActions } from '../../../actions';
 @Component({
     selector: 'staff-container',
     template: `
-        <nav class="aside side-nav"
+        <nav class="aside nb-scrollbar side-nav"
             nb-nav
             module="Staff"
             outlineUrl="/Staff/p?id=outline">

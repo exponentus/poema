@@ -26,6 +26,8 @@ export class ReferenceService {
     }
 }
 
+const localizedNameCodes = ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL'];
+
 const formSchemas = {
     _default: [{
         tabTitle: 'properties',
@@ -42,8 +44,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -69,8 +72,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -107,8 +111,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -136,8 +141,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -165,9 +171,7 @@ const formSchemas = {
                 name: 'region',
                 className: 'span7',
                 values: {
-                    url: '/Reference/p?id=region-view',
-                    listPath: "objects.1.list",
-                    totalPagesPath: "objects.1.meta.totalPage"
+                    url: '/Reference/p?id=region-view'
                 }
             }, {
                 type: 'select',
@@ -182,8 +186,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -210,8 +215,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -235,8 +241,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -254,7 +261,7 @@ const formSchemas = {
                 type: 'select',
                 label: 'code',
                 name: 'code',
-                values: { enum: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL'] },
+                values: { enum: localizedNameCodes },
                 className: 'span2',
                 required: true
             }]
@@ -262,8 +269,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -288,8 +296,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -314,8 +323,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -340,8 +350,36 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
+            }]
+        }]
+    }],
+    texttemplate: [{
+        tabTitle: 'properties',
+        active: true,
+        fieldsets: [{
+            fields: [{
+                type: 'text',
+                label: 'name',
+                name: 'name',
+                className: 'span7',
+                required: true
+            }, {
+                type: 'text',
+                label: 'category',
+                name: 'category',
+                className: 'span7',
+                required: true
+            }]
+        }, {
+            title: 'localized_names',
+            fields: [{
+                type: 'localizedName',
+                hideLabel: true,
+                className: 'span7',
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -375,8 +413,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }],
@@ -401,8 +440,9 @@ const formSchemas = {
             title: 'localized_names',
             fields: [{
                 type: 'localizedName',
+                hideLabel: true,
                 className: 'span7',
-                languages: ['RUS', 'KAZ', 'ENG', 'SPA', 'POR', 'BUL']
+                languages: localizedNameCodes
             }]
         }]
     }]

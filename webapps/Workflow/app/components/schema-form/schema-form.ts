@@ -9,4 +9,8 @@ export class SchemaFormComponent {
     @Input('schema') formSchema: any[] = [];
     @Input() model: any;
     @Input() errors: any[] = [];
+
+    jsonStringify(field): string {
+        return JSON.stringify(field);
+    }
 }
