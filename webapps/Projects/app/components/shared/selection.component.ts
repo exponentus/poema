@@ -128,12 +128,12 @@ export class SelectionComponent {
     @Input() disabled = false;
     @Input() allowClear = false;
     @Input() searchable = false;
-    @Input() contentLoadable = false;
-    @Input() url;
+    @Input() url = '';
     @Input() listPath = null;
     @Input() totalPagesPath = null;
+    @Input() pagePath = null;
     @Input() pageParam = 'page';
-    @Input() searchParam = 'keyWord';
+    @Input() searchParam = 'keyword';
     @Input() tabIndex = 0;
     @Input() checkmarkIconClass = 'fa fa-check';
     @Input() placeHolder: string = '';
@@ -159,6 +159,7 @@ export class SelectionComponent {
     private firstOpen = true;
     private showNotFound = false;
 
+    private allLoaded = false;
     private loading = false;
     private page = 0;
     private totalPages = 1;
@@ -182,6 +183,7 @@ export class SelectionComponent {
         }
 
         this.isInitialized = true;
+        this.allLoaded = this.url.length === 0;
 
         if (this.multiple) {
             this.filterItems();
@@ -244,6 +246,7 @@ export class SelectionComponent {
     setItems(items: any[]) {
         this.items = items;
         this.filterItems();
+        this.ref.markForCheck();
     }
 
     appendToItems(items: any[]) {
@@ -312,7 +315,7 @@ export class SelectionComponent {
 
     // ===
     filterItems(keyWord?: string) {
-        if (!this.contentLoadable && keyWord) {
+        if (keyWord) {
             this.filteredItems = this.items.filter(it => {
                 return it[this.textKey].toLowerCase().indexOf(keyWord) != -1;
             });
@@ -333,12 +336,12 @@ export class SelectionComponent {
 
     search(keyWord) {
         if (this.keyWord !== keyWord) {
-            if (this.contentLoadable) {
+            this.keyWord = keyWord;
+            if (!this.allLoaded) {
                 this.fetchContent({ search: keyWord });
             } else {
                 this.filterItems(keyWord);
             }
-            this.keyWord = keyWord;
             this.open();
         }
     }
@@ -462,7 +465,11 @@ export class SelectionComponent {
         this.load.emit($event);
 
         //
-        if (this.totalPages <= this.page) {
+        if (this.allLoaded) {
+            return;
+        }
+
+        if (!this.url) {
             return;
         }
 
@@ -471,11 +478,7 @@ export class SelectionComponent {
         } else if ($event.next === true) {
             this.page++;
         } else if ($event.search) {
-
-        }
-
-        if (!this.url) {
-            return;
+            this.page = 1;
         }
 
         this.loading = true;
@@ -497,14 +500,31 @@ export class SelectionComponent {
                     _list = _list[it];
                 }
                 // read totalPages
-                let pagePaths = this.totalPagesPath.split('.');
+                let totalPagesPath = this.totalPagesPath.split('.');
                 let _totalPages = payload;
-                for (let it of pagePaths) {
+                for (let it of totalPagesPath) {
                     _totalPages = _totalPages[it];
                 }
+                // read page
+                let pagePaths = this.pagePath.split('.');
+                let _page = payload;
+                for (let it of pagePaths) {
+                    _page = _page[it];
+                }
 
+                this.page = _page;
                 this.totalPages = _totalPages;
-                this.appendToItems(_list);
+
+                if (this.totalPages < this.page) {
+                    this.page = 1;
+                }
+
+                this.allLoaded = (this.totalPages <= this.page) && !this.keyWord;
+                if (this.page === 1) {
+                    this.setItems(_list);
+                } else {
+                    this.appendToItems(_list);
+                }
             });
     }
 
@@ -516,12 +536,14 @@ export class SelectionComponent {
         if (json.payload && json.payload.viewpage) {
             this.listPath = 'payload.viewpage.result'
             this.totalPagesPath = 'payload.viewpage.maxPage';
+            this.pagePath = 'payload.viewpage.page';
         } else if (json.objects) {
             let i = 0;
             for (let obj of json.objects) {
                 if (obj.list && obj.meta && obj.type) {
                     this.listPath = `objects.${i}.list`;
                     this.totalPagesPath = `objects.${i}.meta.totalPages`;
+                    this.pagePath = `objects.${i}.meta.page`;
                 }
                 i++;
             }

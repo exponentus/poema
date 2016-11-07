@@ -110,7 +110,7 @@
     <footer class="content-footer">
         <div class="record-author" *ngIf="request.authorId">
             <span>{{'author' | translate}}</span>
-            <!-- <employee-input [ids]="[request.authorId]"></employee-input> -->
+            <span>{{request.author?.name}}</span>
             <span>{{request.regDate}}</span>
         </div>
     </footer>

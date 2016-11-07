@@ -3,6 +3,8 @@ import { RequestType } from './request-type';
 
 export class Request {
     id: string = '';
+    author: any;
+    authorId: string;
     regDate: Date;
     fsid: string = '' + Date.now();
     acl: any = {};

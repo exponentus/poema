@@ -83,29 +83,21 @@ export class TaskFilterComponent {
     }
 
     get isFiltered() {
-        return this.taskStatus.length || this.taskType || this.assigneeUser || this.tags.length;
+        return this.taskStatus || this.taskType || this.assigneeUser || this.tags.length;
     }
 
     setTaskStatus(taskStatus: string) {
-        this.taskStatus = taskStatus;
+        this.taskStatus = taskStatus || '';
         this.updateFilter();
     }
 
     setTaskType(taskType: TaskType) {
-        if (taskType) {
-            this.taskType = taskType;
-        } else {
-            this.taskType = '';
-        }
+        this.taskType = taskType || '';
         this.updateFilter();
     }
 
     setAssigneeUser(assigneeUser: Employee) {
-        if (assigneeUser) {
-            this.assigneeUser = assigneeUser;
-        } else {
-            this.assigneeUser = '';
-        }
+        this.assigneeUser = assigneeUser || '';
         this.updateFilter();
     }
 

@@ -126,14 +126,18 @@ export class RequestComponent {
     }
 
     doDecline(request: Request, comment: string) {
-        this.taskService.doDeclineRequest(request, comment).subscribe(action => {
+        this.taskService.doDeclineRequest(request, comment || '').subscribe(action => {
             // this.store.dispatch(action);
             this.close();
         });
     }
 
     setRequestType(requestType: RequestType) {
-        this.request.requestTypeId = requestType.id;
+        if (requestType) {
+            this.request.requestTypeId = requestType.id;
+        } else {
+            this.request.requestTypeId = '';
+        }
     }
 
     setComment(comment: string) {

@@ -166,8 +166,13 @@ export class TaskService {
         let url = 'p?id=task-requests&requestId=' + (requestId !== 'new' ? requestId : '');
         return this.http.get(url, { headers: xhrHeaders() })
             .map(response => {
-                let data = parseResponseObjects(response.json().objects);
+                let json = response.json();
+                let data = parseResponseObjects(json.objects);
+                let emps = json.data.employees;
                 let request = <Request>data.request;
+                if (request.authorId) {
+                    request.author = json.data.employees[request.authorId];
+                }
                 if (data.fsid) {
                     request.fsid = data.fsid;
                 }
