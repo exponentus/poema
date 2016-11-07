@@ -23,10 +23,10 @@ import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import reference.dao.RequestTypeDAO;
 import reference.model.RequestType;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class TaskRequests extends _DoForm {
 
@@ -50,12 +50,22 @@ public class TaskRequests extends _DoForm {
             addContent(new ACL(request));
             addContent(request);
             addContent(getActionBar(session, request));
+
+            EmployeeDAO empDao = new EmployeeDAO(session);
+            Map<Long, Employee> emps = new HashMap<>();
+            emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
+            addDataContent("employees", emps);
             return;
         } else if (formData.containsField("requestId")) {
             Request request = new Request();
             request.setAuthor(session.getUser());
             addContent(request);
             addContent(getActionBar(session, request));
+
+            EmployeeDAO empDao = new EmployeeDAO(session);
+            Map<Long, Employee> emps = new HashMap<>();
+            emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
+            addDataContent("employees", emps);
             return;
         }
 
