@@ -52,8 +52,7 @@ body:not(.side-nav-toggle) .aside + .content {
 }
 
 .header-title input {
-    /*font-size: .9em;*/
-    font-family: 'Segoe UI';
+    font-size: .9em;
     line-height: 1.4;
     min-height: auto;
     padding: 4px 7px;
