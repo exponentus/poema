@@ -47,6 +47,10 @@ export class AppComponent {
             this.store.dispatch(this.environmentActions.fetchUserProfile(data));
         });
 
+        // this.appService.fetchSession().subscribe(data => {
+        //     console.log(data);
+        // });
+
         // ng2-translate
         var userLang = navigator.language.split('-')[0]; // use navigator lang if available
         userLang = /(ru|en)/gi.test(userLang) ? userLang : 'en';

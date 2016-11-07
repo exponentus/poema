@@ -20,6 +20,13 @@ export class AppService {
         }
     }
 
+    fetchSession() {
+        return this.http.get('do/session', { headers: xhrHeaders() })
+            .retry(3)
+            .map(response => response.json())
+            .catch(error => this.handleError(error));
+    }
+
     fetchUserProfile() {
         return this.http.get('p?id=userprofile', { headers: xhrHeaders() })
             .retry(3)

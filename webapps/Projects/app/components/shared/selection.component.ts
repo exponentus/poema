@@ -29,10 +29,12 @@ import { Http, Headers } from '@angular/http';
                 <input *ngIf="searchable"
                     #searchInput
                     class="select-search-input"
+                    [class.has-value]="keyWord"
                     name="search"
                     value=""
                     autocomplete="off"
                     [tabindex]="tabIndex"
+                    (change)="$event.stopPropagation()"
                     (focus)="onFocus($event)"
                     (blur)="onBlur($event)"
                     (keyup)="handleEvent($event)" />
@@ -157,6 +159,7 @@ export class SelectionComponent {
     private isInitialized = false;
     private selfClick = false;
     private firstOpen = true;
+    private eventAfterSelect = false;
     private showNotFound = false;
 
     private allLoaded = false;
@@ -273,6 +276,7 @@ export class SelectionComponent {
         this.emitChange();
         this.clearSearchInput();
         this.filterItems();
+        this.eventAfterSelect = true;
     }
 
     remove(item, $event) {
@@ -330,8 +334,6 @@ export class SelectionComponent {
         if (this.filteredItems.length === 0 || this.filteredItems.length !== this.items.length) {
             this.resetCursor();
         }
-
-        this.selectFirst();
     }
 
     search(keyWord) {
@@ -343,6 +345,7 @@ export class SelectionComponent {
                 this.filterItems(keyWord);
             }
             this.open();
+            // this.selectFirst();
         }
     }
 
@@ -382,12 +385,16 @@ export class SelectionComponent {
                 $event.preventDefault();
                 this.move(keyCode);
             }
-        } else if ($event.type === 'keyup' && $event.target.name === 'search') {
+        } else if ($event.type === 'keyup' && $event.key != 'Tab' && $event.target.name === 'search') {
             $event.stopPropagation();
+            if (this.eventAfterSelect) {
+                this.eventAfterSelect = false;
+                return;
+            }
             this.cursorMode = this.SEARCH_MODE;
             this.search($event.target.value.toLowerCase());
         } else {
-            console.log('SelectionComponent::handleEvent > unknown', $event);
+            // console.log('SelectionComponent::handleEvent > unknown', $event);
         }
     }
 
@@ -519,7 +526,7 @@ export class SelectionComponent {
                     this.page = 1;
                 }
 
-                this.allLoaded = (this.totalPages <= this.page) && !this.keyWord;
+                this.allLoaded = (this.totalPages <= this.page) && !this.keyWord && _list.length > 0;
                 if (this.page === 1) {
                     this.setItems(_list);
                 } else {
