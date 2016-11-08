@@ -223,7 +223,7 @@ public class TaskForm extends _DoForm {
 				task.setStartDate(null);
 			} else {
 				if (task.getStatus() == TaskStatusType.DRAFT || task.getStatus() == TaskStatusType.OPEN
-				        || task.getStatus() == TaskStatusType.WAITING) {
+						|| task.getStatus() == TaskStatusType.WAITING) {
 					task.setStartDate(TimeUtil.stringToDate(sd));
 					if (new Date().before(task.getStartDate())) {
 						task.setStatus(TaskStatusType.WAITING);
@@ -241,7 +241,8 @@ public class TaskForm extends _DoForm {
 
 			List<Long> ouIds = new ArrayList<>();
 			if (!formData.getValueSilently("observerUserIds").isEmpty()) {
-				ouIds = Arrays.stream(formData.getValueSilently("observerUserIds").split(",")).map(Long::valueOf).collect(Collectors.toList());
+				ouIds = Arrays.stream(formData.getValueSilently("observerUserIds").split(",")).map(Long::valueOf)
+						.collect(Collectors.toList());
 				for (long uid : ouIds) {
 					IUser<Long> ou = userDAO.findById(uid);
 					if (ou == null) {
@@ -354,6 +355,7 @@ public class TaskForm extends _DoForm {
 	}
 
 	private _ActionBar getActionBar(_Session session, Task task) {
+		
 		_ActionBar actionBar = new _ActionBar(session);
 		if (task.isEditable()) {
 			actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
@@ -374,7 +376,7 @@ public class TaskForm extends _DoForm {
 				}
 			}
 
-			if (task.getAuthor().getId().equals(session.getUser().getId())) {
+			if (task.getAuthor().getId().equals(session.getUser().getId()) || session.getUser().isSuperUser()) {
 				if ((task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)) {
 					actionBar.addAction(new _Action("", "", "task_complete"));
 					actionBar.addAction(new _Action("", "", "task_cancel"));
