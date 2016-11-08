@@ -13,6 +13,8 @@ import { PipesModule } from './pipes/pipes.module';
 import { AppComponent } from './components/application/app';
 import { NavbarComponent } from './components/navbar/navbar';
 import { NavComponent } from './components/nav/nav';
+import { SearchFormComponent, SearchViewComponent } from './components/search';
+import { ListPageComponent } from './components/list-page/list-page';
 import { DashboardComponent } from './components/dashboard/dashboard';
 import { ProjectsComponent } from './components/project/projects';
 import { ProjectComponent } from './components/project/project';
@@ -50,6 +52,9 @@ import { AuthGuard } from './auth.guard';
         AppComponent,
         NavbarComponent,
         NavComponent,
+        SearchFormComponent,
+        SearchViewComponent,
+        ListPageComponent,
         DashboardComponent,
         ProjectsComponent,
         ProjectComponent,

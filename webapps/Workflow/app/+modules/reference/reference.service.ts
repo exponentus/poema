@@ -407,7 +407,7 @@ const formSchemas = {
             }, {
                 type: 'checkbox',
                 name: 'hidden',
-                values: [{ value: 'true', label: 'hidden' }]
+                values: [{ value: 'true', label: 'is_hidden' }]
             }]
         }, {
             title: 'localized_names',

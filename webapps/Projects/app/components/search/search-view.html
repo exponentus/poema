@@ -1,0 +1,43 @@
+<div class="content-header">
+    <h1 class="header-title">
+        {{'ft_search_result' | translate}}
+        <span *ngIf="!loading && meta.count">({{meta.count}})</span>
+    </h1>
+    <div class="content-actions">
+        <button class="btn" type="button" (click)="close()">
+            {{'back_to_doc_list' | translate}}
+        </button>
+        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="goToPage($event)"></pagination>
+    </div>
+</div>
+<div class="content-body">
+    <div class="view search-view">
+        <header class="entries-head">
+            <div class="head-wrap">
+                <div class="entry-captions">
+                    <div class="vw-date" style="width:15%">{{'reg_date' | translate}}</div>
+                    <div class="vw-icon"><i class="fa fa-paperclip"></i></div>
+                    <div class="vw-name">{{'name' | translate}}</div>
+                </div>
+            </div>
+        </header>
+        <div class="entries">
+            <div class="view-empty" *ngIf="!loading && !models.length">
+                {{'ft_search_return_null' | translate}}: {{keyword}}
+            </div>
+            <div class="entry-wrap" *ngFor="let model of models">
+                <div class="entry">
+                    <a class="entry-link" [routerLink]="['./', model.id]">
+                        <div class="entry-fields">
+                            <div class="vw-date" style="width:15%">{{model.regDate | dateFmt:'DD.MM.YYYY'}}</div>
+                            <div class="vw-icon">
+                                <i class="fa fa-paperclip" *ngIf="model.hasAttachments"></i>
+                            </div>
+                            <div class="vw-name">{{model.name}}</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

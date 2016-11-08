@@ -3,6 +3,7 @@ import { TranslateService } from './translate.service';
 import { ProjectService } from './project.service';
 import { TaskService } from './task.service';
 import { ReferenceService } from './reference.service';
+import { SearchService } from './search.service';
 import { UploadService } from './upload.service';
 
 export { AppService };
@@ -10,6 +11,7 @@ export { TranslateService };
 export { ProjectService };
 export { TaskService };
 export { ReferenceService };
+export { SearchService };
 export { UploadService };
 
 export const APP_SERVICES = [
@@ -17,5 +19,6 @@ export const APP_SERVICES = [
     TranslateService,
     ProjectService,
     TaskService,
-    ReferenceService
+    ReferenceService,
+    SearchService
 ];

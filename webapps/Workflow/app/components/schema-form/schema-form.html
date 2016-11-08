@@ -6,15 +6,15 @@
                 <div class="control-label" *ngIf="!field.hideLabel">{{field.label | translate}}</div>
                 <div class="controls" [class.has-error]="errors[field.name]">
                     <div [ngSwitch]="field.type">
-                        <input *ngSwitchCase="'text'" [type]="field.type" [name]="field.name" [placeholder]="field.placeHolder" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
-                        <input *ngSwitchCase="'number'" [type]="field.type" [name]="field.name" [placeholder]="field.placeHolder" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
-                        <input *ngSwitchCase="'date'" datepicker [type]="field.type" [name]="field.name" [placeholder]="field.placeHolder" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'text'" [type]="field.type" [name]="field.name" placeholder="{{field.placeHolder | translate}}" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'number'" [type]="field.type" [name]="field.name" placeholder="{{field.placeHolder | translate}}" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
+                        <input *ngSwitchCase="'date'" datepicker [type]="field.type" [name]="field.name" placeholder="{{field.placeHolder | translate}}" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
                         <input *ngSwitchCase="'color'" [type]="field.type" [name]="field.name" [(ngModel)]="model[field.name]" [ngClass]="field.className" />
-                        <textarea *ngSwitchCase="'textarea'" [name]="field.name" [placeholder]="field.placeHolder" [(ngModel)]="model[field.name]" [ngClass]="field.className"></textarea>
+                        <textarea *ngSwitchCase="'textarea'" [name]="field.name" placeholder="{{field.placeHolder | translate}}" [(ngModel)]="model[field.name]" [ngClass]="field.className"></textarea>
                         <div *ngSwitchCase="'checkbox'">
                             <label class="input" [ngClass]="field.className" *ngFor="let cv of field.values">
                                 <input [type]="field.type" [name]="field.name" [value]="cv.value" [checked]="model[field.name] == cv.value" />
-                                <span *ngIf="cv.label">{{cv.label}}</span>
+                                <span *ngIf="cv.label">{{cv.label | translate}}</span>
                             </label>
                         </div>
                         <div *ngSwitchCase="'select'">
@@ -33,7 +33,7 @@
                                     [totalPagesPath]="field.values.totalPagesPath"
                                     [multiple]="field.values.multiple"
                                     [searchable]="true"
-                                    [placeHolder]="field.placeHolder"
+                                    placeHolder="{{field.placeHolder | translate}}"
                                     (change)="model[field.name] = $event">
                                 </selection>
                             </div>
@@ -51,13 +51,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngSwitchCase="'userAvatar'">
-
-                        </div>
                         <span *ngSwitchDefault>{{jsonStringify(field)}}</span>
                     </div>
                     <error-message [error]="errors[field.name]"></error-message>
-                    <span class="input-hint" *ngIf="field.hint">{{field.hint}}</span>
+                    <span class="input-hint" *ngIf="field.hint">{{field.hint | translate}}</span>
                 </div>
             </div>
         </section>
