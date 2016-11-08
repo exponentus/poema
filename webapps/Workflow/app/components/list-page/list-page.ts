@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 
 export class ListPageComponent {
     @Input() title: string = '';
+    @Input() emptyMessage: string = 'view_no_entries';
     @Input() selectable: boolean = true; // show checkboxes
     @Input() headerVisible: boolean = true;
     @Input() titleVisible: boolean = true;
@@ -45,11 +46,11 @@ export class ListPageComponent {
     @Output() refresh = new EventEmitter();
     @Output() sort = new EventEmitter();
     @Output() goToPage = new EventEmitter();
-    @Output() openUrl = new EventEmitter();
+    @Output() openModel = new EventEmitter();
 
-    onOpenUrl(url, $event) {
+    onOpenModel(model, $event) {
         $event.preventDefault();
-        this.openUrl.emit(url);
+        this.openModel.emit(model);
     }
 
     onAction(action, $event) {

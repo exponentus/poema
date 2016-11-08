@@ -20,6 +20,7 @@ import { WorkflowOfficeMemoService } from '../../services';
             [meta]="meta"
             [actions]="actions"
             [columns]="columns"
+            (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
             (refresh)="refresh($event)"
             (sort)="onSort($event)"
@@ -121,5 +122,10 @@ export class OfficeMemoViewComponent {
         } else {
             console.log($event);
         }
+    }
+
+    onOpenModel(model) {
+        console.log(model);
+        this.router.navigate([model.id], { relativeTo: this.route });
     }
 }

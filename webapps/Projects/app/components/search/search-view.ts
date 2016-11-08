@@ -22,7 +22,7 @@ import { SearchService } from '../../services';
             [meta]="meta"
             [actions]="actions"
             [columns]="columns"
-            (openUrl)="onOpenUrl($event)"
+            (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
             (refresh)="refresh($event)"
             (goToPage)="goToPage($event)">
@@ -85,7 +85,7 @@ export class SearchViewComponent {
         this.router.navigateByUrl(this.redirectUrl);
     }
 
-    onOpenUrl(model) {
+    onOpenModel(model) {
         if (model.kind === 'project') {
             this.router.navigate(['/projects', model.id]);
         } else if (model.kind === 'task') {

@@ -46,11 +46,11 @@ export class ListPageComponent {
     @Output() refresh = new EventEmitter();
     @Output() sort = new EventEmitter();
     @Output() goToPage = new EventEmitter();
-    @Output() openUrl = new EventEmitter();
+    @Output() openModel = new EventEmitter();
 
-    onOpenUrl(model, $event) {
+    onOpenModel(model, $event) {
         $event.preventDefault();
-        this.openUrl.emit(model);
+        this.openModel.emit(model);
     }
 
     onAction(action, $event) {

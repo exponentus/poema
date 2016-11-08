@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
@@ -21,6 +21,7 @@ import { parseResponseObjects } from '../../../utils/utils';
             [meta]="meta"
             [actions]="actions"
             [columns]="columns"
+            (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
             (refresh)="refresh($event)"
             (sort)="onSort($event)"
@@ -55,6 +56,7 @@ export class StaffViewComponent {
 
     constructor(
         private store: Store<any>,
+        private router: Router,
         private route: ActivatedRoute,
         private environmentActions: EnvironmentActions,
         private staffService: StaffService
@@ -125,7 +127,8 @@ export class StaffViewComponent {
         console.log($event);
     }
 
-    onOpenUrl($event) {
-        console.log($event);
+    onOpenModel(model) {
+        console.log(model);
+        this.router.navigate([model.id], { relativeTo: this.route });
     }
 }

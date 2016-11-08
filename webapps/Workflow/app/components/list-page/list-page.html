@@ -2,13 +2,10 @@
     <h1 class="header-title" *ngIf="titleVisible">
         {{title | translate}}<sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
-    <div class="content-actions" *ngIf="actionsVisible">
-        <button class="btn" type="button" (click)="onAction(action, $event)" *ngFor="let action of actions">
+    <div class="content-actions" *ngIf="actionsVisible && (actions.length || meta.totalPages > 1)">
+        <button class="btn" [ngClass]="action.className" type="button" [disabled]="action.disabled" (click)="onAction(action, $event)" *ngFor="let action of actions">
             <i class="action {{action.icon}}" *ngIf="action.icon"></i>
-            <span>{{action.caption | translate}}</span>
-        </button>
-        <button class="btn btn-refresh" type="button" (click)="onRefresh()">
-            <i class="fa fa-refresh"></i>
+            <span *ngIf="action.caption">{{action.caption | translate}}</span>
         </button>
         <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="onGoToPage($event)"></pagination>
     </div>
@@ -31,16 +28,20 @@
             </div>
         </header>
         <div class="entries">
+            <div class="view-empty" *ngIf="!loading && (!list || list.length === 0)">
+                {{emptyMessage | translate}}
+            </div>
             <div class="entry-wrap" *ngFor="let model of list">
                 <div class="entry">
                     <label class="entry-select" *ngIf="selectable">
                         <input type="checkbox" name="docid" [value]="model.id" />
                     </label>
-                    <a class="entry-link" [routerLink]="['./', model.id]">
+                    <a class="entry-link" title="" [href]="model.url" (click)="onOpenModel(model, $event)">
                         <div class="entry-fields" *ngIf="columns[model.kind]">
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns[model.kind]">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
                                 <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
+                                <span *ngSwitchCase="'translate'">{{model[column.value] | translate}}</span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>
@@ -48,6 +49,7 @@
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns.root">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
                                 <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
+                                <span *ngSwitchCase="'translate'">{{model[column.value] | translate}}</span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>

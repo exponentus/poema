@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
@@ -57,7 +57,7 @@ const requestDeclineDialog = {
             [meta]="meta"
             [actions]="actions"
             [columns]="columns"
-            (openUrl)="onOpenUrl($event)"
+            (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
             (refresh)="refresh($event)"
             (sort)="onSort($event)"
@@ -92,6 +92,7 @@ export class ReferenceViewComponent {
 
     constructor(
         private store: Store<any>,
+        private router: Router,
         private route: ActivatedRoute,
         private environmentActions: EnvironmentActions,
         private nbModalService: NbModalService,
@@ -163,7 +164,8 @@ export class ReferenceViewComponent {
         this.nbModalService.create(requestDeclineDialog).show();
     }
 
-    onOpenUrl($event) {
-        console.log($event);
+    onOpenModel(model) {
+        console.log(model);
+        this.router.navigate([model.id], { relativeTo: this.route });
     }
 }
