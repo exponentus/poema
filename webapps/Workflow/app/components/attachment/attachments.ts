@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 
-import { UploadService } from '../../services';
+import { AppService, UploadService } from '../../services';
 import { Attachment } from '../../models';
 
 @Component({
@@ -25,6 +25,7 @@ export class AttachmentsComponent {
 
     constructor(
         private http: Http,
+        private appService: AppService,
         private uploadService: UploadService
     ) { }
 
@@ -44,9 +45,9 @@ export class AttachmentsComponent {
 
     isThumbnailSupported(att: Attachment): boolean {
         if (att.extension) {
-            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.extension) != -1;
+            return this.appService.thumbnailSupportedFormat.indexOf(att.extension) != -1;
         } else {
-            return ['jpeg', 'jpg', 'png', 'gif'].indexOf(att.realFileName.toLowerCase().split('.').pop()) != -1;
+            return this.appService.thumbnailSupportedFormat.indexOf(att.realFileName.toLowerCase().split('.').pop()) != -1;
         }
     }
 

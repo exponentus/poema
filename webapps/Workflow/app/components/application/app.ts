@@ -13,7 +13,6 @@ import { User } from '../../models';
 })
 
 export class AppComponent {
-    @HostListener('window:resize', ['$event.target']) resize(window) { this.onResize(window); };
     @HostBinding('class.phone') get device() { return this.isMobileDevice; };
     @HostBinding('class.side-nav-toggle') get toggleNavVisible() { return this.isNavCollapsed; };
     @HostBinding('class.search-open') get toggleSearch() { return this.isSearchOpen; };
@@ -47,9 +46,9 @@ export class AppComponent {
             this.store.dispatch(this.environmentActions.fetchUserProfile(data));
         });
 
-        // this.appService.fetchSession().subscribe(data => {
-        //     console.log(data);
-        // });
+        this.appService.fetchSession().subscribe(data => {
+            console.log(data);
+        });
 
         // ng2-translate
         var userLang = navigator.language.split('-')[0]; // use navigator lang if available
@@ -64,23 +63,19 @@ export class AppComponent {
             this.isReady = true;
         });
 
-        this.onResize(window);
+        this.isMobileDevice = this.isMobile();
     }
 
     ngOnDestroy() {
         this.subs.map(s => s.unsubscribe());
     }
 
-    hideNav(event) {
+    hideNav($event) {
+        $event.preventDefault();
         this.store.dispatch({ type: EnvironmentActions.HIDE_NAV });
-        event.preventDefault();
     }
 
     isMobile() {
         return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-
-    onResize(window) {
-        this.isMobileDevice = window.innerWidth <= 1024 || this.isMobile();
     }
 }

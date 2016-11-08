@@ -29,7 +29,7 @@ import { Http, Headers } from '@angular/http';
                 <input *ngIf="searchable"
                     #searchInput
                     class="select-search-input"
-                    [class.has-value]="keyWord"
+                    [class.has-value]="isBlur"
                     name="search"
                     value=""
                     autocomplete="off"
@@ -167,6 +167,7 @@ export class SelectionComponent {
     private page = 0;
     private totalPages = 1;
     private keyWord = '';
+    private isBlur = false;
 
     private SEARCH_MODE = 0;
     private MOVE_MODE = 1;
@@ -339,6 +340,7 @@ export class SelectionComponent {
     search(keyWord) {
         if (this.keyWord !== keyWord) {
             this.keyWord = keyWord;
+            this.isBlur = this.keyWord.length > 0;
             if (!this.allLoaded) {
                 this.fetchContent({ search: keyWord });
             } else {
@@ -575,6 +577,7 @@ export class SelectionComponent {
     close() {
         this.isOpen = false;
         this.isFocused = false;
+        this.isBlur = false;
         this.resetCursor();
         this.removeListenGlobal();
     }
