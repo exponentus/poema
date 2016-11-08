@@ -18,6 +18,7 @@
     <caption name="editors"/>
     <caption name="readers"/>
     <caption name="localized_names"/>
+    <caption name="is_hidden"/>
 
     <caption name="acl_tab_title"/>
     <caption name="attach_file"/>
