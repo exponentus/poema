@@ -1,6 +1,6 @@
 $orgname$ 
 Привет, для вас запрос по вашей задаче: 
-`$regNumber$` $taskTitle$
+`$regNumber$` $title$
 Тип: $requestType$ 
 Комментарии: $comment$
 От: $author$
