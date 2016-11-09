@@ -12,6 +12,7 @@
     <caption name="delete"/>
     <caption name="close"/>
     <caption name="search"/>
+    <caption name="ft_search_return_null"/>
     <caption name="filter"/>
     <caption name="view_no_entries"/>
     <caption name="wait_while_document_save"/>
