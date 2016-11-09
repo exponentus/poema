@@ -98,6 +98,7 @@ export class TaskService {
         let payload = {
             fsid: task.fsid,
             projectId: task.project ? task.project.id : '',
+            parentTaskId: task.parentTaskId ? task.parentTaskId : '',
             taskTypeId: task.taskType ? task.taskType.id : '',
             status: task.status ? task.status : '',
             priority: task.priority ? task.priority : '',
