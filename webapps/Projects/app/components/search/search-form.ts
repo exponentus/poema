@@ -24,7 +24,6 @@ import { SearchService } from '../../services';
         <div class="navbar-search-popup" *ngIf="popupOpen && models.length">
             <a class="navbar-search-link" [href]="m.url" (click)="openModel(m, $event)" *ngFor="let m of models">
                 <span>{{m.kind | translate}}</span>
-                <span>{{m.regDate | dateFmt:'DD.MM.YYYY'}}</span>
                 <i class="fa fa-paperclip" *ngIf="m.hasAttachments"></i>
                 <span>{{m.name || m.title}}</span>
             </a>
