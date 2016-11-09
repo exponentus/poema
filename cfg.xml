@@ -19,6 +19,7 @@
         </app>
         <app>
             <name mode="on">Workspace</name>
+              <rest mode="on"/>
         </app>
         <app>
             <name mode="on">Projects</name>
