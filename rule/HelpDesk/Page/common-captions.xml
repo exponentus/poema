@@ -34,6 +34,7 @@
     <caption name="interface"/>
     <caption name="del_document"/>
     <caption name="logout"/>
+    <caption name="your_profile"/>
     <caption name="user_profile"/>
     <caption name="change_skin"/>
     <caption name="employee"/>
