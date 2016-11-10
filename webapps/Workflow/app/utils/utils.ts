@@ -64,14 +64,6 @@ export function parseResponseObjects(objects: any): any {
     return result;
 }
 
-export function transformPostResponse(response: Response): any {
-    let json = response.json();
-    return Object.assign(json, {
-        ok: json.type === 'DOCUMENT_SAVED',
-        message: json.captions ? json.captions.type : json.message
-    });
-}
-
 export function createCookie(name, value, days): void {
     let expires;
 

@@ -1,17 +1,16 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 @Component({
-    selector: 'list-page',
-    templateUrl: './list-page.html',
+    selector: 'view-page',
+    templateUrl: './view-page.html',
     host: {
-        '[class.list-page]': 'true'
+        '[class.view-page]': 'true'
     },
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ListPageComponent {
+export class ViewPageComponent {
     @Input() title: string = '';
     @Input() emptyMessage: string = 'view_no_entries';
     @Input() selectable: boolean = true; // show checkboxes
@@ -43,9 +42,8 @@ export class ListPageComponent {
     @Input() columns = { root: [{ name: 'name', value: 'name', type: 'text', sort: 'desc', className: 'vw-name', valueAsClass: '' }] };
 
     @Output() action = new EventEmitter();
-    @Output() refresh = new EventEmitter();
     @Output() sort = new EventEmitter();
-    @Output() goToPage = new EventEmitter();
+    @Output() changePage = new EventEmitter();
     @Output() openModel = new EventEmitter();
 
     onOpenModel(model, $event) {
@@ -57,12 +55,8 @@ export class ListPageComponent {
         this.action.emit({ action, e: $event });
     }
 
-    onRefresh() {
-        this.refresh.emit(true);
-    }
-
-    onGoToPage($event) {
-        this.goToPage.emit($event);
+    onChangePage($event) {
+        this.changePage.emit($event);
     }
 
     onSort($event) {

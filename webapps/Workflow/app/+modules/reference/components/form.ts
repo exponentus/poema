@@ -34,6 +34,7 @@ export class ReferenceFormComponent {
     private loading: boolean = true;
     private model: any;
     private id: string = '';
+    private actions: any = [];
 
     private subs: any = [];
 
@@ -76,6 +77,7 @@ export class ReferenceFormComponent {
                 let kind = params.id.replace('-form', '').replace('-', '');
 
                 this.model = objects[kind];
+                this.actions = objects.actions;
                 this.fsId = payload.payload ? payload.payload.fsId : Date.now();
                 this.formSchema = this.referenceService.getFormSchema(this.model.kind);
 
@@ -91,8 +93,6 @@ export class ReferenceFormComponent {
     }
 
     save($event) {
-        console.log($event, this.model);
-
         let noty = this.notifyService.process(this.translate.instant('wait_while_document_save')).show();
 
         // create localizedName field if exists
@@ -117,6 +117,14 @@ export class ReferenceFormComponent {
 
     close() {
         this.router.navigate(['../'], { relativeTo: this.route });
+    }
+
+    onAction(action, $event) {
+        if (action.type === 'CLOSE') {
+            this.close();
+        } else if (action.type === 'SAVE_AND_CLOSE') {
+            this.save($event);
+        }
     }
 
     handleXhrError(errorResponse) {

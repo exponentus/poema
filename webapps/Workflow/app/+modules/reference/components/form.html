@@ -1,25 +1,10 @@
 <form class="form" *ngIf="isReady" #form>
     <header class="content-header">
         <div class="content-actions">
-            <button class="btn-back" type="button" title="{{'close' | translate}}" (click)="close($event)">
-                <i class="fa fa-chevron-left"></i>
-                <span>{{'close' | translate}}</span>
+            <button class="btn" [ngClass]="action.className" type="button" [disabled]="action.disabled" (click)="onAction(action, $event)" *ngFor="let action of actions">
+                <i class="action {{action.icon}}" *ngIf="action.icon"></i>
+                <span *ngIf="action.caption">{{action.caption | translate}}</span>
             </button>
-            <button class="btn btn-primary" type="button" (click)="save(form)">
-                {{'save_close' | translate}}
-            </button>
-            <div *ngIf="canDelete" dropdown class="buttons" [tabIndex]="-1">
-                <div dropdown-toggle>
-                    <span class="btn">...</span>
-                </div>
-                <div class="dropdown-menu">
-                    <ul class="menu">
-                        <li>
-                            <a class="menu-item" (click)="delete()">{{'delete' | translate}}</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
         </div>
         <h1 class="header-title">{{title | translate}}</h1>
     </header>

@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
+import { NotificationService } from '../../../shared/notification';
 import { StaffService } from '../staff.service';
 import { parseResponseObjects } from '../../../utils/utils';
 
 @Component({
     selector: 'staff-view',
     template: `
-        <list-page
+        <view-page
             [title]="title"
             [selectable]="true"
             [headerVisible]="true"
@@ -23,10 +24,9 @@ import { parseResponseObjects } from '../../../utils/utils';
             [columns]="columns"
             (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
-            (refresh)="refresh($event)"
             (sort)="onSort($event)"
-            (goToPage)="goToPage($event)">
-        </list-page>
+            (changePage)="goToPage($event)">
+        </view-page>
     `,
     host: {
         '[class.loadable]': 'true',
@@ -59,6 +59,7 @@ export class StaffViewComponent {
         private router: Router,
         private route: ActivatedRoute,
         private environmentActions: EnvironmentActions,
+        private notifyService: NotificationService,
         private staffService: StaffService
     ) { }
 
@@ -106,7 +107,18 @@ export class StaffViewComponent {
                 this.actions = objects.actions;
                 this.columns = columnOptions;
             },
-            error => console.log(error)
+            error => {
+                console.log(error);
+
+                this.loading = false;
+                this.list = [];
+                this.meta = {};
+                this.actions = [];
+                this.columns = [];
+
+                this.notifyService.error(error.message).show().remove(3000);
+                return error;
+            }
         );
     }
 

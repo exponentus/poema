@@ -19,6 +19,7 @@ export class AppComponent {
 
     private subs: any = [];
     isReady: boolean = false;
+    readyCounter: number = 0;
     loggedUser: User = new User();
     language: any;
     moduleId: string = '';
@@ -44,10 +45,12 @@ export class AppComponent {
     ngOnInit() {
         this.appService.fetchUserProfile().subscribe(data => {
             this.store.dispatch(this.environmentActions.fetchUserProfile(data));
+            this.setIsReady();
         });
 
         this.appService.fetchSession().subscribe(data => {
-            console.log(data);
+            this.store.dispatch(this.environmentActions.setApps(data.payload._session.user.userApplications));
+            this.setIsReady();
         });
 
         // ng2-translate
@@ -60,7 +63,7 @@ export class AppComponent {
 
         this.translate.get('brand').subscribe(value => {
             this.HEADER_TITLE = value;
-            this.isReady = true;
+            this.setIsReady();
         });
 
         this.isMobileDevice = this.isMobile();
@@ -68,6 +71,13 @@ export class AppComponent {
 
     ngOnDestroy() {
         this.subs.map(s => s.unsubscribe());
+    }
+
+    setIsReady() {
+        this.readyCounter++;
+        if (this.readyCounter > 2) {
+            this.isReady = true;
+        }
     }
 
     hideNav($event) {

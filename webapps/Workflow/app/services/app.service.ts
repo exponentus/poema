@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { xhrHeaders, parseResponseObjects, serializeObj, transformPostResponse } from '../utils/utils';
+import { xhrHeaders, xhrJsonHeaders, parseResponseObjects, serializeObj } from '../utils/utils';
 
 @Injectable()
 export class AppService {
@@ -21,7 +21,7 @@ export class AppService {
     }
 
     fetchSession() {
-        return this.http.get('do/session', { headers: xhrHeaders() })
+        return this.http.get('api/session', { headers: xhrJsonHeaders() })
             .retry(3)
             .map(response => response.json())
             .catch(error => this.handleError(error));
@@ -54,7 +54,7 @@ export class AppService {
     updateUserProfile(userForm: any) {
         return this.http.post('p?id=userprofile', serializeObj(userForm), { headers: xhrHeaders() })
             .map(response => response.json())
-            .catch(error => Observable.throw(transformPostResponse(error)));
+            .catch(error => Observable.throw(error));
     }
 
     logout() {
@@ -68,6 +68,6 @@ export class AppService {
         } else if (error.status === 401) {
             console.log(error);
         }
-        return Observable.throw(transformPostResponse(error));
+        return Observable.throw(error);
     }
 }

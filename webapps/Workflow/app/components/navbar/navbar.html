@@ -7,20 +7,40 @@
         </div>
         <nav class="navbar-nav navbar-right">
             <ul class="nav nav-inline navbar-right">
+                <li dropdown [tabIndex]="-1" class="dropdown nav-ws-apps" *ngIf="apps.length">
+                    <a dropdown-toggle href="#" class="dropdown-toggle nav-ws-apps__toggle">
+                        <i class="fa fa-th"></i>
+                    </a>
+                    <ul class="dropdown-menu nav-ws-apps__menu">
+                        <li class="nav-ws-apps__menu_item" *ngFor="let app of apps">
+                            <a *ngIf="app.interfaceType === 'SPA'" class="ws-app-link" [routerLink]="['/' + app.name + (app.defaultPage != 'index' ? '/' + app.defaultPage : '')]">
+                                <span class="ws-app-logo">
+                                    <img class="ws-app-logo" src="/{{app.name}}/img/logo.png" [alt]="app.name" />
+                                </span>
+                                <span class="ws-app-type">{{app.name}}</span>
+                                <span class="ws-app-name">{{app | localizedName}}</span>
+                            </a>
+                            <a *ngIf="app.interfaceType != 'SPA'" class="ws-app-link" [href]="'/' + app.name + '?id=' + app.defaultPage">
+                                <span class="ws-app-logo">
+                                    <img class="ws-app-logo" src="/{{app.name}}/img/logo.png" [alt]="app.name" />
+                                </span>
+                                <span class="ws-app-type">{{app.name}}</span>
+                                <span class="ws-app-name">{{app | localizedName}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li dropdown [tabIndex]="-1" class="dropdown">
                     <a dropdown-toggle href="#" class="dropdown-toggle">
                         <i class="fa fa-user"></i>
+                        <span *ngIf="user">{{user.name}}</span>
                     </a>
                     <ul class="dropdown-menu right">
                         <li *ngIf="user">
                             <a class="user-profile" [routerLink]="['/user-profile']">
-                                <i class="fa fa-user"></i>
-                                <span>{{user.name}}</span>
+                                <i class=""></i>
+                                <span>{{'your_profile' | translate}}</span>
                             </a>
-                        </li>
-                        <li class="divider" *ngIf="apps.length"></li>
-                        <li *ngFor="let app of apps">
-                            <a [routerLink]="[app.url]" class="nav-item nav-link">{{app.name}}</a>
                         </li>
                         <li class="divider"></li>
                         <li>

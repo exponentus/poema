@@ -5,7 +5,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AppService } from '../../../services/app.service';
 import { Attachment } from '../../../models';
 import { Task, Request, Comment } from '../models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
+import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj } from '../../../utils/utils';
 
 @Injectable()
 export class TaskService {
@@ -114,25 +114,25 @@ export class TaskService {
         };
 
         return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
     completeTask(task: Task) {
         return this.http.put('/Projects/p?id=task-form&taskId=' + task.id + '&_action=complete&fsid=' + task.fsid, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
     cancelTask(task: Task, comment: string) {
         return this.http.put('/Projects/p?id=task-form&taskId=' + task.id + '&_action=cancel&fsid=' + task.fsid + '&comment=' + comment, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
     acknowledgedTask(task: Task) {
         return this.http.put('/Projects/p?id=task-form&taskId=' + task.id + '&_action=acknowledged&fsid=' + task.fsid, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
@@ -189,21 +189,21 @@ export class TaskService {
     sendTaskRequest(request: Request) {
         let url = '/Projects/p?id=task-requests&taskId=' + request.taskId;
         return this.http.post(url, serializeObj(request), { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
     doAcceptRequest(request: Request, data?: any) {
         let url = '/Projects/p?id=task-requests&requestId=' + request.id + '&_action=accept&fsid=' + request.fsid + '&' + serializeObj(data);
         return this.http.put(url, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
     doDeclineRequest(request: Request, comment: string) {
         let url = 'p?id=task-requests&requestId=' + request.id + '&comment=' + comment + '&_action=decline&fsid=' + request.fsid;
         return this.http.put(url, '', { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 
@@ -237,7 +237,7 @@ export class TaskService {
     saveComment(task: Task, comment: Comment) {
         let url = '/Projects/p?id=comments&taskId=' + task.id + (comment.id ? '&commentId=' + comment.id : '');
         return this.http.post(url, serializeObj(comment), { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response.json())
             .catch(error => this.appService.handleError(error));
     }
 

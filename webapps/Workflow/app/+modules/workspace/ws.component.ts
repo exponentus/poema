@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { EnvironmentActions } from '../../actions';
 import { IEnvironmentState } from '../../reducers';
 import { WorkspaceService } from './ws.service';
+import { App } from './app.model';
 
 @Component({
     selector: 'WorkSpaceComponent',
@@ -13,12 +14,20 @@ import { WorkspaceService } from './ws.service';
                 <section class="ws-apps">
                     <div class="container">
                         <div class="ws-app" *ngFor="let app of apps">
-                            <a class="ws-app-link" [routerLink]="[app.url]">
+                            <a *ngIf="app.interfaceType === 'SPA'" class="ws-app-link"
+                                  [routerLink]="['/' + app.name + (app.defaultPage != 'index' ? '/' + app.defaultPage : '')]">
                                 <span class="ws-app-logo">
-                                    <img class="ws-app-logo" src="/{{app.id}}/img/logo.png" alt="logo" />
+                                    <img class="ws-app-logo" src="/{{app.name}}/img/logo.png" [alt]="app.name" />
                                 </span>
-                                <span class="ws-app-type">{{app.id}}</span>
-                                <span class="ws-app-name">{{app.name}}</span>
+                                <span class="ws-app-type">{{app.name}}</span>
+                                <span class="ws-app-name">{{app | localizedName}}</span>
+                            </a>
+                            <a *ngIf="app.interfaceType != 'SPA'" class="ws-app-link" [href]="'/' + app.name + '?id=' + app.defaultPage">
+                                <span class="ws-app-logo">
+                                    <img class="ws-app-logo" src="/{{app.name}}/img/logo.png" [alt]="app.name" />
+                                </span>
+                                <span class="ws-app-type">{{app.name}}</span>
+                                <span class="ws-app-name">{{app | localizedName}}</span>
                             </a>
                         </div>
                     </div>
@@ -29,7 +38,7 @@ import { WorkspaceService } from './ws.service';
 })
 
 export class WorkspaceComponent {
-    private apps: any = [];
+    private apps: App[] = [];
     private subs: any = [];
 
     constructor(

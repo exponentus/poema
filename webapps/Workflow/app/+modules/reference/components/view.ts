@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { EnvironmentActions } from '../../../actions';
+import { NotificationService } from '../../../shared/notification';
 import { ReferenceService } from '../reference.service';
 import { NbModalService } from '../../../components/nb-modal';
 import { parseResponseObjects } from '../../../utils/utils';
@@ -45,7 +46,7 @@ const requestDeclineDialog = {
 @Component({
     selector: 'reference-view',
     template: `
-        <list-page
+        <view-page
             [title]="title"
             [selectable]="true"
             [headerVisible]="true"
@@ -59,10 +60,9 @@ const requestDeclineDialog = {
             [columns]="columns"
             (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
-            (refresh)="refresh($event)"
             (sort)="onSort($event)"
-            (goToPage)="goToPage($event)">
-        </list-page>
+            (changePage)="goToPage($event)">
+        </view-page>
     `,
     host: {
         '[class.loadable]': 'true',
@@ -95,6 +95,7 @@ export class ReferenceViewComponent {
         private router: Router,
         private route: ActivatedRoute,
         private environmentActions: EnvironmentActions,
+        private notifyService: NotificationService,
         private nbModalService: NbModalService,
         private referenceService: ReferenceService
     ) { }
@@ -143,7 +144,18 @@ export class ReferenceViewComponent {
                 this.actions = objects.actions;
                 this.columns = columnOptions;
             },
-            error => console.log(error)
+            error => {
+                console.log(error);
+
+                this.loading = false;
+                this.list = [];
+                this.meta = {};
+                this.actions = [];
+                this.columns = [];
+
+                this.notifyService.error(error.message).show().remove(3000);
+                return error;
+            }
         );
     }
 

@@ -34,6 +34,7 @@ export class StaffFormComponent {
     private loading: boolean = true;
     private model: any;
     private id: string = '';
+    private actions: any = [];
 
     private subs: any = [];
 
@@ -76,6 +77,7 @@ export class StaffFormComponent {
                 let kind = params.id.replace('-form', '').replace('-', '');
 
                 this.model = objects[kind];
+                this.actions = objects.actions;
                 this.fsId = payload.payload ? payload.payload.fsId : Date.now();
                 this.formSchema = this.staffService.getFormSchema(this.model.kind);
 
@@ -115,6 +117,14 @@ export class StaffFormComponent {
 
     close() {
         this.router.navigate(['../'], { relativeTo: this.route });
+    }
+
+    onAction(action, $event) {
+        if (action.type === 'CLOSE') {
+            this.close();
+        } else if (action.type === 'SAVE_AND_CLOSE') {
+            this.save($event);
+        }
     }
 
     handleXhrError(errorResponse) {

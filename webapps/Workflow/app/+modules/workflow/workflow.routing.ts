@@ -13,6 +13,7 @@ const routes: Routes = [{
     path: 'Workflow', component: WorkflowContainerComponent,
     children: [
         { path: '', redirectTo: 'incomings', pathMatch: 'full' },
+        { path: 'index', redirectTo: 'incomings', pathMatch: 'full' },
         { path: 'incomings/:id', component: IncomingFormComponent },
         { path: 'incomings', component: IncomingViewComponent },
         //

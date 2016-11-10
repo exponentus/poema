@@ -8,7 +8,7 @@ import { WorkflowOfficeMemoService } from '../../services';
 @Component({
     selector: 'office-memo-view',
     template: `
-        <list-page
+        <view-page
             [title]="title"
             [selectable]="true"
             [headerVisible]="true"
@@ -22,10 +22,9 @@ import { WorkflowOfficeMemoService } from '../../services';
             [columns]="columns"
             (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
-            (refresh)="refresh($event)"
             (sort)="onSort($event)"
-            (goToPage)="goToPage($event)">
-        </list-page>
+            (changePage)="goToPage($event)">
+        </view-page>
     `,
     host: {
         '[class.loadable]': 'true',

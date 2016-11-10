@@ -27,6 +27,12 @@ export class DataService {
             .retry(retry)
             .take(1)
             .map(response => response.json())
+            .map(response => {
+                if (response.code === 500) {
+                    throw response;
+                }
+                return response;
+            })
             .catch(error => this.appService.handleError(error));
     }
 

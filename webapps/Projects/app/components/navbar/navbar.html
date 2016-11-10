@@ -10,12 +10,13 @@
                 <li dropdown [tabIndex]="-1" class="dropdown">
                     <a dropdown-toggle href="#" class="dropdown-toggle">
                         <i class="fa fa-user"></i>
+                        <span *ngIf="user">{{user.name}}</span>
                     </a>
                     <ul class="dropdown-menu right">
                         <li *ngIf="user">
                             <a class="user-profile" [routerLink]="['/user-profile']">
                                 <i class="fa fa-user"></i>
-                                <span>{{user.name}}</span>
+                                <span>{{'your_profile' | translate}}</span>
                             </a>
                         </li>
                         <li class="divider"></li>

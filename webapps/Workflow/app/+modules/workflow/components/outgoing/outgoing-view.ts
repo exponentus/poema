@@ -8,7 +8,7 @@ import { WorkflowOutgoingService } from '../../services';
 @Component({
     selector: 'outgoing-view',
     template: `
-        <list-page
+        <view-page
             [title]="title"
             [selectable]="true"
             [headerVisible]="true"
@@ -22,10 +22,9 @@ import { WorkflowOutgoingService } from '../../services';
             [columns]="columns"
             (openModel)="onOpenModel($event)"
             (action)="onAction($event)"
-            (refresh)="refresh($event)"
             (sort)="onSort($event)"
-            (goToPage)="goToPage($event)">
-        </list-page>
+            (changePage)="goToPage($event)">
+        </view-page>
     `,
     host: {
         '[class.loadable]': 'true',

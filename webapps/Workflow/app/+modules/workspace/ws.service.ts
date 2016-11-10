@@ -12,10 +12,4 @@ export class WorkspaceService {
         private http: Http,
         private appService: AppService
     ) { }
-
-    fetchApps() {
-        return this.http.get('/p?id=apps', { headers: xhrHeaders() })
-            .map(response => response.json().objects)
-            .catch(error => this.appService.handleError(error));
-    }
 }

@@ -14,7 +14,7 @@ import { NavTreeComponent } from './components/nav/nav-tree';
 import { SelectionComponent } from './components/selection/selection';
 import { AclComponent } from './components/acl/acl';
 import { AttachmentsComponent } from './components/attachment/attachments';
-import { ListPageComponent } from './components/list-page/list-page';
+import { ViewPageComponent } from './components/view-page/view-page';
 import { ErrorMessageComponent } from './components/shared';
 import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe, KeysPipe, ValuesPipe } from './pipes';
 
@@ -27,7 +27,7 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         SelectionComponent,
         AclComponent,
         AttachmentsComponent,
-        ListPageComponent,
+        ViewPageComponent,
         ErrorMessageComponent,
         DateFormatPipe,
         DateDurationPipe,
@@ -49,7 +49,7 @@ import { DateFormatPipe, DateDurationPipe, TextTransformPipe, LocalizedNamePipe,
         SelectionComponent,
         AclComponent,
         AttachmentsComponent,
-        ListPageComponent,
+        ViewPageComponent,
         ErrorMessageComponent,
         _SharedModule,
         DateFormatPipe,

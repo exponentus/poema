@@ -5,7 +5,7 @@ import { TranslateService } from 'ng2-translate/ng2-translate';
 import { AppService } from '../../../services/app.service';
 import { Attachment } from '../../../models';
 import { Project } from '../models';
-import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj, transformPostResponse } from '../../../utils/utils';
+import { xhrHeaders, createURLSearchParams, parseResponseObjects, serializeObj } from '../../../utils/utils';
 
 @Injectable()
 export class ProjectService {
@@ -106,7 +106,7 @@ export class ProjectService {
         };
 
         return this.http.post(url, serializeObj(payload), { headers: xhrHeaders() })
-            .map(response => transformPostResponse(response))
+            .map(response => response)
             .catch(error => this.appService.handleError(error));
     }
 

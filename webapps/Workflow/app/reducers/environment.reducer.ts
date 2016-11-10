@@ -19,13 +19,7 @@ const initialState: IEnvironmentState = {
     isNavOpen: true,
     isSearchOpen: false,
     redirectUrl: '/tasks',
-    apps: [
-        { id: 'Reference', name: 'Reference', url: '/Reference' },
-        { id: 'Staff', name: 'Staff', url: '/Staff' },
-        { id: 'Workflow', name: 'Workflow', url: '/Workflow' },
-        { id: 'Projects', name: 'Projects', url: '/Projects' },
-        { id: 'WorkSpace', name: 'WorkSpace', url: '/Workspace' }
-    ],
+    apps: [],
     moduleId: '',
     keyWord: '',
     userProfile: null,

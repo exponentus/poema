@@ -12,6 +12,7 @@ const routes: Routes = [{
     path: 'Projects', component: ProjectsContainerComponent,
     children: [
         { path: '', redirectTo: 'projects', pathMatch: 'full' },
+        { path: 'index', redirectTo: 'projects', pathMatch: 'full' },
         { path: 'projects/:projectId/tasks', component: TasksComponent },
         { path: 'projects/:projectId', component: ProjectComponent },
         { path: 'projects', component: ProjectsComponent },

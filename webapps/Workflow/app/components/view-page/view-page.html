@@ -2,12 +2,12 @@
     <h1 class="header-title" *ngIf="titleVisible">
         {{title | translate}}<sup *ngIf="!loading && meta.count">({{meta.count}})</sup>
     </h1>
-    <div class="content-actions" *ngIf="actionsVisible && (actions.length || meta.totalPages > 1)">
+    <div class="content-actions" *ngIf="actionsVisible && (actions && actions.length || meta.totalPages > 1)">
         <button class="btn" [ngClass]="action.className" type="button" [disabled]="action.disabled" (click)="onAction(action, $event)" *ngFor="let action of actions">
             <i class="action {{action.icon}}" *ngIf="action.icon"></i>
             <span *ngIf="action.caption">{{action.caption | translate}}</span>
         </button>
-        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="onGoToPage($event)"></pagination>
+        <pagination [totalPages]="meta.totalPages" [page]="meta.page" (change)="onChangePage($event)"></pagination>
     </div>
 </div>
 <div class="content-body">
@@ -41,7 +41,7 @@
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns[model.kind]">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
                                 <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
-                                <span *ngSwitchCase="'translate'">{{model[column.value] | translate}}</span>
+                                <span *ngSwitchCase="'translate'">{{model[column.value] | text:'L' | translate}}</span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <div [ngSwitch]="column.type" [class]="column.className" *ngFor="let column of columns.root">
                                 <span *ngSwitchCase="'localizedName'" [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model | localizedName:column.value}}</span>
                                 <span *ngSwitchCase="'attachment'"><i class="fa fa-paperclip" *ngIf="model.attachments.length"></i></span>
-                                <span *ngSwitchCase="'translate'">{{model[column.value] | translate}}</span>
+                                <span *ngSwitchCase="'translate'">{{model[column.value] | text:'L' | translate}}</span>
                                 <span *ngSwitchDefault [class]="column.valueAsClass ? (column.valueAsClass + model[column.value]) : ''">{{model[column.value]}}</span>
                             </div>
                         </div>
