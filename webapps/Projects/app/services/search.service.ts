@@ -13,7 +13,7 @@ export class SearchService {
     ) { }
 
     search(params: any = {}) {
-        return this.http.get(`do/view/ftsearch/${encodeURIComponent(params.keyword)}/${params.page}`, {
+        return this.http.get(`api/view/ftsearch/${encodeURIComponent(params.keyword)}/${params.page}`, {
             headers: xhrHeaders()
         })
             .map(response => response.json())
