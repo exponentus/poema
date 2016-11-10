@@ -85,6 +85,7 @@
 		<class>reference.model.Tag</class>
 		<class>reference.model.OrgCategory</class>
 		<class>reference.model.DocumentSubject</class>
+		<class>reference.model.TextTemplate</class>
 		<!-- Specific Reference module entities -->
 		<class>reference.model.TaskType</class>
 		<class>reference.model.RequestType</class>
@@ -231,6 +232,7 @@
 		<class>reference.model.Tag</class>
 		<class>reference.model.RequestType</class>
 		<class>reference.model.DocumentSubject</class>
+		<class>reference.model.TextTemplate</class>
 		<!-- The application module entities -->
 		<class>workflow.model.OfficeMemo</class>
 		<class>workflow.model.Incoming</class>
