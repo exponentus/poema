@@ -40,6 +40,11 @@
     }
 }
 
+.workspace .brand-logo,
+.workspace button.btn-side-nav-toggle {
+    display: none;
+}
+
 .workspace .navbar .dropdown-menu:after,
 .workspace .navbar .dropdown-menu:before {
     content: none;
@@ -49,6 +54,7 @@
     color: #FFF;
 }
 
+.workspace .navbar .dropdown .dropdown-toggle > li > a,
 .workspace .navbar .dropdown .dropdown-menu > li > a {
     font-size: 14px;
 }
