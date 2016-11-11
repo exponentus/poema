@@ -89,6 +89,8 @@
 		<!-- Specific Reference module entities -->
 		<class>reference.model.TaskType</class>
 		<class>reference.model.RequestType</class>
+		<!-- Specific Reference module entities for HelpDesk module-->
+		<class>reference.model.DemandType</class>  
 		<!-- Because of it suppose importing from Domino -->
 		<class>administrator.model.Collation</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
@@ -138,6 +140,7 @@
 		<class>reference.model.DocumentLanguage</class>
 		<class>reference.model.Tag</class>
 		<class>reference.model.RequestType</class>
+		<class>reference.model.DemandType</class>  
 		<!-- Projects module entities -->
 		<class>projects.model.Project</class>
 		<class>projects.model.Task</class>
@@ -170,6 +173,7 @@
 		<class>reference.model.DocumentLanguage</class>
 		<class>reference.model.Tag</class>
 		<class>reference.model.RequestType</class>
+		<class>reference.model.DemandType</class>  
 		<!-- Projects module entities -->
 		<class>projects.model.Project</class>
 		<class>projects.model.Task</class>
