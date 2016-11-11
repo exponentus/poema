@@ -22,6 +22,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -63,6 +65,8 @@ public class Demand extends SecureAppEntity<UUID> {
 	@Column(length = 10)
 	private DemandStatusType status = DemandStatusType.UNKNOWN;
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "status_date")
 	private Date statusDate;
 	
 	@FTSearchable
@@ -87,6 +91,39 @@ public class Demand extends SecureAppEntity<UUID> {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 	
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public DemandStatusType getStatus() {
+		return status;
+	}
+
+	public void setStatus(DemandStatusType status) {
+		this.status = status;
+		statusDate = new Date();
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public Organization getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Organization customer) {
+		this.customer = customer;
+	}
+
 	public boolean isHasAttachments() {
 		return attachments.size() > 0;
 	}
