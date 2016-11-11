@@ -4,5 +4,8 @@
     <converter class="administrator.model.util.InterfaceTypeConvertor"/>
         
     <converter class="workflow.model.util.ControlStatusTypeConverter"/>
+    
+      <converter class="helpdesk.model.util.DemandStatusConverter"/>
+    
    
 </entity-mappings>
