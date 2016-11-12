@@ -6,7 +6,7 @@
     <xsl:template match="/request">
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text
             disable-output-escaping="yes">&gt;</xsl:text>
-        <html>
+        <html manifest="manifest.appcache">
             <xsl:choose>
                 <xsl:when test="//document[@entity='project' or @entity='task' or @entity='request']">
                     <head>

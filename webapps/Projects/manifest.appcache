@@ -1,0 +1,13 @@
+CACHE MANIFEST
+# version 1
+
+CACHE:
+p?id=index
+css/all.min.css
+img/favicon.png
+img/logo.png
+js/vendor.js.gz
+js/app.js.gz
+
+NETWORK:
+*
