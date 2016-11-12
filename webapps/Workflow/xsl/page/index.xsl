@@ -6,7 +6,7 @@
     <xsl:template match="/request">
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text
             disable-output-escaping="yes">&gt;</xsl:text>
-        <html>
+        <html manifest="manifest.appcache">
             <xsl:call-template name="layout"/>
         </html>
     </xsl:template>
