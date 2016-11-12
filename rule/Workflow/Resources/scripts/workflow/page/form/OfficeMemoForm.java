@@ -33,30 +33,30 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 
 public class OfficeMemoForm extends _DoForm {
-
+	
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 		IUser<Long> user = session.getUser();
 		OfficeMemo entity;
 		String id = formData.getValueSilently("docid");
-
+		
 		if (!id.isEmpty()) {
 			OfficeMemoDAO dao = new OfficeMemoDAO(session);
 			entity = dao.findById(UUID.fromString(id));
-
+			
 			if (formData.containsField("attachment")) {
 				doGetAttachment(session, formData, entity);
 				return;
 			}
-
+			
 			addContent(entity.getAttachments());
 			addContent(new ACL(entity));
 		} else {
 			entity = new OfficeMemo();
 			entity.setAuthor(user);
-
+			
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-
+			
 			List<String> formFiles;
 			Object obj = session.getAttribute(fsId);
 			if (obj == null) {
@@ -65,9 +65,9 @@ public class OfficeMemoForm extends _DoForm {
 				_FormAttachments fAtts = (_FormAttachments) obj;
 				formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
 			}
-
+			
 			List<IPOJOObject> filesToPublish = new ArrayList<>();
-
+			
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
 				if (uf == null) {
@@ -79,11 +79,11 @@ public class OfficeMemoForm extends _DoForm {
 			}
 			addContent(new _POJOListWrapper<>(filesToPublish, session));
 		}
-
+		
 		addContent(entity);
 		addContent(getActionBar(session, entity));
 	}
-
+	
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
 		try {
@@ -93,24 +93,24 @@ public class OfficeMemoForm extends _DoForm {
 				setValidation(ve);
 				return;
 			}
-
+			
 			OfficeMemoDAO dao = new OfficeMemoDAO(session);
 			OfficeMemo entity;
 			String id = formData.getValueSilently("docid");
 			boolean isNew = id.isEmpty();
-
+			
 			if (isNew) {
 				entity = new OfficeMemo();
 			} else {
 				entity = dao.findById(id);
 			}
-
+			
 			entity.setRegNumber(formData.getValue("regNumber"));
-			entity.setContent(formData.getValue("content"));
-			entity.setSummary(formData.getValue("summary"));
+			entity.setBody(formData.getValue("body"));
+			entity.setTitle(formData.getValue("title"));
 			entity.setAppliedRegDate(formData.getDateSilently("appliedRegDate"));
 			entity.setAttachments(getActualAttachments(entity.getAttachments()));
-
+			
 			if (isNew) {
 				IUser<Long> user = session.getUser();
 				entity.addReaderEditor(user);
@@ -118,7 +118,7 @@ public class OfficeMemoForm extends _DoForm {
 			} else {
 				entity = dao.update(entity);
 			}
-
+			
 			addContent(entity);
 		} catch (SecureException e) {
 			setError(e);
@@ -130,37 +130,37 @@ public class OfficeMemoForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	private _Validation validate(_WebFormData formData, LanguageCode lang) {
 		_Validation ve = new _Validation();
-
+		
 		if (formData.getValueSilently("summary").isEmpty()) {
 			ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
 		}
 		if (formData.getValueSilently("content").isEmpty()) {
 			ve.addError("content", "required", getLocalizedWord("field_is_empty", lang));
 		}
-
+		
 		return ve;
 	}
-
+	
 	@Override
 	public void doDELETE(_Session session, _WebFormData formData) {
 		String id = formData.getValueSilently("docid");
 		String attachmentId = formData.getValueSilently("attachment");
-
+		
 		if (id.isEmpty() || attachmentId.isEmpty()) {
 			addContent("error", "docid or attachmentId empty");
 			return;
 		}
-
+		
 		OfficeMemoDAO dao = new OfficeMemoDAO(session);
 		OfficeMemo entity = dao.findById(id);
-
+		
 		AttachmentDAO attachmentDAO = new AttachmentDAO(session);
 		Attachment attachment = attachmentDAO.findById(attachmentId);
 		entity.getAttachments().remove(attachment);
-
+		
 		try {
 			dao.update(entity);
 		} catch (SecureException | DAOException e) {
@@ -168,14 +168,15 @@ public class OfficeMemoForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
 		_ActionBar actionBar = new _ActionBar(session);
 		if (entity.isEditable()) {
-			actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
+			actionBar.addAction(
+					new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
 			actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
 		}
-
+		
 		return actionBar;
 	}
 }

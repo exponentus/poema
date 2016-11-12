@@ -6,34 +6,32 @@ package workflow.model.embedded;
  */
 
 import java.util.List;
-import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
 
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
+import workflow.model.util.ApprovalStatusTypeConverter;
+import workflow.model.util.ApprovalTypeConverter;
 
 @Entity
 @Table(name = "blocks")
-@NamedQuery(name = "Block.findAll", query = "SELECT m FROM Block AS m ORDER BY m.regDate")
-public class Block extends SecureAppEntity<UUID> {
+public class Block extends SimpleAppEntity {
 	
+	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 	
-	@OneToMany(mappedBy = "block", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Approver> approvers;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = true, length = 8, unique = true)
+	@Convert(converter = ApprovalTypeConverter.class)
 	private ApprovalType type = ApprovalType.UNKNOWN;
 	
 	@Column(name = "require_comment_if_no")

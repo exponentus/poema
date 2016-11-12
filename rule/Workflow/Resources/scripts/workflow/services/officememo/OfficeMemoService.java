@@ -39,13 +39,13 @@ import workflow.model.OfficeMemo;
 
 @Path("office-memos/{id}")
 public class OfficeMemoService extends RestProvider {
-
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId) {
 		_Session ses = getSession();
 		OfficeMemo entity;
-
+		
 		boolean isNew = "new".equals(id);
 		if (isNew) {
 			entity = new OfficeMemo();
@@ -53,7 +53,7 @@ public class OfficeMemoService extends RestProvider {
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
 			entity = officeMemoDAO.findById(id);
 		}
-
+		
 		Outcome outcome = new Outcome();
 		outcome.setId(id);
 		outcome.addPayload(entity);
@@ -62,41 +62,42 @@ public class OfficeMemoService extends RestProvider {
 		if (!isNew) {
 			outcome.addPayload(new ACL(entity));
 		}
-
+		
 		return Response.ok(outcome).build();
 	}
-
+	
 	@GET
 	@Path("attachments/{attachmentId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachId) {
-
+		
 		return Response.ok().build();
 	}
-
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response save(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId, OfficeMemo form) {
+	public Response save(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId,
+			OfficeMemo form) {
 		_Session ses = getSession();
-
+		
 		_Validation validation = validate(form);
 		if (validation.hasError()) {
 			// return error
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
 		}
-
+		
 		// ApprovalDAO approvalDAO = new ApprovalDAO(ses);
 		OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
 		OfficeMemo entity;
-
+		
 		boolean isNew = "new".equals(id);
 		if (isNew) {
 			entity = new OfficeMemo();
 		} else {
 			entity = officeMemoDAO.findById(id);
 		}
-
+		
 		// TODO remove
 		if (entity.getRegNumber() == null) {
 			entity.setRegNumber("RG-OM-" + Math.random());
@@ -108,10 +109,10 @@ public class OfficeMemoService extends RestProvider {
 		} else {
 			entity.setApproval(null);
 		}
-		entity.setSummary(form.getSummary());
-		entity.setContent(form.getContent());
+		entity.setTitle(form.getTitle());
+		entity.setBody(form.getBody());
 		entity.setAttachments(getActualAttachments(ses, fsId, entity.getAttachments()));
-
+		
 		try {
 			if (isNew) {
 				IUser<Long> user = ses.getUser();
@@ -120,13 +121,13 @@ public class OfficeMemoService extends RestProvider {
 			} else {
 				entity = officeMemoDAO.update(entity);
 			}
-
+			
 		} catch (SecureException | DAOException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 		return Response.ok(entity).build();
 	}
-
+	
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("id") String id) {
@@ -142,7 +143,7 @@ public class OfficeMemoService extends RestProvider {
 		}
 		return Response.noContent().build();
 	}
-
+	
 	private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
 		_ActionBar actionBar = new _ActionBar(session);
 		// if (incoming.isEditable()) {
@@ -151,40 +152,40 @@ public class OfficeMemoService extends RestProvider {
 			actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
 		}
 		// }
-
+		
 		return actionBar;
 	}
-
+	
 	private _Validation validate(OfficeMemo entity) {
 		_Validation ve = new _Validation();
-
-		if (entity.getSummary() == null || entity.getSummary().isEmpty()) {
+		
+		if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
 			ve.addError("title", "required", "field_is_empty");
 		}
-
+		
 		return ve;
 	}
-
+	
 	// TODO refactor
 	protected List<Attachment> getActualAttachments(_Session ses, String fsId, List<Attachment> atts) {
 		_FormAttachments formFiles = ses.getFormAttachments(fsId);
-
+		
 		for (TempFile tmpFile : formFiles.getFiles()) {
 			Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
 			a.setFieldName(a.getDefaultFormName());
 			atts.add(a);
 		}
-
+		
 		List<TempFile> toDelete = formFiles.getDeletedFiles();
 		if (toDelete.size() > 0) {
 			for (IAppFile fn : toDelete) {
 				atts.remove(fn);
 			}
 		}
-
+		
 		return atts;
 	}
-
+	
 	@Override
 	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
 		sd.setName(getClass().getName());

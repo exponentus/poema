@@ -3,6 +3,9 @@
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
     <converter class="administrator.model.util.InterfaceTypeConvertor"/>        
-    <converter class="workflow.model.util.ControlStatusTypeConverter"/>    
+    <converter class="workflow.model.util.ControlStatusTypeConverter"/> 
+    <converter class="workflow.model.util.ApprovalStatusTypeConverter"/>   
+    <converter class="workflow.model.util.ApprovalTypeConverter"/>  
+    <converter class="workflow.model.util.DecisionTypeConverter"/>   
     <converter class="helpdesk.model.util.DemandStatusConverter"/>   
 </entity-mappings>

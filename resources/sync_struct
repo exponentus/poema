@@ -1,0 +1,6 @@
+echo Synchronize Structure data from SmartDoc databases
+run task import_orgs_nsf
+run task import_rvz_nsf
+run task import_dep_nsf
+run task import_emp_nsf  
+echo SmartDoc data was populated

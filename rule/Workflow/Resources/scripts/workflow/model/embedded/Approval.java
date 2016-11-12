@@ -7,21 +7,21 @@ package workflow.model.embedded;
 
 import java.util.List;
 
-import javax.persistence.Entity;
+import javax.persistence.CascadeType;
+import javax.persistence.Convert;
+import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
 
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.util.ApprovalStatusTypeConverter;
 
-@Entity
-@Table(name = "approvals")
-public class Approval extends SimpleAppEntity {
+@Embeddable
+public class Approval {
 	
+	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 	
-	@OneToMany()
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Block> blocks;
 	
 	public ApprovalStatusType getStatus() {
