@@ -14,7 +14,6 @@ import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.messaging.slack.SlackAgent;
-import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
 import administrator.dao.UserDAO;
@@ -27,19 +26,17 @@ public class Messages {
 	protected static Log4jLogger logger = new Log4jLogger("Messaging");
 	
 	private LanguageCode lang = EnvConst.getDefaultLang();
-	private _Session session;
 	private AppEnv appEnv;
 	private Vocabulary v;
 	
-	public Messages(_Session session) {
-		this.session = session;
-		appEnv = session.getAppEnv();
+	public Messages(AppEnv appEnv) {
+		this.appEnv = appEnv;
 		v = appEnv.vocabulary;
 	}
 	
 	public void sendOfNewProject(Project project) {
 		try {
-			UserDAO userDAO = new UserDAO(session);
+			UserDAO userDAO = new UserDAO();
 			Set<IUser<Long>> recipients = new HashSet<>();
 			String msgTemplate = "new_project";
 			
@@ -71,7 +68,7 @@ public class Messages {
 			
 			lang = project.getPrimaryLanguage();
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + project.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + project.getURL() + "&lang=" + lang);
 			MailAgent ma = new MailAgent();
 			ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
 					memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
@@ -84,7 +81,7 @@ public class Messages {
 	
 	public void sendToAssignee(Task task) {
 		try {
-			UserDAO userDAO = new UserDAO(session);
+			UserDAO userDAO = new UserDAO();
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			String msgTemplate = "new_task";
 			User user = null;
@@ -103,7 +100,7 @@ public class Messages {
 				
 			}
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
 			
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -145,7 +142,7 @@ public class Messages {
 				
 			}
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
 			memo.addVar("requestType", request.getRequestType().getLocalizedName(lang));
 			
 			if (user != null) {
@@ -173,7 +170,7 @@ public class Messages {
 	public void sendMessageOfRequestDecision(Request request) {
 		try {
 			String msgTemplate = "request_resolution";
-			UserDAO userDAO = new UserDAO(session);
+			UserDAO userDAO = new UserDAO();
 			IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
 			User user = null;
 			
@@ -190,7 +187,7 @@ public class Messages {
 				
 			}
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + request.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + request.getURL() + "&lang=" + lang);
 			memo.addVar("requestResolution", v.getWord(request.getResolution().name(), lang));
 			
 			if (user != null) {
@@ -221,7 +218,7 @@ public class Messages {
 	public void sendOfNewAcknowledging(Task task) {
 		try {
 			String msgTemplate = "task_acknowledged";
-			UserDAO userDAO = new UserDAO(session);
+			UserDAO userDAO = new UserDAO();
 			
 			Memo memo = new Memo();
 			memo.addVar("regNumber", task.getRegNumber());
@@ -239,7 +236,7 @@ public class Messages {
 				
 			}
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
 			
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -266,7 +263,7 @@ public class Messages {
 	public void sendOfTaskCompleted(Task task) {
 		try {
 			String msgTemplate = "task_completed";
-			UserDAO userDAO = new UserDAO(session);
+			UserDAO userDAO = new UserDAO();
 			
 			Memo memo = new Memo();
 			memo.addVar("regNumber", task.getRegNumber());
@@ -284,7 +281,7 @@ public class Messages {
 				
 			}
 			
-			memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
 			
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -310,9 +307,8 @@ public class Messages {
 	public void sendOfTaskCancelled(Task task) {
 		if (task.getAssignee() != task.getAuthorId()) {
 			try {
-				AppEnv appEnv = session.getAppEnv();
 				String msgTemplate = "task_cancelled";
-				UserDAO userDAO = new UserDAO(session);
+				UserDAO userDAO = new UserDAO();
 				
 				Memo memo = new Memo();
 				memo.addVar("regNumber", task.getRegNumber());
@@ -330,7 +326,7 @@ public class Messages {
 					
 				}
 				
-				memo.addVar("url", session.getAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
+				memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
 				
 				if (user != null) {
 					String slackAddr = user.getSlack();

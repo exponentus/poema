@@ -39,15 +39,15 @@ public class PromoService extends RestProvider {
 	@Path("/sendmail")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response create(@FormParam("email") String email, @FormParam("subject") String subj, @FormParam("message") String msg,
-	        @FormParam("g-recaptcha-response") String grecaptcha) {
+	public Response create(@FormParam("email") String email, @FormParam("subject") String subj,
+			@FormParam("message") String msg, @FormParam("g-recaptcha-response") String grecaptcha) {
 
-		return processSimpleMessage(getSession(), AppConst.RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
+		return processSimpleMessage(getAppEnv(), getSession(), AppConst.RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
 	}
 
-	public static Response processSimpleMessage(_Session session, String recipient, String email, String subj, String msg, String captcha) {
+	public static Response processSimpleMessage(AppEnv appEnv, _Session session, String recipient, String email,
+			String subj, String msg, String captcha) {
 		Outcome res = new Outcome("");
-		AppEnv appEnv = session.getAppEnv();
 		LanguageCode lang = session.getLang();
 		ArrayList<String> e = validateSimpleMailForm(email, subj, msg, captcha);
 
@@ -65,16 +65,18 @@ public class PromoService extends RestProvider {
 		memo.addVar("msg", msg);
 		try {
 			if (ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_new_message", lang),
-			        memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, "contact_us", lang)))) {
+					memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, "contact_us", lang)))) {
 				res.addMessage("message_has_sent_succesfully", lang);
 				return Response.status(HttpServletResponse.SC_OK).entity(res).build();
 			} else {
 				res.setMessage("MESSAGE_HAS_NOT_SENT", lang);
-				return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang)).build();
+				return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang))
+						.build();
 			}
 		} catch (MsgException e1) {
 			res.setMessage("MESSAGE_HAS_NOT_SENT", lang);
-			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang)).build();
+			return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).entity(res.setMessages(e, lang))
+					.build();
 		}
 
 	}

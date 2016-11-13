@@ -292,7 +292,7 @@ public class TaskForm extends _DoForm {
 			}
 			
 			if (isNew && task.getStatus() == TaskStatusType.OPEN) {
-				new Messages(session).sendToAssignee(task);
+				new Messages(getCurrentAppEnv()).sendToAssignee(task);
 			}
 
 			addContent(task);
@@ -448,7 +448,7 @@ public class TaskForm extends _DoForm {
 	}
 
 	private void doTaskComplete(_Session session, String taskId) {
-		TaskDAO dao = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
+		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
 
 		try {
@@ -460,7 +460,7 @@ public class TaskForm extends _DoForm {
 			task.setStatus(TaskStatusType.COMPLETED);
 			dao.update(task);
 
-			new Messages(session).sendOfTaskCompleted(task);
+			new Messages(getCurrentAppEnv()).sendOfTaskCompleted(task);
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
@@ -474,7 +474,7 @@ public class TaskForm extends _DoForm {
 	}
 
 	private void doTaskCancel(_Session session, String taskId, String comment) {
-		TaskDAO dao = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
+		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
 
 		try {
@@ -487,7 +487,7 @@ public class TaskForm extends _DoForm {
 			task.setCancellationComment(comment);
 			dao.update(task);
 
-			new Messages(session).sendOfTaskCancelled(task);
+			new Messages(getCurrentAppEnv()).sendOfTaskCancelled(task);
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);
@@ -498,7 +498,7 @@ public class TaskForm extends _DoForm {
 	}
 
 	private void doAcknowledged(_Session session, String taskId) {
-		TaskDAO dao = new TaskDAO(new _Session(session.getAppEnv(), new SuperUser()));
+		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
 
 		try {
@@ -515,7 +515,7 @@ public class TaskForm extends _DoForm {
 			task.setStatus(TaskStatusType.PROCESSING);
 			dao.update(task);
 
-			new Messages(session).sendOfNewAcknowledging(task);
+			new Messages(getCurrentAppEnv()).sendOfNewAcknowledging(task);
 		} catch (SecureException e) {
 			setBadRequest();
 			logError(e);

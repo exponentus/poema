@@ -145,7 +145,8 @@ public class ProjectForm extends _DoForm {
 
 			List<Long> ouIds = new ArrayList<>();
 			if (!formData.getValueSilently("observerUserIds").isEmpty()) {
-				ouIds = Arrays.stream(formData.getValueSilently("observerUserIds").split(",")).map(Long::valueOf).collect(Collectors.toList());
+				ouIds = Arrays.stream(formData.getValueSilently("observerUserIds").split(",")).map(Long::valueOf)
+						.collect(Collectors.toList());
 				for (long uid : ouIds) {
 					IUser<Long> ou = userDAO.findById(uid);
 					if (ou == null) {
@@ -181,7 +182,7 @@ public class ProjectForm extends _DoForm {
 
 			if (isNew) {
 				project = dao.add(project);
-				new Messages(session).sendOfNewProject(project);
+				new Messages(getCurrentAppEnv()).sendOfNewProject(project);
 			} else {
 				project = dao.update(project);
 			}
