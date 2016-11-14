@@ -126,6 +126,7 @@
 		<!-- Common module entities -->
 		<class>com.exponentus.common.model.Attachment</class>
 		<class>com.exponentus.common.model.AttachmentThumbnail</class>
+		<class>com.exponentus.common.model.Tree</class>
 		<!-- Common Staff module entities -->
 		<class>staff.model.Organization</class>
 		<class>staff.model.Department</class>
@@ -159,6 +160,7 @@
 		<!-- Common module entities -->
 		<class>com.exponentus.common.model.Attachment</class>
 		<class>com.exponentus.common.model.AttachmentThumbnail</class>
+		<class>com.exponentus.common.model.Tree</class>
 		<!-- Common Staff module entities -->
 		<class>staff.model.Organization</class>
 		<class>staff.model.Department</class>
@@ -218,6 +220,7 @@
 		<class>administrator.model.Language</class>
 		<class>administrator.model.Sentence</class>
 		<class>administrator.model.embedded.UserApplication</class>
+		
 		<!-- Common Staff module entities -->
 		<class>staff.model.Organization</class>
 		<class>staff.model.Department</class>
@@ -257,6 +260,7 @@
 		<!-- Common module entities -->
 		<class>com.exponentus.common.model.Attachment</class>
 		<class>com.exponentus.common.model.AttachmentThumbnail</class>
+		<class>com.exponentus.common.model.Tree</class>
 		<!-- Because of suppose importing data from Domino -->
 		<class>administrator.model.Collation</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
