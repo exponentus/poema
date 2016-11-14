@@ -146,7 +146,7 @@
 		<class>projects.model.Task</class>
 		<class>projects.model.Request</class>
 		<class>projects.model.Comment</class>
-		<class>projects.model.Dashboard</class>
+		<class>projects.model.Dashboard</class>	
 		<shared-cache-mode>NONE</shared-cache-mode>
 	</persistence-unit>
 	<persistence-unit name="HelpDesk" transaction-type="RESOURCE_LOCAL">
