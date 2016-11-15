@@ -4,7 +4,6 @@ import administrator.dao.UserDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
@@ -12,6 +11,7 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -24,26 +24,24 @@ import staff.dao.OrganizationDAO;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 @Path("demands")
 public class DemandService extends RestProvider {
 
     /*
-     * get view
+     * Get view
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getViewPage(@Context UriInfo uriInfo, @DefaultValue("1") @QueryParam("page") int pageNum) {
+    public Response getViewPage() {
         _Session session = getSession();
         int pageSize = session.pageSize;
 
-        // _SortParams sortParams = formData.getSortParams(_SortParams.asc("name"));
+        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.asc("title"));
         DemandDAO dao = new DemandDAO(session);
-        ViewPage<Demand> vp = dao.findViewPage(pageNum, pageSize);
+        ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
 
         _ActionBar actionBar = new _ActionBar(session);
         _Action newDocAction = new _Action("add_new", "", "new_demand");
@@ -58,8 +56,6 @@ public class DemandService extends RestProvider {
         colOpts.add(Demand.class, "demandType", "localizedName", "vw-demand-type");
         colOpts.add(Demand.class, "customer", "localizedName", "vw-customer");
         colOpts.add(Demand.class, "tags", "localizedName", "vw-tags");
-
-        colOpts.add(Demand.class, "dueDate", "date", "vw-date");
 
         //
         Outcome outcome = new Outcome();
@@ -96,7 +92,7 @@ public class DemandService extends RestProvider {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId) {
+    public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         Demand entity;
 
@@ -115,7 +111,7 @@ public class DemandService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(session, entity));
-        outcome.addPayload("fsId", fsId);
+        outcome.addPayload("fsId", getRequestParameter().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -130,7 +126,7 @@ public class DemandService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId, Demand demandForm) {
+    public Response save(@PathParam("id") String id, Demand demandForm) {
         _Session session = getSession();
 
         _Validation validation = validate(demandForm);
@@ -161,7 +157,7 @@ public class DemandService extends RestProvider {
         demand.setStatusDate(demandForm.getStatusDate());
         demand.setBody(demandForm.getBody());
         demand.setTags(demandForm.getTags());
-        demand.setAttachments(getActualAttachments(session, fsId, demand.getAttachments()));
+        demand.setAttachments(getActualAttachments(demand.getAttachments()));
 
         try {
             if (isNew) {
