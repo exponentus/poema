@@ -106,6 +106,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
+            if (filter.isInitiative() != null) {
+                if (condition == null) {
+                    condition = cb.equal(taskRoot.get("initiative"), filter.isInitiative());
+                } else {
+                    condition = cb.and(cb.equal(taskRoot.get("initiative"), filter.isInitiative()), condition);
+                }
+            }
+
             if (filter.getTags() != null) {
                 if (condition == null) {
                     condition = cb.and(taskRoot.get("tags").in(filter.getTags()));
