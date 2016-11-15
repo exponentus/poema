@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -21,6 +20,7 @@ import javax.persistence.NamedEntityGraphs;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
@@ -28,7 +28,6 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.listeners.TreeListener;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
@@ -42,8 +41,8 @@ import staff.model.Organization;
 @JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-// @Table(name = "projects")
-@EntityListeners(TreeListener.class)
+@Table(name = "projects")
+// @EntityListeners(TreeListener.class)
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
 @NamedEntityGraphs({ @NamedEntityGraph(name = Project.SHORT_GRAPH, attributeNodes = {
 		@NamedAttributeNode(value = "customer", subgraph = "customer"),
