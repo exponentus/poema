@@ -174,7 +174,11 @@ public class DemandService extends RestProvider<Demand> {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
 
-        return Response.ok(demand).build();
+        Outcome outcome = new Outcome();
+        outcome.setId(id);
+        outcome.addPayload(demand);
+
+        return Response.ok(outcome).build();
     }
 
     /* ===========================================
@@ -216,6 +220,7 @@ public class DemandService extends RestProvider<Demand> {
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
+        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
