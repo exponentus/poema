@@ -48,7 +48,7 @@ public class OfficeMemosService extends RestProvider {
 
         Outcome outcome = new Outcome();
         outcome.setId("office-memos");
-        outcome.addPayload("title", "office_memo");
+        outcome.setTitle("office_memo");
         outcome.addPayload(actionBar);
         outcome.addPayload(colOpts);
         outcome.addPayload(vp);

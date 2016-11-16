@@ -49,7 +49,7 @@ public class OutgoingsService extends RestProvider {
 
         Outcome outcome = new Outcome();
         outcome.setId("outgoings");
-        outcome.addPayload("title", "outgoing_documents");
+        outcome.setTitle("outgoing_documents");
         outcome.addPayload(actionBar);
         outcome.addPayload(colOpts);
         outcome.addPayload(vp);

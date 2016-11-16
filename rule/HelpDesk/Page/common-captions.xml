@@ -66,6 +66,7 @@
     <caption name="tasks"/>
 
     <caption name="demands_my"/>
+    <caption name="demands"/>
     <caption name="demand"/>
     <caption name="demand_type"/>
     <caption name="initiative_tasks"/>
