@@ -2,7 +2,6 @@ package workflow.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.jpa.annotation.ResponsesEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +11,6 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentType;
 import staff.model.Organization;
-import workflow.dao.AssignmentDAO;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,7 +20,6 @@ import java.util.UUID;
 
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ResponsesEntity({AssignmentDAO.class})
 @Entity
 @Table(name = "incomings")
 @NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
