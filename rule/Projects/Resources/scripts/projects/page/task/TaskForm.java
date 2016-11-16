@@ -428,7 +428,7 @@ public class TaskForm extends _DoForm {
             ve.addError("dueDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
         }
 
-        if (formData.getNumberValueSilently("assigneeUserId", 0) == 0) {
+        if (!formData.getBoolSilently("initiative") && formData.getNumberValueSilently("assigneeUserId", 0) == 0) {
             ve.addError("assigneeUserId", "required", getLocalizedWord("field_is_empty", lang));
         }
 

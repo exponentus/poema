@@ -102,6 +102,36 @@
         <entry lang="POR">Projeto</entry>
         <entry lang="SPA">Proyecto</entry>
     </sentence>
+    <sentence mode="on" keyword="demands_my">
+        <entry lang="RUS">Мои запросы</entry>
+        <entry lang="ENG">My demands</entry>
+        <entry lang="POR">My demands</entry>
+        <entry lang="SPA">My demands</entry>
+    </sentence>
+    <sentence mode="on" keyword="demand">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Demand</entry>
+        <entry lang="POR">Demand</entry>
+        <entry lang="SPA">Demand</entry>
+    </sentence>
+    <sentence mode="on" keyword="demand_type">
+        <entry lang="RUS">Тип запроса</entry>
+        <entry lang="ENG">Demand type</entry>
+        <entry lang="POR">Demand type</entry>
+        <entry lang="SPA">Demand type</entry>
+    </sentence>
+    <sentence mode="on" keyword="initiative_tasks">
+        <entry lang="RUS">Иницитивные задачи</entry>
+        <entry lang="ENG">Initiative tasks</entry>
+        <entry lang="POR">Initiative tasks</entry>
+        <entry lang="SPA">Initiative tasks</entry>
+    </sentence>
+    <sentence mode="on" keyword="initiative_task">
+        <entry lang="RUS">Иницитивная задача</entry>
+        <entry lang="ENG">Initiative task</entry>
+        <entry lang="POR">Initiative task</entry>
+        <entry lang="SPA">Initiative task</entry>
+    </sentence>
     <sentence mode="on" keyword="new_project">
         <entry lang="RUS">Новый проект</entry>
         <entry lang="ENG">New project</entry>
@@ -520,5 +550,4 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
-
 </vocabulary>
