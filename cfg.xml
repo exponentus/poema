@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <nextbase>
-
     <hostname>localhost</hostname>
     <port></port>
     <orgname>Avanti's projects</orgname>
@@ -19,17 +18,20 @@
         </app>
         <app>
             <name mode="on">Workspace</name>
-              <rest mode="on"/>
+            <rest mode="on"/>
         </app>
         <app>
             <name mode="on">Projects</name>
             <rest mode="on"/>
-           
         </app>
         <app>
             <name mode="on">HelpDesk</name>
-            <rest mode="on"/>
-           
+            <rest mode="on">
+                <urlmapping>/api/*</urlmapping>
+                <services>
+                    <class>helpdesk.services.demand.DemandService</class>
+                </services>
+            </rest>
         </app>
         <app>
             <name mode="on">Workflow</name>
@@ -46,7 +48,6 @@
                 </services>
             </rest>
         </app>
-       
     </applications>
     <langs>
         <!-- https://en.wikipedia.org/wiki/List_of_ISO_639-2_codes -->
