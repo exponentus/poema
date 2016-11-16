@@ -19,7 +19,7 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>com.exponentus.common.model.RecycleBin</class>
-      <!--  <class>com.exponentus.common.model.Tree</class>-->
+         <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
     </persistence-unit>
@@ -128,7 +128,7 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-   <!--  <class>com.exponentus.common.model.Tree</class>-->
+     <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -165,7 +165,7 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-      <!--  <class>com.exponentus.common.model.Tree</class>-->
+        <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -267,7 +267,7 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-      <!--  <class>com.exponentus.common.model.Tree</class>-->
+      <!--  <class>com.exponentus.common.model.ViewEntry</class>-->
         <!-- Because of suppose importing data from Domino -->
         <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>

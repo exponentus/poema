@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -29,6 +30,7 @@ import javax.validation.constraints.NotNull;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
+import com.exponentus.common.model.listeners.EntityListener;
 import com.exponentus.dataengine.jpa.IHierarchicalEntity;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
@@ -48,7 +50,7 @@ import reference.model.TaskType;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "tasks")
-//@EntityListeners(TreeListener.class)
+@EntityListeners(EntityListener.class)
 @NamedQuery(name = "Task.findAll", query = "SELECT m FROM Task AS m ORDER BY m.regDate")
 public class Task extends SecureAppEntity<UUID> implements IHierarchicalEntity {
 	
@@ -220,6 +222,7 @@ public class Task extends SecureAppEntity<UUID> implements IHierarchicalEntity {
 		this.priority = priority;
 	}
 	
+	@Override
 	public String getTitle() {
 		return title;
 	}
@@ -354,16 +357,13 @@ public class Task extends SecureAppEntity<UUID> implements IHierarchicalEntity {
 	public String getURL() {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&taskId=" + getIdentifier();
 	}
-	
+
 	@Override
-	@Transient
-	public List<UUID> getResponses() {
-		List<UUID> resp = new ArrayList<UUID>();
-		if (children != null) {
-			for (IAppEntity r : children) {
-				resp.add(r.getId());
-			}
+	public IHierarchicalEntity getHead() {
+		if (project != null) {
+			return project;
+		} else {
+			return parent;
 		}
-		return resp;
 	}
 }
