@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -32,6 +33,9 @@ public class Task extends SecureAppEntity<UUID> {
     @NotNull
     @ManyToOne
     private Project project;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Demand demand;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Task parent;
@@ -127,6 +131,15 @@ public class Task extends SecureAppEntity<UUID> {
     @JsonIgnore
     public Task getParent() {
         return parent;
+    }
+
+    // TODO short graph
+    public Demand getDemand() {
+        return demand;
+    }
+
+    public void setDemand(Demand demand) {
+        this.demand = demand;
     }
 
     public void setParent(Task parent) {
