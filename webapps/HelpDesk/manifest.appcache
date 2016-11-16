@@ -1,0 +1,17 @@
+CACHE MANIFEST
+# version 1
+
+CACHE:
+p?id=index
+css/all.min.css
+img/favicon.png
+img/logo.png
+img/loading.gif
+js/vendor.js.gz
+js/app.js.gz
+/SharedResources/vendor/bootstrap/css/bootstrap.min.css
+/SharedResources/vendor/font-awesome/css/font-awesome.min.css
+/SharedResources/vendor/font-awesome/fonts/fontawesome-webfont.woff2?v=4.5.0
+
+NETWORK:
+*
