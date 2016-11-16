@@ -3,6 +3,7 @@ package helpdesk.services.demand;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
@@ -28,11 +29,14 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("demands")
-public class DemandService extends RestProvider {
+public class DemandService extends RestProvider<Demand> {
 
-    /*
+    public DemandService() {
+    }
+
+    /* ===========================================
      * Get view
-     */
+     * ---------------------------------------- */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
@@ -86,9 +90,9 @@ public class DemandService extends RestProvider {
 //        return Response.ok().build();
 //    }
 
-    /*
-     * get demand by id
-     */
+    /* ===========================================
+     * Get entity by id
+     * ---------------------------------------- */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -111,7 +115,7 @@ public class DemandService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(session, entity));
-        outcome.addPayload("fsId", getRequestParameter().getFormSesId());
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -119,9 +123,9 @@ public class DemandService extends RestProvider {
         return Response.ok(outcome).build();
     }
 
-    /*
-     * save demand
-     */
+    /* ===========================================
+     * Save entity
+     * ---------------------------------------- */
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -173,9 +177,9 @@ public class DemandService extends RestProvider {
         return Response.ok(demand).build();
     }
 
-    /*
-     * delete demand
-     */
+    /* ===========================================
+     * Delete entity
+     * ---------------------------------------- */
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -193,6 +197,22 @@ public class DemandService extends RestProvider {
         return Response.noContent().build();
     }
 
+    /* ===========================================
+     * Get entity attachment or _thumbnail
+     * ---------------------------------------- */
+    @GET
+    @Path("{id}/attachments/{attachId}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        DemandDAO demandDAO = new DemandDAO(getSession());
+        Demand demand = demandDAO.findById(id);
+
+        return getAttachment(demand, attachId);
+    }
+
+    /* ===========================================
+     * Action bar
+     * ---------------------------------------- */
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
@@ -205,6 +225,9 @@ public class DemandService extends RestProvider {
         return actionBar;
     }
 
+    /* ===========================================
+     * Validate entity
+     * ---------------------------------------- */
     private _Validation validate(Demand demandForm) {
         _Validation ve = new _Validation();
 

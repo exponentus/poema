@@ -7,6 +7,7 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -17,18 +18,29 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Path("incomings")
 public class IncomingsService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@Context UriInfo uriInfo, @DefaultValue("1") @QueryParam("page") int pageNum) {
+    public Response get() {
+        System.out.println(getRequestParameter());
+
         _Session session = getSession();
         int pageSize = session.pageSize;
+        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
-        ViewPage vp = incomingDAO.findViewPage(pageNum, pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
+        // ViewPage vp = incomingDAO.findViewPage(pageNum, pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
+
+        List<UUID> ids = new ArrayList<>(); // incomingDAO.findAll().stream().map(it -> it.getId()).collect(Collectors.toList());
+        ids.add(UUID.fromString("44ba782b-d9a3-428d-8f03-916b37d69fa4"));
+        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getRequestParameter().getPage(), pageSize, ids);
+        // ViewPage vp = incomingDAO.findViewPageWithResponses(_SortParams.desc("regDate"), ids, pageNum, pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);

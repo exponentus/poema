@@ -140,6 +140,19 @@ public class OutgoingService extends RestProvider {
         return Response.noContent().build();
     }
 
+    /* ===========================================
+     * Get entity attachment or _thumbnail
+     * ---------------------------------------- */
+    @GET
+    @Path("attachments/{attachId}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        OutgoingDAO dao = new OutgoingDAO(getSession());
+        Outgoing entity = dao.findById(id);
+
+        return getAttachment(entity, attachId);
+    }
+
     private _ActionBar getActionBar(_Session session, Outgoing entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
