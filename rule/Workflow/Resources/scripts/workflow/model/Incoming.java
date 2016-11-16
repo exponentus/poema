@@ -1,200 +1,198 @@
 package workflow.model;
 
+import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
+import reference.model.DocumentLanguage;
+import reference.model.DocumentType;
+import staff.model.Organization;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
-import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.annotation.JsonSetter;
-
-import reference.model.DocumentLanguage;
-import reference.model.DocumentType;
-import staff.model.Organization;
-
 @JsonRootName("incoming")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "incomings")
 @NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
 public class Incoming extends SecureAppEntity<UUID> {
 
-	@FTSearchable
-	@Column(length = 140)
-	private String title;
+    @JsonIgnore
+    @OneToMany(mappedBy = "incoming", fetch = FetchType.LAZY)
+    private List<Assignment> assignments;
 
-	@Column(name = "reg_number", unique = true)
-	private String regNumber;
+    @FTSearchable
+    @Column(length = 140)
+    private String title;
 
-	@Column(name = "applied_reg_date")
-	private Date appliedRegDate;
+    @Column(name = "reg_number", unique = true)
+    private String regNumber;
 
-	private Organization sender;
+    @Column(name = "applied_reg_date")
+    private Date appliedRegDate;
 
-	@Column(name = "sender_reg_number")
-	private String senderRegNumber;
+    private Organization sender;
 
-	@Column(name = "sender_applied_reg_date")
-	private Date senderAppliedRegDate;
+    @Column(name = "sender_reg_number")
+    private String senderRegNumber;
 
-	private DocumentLanguage docLanguage;
+    @Column(name = "sender_applied_reg_date")
+    private Date senderAppliedRegDate;
 
-	private DocumentType docType;
+    private DocumentLanguage docLanguage;
 
-	private Outgoing responseTo;
+    private DocumentType docType;
 
-	@FTSearchable
-	@Column(columnDefinition = "TEXT")
-	private String body;
+    private Outgoing responseTo;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "incoming_attachments", joinColumns = { @JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
-	        @JoinColumn(name = "attachment_id") }, indexes = {
-	                @Index(columnList = "incoming_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "incoming_id",
-	                        "attachment_id" }))
-	@CascadeOnDelete
-	private List<Attachment> attachments = new ArrayList<>();
+    @FTSearchable
+    @Column(columnDefinition = "TEXT")
+    private String body;
 
-	public String getRegNumber() {
-		return regNumber;
-	}
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "incoming_attachments", joinColumns = {@JoinColumn(name = "incoming_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "attachment_id")}, indexes = {
+            @Index(columnList = "incoming_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {"incoming_id",
+            "attachment_id"}))
+    @CascadeOnDelete
+    private List<Attachment> attachments = new ArrayList<>();
 
-	public void setRegNumber(String regNumber) {
-		this.regNumber = regNumber;
-	}
+    public String getRegNumber() {
+        return regNumber;
+    }
 
-	public Date getAppliedRegDate() {
-		return appliedRegDate;
-	}
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
 
-	public void setAppliedRegDate(Date appliedRegDate) {
-		this.appliedRegDate = appliedRegDate;
-	}
+    public Date getAppliedRegDate() {
+        return appliedRegDate;
+    }
 
-	public Organization getSender() {
-		return sender;
-	}
+    public void setAppliedRegDate(Date appliedRegDate) {
+        this.appliedRegDate = appliedRegDate;
+    }
 
-	public void setSender(Organization sender) {
-		this.sender = sender;
-	}
+    public Organization getSender() {
+        return sender;
+    }
 
-	@JsonSetter("sender")
-	public void setSenderId(UUID id) {
-		if (id != null) {
-			sender = new Organization();
-			sender.setId(id);
-		}
-	}
+    public void setSender(Organization sender) {
+        this.sender = sender;
+    }
 
-	public String getSenderRegNumber() {
-		return senderRegNumber;
-	}
+    @JsonSetter("sender")
+    public void setSenderId(UUID id) {
+        if (id != null) {
+            sender = new Organization();
+            sender.setId(id);
+        }
+    }
 
-	public void setSenderRegNumber(String senderRegNumber) {
-		this.senderRegNumber = senderRegNumber;
-	}
+    public String getSenderRegNumber() {
+        return senderRegNumber;
+    }
 
-	public Date getSenderAppliedRegDate() {
-		return senderAppliedRegDate;
-	}
+    public void setSenderRegNumber(String senderRegNumber) {
+        this.senderRegNumber = senderRegNumber;
+    }
 
-	public void setSenderAppliedRegDate(Date senderAppliedRegDate) {
-		this.senderAppliedRegDate = senderAppliedRegDate;
-	}
+    public Date getSenderAppliedRegDate() {
+        return senderAppliedRegDate;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public void setSenderAppliedRegDate(Date senderAppliedRegDate) {
+        this.senderAppliedRegDate = senderAppliedRegDate;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	@Override
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	@Override
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
+    @Override
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
 
-	public DocumentLanguage getDocLanguage() {
-		return docLanguage;
-	}
+    @Override
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
-	public void setDocLanguage(DocumentLanguage docLanguage) {
-		this.docLanguage = docLanguage;
-	}
+    public DocumentLanguage getDocLanguage() {
+        return docLanguage;
+    }
 
-	@JsonSetter("docLanguage")
-	public void setDocLanguageId(UUID id) {
-		if (id != null) {
-			docLanguage = new DocumentLanguage();
-			docLanguage.setId(id);
-		}
-	}
+    public void setDocLanguage(DocumentLanguage docLanguage) {
+        this.docLanguage = docLanguage;
+    }
 
-	public DocumentType getDocType() {
-		return docType;
-	}
+    @JsonSetter("docLanguage")
+    public void setDocLanguageId(UUID id) {
+        if (id != null) {
+            docLanguage = new DocumentLanguage();
+            docLanguage.setId(id);
+        }
+    }
 
-	public void setDocType(DocumentType docType) {
-		this.docType = docType;
-	}
+    public DocumentType getDocType() {
+        return docType;
+    }
 
-	@JsonSetter("docType")
-	public void setDocTypeId(UUID id) {
-		if (id != null) {
-			docType = new DocumentType();
-			docType.setId(id);
-		}
-	}
+    public void setDocType(DocumentType docType) {
+        this.docType = docType;
+    }
 
-	public Outgoing getResponseTo() {
-		return responseTo;
-	}
+    @JsonSetter("docType")
+    public void setDocTypeId(UUID id) {
+        if (id != null) {
+            docType = new DocumentType();
+            docType.setId(id);
+        }
+    }
 
-	public void setResponseTo(Outgoing responseTo) {
-		this.responseTo = responseTo;
-	}
+    public Outgoing getResponseTo() {
+        return responseTo;
+    }
 
-	@JsonSetter("responseTo")
-	public void setResponseToId(UUID id) {
-		if (id != null) {
-			responseTo = new Outgoing();
-			responseTo.setId(id);
-		}
-	}
+    public void setResponseTo(Outgoing responseTo) {
+        this.responseTo = responseTo;
+    }
 
-	public String getBody() {
-		return body;
-	}
+    @JsonSetter("responseTo")
+    public void setResponseToId(UUID id) {
+        if (id != null) {
+            responseTo = new Outgoing();
+            responseTo.setId(id);
+        }
+    }
 
-	public void setBody(String body) {
-		this.body = body;
-	}
+    public String getBody() {
+        return body;
+    }
 
-	@Override
-	public String getURL() {
-		return "incomings/" + getIdentifier();
-	}
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    @Override
+    public String getURL() {
+        return "incomings/" + getIdentifier();
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
+    }
 }

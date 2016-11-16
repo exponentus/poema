@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import helpdesk.model.Demand;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
@@ -56,6 +57,9 @@ public class Task extends SecureAppEntity<UUID> implements IHierarchicalEntity {
 	@NotNull
 	@ManyToOne
 	private Project project;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Demand demand;
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Task parent;
@@ -152,11 +156,20 @@ public class Task extends SecureAppEntity<UUID> implements IHierarchicalEntity {
 	public Task getParent() {
 		return parent;
 	}
-
+	
 	public void setParent(Task parent) {
 		this.parent = parent;
 	}
 
+	// TODO short graph
+	public Demand getDemand() {
+		return demand;
+	}
+
+	public void setDemand(Demand demand) {
+		this.demand = demand;
+	}
+	
 	public String getRegNumber() {
 		return regNumber;
 	}

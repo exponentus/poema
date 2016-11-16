@@ -5,6 +5,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.util.DemandStatusConverter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -82,6 +83,14 @@ public class Demand extends SecureAppEntity<UUID> {
         this.project = project;
     }
 
+    @JsonSetter("project")
+    public void setProjectId(UUID id) {
+        if (id != null) {
+            project = new Project();
+            project.setId(id);
+        }
+    }
+
     public DemandStatusType getStatus() {
         return status;
     }
@@ -123,12 +132,28 @@ public class Demand extends SecureAppEntity<UUID> {
         this.demandType = demandType;
     }
 
+    @JsonSetter("demandType")
+    public void setDemandTypeId(UUID id) {
+        if (id != null) {
+            demandType = new DemandType();
+            demandType.setId(id);
+        }
+    }
+
     public Organization getCustomer() {
         return customer;
     }
 
     public void setCustomer(Organization customer) {
         this.customer = customer;
+    }
+
+    @JsonSetter("customer")
+    public void setCustomerId(UUID id) {
+        if (id != null) {
+            customer = new Organization();
+            customer.setId(id);
+        }
     }
 
     public String getBody() {
@@ -145,6 +170,18 @@ public class Demand extends SecureAppEntity<UUID> {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    @JsonSetter("tags")
+    public void setTagsIds(List<UUID> ids) {
+        if (ids != null) {
+            tags = new ArrayList<>();
+            for (UUID tid : ids) {
+                Tag t = new Tag();
+                t.setId(tid);
+                tags.add(t);
+            }
+        }
     }
 
     public boolean isHasAttachments() {

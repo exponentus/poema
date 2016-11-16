@@ -1,6 +1,5 @@
 package helpdesk.services.demand;
 
-import administrator.dao.UserDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
@@ -20,6 +19,7 @@ import com.exponentus.user.IUser;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import projects.dao.ProjectDAO;
+import reference.dao.DemandTypeDAO;
 import staff.dao.OrganizationDAO;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +39,7 @@ public class DemandService extends RestProvider {
         _Session session = getSession();
         int pageSize = session.pageSize;
 
-        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.asc("title"));
+        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
         DemandDAO dao = new DemandDAO(session);
         ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
 
@@ -135,10 +135,9 @@ public class DemandService extends RestProvider {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
         }
 
-        UserDAO userDAO = new UserDAO(session);
         ProjectDAO projectDAO = new ProjectDAO(session);
         OrganizationDAO organizationDAO = new OrganizationDAO(session);
-        // DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
+        DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
         DemandDAO demandDAO = new DemandDAO(session);
         Demand demand;
 
@@ -151,7 +150,7 @@ public class DemandService extends RestProvider {
 
         demand.setTitle(demandForm.getTitle());
         demand.setCustomer(organizationDAO.findById(demandForm.getCustomer().getId()));
-        // demand.setDemandType(DemandType);
+        demand.setDemandType(demandTypeDAO.findById(demandForm.getDemandType().getId()));
         demand.setProject(projectDAO.findById(demandForm.getProject().getId()));
         demand.setStatus(demandForm.getStatus());
         demand.setStatusDate(demandForm.getStatusDate());
@@ -197,9 +196,9 @@ public class DemandService extends RestProvider {
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
-        actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
         // }
 
