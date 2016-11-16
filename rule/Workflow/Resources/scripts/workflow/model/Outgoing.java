@@ -7,6 +7,7 @@ package workflow.model;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @JsonRootName("outgoing")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "outgoings")
 @NamedQuery(name = "Outgoing.findAll", query = "SELECT m FROM Outgoing AS m ORDER BY m.regDate")
