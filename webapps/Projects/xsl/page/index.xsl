@@ -57,23 +57,23 @@
                     <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
                 </div>
             </app>
-            <script src="js/vendor.js.gz"></script>
-            <script src="js/app.js.gz"></script>
+            <script src="/SharedResources/ng-app/vendor.js.gz"></script>
+            <script src="/SharedResources/ng-app/app.js.gz"></script>
         </body>
     </xsl:template>
 
     <xsl:template match="document[@entity='project']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/Projects/projects/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
     <xsl:template match="document[@entity='task']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/task/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/Projects/task/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
     <xsl:template match="document[@entity='request']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/requests/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/Projects/requests/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
