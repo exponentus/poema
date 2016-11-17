@@ -45,8 +45,8 @@
                     <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
                 </div>
             </app>
-            <script src="js/vendor.js.gz"></script>
-            <script src="js/app.js.gz"></script>
+            <script src="/SharedResources/ng-app/vendor.js.gz"></script>
+            <script src="/SharedResources/ng-app/app.js.gz"></script>
         </body>
     </xsl:template>
 

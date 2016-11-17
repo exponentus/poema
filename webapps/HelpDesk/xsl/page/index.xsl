@@ -8,11 +8,11 @@
             disable-output-escaping="yes">&gt;</xsl:text>
         <html manifest="manifest.appcache">
             <xsl:choose>
-                <xsl:when test="//document[@entity='project' or @entity='task' or @entity='request']">
+                <xsl:when test="//document[@entity='project' or @entity='demand' or @entity='task' or @entity='request']">
                     <head>
                         <script>
                             <xsl:apply-templates
-                                    select="//document[@entity='project' or @entity='task' or @entity='request']"/>
+                                    select="//document[@entity='project' or @entity='demand' or @entity='task' or @entity='request']"/>
                         </script>
                     </head>
                 </xsl:when>
@@ -57,23 +57,28 @@
                     <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
                 </div>
             </app>
-            <script src="js/vendor.js.gz"></script>
-            <script src="js/app.js.gz"></script>
+            <script src="/SharedResources/ng-app/vendor.js.gz"></script>
+            <script src="/SharedResources/ng-app/app.js.gz"></script>
         </body>
     </xsl:template>
 
     <xsl:template match="document[@entity='project']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/projects/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/HelpDesk/projects/<xsl:value-of
+            select="@docid"/>';
+    </xsl:template>
+
+    <xsl:template match="document[@entity='demand']">
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/HelpDesk/demands/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
     <xsl:template match="document[@entity='task']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/task/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/HelpDesk/task/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
     <xsl:template match="document[@entity='request']">
-        location.href = location.protocol + '//' + location.host + location.pathname + '#/requests/<xsl:value-of
+        location.href = location.protocol + '//' + location.host + location.pathname + '#/HelpDesk/requests/<xsl:value-of
             select="@docid"/>';
     </xsl:template>
 
