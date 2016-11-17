@@ -16,17 +16,25 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+
 /*
 clear child float (pika-lendar), using the famous micro clearfix hack
 http://nicolasgallagher.com/micro-clearfix-hack/
 */
+
 .pika-single:before,
 .pika-single:after {
     content: " ";
     display: table;
 }
-.pika-single:after { clear: both }
-.pika-single { *zoom: 1 }
+
+.pika-single:after {
+    clear: both
+}
+
+.pika-single {
+    *zoom: 1
+}
 
 .pika-single.is-hidden {
     display: none;
@@ -34,7 +42,7 @@ http://nicolasgallagher.com/micro-clearfix-hack/
 
 .pika-single.is-bound {
     position: absolute;
-    box-shadow: 0 5px 15px -5px rgba(0,0,0,.5);
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, .5);
 }
 
 .pika-lendar {
@@ -61,6 +69,7 @@ http://nicolasgallagher.com/micro-clearfix-hack/
     font-weight: bold;
     background-color: #fff;
 }
+
 .pika-title select {
     cursor: pointer;
     position: absolute;
@@ -199,7 +208,8 @@ http://nicolasgallagher.com/micro-clearfix-hack/
     border-radius: 3px;
 }
 
-.is-disabled .pika-button {
+.is-disabled .pika-button,
+.is-outside-current-month .pika-button {
     pointer-events: none;
     cursor: default;
     color: #999;
@@ -213,9 +223,10 @@ http://nicolasgallagher.com/micro-clearfix-hack/
     border-radius: 3px;
 }
 
+
 /* styling for abbr */
+
 .pika-table abbr {
     border-bottom: none;
     cursor: help;
 }
-
