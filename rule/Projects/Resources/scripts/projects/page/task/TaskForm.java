@@ -19,6 +19,7 @@ import com.exponentus.user.IUser;
 import com.exponentus.user.SuperUser;
 import com.exponentus.util.TimeUtil;
 import com.exponentus.webserver.servlet.UploadedFile;
+import helpdesk.dao.DemandDAO;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import org.joda.time.LocalDate;
@@ -168,6 +169,7 @@ public class TaskForm extends _DoForm {
 
             UserDAO userDAO = new UserDAO(session);
             ProjectDAO projectDAO = new ProjectDAO(session);
+            DemandDAO demandDAO = new DemandDAO(session);
             TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
             TaskDAO dao = new TaskDAO(session);
             Task parentTask = null;
@@ -224,6 +226,11 @@ public class TaskForm extends _DoForm {
             task.setDueDate(TimeUtil.stringToDate(formData.getValueSilently("dueDate")));
             task.setBody(formData.getValueSilently("body"));
             IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
+
+            if (!formData.getValueSilently("demandId").isEmpty()) {
+                task.setDemand(demandDAO.findById(formData.getValueSilently("demandId")));
+            }
+
             task.setAssignee(assigneeUser.getId());
             task.setAttachments(getActualAttachments(task.getAttachments()));
             task.setCustomerObservation(Boolean.valueOf(formData.getValue("customerObservation")));
