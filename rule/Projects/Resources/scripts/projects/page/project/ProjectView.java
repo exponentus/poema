@@ -21,7 +21,7 @@ public class ProjectView extends _DoPage {
     @Override
     public void doGET(_Session session, _WebFormData formData) {
         String keyWord = formData.getAnyValueSilently("keyWord");
-        int pageSize = 200; // session.pageSize;
+        int pageSize = formData.getNumberValueSilently("limit", session.pageSize);
         int pageNum = formData.getNumberValueSilently("page", 0);
         _SortParams sortParams = formData.getSortParams(_SortParams.asc("name"));
 
