@@ -19,7 +19,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.exponentus.common.dao.ViewEntryDAO;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
@@ -186,11 +185,11 @@ public class TaskDAO extends DAO<Task, UUID> {
 				typedQuery.setMaxResults(pageSize);
 			}
 
-			ViewEntryDAO veDao = new ViewEntryDAO();
+			//ViewEntryDAO veDao = new ViewEntryDAO();
 			List<Task> result = typedQuery.getResultList();
-			for (Task task : result) {
-				//task.setDescendantsCount(veDao.getResponsesCount(task.getId()));
-			}
+			//for (Task task : result) {
+			//task.setDescendantsCount(veDao.getResponsesCount(task.getId()));
+			//}
 			
 			return new ViewPage<>(result, count, maxPage, pageNum);
 		} finally {
