@@ -23,14 +23,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.IHierarchicalEntity;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -54,7 +52,7 @@ import staff.model.Organization;
 						@NamedAttributeNode("name"), @NamedAttributeNode("localizedName") }),
 				@NamedSubgraph(name = "attachments", attributeNodes = { @NamedAttributeNode("id"),
 						@NamedAttributeNode("realFileName"), @NamedAttributeNode("size") }) }) })
-public class Project extends SecureAppEntity<UUID> implements IHierarchicalEntity {
+public class Project extends HierarchicalEntity<UUID> {
 
 	public final static String SHORT_GRAPH = "Project.SHORT_GRAPH";
 
@@ -95,9 +93,6 @@ public class Project extends SecureAppEntity<UUID> implements IHierarchicalEntit
 	@FTSearchable
 	@Column(length = 2048)
 	private String comment;
-
-	@Transient
-	private int descendantsCount;
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "project_attachments", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
@@ -230,22 +225,4 @@ public class Project extends SecureAppEntity<UUID> implements IHierarchicalEntit
 		return name;
 	}
 
-	@Override
-	@JsonIgnore
-	public IHierarchicalEntity getHead() {
-		return null;
-	}
-	
-	@Override
-	@JsonIgnore
-	public void setDescendantsCount(int count) {
-		descendantsCount = count;
-		
-	}
-
-	@Override
-	@JsonIgnore
-	public int getDescendantsCount() {
-		return descendantsCount;
-	}
 }
