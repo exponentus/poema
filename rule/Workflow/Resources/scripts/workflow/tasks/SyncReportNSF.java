@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
@@ -38,7 +39,7 @@ public class SyncReportNSF extends ImportNSF {
 	private static final String TMP_FIELD_NAME = "report_tmp_file";
 
 	@Override
-	public void doTask(_Session ses) {
+	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Report> entities = new HashMap<>();
 		AssignmentDAO aDao = new AssignmentDAO(ses);
 		ReportDAO dao = new ReportDAO(ses);

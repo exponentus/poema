@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.exponentus.appenv.AppEnv;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.scripting._Session;
@@ -38,7 +39,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 	protected static Map<String, String> controlTypeCollation = controlTypeCollationMapInit();
 
 	@Override
-	public void doTask(_Session ses) {
+	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Assignment> entities = new HashMap<>();
 		AssignmentDAO dao = new AssignmentDAO(ses);
 		IncomingDAO iDao = new IncomingDAO(ses);

@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
@@ -44,7 +45,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
 
 	@Override
-	public void doTask(_Session ses) {
+	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Incoming> entities = new HashMap<>();
 		OrganizationDAO oDao = new OrganizationDAO(ses);
 		IncomingDAO iDao = new IncomingDAO(ses);
