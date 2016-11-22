@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
@@ -18,7 +19,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
 public class ProjectView extends _DoPage {
-
+	
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 		String keyWord = formData.getAnyValueSilently("keyWord");
@@ -26,11 +27,11 @@ public class ProjectView extends _DoPage {
 		//int pageSize = 20;
 		int pageNum = formData.getNumberValueSilently("page", 0);
 		_SortParams sortParams = formData.getSortParams(_SortParams.asc("name"));
-
+		
 		ProjectDAO projectDAO = new ProjectDAO(session);
 		ViewPage<Project> vp = projectDAO.findProjects(keyWord, sortParams, pageNum, pageSize);
 		addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
-
+		
 		//
 		EmployeeDAO empDao = new EmployeeDAO(session);
 		Map<Long, Employee> emps = new HashMap<>();
@@ -47,7 +48,7 @@ public class ProjectView extends _DoPage {
 		}
 		addDataContent("employees", emps);
 	}
-
+	
 	@Override
 	public void doDELETE(_Session session, _WebFormData formData) {
 		ProjectDAO projectDAO = new ProjectDAO(session);
@@ -56,7 +57,7 @@ public class ProjectView extends _DoPage {
 			try {
 				m.setAttachments(null); // if no on delete cascade
 				projectDAO.delete(m);
-			} catch (SecureException e) {
+			} catch (SecureException | DAOException e) {
 				setError(e);
 			}
 		}

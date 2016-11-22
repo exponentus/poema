@@ -34,11 +34,11 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
 public class TaskRequests extends _DoForm {
-
+	
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 		RequestDAO requestDAO = new RequestDAO(session);
-
+		
 		String requestId = formData.getValueSilently("requestId");
 		if (!requestId.isEmpty()) {
 			Request request = requestDAO.findById(requestId);
@@ -46,16 +46,16 @@ public class TaskRequests extends _DoForm {
 				setBadRequest();
 				return;
 			}
-
+			
 			if (formData.containsField("attachment")) {
 				doGetAttachment(session, formData, request);
 				return;
 			}
-
+			
 			addContent(new ACL(request));
 			addContent(request);
 			addContent(getActionBar(session, request));
-
+			
 			EmployeeDAO empDao = new EmployeeDAO(session);
 			Map<Long, Employee> emps = new HashMap<>();
 			emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
@@ -66,54 +66,54 @@ public class TaskRequests extends _DoForm {
 			request.setAuthor(session.getUser());
 			addContent(request);
 			addContent(getActionBar(session, request));
-
+			
 			EmployeeDAO empDao = new EmployeeDAO(session);
 			Map<Long, Employee> emps = new HashMap<>();
 			emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
 			addDataContent("employees", emps);
 			return;
 		}
-
+		
 		String taskId = formData.getValueSilently("taskId");
 		if (taskId.isEmpty()) {
 			addContent("error", "taskId empty");
 			setBadRequest();
 			return;
 		}
-
+		
 		Task task = new Task();
 		task.setId(UUID.fromString(taskId));
-
+		
 		int page = formData.getNumberValueSilently("page", 1);
 		List<Request> requests = requestDAO.findTaskRequests(task, page, 20);
 		addContent(requests);
 	}
-
+	
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
 		String taskId = formData.getValueSilently("taskId");
 		String requestTypeId = formData.getValueSilently("requestTypeId");
-
+		
 		if (taskId.isEmpty() || requestTypeId.isEmpty()) {
 			addContent("error", "taskId or requestTypeId empty");
 			setBadRequest();
 			return;
 		}
-
+		
 		addRequest(session, taskId, requestTypeId, formData.getValueSilently("comment"));
 	}
-
+	
 	@Override
 	public void doPUT(_Session session, _WebFormData formData) {
 		String requestId = formData.getValueSilently("requestId");
 		String action = formData.getValueSilently("_action");
-
+		
 		if (requestId.isEmpty() || action.isEmpty()) {
 			addContent("error", "requestId or _action empty");
 			setBadRequest();
 			return;
 		}
-
+		
 		switch (action) {
 		case "accept":
 			doResolution(session, requestId, ResolutionType.ACCEPTED, formData.getValueSilently("comment"));
@@ -126,7 +126,7 @@ public class TaskRequests extends _DoForm {
 			setBadRequest();
 		}
 	}
-
+	
 	@Override
 	public void doDELETE(_Session session, _WebFormData formData) {
 		String requestId = formData.getValueSilently("requestId");
@@ -135,7 +135,7 @@ public class TaskRequests extends _DoForm {
 			setBadRequest();
 			return;
 		}
-
+		
 		if (formData.containsField("attachmentId")) {
 			String attachmentId = formData.getValueSilently("attachmentId");
 			deleteAttachment(session, requestId, attachmentId);
@@ -143,7 +143,7 @@ public class TaskRequests extends _DoForm {
 			deleteRequest(session, requestId);
 		}
 	}
-
+	
 	private _ActionBar getActionBar(_Session session, Request request) {
 		_ActionBar actionBar = new _ActionBar(session);
 		if (request.isNew()) {
@@ -151,7 +151,7 @@ public class TaskRequests extends _DoForm {
 		} else if (request.isEditable()) {
 			actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
 		}
-
+		
 		if (!request.isNew()) {
 			if (request.getTask().getAuthor().getId().equals(session.getUser().getId())
 					&& (request.getResolution() != ResolutionType.ACCEPTED
@@ -161,7 +161,7 @@ public class TaskRequests extends _DoForm {
 		}
 		return actionBar;
 	}
-
+	
 	private void addRequest(_Session session, String taskId, String requestTypeId, String comment) {
 		try {
 			RequestDAO requestDAO = new RequestDAO(session);
@@ -172,7 +172,7 @@ public class TaskRequests extends _DoForm {
 				setBadRequest();
 				return;
 			}
-
+			
 			if (requestDAO.findUnResolvedRequest(task) != null) {
 				addContent("error", "task has unresolved request");
 				setBadRequest();
@@ -182,7 +182,7 @@ public class TaskRequests extends _DoForm {
 				setBadRequest();
 				return;
 			}
-
+			
 			RequestTypeDAO requestTypeDAO = new RequestTypeDAO(session);
 			RequestType requestType = requestTypeDAO.findById(requestTypeId);
 			Request request = new Request();
@@ -190,27 +190,27 @@ public class TaskRequests extends _DoForm {
 			request.setRequestType(requestType);
 			request.setComment(comment);
 			request.setAttachments(getActualAttachments(request.getAttachments()));
-
+			
 			request.setEditors(task.getEditors());
 			request.addReaderEditor(session.getUser());
-
+			
 			requestDAO.add(request);
-
+			
 			task.setStatus(TaskStatusType.PENDING);
 			taskDAO.update(task);
-
+			
 			new Messages(getCurrentAppEnv()).sendOfNewRequest(request, task);
 		} catch (SecureException | DAOException e) {
 			logError(e);
 			setBadRequest();
 		}
 	}
-
+	
 	private void doResolution(_Session session, String requestId, ResolutionType resolutionType, String comment) {
 		try {
 			RequestDAO requestDAO = new RequestDAO(new _Session(new SuperUser()));
 			Request request = requestDAO.findById(requestId);
-
+			
 			if (request == null || resolutionType == ResolutionType.UNKNOWN) {
 				if (request == null) {
 					addContent("error", "request not found");
@@ -221,7 +221,7 @@ public class TaskRequests extends _DoForm {
 				setBadRequest();
 				return;
 			}
-
+			
 			TaskDAO taskDAO = new TaskDAO(new _Session(new SuperUser()));
 			Task task = request.getTask();
 			if (resolutionType == ResolutionType.ACCEPTED) {
@@ -253,43 +253,43 @@ public class TaskRequests extends _DoForm {
 				}
 			} else {
 				task.setStatus(TaskStatusType.PROCESSING);
-
+				
 			}
 			taskDAO.update(task);
-
+			
 			request.setResolution(resolutionType);
 			request.setResolutionTime(new Date());
 			request.setDecisionComment(comment);
 			requestDAO.update(request);
-
+			
 			new Messages(getCurrentAppEnv()).sendMessageOfRequestDecision(request);
 		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
 	}
-
+	
 	private void deleteRequest(_Session session, String requestId) {
 		RequestDAO requestDAO = new RequestDAO(session);
 		Request request = requestDAO.findById(requestId);
-
+		
 		try {
 			requestDAO.delete(request);
-		} catch (SecureException e) {
+		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
 	}
-
+	
 	private void deleteAttachment(_Session session, String requestId, String attachmentId) {
 		try {
 			RequestDAO requestDAO = new RequestDAO(session);
 			Request request = requestDAO.findById(requestId);
-
+			
 			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
 			Attachment attachment = attachmentDAO.findById(attachmentId);
 			request.getAttachments().remove(attachment);
-
+			
 			requestDAO.update(request);
 		} catch (SecureException | DAOException e) {
 			setBadRequest();
