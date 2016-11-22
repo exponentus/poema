@@ -20,3 +20,4 @@ stini projects.init.FillTags
 stini projects.init.FillPositions
 stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
+run task fill_demand_types
