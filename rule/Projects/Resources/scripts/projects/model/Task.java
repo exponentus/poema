@@ -357,11 +357,11 @@ public class Task extends HierarchicalEntity<UUID> {
 	
 	@Override
 	@JsonIgnore
-	public IHierarchicalEntity getHead() {
-		if (project != null) {
-			return project;
-		} else {
+	public IHierarchicalEntity getRealEntity() {
+		if (parent != null) {
 			return parent;
+		} else {
+			return project;
 		}
 	}
 }

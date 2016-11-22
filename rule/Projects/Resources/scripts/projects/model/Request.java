@@ -148,7 +148,7 @@ public class Request extends HierarchicalEntity<UUID> {
 
 	@Override
 	@JsonIgnore
-	public IHierarchicalEntity getHead() {
+	public IHierarchicalEntity getRealEntity() {
 		return task;
 	}
 

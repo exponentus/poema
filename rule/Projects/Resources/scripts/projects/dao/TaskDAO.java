@@ -223,6 +223,12 @@ public class TaskDAO extends DAO<Task, UUID> {
 		return vp;
 	}
 
+	public ViewPage<Task> findAllWithRespMark(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize,
+			List<UUID> expandedIdList) {
+		ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
+		return vp;
+	}
+
 	public ViewPage<Task> findTaskChildren(Task task) {
 		List<Task> list = new ArrayList<>();
 		list.add(task);
@@ -233,7 +239,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 
 		return vp;
 	}
-
+	
 	private void findChildren(Task task, List<IPOJOObject> childrenList, List<UUID> expandedIds) {
 		if (task.isHasSubtasks() || task.isHasRequests()) {
 			List<IAppEntity> children = new ArrayList<>(task.getSubtasks());
@@ -304,7 +310,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 			em.close();
 		}
 	}
-
+	
 	private List<IAppEntity> findTaskStream(List<UUID> uids) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		try {
@@ -359,4 +365,5 @@ public class TaskDAO extends DAO<Task, UUID> {
 			em.close();
 		}
 	}
+	
 }
