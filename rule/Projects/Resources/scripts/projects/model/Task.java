@@ -33,6 +33,7 @@ import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpa.IHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -356,7 +357,7 @@ public class Task extends HierarchicalEntity<UUID> {
 	}
 
 	@Override
-	public IHierarchicalEntity getRealEntity() {
+	public IHierarchicalEntity getRealEntity(_Session ses) {
 		if (parent != null) {
 			return parent;
 		} else {
