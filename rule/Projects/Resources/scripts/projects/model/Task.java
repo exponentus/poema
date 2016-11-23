@@ -354,9 +354,8 @@ public class Task extends HierarchicalEntity<UUID> {
 	public String getURL() {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&taskId=" + getIdentifier();
 	}
-	
+
 	@Override
-	@JsonIgnore
 	public IHierarchicalEntity getRealEntity() {
 		if (parent != null) {
 			return parent;
