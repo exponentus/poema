@@ -29,17 +29,17 @@ public class OverdueReminder extends _DoScheduled {
 	private Date current = new Date();
 	private Tag tag;
 	private TaskDAO tDao;
-
+	
 	@Override
 	public void doEvery5Min(AppEnv appEnv, _Session session) {
-
+		
 	}
-
+	
 	@Override
 	public void doEvery1Hour(AppEnv appEnv, _Session session) {
-
+		
 	}
-
+	
 	@Override
 	public void doEveryNight(AppEnv appEnv, _Session session) {
 		TagDAO tagDAO = new TagDAO(session);
@@ -54,27 +54,27 @@ public class OverdueReminder extends _DoScheduled {
 			processRemind(vp, session);
 		}
 	}
-
+	
 	private void processRemind(ViewPage<Task> result, _Session session) {
 		for (Task task : result.getResult()) {
-
+			
 		}
 	}
-
+	
 	private void sendNotify(_Session session, Task task) {
 		try {
 			UserDAO userDAO = new UserDAO(session);
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			User user = null;
-
+			
 			LanguageCode lang = EnvConst.getDefaultLang();
 			try {
 				user = (User) assigneeUser;
 				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
-
+				
 			}
-
+			
 			Memo memo = new Memo();
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("regNumber", task.getRegNumber());
@@ -83,20 +83,20 @@ public class OverdueReminder extends _DoScheduled {
 			memo.addVar("author", task.getAuthor().getUserName());
 			memo.addVar("status", getCurrentAppEnv().vocabulary.getWord(task.getStatus().name(), lang));
 			memo.addVar("url", getCurrentAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
-
+			
 			if (user != null) {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
+				ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
 						memo.getBody(
 								getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
-
+		
 	}
-
+	
 }

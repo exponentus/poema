@@ -70,7 +70,7 @@ public class Messages {
 			
 			memo.addVar("url", appEnv.getURL() + "/" + project.getURL() + "&lang=" + lang);
 			MailAgent ma = new MailAgent();
-			ma.sendMеssage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
+			ma.sendMessage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
 					memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			
 		} catch (Exception e) {
@@ -107,7 +107,7 @@ public class Messages {
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
 					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
 				}
@@ -115,7 +115,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
+				ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_new_task_short", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
@@ -150,7 +150,7 @@ public class Messages {
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
 					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
 				}
@@ -158,7 +158,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_request", lang),
+				ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_task_request", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
@@ -195,7 +195,7 @@ public class Messages {
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
 					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
 					
@@ -204,7 +204,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients,
+				ma.sendMessage(recipients,
 						v.getWord("notify_about_request_resolution", lang) + " ["
 								+ v.getWord(request.getResolution().name(), lang) + "]",
 						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
@@ -243,7 +243,7 @@ public class Messages {
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
 					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
 				}
@@ -251,7 +251,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_task_acknowledged", lang),
+				ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_task_acknowledged", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
@@ -288,7 +288,7 @@ public class Messages {
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent();
 					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
 				}
@@ -296,7 +296,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(user.getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_finish_task", lang),
+				ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_finish_task", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {
@@ -333,7 +333,7 @@ public class Messages {
 					if (slackAddr != null && !slackAddr.equals("")) {
 						SlackAgent sa = new SlackAgent();
 						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
-						if (template != null && sa.sendMеssage(slackAddr, memo.getPlainBody(template))) {
+						if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 							return;
 						}
 					}
@@ -341,7 +341,7 @@ public class Messages {
 					List<String> recipients = new ArrayList<>();
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent();
-					ma.sendMеssage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", lang),
+					ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_cancel_task", lang),
 							memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
 				}
 			} catch (Exception e) {
