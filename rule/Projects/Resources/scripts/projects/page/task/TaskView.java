@@ -39,7 +39,7 @@ public class TaskView extends _DoPage {
 		_SortParams sortParams = formData.getSortParams(_SortParams.desc("regDate"));
 		
 		ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
-		//ViewPage<Task> vp = taskDAO.findAllWithRespMark(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
+		//ViewPage<Task> vp = taskDAO.findAllWithRespMarked(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
 		addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
 		
 		//

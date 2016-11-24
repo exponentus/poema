@@ -224,7 +224,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 		return vp;
 	}
 	
-	public ViewPage<Task> findAllWithRespMark(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize,
+	public ViewPage<Task> findAllWithRespMarked(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize,
 			List<UUID> expandedIdList) {
 		ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
 		ViewEntryDAO dao = new ViewEntryDAO(ses);
