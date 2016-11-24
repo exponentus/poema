@@ -20,6 +20,7 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
+import helpdesk.model.constants.DemandStatusType;
 import projects.dao.ProjectDAO;
 import reference.dao.DemandTypeDAO;
 import staff.dao.OrganizationDAO;
@@ -107,6 +108,7 @@ public class DemandService extends RestProvider {
             entity.setAuthor(session.getUser());
             entity.setTitle("");
             entity.setBody("");
+            entity.setStatus(DemandStatusType.DRAFT);
             try {
                 DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
                 entity.setDemandType(demandTypeDAO.findByName("bug"));
