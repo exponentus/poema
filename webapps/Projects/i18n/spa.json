@@ -191,6 +191,7 @@
   "error_400" : "The server cannot or will not process the request due to an apparent client error",
   "error_401" : "Unauthorized",
   "today" : "Hoy",
+  "request_send_success" : "Request has been sent",
   "department" : "department",
   "editors" : "Editores",
   "date_format_does_not_match_to" : "date_format_does_not_match_to",

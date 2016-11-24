@@ -364,6 +364,12 @@
         <entry lang="POR">Data do pedido</entry>
         <entry lang="SPA">Fecha de la solicitud</entry>
     </sentence>
+    <sentence mode="on" keyword="request_send_success">
+        <entry lang="RUS">Запрос отправлен</entry>
+        <entry lang="ENG">Request has been sent</entry>
+        <entry lang="POR">Request has been sent</entry>
+        <entry lang="SPA">Request has been sent</entry>
+    </sentence>
     <sentence mode="on" keyword="accept">
         <entry lang="RUS">Принять</entry>
         <entry lang="ENG">Accept</entry>

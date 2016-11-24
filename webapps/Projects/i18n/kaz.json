@@ -191,6 +191,7 @@
   "error_400" : "The server cannot or will not process the request due to an apparent client error",
   "error_401" : "Unauthorized",
   "today" : "today",
+  "request_send_success" : "request_send_success",
   "department" : "Бөлім",
   "editors" : "editors",
   "date_format_does_not_match_to" : "Формат даты не соответствует шаблону",
