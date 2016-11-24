@@ -28,7 +28,6 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.HierarchicalEntity;
-import com.exponentus.dataengine.jpa.IHierarchicalEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -130,6 +129,7 @@ public class Request extends HierarchicalEntity<UUID> {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+		title = StringUtils.abbreviate(comment, 140);
 	}
 
 	@Override
@@ -149,14 +149,8 @@ public class Request extends HierarchicalEntity<UUID> {
 
 	@Override
 	@JsonIgnore
-	public IHierarchicalEntity getRealEntity(_Session ses) {
+	public HierarchicalEntity<UUID> getParentEntity(_Session ses) {
 		return task;
 	}
-
-	@Override
-	@JsonIgnore
-	public String getTitle() {
-		return StringUtils.abbreviate(comment, 140);
-	}
-
+	
 }

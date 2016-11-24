@@ -31,7 +31,6 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -108,6 +107,7 @@ public class Project extends HierarchicalEntity<UUID> {
 
 	public void setName(String name) {
 		this.name = name;
+		title = name;
 	}
 
 	public ProjectStatusType getStatus() {
@@ -218,11 +218,4 @@ public class Project extends HierarchicalEntity<UUID> {
 	public String getURL() {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&projectId=" + getIdentifier();
 	}
-	
-	@Override
-	@JsonIgnore
-	public String getTitle() {
-		return name;
-	}
-
 }
