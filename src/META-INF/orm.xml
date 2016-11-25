@@ -3,7 +3,8 @@
 	<converter class="com.exponentus.dataengine.jpa.util.PostgresUuidConverter"/>
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
-    <converter class="administrator.model.util.InterfaceTypeConvertor"/>        
+    <converter class="administrator.model.util.InterfaceTypeConvertor"/>  
+    <converter class="administrator.model.util.VisibilityModeConvertor"/>           
     <converter class="workflow.model.util.ControlStatusTypeConverter"/> 
     <converter class="workflow.model.util.ApprovalStatusTypeConverter"/>   
     <converter class="workflow.model.util.ApprovalTypeConverter"/>  
