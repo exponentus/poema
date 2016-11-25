@@ -103,19 +103,25 @@
         <entry lang="SPA">Proyecto</entry>
     </sentence>
     <sentence mode="on" keyword="demands_my">
-        <entry lang="RUS">Мои запросы</entry>
+        <entry lang="RUS">Мои заявки</entry>
         <entry lang="ENG">My demands</entry>
         <entry lang="POR">My demands</entry>
         <entry lang="SPA">My demands</entry>
     </sentence>
     <sentence mode="on" keyword="demand">
-        <entry lang="RUS">Запрос</entry>
+        <entry lang="RUS">Заявка</entry>
         <entry lang="ENG">Demand</entry>
         <entry lang="POR">Demand</entry>
         <entry lang="SPA">Demand</entry>
     </sentence>
+      <sentence mode="on" keyword="demands">
+        <entry lang="RUS">Заявки</entry>
+        <entry lang="ENG">Demands</entry>
+        <entry lang="POR">Demands</entry>
+        <entry lang="SPA">Demands</entry>
+    </sentence>
     <sentence mode="on" keyword="demand_type">
-        <entry lang="RUS">Тип запроса</entry>
+        <entry lang="RUS">Тип заявки</entry>
         <entry lang="ENG">Demand type</entry>
         <entry lang="POR">Demand type</entry>
         <entry lang="SPA">Demand type</entry>
@@ -211,7 +217,7 @@
         <entry lang="SPA">Compartir con el cliente</entry>
     </sentence>
     <sentence mode="on" keyword="acl_tab_title">
-        <entry lang="RUS">Доступ</entry>
+        <entry lang="RUS">Права доступа</entry>
         <entry lang="ENG">ACL</entry>
         <entry lang="POR">Controlo de acesso</entry>
         <entry lang="SPA">Control de acceso</entry>
