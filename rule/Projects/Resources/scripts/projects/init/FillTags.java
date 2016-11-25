@@ -18,11 +18,11 @@ import reference.model.Tag;
  */
 
 public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
-
+	
 	@Override
 	public List<Tag> getData(_Session ses, LanguageCode lang, Vocabulary vocabulary) {
 		List<Tag> entities = new ArrayList<Tag>();
-
+		
 		Tag entity = new Tag();
 		entity.setName("starred");
 		Map<LanguageCode, String> name = new HashMap<LanguageCode, String>();
@@ -32,7 +32,7 @@ public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
 		entity.setLocalizedName(name);
 		entity.setColor("#008080");
 		entities.add(entity);
-
+		
 		entity = new Tag();
 		entity.setName("bug");
 		name = new HashMap<LanguageCode, String>();
@@ -42,9 +42,9 @@ public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
 		entity.setLocalizedName(name);
 		entity.setColor("#ff0000");
 		entities.add(entity);
-
+		
 		entity = new Tag();
-		entity.setName("еnhancement");
+		entity.setName("enhancement");
 		name = new HashMap<LanguageCode, String>();
 		name.put(LanguageCode.ENG, "Enhancement");
 		name.put(LanguageCode.RUS, "Улучшение");
@@ -52,7 +52,7 @@ public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
 		entity.setLocalizedName(name);
 		entity.setColor("#0080ff");
 		entities.add(entity);
-
+		
 		entity = new Tag();
 		entity.setName("expired");
 		name = new HashMap<>();
@@ -63,8 +63,8 @@ public class FillTags extends InitialDataAdapter<Tag, TagDAO> {
 		entity.setColor("#db0000");
 		entity.setHidden(true);
 		entities.add(entity);
-
+		
 		return entities;
 	}
-
+	
 }
