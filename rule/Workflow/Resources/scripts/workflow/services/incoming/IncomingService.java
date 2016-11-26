@@ -37,13 +37,13 @@ import workflow.model.Incoming;
 
 @Path("incomings/{id}")
 public class IncomingService extends RestProvider {
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") String id) {
 		_Session ses = getSession();
 		Incoming entity;
-		
+
 		boolean isNew = "new".equals(id);
 		if (isNew) {
 			entity = new Incoming();
@@ -51,7 +51,7 @@ public class IncomingService extends RestProvider {
 			IncomingDAO incomingDAO = new IncomingDAO(ses);
 			entity = incomingDAO.findById(id);
 		}
-		
+
 		Outcome outcome = new Outcome();
 		outcome.setId(id);
 		outcome.addPayload(entity);
@@ -63,33 +63,33 @@ public class IncomingService extends RestProvider {
 		System.out.println(getRequestParameter());
 		return Response.ok(outcome).build();
 	}
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response save(@PathParam("id") String id, Incoming incomingForm) {
 		_Session ses = getSession();
-		
+
 		_Validation validation = validate(incomingForm);
 		if (validation.hasError()) {
 			// return error
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
 		}
-		
+
 		OrganizationDAO organizationDAO = new OrganizationDAO(ses);
 		DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
 		DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
 		OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 		IncomingDAO incomingDAO = new IncomingDAO(ses);
 		Incoming entity;
-		
+
 		boolean isNew = "new".equals(id);
 		if (isNew) {
 			entity = new Incoming();
 		} else {
 			entity = incomingDAO.findById(id);
 		}
-		
+
 		// TODO remove
 		if (entity.getRegNumber() == null) {
 			entity.setRegNumber("RG-I-" + Math.random());
@@ -121,7 +121,7 @@ public class IncomingService extends RestProvider {
 		entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
 		entity.setBody(incomingForm.getBody());
 		entity.setAttachments(getActualAttachments(entity.getAttachments()));
-		
+
 		try {
 			if (isNew) {
 				IUser<Long> user = ses.getUser();
@@ -130,13 +130,13 @@ public class IncomingService extends RestProvider {
 			} else {
 				entity = incomingDAO.update(entity);
 			}
-			
+
 		} catch (SecureException | DAOException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 		return Response.ok(entity).build();
 	}
-	
+
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("id") String id) {
@@ -152,7 +152,7 @@ public class IncomingService extends RestProvider {
 		}
 		return Response.noContent().build();
 	}
-	
+
 	/*
 	 * =========================================== Get entity attachment or
 	 * _thumbnail ----------------------------------------
@@ -163,31 +163,30 @@ public class IncomingService extends RestProvider {
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
 		IncomingDAO dao = new IncomingDAO(getSession());
 		Incoming entity = dao.findById(id);
-		
+
 		return getAttachment(entity, attachId);
 	}
-	
+
 	@DELETE
 	@Path("attachments/{attachmentId}")
 	public Response deleteAttachment(@PathParam("id") String incomingId,
 			@PathParam("attachmentId") String attachmentId) {
 		_Session ses = getSession();
-		
+
 		IncomingDAO dao = new IncomingDAO(ses);
 		Incoming entity = dao.findById(incomingId);
-		
-		AttachmentDAO attachmentDAO = new AttachmentDAO(ses);
-		Attachment attachment = attachmentDAO.findById(attachmentId);
-		entity.getAttachments().remove(attachment);
-		
 		try {
+			AttachmentDAO attachmentDAO = new AttachmentDAO(ses);
+			Attachment attachment = attachmentDAO.findById(attachmentId);
+			entity.getAttachments().remove(attachment);
+			
 			dao.update(entity);
 		} catch (SecureException | DAOException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 		return Response.noContent().build();
 	}
-	
+
 	/*
 	 *
 	 */
@@ -199,20 +198,20 @@ public class IncomingService extends RestProvider {
 			actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
 		}
 		// }
-		
+
 		return actionBar;
 	}
-	
+
 	private _Validation validate(Incoming incomingForm) {
 		_Validation ve = new _Validation();
-		
+
 		if (incomingForm.getTitle() == null || incomingForm.getTitle().isEmpty()) {
 			ve.addError("title", "required", "field_is_empty");
 		}
-		
+
 		return ve;
 	}
-	
+
 	@Override
 	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
 		sd.setName(getClass().getName());

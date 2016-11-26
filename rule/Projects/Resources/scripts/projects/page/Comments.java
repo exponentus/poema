@@ -182,11 +182,10 @@ public class Comments extends _DoForm {
 			return;
 		}
 
-		AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-		Attachment attachment = attachmentDAO.findById(attachmentId);
-		comment.getAttachments().remove(attachment);
-
 		try {
+			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+			Attachment attachment = attachmentDAO.findById(attachmentId);
+			comment.getAttachments().remove(attachment);
 			commentDAO.update(comment);
 		} catch (SecureException | DAOException e) {
 			logError(e);

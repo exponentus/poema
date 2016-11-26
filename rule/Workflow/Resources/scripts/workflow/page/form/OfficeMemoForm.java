@@ -43,7 +43,6 @@ public class OfficeMemoForm extends _DoForm {
 		if (!id.isEmpty()) {
 			OfficeMemoDAO dao = new OfficeMemoDAO(session);
 			entity = dao.findById(UUID.fromString(id));
-			
 			if (formData.containsField("attachment")) {
 				doGetAttachment(session, formData, entity);
 				return;
@@ -154,14 +153,14 @@ public class OfficeMemoForm extends _DoForm {
 			return;
 		}
 		
-		OfficeMemoDAO dao = new OfficeMemoDAO(session);
-		OfficeMemo entity = dao.findById(id);
-		
-		AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-		Attachment attachment = attachmentDAO.findById(attachmentId);
-		entity.getAttachments().remove(attachment);
-		
 		try {
+			OfficeMemoDAO dao = new OfficeMemoDAO(session);
+			OfficeMemo entity = dao.findById(id);
+			
+			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+			Attachment attachment = attachmentDAO.findById(attachmentId);
+			entity.getAttachments().remove(attachment);
+			
 			dao.update(entity);
 		} catch (SecureException | DAOException e) {
 			setBadRequest();

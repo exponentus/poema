@@ -47,10 +47,11 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, OfficeMemo> entities = new HashMap<>();
-		OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-		UserDAO uDao = new UserDAO(ses);
-		User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 		try {
+			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+			UserDAO uDao = new UserDAO(ses);
+			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
+			
 			Database prjDb = getDatabase("docprojects.nsf");
 			View prjView = prjDb.getView("(In)");
 			ViewEntryCollection vec = getAllEntries("workdoc.nsf");
@@ -189,15 +190,15 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
-			
+
+			logger.infoLogEntry("has been found " + entities.size() + " records");
+			for (Entry<String, OfficeMemo> ee : entities.entrySet()) {
+				save(dao, ee.getValue(), ee.getKey());
+			}
 		} catch (NotesException e) {
 			logger.errorLogEntry(e);
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
-		}
-		logger.infoLogEntry("has been found " + entities.size() + " records");
-		for (Entry<String, OfficeMemo> entry : entities.entrySet()) {
-			save(dao, entry.getValue(), entry.getKey());
 		}
 		logger.infoLogEntry("done...");
 	}

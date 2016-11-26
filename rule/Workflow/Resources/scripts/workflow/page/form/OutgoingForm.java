@@ -36,14 +36,14 @@ import workflow.dao.OutgoingDAO;
 import workflow.model.Outgoing;
 
 public class OutgoingForm extends _DoForm {
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 		IUser<Long> user = session.getUser();
 		Outgoing entity;
 		String id = formData.getValueSilently("docid");
-
+		
 		if (!id.isEmpty()) {
 			OutgoingDAO dao = new OutgoingDAO(session);
 			entity = dao.findById(UUID.fromString(id));
@@ -55,9 +55,9 @@ public class OutgoingForm extends _DoForm {
 		} else {
 			entity = new Outgoing();
 			entity.setAuthor(user);
-
+			
 			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-
+			
 			List<String> formFiles;
 			Object obj = session.getAttribute(fsId);
 			if (obj == null) {
@@ -66,9 +66,9 @@ public class OutgoingForm extends _DoForm {
 				_FormAttachments fAtts = (_FormAttachments) obj;
 				formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
 			}
-
+			
 			List<IPOJOObject> filesToPublish = new ArrayList<>();
-
+			
 			for (String fn : formFiles) {
 				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
 				if (uf == null) {
@@ -80,11 +80,11 @@ public class OutgoingForm extends _DoForm {
 			}
 			addContent(new _POJOListWrapper<>(filesToPublish, session));
 		}
-
+		
 		addContent(entity);
 		addContent(getActionBar(session, entity));
 	}
-
+	
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
 		try {
@@ -94,7 +94,7 @@ public class OutgoingForm extends _DoForm {
 				setValidation(ve);
 				return;
 			}
-
+			
 			OrganizationDAO organizationDAO = new OrganizationDAO(session);
 			DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(session);
 			DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(session);
@@ -102,20 +102,20 @@ public class OutgoingForm extends _DoForm {
 			Outgoing entity;
 			String id = formData.getValueSilently("docid");
 			boolean isNew = id.isEmpty();
-
+			
 			if (isNew) {
 				entity = new Outgoing();
 			} else {
 				entity = dao.findById(id);
 			}
-
+			
 			entity.setAppliedRegDate(TimeUtil.stringToDate(formData.getValueSilently("appliedRegDate")));
 			entity.setDocLanguage(documentLanguageDAO.findById(formData.getValue("docLanguage")));
 			entity.setDocType(documentTypeDAO.findById(formData.getValue("docType")));
 			entity.setRecipient(organizationDAO.findById(formData.getValue("recipient")));
 			entity.setTitle(formData.getValue("summary"));
 			entity.setAttachments(getActualAttachments(entity.getAttachments()));
-
+			
 			if (isNew) {
 				IUser<Long> user = session.getUser();
 				entity.addReaderEditor(user);
@@ -123,7 +123,7 @@ public class OutgoingForm extends _DoForm {
 			} else {
 				entity = dao.update(entity);
 			}
-
+			
 			addContent(entity);
 		} catch (SecureException e) {
 			setError(e);
@@ -135,49 +135,50 @@ public class OutgoingForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	@Override
 	public void doDELETE(_Session session, _WebFormData formData) {
 		String id = formData.getValueSilently("docid");
 		String attachmentId = formData.getValueSilently("attachment");
-
+		
 		if (id.isEmpty() || attachmentId.isEmpty()) {
 			addContent("error", "docid or attachmentId empty");
 			return;
 		}
-
-		OutgoingDAO dao = new OutgoingDAO(session);
-		Outgoing entity = dao.findById(id);
-
-		AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-		Attachment attachment = attachmentDAO.findById(attachmentId);
-		entity.getAttachments().remove(attachment);
-
+		
 		try {
+			OutgoingDAO dao = new OutgoingDAO(session);
+			Outgoing entity = dao.findById(id);
+
+			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
+			Attachment attachment = attachmentDAO.findById(attachmentId);
+			entity.getAttachments().remove(attachment);
+
 			dao.update(entity);
 		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
 		}
 	}
-
+	
 	private _ActionBar getActionBar(_Session session, Outgoing entity) {
 		_ActionBar actionBar = new _ActionBar(session);
 		if (entity.isEditable()) {
-			actionBar.addAction(new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
+			actionBar.addAction(
+					new _Action(getLocalizedWord("save_close", session.getLang()), "", _ActionType.SAVE_AND_CLOSE));
 			actionBar.addAction(new _Action(getLocalizedWord("close", session.getLang()), "", _ActionType.CLOSE));
 		}
-
+		
 		return actionBar;
 	}
-
+	
 	private _Validation validate(_WebFormData formData, LanguageCode lang) {
 		_Validation ve = new _Validation();
-
+		
 		if (formData.getValueSilently("summary").isEmpty()) {
 			ve.addError("summary", "required", getLocalizedWord("field_is_empty", lang));
 		}
-
+		
 		return ve;
 	}
 }

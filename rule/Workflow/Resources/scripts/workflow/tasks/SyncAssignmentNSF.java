@@ -37,16 +37,17 @@ import workflow.model.embedded.Control;
 @Command(name = "import_kr_nsf")
 public class SyncAssignmentNSF extends ImportNSF {
 	protected static Map<String, String> controlTypeCollation = controlTypeCollationMapInit();
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Assignment> entities = new HashMap<>();
-		AssignmentDAO dao = new AssignmentDAO(ses);
-		IncomingDAO iDao = new IncomingDAO(ses);
-		ControlTypeDAO ctDao = new ControlTypeDAO(ses);
-		UserDAO uDao = new UserDAO(ses);
-		User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 		try {
+			AssignmentDAO dao = new AssignmentDAO(ses);
+			IncomingDAO iDao = new IncomingDAO(ses);
+			ControlTypeDAO ctDao = new ControlTypeDAO(ses);
+			UserDAO uDao = new UserDAO(ses);
+			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
+			
 			Database nsfDb = getDatabase("incoming.nsf");
 			View view = nsfDb.getView("(AllUNID)");
 			ViewEntryCollection vec = view.getAllEntries();
@@ -76,19 +77,19 @@ public class SyncAssignmentNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
+			
+			logger.infoLogEntry("has been found " + entities.size() + " records");
+			for (Entry<String, Assignment> ee : entities.entrySet()) {
+				save(dao, ee.getValue(), ee.getKey());
+			}
 		} catch (NotesException e) {
 			logger.errorLogEntry(e);
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
-
-		logger.infoLogEntry("has been found " + entities.size() + " records");
-		for (Entry<String, Assignment> entry : entities.entrySet()) {
-			save(dao, entry.getValue(), entry.getKey());
-		}
 		logger.infoLogEntry("done...");
 	}
-
+	
 	public Assignment fillEntity(UserDAO uDao, AssignmentDAO dao, Document doc, User dummyUser, ControlTypeDAO ctDao) {
 		Assignment entity = null;
 		try {
@@ -103,14 +104,14 @@ public class SyncAssignmentNSF extends ImportNSF {
 			} else {
 				entity.setAuthor(dummyUser);
 			}
-
+			
 			IUser<Long> authorRez = uDao.findByExtKey(doc.getItemValueString("AuthorRezNA"));
 			if (authorRez != null) {
 				entity.setAppliedAuthor(authorRez.getId());
 			} else {
 				entity.setAppliedAuthor(dummyUser.getId());
 			}
-
+			
 			Control control = new Control();
 			control.setStartDate(doc.getFirstItem("DateRez").getDateTimeValue().toJavaDate());
 			control.setDueDate(doc.getFirstItem("CtrlDate").getDateTimeValue().toJavaDate());
@@ -139,7 +140,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 			String controlStatus = doc.getItemValueString("AllControl");
 			if (controlStatus.equalsIgnoreCase("reset")) {
 				control.setStatus(ControlStatusType.COMPLETED);
-
+				
 				control.setAssigneeEntries(ass);
 			} else {
 				control.setStatus(ControlStatusType.PROCESSING);
@@ -155,7 +156,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 		}
 		return entity;
 	}
-
+	
 	protected static Map<String, String> controlTypeCollationMapInit() {
 		Map<String, String> collation = new HashMap<>();
 		collation.put("Срочный контроль", "urgent_control");
@@ -167,6 +168,6 @@ public class SyncAssignmentNSF extends ImportNSF {
 		collation.put("Для встречи", "for_meeting");
 		collation.put("Весьма срочно", "very_urgent");
 		return collation;
-
+		
 	}
 }

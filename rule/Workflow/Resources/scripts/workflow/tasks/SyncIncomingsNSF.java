@@ -46,19 +46,20 @@ public class SyncIncomingsNSF extends ImportNSF {
 	private static final String VID_CATEGORY = "01. Входящие";
 	private static final String HAR_CATEGORY = "ЦОД";
 	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Incoming> entities = new HashMap<>();
 		OrganizationDAO oDao = new OrganizationDAO(ses);
-		IncomingDAO iDao = new IncomingDAO(ses);
-		DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
-		DocumentLanguageDAO dlDao = new DocumentLanguageDAO(ses);
-		DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
-		UserDAO uDao = new UserDAO(ses);
-		Map<String, LanguageCode> docLangCollation = docLangCollationMapInit();
-		User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 		try {
+			IncomingDAO iDao = new IncomingDAO(ses);
+			DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
+			DocumentLanguageDAO dlDao = new DocumentLanguageDAO(ses);
+			DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
+			UserDAO uDao = new UserDAO(ses);
+			Map<String, LanguageCode> docLangCollation = docLangCollationMapInit();
+			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
+			
 			ViewEntryCollection vec = getAllEntries("incoming.nsf");
 			ViewEntry entry = vec.getFirstEntry();
 			ViewEntry tmpEntry = null;
@@ -85,7 +86,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						} else {
 							inc.setAuthor(dummyUser);
 						}
-
+						
 						String vid = doc.getItemValueString("Vid");
 						DocumentType docType = dtDao.findByNameAndCategory(VID_CATEGORY, vid);
 						if (docType != null) {
@@ -93,7 +94,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						} else {
 							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
 						}
-
+						
 						String har = doc.getItemValueString("Har");
 						DocumentSubject docSubj = dsDao.findByNameAndCategory(HAR_CATEGORY, har);
 						if (docSubj != null) {
@@ -101,7 +102,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						} else {
 							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
 						}
-						
+
 						String docLangVal = doc.getItemValueString("langName");
 						LanguageCode intRefKey = docLangCollation.get(docLangVal);
 						if (intRefKey == null) {
@@ -123,7 +124,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						}
 						inc.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 140));
 						inc.setBody(doc.getItemValueString("BriefContent"));
-
+						
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
 						Vector<?> atts = body.getEmbeddedObjects();
@@ -136,7 +137,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 								TempFileCleaner.addFileToDelete(path);
 							}
 						}
-
+						
 						List<Attachment> attachments = new ArrayList<>();
 						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
@@ -151,19 +152,19 @@ public class SyncIncomingsNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
-
+			
+			logger.infoLogEntry("has been found " + entities.size() + " records");
+			for (Entry<String, Incoming> ee : entities.entrySet()) {
+				save(iDao, ee.getValue(), ee.getKey());
+			}
 		} catch (NotesException e) {
 			logger.errorLogEntry(e);
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
-		logger.infoLogEntry("has been found " + entities.size() + " records");
-		for (Entry<String, Incoming> entry : entities.entrySet()) {
-			save(iDao, entry.getValue(), entry.getKey());
-		}
 		logger.infoLogEntry("done...");
 	}
-
+	
 	private Map<String, LanguageCode> docLangCollationMapInit() {
 		Map<String, LanguageCode> depTypeCollation = new HashMap<>();
 		depTypeCollation.put("Русский", LanguageCode.RUS);
@@ -187,6 +188,6 @@ public class SyncIncomingsNSF extends ImportNSF {
 		depTypeCollation.put("", LanguageCode.UNKNOWN);
 		depTypeCollation.put("null", LanguageCode.UNKNOWN);
 		return depTypeCollation;
-
+		
 	}
 }

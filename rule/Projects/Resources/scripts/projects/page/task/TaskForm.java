@@ -349,10 +349,17 @@ public class TaskForm extends _DoForm {
 		String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
 		String attachmentId = formData.getValueSilently("attachmentId");
 		_FormAttachments formFiles = session.getFormAttachments(fsId);
-		AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-		Attachment attachment = attachmentDAO.findById(attachmentId);
-		if (attachment != null) {
-			formFiles.removeFile("attachment", attachment.getRealFileName());
+		AttachmentDAO attachmentDAO;
+		try {
+			attachmentDAO = new AttachmentDAO(session);
+			Attachment attachment = attachmentDAO.findById(attachmentId);
+			if (attachment != null) {
+				formFiles.removeFile("attachment", attachment.getRealFileName());
+			}
+		} catch (DAOException e) {
+			logError(e);
+			setBadRequest();
+			return;
 		}
 
 		/*
