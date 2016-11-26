@@ -120,8 +120,6 @@ public class IncomingService extends RestProvider {
 		entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
 		entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
 		entity.setBody(incomingForm.getBody());
-		
-		// entity.setControl(incomingForm.getControl());
 		entity.setAttachments(getActualAttachments(entity.getAttachments()));
 		
 		try {

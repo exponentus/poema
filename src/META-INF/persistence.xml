@@ -19,7 +19,9 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>com.exponentus.common.model.RecycleBin</class>
-         <class>com.exponentus.common.model.ViewEntry</class>
+        <class>com.exponentus.common.model.ViewEntry</class>             
+        <class>com.exponentus.common.model.Attachment</class>
+        <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
     </persistence-unit>
@@ -264,7 +266,7 @@
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
         <class>projects.model.Dashboard</class>
-        <!-- Common module entities -->
+        <!-- Common module entities -->               
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.ViewEntry</class>
