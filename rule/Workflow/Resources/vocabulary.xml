@@ -56,7 +56,7 @@
        <sentence mode="on" keyword="sender_reg_number">
         <entry lang="RUS">Исходящий</entry>
         <entry lang="KAZ"></entry>
-        <entry lang="ENG">Date</entry>
+        <entry lang="ENG">Outgoing</entry>
     </sentence>
    
     <sentence mode="on" keyword="title">
@@ -67,4 +67,9 @@
         <entry lang="RUS">Краткое содержание</entry>
         <entry lang="ENG">Summary</entry>
     </sentence>
+    <sentence mode="on" keyword="response_to">
+        <entry lang="RUS">Является ответом на</entry>
+        <entry lang="ENG">This is answer to</entry>
+    </sentence>
+    
 </vocabulary>

@@ -1,5 +1,4 @@
 echo Load data from SmartDoc databases
-run task register_add_constrains
 run task register_dummy_user
 run task import_names_nsf
 run task prepare_storage

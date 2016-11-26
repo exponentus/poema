@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,17 +26,18 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
  */
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import reference.model.Tag;
 import workflow.model.embedded.Approval;
 
 @JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
 @NamedQuery(name = "OfficeMemo.findAll", query = "SELECT m FROM OfficeMemo AS m ORDER BY m.regDate")
-public class OfficeMemo extends SecureAppEntity<UUID> {
+public class OfficeMemo extends HierarchicalEntity<UUID> {
 	
 	@Column(name = "reg_number")
 	private String regNumber;
@@ -68,6 +70,10 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "officememo_tags")
+	private List<Tag> tags;
+
 	public String getRegNumber() {
 		return regNumber;
 	}
@@ -108,10 +114,12 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
 		this.approval = approval;
 	}
 	
+	@Override
 	public String getTitle() {
 		return title;
 	}
 
+	@Override
 	public void setTitle(String title) {
 		this.title = title;
 	}
@@ -124,6 +132,14 @@ public class OfficeMemo extends SecureAppEntity<UUID> {
 		this.body = body;
 	}
 	
+	public List<Tag> getTags() {
+		return tags;
+	}
+	
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
 	@Override
 	public List<Attachment> getAttachments() {
 		return attachments;
