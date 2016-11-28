@@ -82,8 +82,8 @@ public class TaskForm extends _DoForm {
 				if (task.getParent() != null) {
 					addContent("parentTask", task.getParent());
 				}
-				taskDAO.findTaskChildren(task);
-				
+				// taskDAO.findTaskChildren(task);
+
 				addContent(task.getAttachments());
 				addContent(new ACL(task));
 			} else {

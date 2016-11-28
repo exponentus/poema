@@ -63,7 +63,7 @@ public class TasksService extends RestProvider {
         colOpts.add(Request.class, "resolutionTime", "date", "request__resolution_time");
         //
 
-        ViewPage<Task> vp = taskDAO.findAllWithChildren(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
+        ViewPage<Task> vp = taskDAO.findAllWithResponses(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
         return Response.ok(vp).build();
     }
 

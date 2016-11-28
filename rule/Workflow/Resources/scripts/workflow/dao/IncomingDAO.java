@@ -1,5 +1,21 @@
 package workflow.dao;
 
+import com.exponentus.dataengine.jpa.DAO;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
+import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
+import workflow.model.Assignment;
+import workflow.model.Incoming;
+import workflow.model.Report;
+
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,138 +23,127 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-
-import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.runtimeobj.IAppEntity;
-import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
-
-import workflow.model.Assignment;
-import workflow.model.Incoming;
-
 public class IncomingDAO extends DAO<Incoming, UUID> {
 
-	public IncomingDAO(_Session session) {
-		super(Incoming.class, session);
-	}
+    public IncomingDAO(_Session session) {
+        super(Incoming.class, session);
+    }
 
-	public ViewPage<Incoming> findAllWithResponses(_SortParams sortParams, int pageNum, int pageSize,
-			List<UUID> expandedIds) {
-		//        ViewPage<Incoming> vp = findViewPage(pageNum, pageSize);
-		//
-		//        if (vp.getResult().isEmpty() || expandedIds.isEmpty()) {
-		//            return vp;
-		//        }
+    public ViewPage<Incoming> findAllWithResponses(_SortParams sortParams, int pageNum, int pageSize, List<UUID> expandedIds) {
+        ViewPage<Incoming> vp = findViewPage(sortParams, pageNum, pageSize);
 
-		EntityManager em = getEntityManagerFactory().createEntityManager();
-		try {
-			String query = "SELECT i " + " FROM " + Incoming.class.getName() + " AS i "
-					+ " JOIN FETCH i.assignments AS a "
-					//+ " JOIN FETCH a.reports AS r "
-					// + " WHERE i.incoming.id in :ids "
-					+ " ORDER BY i.regDate";
+        if (vp.getResult().isEmpty() || expandedIds.isEmpty()) {
+            return vp;
+        }
 
-			TypedQuery<Incoming> q = em.createQuery(query, Incoming.class);
-			//q.setParameter("ids", expandedIds);
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        try {
+            vp.getResult().stream()
+                    .filter(incoming -> expandedIds.contains(incoming.getId()))
+                    .forEach(incoming -> {
+                        List<IAppEntity> responses = findIncomingResponses(incoming, expandedIds, em);
+                        if (responses != null && responses.size() > 0) {
+                            incoming.setResponsesCount((long) responses.size());
+                            incoming.setResponses(responses);
+                        }
+                    });
+        } finally {
+            em.close();
+        }
 
-			List<Incoming> ins = q.getResultList();
+        return vp;
+    }
 
-			return new ViewPage<>(ins, ins.size(), 20, 1);
+    private List<IAppEntity> findIncomingResponses(Incoming incoming, List<UUID> expandedIds, EntityManager em) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Assignment> cq = cb.createQuery(Assignment.class);
+        Root<Assignment> root = cq.from(Assignment.class);
+        cq.select(root).distinct(true);
 
-			//            for (Incoming in : vp.getResult()) {
-			//                String query = "SELECT a "
-			//                        + " FROM " + Assignment.class.getName() + " AS a "
-			//                        + " WHERE a.incoming = :in "
-			//                        + " ORDER BY a.regDate";
-			//
-			//                TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
-			//                q.setParameter("in", in);
-			//
-			//                List<Assignment> children = q.getResultList();
-			//
-			//                if (in.getResponses() == null) {
-			//                    in.setResponses(new ArrayList<>());
-			//                }
-			//                in.getResponses().addAll(children);
-			//
-			//                for (Assignment a : children) {
-			//                    a.setParent(null);
-			//                    if (a.getChildAssignments() != null) {
-			//                        List<IAppEntity> list = new ArrayList<>(a.getChildAssignments());
-			//                        a.setResponses(list);
-			//                        if (a.getReports() != null) {
-			//                            a.getResponses().addAll(a.getReports());
-			//                        }
-			////                for (Assignment assignment : incoming.getAssignments()) {
-			////                    findResponses(assignment, expandedIds);
-			////                }
-			//                    }
-			//                }
-			//            }
-		} finally {
-			em.close();
-		}
+        Predicate condition = cb.equal(root.get("incoming"), incoming);
+        condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
-		//return vp;
-	}
+        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+            condition = cb.and(root.get("readers").in(user.getId()));
+        }
 
-	private List<IAppEntity> findResponses(Assignment assignment, List<UUID> expandedIds) {
-		List<IAppEntity> result = new ArrayList<>();
+        cq.where(condition);
+        cq.orderBy(cb.desc(root.get("regDate")));
 
-		//EntityManager em = getEntityManagerFactory().createEntityManager();
-		try {
+        TypedQuery<Assignment> typedQuery = em.createQuery(cq);
+        List<Assignment> assignments = typedQuery.getResultList();
 
-			List<IAppEntity> children = new ArrayList<>(assignment.getChildAssignments());
-			children.addAll(assignment.getReports());
+        if (assignments.size() > 0) {
+            assignments.stream()
+                    .filter(assignment -> expandedIds.contains(assignment.getId()))
+                    .forEach(assignment -> {
+                        List<IAppEntity> responses = findAssignmentResponses(assignment, expandedIds, em);
+                        if (responses != null && responses.size() > 0) {
+                            assignment.setResponsesCount((long) responses.size());
+                            assignment.setResponses(responses);
+                        }
+                    });
+            return new ArrayList<>(assignments);
+        }
+        return null;
+    }
 
-			Supplier<List<IAppEntity>> supplier = LinkedList::new;
-			children = children.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
-					.collect(Collectors.toCollection(supplier));
+    private List<IAppEntity> findAssignmentResponses(Assignment assignment, List<UUID> expandedIds, EntityManager em) {
+        CriteriaBuilder cba = em.getCriteriaBuilder();
+        CriteriaQuery<Assignment> cqa = cba.createQuery(Assignment.class);
+        Root<Assignment> rootA = cqa.from(Assignment.class);
+        cqa.select(rootA).distinct(true);
 
-			// assignment.setResponses(children);
+        Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
-			//            for (Assignment a : assignment.getChildAssignments()) {
-			//                findResponses(a, expandedIds);
-			//            }
+        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
+            conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
+        }
 
-			//            CriteriaBuilder cb = em.getCriteriaBuilder();
-			//
-			//            CriteriaQuery<Incoming> cq = cb.createQuery(Incoming.class);
-			//            Root<Incoming> root = cq.from(Incoming.class);
-			//            Fetch<Assignment, Report> aFetch = root.fetch(Assignment.class.getName(), JoinType.LEFT);
-			//            aFetch.fetch(Report.class.getName(), JoinType.LEFT);
-			//            cq.select(root);
+        cqa.where(conditionA);
+        cqa.orderBy(cba.desc(rootA.get("regDate")));
 
-			/*
-			 * select a.id, r.id from assignments as a join reports as r on
-			 * r.parent_id=a.id where
-			 * a.incoming_id='7a30f159-61ec-4413-8caf-3bdb07d84aae'
-			 */
+        TypedQuery<Assignment> typedQueryA = em.createQuery(cqa);
+        List<Assignment> assignments = typedQueryA.getResultList();
 
-			//            String query = "SELECT a "
-			//                    + " FROM " + Assignment.class.getName() + " AS a "
-			//                    + " JOIN FETCH a.childAssignments AS ca "
-			//                    + " JOIN FETCH a.reports AS r "
-			//                    + " WHERE a.incoming.id in :ids "
-			//                    + " ORDER BY a.regDate";
-			//
-			//            TypedQuery<Assignment> q = em.createQuery(query, Assignment.class);
-			//            q.setParameter("ids", expandedIds);
-			//
-			//            List<Assignment> children = q.getResultList();
-			//
-			//            Supplier<List<IAppEntity>> supplier = LinkedList::new;
-			//
-			//
-			//            children = children.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
-			//                    .collect(Collectors.toCollection(IAppEntity.class));
-			//
-			return result;
-		} finally {
-			//em.close();
-		}
-	}
+        //
+        CriteriaBuilder cbr = em.getCriteriaBuilder();
+        CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
+        Root<Report> rootR = cqr.from(Report.class);
+        cqr.select(rootR).distinct(true);
+
+        Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
+
+        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Report.class)) {
+            conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
+        }
+
+        cqr.where(conditionR);
+        cqr.orderBy(cbr.desc(rootR.get("regDate")));
+
+        TypedQuery<Report> typedQueryR = em.createQuery(cqr);
+        List<Report> reports = typedQueryR.getResultList();
+
+        List<IAppEntity> result = new ArrayList<>(assignments);
+        result.addAll(reports);
+
+        Supplier<List<IAppEntity>> supplier = LinkedList::new;
+        result = result.stream()
+                .sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
+                .collect(Collectors.toCollection(supplier));
+
+        if (assignments.size() > 0) {
+            assignments.stream()
+                    .filter(it -> expandedIds.contains(it.getId()))
+                    .forEach(it -> {
+                        List<IAppEntity> responses = findAssignmentResponses(it, expandedIds, em);
+                        if (responses != null && responses.size() > 0) {
+                            it.setResponsesCount((long) responses.size());
+                            it.setResponses(responses);
+                        }
+                    });
+        }
+
+        return result;
+    }
 }

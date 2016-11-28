@@ -19,6 +19,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Path("incomings")
 public class IncomingsService extends RestProvider {
@@ -33,11 +36,11 @@ public class IncomingsService extends RestProvider {
         _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
-        ViewPage vp = incomingDAO.findViewPage(getRequestParameter().getPage(), pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
+        // ViewPage vp = incomingDAO.findViewPage(getRequestParameter().getPage(), pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
 
-        // List<UUID> ids = new ArrayList<>(); // incomingDAO.findAll().stream().map(it -> it.getId()).collect(Collectors.toList());
-        // ids.add(UUID.fromString("44ba782b-d9a3-428d-8f03-916b37d69fa4"));
-        // ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getRequestParameter().getPage(), pageSize, ids);
+        List<UUID> ids = new ArrayList<>(); // incomingDAO.findAll().stream().map(it -> it.getId()).collect(Collectors.toList());
+        ids.add(UUID.fromString("44ba782b-d9a3-428d-8f03-916b37d69fa4"));
+        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getRequestParameter().getPage(), pageSize, ids);
         // ViewPage vp = incomingDAO.findViewPageWithResponses(_SortParams.desc("regDate"), ids, pageNum, pageSize);
 
         //
