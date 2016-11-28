@@ -1,5 +1,9 @@
 /* .project-list */
 
+projects .tree-indentation {
+    display: none;
+}
+
 .project-list__name {
     min-width: 80px;
     width: 25%;
