@@ -107,7 +107,6 @@ public class Project extends HierarchicalEntity<UUID> {
 
 	public void setName(String name) {
 		this.name = name;
-		title = name;
 	}
 
 	public ProjectStatusType getStatus() {
@@ -217,5 +216,10 @@ public class Project extends HierarchicalEntity<UUID> {
 	@Override
 	public String getURL() {
 		return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&projectId=" + getIdentifier();
+	}
+	
+	@Override
+	public String getTitle() {
+		return name;
 	}
 }
