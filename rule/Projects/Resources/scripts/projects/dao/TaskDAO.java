@@ -195,18 +195,22 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         EntityManager em = getEntityManagerFactory().createEntityManager();
 
-        vp.getResult()
-                //.stream()
-                //.map(it -> it) // mark has response
-                //.filter(task -> expandedIds.contains(task.getId()))
-                .forEach(task -> {
-                    List<IAppEntity> responses = findTaskResponses(task, expandedIds, em);
-                    if (responses != null && responses.size() > 0) {
-                        task.setResponsesCount((long) responses.size());
-                        task.setResponses(responses);
-                    }
-                });
-        //});
+        try {
+            vp.getResult()
+                    //.stream()
+                    //.map(it -> it) // mark has response
+                    //.filter(task -> expandedIds.contains(task.getId()))
+                    .forEach(task -> {
+                        List<IAppEntity> responses = findTaskResponses(task, expandedIds, em);
+                        if (responses != null && responses.size() > 0) {
+                            task.setResponsesCount((long) responses.size());
+                            task.setResponses(responses);
+                        }
+                    });
+            //});
+        } finally {
+            em.close();
+        }
 
         return vp;
     }
