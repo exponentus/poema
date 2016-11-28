@@ -31,32 +31,36 @@ public class ExpiredTracking extends _DoScheduled {
 	private Date current = new Date();
 	private Tag tag;
 	private TaskDAO tDao;
-
+	
 	@Override
 	public void doEvery5Min(AppEnv appEnv, _Session session) {
-
+		
 	}
-
+	
 	@Override
 	public void doEvery1Hour(AppEnv appEnv, _Session session) {
-
+		
 	}
-
+	
 	@Override
 	public void doEveryNight(AppEnv appEnv, _Session session) {
-		TagDAO tagDAO = new TagDAO(session);
-		tag = tagDAO.findByName(EXPIRED_TAG_NAME);
-		if (tag != null) {
-			tDao = new TaskDAO(session);
-			processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING), 0, 0),
-					session);
-			processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN), 0, 0),
-					session);
-		} else {
-			logger.warningLogEntry("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
+		try {
+			TagDAO tagDAO = new TagDAO(session);
+			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
+			if (tag != null) {
+				tDao = new TaskDAO(session);
+				processTask(appEnv,
+						tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING), 0, 0), session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN), 0, 0),
+						session);
+			} else {
+				logger.warningLogEntry("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
+			}
+		} catch (DAOException e) {
+			logger.errorLogEntry(e);
 		}
 	}
-
+	
 	private void processTask(AppEnv env, ViewPage<Task> result, _Session session) {
 		for (Task task : result.getResult()) {
 			if (current.after(task.getDueDate())) {
@@ -89,21 +93,21 @@ public class ExpiredTracking extends _DoScheduled {
 			}
 		}
 	}
-
+	
 	private void sendNotify(AppEnv env, _Session session, Task task) {
 		try {
 			UserDAO userDAO = new UserDAO(session);
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			User user = null;
-
+			
 			LanguageCode lang = EnvConst.getDefaultLang();
 			try {
 				user = (User) assigneeUser;
 				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
-
+				
 			}
-
+			
 			Memo memo = new Memo();
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("regNumber", task.getRegNumber());
@@ -112,7 +116,7 @@ public class ExpiredTracking extends _DoScheduled {
 			memo.addVar("author", task.getAuthor().getUserName());
 			memo.addVar("status", env.vocabulary.getWord(task.getStatus().name(), lang));
 			memo.addVar("url", env.getURL() + "/" + task.getURL() + "&lang=" + lang);
-
+			
 			if (user != null) {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
@@ -124,7 +128,7 @@ public class ExpiredTracking extends _DoScheduled {
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
-
+		
 	}
-
+	
 }

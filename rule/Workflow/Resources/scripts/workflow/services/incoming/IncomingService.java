@@ -75,54 +75,54 @@ public class IncomingService extends RestProvider {
 			// return error
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
 		}
-
-		OrganizationDAO organizationDAO = new OrganizationDAO(ses);
-		DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
-		DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
-		OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
-		IncomingDAO incomingDAO = new IncomingDAO(ses);
 		Incoming entity;
 
-		boolean isNew = "new".equals(id);
-		if (isNew) {
-			entity = new Incoming();
-		} else {
-			entity = incomingDAO.findById(id);
-		}
-
-		// TODO remove
-		if (entity.getRegNumber() == null) {
-			entity.setRegNumber("RG-I-" + Math.random());
-		}
-		//
-		entity.setTitle(incomingForm.getTitle());
-		entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
-		if (incomingForm.getDocLanguage() != null) {
-			entity.setDocLanguage(documentLanguageDAO.findById(incomingForm.getDocLanguage().getId()));
-		} else {
-			entity.setDocLanguage(null);
-		}
-		if (incomingForm.getDocType() != null) {
-			entity.setDocType(documentTypeDAO.findById(incomingForm.getDocType().getId()));
-		} else {
-			entity.setDocType(null);
-		}
-		if (incomingForm.getSender() != null) {
-			entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
-		} else {
-			entity.setSender(null);
-		}
-		if (incomingForm.getResponseTo() != null) {
-			entity.setResponseTo(outgoingDAO.findById(incomingForm.getResponseTo().getId()));
-		} else {
-			entity.setResponseTo(null);
-		}
-		entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
-		entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
-		entity.setBody(incomingForm.getBody());
-		entity.setAttachments(getActualAttachments(entity.getAttachments()));
-
 		try {
+			OrganizationDAO organizationDAO = new OrganizationDAO(ses);
+			DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
+			DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
+			OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+			IncomingDAO incomingDAO = new IncomingDAO(ses);
+			
+			boolean isNew = "new".equals(id);
+			if (isNew) {
+				entity = new Incoming();
+			} else {
+				entity = incomingDAO.findById(id);
+			}
+
+			// TODO remove
+			if (entity.getRegNumber() == null) {
+				entity.setRegNumber("RG-I-" + Math.random());
+			}
+			//
+			entity.setTitle(incomingForm.getTitle());
+			entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
+			if (incomingForm.getDocLanguage() != null) {
+				entity.setDocLanguage(documentLanguageDAO.findById(incomingForm.getDocLanguage().getId()));
+			} else {
+				entity.setDocLanguage(null);
+			}
+			if (incomingForm.getDocType() != null) {
+				entity.setDocType(documentTypeDAO.findById(incomingForm.getDocType().getId()));
+			} else {
+				entity.setDocType(null);
+			}
+			if (incomingForm.getSender() != null) {
+				entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
+			} else {
+				entity.setSender(null);
+			}
+			if (incomingForm.getResponseTo() != null) {
+				entity.setResponseTo(outgoingDAO.findById(incomingForm.getResponseTo().getId()));
+			} else {
+				entity.setResponseTo(null);
+			}
+			entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
+			entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
+			entity.setBody(incomingForm.getBody());
+			entity.setAttachments(getActualAttachments(entity.getAttachments()));
+
 			if (isNew) {
 				IUser<Long> user = ses.getUser();
 				entity.addReaderEditor(user);

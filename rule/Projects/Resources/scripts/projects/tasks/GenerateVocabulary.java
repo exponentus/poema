@@ -7,18 +7,19 @@ import com.exponentus.localization.Vocabulary;
 import com.exponentus.localization.VocabularyDTO;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._Do;
+import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 
 import administrator.dao.LanguageDAO;
 import administrator.model.Language;
 
-@Command(name = "gen_voc")
+@Command(name = "gen_voc", trigger = Trigger.POST_APP_START)
 public class GenerateVocabulary extends _Do {
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Vocabulary vocabulary = appEnv.vocabulary;
-		
+
 		String i18nPath = appEnv.getWebAppsPath() + File.separator + "i18n" + File.separator;
 		(new File(i18nPath)).mkdirs();
 		LanguageDAO dao = new LanguageDAO();
@@ -28,7 +29,7 @@ public class GenerateVocabulary extends _Do {
 			logger.infoLogEntry("write to \"" + jsonFilePath + "\"");
 			writeJS(vocabularyDTO.getWords(), jsonFilePath);
 		}
-		
+
 		logger.infoLogEntry("done...");
 	}
 }

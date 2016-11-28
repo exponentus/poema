@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.localization.LanguageCode;
@@ -13,6 +14,7 @@ import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduled;
+import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 
 import administrator.dao.UserDAO;
@@ -42,16 +44,20 @@ public class OverdueReminder extends _DoScheduled {
 	
 	@Override
 	public void doEveryNight(AppEnv appEnv, _Session session) {
-		TagDAO tagDAO = new TagDAO(session);
-		tag = tagDAO.findByName(EXPIRED_TAG_NAME);
-		List<Tag> tags = new ArrayList<>();
-		tags.add(tag);
-		if (tag != null) {
-			tDao = new TaskDAO(session);
-			ViewPage<Task> vp = tDao
-					.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags), 0, 0);
-			vp.merge(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags), 0, 0));
-			processRemind(vp, session);
+		try {
+			TagDAO tagDAO = new TagDAO(session);
+			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
+			List<Tag> tags = new ArrayList<>();
+			tags.add(tag);
+			if (tag != null) {
+				tDao = new TaskDAO(session);
+				ViewPage<Task> vp = tDao
+						.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags), 0, 0);
+				vp.merge(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags), 0, 0));
+				processRemind(vp, session);
+			}
+		} catch (DAOException e) {
+			Server.logger.errorLogEntry(e);
 		}
 	}
 	

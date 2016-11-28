@@ -56,117 +56,122 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
 public class TaskForm extends _DoForm {
-
+	
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
 		devPrint(formData);
 		IUser<Long> user = session.getUser();
 		Task task;
-		String id = formData.getValueSilently("taskId");
-
-		if (!id.isEmpty()) {
-			TaskDAO taskDAO = new TaskDAO(session);
-			task = taskDAO.findById(id);
-
-			if (task == null) {
-				setNotFound();
-				return;
-			}
-
-			if (formData.containsField("attachment")) {
-				doGetAttachment(session, formData, task);
-				return;
-			}
-
-			if (task.getParent() != null) {
-				addContent("parentTask", task.getParent());
-			}
-			taskDAO.findTaskChildren(task);
-
-			addContent(task.getAttachments());
-			addContent(new ACL(task));
-		} else {
-			task = new Task();
-			task.setAuthor(user);
-			task.setInitiative(formData.getBoolSilently("initiative"));
-			TaskTypeDAO tDao = new TaskTypeDAO(session);
-			try {
-				task.setTaskType(tDao.findByName("Programming"));
-			} catch (DAOException e) {
-				Server.logger.errorLogEntry(e);
-			}
-			task.setStatus(TaskStatusType.OPEN);
-
-			String projectId = formData.getValueSilently("projectId");
-			if (!projectId.isEmpty()) {
-				ProjectDAO projectDAO = new ProjectDAO(session);
-				Project project = projectDAO.findById(projectId);
-				task.setProject(project);
-				task.setObservers(project.getObservers());
-			}
-
-			String parentTaskId = formData.getValueSilently("parentTaskId");
-			if (!parentTaskId.isEmpty()) {
+		try {
+			String id = formData.getValueSilently("taskId");
+			
+			if (!id.isEmpty()) {
 				TaskDAO taskDAO = new TaskDAO(session);
-				Task parentTask = taskDAO.findById(parentTaskId);
-				task.setProject(parentTask.getProject());
-				task.setParent(parentTask);
-				task.setTitle(parentTask.getTitle());
-				task.setPriority(parentTask.getPriority());
-				task.setStartDate(parentTask.getStartDate());
-				task.setDueDate(parentTask.getDueDate());
-				task.setTags(parentTask.getTags());
-				task.setObservers(parentTask.getObservers());
-				addContent("parentTask", parentTask);
-			} else {
-				task.setStartDate(new Date());
-				task.setDueDate(new LocalDate(task.getStartDate()).plusDays(10).toDate());
-			}
-
-			String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
-
-			List<String> formFiles;
-			Object obj = session.getAttribute(fsId);
-			if (obj == null) {
-				formFiles = new ArrayList<>();
-			} else {
-				_FormAttachments fAtts = (_FormAttachments) obj;
-				formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
-			}
-
-			List<IPOJOObject> filesToPublish = new ArrayList<>();
-
-			for (String fn : formFiles) {
-				UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-				if (uf == null) {
-					uf = new UploadedFile();
-					uf.setName(fn);
-					session.setAttribute(fsId + "_file" + fn, uf);
+				task = taskDAO.findById(id);
+				
+				if (task == null) {
+					setNotFound();
+					return;
 				}
-				filesToPublish.add(uf);
+				
+				if (formData.containsField("attachment")) {
+					doGetAttachment(session, formData, task);
+					return;
+				}
+				
+				if (task.getParent() != null) {
+					addContent("parentTask", task.getParent());
+				}
+				taskDAO.findTaskChildren(task);
+				
+				addContent(task.getAttachments());
+				addContent(new ACL(task));
+			} else {
+				task = new Task();
+				task.setAuthor(user);
+				task.setInitiative(formData.getBoolSilently("initiative"));
+				TaskTypeDAO tDao = new TaskTypeDAO(session);
+				try {
+					task.setTaskType(tDao.findByName("Programming"));
+				} catch (DAOException e) {
+					Server.logger.errorLogEntry(e);
+				}
+				task.setStatus(TaskStatusType.OPEN);
+				
+				String projectId = formData.getValueSilently("projectId");
+				if (!projectId.isEmpty()) {
+					ProjectDAO projectDAO = new ProjectDAO(session);
+					Project project = projectDAO.findById(projectId);
+					task.setProject(project);
+					task.setObservers(project.getObservers());
+				}
+				
+				String parentTaskId = formData.getValueSilently("parentTaskId");
+				if (!parentTaskId.isEmpty()) {
+					TaskDAO taskDAO = new TaskDAO(session);
+					Task parentTask = taskDAO.findById(parentTaskId);
+					task.setProject(parentTask.getProject());
+					task.setParent(parentTask);
+					task.setTitle(parentTask.getTitle());
+					task.setPriority(parentTask.getPriority());
+					task.setStartDate(parentTask.getStartDate());
+					task.setDueDate(parentTask.getDueDate());
+					task.setTags(parentTask.getTags());
+					task.setObservers(parentTask.getObservers());
+					addContent("parentTask", parentTask);
+				} else {
+					task.setStartDate(new Date());
+					task.setDueDate(new LocalDate(task.getStartDate()).plusDays(10).toDate());
+				}
+				
+				String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
+				
+				List<String> formFiles;
+				Object obj = session.getAttribute(fsId);
+				if (obj == null) {
+					formFiles = new ArrayList<>();
+				} else {
+					_FormAttachments fAtts = (_FormAttachments) obj;
+					formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
+				}
+				
+				List<IPOJOObject> filesToPublish = new ArrayList<>();
+				
+				for (String fn : formFiles) {
+					UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
+					if (uf == null) {
+						uf = new UploadedFile();
+						uf.setName(fn);
+						session.setAttribute(fsId + "_file" + fn, uf);
+					}
+					filesToPublish.add(uf);
+				}
+				addContent(new _POJOListWrapper<>(filesToPublish, session));
 			}
-			addContent(new _POJOListWrapper<>(filesToPublish, session));
+			
+			EmployeeDAO empDao = new EmployeeDAO(session);
+			Map<Long, Employee> emps = new HashMap<>();
+			List<Long> empIds = new ArrayList<>();
+			if (task.getAssignee() != null) {
+				empIds.add(task.getAssignee());
+			}
+			if (task.getObservers() != null) {
+				empIds.addAll(task.getObservers());
+			}
+			empIds.add(task.getAuthorId());
+			for (Employee e : empDao.findAllByUserIds(empIds)) {
+				emps.put(e.getUserID(), e);
+			}
+			addDataContent("employees", emps);
+			
+			addContent(task);
+			addContent(getActionBar(session, task));
+		} catch (DAOException e) {
+			Server.logger.errorLogEntry(e);
+			setBadRequest();
 		}
-
-		EmployeeDAO empDao = new EmployeeDAO(session);
-		Map<Long, Employee> emps = new HashMap<>();
-		List<Long> empIds = new ArrayList<>();
-		if (task.getAssignee() != null) {
-			empIds.add(task.getAssignee());
-		}
-		if (task.getObservers() != null) {
-			empIds.addAll(task.getObservers());
-		}
-		empIds.add(task.getAuthorId());
-		for (Employee e : empDao.findAllByUserIds(empIds)) {
-			emps.put(e.getUserID(), e);
-		}
-		addDataContent("employees", emps);
-
-		addContent(task);
-		addContent(getActionBar(session, task));
 	}
-
+	
 	@Override
 	public void doPOST(_Session session, _WebFormData formData) {
 		devPrint(formData);
@@ -174,14 +179,14 @@ public class TaskForm extends _DoForm {
 		try {
 			String parentTaskId = formData.getValueSilently("parentTaskId");
 			boolean isSubTask = !parentTaskId.isEmpty();
-
+			
 			_Validation ve = validate(formData, lang, isSubTask);
 			if (ve.hasError()) {
 				setBadRequest();
 				setValidation(ve);
 				return;
 			}
-
+			
 			UserDAO userDAO = new UserDAO(session);
 			ProjectDAO projectDAO = new ProjectDAO(session);
 			DemandDAO demandDAO = new DemandDAO(session);
@@ -192,7 +197,7 @@ public class TaskForm extends _DoForm {
 			TaskType taskType = null;
 			String id = formData.getValueSilently("taskId");
 			boolean isNew = id.isEmpty();
-
+			
 			if (isNew) {
 				task = new Task();
 				task.setAuthor(session.getUser());
@@ -201,7 +206,7 @@ public class TaskForm extends _DoForm {
 			} else {
 				task = dao.findById(id);
 			}
-
+			
 			if (isSubTask) {
 				parentTask = dao.findById(parentTaskId);
 				task.setParent(parentTask);
@@ -212,7 +217,7 @@ public class TaskForm extends _DoForm {
 				task.setProject(projectDAO.findById(formData.getValue("projectId")));
 				taskType = taskTypeDAO.findById(formData.getValue("taskTypeId"));
 			}
-
+			
 			String title = formData.getValueSilently("title");
 			if (title.isEmpty()) {
 				// TODO here it needed to vanish from markdown symbols
@@ -221,7 +226,7 @@ public class TaskForm extends _DoForm {
 			task.setTitle(title);
 			task.setTaskType(taskType);
 			task.setPriority(TaskPriorityType.valueOf(formData.getValueSilently("priority")));
-
+			
 			String sd = formData.getValueSilently("startDate");
 			if (sd.isEmpty()) {
 				task.setStatus(TaskStatusType.DRAFT);
@@ -240,15 +245,15 @@ public class TaskForm extends _DoForm {
 			task.setDueDate(TimeUtil.stringToDate(formData.getValueSilently("dueDate")));
 			task.setBody(formData.getValueSilently("body"));
 			IUser<Long> assigneeUser = userDAO.findById(formData.getNumberValueSilently("assigneeUserId", 0));
-
+			
 			if (!formData.getValueSilently("demandId").isEmpty()) {
 				task.setDemand(demandDAO.findById(formData.getValueSilently("demandId")));
 			}
-
+			
 			task.setAssignee(assigneeUser.getId());
 			task.setAttachments(getActualAttachments(task.getAttachments()));
 			task.setCustomerObservation(Boolean.valueOf(formData.getValue("customerObservation")));
-
+			
 			List<Long> ouIds = new ArrayList<>();
 			if (!formData.getValueSilently("observerUserIds").isEmpty()) {
 				ouIds = Arrays.stream(formData.getValueSilently("observerUserIds").split(",")).map(Long::valueOf)
@@ -263,7 +268,7 @@ public class TaskForm extends _DoForm {
 				}
 			}
 			task.setObservers(ouIds);
-
+			
 			if (formData.containsField("tagIds")) {
 				if (formData.getValueSilently("tagIds").isEmpty()) {
 					task.setTags(new ArrayList<>());
@@ -277,7 +282,7 @@ public class TaskForm extends _DoForm {
 					}
 				}
 			}
-
+			
 			if (isNew) {
 				if (task.getStatus() != TaskStatusType.DRAFT) {
 					task.addReader(assigneeUser);
@@ -294,16 +299,16 @@ public class TaskForm extends _DoForm {
 				}
 				task = dao.update(task);
 			}
-
+			
 			if (isSubTask) {
 				parentTask.addReaders(task.getReaders());
 				dao.update(parentTask);
 			}
-
+			
 			if (isNew && task.getStatus() == TaskStatusType.OPEN) {
 				new Messages(getCurrentAppEnv()).sendToAssignee(task);
 			}
-
+			
 			addContent(task);
 		} catch (SecureException e) {
 			setBadRequest();
@@ -316,18 +321,18 @@ public class TaskForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	@Override
 	public void doPUT(_Session session, _WebFormData formData) {
 		String taskId = formData.getValueSilently("taskId");
 		String action = formData.getValueSilently("_action");
-
+		
 		if (taskId.isEmpty() || action.isEmpty()) {
 			addContent("error", "taskId or _action empty");
 			setBadRequest();
 			return;
 		}
-
+		
 		switch (action) {
 		case "complete":
 			doTaskComplete(session, taskId);
@@ -343,7 +348,7 @@ public class TaskForm extends _DoForm {
 			break;
 		}
 	}
-
+	
 	@Override
 	public void doDELETE(_Session session, _WebFormData formData) {
 		String fsId = formData.getValueSilently(EnvConst.FSID_FIELD_NAME);
@@ -361,7 +366,7 @@ public class TaskForm extends _DoForm {
 			setBadRequest();
 			return;
 		}
-
+		
 		/*
 		 * String id = formData.getValueSilently("taskId"); String attachmentId
 		 * = formData.getValueSilently("attachmentId");
@@ -379,9 +384,9 @@ public class TaskForm extends _DoForm {
 		 * setBadRequest();
 		 */
 	}
-
+	
 	private _ActionBar getActionBar(_Session session, Task task) {
-
+		
 		_ActionBar actionBar = new _ActionBar(session);
 		if (task.isEditable()) {
 			actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
@@ -389,7 +394,7 @@ public class TaskForm extends _DoForm {
 				actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
 			}
 		}
-
+		
 		if (!task.isNew()) {
 			RequestDAO requestDAO = new RequestDAO(session);
 			if (task.getAssignee().equals(session.getUser().getId())) {
@@ -401,14 +406,14 @@ public class TaskForm extends _DoForm {
 					}
 				}
 			}
-
+			
 			if (task.getAuthor().getId().equals(session.getUser().getId()) || session.getUser().isSuperUser()) {
 				if ((task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)) {
 					actionBar.addAction(new _Action("", "", "task_complete"));
 					actionBar.addAction(new _Action("", "", "task_cancel"));
 				}
 			}
-
+			
 			// if (task.getStatus() != TaskStatusType.COMPLETED &&
 			// task.getStatus() != TaskStatusType.CANCELLED) {
 			actionBar.addAction(new _Action("", "", "add_subtask"));
@@ -416,10 +421,10 @@ public class TaskForm extends _DoForm {
 		}
 		return actionBar;
 	}
-
+	
 	private _Validation validate(_WebFormData formData, LanguageCode lang, boolean isSubTask) {
 		_Validation ve = new _Validation();
-
+		
 		if (!isSubTask && formData.getValueSilently("projectId").isEmpty()) {
 			ve.addError("projectId", "required", getLocalizedWord("field_is_empty", lang));
 		}
@@ -444,7 +449,7 @@ public class TaskForm extends _DoForm {
 		if (formData.getValueSilently("priority").isEmpty()) {
 			ve.addError("priority", "required", getLocalizedWord("field_is_empty", lang));
 		}
-
+		
 		String sDate = formData.getValueSilently("startDate");
 		if (sDate.isEmpty()) {
 			// ve.addError("startDate", "required",
@@ -452,34 +457,34 @@ public class TaskForm extends _DoForm {
 		} else if (TimeUtil.stringToDate(sDate) == null) {
 			ve.addError("startDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
-
+		
 		String dDate = formData.getValueSilently("dueDate");
 		if (dDate.isEmpty()) {
 			ve.addError("dueDate", "required", getLocalizedWord("field_is_empty", lang));
 		} else if (TimeUtil.stringToDate(dDate) == null) {
 			ve.addError("dueDate", "date", getLocalizedWord("date_format_does_not_match_to", lang) + " dd.MM.YYYY");
 		}
-
+		
 		if (!formData.getBoolSilently("initiative") && formData.getNumberValueSilently("assigneeUserId", 0) == 0) {
 			ve.addError("assigneeUserId", "required", getLocalizedWord("field_is_empty", lang));
 		}
-
+		
 		return ve;
 	}
-
+	
 	private void doTaskComplete(_Session session, String taskId) {
 		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
-
+		
 		try {
 			if (task.getStatus() == TaskStatusType.COMPLETED) {
 				addContent("info", "task status is completed");
 				return;
 			}
-
+			
 			task.setStatus(TaskStatusType.COMPLETED);
 			dao.update(task);
-
+			
 			new Messages(getCurrentAppEnv()).sendOfTaskCompleted(task);
 		} catch (SecureException e) {
 			setBadRequest();
@@ -492,21 +497,21 @@ public class TaskForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	private void doTaskCancel(_Session session, String taskId, String comment) {
 		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
-
+		
 		try {
 			if (task.getStatus() == TaskStatusType.CANCELLED) {
 				addContent("info", "task status is cancelled");
 				return;
 			}
-
+			
 			task.setStatus(TaskStatusType.CANCELLED);
 			task.setCancellationComment(comment);
 			dao.update(task);
-
+			
 			new Messages(getCurrentAppEnv()).sendOfTaskCancelled(task);
 		} catch (SecureException e) {
 			setBadRequest();
@@ -516,11 +521,11 @@ public class TaskForm extends _DoForm {
 			logError(e);
 		}
 	}
-
+	
 	private void doAcknowledged(_Session session, String taskId) {
 		TaskDAO dao = new TaskDAO(new _Session(new SuperUser()));
 		Task task = dao.findById(taskId);
-
+		
 		try {
 			if (!task.getAssignee().equals(session.getUser().getId())) {
 				addContent("error", "not_assignee_user");
@@ -531,10 +536,10 @@ public class TaskForm extends _DoForm {
 				setBadRequest();
 				return;
 			}
-
+			
 			task.setStatus(TaskStatusType.PROCESSING);
 			dao.update(task);
-
+			
 			new Messages(getCurrentAppEnv()).sendOfNewAcknowledging(task);
 		} catch (SecureException e) {
 			setBadRequest();
