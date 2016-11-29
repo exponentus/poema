@@ -108,7 +108,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         TypedQuery<Assignment> typedQueryA = em.createQuery(cqa);
         List<Assignment> assignments = typedQueryA.getResultList();
 
-        //
+        // ------------------------------------------
         CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
         Root<Report> rootR = cqr.from(Report.class);
@@ -126,6 +126,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         TypedQuery<Report> typedQueryR = em.createQuery(cqr);
         List<Report> reports = typedQueryR.getResultList();
 
+        // ------------------------------------------
         List<IAppEntity> result = new ArrayList<>(assignments);
         result.addAll(reports);
 
@@ -135,16 +136,17 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                 .collect(Collectors.toCollection(supplier));
 
         if (assignments.size() > 0) {
-            assignments
-                    //.stream()
-                    //.filter(it -> expandedIds.contains(it.getId()))
-                    .forEach(it -> {
-                        List<IAppEntity> responses = findAssignmentResponses(it, expandedIds, em);
-                        if (responses != null && responses.size() > 0) {
-                            it.setResponsesCount((long) responses.size());
-                            it.setResponses(responses);
-                        }
-                    });
+            for (Assignment a : assignments) {
+                //.stream()
+                //.filter(it -> expandedIds.contains(it.getId()))
+                //.forEach(it -> {
+                List<IAppEntity> responses = findAssignmentResponses(a, expandedIds, em);
+                if (responses != null && responses.size() > 0) {
+                    a.setResponsesCount((long) responses.size());
+                    a.setResponses(responses);
+                }
+                //});
+            }
         }
 
         return result;

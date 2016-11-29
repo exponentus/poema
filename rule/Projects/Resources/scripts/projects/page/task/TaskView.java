@@ -17,6 +17,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TaskView extends _DoPage {
@@ -36,19 +37,17 @@ public class TaskView extends _DoPage {
         // ViewPage<Task> vp = taskDAO.findAllWithRespMarked(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
         addContent(vp.getResult(), vp.getMaxPage(), vp.getCount(), vp.getPageNum());
 
-        //ViewEntryDAO viewEntryDAO = new ViewEntryDAO(session);
-        //viewEntryDAO.findAllResponses()
-        //com.exponentus.common.model.ViewEntry.getRealEntity(session);
-
         //
         EmployeeDAO empDao = new EmployeeDAO(session);
-        Map<Long, Employee> emps = new HashMap<>();
-        if (vp.getResult().size() > 0) {
-            List<Long> empIds = vp.getResult().stream().map(Task::getAssignee).collect(Collectors.toList());
-            for (Employee e : empDao.findAllByUserIds(empIds)) {
-                emps.put(e.getUserID(), e);
-            }
-        }
+        List<Employee> empList = empDao.findAll();
+        Map<Long, Employee> emps = empList.stream()
+                .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> {
+                    System.out.println("duplicate key");
+                    return e1;
+                }));
+//        for (Employee e : empList) {
+//            emps.put(e.getUserID(), e);
+//        }
         addDataContent("employees", emps);
     }
 
