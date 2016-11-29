@@ -38,8 +38,9 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
-            vp.getResult().stream()
-                    .filter(incoming -> expandedIds.contains(incoming.getId()))
+            vp.getResult()
+                    //.stream()
+                    //.filter(incoming -> expandedIds.contains(incoming.getId()))
                     .forEach(incoming -> {
                         List<IAppEntity> responses = findIncomingResponses(incoming, expandedIds, em);
                         if (responses != null && responses.size() > 0) {
@@ -74,8 +75,9 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         List<Assignment> assignments = typedQuery.getResultList();
 
         if (assignments.size() > 0) {
-            assignments.stream()
-                    .filter(assignment -> expandedIds.contains(assignment.getId()))
+            assignments
+                    //.stream()
+                    //.filter(assignment -> expandedIds.contains(assignment.getId()))
                     .forEach(assignment -> {
                         List<IAppEntity> responses = findAssignmentResponses(assignment, expandedIds, em);
                         if (responses != null && responses.size() > 0) {
@@ -133,8 +135,9 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                 .collect(Collectors.toCollection(supplier));
 
         if (assignments.size() > 0) {
-            assignments.stream()
-                    .filter(it -> expandedIds.contains(it.getId()))
+            assignments
+                    //.stream()
+                    //.filter(it -> expandedIds.contains(it.getId()))
                     .forEach(it -> {
                         List<IAppEntity> responses = findAssignmentResponses(it, expandedIds, em);
                         if (responses != null && responses.size() > 0) {
