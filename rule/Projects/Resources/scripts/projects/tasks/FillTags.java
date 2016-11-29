@@ -19,13 +19,13 @@ import reference.model.Tag;
 
 @Command(name = "fill_tags")
 public class FillTags extends _Do {
-	private static final String CATEGORY_NAME = "software_developing";
-	
+	private static final String CATEGORY_NAME = "software_developing_task";
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
-
-		List<Tag> entities = new ArrayList<Tag>();
 		
+		List<Tag> entities = new ArrayList<Tag>();
+
 		Tag entity = new Tag();
 		entity.setName("starred");
 		Map<LanguageCode, String> name = new HashMap<LanguageCode, String>();
@@ -36,7 +36,7 @@ public class FillTags extends _Do {
 		entity.setColor("#008080");
 		entity.setCategory(CATEGORY_NAME);
 		entities.add(entity);
-		
+
 		entity = new Tag();
 		entity.setName("bug");
 		name = new HashMap<LanguageCode, String>();
@@ -47,7 +47,7 @@ public class FillTags extends _Do {
 		entity.setColor("#ff0000");
 		entity.setCategory(CATEGORY_NAME);
 		entities.add(entity);
-		
+
 		entity = new Tag();
 		entity.setName("enhancement");
 		name = new HashMap<LanguageCode, String>();
@@ -58,7 +58,7 @@ public class FillTags extends _Do {
 		entity.setColor("#0080ff");
 		entity.setCategory(CATEGORY_NAME);
 		entities.add(entity);
-		
+
 		entity = new Tag();
 		entity.setName("expired");
 		name = new HashMap<>();
@@ -70,7 +70,7 @@ public class FillTags extends _Do {
 		entity.setCategory(CATEGORY_NAME);
 		entity.setHidden(true);
 		entities.add(entity);
-
+		
 		try {
 			TagDAO dao = new TagDAO(ses);
 			for (Tag entry : entities) {
@@ -95,5 +95,5 @@ public class FillTags extends _Do {
 		}
 		logger.infoLogEntry("done...");
 	}
-	
+
 }
