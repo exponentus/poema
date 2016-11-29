@@ -39,15 +39,8 @@ public class TaskView extends _DoPage {
 
         //
         EmployeeDAO empDao = new EmployeeDAO(session);
-        List<Employee> empList = empDao.findAll();
-        Map<Long, Employee> emps = empList.stream()
-                .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> {
-                    // System.out.println("duplicate key");
-                    return e1;
-                }));
-//        for (Employee e : empList) {
-//            emps.put(e.getUserID(), e);
-//        }
+        Map<Long, Employee> emps = empDao.findAll().stream()
+                .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
         addDataContent("employees", emps);
     }
 
