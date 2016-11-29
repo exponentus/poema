@@ -16,7 +16,7 @@ stini staff.init.FillDefaultRoles
 #stini staff.init.FillTestOrgs
 #stini staff.init.FillTestUsers
 #SPECIFIC
-stini projects.init.FillTags
+run task fill_tags
 stini projects.init.FillPositions
 stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
