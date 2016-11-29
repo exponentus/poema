@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 14
+# version 15
 
 CACHE:
 p?id=index
@@ -7,9 +7,13 @@ css/all.min.css
 img/favicon.png
 img/logo.png
 img/loading.gif
+i18n/bel.json
 i18n/bul.json
+i18n/chi.json
+i18n/deu.json
 i18n/eng.json
 i18n/kaz.json
+i18n/por.json
 i18n/rus.json
 i18n/spa.json
 /SharedResources/ng-app/vendor.js.gz

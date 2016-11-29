@@ -83,6 +83,7 @@
   "street" : "street",
   "new_task" : "Nueva tarea",
   "message_has_sent_succesfully" : "El mensaje fue enviado",
+  "summary" : "Resumo",
   "normal" : "Normal",
   "password_confirm_not_equals" : "password_confirm_not_equals",
   "no_connection" : "no_connection",
