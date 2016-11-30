@@ -8,7 +8,7 @@
         <certfile>server.crt</certfile>
         <certkeyfile>server.key</certkeyfile>
     </tls> 
-    <mail mode="ON">
+    <mail mode="OFF">
         <smtphost>smtp.mail.ru</smtphost>
         <defaultsender>mynameis.m@mail.ru</defaultsender>
         <auth>true</auth>
