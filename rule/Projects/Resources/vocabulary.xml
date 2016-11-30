@@ -199,6 +199,12 @@
         <entry lang="POR">Cliente</entry>
         <entry lang="SPA">Cliente</entry>
     </sentence>
+    <sentence mode="on" keyword="representatives">
+        <entry lang="RUS">Представители</entry>
+        <entry lang="ENG">Representatives</entry>
+        <entry lang="POR">Representatives</entry>
+        <entry lang="SPA">Representatives</entry>
+    </sentence>
     <sentence mode="on" keyword="manager">
         <entry lang="RUS">Менеджер</entry>
         <entry lang="ENG">Manager</entry>
