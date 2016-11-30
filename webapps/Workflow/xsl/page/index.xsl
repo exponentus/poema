@@ -42,7 +42,11 @@
             <app class="body">
                 <div class="app-loading">
                     <img class="brand-logo" alt="logo" src="img/logo.png"/>
-                    <span><xsl:value-of select="//captions/loading/@caption"/>...</span>
+                    <div class="three-bounce">
+                        <div class="three-bounce-it one"></div>
+                        <div class="three-bounce-it two"></div>
+                        <div class="three-bounce-it three"></div>
+                    </div>
                 </div>
             </app>
             <script src="/SharedResources/ng-app/vendor.js.gz"></script>

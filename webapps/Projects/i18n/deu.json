@@ -44,6 +44,7 @@
   "readers" : "readers",
   "notify_about_finish_task" : "notify_about_finish_task",
   "cancel_task" : "cancel_task",
+  "representatives" : "representatives",
   "observers" : "observers",
   "open" : "open",
   "country" : "country",
