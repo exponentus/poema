@@ -112,23 +112,26 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
-						Vector<?> atts = body.getEmbeddedObjects();
-						for (int i = 0; i < atts.size(); i++) {
-							EmbeddedObject att = (EmbeddedObject) atts.elementAt(i);
-							if (att.getType() == EmbeddedObject.EMBED_ATTACHMENT) {
-								String path = ses.getTmpDir().getAbsolutePath() + File.separator + att.getSource();
-								att.extractFile(path);
-								files.addFile(new File(path), att.getSource(), TMP_FIELD_NAME);
-								TempFileCleaner.addFileToDelete(path);
+						if (body != null) {
+							Vector<?> atts = body.getEmbeddedObjects();
+							for (int i = 0; i < atts.size(); i++) {
+								EmbeddedObject att = (EmbeddedObject) atts.elementAt(i);
+								if (att.getType() == EmbeddedObject.EMBED_ATTACHMENT) {
+									String path = ses.getTmpDir().getAbsolutePath() + File.separator + att.getSource();
+									att.extractFile(path);
+									files.addFile(new File(path), att.getSource(), TMP_FIELD_NAME);
+									TempFileCleaner.addFileToDelete(path);
+								}
 							}
+
+							List<Attachment> attachments = new ArrayList<>();
+							for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
+								Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
+								attachments.add(a);
+							}
+							
+							entity.setAttachments(attachments);
 						}
-						
-						List<Attachment> attachments = new ArrayList<>();
-						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
-							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
-							attachments.add(a);
-						}
-						entity.setAttachments(attachments);
 						normalizeACL(uDao, entity, doc);
 						entities.put(unId, entity);
 					}

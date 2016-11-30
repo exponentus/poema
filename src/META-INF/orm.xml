@@ -2,6 +2,7 @@
 <entity-mappings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm" version="2.1">
 	<converter class="com.exponentus.dataengine.jpa.util.PostgresUuidConverter"/>
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
+ 	<converter class="administrator.model.util.ApplicationModeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
     <converter class="administrator.model.util.InterfaceTypeConvertor"/>  
     <converter class="administrator.model.util.VisibilityModeConvertor"/>           
