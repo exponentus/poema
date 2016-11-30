@@ -16,7 +16,7 @@
         <smtpuser>mynameis.m@mail.ru</smtpuser>
         <smtppassword>mynameis.mmynameis.m</smtppassword>
     </mail>
-    <slack mode="ON">
+    <slack mode="OFF">
         <token></token>
     </slack>
    

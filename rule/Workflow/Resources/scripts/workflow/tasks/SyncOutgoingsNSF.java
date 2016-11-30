@@ -43,18 +43,19 @@ public class SyncOutgoingsNSF extends ImportNSF {
 	private static final String VID_CATEGORY = "01. Входящие";
 	private static final String TMP_FIELD_NAME = "outgoing_tmp_file";
 	private static final String HAR_CATEGORY = "ЦОД";
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Outgoing> entities = new HashMap<>();
-		OrganizationDAO oDao = new OrganizationDAO(ses);
 		try {
+			OrganizationDAO oDao = new OrganizationDAO(ses);
+			
 			OutgoingDAO dao = new OutgoingDAO(ses);
 			DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
 			DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
-			
+
 			ViewEntryCollection vec = getAllEntries("outgoing.nsf");
 			ViewEntry entry = vec.getFirstEntry();
 			ViewEntry tmpEntry = null;
@@ -81,7 +82,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							entity.setAuthor(dummyUser);
 						}
-
+						
 						String vid = doc.getItemValueString("Vid");
 						DocumentType docType = dtDao.findByNameAndCategory(VID_CATEGORY, vid);
 						if (docType != null) {
@@ -89,7 +90,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
 						}
-
+						
 						String har = doc.getItemValueString("Har");
 						DocumentSubject docSubj = dsDao.findByNameAndCategory(HAR_CATEGORY, har);
 						if (docSubj != null) {
@@ -97,7 +98,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
 						}
-
+						
 						String corrId = doc.getItemValueString("CorrID");
 						if (!corrId.isEmpty()) {
 							Organization org = oDao.findByExtKey(corrId);
@@ -105,10 +106,10 @@ public class SyncOutgoingsNSF extends ImportNSF {
 								entity.setRecipient(org);
 							}
 						}
-
+						
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 140));
 						entity.setBody(doc.getItemValueString("BriefContent"));
-
+						
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
 						Vector<?> atts = body.getEmbeddedObjects();
@@ -121,7 +122,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 								TempFileCleaner.addFileToDelete(path);
 							}
 						}
-
+						
 						List<Attachment> attachments = new ArrayList<>();
 						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
@@ -136,7 +137,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
-			
+
 			logger.infoLogEntry("has been found " + entities.size() + " records");
 			for (Entry<String, Outgoing> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
@@ -148,5 +149,5 @@ public class SyncOutgoingsNSF extends ImportNSF {
 		}
 		logger.infoLogEntry("done...");
 	}
-
+	
 }

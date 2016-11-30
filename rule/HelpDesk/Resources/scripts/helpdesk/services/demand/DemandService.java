@@ -51,36 +51,41 @@ public class DemandService extends RestProvider {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getViewPage() {
+		Outcome outcome = new Outcome();
 		_Session session = getSession();
 		int pageSize = session.pageSize;
-		
-		_SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
-		DemandDAO dao = new DemandDAO(session);
-		ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
-		
-		_ActionBar actionBar = new _ActionBar(session);
-		_Action newDocAction = new _Action("add_new", "", "new_demand");
-		actionBar.addAction(newDocAction);
-		
-		_ColumnOptions colOpts = new _ColumnOptions();
-		colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-		colOpts.add("title", "title", "text", "both", "vw-name");
-		colOpts.add("", "hasAttachments", "attachment", "", "vw-icon");
-		colOpts.add("status", "status", "translate", "", "vw-status");
-		colOpts.add("status_date", "statusDate", "date", "", "vw-date");
-		colOpts.add("demand_type", "demandType", "localizedName", "", "vw-demand-type");
-		colOpts.add("customer", "customer", "localizedName", "", "vw-customer");
-		colOpts.add("tags", "tags", "localizedName", "", "vw-tags");
-		
-		//
-		Outcome outcome = new Outcome();
-		outcome.setId("demands");
-		outcome.setTitle("demands");
-		outcome.addPayload(actionBar);
-		outcome.addPayload(colOpts);
-		outcome.addPayload(vp);
-		
-		return Response.ok(outcome).build();
+		try {
+			_SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
+			DemandDAO dao = new DemandDAO(session);
+			ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
+
+			_ActionBar actionBar = new _ActionBar(session);
+			_Action newDocAction = new _Action("add_new", "", "new_demand");
+			actionBar.addAction(newDocAction);
+
+			_ColumnOptions colOpts = new _ColumnOptions();
+			colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+			colOpts.add("title", "title", "text", "both", "vw-name");
+			colOpts.add("", "hasAttachments", "attachment", "", "vw-icon");
+			colOpts.add("status", "status", "translate", "", "vw-status");
+			colOpts.add("status_date", "statusDate", "date", "", "vw-date");
+			colOpts.add("demand_type", "demandType", "localizedName", "", "vw-demand-type");
+			colOpts.add("customer", "customer", "localizedName", "", "vw-customer");
+			colOpts.add("tags", "tags", "localizedName", "", "vw-tags");
+
+			//
+
+			outcome.setId("demands");
+			outcome.setTitle("demands");
+			outcome.addPayload(actionBar);
+			outcome.addPayload(colOpts);
+			outcome.addPayload(vp);
+
+			return Response.ok(outcome).build();
+		} catch (DAOException e) {
+			logError(e);
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+		}
 	}
 	
 	/*
@@ -108,37 +113,41 @@ public class DemandService extends RestProvider {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") String id) {
+		Outcome outcome = new Outcome();
 		_Session session = getSession();
 		Demand entity;
-		
-		boolean isNew = "new".equals(id);
-		if (isNew) {
-			entity = new Demand();
-			entity.setAuthor(session.getUser());
-			entity.setTitle("");
-			entity.setBody("");
-			entity.setStatus(DemandStatusType.DRAFT);
-			try {
-				DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
-				entity.setDemandType(demandTypeDAO.findByName("bug"));
-			} catch (DAOException e) {
-				Server.logger.errorLogEntry(e);
+		try {
+			boolean isNew = "new".equals(id);
+			if (isNew) {
+				entity = new Demand();
+				entity.setAuthor(session.getUser());
+				entity.setTitle("");
+				entity.setBody("");
+				entity.setStatus(DemandStatusType.DRAFT);
+				try {
+					DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
+					entity.setDemandType(demandTypeDAO.findByName("bug"));
+				} catch (DAOException e) {
+					Server.logger.errorLogEntry(e);
+				}
+			} else {
+				DemandDAO dao = new DemandDAO(session);
+				entity = dao.findById(id);
 			}
-		} else {
-			DemandDAO dao = new DemandDAO(session);
-			entity = dao.findById(id);
+			
+			outcome.setId(id);
+			outcome.addPayload(entity);
+			outcome.addPayload(getActionBar(session, entity));
+			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+			if (!isNew) {
+				outcome.addPayload(new ACL(entity));
+			}
+
+			return Response.ok(outcome).build();
+		} catch (DAOException e) {
+			logError(e);
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
 		}
-		
-		Outcome outcome = new Outcome();
-		outcome.setId(id);
-		outcome.addPayload(entity);
-		outcome.addPayload(getActionBar(session, entity));
-		outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
-		if (!isNew) {
-			outcome.addPayload(new ACL(entity));
-		}
-		
-		return Response.ok(outcome).build();
 	}
 	
 	/*
@@ -218,16 +227,21 @@ public class DemandService extends RestProvider {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("id") String id) {
 		_Session ses = getSession();
-		DemandDAO dao = new DemandDAO(ses);
-		Demand entity = dao.findById(id);
-		if (entity != null) {
-			try {
-				dao.delete(entity);
-			} catch (SecureException | DAOException e) {
-				return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		try {
+			DemandDAO dao = new DemandDAO(ses);
+			Demand entity = dao.findById(id);
+			if (entity != null) {
+				try {
+					dao.delete(entity);
+				} catch (SecureException | DAOException e) {
+					return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+				}
 			}
+			return Response.noContent().build();
+		} catch (DAOException e) {
+			logError(e);
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
-		return Response.noContent().build();
 	}
 	
 	/*
@@ -237,10 +251,15 @@ public class DemandService extends RestProvider {
 	@Path("{id}/attachments/{attachId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		DemandDAO demandDAO = new DemandDAO(getSession());
-		Demand demand = demandDAO.findById(id);
-		
-		return getAttachment(demand, attachId);
+		try {
+			DemandDAO demandDAO = new DemandDAO(getSession());
+			Demand demand = demandDAO.findById(id);
+
+			return getAttachment(demand, attachId);
+		} catch (DAOException e) {
+			logError(e);
+			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+		}
 	}
 	
 	/*
