@@ -54,9 +54,9 @@
         <entry lang="ENG">Date</entry>
     </sentence>
        <sentence mode="on" keyword="sender_reg_number">
-        <entry lang="RUS">Исходящий</entry>
+        <entry lang="RUS">№ Исходящeго</entry>
         <entry lang="KAZ"></entry>
-        <entry lang="ENG">Outgoing</entry>
+        <entry lang="ENG">Outgoing №</entry>
     </sentence>
    
     <sentence mode="on" keyword="title">

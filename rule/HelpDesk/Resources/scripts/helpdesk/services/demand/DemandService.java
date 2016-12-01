@@ -21,6 +21,7 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
@@ -41,10 +42,10 @@ import staff.dao.OrganizationDAO;
 
 @Path("demands")
 public class DemandService extends RestProvider {
-	
+
 	public DemandService() {
 	}
-	
+
 	/*
 	 * Get view
 	 */
@@ -58,11 +59,11 @@ public class DemandService extends RestProvider {
 			_SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
 			DemandDAO dao = new DemandDAO(session);
 			ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
-
+			
 			_ActionBar actionBar = new _ActionBar(session);
 			_Action newDocAction = new _Action("add_new", "", "new_demand");
 			actionBar.addAction(newDocAction);
-
+			
 			_ColumnOptions colOpts = new _ColumnOptions();
 			colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
 			colOpts.add("title", "title", "text", "both", "vw-name");
@@ -72,22 +73,22 @@ public class DemandService extends RestProvider {
 			colOpts.add("demand_type", "demandType", "localizedName", "", "vw-demand-type");
 			colOpts.add("customer", "customer", "localizedName", "", "vw-customer");
 			colOpts.add("tags", "tags", "localizedName", "", "vw-tags");
-
+			
 			//
-
+			
 			outcome.setId("demands");
 			outcome.setTitle("demands");
 			outcome.addPayload(actionBar);
 			outcome.addPayload(colOpts);
 			outcome.addPayload(vp);
-
+			
 			return Response.ok(outcome).build();
 		} catch (DAOException e) {
 			logError(e);
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
 		}
 	}
-	
+
 	/*
 	 * delete all selected
 	 */
@@ -105,7 +106,7 @@ public class DemandService extends RestProvider {
 	//        }
 	//        return Response.ok().build();
 	//    }
-	
+
 	/*
 	 * Get entity by id
 	 */
@@ -134,7 +135,7 @@ public class DemandService extends RestProvider {
 				DemandDAO dao = new DemandDAO(session);
 				entity = dao.findById(id);
 			}
-			
+
 			outcome.setId(id);
 			outcome.addPayload(entity);
 			outcome.addPayload(getActionBar(session, entity));
@@ -142,14 +143,14 @@ public class DemandService extends RestProvider {
 			if (!isNew) {
 				outcome.addPayload(new ACL(entity));
 			}
-
+			
 			return Response.ok(outcome).build();
 		} catch (DAOException e) {
 			logError(e);
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
 		}
 	}
-	
+
 	/*
 	 * Save entity
 	 */
@@ -159,27 +160,27 @@ public class DemandService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response save(@PathParam("id") String id, Demand demandForm) {
 		_Session session = getSession();
-		
+
 		_Validation validation = validate(demandForm);
 		if (validation.hasError()) {
 			// return error
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
 		}
-		
+
 		Demand demand;
 		try {
 			ProjectDAO projectDAO = new ProjectDAO(session);
 			OrganizationDAO organizationDAO = new OrganizationDAO(session);
 			DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
 			DemandDAO demandDAO = new DemandDAO(session);
-			
+
 			boolean isNew = "new".equals(id);
 			if (isNew) {
 				demand = new Demand();
 			} else {
 				demand = demandDAO.findById(id);
 			}
-			
+
 			demand.setTitle(demandForm.getTitle());
 			if (demandForm.getCustomer() != null) {
 				demand.setCustomer(organizationDAO.findById(demandForm.getCustomer().getId()));
@@ -198,7 +199,7 @@ public class DemandService extends RestProvider {
 			demand.setBody(demandForm.getBody());
 			demand.setTags(demandForm.getTags());
 			demand.setAttachments(getActualAttachments(demand.getAttachments()));
-			
+
 			if (isNew) {
 				RegNum rn = new RegNum();
 				demand.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.prefix));
@@ -211,14 +212,14 @@ public class DemandService extends RestProvider {
 		} catch (SecureException | DAOException e) {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
-		
+
 		Outcome outcome = new Outcome();
 		outcome.setId(id);
 		outcome.addPayload(demand);
-		
+
 		return Response.ok(outcome).build();
 	}
-	
+
 	/*
 	 * Delete entity
 	 */
@@ -243,7 +244,7 @@ public class DemandService extends RestProvider {
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 	}
-	
+
 	/*
 	 * Get entity attachment or _thumbnail
 	 */
@@ -254,14 +255,14 @@ public class DemandService extends RestProvider {
 		try {
 			DemandDAO demandDAO = new DemandDAO(getSession());
 			Demand demand = demandDAO.findById(id);
-
+			
 			return getAttachment(demand, attachId);
 		} catch (DAOException e) {
 			logError(e);
 			return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
 		}
 	}
-	
+
 	/*
 	 * Action bar
 	 */
@@ -274,26 +275,26 @@ public class DemandService extends RestProvider {
 			actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
 		}
 		// }
-		
+
 		return actionBar;
 	}
-	
+
 	/*
 	 * Validate entity
 	 */
 	private _Validation validate(Demand demandForm) {
 		_Validation ve = new _Validation();
-		
+
 		if (demandForm.getTitle() == null || demandForm.getTitle().isEmpty()) {
 			ve.addError("title", "required", "field_is_empty");
 		}
 		if (demandForm.getDemandType() == null) {
 			ve.addError("demandType", "required", "field_is_empty");
 		}
-		
+
 		return ve;
 	}
-	
+
 	@Override
 	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
 		sd.setName(getClass().getName());
