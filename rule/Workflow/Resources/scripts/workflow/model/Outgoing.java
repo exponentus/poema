@@ -62,6 +62,8 @@ public class Outgoing extends HierarchicalEntity<UUID> {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
+	private Incoming responseTo;
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "outgoing_attachments", joinColumns = {
 			@JoinColumn(name = "outgoing_id") }, inverseJoinColumns = {
@@ -170,6 +172,14 @@ public class Outgoing extends HierarchicalEntity<UUID> {
 		this.body = body;
 	}
 
+	public Incoming getResponseTo() {
+		return responseTo;
+	}
+	
+	public void setResponseTo(Incoming responseTo) {
+		this.responseTo = responseTo;
+	}
+	
 	public List<Tag> getTags() {
 		return tags;
 	}

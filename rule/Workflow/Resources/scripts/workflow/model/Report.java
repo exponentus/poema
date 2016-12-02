@@ -39,10 +39,6 @@ public class Report extends HierarchicalEntity<UUID> {
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 	
-	@FTSearchable
-	@Column(length = 140)
-	private String title;
-	
 	@JsonIgnore
 	@NotNull
 	@ManyToOne
@@ -73,16 +69,6 @@ public class Report extends HierarchicalEntity<UUID> {
 	
 	public void setAppliedRegDate(Date appliedRegDate) {
 		this.appliedRegDate = appliedRegDate;
-	}
-	
-	@Override
-	public String getTitle() {
-		return title;
-	}
-	
-	@Override
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	public Assignment getParent() {

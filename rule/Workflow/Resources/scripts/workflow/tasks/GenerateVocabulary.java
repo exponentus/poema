@@ -1,7 +1,7 @@
 package workflow.tasks;
 
-import administrator.dao.LanguageDAO;
-import administrator.model.Language;
+import java.io.File;
+
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.localization.Vocabulary;
 import com.exponentus.localization.VocabularyDTO;
@@ -10,7 +10,8 @@ import com.exponentus.scripting.event._Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 
-import java.io.File;
+import administrator.dao.LanguageDAO;
+import administrator.model.Language;
 
 @Command(name = "wf_gen_voc", trigger = Trigger.POST_APP_START)
 public class GenerateVocabulary extends _Do {
@@ -25,10 +26,10 @@ public class GenerateVocabulary extends _Do {
 		for (Language lang : dao.findAll()) {
 			VocabularyDTO vocabularyDTO = VocabularyDTO.valueOf(vocabulary, lang.getCode());
 			String jsonFilePath = i18nPath + lang.getName().toLowerCase() + ".json";
-			logger.infoLogEntry("write to \"" + jsonFilePath + "\"");
+			//logger.infoLogEntry("write to \"" + jsonFilePath + "\"");
 			writeJS(vocabularyDTO.getWords(), jsonFilePath);
 		}
 
-		logger.infoLogEntry("done...");
+		//logger.infoLogEntry("done...");
 	}
 }

@@ -28,6 +28,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.user.AnonymousUser;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.Tag;
@@ -48,15 +49,12 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
 	@Column(name = "applied_author", nullable = false, updatable = true)
 	protected Long appliedAuthor;
 
-	protected Long recipient;
+	@Column(nullable = false)
+	protected Long recipient = AnonymousUser.ID;
 
 	@Embedded
 	private Approval approval;
-	
-	@FTSearchable
-	@Column(length = 140)
-	private String title;
-	
+
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
 	private String body;
@@ -112,16 +110,6 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
 	
 	public void setApproval(Approval approval) {
 		this.approval = approval;
-	}
-	
-	@Override
-	public String getTitle() {
-		return title;
-	}
-
-	@Override
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	public String getBody() {

@@ -43,7 +43,7 @@ import workflow.model.embedded.Block;
 @Command(name = "import_sz_nsf")
 public class SyncOfficeMemoNSF extends ImportNSF {
 	private static final String TMP_FIELD_NAME = "officememo_tmp_file";
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, OfficeMemo> entities = new HashMap<>();
@@ -51,7 +51,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
-			
+
 			Database prjDb = getDatabase("docprojects.nsf");
 			View prjView = prjDb.getView("(In)");
 			ViewEntryCollection vec = getAllEntries("workdoc.nsf");
@@ -74,21 +74,21 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						} catch (NotesException ne) {
 							logger.errorLogEntry(ne.text);
 						}
-						
+
 						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							entity.setAuthor(author);
 						} else {
 							entity.setAuthor(dummyUser);
 						}
-						
+
 						IUser<Long> sender = uDao.findByExtKey(doc.getItemValueString("WorkDocSenderNA"));
 						if (sender != null) {
 							entity.setAppliedAuthor(sender.getId());
 						} else {
 							entity.setAppliedAuthor(dummyUser.getId());
 						}
-						
+
 						IUser<Long> signer = uDao.findByExtKey(doc.getItemValueString("WorkDocSignerNA"));
 						Approver approver = new Approver();
 						if (signer != null) {
@@ -96,7 +96,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						} else {
 							approver.setApproverUser(dummyUser.getId());
 						}
-
+						
 						List<Block> blocks = new ArrayList<Block>();
 						Block block = new Block();
 						block.setType(ApprovalType.SIGNING);
@@ -107,17 +107,17 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						Approval approval = new Approval();
 						approval.setBlocks(blocks);
 						entity.setApproval(approval);
-						
+
 						IUser<Long> recipient = uDao.findByExtKey(doc.getItemValueString("RecipientOnlyNA"));
 						if (recipient != null) {
 							entity.setRecipient(recipient.getId());
 						} else {
 							entity.setRecipient(dummyUser.getId());
 						}
-						
+
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 140));
 						entity.setBody(doc.getItemValueString("BriefContent"));
-						
+
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
 						Vector<?> atts = body.getEmbeddedObjects();
@@ -130,7 +130,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 								TempFileCleaner.addFileToDelete(path);
 							}
 						}
-						
+
 						List<Attachment> attachments = new ArrayList<>();
 						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
@@ -138,7 +138,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						}
 						entity.setAttachments(attachments);
 						normalizeACL(uDao, entity, doc);
-
+						
 						Document prjDoc = prjView.getDocumentByKey(entity.getRegNumber());
 						if (prjDoc != null) {
 							DocumentCollection col = prjDoc.getResponses();
@@ -169,20 +169,20 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 										Block b = new Block();
 										b.setType(ApprovalType.SIGNING);
 									} else if (respForm.equals("InfoForm")) {
-
-									} else if (respForm.equals("ExtraForm")) {
 										
-									} else if (respForm.equals("DocLink")) {
+									} else if (respForm.equals("ExtraForm")) {
 
+									} else if (respForm.equals("DocLink")) {
+										
 									}
 								}
-
+								
 								tmpDoc = col.getNextDocument();
 								respDoc.recycle();
 								respDoc = tmpDoc;
 							}
 						}
-
+						
 						entities.put(unId, entity);
 					}
 				}
@@ -190,7 +190,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
-
+			
 			logger.infoLogEntry("has been found " + entities.size() + " records");
 			for (Entry<String, OfficeMemo> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
@@ -202,5 +202,5 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 		}
 		logger.infoLogEntry("done...");
 	}
-	
+
 }
