@@ -5,12 +5,14 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.IAppFile;
 import com.exponentus.dataengine.jpa.TempFile;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
@@ -27,10 +29,46 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("office-memos/{id}")
+@Path("office-memos")
 public class OfficeMemoService extends RestProvider {
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getView() {
+        _Session session = getSession();
+        int pageSize = session.pageSize;
+
+        OfficeMemoDAO dao = new OfficeMemoDAO(session);
+        ViewPage vp = dao.findViewPage(getRequestParameter().getPage(), pageSize);
+
+        //
+        _ActionBar actionBar = new _ActionBar(session);
+        _Action newDocAction = new _Action("add_new", "", "new_incoming");
+        newDocAction.setURL("new");
+        actionBar.addAction(newDocAction);
+        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+
+        // column options
+        _ColumnOptions colOpts = new _ColumnOptions();
+        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
+        colOpts.add("", "attachment", "attachment", "", "vw-icon");
+        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-date");
+        colOpts.add("approval", "approval", "localizedName", "both", "vw-name");
+        colOpts.add("content", "content", "text", "both", "vw-content");
+        colOpts.add("summary", "summary", "text", "", "vw-summary");
+
+        Outcome outcome = new Outcome();
+        outcome.setId("office-memos");
+        outcome.setTitle("office_memo");
+        outcome.addPayload(actionBar);
+        outcome.addPayload(colOpts);
+        outcome.addPayload(vp);
+
+        return Response.ok(outcome).build();
+    }
+
+    @GET
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId) {
         _Session ses = getSession();
@@ -57,6 +95,7 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId,
@@ -111,6 +150,7 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @DELETE
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
@@ -130,7 +170,7 @@ public class OfficeMemoService extends RestProvider {
      * Get entity attachment or _thumbnail
      */
     @GET
-    @Path("attachments/{attachId}")
+    @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         OfficeMemoDAO dao = new OfficeMemoDAO(getSession());
@@ -140,9 +180,9 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @DELETE
-    @Path("attachments/{attachmentId}")
-    public Response deleteAttachment(@PathParam("id") String id,
-                                     @PathParam("attachmentId") String attachmentId) {
+    @Path("{id}/attachments/{attachmentId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
         return deleteAttachmentFromSessionFormAttachments(attachmentId);
     }
 

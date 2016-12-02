@@ -31,7 +31,7 @@ public class Assignment extends HierarchicalEntity<UUID> {
     private List<Report> reports;
 
     @Column(name = "applied_author", nullable = false, updatable = true)
-    protected Long appliedAuthor;
+    private Long appliedAuthor;
 
     @FTSearchable
     @Column(length = 140)
