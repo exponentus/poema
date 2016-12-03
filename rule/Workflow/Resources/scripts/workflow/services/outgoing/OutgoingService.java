@@ -1,10 +1,7 @@
 package workflow.services.outgoing;
 
 import com.exponentus.common.model.ACL;
-import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.IAppFile;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -13,7 +10,6 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._ColumnOptions;
-import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
@@ -30,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 
 @Path("outgoings")
 public class OutgoingService extends RestProvider {
@@ -74,7 +69,7 @@ public class OutgoingService extends RestProvider {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId) {
+    public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Outgoing entity;
 
@@ -90,7 +85,7 @@ public class OutgoingService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload("fsId", fsId);
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -102,8 +97,7 @@ public class OutgoingService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, @QueryParam(EnvConst.FSID_FIELD_NAME) String fsId,
-                         Outgoing outgoingForm) {
+    public Response save(@PathParam("id") String id, Outgoing outgoingForm) {
         _Session ses = getSession();
 
         _Validation validation = validate(outgoingForm);
@@ -149,7 +143,7 @@ public class OutgoingService extends RestProvider {
                 entity.setRecipient(null);
             }
             entity.setBody(outgoingForm.getBody());
-            entity.setAttachments(getActualAttachments(ses, fsId, entity.getAttachments()));
+            entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {
                 IUser<Long> user = ses.getUser();
@@ -224,26 +218,6 @@ public class OutgoingService extends RestProvider {
         }
 
         return ve;
-    }
-
-    // TODO refactor
-    protected List<Attachment> getActualAttachments(_Session ses, String fsId, List<Attachment> atts) {
-        _FormAttachments formFiles = ses.getFormAttachments(fsId);
-
-        for (TempFile tmpFile : formFiles.getFiles()) {
-            Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
-            a.setFieldName(a.getDefaultFormName());
-            atts.add(a);
-        }
-
-        List<TempFile> toDelete = formFiles.getDeletedFiles();
-        if (toDelete.size() > 0) {
-            for (IAppFile fn : toDelete) {
-                atts.remove(fn);
-            }
-        }
-
-        return atts;
     }
 
     @Override

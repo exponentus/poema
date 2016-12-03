@@ -3,6 +3,7 @@ package workflow.services.incoming;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
@@ -99,7 +100,7 @@ public class IncomingService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload("fsId", getRequestParameter().getFormSesId());
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
