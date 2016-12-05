@@ -38,6 +38,7 @@
   "close" : "Close",
   "email" : "E-mail",
   "session_was_lost" : "User session was expired",
+  "open_document" : "Open document",
   "manager" : "Manager",
   "subtasks" : "Subtasks",
   "demand_type" : "Demand type",

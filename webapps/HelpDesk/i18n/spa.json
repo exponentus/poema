@@ -38,6 +38,7 @@
   "close" : "close",
   "email" : "email",
   "session_was_lost" : "session_was_lost",
+  "open_document" : "open_document",
   "manager" : "Gestor",
   "subtasks" : "Subtareas",
   "demand_type" : "Demand type",

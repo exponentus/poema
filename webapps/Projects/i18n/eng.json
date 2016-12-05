@@ -36,6 +36,7 @@
   "close" : "Close",
   "email" : "E-mail",
   "session_was_lost" : "User session was expired",
+  "open_document" : "Open document",
   "manager" : "Manager",
   "subtasks" : "Subtasks",
   "new_subtask" : "New subtask",

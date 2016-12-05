@@ -62,6 +62,7 @@
   "email" : "E-mail",
   "message_too_short" : "The message is too short",
   "session_was_lost" : "User session was expired",
+  "open_document" : "Open document",
   "authorization_was_failed" : "Authorization was failed",
   "ft_search_return_null" : "Documnets have been not found, keyword",
   "filter" : "Filter",

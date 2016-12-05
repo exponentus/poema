@@ -62,6 +62,7 @@
   "email" : "Электронная почта",
   "message_too_short" : "Сообщение слишком короткое",
   "session_was_lost" : "Сессия была сброшена сервером",
+  "open_document" : "Открыть документ",
   "authorization_was_failed" : "Авторизация неудачна",
   "ft_search_return_null" : "Документы не найдены, строка поиска",
   "filter" : "Фильтр",

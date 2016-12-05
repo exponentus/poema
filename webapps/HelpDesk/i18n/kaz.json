@@ -38,6 +38,7 @@
   "close" : "Жабу",
   "email" : "Электронная почта",
   "session_was_lost" : "session_was_lost",
+  "open_document" : "open_document",
   "manager" : "manager",
   "subtasks" : "subtasks",
   "demand_type" : "demand_type",
