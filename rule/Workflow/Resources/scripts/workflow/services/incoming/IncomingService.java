@@ -10,7 +10,6 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
-import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
@@ -60,22 +59,10 @@ public class IncomingService extends RestProvider {
         actionBar.addAction(newDocAction);
         actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
-        // column options
-        _ColumnOptions colOpts = new _ColumnOptions();
-        colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-        colOpts.add("title", "title", "text", "", "vw-title");
-        colOpts.add("", "attachment", "attachment", "", "vw-icon");
-        colOpts.add("sender", "sender", "localizedName", "both", "vw-sender");
-        colOpts.add("sender_applied_reg_date", "senderAppliedRegDate", "date", "both", "vw-date");
-        colOpts.add("doc_type", "docType", "localizedName", "both", "vw-doc-type");
-        colOpts.add("doc_language", "docLanguage", "localizedName", "both", "vw-name");
-        colOpts.add("applied_reg_date", "appliedRegDate", "date", "both", "vw-reg-date");
-
         Outcome outcome = new Outcome();
         outcome.setId("incomings");
         outcome.setTitle("incoming_documents");
         outcome.addPayload(actionBar);
-        outcome.addPayload(colOpts);
         outcome.addPayload(vp);
 
         return Response.ok(outcome).build();
@@ -223,9 +210,10 @@ public class IncomingService extends RestProvider {
     private _ActionBar getActionBar(_Session session, Incoming entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
-        actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
+        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
         // }
 

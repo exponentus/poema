@@ -2,6 +2,7 @@ package workflow.services.officememo;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
@@ -9,6 +10,7 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -32,6 +34,35 @@ import java.util.List;
 public class OfficeMemoService extends RestProvider {
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getView() {
+        System.out.println(getRequestParameter());
+
+        _Session session = getSession();
+        int pageSize = session.pageSize;
+        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
+
+        OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
+        ViewPage vp = officeMemoDAO.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
+
+        //
+        _ActionBar actionBar = new _ActionBar(session);
+        _Action newDocAction = new _Action("add_new", "", "new_incoming");
+        newDocAction.setURL("new");
+        actionBar.addAction(newDocAction);
+        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+
+        Outcome outcome = new Outcome();
+        outcome.setId("office-memos");
+        outcome.setTitle("office_memo_documents");
+        outcome.addPayload(actionBar);
+        outcome.addPayload(vp);
+
+        return Response.ok(outcome).build();
+    }
+
+    @GET
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
@@ -67,6 +98,7 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, OfficeMemo form) {
@@ -120,6 +152,7 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @DELETE
+    @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
@@ -139,7 +172,7 @@ public class OfficeMemoService extends RestProvider {
      * Get entity attachment or _thumbnail
      */
     @GET
-    @Path("attachments/{attachId}")
+    @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         OfficeMemoDAO dao = new OfficeMemoDAO(getSession());
@@ -149,7 +182,7 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @DELETE
-    @Path("attachments/{attachmentId}")
+    @Path("{id}/attachments/{attachmentId}")
     public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
         return deleteAttachmentFromSessionFormAttachments(attachmentId);
     }
@@ -160,9 +193,10 @@ public class OfficeMemoService extends RestProvider {
     private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
         _ActionBar actionBar = new _ActionBar(session);
         // if (incoming.isEditable()) {
-        actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
+        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
+        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
         // }
 
