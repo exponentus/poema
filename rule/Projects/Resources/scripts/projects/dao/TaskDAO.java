@@ -241,9 +241,9 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         Predicate conditionR = cbr.equal(requestRoot.get("task"), task);
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Request.class)) {
-            conditionR = cbr.and(requestRoot.get("readers").in(user.getId()), conditionR);
-        }
+//        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Request.class)) {
+//            conditionR = cbr.and(requestRoot.get("readers").in(user.getId()), conditionR);
+//        }
 
         cqr.where(conditionR);
         cqr.orderBy(cbr.desc(requestRoot.get("regDate")));
