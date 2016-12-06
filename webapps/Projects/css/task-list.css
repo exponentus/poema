@@ -23,8 +23,8 @@ div.task-list__title {
 }
 
 .task-list__assignee {
-    min-width: 80px;
-    width: 10%;
+    min-width: 120px;
+    width: 20%;
 }
 
 .task-list__start_date {
