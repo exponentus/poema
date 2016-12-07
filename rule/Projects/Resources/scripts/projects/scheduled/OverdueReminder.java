@@ -23,6 +23,7 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
+import projects.other.Messages;
 import reference.dao.TagDAO;
 import reference.model.Tag;
 
@@ -63,7 +64,7 @@ public class OverdueReminder extends _DoScheduled {
 	
 	private void processRemind(ViewPage<Task> result, _Session session) {
 		for (Task task : result.getResult()) {
-			
+			new Messages(getCurrentAppEnv()).sendOfTaskOverdue(task);
 		}
 	}
 	
@@ -89,7 +90,7 @@ public class OverdueReminder extends _DoScheduled {
 			memo.addVar("author", task.getAuthor().getUserName());
 			memo.addVar("status", getCurrentAppEnv().vocabulary.getWord(task.getStatus().name(), lang));
 			memo.addVar("url", getCurrentAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
-			
+
 			if (user != null) {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
