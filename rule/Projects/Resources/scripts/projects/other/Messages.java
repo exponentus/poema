@@ -349,4 +349,51 @@ public class Messages {
 			}
 		}
 	}
+
+	public void sendOfTaskOverdue(Task task) {
+		if (task.getAssignee() != task.getAuthorId()) {
+			try {
+				String msgTemplate = "task_overdue";
+				UserDAO userDAO = new UserDAO();
+
+				Memo memo = new Memo();
+				memo.addVar("regNumber", task.getRegNumber());
+				memo.addVar("title", task.getTitle());
+				IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+				memo.addVar("assignee", assigneeUser.getUserName());
+				memo.addVar("author", task.getAuthor().getUserName());
+
+				User user = null;
+
+				try {
+					user = (User) assigneeUser;
+					lang = user.getDefaultLang();
+				} catch (ClassCastException e) {
+
+				}
+
+				memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+
+				if (user != null) {
+					String slackAddr = user.getSlack();
+					if (slackAddr != null && !slackAddr.equals("")) {
+						SlackAgent sa = new SlackAgent();
+						String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
+						if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+							return;
+						}
+					}
+
+					List<String> recipients = new ArrayList<>();
+					recipients.add(user.getEmail());
+					recipients.add(task.getAuthor().getEmail());
+					MailAgent ma = new MailAgent();
+					ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_overdued_task", lang),
+							memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
+				}
+			} catch (Exception e) {
+				logger.errorLogEntry(e);
+			}
+		}
+	}
 }
