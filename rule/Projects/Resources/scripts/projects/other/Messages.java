@@ -355,7 +355,6 @@ public class Messages {
 			try {
 				String msgTemplate = "task_overdue";
 				UserDAO userDAO = new UserDAO();
-
 				Memo memo = new Memo();
 				memo.addVar("regNumber", task.getRegNumber());
 				memo.addVar("title", task.getTitle());
