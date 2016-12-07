@@ -1,9 +1,3 @@
-/* .project-list */
-
-projects .tree-indentation {
-    display: none;
-}
-
 .project-list__name {
     min-width: 80px;
     width: 25%;
@@ -24,19 +18,11 @@ projects .tree-indentation {
     width: 130px;
 }
 
-.project-list__manager {
-    min-width: 130px;
-    width: 130px;
-}
-
-.project-list__programmer {
-    min-width: 130px;
-    width: 130px;
-}
-
+.project-list__manager,
+.project-list__programmer,
 .project-list__tester {
     min-width: 130px;
-    width: 130px;
+    width: 20%;
 }
 
 @media ( max-width: 768px) {

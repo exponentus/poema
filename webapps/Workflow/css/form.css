@@ -17,15 +17,6 @@
     margin-top: 1em;
 }
 
-.has-error .input,
-.has-error input[required]:not(:focus),
-.has-error select.required:invalid,
-.has-error select[required]:invalid,
-.has-error textarea[required]:not(:focus) {
-    box-shadow: 0 0 1px rgba(255, 0, 0, 0.3);
-    border-color: #FF845D;
-}
-
 .record-author {
     color: #666;
     font-size: .9em;
