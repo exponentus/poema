@@ -9,7 +9,6 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.localization.LanguageCode;
-import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
@@ -32,17 +31,17 @@ public class OverdueReminder extends _DoScheduled {
 	private Date current = new Date();
 	private Tag tag;
 	private TaskDAO tDao;
-	
+
 	@Override
 	public void doEvery5Min(AppEnv appEnv, _Session session) {
-		
+
 	}
-	
+
 	@Override
 	public void doEvery1Hour(AppEnv appEnv, _Session session) {
-		
+
 	}
-	
+
 	@Override
 	public void doEveryNight(AppEnv appEnv, _Session session) {
 		try {
@@ -61,27 +60,27 @@ public class OverdueReminder extends _DoScheduled {
 			Server.logger.errorLogEntry(e);
 		}
 	}
-	
+
 	private void processRemind(ViewPage<Task> result, _Session session) {
 		for (Task task : result.getResult()) {
 			new Messages(getCurrentAppEnv()).sendOfTaskOverdue(task);
 		}
 	}
-	
+
 	private void sendNotify(_Session session, Task task) {
 		try {
 			UserDAO userDAO = new UserDAO(session);
 			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			User user = null;
-			
+
 			LanguageCode lang = EnvConst.getDefaultLang();
 			try {
 				user = (User) assigneeUser;
 				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
-				
+
 			}
-			
+
 			Memo memo = new Memo();
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("regNumber", task.getRegNumber());
@@ -90,20 +89,20 @@ public class OverdueReminder extends _DoScheduled {
 			memo.addVar("author", task.getAuthor().getUserName());
 			memo.addVar("status", getCurrentAppEnv().vocabulary.getWord(task.getStatus().name(), lang));
 			memo.addVar("url", getCurrentAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang);
-
+			
 			if (user != null) {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(assigneeUser.getEmail());
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
-						memo.getBody(
-								getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
+				//ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
+				//		memo.getBody(
+				//				getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
 			}
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
-		
+
 	}
-	
+
 }
