@@ -10,7 +10,6 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
-import com.exponentus.scripting._ColumnOptions;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
@@ -35,9 +34,6 @@ import javax.ws.rs.core.Response;
 @Path("demands")
 public class DemandService extends RestProvider {
 
-    /*
-     * Get view
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
@@ -53,22 +49,9 @@ public class DemandService extends RestProvider {
             _Action newDocAction = new _Action("add_new", "", "new_demand");
             actionBar.addAction(newDocAction);
 
-            _ColumnOptions colOpts = new _ColumnOptions();
-            colOpts.add("reg_number", "regNumber", "text", "both", "vw-reg-number");
-            colOpts.add("title", "title", "text", "both", "vw-name");
-            colOpts.add("", "hasAttachments", "attachment", "", "vw-icon");
-            colOpts.add("status", "status", "translate", "", "vw-status");
-            colOpts.add("status_date", "statusDate", "date", "", "vw-date");
-            colOpts.add("demand_type", "demandType", "localizedName", "", "vw-demand-type");
-            colOpts.add("customer", "customer", "localizedName", "", "vw-customer");
-            colOpts.add("tags", "tags", "localizedName", "", "vw-tags");
-
-            //
-
             outcome.setId("demands");
             outcome.setTitle("demands");
             outcome.addPayload(actionBar);
-            outcome.addPayload(colOpts);
             outcome.addPayload(vp);
 
             return Response.ok(outcome).build();
@@ -96,9 +79,6 @@ public class DemandService extends RestProvider {
     //        return Response.ok().build();
     //    }
 
-    /*
-     * Get entity by id
-     */
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -140,9 +120,6 @@ public class DemandService extends RestProvider {
         }
     }
 
-    /*
-     * Save entity
-     */
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -209,9 +186,6 @@ public class DemandService extends RestProvider {
         return Response.ok(outcome).build();
     }
 
-    /*
-     * Delete entity
-     */
     @DELETE
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -230,9 +204,6 @@ public class DemandService extends RestProvider {
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -248,9 +219,6 @@ public class DemandService extends RestProvider {
         }
     }
 
-    /*
-     * Delete attachment
-     */
     @DELETE
     @Path("{id}/attachments/{attachmentId}")
     @Produces(MediaType.APPLICATION_JSON)
