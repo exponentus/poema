@@ -1,29 +1,17 @@
-.project-list__name {
-    min-width: 80px;
-    width: 25%;
-}
+.project-list__name {}
 
 .project-list__status {
     min-width: 100px;
     width: 100px;
 }
 
-.project-list__customer {
-    min-width: 80px;
-    width: 20%;
-}
+.project-list__customer {}
 
-.project-list__finish_date {
-    min-width: 130px;
-    width: 130px;
-}
+.project-list__finish_date {}
 
 .project-list__manager,
 .project-list__programmer,
-.project-list__tester {
-    min-width: 130px;
-    width: 20%;
-}
+.project-list__tester {}
 
 @media ( max-width: 768px) {
     .project-list .entries-head {

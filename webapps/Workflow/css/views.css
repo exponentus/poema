@@ -2,30 +2,7 @@
     background: #eee;
 }
 
-.vw-icon {
-    max-width: 22px;
-    min-width: 22px;
-    text-align: center;
-    width: 22px;
-}
-
-.vw-title {
-    min-width: 200px;
-    width: 200px;
-}
-
-.vw-reg-number {
-    max-width: 130px;
-    min-width: 130px;
-    width: 130px;
-}
-
-.vw-date,
-.vw-reg-date {
-    max-width: 120px;
-    min-width: 120px;
-    width: 120px;
-}
+.vw-reg-number {}
 
 .vw-doc-language {
     min-width: 140px;
