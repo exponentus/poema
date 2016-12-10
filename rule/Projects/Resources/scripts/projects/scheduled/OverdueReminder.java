@@ -9,6 +9,7 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
@@ -62,18 +63,56 @@ public class OverdueReminder extends _DoScheduled {
 	}
 
 	private void processRemind(ViewPage<Task> result, _Session session) {
+		List<Task> tasks = new ArrayList<>();
 		for (Task task : result.getResult()) {
-			new Messages(getCurrentAppEnv()).sendOfTaskOverdue(task);
+			//sendNotify(session, task);
+			tasks.add(task);
 		}
+		sendNotify(session, tasks);
 	}
 
-	private void sendNotify(_Session session, Task task) {
+	private void sendNotify(_Session session, List<Task> tasks) {
 		try {
-			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			LanguageCode lang = EnvConst.getDefaultLang();
+			if(tasks.size() > 0) {
+				UserDAO userDAO = new UserDAO(session);
+				List<User> allUsers = userDAO.findAll();
+				for (User user : allUsers) {
+					Memo memo = new Memo();
+					memo.addVar("user", user.getUserName());
+					String body = getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued_title", lang);
+					body += "<TABLE style='border-collapse:collapse; margin:1px 0; width:100%' cellpadding = 10px>";
+					body += getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued_trhead", lang);
+					int tasks_count = 0;
+					for (Task task : tasks) {
+						if(user.getId().equals(task.getAssignee())){
+							body += "<TR>" +
+										"<td style = 'border:1px solid #cdcdcd' width= 80px padding: 10px align=\"center\">"+task.getRegNumber()+"</td>" +
+										"<td style = 'border:1px solid #cdcdcd' width= 150px padding: 10px align=\"center\">"+task.getAuthor().getUserName()+"</td>" +
+										"<td style = 'border:1px solid #cdcdcd' width= 150px padding: 10px align=\"center\">" +
+											"<a href=\"" + getCurrentAppEnv().getURL() + "/" + task.getProject().getURL() + "&lang=" + lang + "\">" + task.getProject().getTitle() + "</a>" +
+										"</td>" +
+										"<td style = 'border:1px solid #cdcdcd' width= 200px><a href=\"" + getCurrentAppEnv().getURL() + "/" + task.getURL() + "&lang=" + lang + "\">" +
+										 task.getTitle() + "</a></td>" +
+									"</TR>";
+							tasks_count++;
+						}
+					}
+					body += "</TABLE>";
+					if(tasks_count > 0){
+
+						List<String> recipients = new ArrayList<>();
+						recipients.add(user.getEmail());
+						MailAgent ma = new MailAgent();
+						ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
+								memo.getBody(body));
+					}
+				}
+			}
+			/*IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
 			User user = null;
 
-			LanguageCode lang = EnvConst.getDefaultLang();
+
 			try {
 				user = (User) assigneeUser;
 				lang = user.getDefaultLang();
@@ -81,7 +120,7 @@ public class OverdueReminder extends _DoScheduled {
 
 			}
 
-			Memo memo = new Memo();
+
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("regNumber", task.getRegNumber());
 			memo.addVar("title", task.getTitle());
@@ -95,10 +134,10 @@ public class OverdueReminder extends _DoScheduled {
 				recipients.add(assigneeUser.getEmail());
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent();
-				//ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
-				//		memo.getBody(
-				//				getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
-			}
+				ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
+						memo.getBody(
+								getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
+			}*/
 		} catch (Exception e) {
 			logger.errorLogEntry(e);
 		}
