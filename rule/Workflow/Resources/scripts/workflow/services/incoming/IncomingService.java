@@ -19,6 +19,7 @@ import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 import reference.dao.DocumentLanguageDAO;
 import reference.dao.DocumentTypeDAO;
+import staff.dao.EmployeeDAO;
 import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OutgoingDAO;
@@ -111,6 +112,7 @@ public class IncomingService extends RestProvider {
 
         try {
             OrganizationDAO organizationDAO = new OrganizationDAO(ses);
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
             DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
@@ -139,6 +141,11 @@ public class IncomingService extends RestProvider {
                 entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
             } else {
                 entity.setSender(null);
+            }
+            if (incomingForm.getAddressee() != null) {
+                entity.setAddressee(employeeDAO.findById(incomingForm.getAddressee().getId()));
+            } else {
+                entity.setAddressee(null);
             }
             if (incomingForm.getResponseTo() != null) {
                 entity.setResponseTo(outgoingDAO.findById(incomingForm.getResponseTo().getId()));
@@ -212,6 +219,9 @@ public class IncomingService extends RestProvider {
         // if (incoming.isEditable()) {
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        if (session.getUser().getRoles().contains("chancellery")) {
+            actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+        }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
