@@ -1,7 +1,32 @@
 <div style="border: 1px solid #f1f1f1; margin: 0; max-width: 700px; padding: 8px; width: 100%;">
     <h2 style="background-color: #f8f8f8; padding: 8px; margin: 0;">$orgname$</h2>
-    <p>Уважаемые $assignee$, $author$, уведомляем вас что задача *$regNumber$* была отмечена как просроченная</p>
-    <p>Наименование: $title$</p>
-    <p>Статус: $status$</p>
-    <p>Подробнее >  <a href="$url$">$url$</a></p>
+    <p>Уважаемый $user$, уведомляем вас что задачи были отмечены как просроченные</p>
 </div>
+<table style='border-collapse:collapse; margin:1px 0; width:100%' cellpadding = 10px>
+    <tr style="text-align: center">
+        <td style = 'border:1px solid #cdcdcd; width:60px;'><b>Номер</b></td>
+        <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Автор</b></td>
+        <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Исполнитель</b></td>
+        <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Проект</b></td>
+        <td style = 'border:1px solid #cdcdcd; width:180px;'><b>Содержание</b></td>
+    </tr>
+    $tasks:{ task |
+    <tr style="text-align: center">
+        <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+            $task.regNumber$
+        </td>
+        <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+            $task.author$
+        </td>
+        <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+            $task.assignee$
+        </td>
+        <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+            <a href="$url$$task.project.URL$$lang$">$task.project.title$</a>
+        </td>
+        <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+            <a href="$url$$task.url$$lang$">$task.title$</a>
+        </td>
+    </tr>
+    }$
+</table>
