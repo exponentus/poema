@@ -89,10 +89,7 @@ public class OverdueReminder extends _DoScheduled {
 							tasks_count++;
 						}
 					}
-
 					if(tasks_count > 0){
-
-
 						memo.addVar("tasks", tasks_ftu);
 						memo.addVar("url", getCurrentAppEnv().getURL() + "/");
 						memo.addVar("lang", "&lang=" + lang);
@@ -113,7 +110,6 @@ public class OverdueReminder extends _DoScheduled {
 	}
 
 	public class TaskString {
-
 		private String title;
 		private String url;
 		private String author;
