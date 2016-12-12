@@ -5,6 +5,7 @@
 }
 
 .vw-kind-request .vp__list_it_col {
+    min-width: auto;
     width: auto;
 }
 

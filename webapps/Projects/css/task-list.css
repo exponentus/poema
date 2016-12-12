@@ -49,40 +49,12 @@ div.task-list__title {
 }
 
 @media ( max-width: 768px) {
-    .task-list .entries-head {
-        display: none;
-    }
-    .task-list .entry-select {
-        display: none;
-    }
-    .task-list .entry-select + .entry-link {
-        padding-left: 0;
-    }
-    .task-list .entry-fields > div {
-        border-left: 0;
-        padding-right: 0;
-        padding-left: 0;
-    }
-    .task-list .task-list__reg-number {
-        min-width: 0;
-        width: 25%;
-    }
-    .task-list .task-list__title {
-        min-width: 0;
-        width: 50%;
-    }
+    .task-list .task-list__reg-number {}
+    .task-list .task-list__title {}
     .task-list .task-list__status,
-    .task-list .task-list__priority {
-        min-width: 0;
-        max-width: 70px;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 13%;
-    }
+    .task-list .task-list__priority {}
     .task-list .entry-fields > .task-list__assignee,
     .task-list .entry-fields > .task-list__start_date,
     .task-list .entry-fields > .task-list__due_date,
-    .task-list .entry-fields > .task-list__tags {
-        display: none;
-    }
+    .task-list .entry-fields > .task-list__tags {}
 }

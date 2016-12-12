@@ -17,6 +17,7 @@ import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
+import workflow.dao.IncomingDAO;
 import workflow.model.Assignment;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,6 +45,9 @@ public class AssignmentService extends RestProvider {
                 entity = new Assignment();
                 entity.setAuthor(ses.getUser());
                 entity.setAppliedAuthor(ses.getUser().getId());
+
+                IncomingDAO incomingDAO = new IncomingDAO(ses);
+                entity.setIncoming(incomingDAO.findById(httpRequest.getParameter("incoming")));
             } else {
                 AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
                 entity = assignmentDAO.findById(id);
@@ -66,6 +70,10 @@ public class AssignmentService extends RestProvider {
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
             outcome.addPayload("employees", emps);
+            outcome.addPayload("incoming", entity.getIncoming());
+            if (entity.getParent() != null) {
+                outcome.addPayload("parent", entity.getParent());
+            }
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
