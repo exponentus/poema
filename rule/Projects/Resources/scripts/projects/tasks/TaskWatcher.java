@@ -35,7 +35,7 @@ public class TaskWatcher extends _Do {
 					new Messages(appEnv).sendToAssignee(task);
 				} catch (SecureException | DAOException e) {
 					setError(e);
-
+					
 				}
 			}
 		}
