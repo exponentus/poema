@@ -1,0 +1,16 @@
+/* .vw- */
+
+.vw-reg-number {
+    min-width: 190px;
+    width: 190px;
+}
+
+.vw-status {
+    min-width: 100px;
+    width: 100px;
+}
+
+.vw-tags {
+    min-width: 130px;
+    width: 16%;
+}
