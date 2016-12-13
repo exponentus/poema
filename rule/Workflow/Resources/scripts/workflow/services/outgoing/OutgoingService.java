@@ -9,6 +9,7 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
@@ -16,6 +17,7 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 import reference.dao.DocumentLanguageDAO;
+import reference.dao.DocumentSubjectDAO;
 import reference.dao.DocumentTypeDAO;
 import staff.dao.OrganizationDAO;
 import workflow.dao.OutgoingDAO;
@@ -97,6 +99,7 @@ public class OutgoingService extends RestProvider {
         Outgoing entity;
         try {
             OrganizationDAO organizationDAO = new OrganizationDAO(ses);
+            DocumentSubjectDAO documentSubjectDAO = new DocumentSubjectDAO(ses);
             DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
             DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
@@ -108,13 +111,14 @@ public class OutgoingService extends RestProvider {
                 entity = outgoingDAO.findById(id);
             }
 
-            // TODO remove
-            if (entity.getRegNumber() == null) {
-                entity.setRegNumber("RG-O-" + Math.random());
-            }
             //
             entity.setTitle(outgoingForm.getTitle());
             entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
+            if (outgoingForm.getDocSubject() != null) {
+                entity.setDocSubject(documentSubjectDAO.findById(outgoingForm.getDocSubject().getId()));
+            } else {
+                entity.setDocSubject(null);
+            }
             if (outgoingForm.getDocLanguage() != null) {
                 entity.setDocLanguage(documentLanguageDAO.findById(outgoingForm.getDocLanguage().getId()));
             } else {
@@ -134,6 +138,9 @@ public class OutgoingService extends RestProvider {
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
             if (isNew) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
                 entity = outgoingDAO.add(entity);

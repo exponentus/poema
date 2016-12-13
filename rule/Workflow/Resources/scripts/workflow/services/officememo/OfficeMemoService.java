@@ -9,6 +9,7 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
@@ -121,10 +122,6 @@ public class OfficeMemoService extends RestProvider {
             entity = officeMemoDAO.findById(id);
         }
 
-        // TODO remove
-        if (entity.getRegNumber() == null) {
-            entity.setRegNumber("RG-OM-" + Math.random());
-        }
         //
         entity.setAppliedRegDate(form.getAppliedRegDate());
         if (form.getApproval() != null) {
@@ -138,6 +135,9 @@ public class OfficeMemoService extends RestProvider {
 
         try {
             if (isNew) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
                 entity = officeMemoDAO.add(entity);
