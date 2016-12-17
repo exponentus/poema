@@ -1,4 +1,4 @@
-package workflow.tasks;
+package workflow.task;
 
 import java.io.File;
 import java.util.ArrayList;

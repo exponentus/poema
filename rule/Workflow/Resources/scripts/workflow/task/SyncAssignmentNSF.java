@@ -1,4 +1,4 @@
-package workflow.tasks;
+package workflow.task;
 
 import java.util.ArrayList;
 import java.util.HashMap;

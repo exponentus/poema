@@ -1,4 +1,4 @@
-package projects.tasks;
+package helpdesk.task;
 
 import java.io.File;
 
@@ -13,23 +13,23 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import administrator.dao.LanguageDAO;
 import administrator.model.Language;
 
-@Command(name = "gen_voc", trigger = Trigger.EVERY_HOUR)
+@Command(name = "helpdesk_gen_voc", trigger = Trigger.POST_APP_START)
 public class GenerateVocabulary extends _Do {
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Vocabulary vocabulary = appEnv.vocabulary;
-
+		
 		String i18nPath = appEnv.getWebAppsPath() + File.separator + "i18n" + File.separator;
 		(new File(i18nPath)).mkdirs();
 		LanguageDAO dao = new LanguageDAO();
 		for (Language lang : dao.findAll()) {
 			VocabularyDTO vocabularyDTO = VocabularyDTO.valueOf(vocabulary, lang.getCode());
 			String jsonFilePath = i18nPath + lang.getName().toLowerCase() + ".json";
-			//	logger.infoLogEntry("write to \"" + jsonFilePath + "\"");
+			//logger.infoLogEntry("write to \"" + jsonFilePath + "\"");
 			writeJS(vocabularyDTO.getWords(), jsonFilePath);
 		}
-
-		//	logger.infoLogEntry("done...");
+		
+		//logger.infoLogEntry("done...");
 	}
 }
