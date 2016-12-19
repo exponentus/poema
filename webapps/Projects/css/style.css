@@ -92,17 +92,6 @@
 
 /* .vw- */
 
-.vw-icon {
-    min-width: 22px;
-    text-align: center;
-    width: 22px;
-}
-
-.vw-date {
-    min-width: 105px;
-    width: 105px;
-}
-
 .content-actions .buttons {
     display: inline-block;
     vertical-align: top;
