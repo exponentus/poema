@@ -76,11 +76,12 @@ public class OverdueReminder extends _DoScheduled {
 	private void sendNotify(_Session session, List<Task> tasks) {
 		try {
 			LanguageCode lang = EnvConst.getDefaultLang();
-			Memo memo = new Memo();
+
 			if(tasks.size() > 0) {
 				UserDAO userDAO = new UserDAO(session);
 				List<User> allUsers = userDAO.findAll();
 				for (User user : allUsers) {
+					Memo memo = new Memo();
 					List<TaskString> tasks_ftu  = new ArrayList<>();
 					int tasks_count = 0;
 					for (Task task : tasks) {
