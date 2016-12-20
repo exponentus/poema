@@ -1,8 +1,6 @@
 package projects.scheduled;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
@@ -13,7 +11,6 @@ import com.exponentus.localization.LanguageCode;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
-import com.exponentus.rest.incomingpojo.Session;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoScheduled;
 import com.exponentus.server.Server;
@@ -26,13 +23,11 @@ import projects.dao.filter.TaskFilter;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
-import projects.other.Messages;
 import reference.dao.TagDAO;
 import reference.model.Tag;
 
 public class OverdueReminder extends _DoScheduled {
 	private static final String EXPIRED_TAG_NAME = "expired";
-	private Date current = new Date();
 	private Tag tag;
 	private TaskDAO tDao;
 
@@ -77,29 +72,31 @@ public class OverdueReminder extends _DoScheduled {
 		try {
 			LanguageCode lang = EnvConst.getDefaultLang();
 
-			if(tasks.size() > 0) {
+			if (tasks.size() > 0) {
 				UserDAO userDAO = new UserDAO(session);
 				List<User> allUsers = userDAO.findAll();
 				for (User user : allUsers) {
 					Memo memo = new Memo();
-					List<TaskString> tasks_ftu  = new ArrayList<>();
+					List<TaskString> tasks_ftu = new ArrayList<>();
 					int tasks_count = 0;
 					for (Task task : tasks) {
-						if(user.getId().equals(task.getAssignee())){
+						if (user.getId().equals(task.getAssignee())) {
 							tasks_ftu.add(new TaskString(task, session));
 							tasks_count++;
 						}
 					}
-					if(tasks_count > 0){
+					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
 						memo.addVar("url", getCurrentAppEnv().getURL() + "/");
 						memo.addVar("lang", "&lang=" + lang);
 						memo.addVar("user", user.getUserName());
-						String body = getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued", lang);
+						String body = getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued",
+								lang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
 						MailAgent ma = new MailAgent();
-						ma.sendMessage(recipients, getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
+						ma.sendMessage(recipients,
+								getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", lang),
 								memo.getBody(body));
 					}
 				}
@@ -128,12 +125,30 @@ public class OverdueReminder extends _DoScheduled {
 			this.assignee = assigneeUser.getUserName();
 			this.project = task.getProject();
 		}
-		public String  getTitle() { return title; }
-		public String  getUrl() { return url; }
-		public String  getAuthor() { return author; }
-		public String  getRegNumber() { return regNumber; }
-		public String  getAssignee() { return assignee; }
-		public Project  getProject() { return project; }
+
+		public String getTitle() {
+			return title;
+		}
+
+		public String getUrl() {
+			return url;
+		}
+
+		public String getAuthor() {
+			return author;
+		}
+
+		public String getRegNumber() {
+			return regNumber;
+		}
+
+		public String getAssignee() {
+			return assignee;
+		}
+
+		public Project getProject() {
+			return project;
+		}
 	}
 
 }
