@@ -88,8 +88,10 @@ public class OverdueReminder extends _DoScheduled {
 					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
 						memo.addVar("url", getCurrentAppEnv().getURL() + "/");
-						memo.addVar("lang", "&lang=" + lang);
+						IUser<Long> i_user = userDAO.findById(user.getId());
+						memo.addVar("lang", "&lang=" + i_user.getDefaultLang());
 						memo.addVar("user", user.getUserName());
+
 						String body = getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued",
 								lang);
 						List<String> recipients = new ArrayList<>();
