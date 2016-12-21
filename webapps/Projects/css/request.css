@@ -1,16 +1,3 @@
-.vw-kind-request .vp__list_it_cols {
-    flex-flow: row wrap;
-}
-
-.vw-kind-request .vp__list_it_col {
-    min-width: auto;
-    width: auto;
-}
-
-.vw-kind-request .vp__list_it_col + .vp__list_it_col {
-    border-color: transparent;
-}
-
 .request-status-unknown {
     display: none;
 }
@@ -36,6 +23,10 @@
 .request__header {
     display: block;
     width: 20%;
+}
+
+.request__type {
+    min-width: 120px;
 }
 
 .request__comment {

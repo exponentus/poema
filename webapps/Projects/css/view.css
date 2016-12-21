@@ -1,16 +1,25 @@
 /* .vw- */
 
+/*.vw-name {
+    min-width: 90px;
+    width: 90px;
+}
+
 .vw-reg-number {
     min-width: 190px;
     width: 190px;
 }
 
-.vw-status {
+.vw-status,
+.vw-priority {
     min-width: 100px;
     width: 100px;
-}
+}*/
 
-.vw-tags {
-    min-width: 130px;
-    width: 16%;
+.vw-tags .vp__list_it_val {
+    background: white;
+    border: 1px solid #CCC;
+    border-radius: 2px;
+    margin: 0 1px 1px 0;
+    padding: 0 4px !important;
 }
