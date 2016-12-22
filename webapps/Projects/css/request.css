@@ -30,7 +30,9 @@
 }
 
 .request__comment {
-    max-width: 60%;
+    max-width: 50%;
+    white-space: normal;
+    word-break: break-all;
 }
 
 .request__time {
