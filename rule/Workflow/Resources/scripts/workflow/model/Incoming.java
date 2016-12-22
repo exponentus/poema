@@ -7,7 +7,6 @@ import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
@@ -101,14 +100,6 @@ public class Incoming extends HierarchicalEntity<UUID> {
         this.sender = sender;
     }
 
-    @JsonSetter("sender")
-    public void setSenderId(UUID id) {
-        if (id != null) {
-            sender = new Organization();
-            sender.setId(id);
-        }
-    }
-
     public String getSenderRegNumber() {
         return senderRegNumber;
     }
@@ -133,14 +124,6 @@ public class Incoming extends HierarchicalEntity<UUID> {
         this.addressee = addressee;
     }
 
-    @JsonSetter("addressee")
-    public void setAddresseeId(UUID id) {
-        if (id != null) {
-            addressee = new Employee();
-            addressee.setId(id);
-        }
-    }
-
     @Override
     public List<Attachment> getAttachments() {
         return attachments;
@@ -159,14 +142,6 @@ public class Incoming extends HierarchicalEntity<UUID> {
         this.docLanguage = docLanguage;
     }
 
-    @JsonSetter("docLanguage")
-    public void setDocLanguageId(UUID id) {
-        if (id != null) {
-            docLanguage = new DocumentLanguage();
-            docLanguage.setId(id);
-        }
-    }
-
     public DocumentType getDocType() {
         return docType;
     }
@@ -183,28 +158,12 @@ public class Incoming extends HierarchicalEntity<UUID> {
         this.docSubject = docSubject;
     }
 
-    @JsonSetter("docType")
-    public void setDocTypeId(UUID id) {
-        if (id != null) {
-            docType = new DocumentType();
-            docType.setId(id);
-        }
-    }
-
     public Outgoing getResponseTo() {
         return responseTo;
     }
 
     public void setResponseTo(Outgoing responseTo) {
         this.responseTo = responseTo;
-    }
-
-    @JsonSetter("responseTo")
-    public void setResponseToId(UUID id) {
-        if (id != null) {
-            responseTo = new Outgoing();
-            responseTo.setId(id);
-        }
     }
 
     public String getBody() {

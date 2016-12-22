@@ -219,7 +219,7 @@ public class IncomingService extends RestProvider {
         // if (incoming.isEditable()) {
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
-        if (session.getUser().getRoles().contains("chancellery")) {
+        if (!entity.isNew() && session.getUser().getRoles().contains("chancellery")) {
             actionBar.addAction(new _Action("assignment", "", "new_assignment"));
         }
         if (!entity.isNew() && entity.isEditable()) {
@@ -230,11 +230,29 @@ public class IncomingService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Incoming incomingForm) {
+    private _Validation validate(Incoming model) {
         _Validation ve = new _Validation();
 
-        if (incomingForm.getTitle() == null || incomingForm.getTitle().isEmpty()) {
+        if (model.getTitle() == null || model.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
+        }
+        if (model.getSender() == null) {
+            ve.addError("sender", "required", "field_is_empty");
+        }
+        if (model.getAddressee() == null) {
+            ve.addError("addressee", "required", "field_is_empty");
+        }
+        if (model.getResponseTo() == null) {
+            ve.addError("responseTo", "required", "field_is_empty");
+        }
+        if (model.getSenderAppliedRegDate() == null) {
+            ve.addError("senderAppliedRegDate", "required", "field_is_empty");
+        }
+        if (model.getDocLanguage() == null) {
+            ve.addError("docLanguage", "required", "field_is_empty");
+        }
+        if (model.getDocType() == null) {
+            ve.addError("docType", "required", "field_is_empty");
         }
 
         return ve;

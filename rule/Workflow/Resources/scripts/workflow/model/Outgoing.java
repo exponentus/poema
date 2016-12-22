@@ -5,7 +5,6 @@ import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
@@ -97,14 +96,6 @@ public class Outgoing extends HierarchicalEntity<UUID> {
         this.recipient = recipient;
     }
 
-    @JsonSetter("recipient")
-    public void setRecipientId(UUID id) {
-        if (id != null) {
-            recipient = new Organization();
-            recipient.setId(id);
-        }
-    }
-
     @Override
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
@@ -118,14 +109,6 @@ public class Outgoing extends HierarchicalEntity<UUID> {
         this.docLanguage = docLanguage;
     }
 
-    @JsonSetter("docLanguage")
-    public void setDocLanguageId(UUID id) {
-        if (id != null) {
-            docLanguage = new DocumentLanguage();
-            docLanguage.setId(id);
-        }
-    }
-
     public DocumentType getDocType() {
         return docType;
     }
@@ -134,28 +117,12 @@ public class Outgoing extends HierarchicalEntity<UUID> {
         this.docType = docType;
     }
 
-    @JsonSetter("docType")
-    public void setDocTypeId(UUID id) {
-        if (id != null) {
-            docType = new DocumentType();
-            docType.setId(id);
-        }
-    }
-
     public DocumentSubject getDocSubject() {
         return docSubject;
     }
 
     public void setDocSubject(DocumentSubject docSubject) {
         this.docSubject = docSubject;
-    }
-
-    @JsonSetter("docSubject")
-    public void setDocSubjectId(UUID id) {
-        if (id != null) {
-            docSubject = new DocumentSubject();
-            docSubject.setId(id);
-        }
     }
 
     public String getBody() {
