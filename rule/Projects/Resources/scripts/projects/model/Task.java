@@ -113,8 +113,6 @@ public class Task extends HierarchicalEntity<UUID> {
     @Transient
     private List<IAppEntity> responses;
 
-    //
-    // TODO short graph
     public Project getProject() {
         return project;
     }
@@ -132,7 +130,6 @@ public class Task extends HierarchicalEntity<UUID> {
         this.parent = parent;
     }
 
-    // TODO short graph
     public Demand getDemand() {
         return demand;
     }
@@ -158,7 +155,6 @@ public class Task extends HierarchicalEntity<UUID> {
         this.subtasks = subtasks;
     }
 
-    // TODO short graph
     public TaskType getTaskType() {
         return taskType;
     }
@@ -242,7 +238,6 @@ public class Task extends HierarchicalEntity<UUID> {
         this.initiative = initiative;
     }
 
-    // TODO short graph
     public List<Tag> getTags() {
         return tags;
     }
@@ -275,7 +270,6 @@ public class Task extends HierarchicalEntity<UUID> {
         return attachments.size() > 0;
     }
 
-    // TODO short graph
     @Override
     public List<Attachment> getAttachments() {
         return attachments;

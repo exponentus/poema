@@ -13,6 +13,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
+import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -39,11 +40,13 @@ public class DemandService extends RestProvider {
     public Response getViewPage() {
         Outcome outcome = new Outcome();
         _Session session = getSession();
+        _WebFormData params = getWebFormData();
         int pageSize = session.pageSize;
+
         try {
-            _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
+            _SortParams sortParams = params.getSortParams(_SortParams.desc("regDate"));
             DemandDAO dao = new DemandDAO(session);
-            ViewPage<Demand> vp = dao.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
+            ViewPage<Demand> vp = dao.findViewPage(sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             _Action newDocAction = new _Action("add_new", "", "new_demand");
@@ -108,7 +111,7 @@ public class DemandService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(session, entity));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
@@ -231,13 +234,14 @@ public class DemandService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        if (entity.isNew() || entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }
@@ -245,13 +249,13 @@ public class DemandService extends RestProvider {
     /*
      * Validate entity
      */
-    private _Validation validate(Demand demandForm) {
+    private _Validation validate(Demand demand) {
         _Validation ve = new _Validation();
 
-        if (demandForm.getTitle() == null || demandForm.getTitle().isEmpty()) {
+        if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
-        if (demandForm.getDemandType() == null) {
+        if (demand.getDemandType() == null) {
             ve.addError("demandType", "required", "field_is_empty");
         }
 

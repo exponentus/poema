@@ -37,14 +37,14 @@ public class OfficeMemoService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
-        System.out.println(getRequestParameter());
+        System.out.println(getWebFormData());
 
         _Session session = getSession();
         int pageSize = session.pageSize;
-        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
+        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
 
         OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
-        ViewPage vp = officeMemoDAO.findViewPage(sortParams, getRequestParameter().getPage(), pageSize);
+        ViewPage vp = officeMemoDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
@@ -90,7 +90,7 @@ public class OfficeMemoService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -192,13 +192,12 @@ public class OfficeMemoService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }

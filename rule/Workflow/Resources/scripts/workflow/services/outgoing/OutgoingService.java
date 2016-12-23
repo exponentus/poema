@@ -38,7 +38,7 @@ public class OutgoingService extends RestProvider {
         int pageSize = session.pageSize;
 
         OutgoingDAO dao = new OutgoingDAO(session);
-        ViewPage vp = dao.findViewPage(getRequestParameter().getPage(), pageSize);
+        ViewPage vp = dao.findViewPage(getWebFormData().getPage(), pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
@@ -75,7 +75,7 @@ public class OutgoingService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -195,13 +195,12 @@ public class OutgoingService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, Outgoing entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }

@@ -2,6 +2,7 @@ package workflow.services.report;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
@@ -48,11 +49,11 @@ public class ReportService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
-            outcome.addPayload("fsId", getRequestParameter().getFormSesId());
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
-            System.out.println(getRequestParameter());
+            System.out.println(getWebFormData());
             return Response.ok(outcome).build();
         } catch (Exception e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
@@ -153,13 +154,12 @@ public class ReportService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, Report entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }

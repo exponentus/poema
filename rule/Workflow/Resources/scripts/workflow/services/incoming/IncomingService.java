@@ -39,18 +39,18 @@ public class IncomingService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
-        System.out.println(getRequestParameter());
+        System.out.println(getWebFormData());
 
         _Session session = getSession();
         int pageSize = session.pageSize;
-        _SortParams sortParams = getRequestParameter().getSortParams(_SortParams.desc("regDate"));
+        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
         // ViewPage vp = incomingDAO.findViewPage(getRequestParameter().getPage(), pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
 
         List<UUID> ids = new ArrayList<>(); // incomingDAO.findAll().stream().map(it -> it.getId()).collect(Collectors.toList());
         ids.add(UUID.fromString("44ba782b-d9a3-428d-8f03-916b37d69fa4"));
-        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getRequestParameter().getPage(), pageSize, ids);
+        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getWebFormData().getPage(), pageSize, ids);
         // ViewPage vp = incomingDAO.findViewPageWithResponses(_SortParams.desc("regDate"), ids, pageNum, pageSize);
 
         //
@@ -88,7 +88,7 @@ public class IncomingService extends RestProvider {
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
         if (!isNew) {
             outcome.addPayload(new ACL(entity));
         }
@@ -216,7 +216,7 @@ public class IncomingService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, Incoming entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && session.getUser().getRoles().contains("chancellery")) {
@@ -225,7 +225,6 @@ public class IncomingService extends RestProvider {
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }

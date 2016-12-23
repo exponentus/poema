@@ -1,6 +1,5 @@
 package projects.dao;
 
-import com.exponentus.common.dao.ViewEntryDAO;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
@@ -173,11 +172,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 typedQuery.setMaxResults(pageSize);
             }
 
-            //ViewEntryDAO veDao = new ViewEntryDAO();
             List<Task> result = typedQuery.getResultList();
-            //for (Task task : result) {
-            //task.setDescendantsCount(veDao.getResponsesCount(task.getId()));
-            //}
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {
@@ -207,7 +202,6 @@ public class TaskDAO extends DAO<Task, UUID> {
                             task.setResponses(responses);
                         }
                     });
-            //});
         } finally {
             em.close();
         }
@@ -275,15 +269,5 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
 
         return result;
-    }
-
-    public ViewPage<Task> findAllWithRespMarked(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize,
-                                                List<UUID> expandedIdList) {
-        ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
-        ViewEntryDAO dao = new ViewEntryDAO(ses);
-        for (Task task : vp.getResult()) {
-            task.setResponsesCount(dao.getResponsesCount(task.getId()));
-        }
-        return vp;
     }
 }

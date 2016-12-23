@@ -12,10 +12,9 @@ import projects.model.Project;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ProjectView extends _DoPage {
 
@@ -33,25 +32,8 @@ public class ProjectView extends _DoPage {
 
             //
             EmployeeDAO empDao = new EmployeeDAO(session);
-            Map<Long, Employee> emps = new HashMap<>();
-            if (vp.getResult().size() > 0) {
-                List<Long> empIds = new ArrayList<>();
-                for (Project prj : vp.getResult()) {
-                    empIds.add(prj.getManager());
-                    empIds.add(prj.getProgrammer());
-                    empIds.add(prj.getTester());
-                    if (prj.getObservers() != null) {
-                        empIds.addAll(prj.getObservers());
-                    }
-                    if (prj.getRepresentatives() != null) {
-                        empIds.addAll(prj.getRepresentatives());
-                    }
-                }
-
-                for (Employee e : empDao.findAllByUserIds(empIds)) {
-                    emps.put(e.getUserID(), e);
-                }
-            }
+            Map<Long, Employee> emps = empDao.findAll().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
             addDataContent("employees", emps);
         } catch (DAOException e) {
             logError(e);

@@ -68,7 +68,7 @@ public class AssignmentService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getRequestParameter().getFormSesId());
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
             outcome.addPayload("incoming", entity.getIncoming());
             if (entity.getParent() != null) {
@@ -175,13 +175,14 @@ public class AssignmentService extends RestProvider {
      */
     private _ActionBar getActionBar(_Session session, Assignment entity) {
         _ActionBar actionBar = new _ActionBar(session);
-        // if (incoming.isEditable()) {
+
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        if (entity.isNew() || entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
         }
-        // }
 
         return actionBar;
     }
