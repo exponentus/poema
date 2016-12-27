@@ -532,5 +532,12 @@
         <entry lang="POR">Notificar</entry>
         <entry lang="SPA">Notificarle</entry>
     </sentence>
+    <sentence mode="on" keyword="notify_about_pending_task">
+        <entry lang="RUS">Уведомление о задании на проверку</entry>
+        <entry lang="ENG">Notification about a task for check</entry>
+        <entry lang="KAZ">Уведомление о задании на проверку</entry>
+        <entry lang="POR">Notificar</entry>
+        <entry lang="SPA">Notificarle</entry>
+    </sentence>
 
 </vocabulary>
