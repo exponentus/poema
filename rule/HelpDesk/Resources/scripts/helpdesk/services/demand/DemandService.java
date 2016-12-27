@@ -64,24 +64,6 @@ public class DemandService extends RestProvider {
         }
     }
 
-	/*
-     * delete all selected
-	 */
-    //    @DELETE
-    //    @Produces(MediaType.APPLICATION_JSON)
-    //    public Response delete(_Session session, _WebFormData formData) {
-    //        DemandDAO dao = new DemandDAO(session);
-    //        for (String id : formData.getListOfValuesSilently("ids")) {
-    //            Demand m = dao.findById(id);
-    //            try {
-    //                dao.delete(m);
-    //            } catch (SecureException e) {
-    //                return Response.status(Response.Status.BAD_REQUEST).build();
-    //            }
-    //        }
-    //        return Response.ok().build();
-    //    }
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)

@@ -44,9 +44,6 @@ public class Task extends HierarchicalEntity<UUID> {
     @Column(name = "reg_number", length = 140)
     private String regNumber;
 
-    @OneToMany(mappedBy = "parent")
-    private List<Task> subtasks;
-
     @NotNull
     @ManyToOne(optional = false)
     private TaskType taskType;
@@ -83,6 +80,17 @@ public class Task extends HierarchicalEntity<UUID> {
     @JoinTable(name = "task_tags")
     private List<Tag> tags;
 
+    @Column(name = "customer_observation")
+    private boolean customerObservation;
+
+    @JsonProperty("observerUserIds")
+    @ElementCollection
+    private List<Long> observers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "parent")
+    private List<Task> subtasks;
+
     @JsonIgnore
     @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "task_id")
@@ -103,13 +111,6 @@ public class Task extends HierarchicalEntity<UUID> {
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
-    @Column(name = "customer_observation")
-    private boolean customerObservation;
-
-    @JsonProperty("observerUserIds")
-    @ElementCollection
-    private List<Long> observers;
-
     @Transient
     private List<IAppEntity> responses;
 
@@ -126,6 +127,7 @@ public class Task extends HierarchicalEntity<UUID> {
         return parent;
     }
 
+    @JsonProperty
     public void setParent(Task parent) {
         this.parent = parent;
     }
@@ -144,15 +146,6 @@ public class Task extends HierarchicalEntity<UUID> {
 
     public void setRegNumber(String regNumber) {
         this.regNumber = regNumber;
-    }
-
-    @JsonIgnore
-    public List<Task> getSubtasks() {
-        return subtasks;
-    }
-
-    public void setSubtasks(List<Task> subtasks) {
-        this.subtasks = subtasks;
     }
 
     public TaskType getTaskType() {
@@ -246,20 +239,32 @@ public class Task extends HierarchicalEntity<UUID> {
         this.tags = tags;
     }
 
-    public boolean isHasRequests() {
-        return requests != null && requests.size() > 0;
+    public boolean isCustomerObservation() {
+        return customerObservation;
     }
 
-    public boolean isHasComments() {
-        return comments != null && comments.size() > 0;
+    public void setCustomerObservation(boolean customerObservation) {
+        this.customerObservation = customerObservation;
+    }
+
+    public List<Long> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Long> observers) {
+        this.observers = observers;
+    }
+
+    public List<Task> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<Task> subtasks) {
+        this.subtasks = subtasks;
     }
 
     public List<Comment> getComments() {
         return comments;
-    }
-
-    public boolean isHasSubtasks() {
-        return subtasks != null && subtasks.size() > 0;
     }
 
     public List<Request> getRequests() {
@@ -278,26 +283,6 @@ public class Task extends HierarchicalEntity<UUID> {
     @Override
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
-    }
-
-    public String getParentTaskId() {
-        return parent != null ? parent.getIdentifier() : null;
-    }
-
-    public boolean isCustomerObservation() {
-        return customerObservation;
-    }
-
-    public void setCustomerObservation(boolean customerObservation) {
-        this.customerObservation = customerObservation;
-    }
-
-    public List<Long> getObservers() {
-        return observers;
-    }
-
-    public void setObservers(List<Long> observers) {
-        this.observers = observers;
     }
 
     //

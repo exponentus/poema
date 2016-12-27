@@ -4,6 +4,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.HierarchicalEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -23,7 +24,6 @@ import java.util.UUID;
 @NamedQuery(name = "Request.findAll", query = "SELECT m FROM Request AS m ORDER BY m.regDate")
 public class Request extends HierarchicalEntity<UUID> {
 
-    @JsonIgnore
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(updatable = false, nullable = false)
@@ -61,14 +61,12 @@ public class Request extends HierarchicalEntity<UUID> {
         return author;
     }
 
+    @JsonIgnore
     public Task getTask() {
         return task;
     }
 
-    public String getTaskId() {
-        return task != null ? task.getIdentifier() : "";
-    }
-
+    @JsonProperty
     public void setTask(Task task) {
         this.task = task;
     }
