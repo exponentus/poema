@@ -188,7 +188,9 @@ public class ProjectService extends RestProvider {
                 readers.add(projectForm.getTester());
             }
             readers.add(session.getUser().getId());
-            readers.addAll(projectForm.getObservers());
+            if (projectForm.getObservers() != null) {
+                readers.addAll(projectForm.getObservers());
+            }
 
             project.setReaders(readers);
 

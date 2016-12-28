@@ -284,14 +284,12 @@ public class TaskService extends RestProvider {
             task.setAssignee(assigneeUser.getId());
             task.setCustomerObservation(taskForm.isCustomerObservation());
             task.setAttachments(getActualAttachments(task.getAttachments()));
-            task.setObservers(taskForm.getObservers());
+            task.setObservers(taskForm.getObservers() != null ? taskForm.getObservers() : new ArrayList<>());
 
             if (isNew) {
                 if (task.getStatus() != TaskStatusType.DRAFT) {
                     task.addReader(assigneeUser);
-                    if (task.getObservers() != null) {
-                        task.addReaders(task.getObservers());
-                    }
+                    task.addReaders(task.getObservers());
                 }
                 RegNum rn = new com.exponentus.runtimeobj.RegNum();
                 task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.prefix));
