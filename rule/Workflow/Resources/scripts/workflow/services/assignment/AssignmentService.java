@@ -47,7 +47,7 @@ public class AssignmentService extends RestProvider {
                 entity.setAppliedAuthor(ses.getUser().getId());
 
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
-                entity.setIncoming(incomingDAO.findById(httpRequest.getParameter("incoming")));
+                entity.setIncoming(incomingDAO.findById(getWebFormData().getValue("incoming")));
             } else {
                 AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
                 entity = assignmentDAO.findById(id);

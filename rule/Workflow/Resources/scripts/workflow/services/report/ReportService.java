@@ -14,10 +14,6 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
-import reference.dao.DocumentLanguageDAO;
-import reference.dao.DocumentTypeDAO;
-import staff.dao.OrganizationDAO;
-import workflow.dao.OutgoingDAO;
 import workflow.dao.ReportDAO;
 import workflow.model.Report;
 
@@ -75,22 +71,18 @@ public class ReportService extends RestProvider {
         Report entity;
 
         try {
-            OrganizationDAO organizationDAO = new OrganizationDAO(ses);
-            DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
-            DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
-            OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
             ReportDAO reportDAO = new ReportDAO(ses);
 
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new Report();
+                entity.setParent(reportForm.getParent());
             } else {
                 entity = reportDAO.findById(id);
             }
 
             //
             entity.setTitle(reportForm.getTitle());
-
             entity.setBody(reportForm.getBody());
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 

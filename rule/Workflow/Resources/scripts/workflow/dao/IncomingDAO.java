@@ -32,22 +32,19 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
     public ViewPage<Incoming> findAllWithResponses(_SortParams sortParams, int pageNum, int pageSize, List<UUID> expandedIds) {
         ViewPage<Incoming> vp = findViewPage(sortParams, pageNum, pageSize);
 
-        if (vp.getResult().isEmpty() || expandedIds.isEmpty()) {
+        if (vp.getResult().isEmpty()) {
             return vp;
         }
 
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
-            vp.getResult()
-                    //.stream()
-                    //.filter(incoming -> expandedIds.contains(incoming.getId()))
-                    .forEach(incoming -> {
-                        List<IAppEntity> responses = findIncomingResponses(incoming, expandedIds, em);
-                        if (responses != null && responses.size() > 0) {
-                            incoming.setResponsesCount((long) responses.size());
-                            incoming.setResponses(responses);
-                        }
-                    });
+            for (Incoming incoming : vp.getResult()) {
+                List<IAppEntity> responses = findIncomingResponses(incoming, expandedIds, em);
+                if (responses != null && responses.size() > 0) {
+                    incoming.setResponsesCount((long) responses.size());
+                    incoming.setResponses(responses);
+                }
+            }
         } finally {
             em.close();
         }
@@ -64,7 +61,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Predicate condition = cb.equal(root.get("incoming"), incoming);
         condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
             condition = cb.and(root.get("readers").in(user.getId()));
         }
 
@@ -75,16 +72,13 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         List<Assignment> assignments = typedQuery.getResultList();
 
         if (assignments.size() > 0) {
-            assignments
-                    //.stream()
-                    //.filter(assignment -> expandedIds.contains(assignment.getId()))
-                    .forEach(assignment -> {
-                        List<IAppEntity> responses = findAssignmentResponses(assignment, expandedIds, em);
-                        if (responses != null && responses.size() > 0) {
-                            assignment.setResponsesCount((long) responses.size());
-                            assignment.setResponses(responses);
-                        }
-                    });
+            for (Assignment assignment : assignments) {
+                List<IAppEntity> responses = findAssignmentResponses(assignment, expandedIds, em);
+                if (responses != null && responses.size() > 0) {
+                    assignment.setResponsesCount((long) responses.size());
+                    assignment.setResponses(responses);
+                }
+            }
             return new ArrayList<>(assignments);
         }
         return null;
@@ -127,7 +121,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         List<Report> reports = typedQueryR.getResultList();
 
         // ------------------------------------------
-        List<IAppEntity> result = new ArrayList<>(assignments);
+        List<IAppEntity> result = new LinkedList<>(assignments);
         result.addAll(reports);
 
         Supplier<List<IAppEntity>> supplier = LinkedList::new;
@@ -137,15 +131,11 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 
         if (assignments.size() > 0) {
             for (Assignment a : assignments) {
-                //.stream()
-                //.filter(it -> expandedIds.contains(it.getId()))
-                //.forEach(it -> {
                 List<IAppEntity> responses = findAssignmentResponses(a, expandedIds, em);
                 if (responses != null && responses.size() > 0) {
                     a.setResponsesCount((long) responses.size());
                     a.setResponses(responses);
                 }
-                //});
             }
         }
 

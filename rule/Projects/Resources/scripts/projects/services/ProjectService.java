@@ -48,8 +48,7 @@ public class ProjectService extends RestProvider {
             ViewPage<Project> vp = projectDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            _Action newDocAction = new _Action("new_project", "", "new_project");
-            actionBar.addAction(newDocAction);
+            actionBar.addAction(new _Action("new_project", "", "new_project"));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll().stream()

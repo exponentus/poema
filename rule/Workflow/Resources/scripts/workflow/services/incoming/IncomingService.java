@@ -17,21 +17,17 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
-import reference.dao.DocumentLanguageDAO;
-import reference.dao.DocumentTypeDAO;
-import staff.dao.EmployeeDAO;
-import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
-import workflow.dao.OutgoingDAO;
 import workflow.model.Incoming;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("incomings")
 public class IncomingService extends RestProvider {
@@ -39,26 +35,20 @@ public class IncomingService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
-        System.out.println(getWebFormData());
-
         _Session session = getSession();
         int pageSize = session.pageSize;
         _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
+        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 
         IncomingDAO incomingDAO = new IncomingDAO(session);
-        // ViewPage vp = incomingDAO.findViewPage(getRequestParameter().getPage(), pageSize); // formData.getSortParams(_SortParams.desc("regDate")),
-
-        List<UUID> ids = new ArrayList<>(); // incomingDAO.findAll().stream().map(it -> it.getId()).collect(Collectors.toList());
-        ids.add(UUID.fromString("44ba782b-d9a3-428d-8f03-916b37d69fa4"));
-        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getWebFormData().getPage(), pageSize, ids);
-        // ViewPage vp = incomingDAO.findViewPageWithResponses(_SortParams.desc("regDate"), ids, pageNum, pageSize);
+        ViewPage vp = incomingDAO.findAllWithResponses(sortParams, getWebFormData().getPage(), pageSize, expandedIdList);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
-        _Action newDocAction = new _Action("add_new", "", "new_incoming");
-        newDocAction.setURL("new");
-        actionBar.addAction(newDocAction);
-        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+        actionBar.addAction(new _Action("add_new", "", "new_incoming"));
+        actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
+        // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
         Outcome outcome = new Outcome();
         outcome.setId("incomings");
@@ -111,11 +101,6 @@ public class IncomingService extends RestProvider {
         Incoming entity;
 
         try {
-            OrganizationDAO organizationDAO = new OrganizationDAO(ses);
-            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-            DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
-            DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
-            OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
             IncomingDAO incomingDAO = new IncomingDAO(ses);
 
             boolean isNew = "new".equals(id);
@@ -127,31 +112,11 @@ public class IncomingService extends RestProvider {
 
             entity.setTitle(incomingForm.getTitle());
             entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
-            if (incomingForm.getDocLanguage() != null) {
-                entity.setDocLanguage(documentLanguageDAO.findById(incomingForm.getDocLanguage().getId()));
-            } else {
-                entity.setDocLanguage(null);
-            }
-            if (incomingForm.getDocType() != null) {
-                entity.setDocType(documentTypeDAO.findById(incomingForm.getDocType().getId()));
-            } else {
-                entity.setDocType(null);
-            }
-            if (incomingForm.getSender() != null) {
-                entity.setSender(organizationDAO.findById(incomingForm.getSender().getId()));
-            } else {
-                entity.setSender(null);
-            }
-            if (incomingForm.getAddressee() != null) {
-                entity.setAddressee(employeeDAO.findById(incomingForm.getAddressee().getId()));
-            } else {
-                entity.setAddressee(null);
-            }
-            if (incomingForm.getResponseTo() != null) {
-                entity.setResponseTo(outgoingDAO.findById(incomingForm.getResponseTo().getId()));
-            } else {
-                entity.setResponseTo(null);
-            }
+            entity.setDocLanguage(incomingForm.getDocLanguage());
+            entity.setDocType(incomingForm.getDocType());
+            entity.setSender(incomingForm.getSender());
+            entity.setAddressee(incomingForm.getAddressee());
+            entity.setResponseTo(incomingForm.getResponseTo());
             entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
             entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
             entity.setBody(incomingForm.getBody());
@@ -167,6 +132,7 @@ public class IncomingService extends RestProvider {
                 entity = incomingDAO.update(entity);
             }
 
+            entity = incomingDAO.findById(entity.getId());
         } catch (SecureException | DAOException e) {
             logError(e);
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();

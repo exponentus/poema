@@ -29,7 +29,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("office-memos")
 public class OfficeMemoService extends RestProvider {
@@ -37,21 +40,20 @@ public class OfficeMemoService extends RestProvider {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
-        System.out.println(getWebFormData());
-
         _Session session = getSession();
         int pageSize = session.pageSize;
         _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
+        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 
         OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
         ViewPage vp = officeMemoDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
-        _Action newDocAction = new _Action("add_new", "", "new_incoming");
-        newDocAction.setURL("new");
-        actionBar.addAction(newDocAction);
-        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+        actionBar.addAction(new _Action("add_new", "", "new_office_memo"));
+        actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
+        // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
         Outcome outcome = new Outcome();
         outcome.setId("office-memos");

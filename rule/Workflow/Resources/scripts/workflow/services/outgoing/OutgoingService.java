@@ -11,15 +11,12 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
-import reference.dao.DocumentLanguageDAO;
-import reference.dao.DocumentSubjectDAO;
-import reference.dao.DocumentTypeDAO;
-import staff.dao.OrganizationDAO;
 import workflow.dao.OutgoingDAO;
 import workflow.model.Outgoing;
 
@@ -27,6 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Path("outgoings")
 public class OutgoingService extends RestProvider {
@@ -36,16 +37,18 @@ public class OutgoingService extends RestProvider {
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
+        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
+        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 
         OutgoingDAO dao = new OutgoingDAO(session);
-        ViewPage vp = dao.findViewPage(getWebFormData().getPage(), pageSize);
+        ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
         //
         _ActionBar actionBar = new _ActionBar(session);
-        _Action newDocAction = new _Action("add_new", "", "new_incoming");
-        newDocAction.setURL("new");
-        actionBar.addAction(newDocAction);
-        actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+        actionBar.addAction(new _Action("add_new", "", "new_outgoing"));
+        actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
+        // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
         Outcome outcome = new Outcome();
         outcome.setId("outgoings");
@@ -98,10 +101,6 @@ public class OutgoingService extends RestProvider {
 
         Outgoing entity;
         try {
-            OrganizationDAO organizationDAO = new OrganizationDAO(ses);
-            DocumentSubjectDAO documentSubjectDAO = new DocumentSubjectDAO(ses);
-            DocumentTypeDAO documentTypeDAO = new DocumentTypeDAO(ses);
-            DocumentLanguageDAO documentLanguageDAO = new DocumentLanguageDAO(ses);
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
             boolean isNew = "new".equals(id);
@@ -114,26 +113,10 @@ public class OutgoingService extends RestProvider {
             //
             entity.setTitle(outgoingForm.getTitle());
             entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
-            if (outgoingForm.getDocSubject() != null) {
-                entity.setDocSubject(documentSubjectDAO.findById(outgoingForm.getDocSubject().getId()));
-            } else {
-                entity.setDocSubject(null);
-            }
-            if (outgoingForm.getDocLanguage() != null) {
-                entity.setDocLanguage(documentLanguageDAO.findById(outgoingForm.getDocLanguage().getId()));
-            } else {
-                entity.setDocLanguage(null);
-            }
-            if (outgoingForm.getDocType() != null) {
-                entity.setDocType(documentTypeDAO.findById(outgoingForm.getDocType().getId()));
-            } else {
-                entity.setDocType(null);
-            }
-            if (outgoingForm.getRecipient() != null) {
-                entity.setRecipient(organizationDAO.findById(outgoingForm.getRecipient().getId()));
-            } else {
-                entity.setRecipient(null);
-            }
+            entity.setDocSubject(outgoingForm.getDocSubject());
+            entity.setDocLanguage(outgoingForm.getDocLanguage());
+            entity.setDocType(outgoingForm.getDocType());
+            entity.setRecipient(outgoingForm.getRecipient());
             entity.setBody(outgoingForm.getBody());
             entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
@@ -148,6 +131,7 @@ public class OutgoingService extends RestProvider {
                 entity = outgoingDAO.update(entity);
             }
 
+            entity = outgoingDAO.findById(entity.getId());
         } catch (SecureException | DAOException e) {
             return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
         }
