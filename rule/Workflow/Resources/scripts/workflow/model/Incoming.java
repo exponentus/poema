@@ -182,13 +182,17 @@ public class Incoming extends HierarchicalEntity<UUID> {
         this.tags = tags;
     }
 
-    @Override
-    public String getURL() {
-        return "incomings/" + getIdentifier();
+    public List<Assignment> getAssignments() {
+        return assignments;
     }
 
     public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    @Override
+    public String getURL() {
+        return "incomings/" + getIdentifier();
     }
 
     public List<IAppEntity> getResponses() {

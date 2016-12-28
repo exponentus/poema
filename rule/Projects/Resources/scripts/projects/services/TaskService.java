@@ -38,7 +38,6 @@ import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,10 +48,11 @@ import java.util.stream.Collectors;
 @Path("tasks")
 public class TaskService extends RestProvider {
 
+    private Outcome outcome = new Outcome();
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
-        Outcome outcome = new Outcome();
         try {
             _Session session = getSession();
 
@@ -92,8 +92,7 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -101,9 +100,6 @@ public class TaskService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-
         _Session session = getSession();
         _WebFormData formData = getWebFormData();
 
@@ -203,6 +199,7 @@ public class TaskService extends RestProvider {
                 emps.put(e.getUserID(), e);
             }
 
+            outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
             outcome.addPayload(task);
@@ -210,8 +207,7 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            Server.logger.errorLogEntry(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -220,15 +216,12 @@ public class TaskService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, Task taskForm) {
-        _Session session = getSession();
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-
-        _Validation validation = validate(session, taskForm);
+        _Validation validation = validate(taskForm);
         if (validation.hasError()) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
 
+        _Session session = getSession();
         try {
             UserDAO userDAO = new UserDAO(session);
             TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
@@ -321,13 +314,12 @@ public class TaskService extends RestProvider {
             }
 
             task = dao.findById(task.getId());
+            outcome.setId(id);
             outcome.addPayload(task);
 
             return Response.ok(outcome).build();
         } catch (SecureException | DatabaseException | DAOException e) {
-            logError(e);
-            outcome.setMessage(e.getMessage());
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome).build();
+            return responseException(e);
         }
     }
 
@@ -344,8 +336,7 @@ public class TaskService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -359,8 +350,7 @@ public class TaskService extends RestProvider {
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -395,9 +385,7 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException | DatabaseException e) {
-            logError(e);
-            outcome.setMessage(e.getMessage());
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome).build();
+            return responseException(e);
         }
     }
 
@@ -426,9 +414,7 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            outcome.setMessage(e.getMessage());
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome).build();
+            return responseException(e);
         }
     }
 
@@ -459,9 +445,7 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            outcome.setMessage(e.getMessage());
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome).build();
+            return responseException(e);
         }
     }
 
@@ -503,9 +487,9 @@ public class TaskService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(_Session session, Task task) {
+    private _Validation validate(Task task) {
         _Validation ve = new _Validation();
-        UserDAO userDAO = new UserDAO(session);
+        UserDAO userDAO = new UserDAO(getSession());
 
         if (task.getParent() == null && task.getProject() == null) {
             ve.addError("project", "required", "field_is_empty");

@@ -17,13 +17,14 @@ import com.exponentus.user.IUser;
 import workflow.dao.ReportDAO;
 import workflow.model.Report;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("reports")
 public class ReportService extends RestProvider {
+
+    private Outcome outcome = new Outcome();
 
     @GET
     @Path("{id}")
@@ -41,7 +42,6 @@ public class ReportService extends RestProvider {
                 entity = reportDAO.findById(id);
             }
 
-            Outcome outcome = new Outcome();
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
@@ -49,10 +49,10 @@ public class ReportService extends RestProvider {
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
-            System.out.println(getWebFormData());
+
             return Response.ok(outcome).build();
         } catch (Exception e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -61,15 +61,13 @@ public class ReportService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, Report reportForm) {
-        _Session ses = getSession();
-
         _Validation validation = validate(reportForm);
         if (validation.hasError()) {
-            // return error
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
-        Report entity;
 
+        _Session ses = getSession();
+        Report entity;
         try {
             ReportDAO reportDAO = new ReportDAO(ses);
 
@@ -94,10 +92,14 @@ public class ReportService extends RestProvider {
                 entity = reportDAO.update(entity);
             }
 
+            outcome.setId(id);
+            outcome.setTitle(entity.getTitle());
+            outcome.addPayload(entity);
+
+            return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
-        return Response.ok(entity).build();
     }
 
     @DELETE
@@ -113,7 +115,7 @@ public class ReportService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -124,14 +126,10 @@ public class ReportService extends RestProvider {
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        try {
-            ReportDAO dao = new ReportDAO(getSession());
-            Report entity = dao.findById(id);
+        ReportDAO dao = new ReportDAO(getSession());
+        Report entity = dao.findById(id);
 
-            return getAttachment(entity, attachId);
-        } catch (DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
-        }
+        return getAttachment(entity, attachId);
     }
 
     @DELETE

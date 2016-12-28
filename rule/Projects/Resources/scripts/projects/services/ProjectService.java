@@ -25,7 +25,6 @@ import projects.other.Messages;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -36,10 +35,12 @@ import java.util.stream.Collectors;
 @Path("projects")
 public class ProjectService extends RestProvider {
 
+    private Outcome outcome = new Outcome();
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
-        Outcome outcome = new Outcome();
+
         _Session session = getSession();
         try {
             int pageSize = getWebFormData().getNumberValueSilently("limit", session.pageSize);
@@ -62,8 +63,7 @@ public class ProjectService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -71,11 +71,7 @@ public class ProjectService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-
         _Session session = getSession();
-
         IUser<Long> user = session.getUser();
         Project project;
         _WebFormData formData = getWebFormData();
@@ -133,6 +129,7 @@ public class ProjectService extends RestProvider {
                 emps.put(e.getUserID(), e);
             }
 
+            outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
             outcome.addPayload(project);
@@ -140,8 +137,7 @@ public class ProjectService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -151,12 +147,10 @@ public class ProjectService extends RestProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, Project projectForm) {
         _Session session = getSession();
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
 
         _Validation validation = validate(session, projectForm);
         if (validation.hasError()) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
 
         try {
@@ -206,13 +200,14 @@ public class ProjectService extends RestProvider {
             }
 
             project = dao.findById(project.getId());
+
+            outcome.setId(id);
+            outcome.setTitle(project.getName());
             outcome.addPayload(project);
 
             return Response.ok(outcome).build();
         } catch (SecureException | DatabaseException | DAOException e) {
-            logError(e);
-            outcome.setMessage(e.getMessage());
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome).build();
+            return responseException(e);
         }
     }
 
@@ -229,8 +224,7 @@ public class ProjectService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -244,8 +238,7 @@ public class ProjectService extends RestProvider {
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 

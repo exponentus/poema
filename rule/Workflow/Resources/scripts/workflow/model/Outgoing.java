@@ -62,16 +62,6 @@ public class Outgoing extends HierarchicalEntity<UUID> {
     @JoinTable(name = "outgoing_tags")
     private List<Tag> tags;
 
-    @Override
-    public List<Attachment> getAttachments() {
-        return attachments;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getRegNumber() {
         return regNumber;
     }
@@ -94,11 +84,6 @@ public class Outgoing extends HierarchicalEntity<UUID> {
 
     public void setRecipient(Organization recipient) {
         this.recipient = recipient;
-    }
-
-    @Override
-    public void setAttachments(List<Attachment> attachments) {
-        this.attachments = attachments;
     }
 
     public DocumentLanguage getDocLanguage() {
@@ -147,6 +132,16 @@ public class Outgoing extends HierarchicalEntity<UUID> {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    @Override
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    @Override
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
 
     @Override

@@ -27,7 +27,6 @@ import reference.model.RequestType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,13 +37,12 @@ import java.util.Map;
 @Path("requests")
 public class RequestService extends RestProvider {
 
+    private Outcome outcome = new Outcome();
+
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-
         _Session session = getSession();
 
         try {
@@ -73,6 +71,7 @@ public class RequestService extends RestProvider {
             Map<Long, Employee> emps = new HashMap<>();
             emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
 
+            outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(session, request));
             outcome.addPayload(request);
@@ -81,8 +80,7 @@ public class RequestService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -100,8 +98,6 @@ public class RequestService extends RestProvider {
     }
 
     private Response addRequest(_Session session, Request requestForm) {
-        Outcome outcome = new Outcome();
-
         try {
             RequestDAO requestDAO = new RequestDAO(session);
             TaskDAO taskDAO = new TaskDAO(new _Session(new SuperUser()));
@@ -135,10 +131,11 @@ public class RequestService extends RestProvider {
 
             new Messages(getAppEnv()).sendOfNewRequest(request, task);
 
+            outcome.addPayload(request);
+
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -159,8 +156,6 @@ public class RequestService extends RestProvider {
     }
 
     private Response doResolution(String requestId, ResolutionType resolutionType, Request requestForm) {
-        Outcome outcome = new Outcome();
-
         try {
             RequestDAO requestDAO = new RequestDAO(new _Session(new SuperUser()));
             Request request = requestDAO.findById(requestId);
@@ -214,8 +209,7 @@ public class RequestService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -232,8 +226,7 @@ public class RequestService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -247,8 +240,7 @@ public class RequestService extends RestProvider {
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 

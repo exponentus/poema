@@ -1,5 +1,6 @@
 package workflow.services.assignment;
 
+import administrator.dao.UserDAO;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -20,7 +21,6 @@ import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Assignment;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,6 +31,8 @@ import java.util.Map;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
+
+    private Outcome outcome = new Outcome();
 
     @GET
     @Path("{id}")
@@ -64,7 +66,6 @@ public class AssignmentService extends RestProvider {
             }
             //
 
-            Outcome outcome = new Outcome();
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
@@ -80,7 +81,7 @@ public class AssignmentService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -89,12 +90,12 @@ public class AssignmentService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, Assignment assignmentForm) {
-        _Session ses = getSession();
-
         _Validation validation = validate(assignmentForm);
         if (validation.hasError()) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
+
+        _Session ses = getSession();
         Assignment entity;
 
         try {
@@ -123,10 +124,14 @@ public class AssignmentService extends RestProvider {
                 entity = assignmentDAO.update(entity);
             }
 
+            outcome.setId(id);
+            outcome.setTitle(entity.getTitle());
+            outcome.addPayload(entity);
+
+            return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
-        return Response.ok(entity).build();
     }
 
     @DELETE
@@ -142,7 +147,7 @@ public class AssignmentService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -159,7 +164,7 @@ public class AssignmentService extends RestProvider {
 
             return getAttachment(entity, attachId);
         } catch (DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -187,11 +192,21 @@ public class AssignmentService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Assignment assignmentForm) {
+    private _Validation validate(Assignment assignment) {
         _Validation ve = new _Validation();
+        UserDAO userDAO = new UserDAO(getSession());
 
-        if (assignmentForm.getTitle() == null || assignmentForm.getTitle().isEmpty()) {
+        if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
+        }
+
+        if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
+            for (long uid : assignment.getObservers()) {
+                IUser<Long> ou = userDAO.findById(uid);
+                if (ou == null) {
+                    ve.addError("observerUserIds", "required", "observer user not found");
+                }
+            }
         }
 
         return ve;

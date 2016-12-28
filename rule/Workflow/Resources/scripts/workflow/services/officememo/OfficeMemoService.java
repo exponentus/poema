@@ -24,7 +24,6 @@ import workflow.model.constants.ApprovalType;
 import workflow.model.embedded.Approval;
 import workflow.model.embedded.Block;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -36,6 +35,8 @@ import java.util.stream.Collectors;
 
 @Path("office-memos")
 public class OfficeMemoService extends RestProvider {
+
+    private Outcome outcome = new Outcome();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -55,7 +56,6 @@ public class OfficeMemoService extends RestProvider {
         actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
         // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
-        Outcome outcome = new Outcome();
         outcome.setId("office-memos");
         outcome.setTitle("office_memo_documents");
         outcome.addPayload(actionBar);
@@ -88,7 +88,6 @@ public class OfficeMemoService extends RestProvider {
             entity = officeMemoDAO.findById(id);
         }
 
-        Outcome outcome = new Outcome();
         outcome.setId(id);
         outcome.addPayload(entity);
         outcome.addPayload(getActionBar(ses, entity));
@@ -105,14 +104,12 @@ public class OfficeMemoService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@PathParam("id") String id, OfficeMemo form) {
-        _Session ses = getSession();
-
         _Validation validation = validate(form);
         if (validation.hasError()) {
-            // return error
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
 
+        _Session ses = getSession();
         // ApprovalDAO approvalDAO = new ApprovalDAO(ses);
         OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
         OfficeMemo entity;
@@ -147,10 +144,14 @@ public class OfficeMemoService extends RestProvider {
                 entity = officeMemoDAO.update(entity);
             }
 
+            outcome.setId(id);
+            outcome.setTitle(entity.getTitle());
+            outcome.addPayload(entity);
+
+            return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
-        return Response.ok(entity).build();
     }
 
     @DELETE
@@ -164,7 +165,7 @@ public class OfficeMemoService extends RestProvider {
             try {
                 dao.delete(entity);
             } catch (SecureException | DAOException e) {
-                return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+                return responseException(e);
             }
         }
         return Response.noContent().build();

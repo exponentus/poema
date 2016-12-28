@@ -62,7 +62,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
         if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
-            condition = cb.and(root.get("readers").in(user.getId()));
+            condition = cb.and(root.get("readers").in(user.getId()), condition);
         }
 
         cq.where(condition);
@@ -85,6 +85,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
     }
 
     private List<IAppEntity> findAssignmentResponses(Assignment assignment, List<UUID> expandedIds, EntityManager em) {
+        // --- Assignment
         CriteriaBuilder cba = em.getCriteriaBuilder();
         CriteriaQuery<Assignment> cqa = cba.createQuery(Assignment.class);
         Root<Assignment> rootA = cqa.from(Assignment.class);
@@ -102,7 +103,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         TypedQuery<Assignment> typedQueryA = em.createQuery(cqa);
         List<Assignment> assignments = typedQueryA.getResultList();
 
-        // ------------------------------------------
+        // --- Report
         CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
         Root<Report> rootR = cqr.from(Report.class);
@@ -120,7 +121,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         TypedQuery<Report> typedQueryR = em.createQuery(cqr);
         List<Report> reports = typedQueryR.getResultList();
 
-        // ------------------------------------------
+        // --- concat & sort by reg date
         List<IAppEntity> result = new LinkedList<>(assignments);
         result.addAll(reports);
 
