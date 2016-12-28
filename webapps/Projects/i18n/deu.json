@@ -133,6 +133,7 @@
   "notify_about_request_resolution" : "notify_about_request_resolution",
   "user_profile" : "user_profile",
   "requests" : "requests",
+  "notify_about_pending_task" : "notify_about_pending_task",
   "iin" : "iin",
   "undefined" : "undefined",
   "unknown" : "UNKNOWN",

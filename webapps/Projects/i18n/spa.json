@@ -133,6 +133,7 @@
   "notify_about_request_resolution" : "Notificarle",
   "user_profile" : "user_profile",
   "requests" : "Solicitudes",
+  "notify_about_pending_task" : "Notificarle",
   "iin" : "iin",
   "undefined" : "undefined",
   "unknown" : "Desconocido",

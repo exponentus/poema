@@ -42,6 +42,10 @@ import staff.model.Employee;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+ * Не используется
+ */
+
 public class TaskForm extends _DoForm {
 
     @Override
@@ -397,7 +401,7 @@ public class TaskForm extends _DoForm {
             ve.addError("taskTypeId", "required", getLocalizedWord("field_is_empty", lang));
         }
         /*
-		 * if (formData.getValueSilently("title").isEmpty()) {
+         * if (formData.getValueSilently("title").isEmpty()) {
 		 * ve.addError("title", "required", getLocalizedWord("field_is_empty",
 		 * lang)); } else if (formData.getValueSilently("title").length() > 140)
 		 * { ve.addError("title", "maxlen_140",
