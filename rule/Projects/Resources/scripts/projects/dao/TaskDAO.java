@@ -59,20 +59,6 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (filter.getParentTask() != null) {
-                if (condition == null) {
-                    condition = cb.equal(taskRoot.get("parent"), filter.getParentTask());
-                } else {
-                    condition = cb.and(cb.equal(taskRoot.get("parent"), filter.getParentTask()), condition);
-                }
-            } else if (filter.isParentOnly()) {
-                if (condition == null) {
-                    condition = cb.isEmpty(taskRoot.get("parent"));
-                } else {
-                    condition = cb.and(cb.isEmpty(taskRoot.get("parent")), condition);
-                }
-            }
-
             if (filter.getStatus() != TaskStatusType.UNKNOWN) {
                 if (condition == null) {
                     condition = cb.equal(taskRoot.get("status"), filter.getStatus());
@@ -129,6 +115,22 @@ public class TaskDAO extends DAO<Task, UUID> {
                             condition);
                 }
             }
+
+            //
+            if (filter.getParentTask() != null) {
+                if (condition == null) {
+                    condition = cb.equal(taskRoot.get("parent"), filter.getParentTask());
+                } else {
+                    condition = cb.and(cb.equal(taskRoot.get("parent"), filter.getParentTask()), condition);
+                }
+            } else if (!filter.isPlainMode() || filter.isParentOnly()) {
+                if (condition == null) {
+                    condition = cb.isEmpty(taskRoot.get("parent"));
+                } else {
+                    condition = cb.and(cb.isEmpty(taskRoot.get("parent")), condition);
+                }
+            }
+            //
 
             if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
                 Path<Set<Long>> readers = taskRoot.join("readers", JoinType.LEFT);
@@ -192,11 +194,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         try {
             vp.getResult()
-                    //.stream()
-                    //.map(it -> it) // mark has response
-                    //.filter(task -> expandedIds.contains(task.getId()))
                     .forEach(task -> {
-                        List<IAppEntity> responses = findTaskResponses(task, expandedIds, em);
+                        List<IAppEntity> responses = findTaskResponses(task, filter, expandedIds, em);
                         if (responses != null && responses.size() > 0) {
                             task.setResponsesCount((long) responses.size());
                             task.setResponses(responses);
@@ -209,23 +208,28 @@ public class TaskDAO extends DAO<Task, UUID> {
         return vp;
     }
 
-    private List<IAppEntity> findTaskResponses(Task task, List<UUID> expandedIds, EntityManager em) {
-        CriteriaBuilder cbt = em.getCriteriaBuilder();
-        CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
-        Root<Task> taskRoot = cqt.from(Task.class);
-        cqt.select(taskRoot).distinct(true);
+    private List<IAppEntity> findTaskResponses(Task task, TaskFilter filter, List<UUID> expandedIds, EntityManager em) {
 
-        Predicate conditionA = cbt.equal(taskRoot.get("parent"), task);
+        List<Task> tasks = new ArrayList<>();
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
-            conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+        if (!filter.isPlainMode()) {
+            CriteriaBuilder cbt = em.getCriteriaBuilder();
+            CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
+            Root<Task> taskRoot = cqt.from(Task.class);
+            cqt.select(taskRoot).distinct(true);
+
+            Predicate conditionA = cbt.equal(taskRoot.get("parent"), task);
+
+            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
+                conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+            }
+
+            cqt.where(conditionA);
+            cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
+
+            TypedQuery<Task> typedQueryT = em.createQuery(cqt);
+            tasks = typedQueryT.getResultList();
         }
-
-        cqt.where(conditionA);
-        cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
-
-        TypedQuery<Task> typedQueryT = em.createQuery(cqt);
-        List<Task> tasks = typedQueryT.getResultList();
 
         // -----------------------------------------
         CriteriaBuilder cbr = em.getCriteriaBuilder();
@@ -256,15 +260,11 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         if (tasks.size() > 0) {
             for (Task t : tasks) {
-                //.stream()
-                //.filter(it -> expandedIds.contains(it.getId()))
-                //.forEach(it -> {
-                List<IAppEntity> responses = findTaskResponses(t, expandedIds, em);
+                List<IAppEntity> responses = findTaskResponses(t, filter, expandedIds, em);
                 if (responses != null && responses.size() > 0) {
                     t.setResponsesCount((long) responses.size());
                     t.setResponses(responses);
                 }
-                //});
             }
         }
 

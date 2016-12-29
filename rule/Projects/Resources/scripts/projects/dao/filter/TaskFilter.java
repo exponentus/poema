@@ -174,7 +174,12 @@ public class TaskFilter extends Filter {
         return isInitiative;
     }
 
-    public void setInitiative(boolean initiative) {
+    public TaskFilter setInitiative(boolean initiative) {
         isInitiative = initiative;
+        return this;
+    }
+
+    public boolean isPlainMode() {
+        return hasSearch() || getAssigneeUserId() != null || getStatus() != TaskStatusType.UNKNOWN || getTaskType() != null || getTags() != null;
     }
 }

@@ -540,13 +540,6 @@ public class TaskService extends RestProvider {
         filter.setStartDate(formData.getDateSilently("startDate"));
         filter.setDueDate(formData.getDateSilently("dueDate"));
 
-        String parentOnly = formData.getValueSilently("parentOnly");
-        if (!filter.hasSearch() && !parentOnly.equals("false")) {
-            filter.setParentOnly(true);
-        } else {
-            filter.setParentOnly(false);
-        }
-
         String taskStatus = formData.getValueSilently("taskStatus");
         if (!taskStatus.isEmpty()) {
             filter.setStatus(TaskStatusType.valueOf(taskStatus));
@@ -581,6 +574,8 @@ public class TaskService extends RestProvider {
             }
             filter.setTags(tags);
         }
+
+        filter.setParentOnly(formData.getBoolSilently("parentOnly"));
 
         return filter;
     }
