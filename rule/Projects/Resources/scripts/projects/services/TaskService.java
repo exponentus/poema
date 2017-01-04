@@ -66,6 +66,7 @@ public class TaskService extends RestProvider {
             _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
 
             ViewPage<Task> vp = taskDAO.findAllWithResponses(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
+            // vp.setResult(TaskDtoConverter.convert(vp.getResult()));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll().stream()
@@ -197,6 +198,18 @@ public class TaskService extends RestProvider {
             empIds.add(task.getAuthorId());
             for (Employee e : empDao.findAllByUserIds(empIds)) {
                 emps.put(e.getUserID(), e);
+            }
+
+            if (isNew && task.getParent() != null) {
+                outcome.setTitle("new_subtask");
+            } else if (task.isInitiative()) {
+                outcome.setTitle("initiative_task");
+            } else if (isNew) {
+                outcome.setTitle("new_task");
+            } else if (task.getParent() != null) {
+                outcome.setTitle("subtask");
+            } else {
+                outcome.setTitle("task");
             }
 
             outcome.setId(id);

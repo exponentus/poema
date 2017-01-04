@@ -47,6 +47,7 @@ public class ProjectService extends RestProvider {
             _SortParams sortParams = getWebFormData().getSortParams(_SortParams.asc("name"));
             ProjectDAO projectDAO = new ProjectDAO(session);
             ViewPage<Project> vp = projectDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+            // vp.setResult(ProjectDtoConverter.convert(vp.getResult()));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action("new_project", "", "new_project"));
@@ -82,7 +83,10 @@ public class ProjectService extends RestProvider {
                 project = dao.findById(id);
 
                 outcome.addPayload(new ACL(project));
+                outcome.setTitle("project");
             } else {
+                outcome.setTitle("new_project");
+
                 project = new Project();
                 project.setAuthor(user);
                 project.setComment("");

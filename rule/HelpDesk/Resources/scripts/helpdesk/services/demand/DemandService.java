@@ -27,7 +27,6 @@ import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 import staff.dao.OrganizationDAO;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -35,10 +34,11 @@ import javax.ws.rs.core.Response;
 @Path("demands")
 public class DemandService extends RestProvider {
 
+    private Outcome outcome = new Outcome();
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
-        Outcome outcome = new Outcome();
         _Session session = getSession();
         _WebFormData params = getWebFormData();
         int pageSize = session.pageSize;
@@ -59,8 +59,7 @@ public class DemandService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -68,7 +67,6 @@ public class DemandService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
         _Session session = getSession();
         Demand entity;
         try {
@@ -100,8 +98,7 @@ public class DemandService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(outcome.setMessage(e.toString())).build();
+            return responseException(e);
         }
     }
 
@@ -114,8 +111,7 @@ public class DemandService extends RestProvider {
 
         _Validation validation = validate(demandForm);
         if (validation.hasError()) {
-            // return error
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).entity(validation).build();
+            return responseValidationError(validation);
         }
 
         Demand demand;
@@ -161,10 +157,9 @@ public class DemandService extends RestProvider {
                 demand = demandDAO.update(demand);
             }
         } catch (SecureException | DAOException e) {
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
 
-        Outcome outcome = new Outcome();
         outcome.setId(id);
         outcome.addPayload(demand);
 
@@ -184,8 +179,7 @@ public class DemandService extends RestProvider {
             }
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -199,8 +193,7 @@ public class DemandService extends RestProvider {
 
             return getAttachment(demand, attachId);
         } catch (DAOException e) {
-            logError(e);
-            return Response.status(HttpServletResponse.SC_BAD_REQUEST).build();
+            return responseException(e);
         }
     }
 
@@ -222,7 +215,7 @@ public class DemandService extends RestProvider {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
 
         return actionBar;

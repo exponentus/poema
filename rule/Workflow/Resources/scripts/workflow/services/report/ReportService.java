@@ -148,7 +148,7 @@ public class ReportService extends RestProvider {
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("delete_document", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
 
         return actionBar;

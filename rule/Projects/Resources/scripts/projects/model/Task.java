@@ -167,11 +167,15 @@ public class Task extends HierarchicalEntity<UUID> {
         } else {
             addReaderEditor(author);
         }
-        statusDate = new Date();
+        setStatusDate(new Date());
     }
 
     public Date getStatusDate() {
         return statusDate;
+    }
+
+    public void setStatusDate(Date date) {
+        statusDate = date;
     }
 
     public TaskPriorityType getPriority() {
