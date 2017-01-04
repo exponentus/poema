@@ -1,5 +1,6 @@
 /* UNKNOWN, DRAFT, WAITING, @Deprecated PROCESSED, @Deprecated FINISHED, PROCESSING, COMPLETED, CANCELLED, OPEN, PENDING; */
 
+
 /*
 Open = Blue
 Processing = Yellow
@@ -58,4 +59,64 @@ Pending = Orange
 .status-pending {
     background: #FF9800;
     color: #fff;
+}
+
+
+/* */
+
+.vp__list_it_col.status-col-mobile {
+    border: 0;
+    max-width: 6px;
+    min-width: 6px;
+    width: 6px;
+}
+
+.status-col-mobile,
+.status-col-mobile .vp__list_it_val_wrap {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.status-col-mobile .vp__list_it_val {
+    border-radius: 2px;
+    height: 80%;
+    position: absolute;
+    text-indent: 50px;
+    top: 10%;
+    left: 0;
+    width: 4px;
+}
+
+.status-bg-draft {
+    background: #f5f5f5;
+}
+
+.status-bg-open {
+    background: #cee3ff;
+}
+
+.status-bg-active {
+    background: #FFEB3B;
+}
+
+.status-bg-processing {
+    background: #FFEB3B;
+}
+
+.status-bg-waiting {
+    background: #b4baff;
+}
+
+.status-bg-completed {
+    background: #8BC34A;
+}
+
+.status-bg-cancelled {
+    background: #fd918a;
+}
+
+.status-bg-pending {
+    background: #FF9800;
 }
