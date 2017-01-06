@@ -27,7 +27,7 @@
     padding: 4px;
 }
 
-.tags-input .select-option .tag {
+.tags-input .select__list-option .tag {
     border: 0;
     padding: 0 2px;
 }

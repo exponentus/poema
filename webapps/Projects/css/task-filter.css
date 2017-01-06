@@ -1,15 +1,24 @@
 .filter-box .tags-input .tag {
-    padding: 0 2px;
+    padding: 4px;
 }
 
-.filter-box .input {
+.filter-box .select__toggle {
     background: transparent;
     border: 0;
     min-width: 110px;
 }
 
-.filter-box .task-status-input .select-option {
+.filter-box .task-status-input .select__list-option {
     padding: .6em .6em .6em 1.8em;
+}
+
+@media ( min-width: 768px) {
+    .filter-box .tags-input .tag {
+        margin: -4px 1px;
+    }
+    .filter-box .select__selected[class*='status-'] {
+        margin: -6px 0;
+    }
 }
 
 
@@ -28,16 +37,19 @@
     display: inline-block;
     min-height: 31px;
     padding: 7px 8px;
+    vertical-align: top;
 }
 
 .filter__items {
     display: inline-block;
+    vertical-align: top;
 }
 
 .filter__items_item {
+    display: inline-block;
     height: 100%;
     margin: 0;
-    display: inline-block;
+    vertical-align: top;
 }
 
 .filter__items_item:hover {
