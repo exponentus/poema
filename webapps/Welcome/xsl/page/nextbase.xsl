@@ -3,7 +3,6 @@
 
 	<xsl:template name="nextbase">
 		<section class="section skills" id="skills">
-
 			<!-- SKILLS -->
 			<div class="container">
 				<div class="row">

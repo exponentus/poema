@@ -7,6 +7,7 @@
 	<xsl:import href="about.xsl" />
 	<xsl:import href="skills.xsl" />
 	<xsl:import href="contact.xsl" />
+	<xsl:import href="faq.xsl" />
 	<xsl:import href="../templates/footer.xsl" />
 
 	<xsl:template match="/request">
@@ -20,6 +21,8 @@
 		<xsl:call-template name="about" />
 		<div class="section_divider"></div>
 		<xsl:call-template name="skills" />
+		<div class="section_divider"></div>
+		<xsl:call-template name="faq" />
 		<div class="section_divider"></div>
 		<xsl:call-template name="contact" />
 		<xsl:call-template name="footer" />

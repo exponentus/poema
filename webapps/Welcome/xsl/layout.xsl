@@ -26,6 +26,7 @@
                 <link rel="stylesheet" href="/SharedResources/css/animate.css"/>
 
                 <link rel="stylesheet" href="css/layout.css"/>
+                <link rel="stylesheet" href="css/faq.css"/>
                 <link rel="stylesheet" href="css/navbar.css"/>
                 <link rel="stylesheet" href="css/heading.css"/>
                 <link rel="stylesheet" href="css/promo.css"/>
