@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.exponentus.localization.LanguageCode;
+import com.exponentus.messaging.MessageType;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._WebFormData;
 import com.exponentus.scripting.event._DoPage;
@@ -18,12 +19,14 @@ public class Index extends _DoPage {
 
 		String toLang = formData.getValueSilently("lang");
 		try {
+			LanguageCode l = LanguageCode.ENG;
 			if (toLang.length() > 0) {
-				LanguageCode l = LanguageCode.valueOf(toLang.toUpperCase().trim());
+				l = LanguageCode.valueOf(toLang.toUpperCase().trim());
 				session.setLang(l);
 			} else if (session.getLang() == null) {
 				session.setLang(LanguageCode.ENG);
 			}
+			addValue("template",getCurrentAppEnv().templates.getTemplate(MessageType.SITE, "faq", LanguageCode.ENG));
 		} catch (Exception e) {
 			addContent("error", "the " + toLang + " language is not available");
 		}
