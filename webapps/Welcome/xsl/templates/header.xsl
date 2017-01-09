@@ -23,7 +23,7 @@
 						<span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="#home">
-						<img style="margin-top:-10px" src="img/logo_NB.png"/>
+						<img style="margin-top:-15px" src="img/exponentus_logo_text_ywb_nobg.png"/>
 					</a>
 					<!--<a class="navbar-brand" href="#home">
 						<xsl:value-of select="//captions/brand/@caption" />
