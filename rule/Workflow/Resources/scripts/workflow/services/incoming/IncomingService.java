@@ -210,8 +210,8 @@ public class IncomingService extends RestProvider {
         if (model.getAddressee() == null) {
             ve.addError("addressee", "required", "field_is_empty");
         }
-        if (model.getResponseTo() == null) {
-            ve.addError("responseTo", "required", "field_is_empty");
+        if (model.getSenderRegNumber() == null || model.getSenderRegNumber().isEmpty()) {
+            ve.addError("senderRegNumber", "required", "field_is_empty");
         }
         if (model.getSenderAppliedRegDate() == null) {
             ve.addError("senderAppliedRegDate", "required", "field_is_empty");

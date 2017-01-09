@@ -263,7 +263,8 @@ public class RequestService extends RestProvider {
             if (request.getTask().getAuthor().getId().equals(session.getUser().getId())
                     && (request.getResolution() != ResolutionType.ACCEPTED
                     && request.getResolution() != ResolutionType.DECLINED)) {
-                actionBar.addAction(new _Action("", "", "resolution"));
+                actionBar.addAction(new _Action("", "", "decline"));
+                actionBar.addAction(new _Action("", "", "accept"));
             }
         }
         return actionBar;

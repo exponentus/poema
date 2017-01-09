@@ -177,6 +177,7 @@
   "accepted" : "accepted",
   "new_document" : "new_document",
   "task" : "task",
+  "confirm_action" : "confirm_action",
   "files" : "files",
   "position" : "position",
   "handler_not_defined" : "The handler has not been defined",
