@@ -26,7 +26,7 @@ public class Index extends _DoPage {
 			} else if (session.getLang() == null) {
 				session.setLang(LanguageCode.ENG);
 			}
-			addValue("template",getCurrentAppEnv().templates.getTemplate(MessageType.SITE, "faq", LanguageCode.ENG));
+			addValue("template",getCurrentAppEnv().templates.getTemplate(MessageType.SITE, "faq", l));
 		} catch (Exception e) {
 			addContent("error", "the " + toLang + " language is not available");
 		}
