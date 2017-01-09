@@ -125,7 +125,7 @@ $(document).ready(function(e) {
     $('form[name=contact_us]').submit(function(e) {
         var $form = $(this);
         $.ajax({
-            url: 'rest/service/sendmail',
+            url: 'Welcome/api/service/sendmail',
             type: 'POST',
             data: $form.serialize(),
             dataType: 'json',

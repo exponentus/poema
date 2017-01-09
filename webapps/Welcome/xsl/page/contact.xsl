@@ -25,7 +25,7 @@
 						<!-- Alert message -->
 						<div class="alert contact-form__alert" id="form_message" role="alert"></div>
 						<!-- Contact form -->
-						<form method="post" action="rest/service/sendmail" name="contact_us">
+						<form method="post" action="api/service/sendmail" name="contact_us">
 							<fieldset>
 								<div class="form-group">
 									<input type="email" name="email" placeholder="Yours email" class="form-control contact-email contact-error" required="required" >
