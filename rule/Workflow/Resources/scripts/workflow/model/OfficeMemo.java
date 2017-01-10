@@ -37,9 +37,6 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
     @Column(nullable = false)
     protected Long recipient = AnonymousUser.ID;
 
-    @Embedded
-    private Approval approval;
-
     @FTSearchable
     @Column(columnDefinition = "TEXT")
     private String body;
@@ -56,6 +53,9 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "officememo_tags")
     private List<Tag> tags;
+
+    @Embedded
+    private Approval approval;
 
     public String getRegNumber() {
         return regNumber;
@@ -89,14 +89,6 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
         this.recipient = recipient;
     }
 
-    public Approval getApproval() {
-        return approval;
-    }
-
-    public void setApproval(Approval approval) {
-        this.approval = approval;
-    }
-
     public String getBody() {
         return body;
     }
@@ -121,6 +113,14 @@ public class OfficeMemo extends HierarchicalEntity<UUID> {
     @Override
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public Approval getApproval() {
+        return approval;
+    }
+
+    public void setApproval(Approval approval) {
+        this.approval = approval;
     }
 
     @Override

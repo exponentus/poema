@@ -130,6 +130,7 @@ public class OfficeMemoService extends RestProvider {
         }
         entity.setTitle(form.getTitle());
         entity.setBody(form.getBody());
+        entity.setRecipient(form.getRecipient());
         entity.setAttachments(getActualAttachments(entity.getAttachments()));
 
         try {
