@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.DatabaseUtil;
@@ -23,13 +24,15 @@ import administrator.model.User;
 import reference.dao.DocumentLanguageDAO;
 import reference.dao.DocumentSubjectDAO;
 import reference.dao.DocumentTypeDAO;
+import reference.model.DocumentSubject;
+import reference.model.DocumentType;
 import staff.dao.OrganizationDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
 @Command(name = "import_in_4ms")
 public class SyncIncomings4MS extends Import4MS {
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Incoming> entities = new HashMap<>();
@@ -42,11 +45,12 @@ public class SyncIncomings4MS extends Import4MS {
 			DocumentLanguageDAO dlDao = new DocumentLanguageDAO(ses);
 			DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
+			Map<Integer, String> vidCollation = vidCollationMapInit();
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
-			
+
 			conn.setAutoCommit(false);
 			Statement s = conn.createStatement();
-			String sql = "SELECT * FROM maindocs as m, custom_fields as cf WHERE form='IN' and m.docid = cf.docid;";
+			String sql = "SELECT * FROM maindocs as m WHERE form='IN';";
 			ResultSet rs = s.executeQuery(sql);
 			while (rs.next()) {
 				int docId = rs.getInt("docid");
@@ -63,11 +67,31 @@ public class SyncIncomings4MS extends Import4MS {
 				} else {
 					inc.setAuthor(dummyUser);
 				}
+				int code = getGloassaryValue(conn, docId, "vid");
+				String vidName = vidCollation.get(code);
+				DocumentType docType = dtDao.findByName(vidName);
+				if (docType != null) {
+					inc.setDocType(docType);
+				} else {
+					logger.errorLogEntry("reference ext value has not been found \"" + vidName + "\"");
+				}
+
+				String har = "unknown";
+				DocumentSubject docSubj = dsDao.findByName(har);
+				if (docSubj != null) {
+					inc.setDocSubject(docSubj);
+				} else {
+					logger.errorLogEntry("reference ext value has not been found \"" + har + "\"");
+				}
+
 				entities.put(extKey, inc);
 			}
 			s.close();
 			conn.commit();
-
+			logger.infoLogEntry("has been found " + entities.size() + " records");
+			for (Entry<String, Incoming> ee : entities.entrySet()) {
+				save(iDao, ee.getValue(), ee.getKey());
+			}
 		} catch (SQLException e) {
 			DatabaseUtil.errorPrint(e);
 		} catch (DAOException e) {
@@ -78,7 +102,7 @@ public class SyncIncomings4MS extends Import4MS {
 		}
 		logger.infoLogEntry("done...");
 	}
-
+	
 	private String getStringValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT value FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '" + fieldName
@@ -90,7 +114,7 @@ public class SyncIncomings4MS extends Import4MS {
 			return "";
 		}
 	}
-
+	
 	private Date getDateValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasdate FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -101,5 +125,25 @@ public class SyncIncomings4MS extends Import4MS {
 		} else {
 			return null;
 		}
+	}
+
+	private int getGloassaryValue(Connection conn, int docId, String fieldName) throws SQLException {
+		Statement s = conn.createStatement();
+		String sql = "SELECT valueasglossary FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
+				+ fieldName + "';";
+		ResultSet rs = s.executeQuery(sql);
+		if (rs.next()) {
+			return rs.getInt(fieldName);
+		} else {
+			return 0;
+		}
+	}
+
+	private Map<Integer, String> vidCollationMapInit() {
+		Map<Integer, String> collation = new HashMap<>();
+		collation.put(110, "Письмо");
+		collation.put(111, "Поручение");
+		return collation;
+		
 	}
 }
