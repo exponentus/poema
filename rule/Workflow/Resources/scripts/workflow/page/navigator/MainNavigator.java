@@ -17,7 +17,7 @@ public class MainNavigator extends _DoPage {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         _Outline common_outline = new _Outline(getLocalizedWord("workflow", session.getLang()), "common");
-        common_outline.addEntry(new _OutlineEntry(getLocalizedWord("office_memo", session.getLang()), "", "office-memos", "office-memos"));
+        common_outline.addEntry(new _OutlineEntry(getLocalizedWord("office_memo_plural", session.getLang()), "", "office-memos", "office-memos"));
         common_outline.addEntry(new _OutlineEntry(getLocalizedWord("incoming_documents", session.getLang()), "", "incomings", "incomings"));
         common_outline.addEntry(new _OutlineEntry(getLocalizedWord("outgoing_documents", session.getLang()), "", "outgoings", "outgoings"));
 

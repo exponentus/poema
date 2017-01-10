@@ -64,6 +64,7 @@
   "has_been_not_filled" : "has_been_not_filled",
   "field_is_too_long" : "field_is_too_long",
   "recycle_bin" : "recycle_bin",
+  "add" : "add",
   "телефон" : "Телефон",
   "tasks_all" : "tasks_all",
   "no_data" : "no_data",
