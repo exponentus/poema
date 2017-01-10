@@ -285,4 +285,18 @@
         <entry lang="POR">This is message from Promo site</entry>
         <entry lang="SPA">This is message from Promo site</entry>
     </sentence>
+	<sentence mode="on" keyword="ask_question">
+		<entry lang="RUS">Задать вопрос</entry>
+		<entry lang="ENG">Ask a question</entry>
+		<entry lang="KAZ">Задать вопрос</entry>
+		<entry lang="POR">Ask a question</entry>
+		<entry lang="SPA">Ask a question</entry>
+	</sentence>
+	<sentence mode="on" keyword="faq">
+		<entry lang="RUS">Вопросы</entry>
+		<entry lang="ENG">FAQ</entry>
+		<entry lang="KAZ">Вопросы</entry>
+		<entry lang="POR">FAQ</entry>
+		<entry lang="SPA">FAQ</entry>
+	</sentence>
 </vocabulary>

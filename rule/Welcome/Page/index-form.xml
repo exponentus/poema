@@ -50,4 +50,6 @@
     <caption name="phone" />
 
     <caption name="cookieconsent_message" />
+    <caption name="ask_question" />
+    <caption name="faq" />
 </rule>
