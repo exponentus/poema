@@ -38,15 +38,15 @@
 							</a>
 						</li>
 						<li class="">
-							<a href="#about">
-								<xsl:value-of select="//captions/about_us/@caption" />
+							<a href="#faq">
+								<xsl:value-of select="//captions/faq/@caption" />
 							</a>
 						</li>
-						<li class="">
+						<!--<li class="">
 							<a href="#skills">
 								<xsl:value-of select="//captions/skills_title/@caption" />
 							</a>
-						</li>
+						</li>-->
 						<!-- <li class="">
 							<a href="#contact">
 								<xsl:value-of select="//captions/contact_us/@caption" />
@@ -86,14 +86,16 @@
 							class="heading__sub promo-heading__experience animated fadeInUp delay_1">
 							<xsl:value-of select="//captions/promo_experience/@caption" />
 						</p>
+						<p class="heading__sub promo-heading__experience animated fadeInUp delay_1">
 						<a href="#contact"
 							class="promo__btn btn btn-lg btn-primary animated fadeInUp delay_2">
-							<xsl:value-of select="//captions/contact_us/@caption" />
+							<xsl:value-of select="//captions/ask_question/@caption" />
 						</a>
-						<a href="#about"
+						</p>
+						<!--<a href="#about"
 							class="promo__btn btn btn-lg btn-link animated fadeInUp delay_2">
 							<xsl:value-of select="//captions/find_out_more/@caption" />
-						</a>
+						</a>-->
 					</div>
 				</div>
 			</div>
