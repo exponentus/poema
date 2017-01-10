@@ -56,8 +56,8 @@ public class OfficeMemoService extends RestProvider {
         actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
         // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
-        outcome.setId("office-memos");
-        outcome.setTitle("office_memo_documents");
+        outcome.setId("office-memo");
+        outcome.setTitle("office_memo_plural");
         outcome.addPayload(actionBar);
         outcome.addPayload(vp);
 

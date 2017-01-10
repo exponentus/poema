@@ -9,7 +9,7 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<h3 class="heading heading_center">
-							<xsl:value-of select="//captions/contact_us/@caption" />
+							<xsl:value-of select="//captions/ask_question/@caption" />
 							<hr />
 						</h3>
 						<p class="heading__sub heading__sub_center" style="margin-bottom:40px">

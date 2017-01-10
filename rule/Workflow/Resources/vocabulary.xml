@@ -7,8 +7,12 @@
         <entry lang="SPA">Control de acceso</entry>
     </sentence>
 
-    <sentence mode="on" keyword="office_memo">
+    <sentence mode="on" keyword="office_memo_plural">
         <entry lang="RUS">Служебные записки</entry>
+        <entry lang="ENG">Officememo</entry>
+    </sentence>
+    <sentence mode="on" keyword="office_memo">
+        <entry lang="RUS">Служебная записка</entry>
         <entry lang="ENG">Officememo</entry>
     </sentence>
     <sentence mode="on" keyword="incoming_documents">
@@ -27,7 +31,10 @@
         <entry lang="RUS">Исходящий документ</entry>
         <entry lang="ENG">Outgoing document</entry>
     </sentence>
-
+    <sentence mode="on" keyword="approvals">
+        <entry lang="RUS">Согласование</entry>
+        <entry lang="ENG">Approvals</entry>
+    </sentence>
     <sentence mode="on" keyword="signer">
         <entry lang="RUS">Подписывающий</entry>
         <entry lang="ENG">Signer</entry>

@@ -17,11 +17,11 @@
 	<xsl:template name="_content">
 		<xsl:call-template name="header" />
              <!--    <xsl:call-template name="nextbase" /> -->
-		<div class="section_divider"></div>
+		<!--<div class="section_divider"></div>
 		<xsl:call-template name="about" />
 		<div class="section_divider"></div>
 		<xsl:call-template name="skills" />
-		<div class="section_divider"></div>
+		<div class="section_divider"></div>-->
 		<xsl:call-template name="faq" />
 		<div class="section_divider"></div>
 		<xsl:call-template name="contact" />
