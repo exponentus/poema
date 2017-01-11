@@ -114,7 +114,7 @@
   "create_report" : "Сформировать отчет",
   "send" : "send",
   "incoming_documents" : "Входящие документы",
-  "view_mode_tree" : "В виде древа",
+  "view_mode_tree" : "В виде иерархии",
   "outgoing" : "Исходящий документ",
   "method_is_not_implemented" : "Метод не реализован",
   "password_confirm" : "Confirm password",

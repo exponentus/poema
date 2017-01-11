@@ -114,7 +114,7 @@
   "create_report" : "Generate a report",
   "send" : "Send",
   "incoming_documents" : "Incoming documents",
-  "view_mode_tree" : "As tree",
+  "view_mode_tree" : "Hierarchy",
   "outgoing" : "Outgoing document",
   "method_is_not_implemented" : "Method is not implemented",
   "password_confirm" : "Confirm password",
