@@ -114,7 +114,7 @@
   "create_report" : "Есептемені құрастыру",
   "send" : "Жіберу",
   "incoming_documents" : "incoming_documents",
-  "view_mode_tree" : "В виде дерева",
+  "view_mode_tree" : "В виде иерархии",
   "outgoing" : "outgoing",
   "method_is_not_implemented" : "Method is not implemented",
   "password_confirm" : "Confirm password",
