@@ -123,7 +123,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 } else {
                     condition = cb.and(cb.equal(taskRoot.get("parent"), filter.getParentTask()), condition);
                 }
-            } else if (!filter.isPlainMode() || filter.isParentOnly()) {
+            } else if (filter.isTreeMode() || filter.isParentOnly()) {
                 if (condition == null) {
                     condition = cb.isEmpty(taskRoot.get("parent"));
                 } else {
@@ -212,7 +212,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         List<Task> tasks = new ArrayList<>();
 
-        if (!filter.isPlainMode()) {
+        if (filter.isTreeMode()) {
             CriteriaBuilder cbt = em.getCriteriaBuilder();
             CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
             Root<Task> taskRoot = cqt.from(Task.class);
