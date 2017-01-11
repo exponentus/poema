@@ -7,6 +7,10 @@
     padding: 1px 2px!important;
 }
 
-.btn-toggle-view-mode .btn-icon:not(.is-active) {
-    opacity: .5;
+.btn-toggle-view-mode {
+    cursor: pointer;
+    line-height: normal;
+    margin: 1px;
+    padding: 8px;
+    vertical-align: top;
 }
