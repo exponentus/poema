@@ -1,7 +1,7 @@
 package workflow.task;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
-import org.postgresql.largeobject.LargeObject;
-import org.postgresql.largeobject.LargeObjectManager;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
@@ -46,11 +44,11 @@ import staff.model.Organization;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
-@Command(name = "import_in_4ms")
+@Command(name = "i")
 public class SyncIncomings4MS extends Import4MS {
 	private static final String VID_CATEGORY = "Интеграция";
 	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Incoming> entities = new HashMap<>();
@@ -66,7 +64,7 @@ public class SyncIncomings4MS extends Import4MS {
 			Map<Integer, String> vidCollation = vidCollationMapInit();
 			Map<String, LanguageCode> docLangCollation = langCollationMapInit();
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
-			
+
 			conn.setAutoCommit(false);
 			Statement s = conn.createStatement();
 			String sql = "SELECT * FROM maindocs as m WHERE form='IN';";
@@ -92,21 +90,21 @@ public class SyncIncomings4MS extends Import4MS {
 				if (docType != null) {
 					inc.setDocType(docType);
 				} else {
-					logger.errorLogEntry("reference ext value has not been found \"" + vidName + "\"");
+					logger.errorLogEntry("reference ext value has not been found \"" + vidName + "\" (vid)");
 				}
-				
+
 				String har = ConvertorEnvConst.GAG_KEY;
 				DocumentSubject docSubj = dsDao.findByName(har);
 				if (docSubj != null) {
 					inc.setDocSubject(docSubj);
 				} else {
-					logger.errorLogEntry("reference ext value has not been found \"" + har + "\"");
+					logger.errorLogEntry("reference ext value has not been found \"" + har + "\" (har)");
 				}
-				
+
 				int docLangVal = getIntValue(conn, docId, "lang");
 				LanguageCode intRefKey = docLangCollation.get(docLangVal);
 				if (intRefKey == null) {
-					logger.errorLogEntry("wrong reference ext value \"" + docLangVal + "\"");
+					logger.errorLogEntry("wrong reference ext value \"" + docLangVal + "\" (lang)");
 					intRefKey = LanguageCode.UNKNOWN;
 				}
 				DocumentLanguage docLang = dlDao.findByCode(intRefKey);
@@ -124,7 +122,7 @@ public class SyncIncomings4MS extends Import4MS {
 				}
 				inc.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
 				inc.setBody(getStringValue(conn, docId, "briefcontent"));
-				
+
 				_FormAttachments files = new _FormAttachments(ses);
 				Map<String, String> blobs = getBlobValue(ses, conn, docId);
 				for (Entry<String, String> entry : blobs.entrySet()) {
@@ -132,14 +130,14 @@ public class SyncIncomings4MS extends Import4MS {
 					files.addFile(new File(entry.getValue()), filePath, TMP_FIELD_NAME);
 					TempFileCleaner.addFileToDelete(filePath);
 				}
-				
+
 				List<Attachment> attachments = new ArrayList<>();
 				for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 					Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
 					attachments.add(a);
 				}
 				inc.setAttachments(attachments);
-				
+
 				normalizeACL(uDao, docId, inc, conn);
 				entities.put(extKey, inc);
 			}
@@ -159,7 +157,7 @@ public class SyncIncomings4MS extends Import4MS {
 		}
 		logger.infoLogEntry("done...");
 	}
-
+	
 	private String getStringValue(Connection conn, int docId, String fieldName) {
 		try {
 			Statement s = conn.createStatement();
@@ -176,7 +174,7 @@ public class SyncIncomings4MS extends Import4MS {
 			return "";
 		}
 	}
-
+	
 	private int getIntValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasnumber FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -188,7 +186,7 @@ public class SyncIncomings4MS extends Import4MS {
 			return 0;
 		}
 	}
-
+	
 	private Date getDateValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		try {
@@ -205,37 +203,36 @@ public class SyncIncomings4MS extends Import4MS {
 			return null;
 		}
 	}
-	
+
 	private Map<String, String> getBlobValue(_Session ses, Connection conn, int docId) throws SQLException {
 		Map<String, String> paths = new HashMap<String, String>();
 		Statement s = conn.createStatement();
 		String sql = "SELECT * FROM custom_blobs_maindocs as cf WHERE cf.docid = " + docId + ";";
-		LargeObjectManager lobj = ((org.postgresql.PGConnection) conn).getLargeObjectAPI();
-		
+		//LargeObjectManager lobj = ((org.postgresql.PGConnection) ((DelegatingConnection) conn).getInnermostDelegate())
+		//		.getLargeObjectAPI();
+
 		ResultSet rs = s.executeQuery(sql);
 		while (rs.next()) {
-			int oid = rs.getInt("oid");
 			String originalName = rs.getString("originalname");
-			LargeObject obj = lobj.open(oid, LargeObjectManager.READ);
-			byte buf[] = new byte[obj.size()];
-			obj.read(buf, 0, obj.size());
 			String path = ses.getTmpDir().getAbsolutePath() + File.separator + originalName;
 			File file = new File(path);
+			
 			try {
-				FileInputStream fileInputStream = new FileInputStream(file);
-				fileInputStream.read(buf);
-				fileInputStream.close();
+				FileOutputStream out = new FileOutputStream(file);
+				byte[] fileBytes = rs.getBytes("value");
+				if (fileBytes != null) {
+					out.write(fileBytes);
+					paths.put(originalName, path);
+				}
+				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			paths.put(originalName, path);
-			obj.close();
-
 		}
 		return paths;
-		
+
 	}
-	
+
 	private int getGloassaryValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasglossary FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -247,38 +244,23 @@ public class SyncIncomings4MS extends Import4MS {
 			return 0;
 		}
 	}
-	
+
 	private Map<Integer, String> vidCollationMapInit() {
 		Map<Integer, String> collation = new HashMap<>();
 		collation.put(110, "Письмо");
 		collation.put(111, "Поручение");
 		return collation;
-
+		
 	}
-
+	
 	private Map<String, LanguageCode> langCollationMapInit() {
 		Map<String, LanguageCode> depTypeCollation = new HashMap<>();
-		depTypeCollation.put("Русский", LanguageCode.RUS);
-		depTypeCollation.put("Английский", LanguageCode.ENG);
-		depTypeCollation.put("Казахский", LanguageCode.KAZ);
-		depTypeCollation.put("Французский", LanguageCode.FRA);
-		depTypeCollation.put("Китайский", LanguageCode.CHI);
-		depTypeCollation.put("Немецкий", LanguageCode.DEU);
-		depTypeCollation.put("Польский", LanguageCode.POL);
-		depTypeCollation.put("Белорусский", LanguageCode.BEL);
-		depTypeCollation.put("Чешский", LanguageCode.CES);
-		depTypeCollation.put("Греческий", LanguageCode.GRE);
-		depTypeCollation.put("Украинский", LanguageCode.UKR);
-		depTypeCollation.put("Турецкий", LanguageCode.TUR);
-		depTypeCollation.put("Итальянский", LanguageCode.ITA);
-		depTypeCollation.put("Корейский", LanguageCode.KOR);
-		depTypeCollation.put("Японский", LanguageCode.JPN);
-		depTypeCollation.put("Испанский", LanguageCode.SPA);
-		depTypeCollation.put("Хинди", LanguageCode.HIN);
-		depTypeCollation.put("Арабский", LanguageCode.ARA);
-		depTypeCollation.put("", LanguageCode.UNKNOWN);
+		depTypeCollation.put("1", LanguageCode.RUS);
+		depTypeCollation.put("2", LanguageCode.ENG);
+		depTypeCollation.put("3", LanguageCode.KAZ);
 		depTypeCollation.put("null", LanguageCode.UNKNOWN);
+		//depTypeCollation.put("0", LanguageCode.UNKNOWN);
 		return depTypeCollation;
-		
+
 	}
 }
