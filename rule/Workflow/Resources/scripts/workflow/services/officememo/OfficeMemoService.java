@@ -125,6 +125,7 @@ public class OfficeMemoService extends RestProvider {
         entity.setAppliedRegDate(form.getAppliedRegDate());
         if (form.getApproval() != null) {
             // entity.setApproval(approvalDAO.findById(form.getApproval().getId()));
+            entity.setApproval(form.getApproval());
         } else {
             entity.setApproval(null);
         }

@@ -30,6 +30,7 @@ public class TaskFilter extends Filter {
     private List<Tag> tags;
     private boolean isParentOnly;
     private Boolean isInitiative = null;
+    private boolean treeMode = true;
 
     public Project getProject() {
         return project;
@@ -179,7 +180,12 @@ public class TaskFilter extends Filter {
         return this;
     }
 
-    public boolean isPlainMode() {
-        return hasSearch() || getAssigneeUserId() != null || getStatus() != TaskStatusType.UNKNOWN || getTaskType() != null || getTags() != null;
+    public boolean isTreeMode() {
+        return treeMode;
+    }
+
+    public TaskFilter setTreeMode(boolean treeMode) {
+        this.treeMode = treeMode;
+        return this;
     }
 }
