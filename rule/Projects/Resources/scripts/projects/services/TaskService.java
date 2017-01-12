@@ -64,8 +64,14 @@ public class TaskService extends RestProvider {
             TaskDAO taskDAO = new TaskDAO(session);
             TaskFilter taskFilter = setUpTaskFilter(session, getWebFormData(), new TaskFilter());
             _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+            ViewPage<Task> vp;
 
-            ViewPage<Task> vp = taskDAO.findAllWithResponses(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
+            if (getWebFormData().getBoolSilently("execution")) {
+                Task parentTask = taskDAO.findById(taskFilter.getParentTask().getId());
+                vp = taskDAO.findTaskExecution(parentTask);
+            } else {
+                vp = taskDAO.findAllWithResponses(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
+            }
             // vp.setResult(TaskDtoConverter.convert(vp.getResult()));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
@@ -95,6 +101,13 @@ public class TaskService extends RestProvider {
         } catch (DAOException e) {
             return responseException(e);
         }
+    }
+
+    @GET
+    @Path("{id}/execution")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTaskExecution(@PathParam("id") String id) {
+        return null;
     }
 
     @GET

@@ -186,7 +186,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                                                List<UUID> expandedIds) {
         ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
 
-        if (vp.getResult().isEmpty()) {
+        if (vp.getResult().isEmpty() || !filter.isTreeMode()) {
             return vp;
         }
 
@@ -208,30 +208,49 @@ public class TaskDAO extends DAO<Task, UUID> {
         return vp;
     }
 
-    private List<IAppEntity> findTaskResponses(Task task, TaskFilter filter, List<UUID> expandedIds, EntityManager em) {
+    public ViewPage<Task> findTaskExecution(Task task) {
+        List<Task> list = new ArrayList<>();
+        list.add(task);
+        ViewPage<Task> vp = new ViewPage(list, 1, 1, 1);
 
-        List<Task> tasks = new ArrayList<>();
+        EntityManager em = getEntityManagerFactory().createEntityManager();
 
-        if (filter.isTreeMode()) {
-            CriteriaBuilder cbt = em.getCriteriaBuilder();
-            CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
-            Root<Task> taskRoot = cqt.from(Task.class);
-            cqt.select(taskRoot).distinct(true);
-
-            Predicate conditionA = cbt.equal(taskRoot.get("parent"), task);
-
-            if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
-                conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+        try {
+            List<IAppEntity> responses = findTaskResponses(task, null, null, em);
+            if (responses != null && responses.size() > 0) {
+                task.setResponsesCount((long) responses.size());
+                task.setResponses(responses);
             }
-
-            cqt.where(conditionA);
-            cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
-
-            TypedQuery<Task> typedQueryT = em.createQuery(cqt);
-            tasks = typedQueryT.getResultList();
+        } finally {
+            em.close();
         }
 
-        // -----------------------------------------
+        return vp;
+    }
+
+    private List<IAppEntity> findTaskResponses(Task task, TaskFilter filter, List<UUID> expandedIds, EntityManager em) {
+
+        List<Task> tasks;
+
+        // Task
+        CriteriaBuilder cbt = em.getCriteriaBuilder();
+        CriteriaQuery<Task> cqt = cbt.createQuery(Task.class);
+        Root<Task> taskRoot = cqt.from(Task.class);
+        cqt.select(taskRoot).distinct(true);
+
+        Predicate conditionA = cbt.equal(taskRoot.get("parent"), task);
+
+        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
+            conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+        }
+
+        cqt.where(conditionA);
+        cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
+
+        TypedQuery<Task> typedQueryT = em.createQuery(cqt);
+        tasks = typedQueryT.getResultList();
+
+        // Request
         CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Request> cqr = cbr.createQuery(Request.class);
         Root<Request> requestRoot = cqr.from(Request.class);
