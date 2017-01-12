@@ -1,5 +1,36 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <vocabulary primary="ENG">
+    <sentence mode="on" keyword="draft">
+        <entry lang="RUS">Черновик</entry>
+        <entry lang="ENG">Draft</entry>
+        <entry lang="POR">Rascunho</entry>
+        <entry lang="SPA">Boceto</entry>
+    </sentence>
+    <sentence mode="on" keyword="processing">
+        <entry lang="RUS">В работе</entry>
+        <entry lang="ENG">Processing</entry>
+        <entry lang="POR">Em processamento</entry>
+        <entry lang="SPA">En procesamiento</entry>
+    </sentence>
+    <sentence mode="on" keyword="finished">
+        <entry lang="RUS">Завершен</entry>
+        <entry lang="ENG">Finished</entry>
+        <entry lang="POR">Concluído</entry>
+        <entry lang="SPA">Terminado</entry>
+    </sentence>
+    <sentence mode="on" keyword="serial">
+        <entry lang="RUS">Последовательно</entry>
+        <entry lang="ENG">Serial</entry>
+    </sentence>
+    <sentence mode="on" keyword="parallel">
+        <entry lang="RUS">Паралельно</entry>
+        <entry lang="ENG">Parallel</entry>
+    </sentence>
+    <sentence mode="on" keyword="signing">
+        <entry lang="RUS">Подписание</entry>
+        <entry lang="ENG">Signing</entry>
+    </sentence>
+
     <sentence mode="on" keyword="acl_tab_title">
         <entry lang="RUS">Доступ</entry>
         <entry lang="ENG">ACL</entry>
