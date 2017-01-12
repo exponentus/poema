@@ -79,7 +79,7 @@ Pending = Orange
     white-space: nowrap;
 }
 
-.status-col-mobile .vp__list_it_val {
+.status-col-mobile .vp__list_it_val_text {
     border-radius: 2px;
     height: 80%;
     position: absolute;
