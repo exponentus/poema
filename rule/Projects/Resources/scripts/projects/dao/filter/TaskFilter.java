@@ -30,7 +30,7 @@ public class TaskFilter extends Filter {
     private List<Tag> tags;
     private boolean isParentOnly;
     private Boolean isInitiative = null;
-    private boolean treeMode = true;
+    private boolean treeMode = false;
 
     public Project getProject() {
         return project;
