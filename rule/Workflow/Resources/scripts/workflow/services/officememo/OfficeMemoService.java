@@ -74,15 +74,16 @@ public class OfficeMemoService extends RestProvider {
         boolean isNew = "new".equals(id);
         if (isNew) {
             entity = new OfficeMemo();
-            Approval approval = new Approval();
-            approval.setStatus(ApprovalStatusType.DRAFT);
-            Block block = new Block();
-            block.setStatus(ApprovalStatusType.DRAFT);
-            block.setType(ApprovalType.SERIAL);
-            List<Block> blocks = new ArrayList<Block>();
-            blocks.add(block);
-            approval.setBlocks(blocks);
-            entity.setApproval(approval);
+            // Approval approval = new Approval();
+            // approval.setStatus(ApprovalStatusType.DRAFT);
+            // Block block = new Block();
+            // block.setStatus(ApprovalStatusType.DRAFT);
+            // block.setType(ApprovalType.SERIAL);
+            // List<Block> blocks = new ArrayList<Block>();
+            // blocks.add(block);
+            // approval.setBlocks(blocks);
+            // entity.setApproval(approval);
+            entity.setAppliedAuthor(ses.getUser().getId());
         } else {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
             entity = officeMemoDAO.findById(id);
@@ -110,7 +111,6 @@ public class OfficeMemoService extends RestProvider {
         }
 
         _Session ses = getSession();
-        // ApprovalDAO approvalDAO = new ApprovalDAO(ses);
         OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
         OfficeMemo entity;
 
@@ -141,6 +141,7 @@ public class OfficeMemoService extends RestProvider {
 
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
+                entity.setAppliedAuthor(ses.getUser().getId());
                 entity = officeMemoDAO.add(entity);
             } else {
                 entity = officeMemoDAO.update(entity);
