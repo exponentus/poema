@@ -1,4 +1,4 @@
-#Init primary data for Software developing Projects
+#Init primary data for Projects (Software developing model)
 #
 #COMMON
 stini reference.init.FillRegionTypes
@@ -9,7 +9,7 @@ stini reference.init.FillDistricts
 stini reference.init.FillLocalities
 stini reference.init.FillCityDistricts
 stini reference.init.FillDepartmentType
-
+run task fill_doc_langs
 stini reference.init.FillOrgCategories
 stini staff.init.FillDefaultLabels
 stini staff.init.FillDefaultRoles
@@ -17,7 +17,7 @@ stini staff.init.FillDefaultRoles
 #stini staff.init.FillTestUsers
 #SPECIFIC
 run task fill_tags
-stini projects.init.FillPositions
+run task fill_positions
 stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
 run task fill_demand_types
