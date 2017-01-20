@@ -46,10 +46,10 @@ import staff.model.Organization;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
-@Command(name = "i")
+@Command(name = "import_in_4ms")
 public class SyncIncomings4MS extends Import4MS {
 	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
-
+	
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Incoming> entities = new HashMap<>();
@@ -94,7 +94,7 @@ public class SyncIncomings4MS extends Import4MS {
 					} else {
 						logger.errorLogEntry("reference ext value has not been found \"" + vidName + "\" (vid)");
 					}
-
+					
 					String har = ConvertorEnvConst.GAG_KEY;
 					DocumentSubject docSubj = dsDao.findByName(har);
 					if (docSubj != null) {
@@ -102,7 +102,7 @@ public class SyncIncomings4MS extends Import4MS {
 					} else {
 						logger.errorLogEntry("reference ext value has not been found \"" + har + "\" (har)");
 					}
-
+					
 					int docLangVal = getIntValue(conn, docId, "lang");
 					LanguageCode intRefKey = docLangCollation.get(docLangVal);
 					if (intRefKey == null) {
@@ -122,7 +122,7 @@ public class SyncIncomings4MS extends Import4MS {
 							inc.setSender(org);
 						}
 					}
-
+					
 					String recipient = getStringValue(conn, docId, "recipients");
 					IUser<Long> r = uDao.findByLogin(recipient);
 					if (r != null) {
@@ -135,11 +135,11 @@ public class SyncIncomings4MS extends Import4MS {
 					} else {
 						logger.errorLogEntry("wrong ext value \"" + recipient + "\" (login)");
 					}
-					
+
 					inc.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
 					inc.setBody("#" + getStringValue(conn, docId, "corrstring") + "#"
 							+ getStringValue(conn, docId, "briefcontent"));
-
+					
 					_FormAttachments files = new _FormAttachments(ses);
 					Map<String, String> blobs = getBlobValue(ses, conn, docId);
 					for (Entry<String, String> entry : blobs.entrySet()) {
@@ -147,14 +147,14 @@ public class SyncIncomings4MS extends Import4MS {
 						files.addFile(new File(entry.getValue()), filePath, TMP_FIELD_NAME);
 						TempFileCleaner.addFileToDelete(filePath);
 					}
-
+					
 					List<Attachment> attachments = new ArrayList<>();
 					for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 						Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
 						attachments.add(a);
 					}
 					inc.setAttachments(attachments);
-
+					
 					normalizeACL(uDao, docId, inc, conn);
 					entities.put(extKey, inc);
 					logger.infoLogEntry(inc + " has been added");
@@ -179,7 +179,7 @@ public class SyncIncomings4MS extends Import4MS {
 		}
 		logger.infoLogEntry("done...");
 	}
-	
+
 	private String getStringValue(Connection conn, int docId, String fieldName) {
 		try {
 			Statement s = conn.createStatement();
@@ -196,7 +196,7 @@ public class SyncIncomings4MS extends Import4MS {
 			return "";
 		}
 	}
-	
+
 	private int getIntValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasnumber FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -208,7 +208,7 @@ public class SyncIncomings4MS extends Import4MS {
 			return 0;
 		}
 	}
-	
+
 	private Date getDateValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		try {
@@ -225,20 +225,20 @@ public class SyncIncomings4MS extends Import4MS {
 			return null;
 		}
 	}
-
+	
 	private Map<String, String> getBlobValue(_Session ses, Connection conn, int docId) throws SQLException {
 		Map<String, String> paths = new HashMap<String, String>();
 		Statement s = conn.createStatement();
 		String sql = "SELECT * FROM custom_blobs_maindocs as cf WHERE cf.docid = " + docId + ";";
 		//LargeObjectManager lobj = ((org.postgresql.PGConnection) ((DelegatingConnection) conn).getInnermostDelegate())
 		//		.getLargeObjectAPI();
-
+		
 		ResultSet rs = s.executeQuery(sql);
 		while (rs.next()) {
 			String originalName = rs.getString("originalname");
 			String path = ses.getTmpDir().getAbsolutePath() + File.separator + originalName;
 			File file = new File(path);
-			
+
 			try {
 				FileOutputStream out = new FileOutputStream(file);
 				byte[] fileBytes = rs.getBytes("value");
@@ -252,9 +252,9 @@ public class SyncIncomings4MS extends Import4MS {
 			}
 		}
 		return paths;
-
+		
 	}
-
+	
 	private int getGloassaryValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasglossary FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -266,15 +266,15 @@ public class SyncIncomings4MS extends Import4MS {
 			return 0;
 		}
 	}
-
+	
 	private Map<Integer, String> vidCollationMapInit() {
 		Map<Integer, String> collation = new HashMap<>();
 		collation.put(110, "Letter");
 		collation.put(111, "Task");
 		return collation;
-		
+
 	}
-	
+
 	private Map<Integer, LanguageCode> langCollationMapInit() {
 		Map<Integer, LanguageCode> depTypeCollation = new HashMap<>();
 		depTypeCollation.put(1, LanguageCode.RUS);
@@ -283,6 +283,6 @@ public class SyncIncomings4MS extends Import4MS {
 		depTypeCollation.put(null, LanguageCode.UNKNOWN);
 		depTypeCollation.put(0, LanguageCode.RUS);
 		return depTypeCollation;
-
+		
 	}
 }
