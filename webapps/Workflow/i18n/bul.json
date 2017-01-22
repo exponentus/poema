@@ -34,6 +34,7 @@
   "новая роль" : "Новая роль",
   "report_file_type" : "report_file_type",
   "sender" : "sender",
+  "violates_foreign_key" : "There is related entity. Deleteing was cancelled",
   "ft_search_result" : "ft_search_result",
   "name_is_not_unique" : "name_is_not_unique",
   "action_completed_successfully" : "action_completed_successfully",

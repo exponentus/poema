@@ -1,7 +1,7 @@
 package workflow.model;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,7 +26,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "incomings")
 @NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
-public class Incoming extends HierarchicalEntity<UUID> {
+public class Incoming extends SecureHierarchicalEntity<UUID> {
 
     @JsonIgnore
     @OneToMany(mappedBy = "incoming", fetch = FetchType.LAZY)

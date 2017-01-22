@@ -1,7 +1,7 @@
 package projects.model;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
@@ -28,7 +28,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tasks")
 @NamedQuery(name = "Task.findAll", query = "SELECT m FROM Task AS m ORDER BY m.regDate")
-public class Task extends HierarchicalEntity<UUID> {
+public class Task extends SecureHierarchicalEntity<UUID> {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -305,7 +305,7 @@ public class Task extends HierarchicalEntity<UUID> {
     }
 
     @Override
-    public HierarchicalEntity<UUID> getParentEntity(_Session ses) {
+    public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
         if (parent != null) {
             return parent;
         } else {

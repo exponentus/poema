@@ -1,7 +1,7 @@
 package projects.model;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "requests")
 @NamedQuery(name = "Request.findAll", query = "SELECT m FROM Request AS m ORDER BY m.regDate")
-public class Request extends HierarchicalEntity<UUID> {
+public class Request extends SecureHierarchicalEntity<UUID> {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -128,7 +128,7 @@ public class Request extends HierarchicalEntity<UUID> {
 
     @Override
     @JsonIgnore
-    public HierarchicalEntity<UUID> getParentEntity(_Session ses) {
+    public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
         return task;
     }
 

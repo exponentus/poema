@@ -1,7 +1,7 @@
 package workflow.model;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,7 +21,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "reports")
 @NamedQuery(name = "Report.findAll", query = "SELECT m FROM Report AS m ORDER BY m.regDate")
-public class Report extends HierarchicalEntity<UUID> {
+public class Report extends SecureHierarchicalEntity<UUID> {
 
     @Column(name = "applied_author", nullable = false)
     protected Long appliedAuthor;
@@ -88,7 +88,7 @@ public class Report extends HierarchicalEntity<UUID> {
     }
 
     @Override
-    public HierarchicalEntity<UUID> getParentEntity(_Session ses) {
+    public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
         return parent;
     }
 }

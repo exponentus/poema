@@ -1,6 +1,6 @@
 package workflow.model;
 
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "assignments")
 @NamedQuery(name = "Assignment.findAll", query = "SELECT m FROM Assignment AS m ORDER BY m.regDate")
-public class Assignment extends HierarchicalEntity<UUID> {
+public class Assignment extends SecureHierarchicalEntity<UUID> {
 
     @JsonIgnore
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
@@ -115,7 +115,7 @@ public class Assignment extends HierarchicalEntity<UUID> {
     }
 
     @Override
-    public HierarchicalEntity<UUID> getParentEntity(_Session ses) {
+    public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
         if (parent != null) {
             return parent;
         } else {

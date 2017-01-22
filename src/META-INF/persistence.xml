@@ -28,6 +28,7 @@
 
 
     <persistence-unit name="Staff" transaction-type="RESOURCE_LOCAL">
+   		<class>com.exponentus.common.model.ViewEntry</class>
         <!-- Obligatory the application module entities -->
         <class>administrator.model.Language</class>
         <class>administrator.model.Application</class>
@@ -53,7 +54,7 @@
         <class>reference.model.Position</class>
         <class>reference.model.OrgCategory</class>
         <!-- Obligatory the application module entities -->
-        <class>administrator.model.Language</class>
+        <class>administrator.model.Language</class>  
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -131,7 +132,7 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-     <class>com.exponentus.common.model.ViewEntry</class>
+     	<class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>

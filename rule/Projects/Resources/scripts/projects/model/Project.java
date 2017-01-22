@@ -1,7 +1,7 @@
 package projects.model;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.HierarchicalEntity;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
-public class Project extends HierarchicalEntity<UUID> {
+public class Project extends SecureHierarchicalEntity<UUID> {
 
     @FTSearchable
     @Column(length = 140)

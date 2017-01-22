@@ -120,6 +120,7 @@
   "priority" : "Priority",
   "новая роль" : "New role",
   "report_file_type" : "File type of the report",
+  "violates_foreign_key" : "There is related entity. Deleteing was cancelled",
   "ft_search_result" : "Search result",
   "name_is_not_unique" : "There is a record with such value",
   "action_completed_successfully" : "action_completed_successfully",
