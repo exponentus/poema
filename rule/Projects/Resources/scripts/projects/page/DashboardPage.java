@@ -17,22 +17,28 @@ public class DashboardPage extends _DoPage {
 
 	@Override
 	public void doGET(_Session session, _WebFormData formData) {
-		DashboardDAO dashboardDAO = new DashboardDAO(session);
-		Dashboard dashboard = dashboardDAO.findUserDashboard(session.getUser());
-		if (dashboard == null) {
-			addValue("dashboard", "not_found");
+		try {
+			DashboardDAO dashboardDAO = new DashboardDAO(session);
+			Dashboard dashboard = dashboardDAO.findUserDashboard(session.getUser());
+			if (dashboard == null) {
+				addValue("dashboard", "not_found");
+				return;
+			}
+
+			String projectId = formData.getValueSilently("projectId");
+			if (projectId.isEmpty()) {
+				addContent(dashboard.getProjects()); // user dashboard projects
+				return;
+			}
+
+			// project data
+			ProjectDAO projectDAO = new ProjectDAO(session);
+			Project project = projectDAO.findById(projectId);
+		} catch (DAOException e) {
+			logError(e);
+			setBadRequest();
 			return;
 		}
-
-		String projectId = formData.getValueSilently("projectId");
-		if (projectId.isEmpty()) {
-			addContent(dashboard.getProjects()); // user dashboard projects
-			return;
-		}
-
-		// project data
-		ProjectDAO projectDAO = new ProjectDAO(session);
-		Project project = projectDAO.findById(projectId);
 
 	}
 
@@ -68,15 +74,14 @@ public class DashboardPage extends _DoPage {
 			setBadRequest();
 			return;
 		}
-
-		DashboardDAO dashboardDAO = new DashboardDAO(session);
-		Dashboard dashboard = dashboardDAO.findUserDashboard(session.getUser());
-		if (dashboard == null) {
-			setBadRequest();
-			return;
-		}
-
 		try {
+			DashboardDAO dashboardDAO = new DashboardDAO(session);
+			Dashboard dashboard = dashboardDAO.findUserDashboard(session.getUser());
+			if (dashboard == null) {
+				setBadRequest();
+				return;
+			}
+			
 			Project project = new Project();
 			project.setId(UUID.fromString(projectId));
 			dashboard.getProjects().remove(project);

@@ -1,7 +1,8 @@
 package projects.task;
 
-import administrator.dao.UserDAO;
-import administrator.model.User;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
@@ -13,28 +14,30 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
-import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
+
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
-import reference.dao.TagDAO;
-import reference.model.Tag;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Command(name = "pending_reminder", trigger = Trigger.EVERY_NIGHT)
 public class PendingReminder extends _Do {
 	private TaskDAO tDao;
 
+	@Override
 	public void doTask(AppEnv appEnv, _Session session) {
-		tDao = new TaskDAO(session);
-		ViewPage<Task> vp = tDao
-                .findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING), 0, 0);
-		processRemind(vp, session);
+		try {
+			tDao = new TaskDAO(session);
+			ViewPage<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING), 0, 0);
+			processRemind(vp, session);
+		} catch (DAOException e) {
+			logError(e);
+			return;
+		}
 	}
 
 	private void processRemind(ViewPage<Task> result, _Session session) {

@@ -38,10 +38,17 @@ public class Comments extends _DoForm {
 		Task task = new Task();
 		task.setId(UUID.fromString(taskId));
 
-		CommentDAO commentDAO = new CommentDAO(session);
-		int page = formData.getNumberValueSilently("page", 1);
-		List<Comment> comments = commentDAO.findTaskComments(task, page, 20);
-		addContent(comments);
+		CommentDAO commentDAO;
+		try {
+			commentDAO = new CommentDAO(session);
+			int page = formData.getNumberValueSilently("page", 1);
+			List<Comment> comments = commentDAO.findTaskComments(task, page, 20);
+			addContent(comments);
+		} catch (DAOException e) {
+			logError(e);
+			setBadRequest();
+			return;
+		}
 	}
 
 	@Override
@@ -151,16 +158,16 @@ public class Comments extends _DoForm {
 	}
 
 	private void deleteComment(_Session session, String commentId) {
-		CommentDAO commentDAO = new CommentDAO(session);
-		Comment comment = commentDAO.findById(commentId);
-
-		if (!comment.getTask().getEditors().contains(session.getUser().getId())) {
-			addContent("error", "task: no editor access");
-			setBadRequest();
-			return;
-		}
-
 		try {
+			CommentDAO commentDAO = new CommentDAO(session);
+			Comment comment = commentDAO.findById(commentId);
+
+			if (!comment.getTask().getEditors().contains(session.getUser().getId())) {
+				addContent("error", "task: no editor access");
+				setBadRequest();
+				return;
+			}
+
 			commentDAO.delete(comment);
 		} catch (SecureException | DAOException e) {
 			setBadRequest();
@@ -172,17 +179,16 @@ public class Comments extends _DoForm {
 		if (commentId.isEmpty() || attachmentId.isEmpty()) {
 			return;
 		}
-
-		CommentDAO commentDAO = new CommentDAO(session);
-		Comment comment = commentDAO.findById(commentId);
-
-		if (comment.getAuthorId() == session.getUser().getId()) {
-			addContent("error", "not author");
-			setBadRequest();
-			return;
-		}
-
 		try {
+			CommentDAO commentDAO = new CommentDAO(session);
+			Comment comment = commentDAO.findById(commentId);
+			
+			if (comment.getAuthorId() == session.getUser().getId()) {
+				addContent("error", "not author");
+				setBadRequest();
+				return;
+			}
+			
 			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
 			Attachment attachment = attachmentDAO.findById(attachmentId);
 			comment.getAttachments().remove(attachment);

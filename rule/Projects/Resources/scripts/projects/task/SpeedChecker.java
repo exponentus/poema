@@ -16,9 +16,9 @@ import projects.model.Project;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
-@Command(name = "st1")
+@Command(name = "speed_check")
 public class SpeedChecker extends _Do {
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session session) {
 		System.out.println("run...");
@@ -37,11 +37,11 @@ public class SpeedChecker extends _Do {
 		} catch (Exception e) {
 			System.err.println(e);
 		}
-
+		
 		long end_time = System.nanoTime();
 		System.out.println("done");
 		System.out.println("speed=" + (end_time - start_time) / 1e6);
-
+		
 	}
-	
+
 }

@@ -22,22 +22,27 @@ public class TaskWatcher extends _Do {
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Date current = new Date();
-		TaskDAO tDao = new TaskDAO(ses);
-		TaskFilter filter = new TaskFilter();
-		filter.setStatus(TaskStatusType.WAITING);
-		ViewPage<Task> result = tDao.findAllByTaskFilter(filter, 0, 0);
-		for (Task task : result.getResult()) {
-			if (current.after(task.getStartDate())) {
-				task.setStatus(TaskStatusType.OPEN);
-				try {
-					tDao.update(task);
-					logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
-					new Messages(appEnv).sendToAssignee(task);
-				} catch (SecureException | DAOException e) {
-					setError(e);
-					
+		try {
+			TaskDAO tDao = new TaskDAO(ses);
+			TaskFilter filter = new TaskFilter();
+			filter.setStatus(TaskStatusType.WAITING);
+			ViewPage<Task> result = tDao.findAllByTaskFilter(filter, 0, 0);
+			for (Task task : result.getResult()) {
+				if (current.after(task.getStartDate())) {
+					task.setStatus(TaskStatusType.OPEN);
+					try {
+						tDao.update(task);
+						logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
+						new Messages(appEnv).sendToAssignee(task);
+					} catch (SecureException | DAOException e) {
+						setError(e);
+						
+					}
 				}
 			}
+		} catch (DAOException e) {
+			logError(e);
+			return;
 		}
 	}
 }
