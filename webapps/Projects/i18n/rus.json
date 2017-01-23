@@ -27,6 +27,7 @@
   "back_to_doc_list" : "Вернуться к списку документов",
   "attachments" : "Вложения",
   "user_name" : "Имя пользователя",
+  "more_action" : "Ещё",
   "user_not_found_error" : "Пользователь не найден",
   "send_task" : "Отправить задачу",
   "search" : "Поиск",

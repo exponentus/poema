@@ -48,6 +48,7 @@
   "attachments" : "Attachments",
   "validation_error" : "Validation error",
   "user_name" : "User name",
+  "more_action" : "More",
   "is_hidden" : "Is hidden",
   "save" : "Save",
   "user_not_found_error" : "User has not been found",

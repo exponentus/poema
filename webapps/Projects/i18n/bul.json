@@ -27,6 +27,7 @@
   "back_to_doc_list" : "back_to_doc_list",
   "attachments" : "attachments",
   "user_name" : "user_name",
+  "more_action" : "more_action",
   "user_not_found_error" : "User has not been found",
   "send_task" : "send_task",
   "search" : "search",

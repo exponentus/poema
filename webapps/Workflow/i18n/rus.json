@@ -48,6 +48,7 @@
   "attachments" : "Вложения",
   "validation_error" : "Ошибка значения формы",
   "user_name" : "Имя пользователя",
+  "more_action" : "Ещё",
   "is_hidden" : "Скрытый",
   "save" : "Сохранить",
   "user_not_found_error" : "Пользователь не найден",

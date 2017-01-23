@@ -27,6 +27,7 @@
   "back_to_doc_list" : "Return to the list of documents",
   "attachments" : "Attachments",
   "user_name" : "User name",
+  "more_action" : "More",
   "user_not_found_error" : "User has not been found",
   "send_task" : "Send task",
   "search" : "Search",
