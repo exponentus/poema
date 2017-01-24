@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <entity-mappings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm" version="2.1">
-	<converter class="com.exponentus.dataengine.jpa.util.PostgresUuidConverter"/>
-	<!-- <converter calss="com.exponentus.common.model.util.JSONConverter"/>    -->
+	<converter class="com.exponentus.common.model.util.PostgresUuidConverter"/>
+	<converter class="com.exponentus.common.model.util.LocalizedValConverter"/>   
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.ApplicationModeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
