@@ -5,7 +5,7 @@
 	<xsl:template name="header">
 		<header>
 			<xsl:call-template name="navbar" />
-			<xsl:call-template name="promo" />
+			<!--<xsl:call-template name="promo" />-->
 		</header>
 	</xsl:template>
 
