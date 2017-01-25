@@ -24,16 +24,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "demands")
 @NamedQuery(name = "Demand.findAll", query = "SELECT m FROM Demand AS m ORDER BY m.regDate")
-@NamedEntityGraphs({@NamedEntityGraph(name = Demand.SHORT_GRAPH, attributeNodes = {
-        @NamedAttributeNode(value = "customer", subgraph = "customer"),
-        @NamedAttributeNode(value = "attachments", subgraph = "attachments")}, subgraphs = {
-        @NamedSubgraph(name = "customer", attributeNodes = {@NamedAttributeNode("id"),
-                @NamedAttributeNode("name"), @NamedAttributeNode("localizedName")}),
-        @NamedSubgraph(name = "attachments", attributeNodes = {@NamedAttributeNode("id"),
-                @NamedAttributeNode("realFileName"), @NamedAttributeNode("size")})})})
 public class Demand extends SecureAppEntity<UUID> {
-
-    public final static String SHORT_GRAPH = "Demand.SHORT_GRAPH";
 
     private Project project;
 

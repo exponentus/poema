@@ -80,6 +80,7 @@
   "back" : "back",
   "description" : "description",
   "medium" : "medium",
+  "title" : "title",
   "interface" : "interface",
   "content" : "content",
   "value_is_non_latin" : "value_is_non_latin",
