@@ -49,7 +49,7 @@ public class DemandService extends RestProvider {
             ViewPage<Demand> vp = dao.findViewPage(sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            _Action newDocAction = new _Action("add_new", "", "new_demand");
+            _Action newDocAction = new _Action("add_demand", "", "add_demand");
             actionBar.addAction(newDocAction);
 
             outcome.setId("demands");

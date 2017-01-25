@@ -24,24 +24,6 @@
         <entry lang="POR">Leitores</entry>
         <entry lang="SPA">Lectores</entry>
     </sentence>
-    <sentence mode="on" keyword="inbox">
-        <entry lang="RUS">Входящие</entry>
-        <entry lang="ENG">Inbox</entry>
-        <entry lang="POR">Caixa de entrada</entry>
-        <entry lang="SPA">Correo entrante</entry>
-    </sentence>
-    <sentence mode="on" keyword="today">
-        <entry lang="RUS">Сегодня</entry>
-        <entry lang="ENG">Today</entry>
-        <entry lang="POR">Hoje</entry>
-        <entry lang="SPA">Hoy</entry>
-    </sentence>
-    <sentence mode="on" keyword="week">
-        <entry lang="RUS">Неделя</entry>
-        <entry lang="ENG">Week</entry>
-        <entry lang="POR">Semana</entry>
-        <entry lang="SPA">Semana</entry>
-    </sentence>
     <sentence mode="on" keyword="all">
         <entry lang="RUS">Все</entry>
         <entry lang="ENG">All</entry>
@@ -53,30 +35,6 @@
         <entry lang="ENG">Completed</entry>
         <entry lang="POR">Concluída</entry>
         <entry lang="SPA">Terminada</entry>
-    </sentence>
-    <sentence mode="on" keyword="tasks_all">
-        <entry lang="RUS">Все задания</entry>
-        <entry lang="ENG">All tasks</entry>
-        <entry lang="POR">Todas a tarefas</entry>
-        <entry lang="SPA">Todas las tareas</entry>
-    </sentence>
-    <sentence mode="on" keyword="my_tasks">
-        <entry lang="RUS">Мои задания</entry>
-        <entry lang="ENG">My tasks</entry>
-        <entry lang="POR">As minhas tarefas</entry>
-        <entry lang="SPA">Mis tareas</entry>
-    </sentence>
-    <sentence mode="on" keyword="tasks_assigned_to_me">
-        <entry lang="RUS">Назначенные мне</entry>
-        <entry lang="ENG">Assigned to me</entry>
-        <entry lang="POR">Atribuidas a mim</entry>
-        <entry lang="SPA">Asignadas a mi</entry>
-    </sentence>
-    <sentence mode="on" keyword="dashboard">
-        <entry lang="RUS">Dashboard</entry>
-        <entry lang="ENG">Dashboard</entry>
-        <entry lang="POR">Painel de controlo</entry>
-        <entry lang="SPA">Panel de control</entry>
     </sentence>
     <sentence mode="on" keyword="projects">
         <entry lang="RUS">Проекты</entry>
@@ -102,6 +60,18 @@
         <entry lang="POR">Projeto</entry>
         <entry lang="SPA">Proyecto</entry>
     </sentence>
+    <sentence mode="on" keyword="add_demand">
+        <entry lang="RUS">Заявка</entry>
+        <entry lang="ENG">Demand</entry>
+        <entry lang="POR">Demand</entry>
+        <entry lang="SPA">Demand</entry>
+    </sentence>
+    <sentence mode="on" keyword="send_demand">
+        <entry lang="RUS">Отправить заявку</entry>
+        <entry lang="ENG">Send demand</entry>
+        <entry lang="POR">Send demand</entry>
+        <entry lang="SPA">Send demand</entry>
+    </sentence>
     <sentence mode="on" keyword="demands_my">
         <entry lang="RUS">Мои заявки</entry>
         <entry lang="ENG">My demands</entry>
@@ -114,7 +84,7 @@
         <entry lang="POR">Demand</entry>
         <entry lang="SPA">Demand</entry>
     </sentence>
-      <sentence mode="on" keyword="demands">
+    <sentence mode="on" keyword="demands">
         <entry lang="RUS">Заявки</entry>
         <entry lang="ENG">Demands</entry>
         <entry lang="POR">Demands</entry>
@@ -137,18 +107,6 @@
         <entry lang="ENG">Initiative task</entry>
         <entry lang="POR">Initiative task</entry>
         <entry lang="SPA">Initiative task</entry>
-    </sentence>
-    <sentence mode="on" keyword="new_project">
-        <entry lang="RUS">Новый проект</entry>
-        <entry lang="ENG">New project</entry>
-        <entry lang="POR">Novo projeto</entry>
-        <entry lang="SPA">Nuevo proyecto</entry>
-    </sentence>
-    <sentence mode="on" keyword="new_task">
-        <entry lang="RUS">Новая задача</entry>
-        <entry lang="ENG">New task</entry>
-        <entry lang="POR">Nova tarefa</entry>
-        <entry lang="SPA">Nueva tarea</entry>
     </sentence>
     <sentence mode="on" keyword="task_title">
         <entry lang="RUS">Название задачи</entry>
