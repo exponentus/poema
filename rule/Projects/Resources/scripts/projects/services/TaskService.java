@@ -42,7 +42,7 @@ import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -137,7 +137,7 @@ public class TaskService extends RestProvider {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") String id) {
 		_Session session = getSession();
-		_WebFormData formData = getWebFormData();
+		WebFormData formData = getWebFormData();
 
 		IUser<Long> user = session.getUser();
 		Task task;
@@ -581,7 +581,7 @@ public class TaskService extends RestProvider {
 		return ve;
 	}
 
-	public static TaskFilter setUpTaskFilter(_Session session, _WebFormData formData, TaskFilter filter) {
+	public static TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {
 
 		filter.setProject(formData.getValueSilently("projectId"));
 		filter.setParentTask(formData.getValueSilently("parentTaskId"));

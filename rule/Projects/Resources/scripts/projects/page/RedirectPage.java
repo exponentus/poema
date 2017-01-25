@@ -1,13 +1,13 @@
 package projects.page;
 
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.event._DoPage;
 
 public class RedirectPage extends _DoPage {
 
     @Override
-    public void doGET(_Session session, _WebFormData formData) {
+    public void doGET(_Session session, WebFormData formData) {
         String path = "/" + getCurrentAppEnv().appName + "/#/" + getCurrentAppEnv().appName;
         String id = formData.getValueSilently("id");
 

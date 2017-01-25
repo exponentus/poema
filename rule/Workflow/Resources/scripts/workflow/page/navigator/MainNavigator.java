@@ -1,7 +1,7 @@
 package workflow.page.navigator;
 
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.event._DoPage;
 import com.exponentus.scripting.outline._Outline;
 import com.exponentus.scripting.outline._OutlineEntry;
@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public class MainNavigator extends _DoPage {
 
     @Override
-    public void doGET(_Session session, _WebFormData formData) {
+    public void doGET(_Session session, WebFormData formData) {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         _Outline common_outline = new _Outline(getLocalizedWord("workflow", session.getLang()), "common");

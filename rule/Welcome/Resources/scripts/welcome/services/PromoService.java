@@ -27,7 +27,7 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validator;
+import com.exponentus.util.Validator;
 
 import welcome.init.AppConst;
 import welcome.model.ReCaptchaResponse;
@@ -85,7 +85,7 @@ public class PromoService extends RestProvider {
 		ArrayList<String> errors = new ArrayList<>();
 		boolean isValid = true;
 		
-		if (!_Validator.checkEmail(email)) {
+		if (!Validator.checkEmail(email)) {
 			isValid = false;
 			errors.add("EMAIL_IS_INCORRECT");
 		}

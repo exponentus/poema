@@ -13,7 +13,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -40,7 +40,7 @@ public class DemandService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
         _Session session = getSession();
-        _WebFormData params = getWebFormData();
+        WebFormData params = getWebFormData();
         int pageSize = session.pageSize;
 
         try {

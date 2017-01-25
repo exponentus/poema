@@ -37,7 +37,7 @@ import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -95,7 +95,7 @@ public class ProjectService extends RestProvider {
 		_Session session = getSession();
 		IUser<Long> user = session.getUser();
 		Project project;
-		_WebFormData formData = getWebFormData();
+		WebFormData formData = getWebFormData();
 		try {
 			ProjectDAO dao = new ProjectDAO(session);
 			boolean isNew = "new".equals(id);

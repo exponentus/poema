@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.event._DoPage;
 
 import projects.dao.DashboardDAO;
@@ -16,7 +16,7 @@ import projects.model.Project;
 public class DashboardPage extends _DoPage {
 
 	@Override
-	public void doGET(_Session session, _WebFormData formData) {
+	public void doGET(_Session session, WebFormData formData) {
 		try {
 			DashboardDAO dashboardDAO = new DashboardDAO(session);
 			Dashboard dashboard = dashboardDAO.findUserDashboard(session.getUser());
@@ -43,7 +43,7 @@ public class DashboardPage extends _DoPage {
 	}
 
 	@Override
-	public void doPOST(_Session session, _WebFormData formData) {
+	public void doPOST(_Session session, WebFormData formData) {
 		String projectId = formData.getValueSilently("projectId");
 		if (projectId.isEmpty()) {
 			setBadRequest();
@@ -68,7 +68,7 @@ public class DashboardPage extends _DoPage {
 	}
 
 	@Override
-	public void doDELETE(_Session session, _WebFormData formData) {
+	public void doDELETE(_Session session, WebFormData formData) {
 		String projectId = formData.getValueSilently("projectId");
 		if (projectId.isEmpty()) {
 			setBadRequest();

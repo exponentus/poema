@@ -14,7 +14,7 @@ import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._WebFormData;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
 
@@ -27,7 +27,7 @@ import projects.model.Task;
 public class Comments extends _DoForm {
 
 	@Override
-	public void doGET(_Session session, _WebFormData formData) {
+	public void doGET(_Session session, WebFormData formData) {
 		String taskId = formData.getValueSilently("taskId");
 		if (taskId.isEmpty()) {
 			addContent("error", "taskId empty");
@@ -52,7 +52,7 @@ public class Comments extends _DoForm {
 	}
 
 	@Override
-	public void doPOST(_Session session, _WebFormData formData) {
+	public void doPOST(_Session session, WebFormData formData) {
 		String taskId = formData.getValueSilently("taskId");
 		if (taskId.isEmpty()) {
 			addContent("error", "taskId empty");
@@ -65,7 +65,7 @@ public class Comments extends _DoForm {
 	}
 
 	@Override
-	public void doDELETE(_Session session, _WebFormData formData) {
+	public void doDELETE(_Session session, WebFormData formData) {
 		String commentId = formData.getValueSilently("commentId");
 		if (commentId.isEmpty()) {
 			addContent("error", "commentId empty");
@@ -81,7 +81,7 @@ public class Comments extends _DoForm {
 		}
 	}
 
-	private void saveComment(_Session session, _WebFormData formData, String taskId, String commentId) {
+	private void saveComment(_Session session, WebFormData formData, String taskId, String commentId) {
 		try {
 			TaskDAO taskDAO = new TaskDAO(session);
 			Task task = taskDAO.findById(taskId);
@@ -199,7 +199,7 @@ public class Comments extends _DoForm {
 		}
 	}
 
-	private _Validation validateComment(_WebFormData formData, LanguageCode lang) {
+	private _Validation validateComment(WebFormData formData, LanguageCode lang) {
 		_Validation ve = new _Validation();
 
 		if (formData.getValueSilently("comment").isEmpty()) {
