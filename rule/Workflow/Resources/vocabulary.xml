@@ -143,9 +143,17 @@
         <entry lang="RUS">Согласующие</entry>
         <entry lang="ENG">Approvers</entry>
     </sentence>
+    <sentence mode="on" keyword="approval_block">
+        <entry lang="RUS">Блок согласования</entry>
+        <entry lang="ENG">Approval block</entry>
+    </sentence>
     <sentence mode="on" keyword="add_approver">
         <entry lang="RUS">Добавить согласующего</entry>
         <entry lang="ENG">Add approver</entry>
+    </sentence>
+    <sentence mode="on" keyword="current_approver">
+        <entry lang="RUS">Текущий</entry>
+        <entry lang="ENG">Current</entry>
     </sentence>
     <sentence mode="on" keyword="time_limit">
         <entry lang="RUS">Ограничение времени</entry>

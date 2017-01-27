@@ -17,12 +17,11 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
+import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
 import workflow.model.embedded.Approval;
-import workflow.model.embedded.Block;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -80,18 +79,7 @@ public class OfficeMemoService extends RestProvider {
                 Approval approval = new Approval();
                 approval.setStatus(ApprovalStatusType.DRAFT);
                 //
-                Block block = new Block();
-                block.setStatus(ApprovalStatusType.DRAFT);
-                block.setType(ApprovalType.SERIAL);
-                List<Block> blocks = new ArrayList<Block>();
-                blocks.add(block);
-
-                Block block2 = new Block();
-                block2.setStatus(ApprovalStatusType.DRAFT);
-                block2.setType(ApprovalType.SERIAL);
-                blocks.add(block2);
-                //
-                approval.setBlocks(blocks);
+                approval.setBlocks(new ArrayList<>());
                 entity.setApproval(approval);
                 entity.setAppliedAuthor(ses.getUser().getId());
             } else {
@@ -99,7 +87,10 @@ public class OfficeMemoService extends RestProvider {
                 entity = officeMemoDAO.findById(id);
             }
 
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+
             outcome.setId(id);
+            outcome.addPayload("employees", empDao.findAll(false).getResult());
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
