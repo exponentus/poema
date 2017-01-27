@@ -1,0 +1,44 @@
+.approval {
+    padding: 8px;
+}
+
+.approval__status {
+    padding: 0;
+}
+
+.approval__blocks {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+}
+
+.approval__block {
+    border-bottom: 1px solid #eee;
+    padding: 8px;
+}
+
+.approval__block:hover,
+.approval__block.is-active {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.approval__actions {
+    margin: 6px 0;
+    padding: 0;
+}
+
+.approver-list {
+    display: block;
+    width: 100%;
+}
+
+.approver-list-it {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 2px 0;
+}
+
+.approver-list-it:hover {
+    background: #eee;
+}

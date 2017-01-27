@@ -135,4 +135,20 @@
         <entry lang="RUS">Автор</entry>
         <entry lang="ENG">Author</entry>
     </sentence>
+    <sentence mode="on" keyword="require_comment_if_no">
+        <entry lang="RUS">Комментарий если не согласен</entry>
+        <entry lang="ENG">Комментарий если не согласен</entry>
+    </sentence>
+    <sentence mode="on" keyword="approvers">
+        <entry lang="RUS">Согласующие</entry>
+        <entry lang="ENG">Approvers</entry>
+    </sentence>
+    <sentence mode="on" keyword="add_approver">
+        <entry lang="RUS">Добавить согласующего</entry>
+        <entry lang="ENG">Add approver</entry>
+    </sentence>
+    <sentence mode="on" keyword="time_limit">
+        <entry lang="RUS">Ограничение времени</entry>
+        <entry lang="ENG">Time limit</entry>
+    </sentence>
 </vocabulary>
