@@ -17,10 +17,13 @@
     padding: 8px;
 }
 
-.approval__block:hover,
-.approval__block.is-active {
+.approval__block:hover {
     background-color: #eee;
     cursor: pointer;
+}
+
+.approval__block.is-active {
+    background-color: #ddd;
 }
 
 .approval__actions {
@@ -42,8 +45,8 @@
     align-items: center;
     display: flex;
     flex-flow: row nowrap;
-    min-height: 30px;
-    padding: 3px 6px;
+    min-height: 36px;
+    padding: 6px;
 }
 
 .approver-list-it:hover {
