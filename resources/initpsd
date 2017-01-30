@@ -1,7 +1,7 @@
 #Init primary data for Projects (Software developing model)
 #
 #COMMON
-stini reference.init.FillRegionTypes
+run task fill_region_types
 stini reference.init.FillLocalityTypes
 stini reference.init.FillCountries
 stini reference.init.FillRegions

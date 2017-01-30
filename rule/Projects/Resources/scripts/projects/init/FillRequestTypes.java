@@ -18,7 +18,7 @@ import reference.model.RequestType;
  */
 
 public class FillRequestTypes extends InitialDataAdapter<RequestType, RequestTypeDAO> {
-
+	
 	@Override
 	public List<RequestType> getData(_Session ses, LanguageCode lang, Vocabulary vocabulary) {
 		List<RequestType> entities = new ArrayList<RequestType>();
@@ -26,7 +26,7 @@ public class FillRequestTypes extends InitialDataAdapter<RequestType, RequestTyp
 		String[] dataEng = { "Mark as implemented", "To prolong", "Cancel" };
 		String[] dataPor = { "Mark como implementado", "Prolongar", "Cancelar" };
 		String[] dataRus = { "Отметить как исполненный", "Продлить", "Отмена" };
-
+		
 		for (int i = 0; i < data.length; i++) {
 			RequestType entity = new RequestType();
 			entity.setName(data[i]);
@@ -34,11 +34,11 @@ public class FillRequestTypes extends InitialDataAdapter<RequestType, RequestTyp
 			name.put(LanguageCode.ENG, dataEng[i]);
 			name.put(LanguageCode.POR, dataPor[i]);
 			name.put(LanguageCode.RUS, dataRus[i]);
-			entity.setLocalizedName(name);
+			entity.setLocName(name);
 			entities.add(entity);
 		}
-
+		
 		return entities;
 	}
-
+	
 }

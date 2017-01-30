@@ -18,25 +18,25 @@ import reference.model.TaskType;
  */
 
 public class FillTaskTypesSofwareDev extends InitialDataAdapter<TaskType, TaskTypeDAO> {
-
+	
 	@Override
 	public List<TaskType> getData(_Session ses, LanguageCode lang, Vocabulary vocabulary) {
 		List<TaskType> entities = new ArrayList<TaskType>();
 		String[] data = { "Documentation", "Technical support", "Testing", "Programming" };
 		String[] dataEng = { "Documentation", "Technical support", "Testing", "Programming" };
 		String[] dataPor = { "Documentação", "Assistência técnica", "Тестирование", "Programação" };
-
+		
 		for (int i = 0; i < data.length; i++) {
 			TaskType entity = new TaskType();
 			entity.setName(data[i]);
 			Map<LanguageCode, String> name = new HashMap<LanguageCode, String>();
 			name.put(LanguageCode.ENG, dataEng[i]);
 			name.put(LanguageCode.POR, dataPor[i]);
-			entity.setLocalizedName(name);
+			entity.setLocName(name);
 			entities.add(entity);
 		}
-
+		
 		return entities;
 	}
-
+	
 }
