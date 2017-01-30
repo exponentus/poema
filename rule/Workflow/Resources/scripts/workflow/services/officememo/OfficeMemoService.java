@@ -18,6 +18,7 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
@@ -26,10 +27,8 @@ import workflow.model.embedded.Approval;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("office-memos")
@@ -55,10 +54,15 @@ public class OfficeMemoService extends RestProvider {
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
             // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
+            EmployeeDAO empDao = new EmployeeDAO(session);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
             outcome.setId("office-memo");
             outcome.setTitle("office_memo_plural");
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
+            outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
