@@ -161,6 +161,7 @@
   "message_has_sent_succesfully" : "El mensaje fue enviado",
   "date_format_does_not_match_to" : "date_format_does_not_match_to",
   "summary" : "summary",
+  "approval_block_time_limit_help" : "approval_block_time_limit_help",
   "editable" : "editable",
   "password_confirm_not_equals" : "password_confirm_not_equals",
   "assignment" : "assignment",

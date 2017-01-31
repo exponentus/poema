@@ -159,4 +159,8 @@
         <entry lang="RUS">Ограничение времени</entry>
         <entry lang="ENG">Time limit</entry>
     </sentence>
+    <sentence mode="on" keyword="approval_block_time_limit_help">
+        <entry lang="RUS">approval_block_time_limit_help</entry>
+        <entry lang="ENG">approval_block_time_limit_help</entry>
+    </sentence>
 </vocabulary>

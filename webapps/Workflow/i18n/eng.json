@@ -161,6 +161,7 @@
   "message_has_sent_succesfully" : "The message has been sent",
   "date_format_does_not_match_to" : "Date format does not match to pattern",
   "summary" : "Summary",
+  "approval_block_time_limit_help" : "approval_block_time_limit_help",
   "editable" : "Editing",
   "password_confirm_not_equals" : "Passwords do not match",
   "assignment" : "Assignment",

@@ -6,15 +6,22 @@
     padding: 0;
 }
 
-.approval__blocks {
-    list-style: none;
-    margin: 8px 0 0;
+.approval__actions {
+    margin: 0;
     padding: 0;
 }
 
+.approval__blocks {
+    margin: 8px 0 0;
+    padding: 0;
+    width: 100%;
+}
+
 .approval__block {
-    border-bottom: 1px solid #eee;
-    padding: 8px;
+    border: 1px solid #eee;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
 }
 
 .approval__block:hover {
@@ -22,14 +29,42 @@
     cursor: pointer;
 }
 
-.approval__block.is-active {
-    background-color: #ddd;
+.approval__block.is-new {
+    border-left-color: blue;
 }
 
-.approval__actions {
-    margin: 6px 0;
-    padding: 0;
+.approval__block-status,
+.approval__block-type,
+.approval__block-approvers {
+    padding: 8px;
 }
+
+.approval__block-status,
+.approval__block-type {
+    width: 20%;
+}
+
+.approval__block-approvers {
+    width: 60%;
+}
+
+@media ( max-width: 800px) {
+    .approval__block {
+        flex-wrap: wrap;
+        margin: 8px 0;
+    }
+    .approval__block-status,
+    .approval__block-type {
+        width: 50%;
+    }
+    .approval__block-approvers {
+        border-top: 1px dotted #eee;
+        width: 100%;
+    }
+}
+
+
+/* .approver-list */
 
 .approver-list {
     display: block;
