@@ -1,11 +1,11 @@
 package workflow.model.constants;
 
 /**
- * 
+ *
  * @author Kayra created 07-04-2016
  */
 public enum ApprovalStatusType {
-	UNKNOWN(0), DRAFT(80), PROCESSING(81), FINISHED(82);
+	UNKNOWN(0), DRAFT(80), PROCESSING(81), FINISHED(82), AWAITING(83);
 
 	private int code;
 
