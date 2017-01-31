@@ -7,5 +7,5 @@ public class AppConst {
 	public static String NAME_RUS = "Документооборот";
 	public static String NAME_KAZ = "Документооборот";
 	public static String DEFAULT_PAGE = "index";
-	public static String FT_INDEX_SCOPE = "";
+	public static String[] ROLES = { "can_sign_outgoing" };
 }
