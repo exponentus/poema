@@ -51,7 +51,7 @@ public class OfficeMemoService extends RestProvider {
             //
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action("add_new", "", "new_office_memo"));
-            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh"));
+            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
             // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
