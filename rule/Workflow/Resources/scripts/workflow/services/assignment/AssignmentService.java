@@ -115,7 +115,7 @@ public class AssignmentService extends RestProvider {
             entity.setBody(assignmentForm.getBody());
             entity.setAppliedAuthor(assignmentForm.getAppliedAuthor());
             entity.setObservers(assignmentForm.getObservers());
-            entity.setAttachments(getActualAttachments(entity.getAttachments()));
+            entity.setAttachments(getActualAttachments(entity.getAttachments(), assignmentForm.getAttachments()));
 
             if (isNew) {
                 IUser<Long> user = ses.getUser();

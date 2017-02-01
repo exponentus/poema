@@ -202,7 +202,7 @@ public class ProjectService extends RestProvider {
 			project.setComment(projectForm.getComment());
 			project.setStatus(projectForm.getStatus());
 			project.setFinishDate(projectForm.getFinishDate());
-			project.setAttachments(getActualAttachments(project.getAttachments()));
+			project.setAttachments(getActualAttachments(project.getAttachments(), projectForm.getAttachments()));
 			project.setPrimaryLanguage(EnvConst.getDefaultLang());
 			
 			Set<Long> readers = new HashSet<>();

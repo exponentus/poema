@@ -136,7 +136,7 @@ public class IncomingService extends RestProvider {
 			entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
 			entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
 			entity.setBody(incomingForm.getBody());
-			entity.setAttachments(getActualAttachments(entity.getAttachments()));
+			entity.setAttachments(getActualAttachments(entity.getAttachments(), incomingForm.getAttachments()));
 			
 			if (isNew) {
 				RegNum rn = new RegNum();

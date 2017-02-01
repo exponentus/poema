@@ -90,7 +90,7 @@ public class ReportService extends RestProvider {
 			//
 			entity.setTitle(reportForm.getTitle());
 			entity.setBody(reportForm.getBody());
-			entity.setAttachments(getActualAttachments(entity.getAttachments()));
+			entity.setAttachments(getActualAttachments(entity.getAttachments(), reportForm.getAttachments()));
 			
 			if (isNew) {
 				IUser<Long> user = ses.getUser();

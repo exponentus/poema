@@ -119,7 +119,7 @@ public class RequestService extends RestProvider {
             request.setTask(task);
             request.setRequestType(requestType);
             request.setComment(requestForm.getComment());
-            request.setAttachments(getActualAttachments(request.getAttachments()));
+            request.setAttachments(getActualAttachments(request.getAttachments(), requestForm.getAttachments()));
 
             request.setEditors(task.getEditors());
             request.addReaderEditor(session.getUser());

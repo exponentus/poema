@@ -130,7 +130,7 @@ public class OutgoingService extends RestProvider {
 			entity.setDocType(outgoingForm.getDocType());
 			entity.setRecipient(outgoingForm.getRecipient());
 			entity.setBody(outgoingForm.getBody());
-			entity.setAttachments(getActualAttachments(entity.getAttachments()));
+			entity.setAttachments(getActualAttachments(entity.getAttachments(), outgoingForm.getAttachments()));
 
 			if (isNew) {
 				RegNum rn = new RegNum();

@@ -331,7 +331,7 @@ public class TaskService extends RestProvider {
 			IUser<Long> assigneeUser = userDAO.findById(taskForm.getAssignee());
 			task.setAssignee(assigneeUser.getId());
 			task.setCustomerObservation(taskForm.isCustomerObservation());
-			task.setAttachments(getActualAttachments(task.getAttachments()));
+			task.setAttachments(getActualAttachments(task.getAttachments(), taskForm.getAttachments()));
 			task.setObservers(taskForm.getObservers() != null ? taskForm.getObservers() : new ArrayList<>());
 
 			if (isNew) {

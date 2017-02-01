@@ -140,8 +140,9 @@ public class OfficeMemoService extends RestProvider {
             }
             entity.setTitle(form.getTitle());
             entity.setBody(form.getBody());
+            entity.setAppliedAuthor(form.getAppliedAuthor());
             entity.setRecipient(form.getRecipient());
-            entity.setAttachments(getActualAttachments(entity.getAttachments()));
+            entity.setAttachments(getActualAttachments(entity.getAttachments(), form.getAttachments()));
 
             if (isNew) {
                 RegNum rn = new RegNum();

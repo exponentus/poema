@@ -145,7 +145,7 @@ public class DemandService extends RestProvider {
             demand.setStatusDate(demandForm.getStatusDate());
             demand.setBody(demandForm.getBody());
             demand.setTags(demandForm.getTags());
-            demand.setAttachments(getActualAttachments(demand.getAttachments()));
+            demand.setAttachments(getActualAttachments(demand.getAttachments(), demandForm.getAttachments()));
 
             if (isNew) {
                 RegNum rn = new RegNum();
