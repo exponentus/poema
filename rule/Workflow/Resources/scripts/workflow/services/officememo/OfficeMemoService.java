@@ -231,6 +231,9 @@ public class OfficeMemoService extends RestProvider {
         if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
+        if (entity.getAppliedAuthor() <= 0) {
+            ve.addError("appliedAuthor", "required", "field_is_empty");
+        }
         if (entity.getRecipient() <= 0) {
             ve.addError("recipient", "required", "field_is_empty");
         }
