@@ -20,6 +20,7 @@ import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Assignment;
+import workflow.model.embedded.Control;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -51,6 +52,7 @@ public class AssignmentService extends RestProvider {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
                 entity.setIncoming(incomingDAO.findById(getWebFormData().getValue("incoming")));
                 entity.setAppliedAuthor(ses.getUser().getId());
+                entity.setControl(new Control());
             } else {
                 AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
                 entity = assignmentDAO.findById(id);
@@ -182,10 +184,11 @@ public class AssignmentService extends RestProvider {
     private _ActionBar getActionBar(_Session session, Assignment entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
+        actionBar.addAction(new _Action("close", "", "close",  "fa fa-chevron-left", "btn-back"));
         if (entity.isNew() || entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         }
+        actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }

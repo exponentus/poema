@@ -37,6 +37,11 @@
         <entry lang="SPA">Control de acceso</entry>
     </sentence>
 
+    <sentence mode="on" keyword="sign">
+        <entry lang="RUS">Подписать</entry>
+        <entry lang="ENG">Sign</entry>
+    </sentence>
+
     <sentence mode="on" keyword="office_memo_plural">
         <entry lang="RUS">Служебные записки</entry>
         <entry lang="ENG">Officememo</entry>
@@ -162,5 +167,28 @@
     <sentence mode="on" keyword="approval_block_time_limit_help">
         <entry lang="RUS">approval_block_time_limit_help</entry>
         <entry lang="ENG">approval_block_time_limit_help</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="control">
+        <entry lang="RUS">Контроль</entry>
+        <entry lang="ENG">Control</entry>
+    </sentence>
+    <sentence mode="on" keyword="control_type">
+        <entry lang="RUS">Тип контроля</entry>
+        <entry lang="ENG">Control type</entry>
+    </sentence>
+    <sentence mode="on" keyword="start_date">
+        <entry lang="RUS">Дата начала</entry>
+        <entry lang="ENG">Start date</entry>
+    </sentence>
+    <sentence mode="on" keyword="due_date">
+        <entry lang="RUS">Дата исполнения</entry>
+        <entry lang="ENG">Due date</entry>
+    </sentence>
+    <sentence mode="on" keyword="assignee_user">
+        <entry lang="RUS">Исполнитель</entry>
+        <entry lang="ENG">Assignee</entry>
+        <entry lang="POR">Executante</entry>
+        <entry lang="SPA">Ejecutor</entry>
     </sentence>
 </vocabulary>
