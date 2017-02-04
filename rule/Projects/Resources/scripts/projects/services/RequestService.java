@@ -106,8 +106,8 @@ public class RequestService extends RestProvider {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
 
-            if (requestDAO.findUnResolvedRequest(task) != null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("task has unresolved request").build();
+            if (task.getStatus() != TaskStatusType.PROCESSING) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("task status is not PROCESSING").build();
             } else if (task.getRequests() != null && task.getRequests().size() > 42) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("task: too more request?! Bad game bro").build();
             }
@@ -164,9 +164,7 @@ public class RequestService extends RestProvider {
                 if (request == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
-                if (resolutionType == ResolutionType.UNKNOWN) {
-                    return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
-                }
+                return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
             }
 
             TaskDAO taskDAO = new TaskDAO(new _Session(new SuperUser()));
