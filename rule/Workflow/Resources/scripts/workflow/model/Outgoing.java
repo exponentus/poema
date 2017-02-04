@@ -26,7 +26,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "outgoings")
-@NamedQuery(name = "Outgoing.findAll", query = "SELECT m FROM Outgoing AS m ORDER BY m.regDate")
 public class Outgoing extends SecureHierarchicalEntity<UUID> {
 
     @Column(name = "reg_number")

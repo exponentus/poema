@@ -6,6 +6,7 @@ import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
@@ -20,7 +21,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "reports")
-@NamedQuery(name = "Report.findAll", query = "SELECT m FROM Report AS m ORDER BY m.regDate")
 public class Report extends SecureHierarchicalEntity<UUID> {
 
     @Column(name = "applied_author", nullable = false)
@@ -45,6 +45,30 @@ public class Report extends SecureHierarchicalEntity<UUID> {
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
+    public Report() {
+    }
+
+    public Report(UUID id, String title, String body, Long appliedAuthor, Date appliedRegDate) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.appliedAuthor = appliedAuthor;
+        this.appliedRegDate = appliedRegDate;
+    }
+
+    // test
+    public Report(UUID id, Date regDate, String title, String body, Long appliedAuthor, Date appliedRegDate) {
+        this.id = id;
+        this.regDate = regDate;
+        this.title = title;
+        this.body = body;
+        this.appliedAuthor = appliedAuthor;
+        this.appliedRegDate = appliedRegDate;
+        // this.attachments = (List<Attachment>) attachments;
+        // this.addReader(reader);
+        // this.setReaders(Stream.of(reader).collect(Collectors.toSet()));
+    }
+
     public Long getAppliedAuthor() {
         return appliedAuthor;
     }
@@ -65,6 +89,7 @@ public class Report extends SecureHierarchicalEntity<UUID> {
         return parent;
     }
 
+    @JsonProperty
     public void setParent(Assignment parent) {
         this.parent = parent;
     }

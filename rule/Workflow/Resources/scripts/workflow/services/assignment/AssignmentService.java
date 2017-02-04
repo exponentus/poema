@@ -48,8 +48,21 @@ public class AssignmentService extends RestProvider {
                 entity.setAuthor(ses.getUser());
                 entity.setAppliedAuthor(ses.getUser().getId());
 
-                IncomingDAO incomingDAO = new IncomingDAO(ses);
-                entity.setIncoming(incomingDAO.findById(getWebFormData().getValue("incoming")));
+                String incomingId = getWebFormData().getAnyValueSilently("incoming");
+                String assignmentId = getWebFormData().getAnyValueSilently("assignment");
+
+                if (!incomingId.isEmpty()) {
+                    IncomingDAO incomingDAO = new IncomingDAO(ses);
+                    entity.setIncoming(incomingDAO.findById(incomingId));
+                } else if (!assignmentId.isEmpty()) {
+                    AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
+                    Assignment parent = assignmentDAO.findById(assignmentId);
+                    entity.setParent(parent);
+                    entity.setIncoming(parent.getIncoming());
+                } else {
+                    throw new IllegalArgumentException("no parent document");
+                }
+
                 entity.setAppliedAuthor(ses.getUser().getId());
                 entity.setControl(new Control());
             } else {
@@ -184,6 +197,9 @@ public class AssignmentService extends RestProvider {
         actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
         if (entity.isNew() || entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
+        if (!entity.isNew() && session.getUser().getRoles().contains("chancellery")) {
+            actionBar.addAction(new _Action("assignment", "", "new_assignment"));
         }
         if (entity.getControl().assigneesContainsUser(session.getUser())) {
             actionBar.addAction(new _Action("report", "", "new_report", "", ""));

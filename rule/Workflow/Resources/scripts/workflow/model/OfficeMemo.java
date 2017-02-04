@@ -22,7 +22,6 @@ import java.util.UUID;
 @JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
-@NamedQuery(name = "OfficeMemo.findAll", query = "SELECT m FROM OfficeMemo AS m ORDER BY m.regDate")
 public class OfficeMemo extends SecureHierarchicalEntity<UUID> {
 
     @Column(name = "reg_number")

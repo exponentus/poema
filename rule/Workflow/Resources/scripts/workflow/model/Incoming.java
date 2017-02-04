@@ -25,7 +25,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "incomings")
-@NamedQuery(name = "Incoming.findAll", query = "SELECT m FROM Incoming AS m ORDER BY m.regDate")
 public class Incoming extends SecureHierarchicalEntity<UUID> {
 
     @JsonIgnore
@@ -75,6 +74,32 @@ public class Incoming extends SecureHierarchicalEntity<UUID> {
 
     @Transient
     private List<IAppEntity> responses;
+
+    public Incoming() {
+    }
+
+    // test
+    public Incoming(UUID id, String title, String body, String regNumber, Date appliedRegDate,
+                    Organization sender, String senderRegNumber, Date senderAppliedRegDate,
+                    Employee addressee, DocumentLanguage docLanguage, DocumentType docType,
+                    DocumentSubject docSubject, Outgoing responseTo/*, Attachment[] atts*/) {
+        this.id = id;
+        this.title = title;
+        this.body = body;
+        this.regNumber = regNumber;
+        this.appliedRegDate = appliedRegDate;
+        this.sender = sender;
+        this.senderRegNumber = senderRegNumber;
+        this.senderAppliedRegDate = senderAppliedRegDate;
+        this.addressee = addressee;
+        this.docLanguage = docLanguage;
+        this.docType = docType;
+        this.docSubject = docSubject;
+        this.responseTo = responseTo;
+//        if (atts.length > 0) {
+//            this.attachments = Arrays.stream(atts).collect(Collectors.toList());
+//        }
+    }
 
     public String getRegNumber() {
         return regNumber;

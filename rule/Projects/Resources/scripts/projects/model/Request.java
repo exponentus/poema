@@ -21,7 +21,6 @@ import java.util.UUID;
 @JsonRootName("request")
 @Entity
 @Table(name = "requests")
-@NamedQuery(name = "Request.findAll", query = "SELECT m FROM Request AS m ORDER BY m.regDate")
 public class Request extends SecureHierarchicalEntity<UUID> {
 
     @NotNull

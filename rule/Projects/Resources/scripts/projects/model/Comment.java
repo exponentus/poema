@@ -15,7 +15,6 @@ import java.util.UUID;
 @JsonRootName("comment")
 @Entity
 @Table(name = "comments")
-@NamedQuery(name = "Comment.findAll", query = "SELECT m FROM Comment AS m ORDER BY m.regDate ASC")
 public class Comment extends AppEntity<UUID> {
 
     @JsonIgnore

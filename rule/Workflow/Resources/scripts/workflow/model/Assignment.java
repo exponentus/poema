@@ -12,6 +12,7 @@ import workflow.model.embedded.Control;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +20,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "assignments")
-@NamedQuery(name = "Assignment.findAll", query = "SELECT m FROM Assignment AS m ORDER BY m.regDate")
 public class Assignment extends SecureHierarchicalEntity<UUID> {
 
     @JsonIgnore
@@ -47,7 +47,6 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    @JsonProperty("observerUserIds")
     private List<Long> observers;
 
     @Embedded
@@ -55,6 +54,18 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 
     @Transient
     private List<IAppEntity> responses;
+
+    public Assignment() {
+    }
+
+    // test
+    public Assignment(UUID id, Date regDate, String title, String body, Long appliedAuthor) {
+        this.id = id;
+        this.regDate = regDate;
+        this.title = title;
+        this.body = body;
+        this.appliedAuthor = appliedAuthor;
+    }
 
     public Long getAppliedAuthor() {
         return appliedAuthor;
@@ -69,6 +80,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
         return incoming;
     }
 
+    @JsonProperty
     public void setIncoming(Incoming incoming) {
         this.incoming = incoming;
     }
@@ -77,6 +89,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
         return parent;
     }
 
+    @JsonProperty
     public void setParent(Assignment parent) {
         this.parent = parent;
     }

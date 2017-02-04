@@ -23,7 +23,6 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "demands")
-@NamedQuery(name = "Demand.findAll", query = "SELECT m FROM Demand AS m ORDER BY m.regDate")
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
