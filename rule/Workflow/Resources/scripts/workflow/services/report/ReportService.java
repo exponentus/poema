@@ -14,12 +14,19 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
+import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
 import workflow.model.Report;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Date;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Path("reports")
 public class ReportService extends RestProvider {
@@ -37,15 +44,25 @@ public class ReportService extends RestProvider {
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new Report();
+                AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
+                entity.setParent(assignmentDAO.findById(getWebFormData().getValue("assignment")));
+                entity.setAppliedAuthor(ses.getUser().getId());
+                entity.setAppliedRegDate(new Date());
             } else {
                 ReportDAO reportDAO = new ReportDAO(ses);
                 entity = reportDAO.findById(id);
             }
 
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.addPayload("employees", emps);
+            outcome.addPayload("assignment", entity.getParent());
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
@@ -80,8 +97,11 @@ public class ReportService extends RestProvider {
             }
 
             //
+            entity.setParent(reportForm.getParent());
             entity.setTitle(reportForm.getTitle());
             entity.setBody(reportForm.getBody());
+            entity.setAppliedAuthor(reportForm.getAppliedAuthor());
+            entity.setAppliedRegDate(reportForm.getAppliedRegDate());
             entity.setAttachments(getActualAttachments(entity.getAttachments(), reportForm.getAttachments()));
 
             if (isNew) {

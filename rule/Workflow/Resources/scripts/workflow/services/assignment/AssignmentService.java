@@ -25,10 +25,9 @@ import workflow.model.embedded.Control;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
@@ -60,13 +59,8 @@ public class AssignmentService extends RestProvider {
 
             //
             EmployeeDAO empDao = new EmployeeDAO(ses);
-            Map<Long, Employee> emps = new HashMap<>();
-            List<Long> empIds = new ArrayList<>();
-            empIds.add(entity.getAuthor().getId());
-            empIds.add(entity.getAppliedAuthor());
-            for (Employee e : empDao.findAllByUserIds(empIds)) {
-                emps.put(e.getUserID(), e);
-            }
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
             //
 
             outcome.setId(id);
@@ -113,10 +107,13 @@ public class AssignmentService extends RestProvider {
             }
 
             //
+            entity.setIncoming(assignmentForm.getIncoming());
+            entity.setParent(assignmentForm.getParent());
             entity.setTitle(assignmentForm.getTitle());
             entity.setBody(assignmentForm.getBody());
             entity.setAppliedAuthor(assignmentForm.getAppliedAuthor());
             entity.setObservers(assignmentForm.getObservers());
+            entity.setControl(assignmentForm.getControl());
             entity.setAttachments(getActualAttachments(entity.getAttachments(), assignmentForm.getAttachments()));
 
             if (isNew) {
@@ -184,9 +181,12 @@ public class AssignmentService extends RestProvider {
     private _ActionBar getActionBar(_Session session, Assignment entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", "close",  "fa fa-chevron-left", "btn-back"));
+        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
         if (entity.isNew() || entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
+        if (entity.getControl().assigneesContainsUser(session.getUser())) {
+            actionBar.addAction(new _Action("report", "", "new_report", "", ""));
         }
         actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
