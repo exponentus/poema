@@ -73,6 +73,10 @@ public class Control {
     }
 
     public boolean assigneesContainsUser(IUser user) {
+        if (this.getAssigneeEntries() == null) {
+            return false;
+        }
+
         for (AssigneeEntry ae : this.getAssigneeEntries()) {
             if (ae.getAssignee().equals((long) user.getId())) {
                 return true;
