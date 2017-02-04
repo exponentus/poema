@@ -275,10 +275,6 @@ public class Task extends SecureHierarchicalEntity<UUID> {
         return requests;
     }
 
-    public boolean isHasAttachments() {
-        return attachments.size() > 0;
-    }
-
     @Override
     public List<Attachment> getAttachments() {
         return attachments;

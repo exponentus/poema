@@ -4,6 +4,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.localization.LanguageCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -23,6 +24,10 @@ import java.util.UUID;
 @Table(name = "projects")
 @NamedQuery(name = "Project.findAll", query = "SELECT m FROM Project AS m ORDER BY m.regDate")
 public class Project extends SecureHierarchicalEntity<UUID> {
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<Task> tasks;
 
     @FTSearchable
     @Column(length = 140)
@@ -164,10 +169,6 @@ public class Project extends SecureHierarchicalEntity<UUID> {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public boolean isHasAttachments() {
-        return attachments.size() > 0;
     }
 
     @Override
