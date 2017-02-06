@@ -74,6 +74,32 @@ public class Project extends SecureHierarchicalEntity<UUID> {
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
+    public Project() {
+    }
+
+    // Constructor for view
+    public Project(UUID id, Date regDate, String name, ProjectStatusType status, String customer,
+                   long manager, long programmer, long tester, Date finishDate, Long countAtt) {
+        this.id = id;
+        this.regDate = regDate;
+        this.name = name;
+        this.status = status;
+        //
+        this.customer = new Organization();
+        this.customer.setName(customer);
+        //
+        this.manager = manager;
+        this.programmer = programmer;
+        this.tester = tester;
+        this.finishDate = finishDate;
+        if (countAtt > 0) {
+            this.attachments = new ArrayList<>();
+            for (int i = 0; i < countAtt; i++) {
+                this.attachments.add(new Attachment());
+            }
+        }
+    }
+
     public String getName() {
         return name;
     }
