@@ -48,25 +48,20 @@ public class Report extends SecureHierarchicalEntity<UUID> {
     public Report() {
     }
 
-    public Report(UUID id, String title, String body, Long appliedAuthor, Date appliedRegDate) {
-        this.id = id;
-        this.title = title;
-        this.body = body;
-        this.appliedAuthor = appliedAuthor;
-        this.appliedRegDate = appliedRegDate;
-    }
-
     // test
-    public Report(UUID id, Date regDate, String title, String body, Long appliedAuthor, Date appliedRegDate) {
+    public Report(UUID id, Date regDate, String title, String body, Long appliedAuthor, Date appliedRegDate, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.title = title;
         this.body = body;
         this.appliedAuthor = appliedAuthor;
         this.appliedRegDate = appliedRegDate;
-        // this.attachments = (List<Attachment>) attachments;
-        // this.addReader(reader);
-        // this.setReaders(Stream.of(reader).collect(Collectors.toSet()));
+        if (countAtt > 0) {
+            this.attachments = new ArrayList<>();
+            for (int i = 0; i < countAtt; i++) {
+                this.attachments.add(new Attachment());
+            }
+        }
     }
 
     public Long getAppliedAuthor() {

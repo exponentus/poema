@@ -31,7 +31,7 @@ public class Request extends SecureHierarchicalEntity<UUID> {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "request_type")
-    private reference.model.RequestType requestType;
+    private RequestType requestType;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 8)
@@ -54,6 +54,27 @@ public class Request extends SecureHierarchicalEntity<UUID> {
             "request_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
+
+    public Request() {
+    }
+
+    public Request(UUID id, Date regDate, long author, RequestType requestType, ResolutionType resolution,
+                   Date resolutionTime, String decisionComment, String comment, Long countAtt) {
+        this.id = id;
+        this.regDate = regDate;
+        this.author = author;
+        this.requestType = requestType;
+        this.resolution = resolution;
+        this.resolutionTime = resolutionTime;
+        this.decisionComment = decisionComment;
+        this.comment = comment;
+        if (countAtt > 0) {
+            this.attachments = new ArrayList<>();
+            for (int i = 0; i < countAtt; i++) {
+                this.attachments.add(new Attachment());
+            }
+        }
+    }
 
     @Override
     public long getAuthorId() {

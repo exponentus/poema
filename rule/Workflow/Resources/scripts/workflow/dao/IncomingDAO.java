@@ -13,10 +13,7 @@ import workflow.model.Report;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,8 +90,13 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Root<Assignment> rootA = cqa.from(Assignment.class);
         // cqa.select(rootA).distinct(true);
         // UUID id, Date regDate, String title, String body, Long appliedAuthor
-        cqa.select(cba.construct(Assignment.class, rootA.get("id"), rootA.get("regDate"), rootA.get("title"),
-                rootA.get("body"), rootA.get("appliedAuthor")));
+        cqa.select(cba.construct(
+                Assignment.class,
+                rootA.get("id"),
+                rootA.get("regDate"),
+                rootA.get("title"),
+                rootA.get("body"),
+                rootA.get("appliedAuthor")));
 
         Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
@@ -112,9 +114,16 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
         Root<Report> rootR = cqr.from(Report.class);
-        // cqr.select(rootR).distinct(true);
-        cqr.select(cba.construct(Report.class, rootR.get("id"), rootR.get("regDate"), rootR.get("title"), rootR.get("body"),
-                rootR.get("appliedAuthor"), rootR.get("appliedRegDate")));
+        Join attCount = rootR.join("attachments", JoinType.LEFT);
+        cqr.select(cba.construct(
+                Report.class,
+                rootR.get("id"),
+                rootR.get("regDate"),
+                rootR.get("title"),
+                rootR.get("body"),
+                rootR.get("appliedAuthor"),
+                rootR.get("appliedRegDate"),
+                cba.count(attCount)));
 
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
@@ -123,6 +132,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         }
 
         cqr.where(conditionR);
+        cqr.groupBy(rootR);
         cqr.orderBy(cbr.desc(rootR.get("regDate")));
 
         TypedQuery<Report> typedQueryR = em.createQuery(cqr);

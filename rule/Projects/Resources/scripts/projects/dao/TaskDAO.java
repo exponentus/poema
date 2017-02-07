@@ -13,6 +13,7 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
+import reference.model.RequestType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -254,15 +255,26 @@ public class TaskDAO extends DAO<Task, UUID> {
         CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Request> cqr = cbr.createQuery(Request.class);
         Root<Request> requestRoot = cqr.from(Request.class);
+        Join attCount = requestRoot.join("attachments", JoinType.LEFT);
         cqr.select(requestRoot).distinct(true);
+        /*cqr.select(cbr.construct(
+                Request.class,
+                requestRoot.get("id"),
+                requestRoot.get("regDate"),
+                requestRoot.get("author"),
+                cbr.construct(RequestType.class,
+                        requestRoot.get("requestType").get("name"),
+                        requestRoot.get("requestType").get("locName")),
+                requestRoot.get("resolution"),
+                requestRoot.get("resolutionTime"),
+                requestRoot.get("decisionComment"),
+                requestRoot.get("comment"),
+                cbr.count(attCount)));*/
 
         Predicate conditionR = cbr.equal(requestRoot.get("task"), task);
 
-        //        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Request.class)) {
-        //            conditionR = cbr.and(requestRoot.get("readers").in(user.getId()), conditionR);
-        //        }
-
         cqr.where(conditionR);
+        // cqr.groupBy(requestRoot);
         cqr.orderBy(cbr.desc(requestRoot.get("regDate")));
 
         TypedQuery<Request> typedQueryR = em.createQuery(cqr);
