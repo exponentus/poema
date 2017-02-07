@@ -11,7 +11,7 @@ import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -41,7 +41,7 @@ public class OfficeMemoService extends RestProvider {
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
-        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
         String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
         List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
         try {

@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.event._Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 
@@ -26,7 +26,7 @@ public class SpeedChecker extends _Do {
 		try {
 			int iteration = 100;
 			int pageSize = 200;
-			_SortParams sortParams = new _SortParams();
+			SortParams sortParams = new SortParams();
 			for (int i = 0; i < iteration; i++) {
 				ProjectDAO projectDAO = new ProjectDAO(session);
 				ViewPage<Project> vp = projectDAO.findViewPage(sortParams, 1, pageSize);

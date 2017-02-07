@@ -6,7 +6,7 @@ import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
+import com.exponentus.scripting.SortParams;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
 import workflow.model.Report;
@@ -27,7 +27,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         super(Incoming.class, session);
     }
 
-    public ViewPage<Incoming> findAllWithResponses(_SortParams sortParams, int pageNum, int pageSize,
+    public ViewPage<Incoming> findAllWithResponses(SortParams sortParams, int pageNum, int pageSize,
                                                    List<UUID> expandedIds) {
         ViewPage<Incoming> vp = findViewPage(sortParams, pageNum, pageSize);
 
