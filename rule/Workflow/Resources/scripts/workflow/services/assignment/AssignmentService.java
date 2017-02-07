@@ -202,7 +202,7 @@ public class AssignmentService extends RestProvider {
         if (entity.getControl().assigneesContainsUser(session.getUser())) {
             actionBar.addAction(new _Action("report", "", "new_report", "", ""));
         }
-        actionBar.addAction(new _Action("sign", "", "sign"));
+        // actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
