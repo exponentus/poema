@@ -77,12 +77,13 @@ public class ProjectService extends RestProvider {
 			select.addField("status");
 			select.addField(select.getRoot().get("customer").get("name"));
 			select.addField("manager");
-			select.addField("programmer");
 			select.addField("tester");
+			select.addField("programmer");
 			select.addField("finishDate");
-			//select.addAttachmentCount();
-			ViewPage<Project> vp = projectDAO.findViewPage(select);
-			//ViewPage<Project> vp = projectDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+			//select.addField("comment");
+			select.addAttachmentCount();
+			//ViewPage<Project> vp = projectDAO.findViewPage(select);
+			ViewPage<Project> vp = projectDAO.findViewPage1(sortParams, getWebFormData().getPage(), pageSize);
 
 			_ActionBar actionBar = new _ActionBar(session);
 			actionBar.addAction(new _Action("new_project", "", "new_project"));

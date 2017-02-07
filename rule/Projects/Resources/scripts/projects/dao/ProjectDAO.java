@@ -20,18 +20,18 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.scripting._Session;
 import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting._Session;
 import com.exponentus.user.SuperUser;
 
 import projects.model.Project;
 
 public class ProjectDAO extends DAO<Project, UUID> {
-	
+
 	public ProjectDAO(_Session session) throws DAOException {
 		super(Project.class, session);
 	}
-	
+
 	// TEST
 	//@Override
 	public ViewPage<Project> findViewPage1(SortParams sortParams, int pageNum, int pageSize) {
@@ -47,12 +47,12 @@ public class ProjectDAO extends DAO<Project, UUID> {
 					root.get("status"), root.get("customer").get("name"), root.get("manager"), root.get("programmer"),
 					root.get("tester"), root.get("finishDate"), cb.count(atts)));
 			countCq.select(cb.count(root));
-			
+
 			Predicate condition = null;
 			if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
 				condition = cb.and(root.get("readers").in(user.getId()));
 			}
-			
+
 			if (sortParams != null && !sortParams.isEmpty()) {
 				List<Order> orderByList = new ArrayList<>();
 				sortParams.values().forEach((fieldName, direction) -> {
@@ -66,13 +66,13 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			} else {
 				cq.orderBy(cb.desc(root.get("regDate")));
 			}
-			
+
 			if (condition != null) {
 				cq.where(condition);
 				countCq.where(condition);
 			}
 			cq.groupBy(root, root.get("customer").get("name"));
-			
+
 			TypedQuery<Project> typedQuery = em.createQuery(cq);
 			Query query = em.createQuery(countCq);
 			long count = (long) query.getSingleResult();
@@ -87,7 +87,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 				typedQuery.setMaxResults(pageSize);
 			}
 			List<Project> result = typedQuery.getResultList();
-			
+
 			return new ViewPage<>(result, count, maxPage, pageNum);
 		} finally {
 			em.close();
