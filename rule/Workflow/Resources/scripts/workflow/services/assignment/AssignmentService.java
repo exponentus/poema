@@ -181,13 +181,6 @@ public class AssignmentService extends RestProvider {
         }
     }
 
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
-    }
-
     /*
      *
      */
@@ -198,7 +191,9 @@ public class AssignmentService extends RestProvider {
         if (entity.isNew() || entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         }
-        actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+        if (!entity.isNew()) {
+            actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+        }
         if (entity.getControl().assigneesContainsUser(session.getUser())) {
             actionBar.addAction(new _Action("report", "", "new_report", "", ""));
         }

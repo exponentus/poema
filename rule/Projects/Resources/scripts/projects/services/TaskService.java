@@ -62,7 +62,7 @@ public class TaskService extends RestProvider {
 
             TaskDAO taskDAO = new TaskDAO(session);
             TaskFilter taskFilter = setUpTaskFilter(session, getWebFormData(), new TaskFilter());
-            _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+            SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
             ViewPage<Task> vp;
 
             if (getWebFormData().getBoolSilently("execution")) {
@@ -374,13 +374,6 @@ public class TaskService extends RestProvider {
         } catch (Exception e) {
             return responseException(e);
         }
-    }
-
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
     }
 
     @POST

@@ -6,14 +6,13 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
 import projects.dao.filter.TaskFilter;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
-import reference.model.RequestType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -30,10 +29,10 @@ public class TaskDAO extends DAO<Task, UUID> {
     }
 
     public ViewPage<Task> findAllByTaskFilter(TaskFilter filter, int pageNum, int pageSize) {
-        return findAll(filter, _SortParams.desc("regDate"), pageNum, pageSize);
+        return findAll(filter, SortParams.desc("regDate"), pageNum, pageSize);
     }
 
-    public ViewPage<Task> findAll(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<Task> findAll(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
         }
@@ -184,7 +183,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAllWithResponses(TaskFilter filter, _SortParams sortParams, int pageNum, int pageSize,
+    public ViewPage<Task> findAllWithResponses(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize,
                                                List<UUID> expandedIds) {
         ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
 

@@ -10,8 +10,8 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -38,7 +38,7 @@ public class IncomingService extends RestProvider {
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
-        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
         String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
         List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 
@@ -188,13 +188,6 @@ public class IncomingService extends RestProvider {
         }
     }
 
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
-    }
-
     /*
      *
      */
@@ -203,7 +196,13 @@ public class IncomingService extends RestProvider {
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
-        actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+        if (!entity.isNew()) {
+            // dev396
+            if (entity.getAddressee().getUser().getId().equals(session.getUser().getId())
+                    || session.getUser().getRoles().contains("chancellery")) {
+                actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+            }
+        }
         actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));

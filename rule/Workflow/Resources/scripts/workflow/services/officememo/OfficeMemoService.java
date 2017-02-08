@@ -10,8 +10,8 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -41,7 +41,7 @@ public class OfficeMemoService extends RestProvider {
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
-        _SortParams sortParams = getWebFormData().getSortParams(_SortParams.desc("regDate"));
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
         String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
         List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
         try {
@@ -204,10 +204,10 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
+    @POST
+    @Path("{id}/action/startApproving")
+    public Response startApproving(@PathParam("id") String id) {
+        return Response.noContent().build();
     }
 
     /*
@@ -218,6 +218,9 @@ public class OfficeMemoService extends RestProvider {
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        if (entity.getApproval().getStatus() == ApprovalStatusType.DRAFT) {
+            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+        }
         actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));

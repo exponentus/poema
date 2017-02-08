@@ -242,13 +242,6 @@ public class RequestService extends RestProvider {
         }
     }
 
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
-    }
-
     private _ActionBar getActionBar(_Session session, Request request) {
         _ActionBar actionBar = new _ActionBar(session);
         if (request.isNew()) {

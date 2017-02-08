@@ -3,11 +3,9 @@ package projects.dao;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
-import com.exponentus.user.SuperUser;
 import projects.model.Project;
 
 import javax.persistence.EntityManager;
@@ -26,7 +24,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 
     // TEST
     @Override
-    public ViewPage<Project> findViewPage(_SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<Project> findViewPage(SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -47,12 +45,9 @@ public class ProjectDAO extends DAO<Project, UUID> {
                     root.get("tester"),
                     root.get("finishDate"),
                     cb.count(atts)));
-            countCq.select(cb.count(root));
+            countCq.select(cb.count(root)).distinct(true);
 
-            Predicate condition = null;
-            if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                condition = cb.and(root.get("readers").in(user.getId()));
-            }
+            Predicate condition = cb.and(root.get("readers").in(user.getId()));
 
             if (sortParams != null && !sortParams.isEmpty()) {
                 List<Order> orderByList = new ArrayList<>();

@@ -155,7 +155,6 @@
         <class>projects.model.Task</class>
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
-        <class>projects.model.Dashboard</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -190,7 +189,6 @@
         <class>projects.model.Task</class>
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
-        <class>projects.model.Dashboard</class>
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -267,7 +265,6 @@
         <class>projects.model.Task</class>
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
-        <class>projects.model.Dashboard</class>
         <!-- Common module entities -->               
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>

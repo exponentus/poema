@@ -44,7 +44,7 @@ public class ProjectService extends RestProvider {
         _Session session = getSession();
         try {
             int pageSize = getWebFormData().getNumberValueSilently("limit", session.pageSize);
-            _SortParams sortParams = getWebFormData().getSortParams(_SortParams.asc("name"));
+            SortParams sortParams = getWebFormData().getSortParams(SortParams.asc("name"));
             ProjectDAO projectDAO = new ProjectDAO(session);
             ViewPage<Project> vp = projectDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
@@ -245,13 +245,6 @@ public class ProjectService extends RestProvider {
         } catch (Exception e) {
             return responseException(e);
         }
-    }
-
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
     }
 
     private _ActionBar getActionBar(_Session session, Project project) {

@@ -10,9 +10,9 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._SortParams;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
@@ -44,7 +44,7 @@ public class DemandService extends RestProvider {
         int pageSize = session.pageSize;
 
         try {
-            _SortParams sortParams = params.getSortParams(_SortParams.desc("regDate"));
+            SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             DemandDAO dao = new DemandDAO(session);
             ViewPage<Demand> vp = dao.findViewPage(sortParams, params.getPage(), pageSize);
 
@@ -195,13 +195,6 @@ public class DemandService extends RestProvider {
         } catch (DAOException e) {
             return responseException(e);
         }
-    }
-
-    @DELETE
-    @Path("{id}/attachments/{attachmentId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteAttachment(@PathParam("id") String id, @PathParam("attachmentId") String attachmentId) {
-        return deleteAttachmentFromSessionFormAttachments(attachmentId);
     }
 
     /*
