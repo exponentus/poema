@@ -3,11 +3,9 @@ package projects.dao;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.user.SuperUser;
 import projects.model.Project;
 
 import javax.persistence.EntityManager;
@@ -31,22 +29,16 @@ public class ProjectDAO extends DAO<Project, UUID> {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
             CriteriaQuery<Project> cq = cb.createQuery(Project.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+            Root<Project> countRoot = countRootCq.from(Project.class);
             Root<Project> root = cq.from(Project.class);
-            // cq.select(root);
             Join atts = root.join("attachments", JoinType.LEFT);
-            cq.select(cb.construct(Project.class, root.get("id"), root.get("regDate"), root.get("name"),
-                    root.get("status"), root.get("customer").get("name"), root.get("manager"), root.get("programmer"),
-                    root.get("tester"), root.get("finishDate"), cb.count(atts)));
-            countCq.select(cb.count(root));
 
-            Predicate condition = null;
-            if (user.getId() != SuperUser.ID && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                condition = cb.and(root.get("readers").in(user.getId()));
-            }
+            Predicate condition = cb.and(root.get("readers").in(user.getId()));
+            Predicate conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
 
+            List<Order> orderByList = new ArrayList<>();
             if (sortParams != null && !sortParams.isEmpty()) {
-                List<Order> orderByList = new ArrayList<>();
                 sortParams.values().forEach((fieldName, direction) -> {
                     if (direction.isAscending()) {
                         orderByList.add(cb.asc(root.get(fieldName)));
@@ -56,17 +48,28 @@ public class ProjectDAO extends DAO<Project, UUID> {
                 });
                 cq.orderBy(orderByList);
             } else {
-                cq.orderBy(cb.desc(root.get("regDate")));
+                orderByList.add(cb.desc(root.get("regDate")));
             }
 
-            if (condition != null) {
-                cq.where(condition);
-                countCq.where(condition);
-            }
-            cq.groupBy(root, root.get("customer").get("name"));
+            cq.select(cb.construct(
+                    Project.class,
+                    root.get("id"),
+                    root.get("regDate"),
+                    root.get("name"),
+                    root.get("status"),
+                    root.get("customer").get("name"),
+                    root.get("manager"),
+                    root.get("programmer"),
+                    root.get("tester"),
+                    root.get("finishDate"),
+                    cb.count(atts)))
+                    .where(condition)
+                    .groupBy(root, root.get("customer").get("name"));
+
+            countRootCq.select(cb.count(countRoot)).where(conditionCount);
 
             TypedQuery<Project> typedQuery = em.createQuery(cq);
-            Query query = em.createQuery(countCq);
+            Query query = em.createQuery(countRootCq);
             long count = (long) query.getSingleResult();
             int maxPage = 1;
             if (pageNum != 0 || pageSize != 0) {
