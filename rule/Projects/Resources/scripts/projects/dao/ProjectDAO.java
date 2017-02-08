@@ -9,7 +9,6 @@ import com.exponentus.scripting._Session;
 import projects.model.Project;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -37,18 +36,17 @@ public class ProjectDAO extends DAO<Project, UUID> {
             Predicate condition = cb.and(root.get("readers").in(user.getId()));
             Predicate conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
 
-            List<Order> orderByList = new ArrayList<>();
+            List<Order> orderBy = new ArrayList<>();
             if (sortParams != null && !sortParams.isEmpty()) {
                 sortParams.values().forEach((fieldName, direction) -> {
                     if (direction.isAscending()) {
-                        orderByList.add(cb.asc(root.get(fieldName)));
+                        orderBy.add(cb.asc(root.get(fieldName)));
                     } else {
-                        orderByList.add(cb.desc(root.get(fieldName)));
+                        orderBy.add(cb.desc(root.get(fieldName)));
                     }
                 });
-                cq.orderBy(orderByList);
             } else {
-                orderByList.add(cb.desc(root.get("regDate")));
+                orderBy.add(cb.desc(root.get("regDate")));
             }
 
             cq.select(cb.construct(
@@ -62,15 +60,18 @@ public class ProjectDAO extends DAO<Project, UUID> {
                     root.get("programmer"),
                     root.get("tester"),
                     root.get("finishDate"),
-                    cb.count(atts)))
+                    cb.count(atts))
+            )
                     .where(condition)
-                    .groupBy(root, root.get("customer").get("name"));
+                    .groupBy(root, root.get("customer").get("name"))
+                    .orderBy(orderBy);
 
             countRootCq.select(cb.count(countRoot)).where(conditionCount);
 
             TypedQuery<Project> typedQuery = em.createQuery(cq);
-            Query query = em.createQuery(countRootCq);
-            long count = (long) query.getSingleResult();
+            TypedQuery<Long> query = em.createQuery(countRootCq);
+
+            long count = query.getSingleResult();
             int maxPage = 1;
             if (pageNum != 0 || pageSize != 0) {
                 maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
