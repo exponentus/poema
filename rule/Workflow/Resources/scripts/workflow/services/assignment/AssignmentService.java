@@ -25,6 +25,7 @@ import workflow.model.embedded.Control;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -64,7 +65,9 @@ public class AssignmentService extends RestProvider {
                 }
 
                 entity.setAppliedAuthor(ses.getUser().getId());
-                entity.setControl(new Control());
+                Control newControl = new Control();
+                newControl.setStartDate(new Date());
+                entity.setControl(newControl);
             } else {
                 AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
                 entity = assignmentDAO.findById(id);
@@ -115,13 +118,14 @@ public class AssignmentService extends RestProvider {
             if (isNew) {
                 entity = new Assignment();
                 entity.setIncoming(assignmentForm.getIncoming());
+                entity.setParent(assignmentForm.getParent());
             } else {
                 entity = assignmentDAO.findById(id);
             }
 
             //
-            entity.setIncoming(assignmentForm.getIncoming());
-            entity.setParent(assignmentForm.getParent());
+            // entity.setIncoming(assignmentForm.getIncoming());
+            // entity.setParent(assignmentForm.getParent());
             entity.setTitle(assignmentForm.getTitle());
             entity.setBody(assignmentForm.getBody());
             entity.setAppliedAuthor(assignmentForm.getAppliedAuthor());
@@ -207,13 +211,25 @@ public class AssignmentService extends RestProvider {
 
     private _Validation validate(Assignment assignment) {
         _Validation ve = new _Validation();
-        UserDAO userDAO = new UserDAO(getSession());
 
         if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
 
+        if (assignment.getControl().getStartDate() == null) {
+            ve.addError("control.startDate", "required", "field_is_empty");
+        }
+
+        if (assignment.getControl().getDueDate() == null) {
+            ve.addError("control.dueDate", "required", "field_is_empty");
+        }
+
+        if (assignment.getControl().getAssigneeEntries() != null && assignment.getControl().getAssigneeEntries().size() > 1) {
+            ve.addError("control.assigneeEntries", "eq_1", "select_one_assignee");
+        }
+
         if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
+            UserDAO userDAO = new UserDAO(getSession());
             for (long uid : assignment.getObservers()) {
                 IUser<Long> ou = userDAO.findById(uid);
                 if (ou == null) {
