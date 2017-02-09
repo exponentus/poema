@@ -256,6 +256,12 @@
         <entry lang="POR">Obrigatório</entry>
         <entry lang="SPA">Obligatorio</entry>
     </sentence>
+    <sentence mode="on" keyword="request">
+        <entry lang="RUS">Запрос</entry>
+        <entry lang="ENG">Request</entry>
+        <entry lang="POR">Pedido</entry>
+        <entry lang="SPA">Solicitud</entry>
+    </sentence>
     <sentence mode="on" keyword="new_request">
         <entry lang="RUS">Запрос</entry>
         <entry lang="ENG">Request</entry>

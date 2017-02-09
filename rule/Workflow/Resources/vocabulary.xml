@@ -46,6 +46,10 @@
         <entry lang="RUS">Служебные записки</entry>
         <entry lang="ENG">Officememo</entry>
     </sentence>
+    <sentence mode="on" keyword="officememo">
+        <entry lang="RUS">Служебная записка</entry>
+        <entry lang="ENG">Officememo</entry>
+    </sentence>
     <sentence mode="on" keyword="office_memo">
         <entry lang="RUS">Служебная записка</entry>
         <entry lang="ENG">Officememo</entry>
