@@ -43,8 +43,6 @@ public class TaskDAO extends DAO<Task, UUID> {
             CriteriaQuery<Task> cq = cb.createQuery(Task.class);
             CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
             Root<Task> taskRoot = cq.from(Task.class);
-            cq.select(taskRoot).distinct(true);
-            countCq.select(cb.countDistinct(taskRoot));
 
             Predicate condition = null;
 
@@ -110,7 +108,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             if (filter.hasSearch()) {
                 if (condition == null) {
-                    condition = cb.and(cb.like(cb.lower(taskRoot.get("title")), "%" + filter.getSearch() + "%"));
+                    condition = cb.like(cb.lower(taskRoot.get("title")), "%" + filter.getSearch() + "%");
                 } else {
                     condition = cb.and(cb.like(cb.lower(taskRoot.get("title")), "%" + filter.getSearch() + "%"),
                             condition);
@@ -144,11 +142,6 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (condition != null) {
-                cq.where(condition);
-                countCq.where(condition);
-            }
-
             if (sortParams != null && !sortParams.isEmpty()) {
                 List<Order> orderBy = new ArrayList<>();
                 sortParams.values().forEach((fieldName, direction) -> {
@@ -159,6 +152,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                     }
                 });
                 cq.orderBy(orderBy);
+            }
+
+            cq.select(taskRoot).distinct(true);
+            countCq.select(cb.countDistinct(taskRoot));
+
+            if (condition != null) {
+                cq.where(condition);
+                countCq.where(condition);
             }
 
             TypedQuery<Task> typedQuery = em.createQuery(cq);
