@@ -186,6 +186,7 @@
   "create_report" : "Generate a report",
   "send" : "Send",
   "view_mode_tree" : "Hierarchy",
+  "request" : "Request",
   "method_is_not_implemented" : "Method is not implemented",
   "password_confirm" : "Confirm password",
   "code" : "Code",

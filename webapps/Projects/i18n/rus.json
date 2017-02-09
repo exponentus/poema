@@ -186,6 +186,7 @@
   "create_report" : "Сформировать отчет",
   "send" : "send",
   "view_mode_tree" : "В виде иерархии",
+  "request" : "Запрос",
   "method_is_not_implemented" : "Метод не реализован",
   "password_confirm" : "Confirm password",
   "code" : "code",
