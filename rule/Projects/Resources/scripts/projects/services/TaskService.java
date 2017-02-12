@@ -542,7 +542,7 @@ public class TaskService extends RestProvider {
 
     public static TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {
 
-        filter.setProject(formData.getValueSilently("projectId"));
+        filter.setProject(formData.getValueSilently("project"));
         filter.setParentTask(formData.getValueSilently("parentTaskId"));
         filter.setTaskType(formData.getValueSilently("taskTypeId"));
         filter.setSearch(formData.getValueSilently("keyWord").toLowerCase());
