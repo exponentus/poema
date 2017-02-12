@@ -4,6 +4,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.common.model.SimpleReferenceEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.localization.LanguageCode;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,10 +20,7 @@ import reference.model.TaskType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -117,13 +115,15 @@ public class Task extends SecureHierarchicalEntity<UUID> {
     public Task() {
     }
 
-    public Task(UUID id, Date regDate, Long author, String title, String body, List<Tag> tags, Long countAtt) {
+    // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String, java.lang.Long
+    // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String, java.lang.String, java.lang.String, reference.model.Tag, java.lang.Long
+    public Task(UUID id, Date regDate, Long author, String tname, String locName, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.author = author;
-        this.title = title;
-        this.body = body;
-        this.tags = tags;
+        this.title = tname;
+        // this.body = locName;
+//        this.tags = tags;
     }
 
     public Task(UUID id, Date regDate, Long author, String title, String body, Tag tag, Long countAtt) {
