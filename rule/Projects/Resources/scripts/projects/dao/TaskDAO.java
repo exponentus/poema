@@ -270,12 +270,12 @@ public class TaskDAO extends DAO<Task, UUID> {
 		CriteriaQuery<Request> cqr = cbr.createQuery(Request.class);
 		Root<Request> requestRoot = cqr.from(Request.class);
 		Join attCount = requestRoot.join("attachments", JoinType.LEFT);
-		//     cqr.select(requestRoot).distinct(true);
-		cqr.select(cbr.construct(Request.class,  requestRoot.get("regDate"),
+		cqr.select(requestRoot).distinct(true);
+		/*cqr.select(cbr.construct(Request.class,  requestRoot.get("regDate"),
 				requestRoot.get("author"),cbr.construct(RequestType.class, requestRoot.get("requestType").get("name"),
 						requestRoot.get("requestType").get("locName")),
 				requestRoot.get("resolution"), requestRoot.get("resolutionTime"), requestRoot.get("decisionComment"),
-				requestRoot.get("comment"), cbr.count(attCount)));
+				requestRoot.get("comment"), cbr.count(attCount)));*/
 		
 		Predicate conditionR = cbr.equal(requestRoot.get("task"), task);
 		
