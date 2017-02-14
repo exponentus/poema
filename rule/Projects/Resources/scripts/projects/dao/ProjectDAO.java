@@ -7,6 +7,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import projects.model.Project;
+import projects.model.constants.ProjectStatusType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -23,7 +24,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 
     // TEST
     //@Override
-    public ViewPage<Project> findViewPage1(SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<Project> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -35,6 +36,11 @@ public class ProjectDAO extends DAO<Project, UUID> {
 
             Predicate condition = cb.and(root.get("readers").in(user.getId()));
             Predicate conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
+
+            if (status != null) {
+                condition = cb.and(cb.equal(root.get("status"), status), condition);
+                conditionCount = cb.and(cb.equal(countRoot.get("status"), status), conditionCount);
+            }
 
             List<Order> orderBy = new ArrayList<>();
             if (sortParams != null && !sortParams.isEmpty()) {
