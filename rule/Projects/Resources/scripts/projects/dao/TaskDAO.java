@@ -271,6 +271,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 		Root<Request> requestRoot = cqr.from(Request.class);
 		Join attCount = requestRoot.join("attachments", JoinType.LEFT);
 		cqr.select(requestRoot).distinct(true);
+		//TODO does not worked if choose hierarchy view
 		/*cqr.select(cbr.construct(Request.class,  requestRoot.get("regDate"),
 				requestRoot.get("author"),cbr.construct(RequestType.class, requestRoot.get("requestType").get("name"),
 						requestRoot.get("requestType").get("locName")),
