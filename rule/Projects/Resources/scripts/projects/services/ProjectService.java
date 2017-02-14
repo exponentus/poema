@@ -24,7 +24,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.SelectBuilder;
+import com.exponentus.dataengine.jpa.Selector;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -67,7 +67,7 @@ public class ProjectService extends RestProvider {
 			int pageSize = getWebFormData().getNumberValueSilently("limit", session.pageSize);
 			SortParams sortParams = getWebFormData().getSortParams(SortParams.asc("name"));
 			ProjectDAO projectDAO = new ProjectDAO(session);
-			SelectBuilder<Project> select = projectDAO.getSelectBuilder();
+			Selector<Project> select = projectDAO.getSelector();
 			select.setPageNum(getWebFormData().getPage());
 			select.setPageSize(pageSize);
 			select.setSortParams(sortParams);
