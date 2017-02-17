@@ -31,12 +31,14 @@ public class Approver extends SimpleAppEntity {
     @Column(name = "is_current")
     private boolean isCurrent;
 
-    public Long getApproverUser() {
-        return approverUser;
-    }
+    private int position;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Block> blocks;
+
+    public Long getApproverUser() {
+        return approverUser;
+    }
 
     public void setApproverUser(Long approverUser) {
         this.approverUser = approverUser;
@@ -80,5 +82,13 @@ public class Approver extends SimpleAppEntity {
 
     public void setBlocks(List<Block> blocks) {
         this.blocks = blocks;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

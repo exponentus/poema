@@ -78,7 +78,7 @@ public class Control {
         }
 
         for (AssigneeEntry ae : this.getAssigneeEntries()) {
-            if (ae.getAssignee().equals((long) user.getId())) {
+            if (ae.getAssignee().equals(user.getId())) {
                 return true;
             }
         }

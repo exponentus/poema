@@ -1,5 +1,7 @@
 package workflow.services.officememo;
 
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
@@ -22,12 +24,17 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.constants.ApprovalType;
 import workflow.model.embedded.Approval;
+import workflow.model.embedded.Approver;
+import workflow.model.embedded.Block;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -42,8 +49,7 @@ public class OfficeMemoService extends RestProvider {
         _Session session = getSession();
         int pageSize = session.pageSize;
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
-        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
+
         try {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
             ViewPage vp = officeMemoDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
@@ -205,8 +211,129 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/startApproving")
+    @Path("{id}/actions/startApproving")
     public Response startApproving(@PathParam("id") String id) {
+        /*
+    DRAFT>PROCESSING. При статусе DRAFT должна быть кнопка “start approving”(Начать согласование).
+    Берем первый блок, и выдаем права, на чтение: если последовательно - Первому согласователю, если Паралелльно - то всем согласователям в блоке .
+    Документ меняет статус на PROCESSING и текущий блок меняет статус на PROCESSING, остальные блоки переходят в AWAITING. Кнопка “start approving” исчезает.
+     */
+        try {
+            UserDAO userDAO = new UserDAO(getSession());
+            OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+            OfficeMemo om = officeMemoDAO.findById(id);
+
+            if (om.getApproval().getStatus() != ApprovalStatusType.DRAFT) {
+                // return Error;
+            }
+
+            Block block = om.getApproval().getNextBlockForApproving();
+
+            if (block.getType() == ApprovalType.SERIAL) {
+                Approver approver = block.getFirstApprover();
+                approver.setCurrent(true);
+                IUser user = userDAO.findById(approver.getApproverUser());
+                om.addReader(user);
+            } else if (block.getType() == ApprovalType.PARALLEL) {
+                List<IUser> users = block.getApprovers().stream().map(approver -> {
+                    IUser u = new User();
+                    u.setId(approver.getApproverUser());
+                    return u;
+                }).collect(Collectors.toList());
+                // om.addReaders(users.stream().map(it->it.getId()));
+
+            } else {
+                throw new IllegalArgumentException();
+            }
+
+            om.getApproval().setStatus(ApprovalStatusType.PROCESSING);
+            block.setStatus(ApprovalStatusType.PROCESSING);
+
+            om.getApproval().getBlocks().forEach(b -> {
+                if (!block.getId().equals(b.getId())) {
+                    b.setStatus(ApprovalStatusType.AWAITING);
+                }
+            });
+
+            officeMemoDAO.update(om);
+
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("{id}/actions/acceptApprovalBlock")
+    public Response acceptApprovalBlock(@PathParam("id") String id) {
+
+    /*
+    Согласователи получают уведомления и открыв документ видят кнопки Согласен, Отклонить (Accept, Decline). При согласен (у workflow.model.embedded.Approver DecisionType = YES) при последовательном отбираем права на кнопки “Согласен, Отклонить”
+И даем права на чтение следующему согласователю, при паралелльном, просто отбираем права на кнопки “Согласен, Отклонить”. Если согласователи “закончились” то закрываем блок (ApprovalStatusType=FINISHED) и переходим к следующему. Если блоки закончились то согласование завершено (ApprovalStatusType=FINISHED) у Approval...
+     */
+        try {
+            UserDAO userDAO = new UserDAO(getSession());
+            OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+            OfficeMemo om = officeMemoDAO.findById(id);
+
+            if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
+                // return Error;
+            }
+
+            Block processBlock = om.getApproval().getProcessingBlock();
+
+
+            processBlock.doApproverAccept(getSession().getUser());
+
+            Approver nextApprover = processBlock.getNextApproverWithoutDecision();
+            if (nextApprover != null) {
+                // add next approver for read
+                if (processBlock.getType() == ApprovalType.SERIAL) {
+                    nextApprover.setCurrent(true);
+                    IUser user = userDAO.findById(nextApprover.getApproverUser());
+                    om.addReader(user);
+                }
+            } else {
+                processBlock.setStatus(ApprovalStatusType.FINISHED);
+
+                Block nextBlock = om.getApproval().getNextBlockForApproving();
+                if (nextBlock != null) {
+                    nextBlock.setStatus(ApprovalStatusType.PROCESSING);
+
+                    if (nextBlock.getType() == ApprovalType.SERIAL) {
+                        IUser user = userDAO.findById(nextBlock.getFirstApprover().getApproverUser());
+                        om.addReader(user);
+                    } else if (nextBlock.getType() == ApprovalType.PARALLEL) {
+                        List<IUser> users = nextBlock.getApprovers().stream().map(a -> {
+                            IUser u = new User();
+                            u.setId(a.getApproverUser());
+                            return u;
+                        }).collect(Collectors.toList());
+                        // om.addReaders(users.stream().map(it->it.getId()));
+
+                    } else {
+                        throw new IllegalArgumentException();
+                    }
+                } else {
+                    om.getApproval().setStatus(ApprovalStatusType.FINISHED);
+                }
+            }
+
+            officeMemoDAO.update(om);
+
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("{id}/actions/declineApprovalBlock")
+    public Response declineApprovalBlock(@PathParam("id") String id) {
+
+
         return Response.noContent().build();
     }
 
@@ -221,6 +348,12 @@ public class OfficeMemoService extends RestProvider {
         if (entity.getApproval().getStatus() == ApprovalStatusType.DRAFT) {
             actionBar.addAction(new _Action("start_approving", "", "start_approving"));
         }
+
+        if (entity.getApproval().getStatus() == ApprovalStatusType.PROCESSING) {
+            actionBar.addAction(new _Action("agree", "", "accept_approval_block"));
+            actionBar.addAction(new _Action("disagree", "", "decline_approval_block"));
+        }
+
         actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));

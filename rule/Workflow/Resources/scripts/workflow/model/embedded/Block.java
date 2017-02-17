@@ -1,83 +1,128 @@
 package workflow.model.embedded;
 
 /**
- *
  * @author Kayra created 07-04-2016
  */
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
-
+import com.exponentus.user.IUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
+import workflow.model.constants.DecisionType;
 import workflow.model.util.ApprovalStatusTypeConverter;
 import workflow.model.util.ApprovalTypeConverter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "blocks")
 public class Block extends SimpleAppEntity {
 
-	@Convert(converter = ApprovalStatusTypeConverter.class)
-	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
+    @Convert(converter = ApprovalStatusTypeConverter.class)
+    private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
-	@OneToMany(cascade = CascadeType.PERSIST)
-	private List<Approver> approvers;
+    @OneToMany(cascade = CascadeType.PERSIST)
+    private List<Approver> approvers;
 
-	@Convert(converter = ApprovalTypeConverter.class)
-	private ApprovalType type = ApprovalType.UNKNOWN;
+    @Convert(converter = ApprovalTypeConverter.class)
+    private ApprovalType type = ApprovalType.UNKNOWN;
 
-	@Column(name = "require_comment_if_no")
-	private boolean requireCommentIfNo;
+    @Column(name = "require_comment_if_no")
+    private boolean requireCommentIfNo;
 
-	@Column(name = "time_limit")
-	private int timeLimit;
+    @Column(name = "time_limit")
+    private int timeLimit;
 
-	public ApprovalStatusType getStatus() {
-		return status;
-	}
+    private int position;
 
-	public void setStatus(ApprovalStatusType status) {
-		this.status = status;
-	}
+    public ApprovalStatusType getStatus() {
+        return status;
+    }
 
-	public List<Approver> getApprovers() {
-		return approvers;
-	}
+    public void setStatus(ApprovalStatusType status) {
+        this.status = status;
+    }
 
-	public void setApprovers(List<Approver> approvers) {
-		this.approvers = approvers;
-	}
+    public List<Approver> getApprovers() {
+        return approvers;
+    }
 
-	public ApprovalType getType() {
-		return type;
-	}
+    public void setApprovers(List<Approver> approvers) {
+        this.approvers = approvers;
+    }
 
-	public void setType(ApprovalType type) {
-		this.type = type;
-	}
+    public ApprovalType getType() {
+        return type;
+    }
 
-	public boolean isRequireCommentIfNo() {
-		return requireCommentIfNo;
-	}
+    public void setType(ApprovalType type) {
+        this.type = type;
+    }
 
-	public void setRequireCommentIfNo(boolean requireCommentIfNo) {
-		this.requireCommentIfNo = requireCommentIfNo;
-	}
+    public boolean isRequireCommentIfNo() {
+        return requireCommentIfNo;
+    }
 
-	public int getTimeLimit() {
-		return timeLimit;
-	}
+    public void setRequireCommentIfNo(boolean requireCommentIfNo) {
+        this.requireCommentIfNo = requireCommentIfNo;
+    }
 
-	public void setTimeLimit(int timeLimit) {
-		this.timeLimit = timeLimit;
-	}
+    public int getTimeLimit() {
+        return timeLimit;
+    }
 
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    @JsonIgnore
+    public Approver getFirstApprover() {
+        return approvers.stream()
+                .sorted((a1, a2) -> a1.getPosition() > a2.getPosition() ? 1 : -1)
+                .limit(1)
+                .findFirst().get();
+    }
+
+    @JsonIgnore
+    public Approver getNextApproverWithoutDecision() {
+        return approvers.stream()
+                .sorted((a1, a2) -> a1.getPosition() > a2.getPosition() ? 1 : -1)
+                .filter(approver -> approver.getDecisionType() == DecisionType.UNKNOWN)
+                .limit(1)
+                .findFirst().get();
+    }
+
+    public Approver doApproverAccept(IUser user) {
+        Approver approver = approvers.stream()
+                .filter(a -> user.getId().equals(a.approverUser))
+                .limit(1)
+                .findFirst().get();
+        approver.setDecisionType(DecisionType.YES);
+        approver.setDecisionTime(new Date());
+
+        return approver;
+    }
+
+    public Approver doApproverDecline(IUser user, String decisionComment) {
+        Approver approver = approvers.stream()
+                .filter(a -> user.getId().equals(a.approverUser))
+                .limit(1)
+                .findFirst().get();
+        approver.setDecisionType(DecisionType.NO);
+        approver.setDecisionTime(new Date());
+        approver.setDecisionComment(decisionComment);
+
+        return approver;
+    }
 }

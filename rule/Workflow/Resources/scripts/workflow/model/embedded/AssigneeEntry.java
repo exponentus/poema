@@ -1,57 +1,58 @@
 package workflow.model.embedded;
 
-import java.util.Date;
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import java.util.Date;
 
 @Entity
 @Table(name = "assignee_entries")
 public class AssigneeEntry extends SimpleAppEntity {
 
-	@Column(name = "is_coordinator")
-	private boolean isCoordinator;
+    @Column(name = "is_coordinator")
+    private boolean isCoordinator;
 
-	private Long assignee;
+    private Long assignee;
 
-	@Column(name = "reset_time")
-	private Date resetTime;
+    private Long resetter;
 
-	@Column(name = "resetter_info")
-	private String resetterInfo;
+    @Column(name = "reset_time")
+    private Date resetTime;
 
-	public boolean isCoordinator() {
-		return isCoordinator;
-	}
+    @Column(name = "resetter_info")
+    private String resetterInfo;
 
-	public void setCoordinator(boolean isCoordinator) {
-		this.isCoordinator = isCoordinator;
-	}
+    public boolean isCoordinator() {
+        return isCoordinator;
+    }
 
-	public Long getAssignee() {
-		return assignee;
-	}
+    public void setCoordinator(boolean isCoordinator) {
+        this.isCoordinator = isCoordinator;
+    }
 
-	public void setAssignee(Long assignee) {
-		this.assignee = assignee;
-	}
+    public Long getAssignee() {
+        return assignee;
+    }
 
-	public Date getResetTime() {
-		return resetTime;
-	}
+    public void setAssignee(Long assignee) {
+        this.assignee = assignee;
+    }
 
-	public void setResetTime(Date resetTime) {
-		this.resetTime = resetTime;
-	}
+    public Date getResetTime() {
+        return resetTime;
+    }
 
-	public String getResetterInfo() {
-		return resetterInfo;
-	}
+    public void setResetTime(Date resetTime) {
+        this.resetTime = resetTime;
+    }
 
-	public void setResetterInfo(String resetterInfo) {
-		this.resetterInfo = resetterInfo;
-	}
+    public String getResetterInfo() {
+        return resetterInfo;
+    }
+
+    public void setResetterInfo(String resetterInfo) {
+        this.resetterInfo = resetterInfo;
+    }
 }
