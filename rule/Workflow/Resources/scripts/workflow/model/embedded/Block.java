@@ -24,7 +24,7 @@ public class Block extends SimpleAppEntity {
     @Convert(converter = ApprovalStatusTypeConverter.class)
     private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Approver> approvers;
 
     @Convert(converter = ApprovalTypeConverter.class)
@@ -87,27 +87,22 @@ public class Block extends SimpleAppEntity {
     }
 
     @JsonIgnore
-    public Approver getFirstApprover() {
-        return approvers.stream()
-                .sorted((a1, a2) -> a1.getPosition() > a2.getPosition() ? 1 : -1)
-                .limit(1)
-                .findFirst().get();
-    }
-
-    @JsonIgnore
-    public Approver getNextApproverWithoutDecision() {
+    public Approver getNextApprover() {
         return approvers.stream()
                 .sorted((a1, a2) -> a1.getPosition() > a2.getPosition() ? 1 : -1)
                 .filter(approver -> approver.getDecisionType() == DecisionType.UNKNOWN)
-                .limit(1)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 
     public Approver doApproverAccept(IUser user) {
         Approver approver = approvers.stream()
                 .filter(a -> user.getId().equals(a.approverUser))
-                .limit(1)
-                .findFirst().get();
+                .findFirst().orElse(null);
+
+        if (approver == null) {
+            throw new IllegalArgumentException("approver not found");
+        }
+
         approver.setDecisionType(DecisionType.YES);
         approver.setDecisionTime(new Date());
 
@@ -117,8 +112,12 @@ public class Block extends SimpleAppEntity {
     public Approver doApproverDecline(IUser user, String decisionComment) {
         Approver approver = approvers.stream()
                 .filter(a -> user.getId().equals(a.approverUser))
-                .limit(1)
-                .findFirst().get();
+                .findFirst().orElse(null);
+
+        if (approver == null) {
+            throw new IllegalArgumentException("approver not found");
+        }
+
         approver.setDecisionType(DecisionType.NO);
         approver.setDecisionTime(new Date());
         approver.setDecisionComment(decisionComment);
