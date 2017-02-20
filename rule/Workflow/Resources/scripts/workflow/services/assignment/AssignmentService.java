@@ -1,6 +1,7 @@
 package workflow.services.assignment;
 
 import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -26,6 +27,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -123,7 +125,6 @@ public class AssignmentService extends RestProvider {
                 entity = assignmentDAO.findById(id);
             }
 
-            //
             // entity.setIncoming(assignmentForm.getIncoming());
             // entity.setParent(assignmentForm.getParent());
             entity.setTitle(assignmentForm.getTitle());
@@ -224,17 +225,15 @@ public class AssignmentService extends RestProvider {
             ve.addError("control.dueDate", "required", "field_is_empty");
         }
 
-        if (assignment.getControl().getAssigneeEntries() != null && assignment.getControl().getAssigneeEntries().size() > 1) {
-            ve.addError("control.assigneeEntries", "eq_1", "select_one_assignee");
+        if (assignment.getControl().getAssigneeEntries() == null || assignment.getControl().getAssigneeEntries().isEmpty()) {
+            ve.addError("control.assigneeEntries", "required", "field_is_empty");
         }
 
         if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
             UserDAO userDAO = new UserDAO(getSession());
-            for (long uid : assignment.getObservers()) {
-                IUser<Long> ou = userDAO.findById(uid);
-                if (ou == null) {
-                    ve.addError("observerUserIds", "required", "observer user not found");
-                }
+            List<User> users = userDAO.findAllByIds(assignment.getObservers());
+            if (assignment.getObservers().size() != users.size()) {
+                ve.addError("observerUserIds", "required", "observer user not found");
             }
         }
 

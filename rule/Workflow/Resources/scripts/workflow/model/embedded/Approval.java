@@ -61,12 +61,11 @@ public class Approval {
 
         return blocks.stream()
                 .filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING)
-                .limit(1)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 
     @JsonIgnore
-    public Block getNextBlockForApproving() {
+    public Block getNextBlock() {
         if (getStatus() == ApprovalStatusType.FINISHED) {
             return null;
         }
@@ -84,7 +83,6 @@ public class Approval {
                         return block.getStatus() == ApprovalStatusType.AWAITING;
                     }
                 })
-                .limit(1)
-                .findFirst().get();
+                .findFirst().orElse(null);
     }
 }
