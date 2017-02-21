@@ -86,20 +86,28 @@ public class Block extends SimpleAppEntity {
     }
 
     @JsonIgnore
+    public Approver getCurrentApprover() {
+        return approvers.stream()
+                .sorted((a, b) -> a.getPosition() > b.getPosition() ? 1 : -1)
+                .filter(Approver::isCurrent)
+                .findFirst().orElse(null);
+    }
+
+    @JsonIgnore
     public Approver getNextApprover() {
         return approvers.stream()
-                .sorted((a1, a2) -> a1.getPosition() > a2.getPosition() ? 1 : -1)
+                .sorted((a, b) -> a.getPosition() > b.getPosition() ? 1 : -1)
                 .filter(approver -> approver.getDecisionType() == DecisionType.UNKNOWN)
                 .findFirst().orElse(null);
     }
 
-    public Approver getApprover(IUser user) {
+    public Approver getApprover(IUser<Long> user) {
         Approver approver = approvers.stream()
-                .filter(a -> user.getId().equals(a.approverUser))
+                .filter(a -> a.getApproverUser().longValue() == user.getId().longValue())
                 .findFirst().orElse(null);
 
         if (approver == null) {
-            throw new IllegalArgumentException("approver not found");
+            throw new IllegalArgumentException("approver not found. user: " + user);
         }
 
         return approver;

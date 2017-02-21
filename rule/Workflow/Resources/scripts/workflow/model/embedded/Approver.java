@@ -99,6 +99,7 @@ public class Approver extends SimpleAppEntity {
 
         setDecisionType(DecisionType.YES);
         setDecisionTime(new Date());
+        setCurrent(false);
     }
 
     public void disagree(String decisionComment) {
@@ -109,5 +110,6 @@ public class Approver extends SimpleAppEntity {
         setDecisionType(DecisionType.NO);
         setDecisionTime(new Date());
         setDecisionComment(decisionComment);
+        setCurrent(false);
     }
 }

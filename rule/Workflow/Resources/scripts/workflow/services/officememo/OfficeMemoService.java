@@ -52,7 +52,6 @@ public class OfficeMemoService extends RestProvider {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
             ViewPage vp = officeMemoDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
-            //
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action("add_new", "", "new_office_memo"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
@@ -303,7 +302,9 @@ public class OfficeMemoService extends RestProvider {
                     nextBlock.setStatus(ApprovalStatusType.PROCESSING);
 
                     if (nextBlock.getType() == ApprovalType.SERIAL) {
-                        om.addReader(userDAO.findById(nextBlock.getNextApprover().getApproverUser()));
+                        Approver _nextApprover = nextBlock.getNextApprover();
+                        _nextApprover.setCurrent(true);
+                        om.addReader(userDAO.findById(_nextApprover.getApproverUser()));
                     } else if (nextBlock.getType() == ApprovalType.PARALLEL) {
                         om.addReaders(nextBlock.getApprovers().stream().map(Approver::getApproverUser).collect(Collectors.toList()));
                     } else if (nextBlock.getType() == ApprovalType.SIGNING) {
@@ -333,16 +334,67 @@ public class OfficeMemoService extends RestProvider {
     @POST
     @Path("{id}/actions/declineApprovalBlock")
     public Response declineApprovalBlock(@PathParam("id") String id) {
+        try {
+            UserDAO userDAO = new UserDAO(getSession());
+            OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+            OfficeMemo om = officeMemoDAO.findById(id);
 
-        outcome.setTitle("declineApprovalBlock");
-        outcome.setMessage("declineApprovalBlock");
+            if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
+                throw new IllegalStateException("status error: " + om.getApproval().getStatus());
+            }
 
-        return Response.ok(outcome).build();
+            Block processBlock = om.getApproval().getProcessingBlock();
+            if (processBlock == null) {
+                throw new IllegalStateException("not found processing Block");
+            }
+
+            String decisionComment = getWebFormData().getValueSilently("comment");
+            processBlock.getApprover(getSession().getUser()).disagree(decisionComment);
+
+            Approver nextApprover = processBlock.getNextApprover();
+            if (nextApprover != null) {
+                // add next approver for read
+                if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
+                    nextApprover.setCurrent(true);
+                    om.addReader(userDAO.findById(nextApprover.getApproverUser()));
+                }
+            } else {
+                processBlock.setStatus(ApprovalStatusType.FINISHED);
+
+                Block nextBlock = om.getApproval().getNextBlock();
+                if (nextBlock != null) {
+                    nextBlock.setStatus(ApprovalStatusType.PROCESSING);
+
+                    if (nextBlock.getType() == ApprovalType.SERIAL) {
+                        Approver _nextApprover = nextBlock.getNextApprover();
+                        _nextApprover.setCurrent(true);
+                        om.addReader(userDAO.findById(_nextApprover.getApproverUser()));
+                    } else if (nextBlock.getType() == ApprovalType.PARALLEL) {
+                        om.addReaders(nextBlock.getApprovers().stream().map(Approver::getApproverUser).collect(Collectors.toList()));
+                    } else if (nextBlock.getType() == ApprovalType.SIGNING) {
+                        Approver approver = nextBlock.getNextApprover();
+                        approver.setCurrent(true);
+                        om.addReader(userDAO.findById(approver.getApproverUser()));
+                    } else {
+                        throw new IllegalStateException("Block type error: " + nextBlock.getType());
+                    }
+                } else {
+                    om.getApproval().setStatus(ApprovalStatusType.FINISHED);
+                }
+            }
+
+            officeMemoDAO.update(om, false);
+
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("declineApprovalBlock");
+            outcome.addPayload(om);
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
     }
 
-    /*
-     *
-     */
     private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -352,7 +404,7 @@ public class OfficeMemoService extends RestProvider {
             actionBar.addAction(new _Action("start_approving", "", "start_approving"));
         }
 
-        if (entity.getApproval().getStatus() == ApprovalStatusType.PROCESSING) {
+        if (entity.getApproval().userCanDoDecision(session.getUser())) {
             actionBar.addAction(new _Action("agree", "", "accept_approval_block"));
             actionBar.addAction(new _Action("disagree", "", "decline_approval_block"));
         }

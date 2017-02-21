@@ -4,8 +4,11 @@ package workflow.model.embedded;
  * @author Kayra created 07-04-2016
  */
 
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.constants.ApprovalType;
+import workflow.model.constants.DecisionType;
 import workflow.model.util.ApprovalStatusTypeConverter;
 
 import javax.persistence.CascadeType;
@@ -75,7 +78,7 @@ public class Approval {
         }
 
         return blocks.stream()
-                .sorted((b1, b2) -> (b1.getPosition() > b2.getPosition() ? 1 : -1))
+                .sorted((a, b) -> (a.getPosition() > b.getPosition() ? 1 : -1))
                 .filter(block -> {
                     if (getStatus() == ApprovalStatusType.DRAFT) {
                         return block.getStatus() == ApprovalStatusType.DRAFT;
@@ -84,5 +87,22 @@ public class Approval {
                     }
                 })
                 .findFirst().orElse(null);
+    }
+
+    public boolean userCanDoDecision(IUser<Long> user) {
+        if (getStatus() == ApprovalStatusType.PROCESSING) {
+            Block block = getProcessingBlock();
+            if (block != null) {
+                if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+                    return block.getCurrentApprover().getApproverUser().longValue() == user.getId().longValue();
+                } else if (block.getType() == ApprovalType.PARALLEL) {
+                    return block.getApprovers().stream()
+                            .filter(it -> it.getApproverUser().longValue() == user.getId().longValue() && it.getDecisionType() == DecisionType.UNKNOWN)
+                            .count() > 0;
+                }
+            }
+        }
+
+        return false;
     }
 }

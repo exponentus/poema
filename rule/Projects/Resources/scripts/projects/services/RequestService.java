@@ -13,7 +13,6 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.user.SuperUser;
 import com.exponentus.util.TimeUtil;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
@@ -100,7 +99,7 @@ public class RequestService extends RestProvider {
     private Response addRequest(_Session session, Request requestForm) {
         try {
             RequestDAO requestDAO = new RequestDAO(session);
-            TaskDAO taskDAO = new TaskDAO(new _Session(new SuperUser()));
+            TaskDAO taskDAO = new TaskDAO(session);
             Task task = taskDAO.findById(requestForm.getTask().getId());
             if (task == null) {
                 return Response.status(Response.Status.NOT_FOUND).build();
@@ -127,7 +126,7 @@ public class RequestService extends RestProvider {
             requestDAO.add(request);
 
             task.setStatus(TaskStatusType.PENDING);
-            taskDAO.update(task);
+            taskDAO.update(task, false);
 
             new Messages(getAppEnv()).sendOfNewRequest(request, task);
 
@@ -157,7 +156,7 @@ public class RequestService extends RestProvider {
 
     private Response doResolution(String requestId, ResolutionType resolutionType, Request requestForm) {
         try {
-            RequestDAO requestDAO = new RequestDAO(new _Session(new SuperUser()));
+            RequestDAO requestDAO = new RequestDAO(getSession());
             Request request = requestDAO.findById(requestId);
 
             if (request == null || resolutionType == ResolutionType.UNKNOWN) {
@@ -167,7 +166,7 @@ public class RequestService extends RestProvider {
                 return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
             }
 
-            TaskDAO taskDAO = new TaskDAO(new _Session(new SuperUser()));
+            TaskDAO taskDAO = new TaskDAO(getSession());
             Task task = request.getTask();
             if (resolutionType == ResolutionType.ACCEPTED) {
                 switch (request.getRequestType().getName()) {
@@ -196,12 +195,12 @@ public class RequestService extends RestProvider {
             } else {
                 task.setStatus(TaskStatusType.PROCESSING);
             }
-            taskDAO.update(task);
+            taskDAO.update(task, false);
 
             request.setResolution(resolutionType);
             request.setResolutionTime(new Date());
             request.setDecisionComment(getWebFormData().getValueSilently("comment"));
-            requestDAO.update(request);
+            requestDAO.update(request, false);
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
