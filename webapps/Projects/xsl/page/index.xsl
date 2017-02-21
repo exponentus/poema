@@ -10,7 +10,7 @@
     <xsl:template name="layout">
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text
             disable-output-escaping="yes">&gt;</xsl:text>
-        <html manifest="manifest.appcache">
+        <html manifest="manifest.appcache?v=41">
             <head>
                 <base href=""/>
                 <meta charset="utf-8"/>
@@ -26,17 +26,17 @@
                 <link rel="stylesheet" href="css/all.min.css"/>
                 <style>
                     <![CDATA[
-                /* fix: fieldset content overflow */
-                fieldset {
-                    display: block;
-                    min-width: inherit; /* chrome */
-                }
-                @-moz-document url-prefix() {
+                    /* fix: fieldset content overflow */
                     fieldset {
-                        display: table-column !important;
+                        display: block;
+                        min-width: inherit; /* chrome */
                     }
-                }
-                ]]>
+                    @-moz-document url-prefix() {
+                        fieldset {
+                            display: table-column !important;
+                        }
+                    }
+                    ]]>
                 </style>
             </head>
             <body>
