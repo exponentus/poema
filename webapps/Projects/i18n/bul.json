@@ -11,6 +11,7 @@
   "brand" : "brand",
   "edit" : "edit",
   "locality" : "locality",
+  "request_error_help" : "request_error_help",
   "active" : "active",
   "org_category" : "org_category",
   "completed" : "completed",

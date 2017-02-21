@@ -11,6 +11,7 @@
   "brand" : "Poema",
   "edit" : "edit",
   "locality" : "locality",
+  "request_error_help" : "Ошибка при выполнении запроса",
   "active" : "Ativo",
   "org_category" : "org_category",
   "completed" : "Concluído",

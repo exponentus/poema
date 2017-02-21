@@ -286,7 +286,7 @@ public class OfficeMemoService extends RestProvider {
                 throw new IllegalStateException("not found processing Block");
             }
 
-            processBlock.doApproverAccept(getSession().getUser());
+            processBlock.getApprover(getSession().getUser()).agree();
 
             Approver nextApprover = processBlock.getNextApprover();
             if (nextApprover != null) {

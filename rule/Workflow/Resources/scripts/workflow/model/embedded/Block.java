@@ -14,7 +14,6 @@ import workflow.model.util.ApprovalStatusTypeConverter;
 import workflow.model.util.ApprovalTypeConverter;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -94,7 +93,7 @@ public class Block extends SimpleAppEntity {
                 .findFirst().orElse(null);
     }
 
-    public Approver doApproverAccept(IUser user) {
+    public Approver getApprover(IUser user) {
         Approver approver = approvers.stream()
                 .filter(a -> user.getId().equals(a.approverUser))
                 .findFirst().orElse(null);
@@ -102,25 +101,6 @@ public class Block extends SimpleAppEntity {
         if (approver == null) {
             throw new IllegalArgumentException("approver not found");
         }
-
-        approver.setDecisionType(DecisionType.YES);
-        approver.setDecisionTime(new Date());
-
-        return approver;
-    }
-
-    public Approver doApproverDecline(IUser user, String decisionComment) {
-        Approver approver = approvers.stream()
-                .filter(a -> user.getId().equals(a.approverUser))
-                .findFirst().orElse(null);
-
-        if (approver == null) {
-            throw new IllegalArgumentException("approver not found");
-        }
-
-        approver.setDecisionType(DecisionType.NO);
-        approver.setDecisionTime(new Date());
-        approver.setDecisionComment(decisionComment);
 
         return approver;
     }

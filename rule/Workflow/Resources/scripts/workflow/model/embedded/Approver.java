@@ -91,4 +91,23 @@ public class Approver extends SimpleAppEntity {
     public void setPosition(int position) {
         this.position = position;
     }
+
+    public void agree() {
+        if (approverUser == null) {
+            throw new IllegalStateException("approver not set");
+        }
+
+        setDecisionType(DecisionType.YES);
+        setDecisionTime(new Date());
+    }
+
+    public void disagree(String decisionComment) {
+        if (approverUser == null) {
+            throw new IllegalStateException("approver not set");
+        }
+
+        setDecisionType(DecisionType.NO);
+        setDecisionTime(new Date());
+        setDecisionComment(decisionComment);
+    }
 }

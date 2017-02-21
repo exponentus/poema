@@ -12,6 +12,12 @@
         <entry lang="POR">A carregar</entry>
         <entry lang="SPA">Cargando</entry>
     </sentence>
+    <sentence mode="on" keyword="request_error_help">
+        <entry lang="RUS">Ошибка при выполнении запроса</entry>
+        <entry lang="ENG">Ошибка при выполнении запроса</entry>
+        <entry lang="POR">Ошибка при выполнении запроса</entry>
+        <entry lang="SPA">Ошибка при выполнении запроса</entry>
+    </sentence>
     <sentence mode="on" keyword="editors">
         <entry lang="RUS">Редакторы</entry>
         <entry lang="ENG">Editors</entry>

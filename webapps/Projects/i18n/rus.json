@@ -11,6 +11,7 @@
   "brand" : "Poema",
   "edit" : "Редактирование",
   "locality" : "Населенный пункт",
+  "request_error_help" : "Ошибка при выполнении запроса",
   "active" : "Активный",
   "org_category" : "Тип организации",
   "completed" : "Завершен",
