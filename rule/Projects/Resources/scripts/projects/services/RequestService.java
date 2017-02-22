@@ -16,13 +16,13 @@ import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.util.TimeUtil;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
+import projects.domain.RequestDomain;
+import projects.domain.TaskDomain;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
-import reference.dao.RequestTypeDAO;
-import reference.model.RequestType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
@@ -96,36 +96,46 @@ public class RequestService extends RestProvider {
         return addRequest(getSession(), requestForm);
     }
 
-    private Response addRequest(_Session session, Request requestForm) {
+    private Response addRequest(_Session session, Request requestDto) {
         try {
-            RequestDAO requestDAO = new RequestDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
-            Task task = taskDAO.findById(requestForm.getTask().getId());
+            Task task = taskDAO.findById(requestDto.getTask().getId());
+
             if (task == null) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
 
             if (task.getStatus() != TaskStatusType.PROCESSING) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("task status is not PROCESSING").build();
-            } else if (task.getRequests() != null && task.getRequests().size() > 42) {
-                return Response.status(Response.Status.BAD_REQUEST).entity("task: too more request?! Bad game bro").build();
+                throw new IllegalStateException("task status is not PROCESSING");
             }
 
-            RequestTypeDAO requestTypeDAO = new RequestTypeDAO(session);
-            RequestType requestType = requestTypeDAO.findById(requestForm.getRequestType().getId());
+            //RequestTypeDAO requestTypeDAO = new RequestTypeDAO(session);
+            //RequestType requestType = requestTypeDAO.findById(requestDto.getRequestType().getId());
 
             Request request = new Request();
-            request.setTask(task);
-            request.setRequestType(requestType);
-            request.setComment(requestForm.getComment());
-            request.setAttachments(getActualAttachments(request.getAttachments(), requestForm.getAttachments()));
 
-            request.setEditors(task.getEditors());
-            request.addReaderEditor(session.getUser());
+            requestDto.setTask(task);
+            requestDto.setAttachments(getActualAttachments(request.getAttachments(), requestDto.getAttachments()));
 
-            requestDAO.add(request);
+            TaskDomain taskDomain = new TaskDomain(task);
+            RequestDomain requestDomain = new RequestDomain(request);
 
-            task.setStatus(TaskStatusType.PENDING);
+            requestDomain.fillFromDto(requestDto, session.getUser());
+            taskDomain.changeStatus(TaskStatusType.PENDING);
+
+//            request.setAuthor(session.getUser());
+//            request.setLastModifier(session.getUser().getId());
+//            request.setTask(task);
+//            request.setRequestType(requestType);
+//            request.setComment(requestForm.getComment());
+//            request.setAttachments(getActualAttachments(request.getAttachments(), requestForm.getAttachments()));
+//
+//            request.setEditors(task.getEditors());
+//            request.addReaderEditor(session.getUser());
+//
+//            task.setStatus(TaskStatusType.PENDING);
+            task.getRequests().add(request);
+
             taskDAO.update(task, false);
 
             new Messages(getAppEnv()).sendOfNewRequest(request, task);
@@ -142,19 +152,19 @@ public class RequestService extends RestProvider {
     @Path("{id}/action/accept")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doRequestAccept(@PathParam("id") String id, Request requestForm) {
-        return doResolution(id, ResolutionType.ACCEPTED, requestForm);
+    public Response doRequestAccept(@PathParam("id") String id, Request requestDTO) {
+        return doResolution(id, ResolutionType.ACCEPTED, requestDTO);
     }
 
     @POST
     @Path("{id}/action/decline")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doRequestDecline(@PathParam("id") String id, Request requestForm) {
-        return doResolution(id, ResolutionType.DECLINED, requestForm);
+    public Response doRequestDecline(@PathParam("id") String id, Request requestDto) {
+        return doResolution(id, ResolutionType.DECLINED, requestDto);
     }
 
-    private Response doResolution(String requestId, ResolutionType resolutionType, Request requestForm) {
+    private Response doResolution(String requestId, ResolutionType resolutionType, Request requestDto) {
         try {
             RequestDAO requestDAO = new RequestDAO(getSession());
             Request request = requestDAO.findById(requestId);
@@ -195,11 +205,14 @@ public class RequestService extends RestProvider {
             } else {
                 task.setStatus(TaskStatusType.PROCESSING);
             }
-            taskDAO.update(task, false);
 
             request.setResolution(resolutionType);
             request.setResolutionTime(new Date());
             request.setDecisionComment(getWebFormData().getValueSilently("comment"));
+
+            // taskDAO.update(task, false);
+
+
             requestDAO.update(request, false);
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
