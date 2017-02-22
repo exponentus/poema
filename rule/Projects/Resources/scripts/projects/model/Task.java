@@ -34,10 +34,10 @@ public class Task extends SecureHierarchicalEntity<UUID> {
     @ManyToOne(fetch = FetchType.EAGER)
     private Project project;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Demand demand;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Task parent;
 
     @FTSearchable(ignoreLang = true, regEx = "[^0-9]*")
@@ -92,22 +92,23 @@ public class Task extends SecureHierarchicalEntity<UUID> {
     private List<Task> subtasks;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id")
     @CascadeOnDelete
     private List<Comment> comments;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "task_id")
     @CascadeOnDelete
     private List<Request> requests;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id")}, indexes = {
-            @Index(columnList = "task_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "task_id", "attachment_id"}))
+    @JoinTable(name = "task_attachments",
+            joinColumns = {@JoinColumn(name = "task_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "task_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"task_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
@@ -221,12 +222,6 @@ public class Task extends SecureHierarchicalEntity<UUID> {
 
     public void setStatus(TaskStatusType status) {
         this.status = status;
-        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) {
-            resetEditors();
-        } else {
-            addReaderEditor(author);
-        }
-        setStatusDate(new Date());
     }
 
     public Date getStatusDate() {

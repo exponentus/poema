@@ -24,7 +24,7 @@ import java.util.UUID;
 public class Request extends SecureHierarchicalEntity<UUID> {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(updatable = false, nullable = false)
     private Task task;
 

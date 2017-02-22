@@ -1,9 +1,7 @@
 package projects.services;
 
 import administrator.dao.UserDAO;
-import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -12,19 +10,20 @@ import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import com.exponentus.runtimeobj.RegNum;
-import com.exponentus.scripting.*;
+import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting.WebFormData;
+import com.exponentus.scripting._Session;
+import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
-import com.exponentus.webserver.servlet.UploadedFile;
-import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.exceptions.DatabaseException;
-import org.joda.time.LocalDate;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
+import projects.domain.TaskDomain;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -103,99 +102,56 @@ public class TaskService extends RestProvider {
     }
 
     @GET
-    @Path("{id}/execution")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getTaskExecution(@PathParam("id") String id) {
-        return null;
-    }
-
-    @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         WebFormData formData = getWebFormData();
 
-        IUser<Long> user = session.getUser();
-        Task task;
-        try {
-            boolean isNew = "new".equals(id);
-            if (!isNew) {
-                TaskDAO taskDAO = new TaskDAO(session);
-                task = taskDAO.findById(id);
+        String fsId = formData.getFormSesId();
+        String projectId = formData.getValueSilently("projectId");
+        String parentTaskId = formData.getValueSilently("parentTaskId");
+        boolean initiative = formData.getBoolSilently("initiative");
+        boolean isNew = "new".equals(id);
 
+        try {
+            TaskDAO taskDAO = new TaskDAO(session);
+            IUser<Long> user = session.getUser();
+            Task task;
+            TaskDomain taskDomain;
+
+            if (!isNew) {
+                task = taskDAO.findById(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
-                if (task.getParent() != null) {
-                    outcome.addPayload("parentTask", task.getParent());
+                taskDomain = new TaskDomain(task);
+            } else {
+                Project project = null;
+                Task parentTask = null;
+
+                if (!parentTaskId.isEmpty()) {
+                    parentTask = taskDAO.findById(parentTaskId);
                 }
 
-                outcome.addPayload(new ACL(task));
-            } else {
-                task = new Task();
-                task.setAuthor(user);
-                task.setInitiative(formData.getBoolSilently("initiative"));
+                if (!projectId.isEmpty()) {
+                    ProjectDAO projectDAO = new ProjectDAO(session);
+                    project = projectDAO.findById(projectId);
+                } else if (parentTask != null) {
+                    project = parentTask.getProject();
+                }
+
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
+                TaskType taskType = null;
                 try {
-                    task.setTaskType(taskTypeDAO.findByName("Programming"));
+                    taskType = taskTypeDAO.findByName("Programming");
                 } catch (DAOException e) {
                     Server.logger.errorLogEntry(e);
                 }
-                task.setStatus(TaskStatusType.OPEN);
 
-                String projectId = formData.getValueSilently("projectId");
-                if (!projectId.isEmpty()) {
-                    ProjectDAO projectDAO = new ProjectDAO(session);
-                    Project project = projectDAO.findById(projectId);
-                    task.setProject(project);
-                    task.setObservers(project.getObservers());
-                }
-
-                String parentTaskId = formData.getValueSilently("parentTaskId");
-                if (!parentTaskId.isEmpty()) {
-                    TaskDAO taskDAO = new TaskDAO(session);
-                    Task parentTask = taskDAO.findById(parentTaskId);
-                    task.setProject(parentTask.getProject());
-                    task.setParent(parentTask);
-                    task.setTitle(parentTask.getTitle());
-                    task.setPriority(parentTask.getPriority());
-                    task.setStartDate(parentTask.getStartDate());
-                    task.setDueDate(parentTask.getDueDate());
-                    task.setTags(parentTask.getTags());
-                    task.setObservers(parentTask.getObservers());
-
-                    outcome.addPayload("parentTask", parentTask);
-                } else {
-                    task.setStartDate(new Date());
-                    task.setDueDate(new LocalDate(task.getStartDate()).plusDays(10).toDate());
-                }
-
-                String fsId = formData.getFormSesId();
-
-                List<String> formFiles;
-                Object obj = session.getAttribute(fsId);
-                if (obj == null) {
-                    formFiles = new ArrayList<>();
-                } else {
-                    _FormAttachments fAtts = (_FormAttachments) obj;
-                    formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
-                }
-
-                List<IPOJOObject> filesToPublish = new ArrayList<>();
-
-                for (String fn : formFiles) {
-                    UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-                    if (uf == null) {
-                        uf = new UploadedFile();
-                        uf.setName(fn);
-                        session.setAttribute(fsId + "_file" + fn, uf);
-                    }
-                    filesToPublish.add(uf);
-                }
-
-                outcome.addPayload("filesToPublish", filesToPublish);
+                task = new Task();
+                taskDomain = new TaskDomain(task, user, project, parentTask, taskType, initiative, 10);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);
@@ -212,22 +168,11 @@ public class TaskService extends RestProvider {
                 emps.put(e.getUserID(), e);
             }
 
-            if (isNew && task.getParent() != null) {
-                outcome.setTitle("new_subtask");
-            } else if (task.isInitiative()) {
-                outcome.setTitle("initiative_task");
-            } else if (isNew) {
-                outcome.setTitle("new_task");
-            } else if (task.getParent() != null) {
-                outcome.setTitle("subtask");
-            } else {
-                outcome.setTitle("task");
-            }
+            Outcome outcome = taskDomain.getOutcome();
 
             outcome.setId(id);
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(task);
             outcome.addPayload(getActionBar(session, task));
 
             return Response.ok(outcome).build();
@@ -242,107 +187,50 @@ public class TaskService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Task taskForm) {
-        _Validation validation = validate(taskForm);
+    public Response save(@PathParam("id") String id, Task taskDto) {
+        _Validation validation = validate(taskDto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session session = getSession();
         try {
-            UserDAO userDAO = new UserDAO(session);
-            TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
-            TaskDAO dao = new TaskDAO(session);
+            TaskDAO taskDAO = new TaskDAO(session);
             Task task;
             TaskType taskType;
             boolean isNew = "new".equals(id);
 
             if (isNew) {
                 task = new Task();
-                task.setAuthor(session.getUser());
-                task.setStatus(TaskStatusType.OPEN);
-                task.setInitiative(taskForm.isInitiative());
+                taskDto.setAuthor(session.getUser());
 
-                if (taskForm.getParent() != null) {
-                    Task parentTask = dao.findById(taskForm.getParent().getId());
-                    task.setParent(parentTask);
-                    task.setProject(parentTask.getProject());
-                    task.addReaders(parentTask.getReaders());
+                if (taskDto.getParent() != null) {
+                    taskDto.setParent(taskDAO.findById(taskDto.getParent().getId()));
                 }
             } else {
-                task = dao.findById(id);
+                task = taskDAO.findById(id);
             }
 
-            if (task.getParent() == null) {
-                task.setProject(taskForm.getProject());
-            }
-            taskType = taskTypeDAO.findById(taskForm.getTaskType().getId());
-            String title = taskForm.getTitle();
-            if (title == null || title.isEmpty()) {
-                // TODO here it needed to vanish from markdown symbols
-                title = StringUtils.abbreviate(taskForm.getBody(), 140);
-            }
-            task.setTitle(title);
-            task.setTaskType(taskType);
-            task.setPriority(taskForm.getPriority());
-            task.setStartDate(taskForm.getStartDate());
-            task.setDueDate(taskForm.getDueDate());
-            task.setBody(taskForm.getBody());
-            task.setTags(taskForm.getTags());
+            taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
 
-            if (task.getStartDate() == null) {
-                task.setStatus(TaskStatusType.DRAFT);
-            } else {
-                if (task.getStatus() == TaskStatusType.DRAFT || task.getStatus() == TaskStatusType.OPEN
-                        || task.getStatus() == TaskStatusType.WAITING) {
-                    if (new Date().before(task.getStartDate())) {
-                        task.setStatus(TaskStatusType.WAITING);
-                    } else {
-                        task.setStatus(TaskStatusType.OPEN);
-                    }
-                }
-            }
-
-            if (getAppEnv().appName.equals("HelpDesk") && taskForm.getDemand() != null) {
-                task.setDemand(taskForm.getDemand());
-            }
-
-            IUser<Long> assigneeUser = userDAO.findById(taskForm.getAssignee());
-            task.setAssignee(assigneeUser.getId());
-            task.setCustomerObservation(taskForm.isCustomerObservation());
-            task.setAttachments(getActualAttachments(task.getAttachments(), taskForm.getAttachments()));
-            task.setObservers(taskForm.getObservers() != null ? taskForm.getObservers() : new ArrayList<>());
+            TaskDomain taskDomain = new TaskDomain(task);
+            taskDomain.fillFromDto(taskDto);
 
             if (isNew) {
-                if (task.getStatus() != TaskStatusType.DRAFT) {
-                    task.addReader(assigneeUser);
-                    task.addReaders(task.getObservers());
-                }
                 RegNum rn = new com.exponentus.runtimeobj.RegNum();
-                task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.prefix));
-                task = dao.add(task, rn);
+                TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
+                taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
+                task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
+                task = taskDAO.add(task, rn);
             } else {
-                if (task.getStatus() != TaskStatusType.DRAFT) {
-                    task.addReader(assigneeUser);
-                    task.addReaders(task.getObservers());
-                }
-                task = dao.update(task);
-            }
-
-            if (task.getParent() != null) {
-                task.getParent().addReaders(task.getReaders());
-                dao.update(task.getParent(), false);
+                task = taskDAO.update(task);
             }
 
             if (isNew && task.getStatus() == TaskStatusType.OPEN) {
                 new Messages(getAppEnv()).sendToAssignee(task);
             }
 
-            task = dao.findById(task.getId());
-            outcome.setId(id);
-            outcome.addPayload(task);
-
-            return Response.ok(outcome).build();
+            return Response.ok((new TaskDomain(taskDAO.findById(task.getId()))).getOutcome()).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
         } catch (Exception e) {
@@ -384,30 +272,47 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/complete")
+    @Path("{id}/action/acknowledged")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskComplete(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
+    public Response doTaskAcknowledged(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(id);
 
-            if (task.getStatus() == TaskStatusType.COMPLETED) {
-                outcome.setMessage("task status is completed");
-                return Response.ok(outcome).build();
-            }
+            TaskDomain taskDomain = new TaskDomain(task);
+            taskDomain.acknowledged(getSession().getUser());
 
-            task.setStatus(TaskStatusType.COMPLETED);
+            dao.update(task, false);
+
+            new Messages(getAppEnv()).sendOfNewAcknowledging(task);
+
+            return Response.ok(taskDomain.getOutcome()).build();
+        } catch (SecureException | DAOException e) {
+            return responseException(e);
+        } catch (Exception e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("{id}/action/complete")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response doTaskComplete(@PathParam("id") String id) {
+        try {
+            TaskDAO dao = new TaskDAO(getSession());
+            Task task = dao.findById(id);
+
+            TaskDomain taskDomain = new TaskDomain(task);
+            taskDomain.complete();
+
             dao.update(task, false);
 
             new Messages(getAppEnv()).sendOfTaskCompleted(task);
 
-            return Response.ok(outcome).build();
+            return Response.ok(taskDomain.getOutcome()).build();
         } catch (SecureException | DAOException | DatabaseException e) {
-            return responseException(e);
-        } catch (Exception e) {
             return responseException(e);
         }
     }
@@ -417,60 +322,19 @@ public class TaskService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskCancel(@PathParam("id") String id, @QueryParam("comment") String comment) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-
         try {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(id);
 
-            if (task.getStatus() == TaskStatusType.CANCELLED) {
-                outcome.setMessage("task status is cancelled");
-                return Response.ok(outcome).build();
-            }
+            TaskDomain taskDomain = new TaskDomain(task);
+            taskDomain.cancel(comment);
 
-            task.setStatus(TaskStatusType.CANCELLED);
-            task.setCancellationComment(comment);
             dao.update(task, false);
 
             new Messages(getAppEnv()).sendOfTaskCancelled(task);
 
-            return Response.ok(outcome).build();
+            return Response.ok(taskDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
-            return responseException(e);
-        } catch (Exception e) {
-            return responseException(e);
-        }
-    }
-
-    @POST
-    @Path("{id}/action/acknowledged")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskAcknowledged(@PathParam("id") String id) {
-        Outcome outcome = new Outcome();
-        outcome.setId(id);
-        try {
-            TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findById(id);
-
-            if (!task.getAssignee().equals(getSession().getUser().getId())) {
-                outcome.setMessage("not_assignee_user");
-                return Response.status(Response.Status.BAD_REQUEST).entity(outcome).build();
-            } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
-                outcome.setMessage("task_status_is_not_open");
-                return Response.status(Response.Status.BAD_REQUEST).entity(outcome).build();
-            }
-
-            task.setStatus(TaskStatusType.PROCESSING);
-            dao.update(task, false);
-
-            new Messages(getAppEnv()).sendOfNewAcknowledging(task);
-
-            return Response.ok(outcome).build();
-        } catch (SecureException | DAOException e) {
-            return responseException(e);
-        } catch (Exception e) {
             return responseException(e);
         }
     }
@@ -545,7 +409,7 @@ public class TaskService extends RestProvider {
             for (long uid : task.getObservers()) {
                 IUser<Long> ou = userDAO.findById(uid);
                 if (ou == null) {
-                    ve.addError("observerUserIds", "required", "observer user not found");
+                    ve.addError("observerUserIds", "required", "observer user not found: id=" + uid);
                 }
             }
         }
