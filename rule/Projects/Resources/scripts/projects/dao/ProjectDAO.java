@@ -26,13 +26,13 @@ import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
 public class ProjectDAO extends DAO<Project, UUID> {
-	
+
 	public ProjectDAO(_Session session) throws DAOException {
 		super(Project.class, session);
 	}
-	
+
 	// TEST
-	//@Override
+	// @Override
 	public ViewPage<Project> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -42,20 +42,23 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			Root<Project> countRoot = countRootCq.from(Project.class);
 			Root<Project> root = cq.from(Project.class);
 			Join atts = root.join("attachments", JoinType.LEFT);
-			
+
 			Predicate condition = null;
 			Predicate conditionCount = null;
-			
+
 			if (user.getId() != SuperUser.ID) {
 				condition = cb.and(root.get("readers").in(user.getId()));
 				conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
+			} else {
+				condition = cb.disjunction();
+				conditionCount = cb.disjunction();
 			}
-			
+
 			if (status != null) {
 				condition = cb.and(cb.equal(root.get("status"), status), condition);
 				conditionCount = cb.and(cb.equal(countRoot.get("status"), status), conditionCount);
 			}
-			
+
 			List<Order> orderBy = new ArrayList<>();
 			if (sortParams != null && !sortParams.isEmpty()) {
 				sortParams.values().forEach((fieldName, direction) -> {
@@ -68,17 +71,17 @@ public class ProjectDAO extends DAO<Project, UUID> {
 			} else {
 				orderBy.add(cb.desc(root.get("regDate")));
 			}
-			
+
 			cq.select(cb.construct(Project.class, root.get("id"), root.get("regDate"), root.get("name"),
 					root.get("status"), root.get("customer").get("name"), root.get("manager"), root.get("programmer"),
 					root.get("tester"), root.get("finishDate"), cb.count(atts))).where(condition)
 					.groupBy(root, root.get("customer").get("name")).orderBy(orderBy);
-			
+
 			countRootCq.select(cb.count(countRoot)).where(conditionCount);
-			
+
 			TypedQuery<Project> typedQuery = em.createQuery(cq);
 			TypedQuery<Long> query = em.createQuery(countRootCq);
-			
+
 			long count = query.getSingleResult();
 			int maxPage = 1;
 			if (pageNum != 0 || pageSize != 0) {
@@ -91,7 +94,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
 				typedQuery.setMaxResults(pageSize);
 			}
 			List<Project> result = typedQuery.getResultList();
-			
+
 			return new ViewPage<>(result, count, maxPage, pageNum);
 		} finally {
 			em.close();
