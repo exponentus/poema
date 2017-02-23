@@ -1,5 +1,6 @@
 package projects.model;
 
+import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.common.model.SimpleReferenceEntity;
@@ -122,7 +123,7 @@ public class Task extends SecureHierarchicalEntity<UUID> {
     // java.lang.Long
     // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String,
     // java.lang.String, java.lang.String, reference.model.Tag, java.lang.Long
-    public Task(UUID id, Date regDate, Long author, String tname, String locName, Long countAtt) {
+    public Task(UUID id, Date regDate, User author, String tname, String locName, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.author = author;
@@ -131,7 +132,7 @@ public class Task extends SecureHierarchicalEntity<UUID> {
         // this.tags = tags;
     }
 
-    public Task(UUID id, Date regDate, Long author, String title, String body, Tag tag, Long countAtt) {
+    public Task(UUID id, Date regDate, User author, String title, String body, Tag tag, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.author = author;
@@ -145,7 +146,7 @@ public class Task extends SecureHierarchicalEntity<UUID> {
 
     // java.util.UUID, java.util.Date, java.lang.Long, reference.model.TaskType,
     // java.lang.String, java.lang.Long
-    public Task(UUID id, Date regDate, Long author, TaskType taskType, String title, Long countAtt) {
+    public Task(UUID id, Date regDate, User author, TaskType taskType, String title, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.author = author;

@@ -75,7 +75,7 @@ public class Comments extends _DoForm {
 
 		if (formData.containsField("attachmentId")) {
 			String attachmentId = formData.getValueSilently("attachmentId");
-			deleteAttachment(session, commentId, attachmentId);
+			// deleteAttachment(session, commentId, attachmentId);
 		} else {
 			deleteComment(session, commentId);
 		}
@@ -128,11 +128,11 @@ public class Comments extends _DoForm {
 			List<String> recipients = new ArrayList<>();
 
 			UserDAO userDAO = new UserDAO(session);
-			if (comment.getTask().getAuthorId() == session.getUser().getId()) {
+			if (comment.getTask().getAuthor().getId() == session.getUser().getId()) {
 				IUser<Long> assigneeUser = userDAO.findById(comment.getTask().getAssignee());
 				recipients.add(assigneeUser.getEmail());
 			} else {
-				IUser<Long> authorUser = userDAO.findById(comment.getTask().getAuthorId());
+				IUser<Long> authorUser = comment.getTask().getAuthor();
 				recipients.add(authorUser.getEmail());
 			}
 
@@ -172,30 +172,6 @@ public class Comments extends _DoForm {
 		} catch (SecureException | DAOException e) {
 			setBadRequest();
 			logError(e);
-		}
-	}
-
-	private void deleteAttachment(_Session session, String commentId, String attachmentId) {
-		if (commentId.isEmpty() || attachmentId.isEmpty()) {
-			return;
-		}
-		try {
-			CommentDAO commentDAO = new CommentDAO(session);
-			Comment comment = commentDAO.findById(commentId);
-			
-			if (comment.getAuthorId() == session.getUser().getId()) {
-				addContent("error", "not author");
-				setBadRequest();
-				return;
-			}
-			
-			AttachmentDAO attachmentDAO = new AttachmentDAO(session);
-			Attachment attachment = attachmentDAO.findById(attachmentId);
-			comment.getAttachments().remove(attachment);
-			commentDAO.update(comment);
-		} catch (SecureException | DAOException e) {
-			logError(e);
-			setBadRequest();
 		}
 	}
 

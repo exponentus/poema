@@ -1,74 +1,92 @@
-package workflow.services.report;
+package workflow.services;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.runtimeobj.RegNum;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
-import staff.dao.EmployeeDAO;
-import staff.model.Employee;
-import workflow.dao.AssignmentDAO;
-import workflow.dao.ReportDAO;
-import workflow.model.Report;
+import workflow.dao.OutgoingDAO;
+import workflow.model.Outgoing;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Path("reports")
-public class ReportService extends RestProvider {
+@Path("outgoings")
+public class OutgoingService extends RestProvider {
 
     private Outcome outcome = new Outcome();
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getView() {
+        _Session session = getSession();
+        int pageSize = session.pageSize;
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
+        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
+        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
+        try {
+            OutgoingDAO dao = new OutgoingDAO(session);
+            ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+
+            //
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(new _Action("add_new", "", "new_outgoing"));
+            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
+            // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
+
+            outcome.setId("outgoings");
+            outcome.setTitle("outgoing_documents");
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
+        _Session ses = getSession();
+        Outgoing entity;
         try {
-            _Session ses = getSession();
-            Report entity;
-
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = new Report();
-                AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-                entity.setParent(assignmentDAO.findById(getWebFormData().getValue("assignment")));
-                entity.setAppliedAuthor(ses.getUser().getId());
-                entity.setAppliedRegDate(new Date());
+                entity = new Outgoing();
             } else {
-                ReportDAO reportDAO = new ReportDAO(ses);
-                entity = reportDAO.findById(id);
+                OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
+                entity = outgoingDAO.findById(id);
             }
-
-            EmployeeDAO empDao = new EmployeeDAO(ses);
-            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             outcome.setId(id);
             outcome.addPayload(entity);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            outcome.addPayload("employees", emps);
-            outcome.addPayload("assignment", entity.getParent());
             if (!isNew) {
                 outcome.addPayload(new ACL(entity));
             }
 
             return Response.ok(outcome).build();
-        } catch (Exception e) {
+        } catch (DAOException e) {
             return responseException(e);
         }
     }
@@ -77,40 +95,46 @@ public class ReportService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Report reportForm) {
-        _Validation validation = validate(reportForm);
+    public Response save(@PathParam("id") String id, Outgoing outgoingForm) {
+        _Validation validation = validate(outgoingForm);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session ses = getSession();
-        Report entity;
+        Outgoing entity;
         try {
-            ReportDAO reportDAO = new ReportDAO(ses);
+            OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = new Report();
-                entity.setParent(reportForm.getParent());
+                entity = new Outgoing();
             } else {
-                entity = reportDAO.findById(id);
+                entity = outgoingDAO.findById(id);
             }
 
             //
-            entity.setParent(reportForm.getParent());
-            entity.setTitle(reportForm.getTitle());
-            entity.setBody(reportForm.getBody());
-            entity.setAppliedAuthor(reportForm.getAppliedAuthor());
-            entity.setAppliedRegDate(reportForm.getAppliedRegDate());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), reportForm.getAttachments()));
+            entity.setTitle(outgoingForm.getTitle());
+            entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
+            entity.setDocSubject(outgoingForm.getDocSubject());
+            entity.setDocLanguage(outgoingForm.getDocLanguage());
+            entity.setDocType(outgoingForm.getDocType());
+            entity.setRecipient(outgoingForm.getRecipient());
+            entity.setBody(outgoingForm.getBody());
+            entity.setAttachments(getActualAttachments(entity.getAttachments(), outgoingForm.getAttachments()));
 
             if (isNew) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
-                entity = reportDAO.add(entity);
+                entity = outgoingDAO.add(entity);
             } else {
-                entity = reportDAO.update(entity);
+                entity = outgoingDAO.update(entity);
             }
+
+            entity = outgoingDAO.findById(entity.getId());
 
             outcome.setId(id);
             outcome.setTitle(entity.getTitle());
@@ -126,15 +150,19 @@ public class ReportService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
+        _Session ses = getSession();
         try {
-            _Session ses = getSession();
-            ReportDAO dao = new ReportDAO(ses);
-            Report entity = dao.findById(id);
+            OutgoingDAO dao = new OutgoingDAO(ses);
+            Outgoing entity = dao.findById(id);
             if (entity != null) {
-                dao.delete(entity);
+                try {
+                    dao.delete(entity);
+                } catch (SecureException | DAOException e) {
+                    return responseException(e);
+                }
             }
             return Response.noContent().build();
-        } catch (SecureException | DAOException e) {
+        } catch (DAOException e) {
             return responseException(e);
         }
     }
@@ -147,8 +175,8 @@ public class ReportService extends RestProvider {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
-            ReportDAO dao = new ReportDAO(getSession());
-            Report entity = dao.findById(id);
+            OutgoingDAO dao = new OutgoingDAO(getSession());
+            Outgoing entity = dao.findById(id);
 
             return getAttachment(entity, attachId);
         } catch (DAOException e) {
@@ -159,12 +187,12 @@ public class ReportService extends RestProvider {
     /*
      *
      */
-    private _ActionBar getActionBar(_Session session, Report entity) {
+    private _ActionBar getActionBar(_Session session, Outgoing entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
-        // actionBar.addAction(new _Action("sign", "", "sign"));
+        actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
@@ -172,10 +200,10 @@ public class ReportService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Report entity) {
+    private _Validation validate(Outgoing outgoingForm) {
         _Validation ve = new _Validation();
 
-        if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
+        if (outgoingForm.getTitle() == null || outgoingForm.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
 

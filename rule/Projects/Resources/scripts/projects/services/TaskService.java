@@ -1,6 +1,7 @@
 package projects.services;
 
 import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -163,7 +164,7 @@ public class TaskService extends RestProvider {
             if (task.getObservers() != null) {
                 empIds.addAll(task.getObservers());
             }
-            empIds.add(task.getAuthorId());
+            empIds.add(task.getAuthor().getId());
             for (Employee e : empDao.findAllByUserIds(empIds)) {
                 emps.put(e.getUserID(), e);
             }
@@ -445,7 +446,7 @@ public class TaskService extends RestProvider {
         if ("inbox".equals(tasksFor)) {
             filter.setAssigneeUserId(session.getUser().getId());
         } else if ("my".equals(tasksFor)) {
-            filter.setAuthorId(session.getUser().getId());
+            filter.setAuthor((User) session.getUser());
         } else if ("initiative".equals(tasksFor)) {
             filter.setInitiative(true);
         }

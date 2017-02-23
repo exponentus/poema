@@ -1,7 +1,5 @@
-package workflow.services.assignment;
+package workflow.services;
 
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -27,7 +25,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -43,13 +40,15 @@ public class AssignmentService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         try {
             _Session ses = getSession();
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             Assignment entity;
 
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new Assignment();
                 entity.setAuthor(ses.getUser());
-                entity.setAppliedAuthor(ses.getUser().getId());
+                entity.setAppliedAuthor(employee);
 
                 String incomingId = getWebFormData().getAnyValueSilently("incoming");
                 String assignmentId = getWebFormData().getAnyValueSilently("assignment");
@@ -66,7 +65,6 @@ public class AssignmentService extends RestProvider {
                     throw new IllegalArgumentException("no parent document");
                 }
 
-                entity.setAppliedAuthor(ses.getUser().getId());
                 Control newControl = new Control();
                 newControl.setStartDate(new Date());
                 entity.setControl(newControl);
@@ -229,13 +227,13 @@ public class AssignmentService extends RestProvider {
             ve.addError("control.assigneeEntries", "required", "field_is_empty");
         }
 
-        if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
-            UserDAO userDAO = new UserDAO(getSession());
-            List<User> users = userDAO.findAllByIds(assignment.getObservers());
-            if (assignment.getObservers().size() != users.size()) {
-                ve.addError("observerUserIds", "required", "observer user not found");
-            }
-        }
+//        if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
+//            UserDAO userDAO = new UserDAO(getSession());
+//            List<User> users = userDAO.findAllByIds(assignment.getObservers());
+//            if (assignment.getObservers().size() != users.size()) {
+//                ve.addError("observerUserIds", "required", "observer user not found");
+//            }
+//        }
 
         return ve;
     }

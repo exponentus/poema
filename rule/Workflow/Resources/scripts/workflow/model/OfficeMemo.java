@@ -3,10 +3,10 @@ package workflow.model;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.user.AnonymousUser;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.Tag;
+import staff.model.Employee;
 import workflow.model.embedded.Approval;
 
 import javax.persistence.*;
@@ -30,11 +30,11 @@ public class OfficeMemo extends SecureHierarchicalEntity<UUID> {
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-    @Column(name = "applied_author", nullable = false, updatable = true)
-    protected Long appliedAuthor;
+    @JoinColumn(name = "applied_author", nullable = false)
+    private Employee appliedAuthor;
 
-    @Column(nullable = false)
-    protected Long recipient = AnonymousUser.ID;
+    @JoinColumn(nullable = false)
+    private Employee recipient;
 
     @FTSearchable
     @Column(columnDefinition = "TEXT")
@@ -72,19 +72,19 @@ public class OfficeMemo extends SecureHierarchicalEntity<UUID> {
         this.appliedRegDate = appliedRegDate;
     }
 
-    public Long getAppliedAuthor() {
+    public Employee getAppliedAuthor() {
         return appliedAuthor;
     }
 
-    public void setAppliedAuthor(Long appliedAuthor) {
+    public void setAppliedAuthor(Employee appliedAuthor) {
         this.appliedAuthor = appliedAuthor;
     }
 
-    public long getRecipient() {
+    public Employee getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(long recipient) {
+    public void setRecipient(Employee recipient) {
         this.recipient = recipient;
     }
 

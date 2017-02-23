@@ -4,8 +4,8 @@ package workflow.model.embedded;
  * @author Kayra created 07-04-2016
  */
 
-import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import staff.model.Employee;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
 import workflow.model.constants.DecisionType;
@@ -89,15 +89,15 @@ public class Approval {
                 .findFirst().orElse(null);
     }
 
-    public boolean userCanDoDecision(IUser<Long> user) {
+    public boolean userCanDoDecision(Employee emp) {
         if (getStatus() == ApprovalStatusType.PROCESSING) {
             Block block = getProcessingBlock();
             if (block != null) {
                 if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-                    return block.getCurrentApprover().getApproverUser().longValue() == user.getId().longValue();
+                    return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
                 } else if (block.getType() == ApprovalType.PARALLEL) {
                     return block.getApprovers().stream()
-                            .filter(it -> it.getApproverUser().longValue() == user.getId().longValue() && it.getDecisionType() == DecisionType.UNKNOWN)
+                            .filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
                             .count() > 0;
                 }
             }

@@ -1,4 +1,4 @@
-package workflow.services.officememo;
+package workflow.services;
 
 import administrator.dao.UserDAO;
 import com.exponentus.common.model.ACL;
@@ -80,6 +80,7 @@ public class OfficeMemoService extends RestProvider {
         _Session ses = getSession();
         OfficeMemo entity;
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new OfficeMemo();
@@ -88,7 +89,7 @@ public class OfficeMemoService extends RestProvider {
                 //
                 approval.setBlocks(new ArrayList<>());
                 entity.setApproval(approval);
-                entity.setAppliedAuthor(ses.getUser().getId());
+                entity.setAppliedAuthor(employeeDAO.findByUser(ses.getUser()));
             } else {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
                 entity = officeMemoDAO.findById(id);
@@ -123,6 +124,7 @@ public class OfficeMemoService extends RestProvider {
 
         _Session ses = getSession();
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
             OfficeMemo entity;
 
@@ -153,7 +155,7 @@ public class OfficeMemoService extends RestProvider {
 
                 IUser<Long> user = ses.getUser();
                 entity.addReaderEditor(user);
-                entity.setAppliedAuthor(ses.getUser().getId());
+                entity.setAppliedAuthor(employeeDAO.findByUser(ses.getUser()));
                 entity = officeMemoDAO.add(entity, rn);
             } else {
                 entity = officeMemoDAO.update(entity);
@@ -230,13 +232,13 @@ public class OfficeMemoService extends RestProvider {
             if (block.getType() == ApprovalType.SERIAL) {
                 Approver approver = block.getNextApprover();
                 approver.setCurrent(true);
-                om.addReader(userDAO.findById(approver.getApproverUser()));
+                om.addReader(approver.getEmployee().getUser());
             } else if (block.getType() == ApprovalType.PARALLEL) {
-                om.addReaders(block.getApprovers().stream().map(Approver::getApproverUser).collect(Collectors.toList()));
+                om.addReaders(block.getApprovers().stream().map(approver -> approver.getEmployee().getUser().getId()).collect(Collectors.toList()));
             } else if (block.getType() == ApprovalType.SIGNING) {
                 Approver approver = block.getNextApprover();
                 approver.setCurrent(true);
-                om.addReader(userDAO.findById(approver.getApproverUser()));
+                om.addReader(approver.getEmployee().getUser());
             } else {
                 throw new IllegalStateException("Block type error: " + block.getType());
             }
@@ -273,6 +275,7 @@ public class OfficeMemoService extends RestProvider {
      */
         try {
             UserDAO userDAO = new UserDAO(getSession());
+            EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
             OfficeMemo om = officeMemoDAO.findById(id);
 
@@ -285,14 +288,14 @@ public class OfficeMemoService extends RestProvider {
                 throw new IllegalStateException("not found processing Block");
             }
 
-            processBlock.getApprover(getSession().getUser()).agree();
+            processBlock.getApprover(employeeDAO.findByUser(getSession().getUser())).agree();
 
             Approver nextApprover = processBlock.getNextApprover();
             if (nextApprover != null) {
                 // add next approver for read
                 if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
                     nextApprover.setCurrent(true);
-                    om.addReader(userDAO.findById(nextApprover.getApproverUser()));
+                    om.addReader(nextApprover.getEmployee().getUser());
                 }
             } else {
                 processBlock.setStatus(ApprovalStatusType.FINISHED);
@@ -304,13 +307,13 @@ public class OfficeMemoService extends RestProvider {
                     if (nextBlock.getType() == ApprovalType.SERIAL) {
                         Approver _nextApprover = nextBlock.getNextApprover();
                         _nextApprover.setCurrent(true);
-                        om.addReader(userDAO.findById(_nextApprover.getApproverUser()));
+                        om.addReader(_nextApprover.getEmployee().getUser());
                     } else if (nextBlock.getType() == ApprovalType.PARALLEL) {
-                        om.addReaders(nextBlock.getApprovers().stream().map(Approver::getApproverUser).collect(Collectors.toList()));
+                        om.addReaders(nextBlock.getApprovers().stream().map(approver -> approver.getEmployee().getUser().getId()).collect(Collectors.toList()));
                     } else if (nextBlock.getType() == ApprovalType.SIGNING) {
                         Approver approver = nextBlock.getNextApprover();
                         approver.setCurrent(true);
-                        om.addReader(userDAO.findById(approver.getApproverUser()));
+                        om.addReader(approver.getEmployee().getUser());
                     } else {
                         throw new IllegalStateException("Block type error: " + nextBlock.getType());
                     }
@@ -336,6 +339,7 @@ public class OfficeMemoService extends RestProvider {
     public Response declineApprovalBlock(@PathParam("id") String id) {
         try {
             UserDAO userDAO = new UserDAO(getSession());
+            EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
             OfficeMemo om = officeMemoDAO.findById(id);
 
@@ -349,14 +353,14 @@ public class OfficeMemoService extends RestProvider {
             }
 
             String decisionComment = getWebFormData().getValueSilently("comment");
-            processBlock.getApprover(getSession().getUser()).disagree(decisionComment);
+            processBlock.getApprover(employeeDAO.findByUser(getSession().getUser())).disagree(decisionComment);
 
             Approver nextApprover = processBlock.getNextApprover();
             if (nextApprover != null) {
                 // add next approver for read
                 if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
                     nextApprover.setCurrent(true);
-                    om.addReader(userDAO.findById(nextApprover.getApproverUser()));
+                    om.addReader(nextApprover.getEmployee().getUser());
                 }
             } else {
                 processBlock.setStatus(ApprovalStatusType.FINISHED);
@@ -368,13 +372,13 @@ public class OfficeMemoService extends RestProvider {
                     if (nextBlock.getType() == ApprovalType.SERIAL) {
                         Approver _nextApprover = nextBlock.getNextApprover();
                         _nextApprover.setCurrent(true);
-                        om.addReader(userDAO.findById(_nextApprover.getApproverUser()));
+                        om.addReader(_nextApprover.getEmployee().getUser());
                     } else if (nextBlock.getType() == ApprovalType.PARALLEL) {
-                        om.addReaders(nextBlock.getApprovers().stream().map(Approver::getApproverUser).collect(Collectors.toList()));
+                        om.addReaders(nextBlock.getApprovers().stream().map(approver -> approver.getEmployee().getUser().getId()).collect(Collectors.toList()));
                     } else if (nextBlock.getType() == ApprovalType.SIGNING) {
                         Approver approver = nextBlock.getNextApprover();
                         approver.setCurrent(true);
-                        om.addReader(userDAO.findById(approver.getApproverUser()));
+                        om.addReader(approver.getEmployee().getUser());
                     } else {
                         throw new IllegalStateException("Block type error: " + nextBlock.getType());
                     }
@@ -395,7 +399,7 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, OfficeMemo entity) {
+    private _ActionBar getActionBar(_Session session, OfficeMemo entity) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
@@ -404,7 +408,9 @@ public class OfficeMemoService extends RestProvider {
             actionBar.addAction(new _Action("start_approving", "", "start_approving"));
         }
 
-        if (entity.getApproval().userCanDoDecision(session.getUser())) {
+        EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
+
+        if (entity.getApproval().userCanDoDecision(employeeDAO.findByUser(session.getUser()))) {
             actionBar.addAction(new _Action("agree", "", "accept_approval_block"));
             actionBar.addAction(new _Action("disagree", "", "decline_approval_block"));
         }
@@ -423,10 +429,10 @@ public class OfficeMemoService extends RestProvider {
         if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
-        if (entity.getAppliedAuthor() <= 0) {
+        if (entity.getAppliedAuthor() == null) {
             ve.addError("appliedAuthor", "required", "field_is_empty");
         }
-        if (entity.getRecipient() <= 0) {
+        if (entity.getRecipient() == null) {
             ve.addError("recipient", "required", "field_is_empty");
         }
 

@@ -51,7 +51,7 @@ public class RequestDomain {
         }
 
         ResolutionType rt = request.getResolution();
-        long taskAuthorId = request.getTask().getAuthorId();
+        long taskAuthorId = request.getTask().getAuthor().getId();
 
         return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
     }

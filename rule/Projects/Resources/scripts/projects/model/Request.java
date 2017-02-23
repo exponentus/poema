@@ -1,5 +1,6 @@
 package projects.model;
 
+import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.scripting._Session;
@@ -59,7 +60,7 @@ public class Request extends SecureHierarchicalEntity<UUID> {
         super();
     }
 
-    public Request(UUID id, Date regDate, long author, RequestType requestType, ResolutionType resolution,
+    public Request(UUID id, Date regDate, User author, RequestType requestType, ResolutionType resolution,
                    Date resolutionTime, String decisionComment, String comment, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
@@ -77,10 +78,10 @@ public class Request extends SecureHierarchicalEntity<UUID> {
         }
     }
 
-    @Override
-    public long getAuthorId() {
-        return author;
-    }
+    //@Override
+//    public long getAuthorId() {
+//        return author;
+//    }
 
     @JsonIgnore
     public Task getTask() {

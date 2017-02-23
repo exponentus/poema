@@ -35,10 +35,6 @@ public class Comment extends AppEntity<UUID> {
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
-    public long getAuthorId() {
-        return author;
-    }
-
     public Task getTask() {
         return task;
     }

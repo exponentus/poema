@@ -1,6 +1,7 @@
 package workflow.model.embedded;
 
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import staff.model.Employee;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,9 +15,9 @@ public class AssigneeEntry extends SimpleAppEntity {
     @Column(name = "is_coordinator")
     private boolean isCoordinator;
 
-    private Long assignee;
+    private Employee assignee;
 
-    private Long resetter;
+    private Employee resetter;
 
     @Column(name = "reset_time")
     private Date resetTime;
@@ -32,11 +33,11 @@ public class AssigneeEntry extends SimpleAppEntity {
         this.isCoordinator = isCoordinator;
     }
 
-    public Long getAssignee() {
+    public Employee getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(Long assignee) {
+    public void setAssignee(Employee assignee) {
         this.assignee = assignee;
     }
 

@@ -306,7 +306,7 @@ public class Messages {
 	}
 	
 	public void sendOfTaskCancelled(Task task) {
-		if (task.getAssignee() != task.getAuthorId()) {
+		if (task.getAssignee() != task.getAuthor().getId()) {
 			try {
 				String msgTemplate = "task_cancelled";
 				UserDAO userDAO = new UserDAO();

@@ -1,5 +1,6 @@
 package workflow.model;
 
+import administrator.model.User;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+import staff.model.Employee;
 import workflow.model.embedded.Control;
 
 import javax.persistence.*;
@@ -30,8 +32,8 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<Report> reports;
 
-    @Column(name = "applied_author", nullable = false, updatable = true)
-    protected Long appliedAuthor;
+    @JoinColumn(name = "applied_author", nullable = false)
+    private Employee appliedAuthor;
 
     @JsonIgnore
     @NotNull
@@ -47,7 +49,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    private List<Long> observers;
+    private List<User> observers;
 
     @Embedded
     private Control control;
@@ -59,7 +61,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
     }
 
     // test
-    public Assignment(UUID id, Date regDate, String title, String body, Long appliedAuthor) {
+    public Assignment(UUID id, Date regDate, String title, String body, Employee appliedAuthor) {
         this.id = id;
         this.regDate = regDate;
         this.title = title;
@@ -67,11 +69,11 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
         this.appliedAuthor = appliedAuthor;
     }
 
-    public Long getAppliedAuthor() {
+    public Employee getAppliedAuthor() {
         return appliedAuthor;
     }
 
-    public void setAppliedAuthor(long appliedAuthor) {
+    public void setAppliedAuthor(Employee appliedAuthor) {
         this.appliedAuthor = appliedAuthor;
     }
 
@@ -102,11 +104,11 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
         this.body = body;
     }
 
-    public List<Long> getObservers() {
+    public List<User> getObservers() {
         return observers;
     }
 
-    public void setObservers(List<Long> observers) {
+    public void setObservers(List<User> observers) {
         this.observers = observers;
     }
 

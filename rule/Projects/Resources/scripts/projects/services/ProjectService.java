@@ -144,7 +144,7 @@ public class ProjectService extends RestProvider {
             empIds.add(project.getManager());
             empIds.add(project.getProgrammer());
             empIds.add(project.getTester());
-            empIds.add(project.getAuthorId());
+            empIds.add(project.getAuthor().getId());
             if (project.getObservers() != null) {
                 empIds.addAll(project.getObservers());
             }

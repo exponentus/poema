@@ -68,7 +68,7 @@ public class RequestService extends RestProvider {
             }
 
             Map<Long, Employee> emps = new HashMap<>();
-            emps.put(request.getAuthorId(), empDao.findByUserId(request.getAuthorId()));
+            emps.put(request.getAuthor().getId(), empDao.findByUser(request.getAuthor()));
 
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());

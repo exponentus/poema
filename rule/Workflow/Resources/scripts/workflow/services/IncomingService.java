@@ -1,4 +1,4 @@
-package workflow.services.incoming;
+package workflow.services;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;

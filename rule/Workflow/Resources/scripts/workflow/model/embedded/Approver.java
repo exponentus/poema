@@ -1,6 +1,7 @@
 package workflow.model.embedded;
 
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import staff.model.Employee;
 import workflow.model.constants.DecisionType;
 import workflow.model.util.DecisionTypeConverter;
 
@@ -16,8 +17,8 @@ import java.util.List;
 @Table(name = "approvers")
 public class Approver extends SimpleAppEntity {
 
-    @Column(name = "approver_user", nullable = false)
-    protected Long approverUser;
+    @JoinColumn(nullable = false)
+    private Employee employee;
 
     @Convert(converter = DecisionTypeConverter.class)
     private DecisionType decisionType = DecisionType.UNKNOWN;
@@ -36,12 +37,12 @@ public class Approver extends SimpleAppEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Block> blocks;
 
-    public Long getApproverUser() {
-        return approverUser;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setApproverUser(Long approverUser) {
-        this.approverUser = approverUser;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public DecisionType getDecisionType() {
@@ -93,8 +94,8 @@ public class Approver extends SimpleAppEntity {
     }
 
     public void agree() {
-        if (approverUser == null) {
-            throw new IllegalStateException("approver not set");
+        if (employee == null) {
+            throw new IllegalStateException("employee not set");
         }
 
         setDecisionType(DecisionType.YES);
@@ -103,8 +104,8 @@ public class Approver extends SimpleAppEntity {
     }
 
     public void disagree(String decisionComment) {
-        if (approverUser == null) {
-            throw new IllegalStateException("approver not set");
+        if (employee == null) {
+            throw new IllegalStateException("employee not set");
         }
 
         setDecisionType(DecisionType.NO);

@@ -5,8 +5,8 @@ package workflow.model.embedded;
  */
 
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
-import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import staff.model.Employee;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
 import workflow.model.constants.DecisionType;
@@ -101,9 +101,9 @@ public class Block extends SimpleAppEntity {
                 .findFirst().orElse(null);
     }
 
-    public Approver getApprover(IUser<Long> user) {
+    public Approver getApprover(Employee user) {
         Approver approver = approvers.stream()
-                .filter(a -> a.getApproverUser().longValue() == user.getId().longValue())
+                .filter(a -> a.getEmployee().getId().equals(user.getId()))
                 .findFirst().orElse(null);
 
         if (approver == null) {

@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
+import staff.model.Employee;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,8 +24,8 @@ import java.util.UUID;
 @Table(name = "reports")
 public class Report extends SecureHierarchicalEntity<UUID> {
 
-    @Column(name = "applied_author", nullable = false)
-    protected Long appliedAuthor;
+    @JoinColumn(name = "applied_author", nullable = false)
+    private Employee appliedAuthor;
 
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
@@ -49,7 +50,7 @@ public class Report extends SecureHierarchicalEntity<UUID> {
     }
 
     // test
-    public Report(UUID id, Date regDate, String title, String body, Long appliedAuthor, Date appliedRegDate, Long countAtt) {
+    public Report(UUID id, Date regDate, String title, String body, Employee appliedAuthor, Date appliedRegDate, Long countAtt) {
         this.id = id;
         this.regDate = regDate;
         this.title = title;
@@ -64,11 +65,11 @@ public class Report extends SecureHierarchicalEntity<UUID> {
         }
     }
 
-    public Long getAppliedAuthor() {
+    public Employee getAppliedAuthor() {
         return appliedAuthor;
     }
 
-    public void setAppliedAuthor(long appliedAuthor) {
+    public void setAppliedAuthor(Employee appliedAuthor) {
         this.appliedAuthor = appliedAuthor;
     }
 

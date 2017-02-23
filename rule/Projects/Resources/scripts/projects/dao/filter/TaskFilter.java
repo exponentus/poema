@@ -1,5 +1,6 @@
 package projects.dao.filter;
 
+import administrator.model.User;
 import com.exponentus.runtimeobj.Filter;
 import projects.model.Project;
 import projects.model.Task;
@@ -23,7 +24,7 @@ public class TaskFilter extends Filter {
     private TaskStatusType status = TaskStatusType.UNKNOWN;
     private TaskPriorityType priority = TaskPriorityType.UNKNOWN;
     private String search;
-    private Long authorId;
+    private User author;
     private Long assigneeUserId;
     private Date startDate;
     private Date dueDate;
@@ -117,12 +118,12 @@ public class TaskFilter extends Filter {
         return this;
     }
 
-    public Long getAuthorId() {
-        return authorId;
+    public User getAuthor() {
+        return author;
     }
 
-    public TaskFilter setAuthorId(Long authorId) {
-        this.authorId = authorId;
+    public TaskFilter setAuthor(User author) {
+        this.author = author;
         return this;
     }
 
