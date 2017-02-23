@@ -102,8 +102,19 @@ public class TaskDomain implements ITaskDomain {
     @Override
     public void changeStatus(TaskStatusType status) {
         task.setStatus(status);
-        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) { // TODO ? что имелось ввиду
-            task.resetEditors();
+//        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) { // TODO ? что имелось ввиду
+//            task.resetEditors();
+//
+//        } else {
+//            task.addReaderEditor(task.getAuthor());
+//        }
+        /*
+        Если задача становится draft,  то перестает быть видной для исполнителей и обсерверов.
+        Т.е. Ситуация автор вдруг понял,  что задание ещё не достаточно четко сформулировано или что-то изменилось в требованиях и т.д.
+         */
+        if (status == TaskStatusType.DRAFT) {
+            task.resetReadersEditors();
+            task.addReaderEditor(task.getAuthor());
         } else {
             task.addReaderEditor(task.getAuthor());
         }
