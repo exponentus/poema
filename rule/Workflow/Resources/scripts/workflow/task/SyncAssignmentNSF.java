@@ -26,6 +26,7 @@ import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
 import reference.dao.ControlTypeDAO;
 import reference.model.ControlType;
+import staff.dao.EmployeeDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.model.Assignment;
@@ -45,6 +46,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 			AssignmentDAO dao = new AssignmentDAO(ses);
 			IncomingDAO iDao = new IncomingDAO(ses);
 			ControlTypeDAO ctDao = new ControlTypeDAO(ses);
+			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 			
@@ -57,7 +59,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 				Document doc = entry.getDocument();
 				String form = doc.getItemValueString("Form");
 				if (form != null && form.equals("KR")) {
-					Assignment entity = fillEntity(uDao, dao, doc, dummyUser, ctDao);
+					Assignment entity = fillEntity(uDao, employeeDAO, dao, doc, dummyUser, ctDao);
 					String parent = doc.getParentDocumentUNID();
 					Incoming inc = iDao.findByExtKey(parent);
 					if (inc != null) {
@@ -90,7 +92,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 		logger.infoLogEntry("done...");
 	}
 	
-	public Assignment fillEntity(UserDAO uDao, AssignmentDAO dao, Document doc, User dummyUser, ControlTypeDAO ctDao) {
+	public Assignment fillEntity(UserDAO uDao, EmployeeDAO employeeDAO, AssignmentDAO dao, Document doc, User dummyUser, ControlTypeDAO ctDao) {
 		Assignment entity = null;
 		try {
 			String unId = doc.getUniversalID();
@@ -107,9 +109,9 @@ public class SyncAssignmentNSF extends ImportNSF {
 			
 			IUser<Long> authorRez = uDao.findByExtKey(doc.getItemValueString("AuthorRezNA"));
 			if (authorRez != null) {
-				entity.setAppliedAuthor(authorRez.getId());
+				entity.setAppliedAuthor(employeeDAO.findByUser(authorRez));
 			} else {
-				entity.setAppliedAuthor(dummyUser.getId());
+				entity.setAppliedAuthor(employeeDAO.findByUser(dummyUser));
 			}
 			
 			Control control = new Control();
@@ -130,7 +132,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 				IUser<Long> e = uDao.findByExtKey(exec);
 				if (e != null) {
 					AssigneeEntry assigneeEntry = new AssigneeEntry();
-					assigneeEntry.setAssignee(e.getId());
+					assigneeEntry.setAssignee(employeeDAO.findByUser(e));
 					if (otvExec.equals(exec)) {
 						assigneeEntry.setCoordinator(true);
 					}

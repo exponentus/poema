@@ -96,7 +96,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					if (r != null) {
 						Employee e = eDao.findByUserId(r.getId());
 						if (e != null) {
-							sz.setRecipient(e.getAuthorId());
+							sz.setRecipient(e);
 						} else {
 							logger.errorLogEntry("wrong ext value \"" + r + "\" (user id)");
 						}

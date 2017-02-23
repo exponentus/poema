@@ -2,7 +2,7 @@ package workflow.domain;
 
 import workflow.model.OfficeMemo;
 
-public class OfficeMemoDomain {
+public class OfficeMemoDomain implements IOfficeMemoDomain {
 
     private OfficeMemo officeMemo;
 
@@ -10,6 +10,7 @@ public class OfficeMemoDomain {
         this.officeMemo = officeMemo;
     }
 
+    @Override
     public void startApproving() {
 
         /*
@@ -54,10 +55,12 @@ public class OfficeMemoDomain {
          */
     }
 
+    @Override
     public void acceptApprovalBlock() {
 
     }
 
+    @Override
     public void declineApprovalBlock() {
 
     }

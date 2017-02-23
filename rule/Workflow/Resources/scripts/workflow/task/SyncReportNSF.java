@@ -29,6 +29,7 @@ import lotus.domino.NotesException;
 import lotus.domino.RichTextItem;
 import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
+import staff.dao.EmployeeDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
 import workflow.model.Assignment;
@@ -44,6 +45,7 @@ public class SyncReportNSF extends ImportNSF {
 		try {
 			AssignmentDAO aDao = new AssignmentDAO(ses);
 			ReportDAO dao = new ReportDAO(ses);
+			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 			
@@ -79,9 +81,9 @@ public class SyncReportNSF extends ImportNSF {
 						
 						IUser<Long> authorKi = uDao.findByExtKey(doc.getItemValueString("IntExecutNA"));
 						if (authorKi != null) {
-							entity.setAppliedAuthor(authorKi.getId());
+							entity.setAppliedAuthor(employeeDAO.findByUser(authorKi));
 						} else {
-							entity.setAppliedAuthor(dummyUser.getId());
+							entity.setAppliedAuthor(employeeDAO.findByUser(dummyUser));
 						}
 						
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("ShortText"), 140));

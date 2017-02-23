@@ -32,6 +32,7 @@ import lotus.domino.RichTextItem;
 import lotus.domino.View;
 import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
+import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
@@ -49,6 +50,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 		Map<String, OfficeMemo> entities = new HashMap<>();
 		try {
 			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
 
@@ -84,17 +86,17 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 
 						IUser<Long> sender = uDao.findByExtKey(doc.getItemValueString("WorkDocSenderNA"));
 						if (sender != null) {
-							entity.setAppliedAuthor(sender.getId());
+							entity.setAppliedAuthor(employeeDAO.findByUser(sender));
 						} else {
-							entity.setAppliedAuthor(dummyUser.getId());
+							entity.setAppliedAuthor(employeeDAO.findByUser(dummyUser));
 						}
 
 						IUser<Long> signer = uDao.findByExtKey(doc.getItemValueString("WorkDocSignerNA"));
 						Approver approver = new Approver();
 						if (signer != null) {
-							approver.setApproverUser(signer.getId());
+							approver.setEmployee(employeeDAO.findByUser(signer));
 						} else {
-							approver.setApproverUser(dummyUser.getId());
+							approver.setEmployee(employeeDAO.findByUser(dummyUser));
 						}
 						
 						List<Block> blocks = new ArrayList<Block>();
@@ -110,9 +112,9 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 
 						IUser<Long> recipient = uDao.findByExtKey(doc.getItemValueString("RecipientOnlyNA"));
 						if (recipient != null) {
-							entity.setRecipient(recipient.getId());
+							entity.setRecipient(employeeDAO.findByUser(recipient));
 						} else {
-							entity.setRecipient(dummyUser.getId());
+							entity.setRecipient(employeeDAO.findByUser(dummyUser));
 						}
 
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 140));
