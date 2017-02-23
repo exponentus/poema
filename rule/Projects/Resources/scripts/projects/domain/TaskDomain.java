@@ -184,6 +184,14 @@ public class TaskDomain implements ITaskDomain {
 
     @Override
     public void prolongTask(Date newDueDate) {
+        if (newDueDate == null) {
+            throw new IllegalArgumentException("newDueDate is null");
+        }
+
+        if (task.getDueDate().after(newDueDate)) {
+            throw new IllegalArgumentException("new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
+        }
+
         task.setDueDate(newDueDate);
         changeStatus(TaskStatusType.PROCESSING);
     }
