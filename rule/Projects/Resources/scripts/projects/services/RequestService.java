@@ -1,6 +1,6 @@
 package projects.services;
 
-import com.exponentus.common.model.ACL;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -48,6 +48,7 @@ public class RequestService extends RestProvider {
             boolean isNew = "new".equals(id);
             RequestDAO requestDAO = new RequestDAO(session);
             Request request;
+            RequestDomain requestDomain;
             EmployeeDAO empDao = new EmployeeDAO(session);
 
             if (!isNew) {
@@ -56,25 +57,23 @@ public class RequestService extends RestProvider {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
-                outcome.addPayload(new ACL(request));
+                requestDomain = new RequestDomain(request);
             } else {
-                request = new Request();
-                request.setAuthor(session.getUser());
-
                 String taskId = getWebFormData().getValueSilently("task");
                 TaskDAO taskDAO = new TaskDAO(session);
-                Task task = taskDAO.findById(taskId);
-                request.setTask(task);
+
+                request = new Request();
+                requestDomain = new RequestDomain(request);
+
+                requestDomain.composeRequest((User) session.getUser(), taskDAO.findById(taskId));
             }
 
             Map<Long, Employee> emps = new HashMap<>();
             emps.put(request.getAuthor().getId(), empDao.findByUser(request.getAuthor()));
 
-            outcome.setId(id);
+            outcome = requestDomain.getOutcome();
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(session, request));
-            outcome.addPayload(request);
-            outcome.addPayload("task", request.getTask());
             outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
@@ -109,40 +108,25 @@ public class RequestService extends RestProvider {
                 throw new IllegalStateException("task status is not PROCESSING");
             }
 
-            //RequestTypeDAO requestTypeDAO = new RequestTypeDAO(session);
-            //RequestType requestType = requestTypeDAO.findById(requestDto.getRequestType().getId());
-
             Request request = new Request();
 
+            requestDto.setAuthor(session.getUser());
             requestDto.setTask(task);
             requestDto.setAttachments(getActualAttachments(request.getAttachments(), requestDto.getAttachments()));
 
             TaskDomain taskDomain = new TaskDomain(task);
             RequestDomain requestDomain = new RequestDomain(request);
 
-            requestDomain.fillFromDto(requestDto, session.getUser());
+            requestDomain.fillFromDto(requestDto);
             taskDomain.changeStatus(TaskStatusType.PENDING);
 
-//            request.setAuthor(session.getUser());
-//            request.setLastModifier(session.getUser().getId());
-//            request.setTask(task);
-//            request.setRequestType(requestType);
-//            request.setComment(requestForm.getComment());
-//            request.setAttachments(getActualAttachments(request.getAttachments(), requestForm.getAttachments()));
-//
-//            request.setEditors(task.getEditors());
-//            request.addReaderEditor(session.getUser());
-//
-//            task.setStatus(TaskStatusType.PENDING);
             task.getRequests().add(request);
 
             taskDAO.update(task, false);
 
             new Messages(getAppEnv()).sendOfNewRequest(request, task);
 
-            outcome.addPayload(request);
-
-            return Response.ok(outcome).build();
+            return Response.ok(requestDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -176,12 +160,14 @@ public class RequestService extends RestProvider {
                 return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
             }
 
-            TaskDAO taskDAO = new TaskDAO(getSession());
-            Task task = request.getTask();
+            TaskDomain taskDomain = new TaskDomain(request.getTask());
+            RequestDomain requestDomain = new RequestDomain(request);
+
             if (resolutionType == ResolutionType.ACCEPTED) {
                 switch (request.getRequestType().getName()) {
                     case "implement":
-                        task.setStatus(TaskStatusType.COMPLETED);
+                        // task.setStatus(TaskStatusType.COMPLETED);
+                        taskDomain.completeTask();
                         break;
                     case "prolong":
                         // prolong new due date
@@ -189,29 +175,32 @@ public class RequestService extends RestProvider {
                         if (newDueDate == null) {
                             _Validation ve = new _Validation();
                             ve.addError("dueDate", "date", "field_is_empty");
-                            return Response.status(Response.Status.BAD_REQUEST).entity(ve).build();
+                            return responseValidationError(ve);
+                            // return Response.status(Response.Status.BAD_REQUEST).entity(ve).build();
                         }
-                        task.setDueDate(newDueDate);
-                        task.setStatus(TaskStatusType.PROCESSING);
+//                        task.setDueDate(newDueDate);
+//                        task.setStatus(TaskStatusType.PROCESSING);
+                        taskDomain.prolongTask(newDueDate);
                         break;
                     case "cancel":
-                        task.setStatus(TaskStatusType.CANCELLED);
+                        // task.setStatus(TaskStatusType.CANCELLED);
+                        taskDomain.cancelTask("");
                         break;
                     default:
-                        outcome.setMessage("I don't know what you want. Unknown requestType.name: "
+                        outcome.setMessage("I don't know what you want. Unknown request type: "
                                 + request.getRequestType().getName());
                         return Response.status(Response.Status.BAD_REQUEST).entity(outcome).build();
                 }
             } else {
-                task.setStatus(TaskStatusType.PROCESSING);
+                // task.setStatus(TaskStatusType.PROCESSING);
+                taskDomain.returnToProcessing();
             }
 
-            request.setResolution(resolutionType);
-            request.setResolutionTime(new Date());
-            request.setDecisionComment(getWebFormData().getValueSilently("comment"));
+            requestDomain.doResolution((User) getSession().getUser(), resolutionType, getWebFormData().getValueSilently("comment"));
 
-            // taskDAO.update(task, false);
-
+//            request.setResolution(resolutionType);
+//            request.setResolutionTime(new Date());
+//            request.setDecisionComment(getWebFormData().getValueSilently("comment"));
 
             requestDAO.update(request, false);
 

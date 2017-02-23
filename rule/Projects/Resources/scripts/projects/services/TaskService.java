@@ -46,8 +46,6 @@ import java.util.stream.Collectors;
 @Path("tasks")
 public class TaskService extends RestProvider {
 
-    private Outcome outcome = new Outcome();
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
@@ -89,6 +87,7 @@ public class TaskService extends RestProvider {
                     break;
             }
 
+            Outcome outcome = new Outcome();
             outcome.setId(title);
             outcome.setTitle(title);
             outcome.addPayload(vp);
@@ -152,7 +151,8 @@ public class TaskService extends RestProvider {
                 }
 
                 task = new Task();
-                taskDomain = new TaskDomain(task, user, project, parentTask, taskType, initiative, 10);
+                taskDomain = new TaskDomain(task);
+                taskDomain.composeTask((User) user, project, parentTask, taskType, initiative, 10);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);
@@ -282,7 +282,7 @@ public class TaskService extends RestProvider {
             Task task = dao.findById(id);
 
             TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.acknowledged(getSession().getUser());
+            taskDomain.acknowledgedTask((User) getSession().getUser());
 
             dao.update(task, false);
 
@@ -306,7 +306,7 @@ public class TaskService extends RestProvider {
             Task task = dao.findById(id);
 
             TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.complete();
+            taskDomain.completeTask();
 
             dao.update(task, false);
 
@@ -328,7 +328,7 @@ public class TaskService extends RestProvider {
             Task task = dao.findById(id);
 
             TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.cancel(comment);
+            taskDomain.cancelTask(comment);
 
             dao.update(task, false);
 

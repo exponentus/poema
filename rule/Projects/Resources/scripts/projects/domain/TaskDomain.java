@@ -2,7 +2,6 @@ package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.rest.outgoingpojo.Outcome;
-import com.exponentus.user.IUser;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.model.Project;
@@ -13,7 +12,7 @@ import reference.model.TaskType;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TaskDomain {
+public class TaskDomain implements ITaskDomain {
 
     private Task task = null;
 
@@ -25,14 +24,20 @@ public class TaskDomain {
         this.task = task;
     }
 
-    public TaskDomain(Task task, IUser<Long> user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange) {
-        this.task = task;
+    @Override
+    public void composeTask(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange) {
+        if (!task.isNew()) {
+            throw new IllegalStateException("task_is_not_new");
+        }
 
         task.setAuthor(user);
         task.setInitiative(initiative);
         task.setTaskType(taskType);
         task.setStatus(TaskStatusType.OPEN);
         task.setProject(project);
+        if (project != null) {
+            task.setAssignee(project.getProgrammer());
+        }
 
         if (parentTask != null) {
             task.setParent(parentTask);
@@ -51,6 +56,7 @@ public class TaskDomain {
         }
     }
 
+    @Override
     public void fillFromDto(Task dto) {
         if (task.isNew()) {
             task.setAuthor(dto.getAuthor());
@@ -82,7 +88,10 @@ public class TaskDomain {
         task.setDueDate(dto.getDueDate());
         calculateStatus();
 
-        changeAssignee(dto.getAssignee());
+        User user = new User();
+        user.setId(dto.getAssignee());
+        changeAssignee(user);
+
         task.setCustomerObservation(dto.isCustomerObservation());
         task.setAttachments(dto.getAttachments());
         task.setObservers(dto.getObservers() != null ? dto.getObservers() : new ArrayList<>());
@@ -90,10 +99,18 @@ public class TaskDomain {
         calculateReaders();
     }
 
-    public Task addChildTask() {
-        return null;
+    @Override
+    public void changeStatus(TaskStatusType status) {
+        task.setStatus(status);
+        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) { // TODO ? что имелось ввиду
+            task.resetEditors();
+        } else {
+            task.addReaderEditor(task.getAuthor());
+        }
+        task.setStatusDate(new Date());
     }
 
+    @Override
     public void calculateStatus() {
         if (task.getStartDate() == null) {
             changeStatus(TaskStatusType.DRAFT);
@@ -109,24 +126,16 @@ public class TaskDomain {
         }
     }
 
-    public void changeStatus(TaskStatusType status) {
-        task.setStatus(status);
-        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) { // TODO ?
-            task.resetEditors();
-        } else {
-            task.addReaderEditor(task.getAuthor());
-        }
-        task.setStatusDate(new Date());
-    }
-
-    public void changeAssignee(Long newAssignee) {
-        task.setAssignee(newAssignee);
+    @Override
+    public void changeAssignee(User newAssignee) {
+        task.setAssignee(newAssignee.getId());
 
 //        if (oldAssignee.longValue() != newAssignee.longValue()) {
 //            // TODO notify about changes ?
 //        }
     }
 
+    @Override
     public void calculateReaders() {
         if (task.getStatus() != TaskStatusType.DRAFT) {
 
@@ -142,7 +151,8 @@ public class TaskDomain {
         }
     }
 
-    public void acknowledged(IUser<Long> user) throws Exception {
+    @Override
+    public void acknowledgedTask(User user) throws Exception {
         if (!task.getAssignee().equals(user.getId())) {
             throw new Exception("not_assignee_user");
         } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
@@ -152,7 +162,8 @@ public class TaskDomain {
         changeStatus(TaskStatusType.PROCESSING);
     }
 
-    public void complete() {
+    @Override
+    public void completeTask() {
         if (task.getStatus() == TaskStatusType.COMPLETED) {
             throw new IllegalStateException("task already completed");
         }
@@ -160,7 +171,14 @@ public class TaskDomain {
         changeStatus(TaskStatusType.COMPLETED);
     }
 
-    public void cancel(String comment) {
+    @Override
+    public void prolongTask(Date newDueDate) {
+        task.setDueDate(newDueDate);
+        changeStatus(TaskStatusType.PROCESSING);
+    }
+
+    @Override
+    public void cancelTask(String comment) {
         if (task.getStatus() == TaskStatusType.CANCELLED) {
             throw new IllegalStateException("task already cancelled");
         }
@@ -169,6 +187,12 @@ public class TaskDomain {
         task.setCancellationComment(comment);
     }
 
+    @Override
+    public void returnToProcessing() {
+        changeStatus(TaskStatusType.PROCESSING);
+    }
+
+    @Override
     public Outcome getOutcome() {
         Outcome outcome = new Outcome();
 
