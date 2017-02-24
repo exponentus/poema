@@ -137,10 +137,6 @@ public class Demand extends SecureAppEntity<UUID> {
         this.tags = tags;
     }
 
-    public boolean isHasAttachments() {
-        return attachments.size() > 0;
-    }
-
     @Override
     public List<Attachment> getAttachments() {
         return attachments;

@@ -1,10 +1,9 @@
 package projects.services;
 
 import administrator.dao.UserDAO;
-import com.exponentus.common.model.ACL;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.Selector;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -12,14 +11,16 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingpojo.Outcome;
-import com.exponentus.scripting.*;
+import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting._Session;
+import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
-import com.exponentus.webserver.servlet.UploadedFile;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
+import projects.domain.ProjectDomain;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
@@ -29,7 +30,10 @@ import staff.model.Employee;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -95,47 +99,43 @@ public class ProjectService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
-        IUser<Long> user = session.getUser();
-        Project project;
-        WebFormData formData = getWebFormData();
         try {
             ProjectDAO dao = new ProjectDAO(session);
+            Project project;
+            ProjectDomain projectDomain;
             boolean isNew = "new".equals(id);
+
             if (!isNew) {
                 project = dao.findById(id);
-
-                outcome.addPayload(new ACL(project));
-                outcome.setTitle("project");
+                projectDomain = new ProjectDomain(project);
             } else {
-                outcome.setTitle("new_project");
-
                 project = new Project();
-                project.setAuthor(user);
-                project.setComment("");
-                project.setStatus(ProjectStatusType.DRAFT);
-                String fsId = formData.getFormSesId();
-                List<String> formFiles = null;
-                Object obj = session.getAttribute(fsId);
-                if (obj == null) {
-                    formFiles = new ArrayList<>();
-                } else {
-                    _FormAttachments fAtts = (_FormAttachments) obj;
-                    formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
-                }
+                projectDomain = new ProjectDomain(project);
+                projectDomain.composeProject((User) session.getUser());
 
-                List<IPOJOObject> filesToPublish = new ArrayList<>();
+//                String fsId = formData.getFormSesId();
+//                List<String> formFiles = null;
+//                Object obj = session.getAttribute(fsId);
+//                if (obj == null) {
+//                    formFiles = new ArrayList<>();
+//                } else {
+//                    _FormAttachments fAtts = (_FormAttachments) obj;
+//                    formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
+//                }
 
-                for (String fn : formFiles) {
-                    UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-                    if (uf == null) {
-                        uf = new UploadedFile();
-                        uf.setName(fn);
-                        session.setAttribute(fsId + "_file" + fn, uf);
-                    }
-                    filesToPublish.add(uf);
-                }
-                // addContent(new _POJOListWrapper<>(filesToPublish, session));
-                outcome.addPayload("filesToPublish", filesToPublish);
+//                List<IPOJOObject> filesToPublish = new ArrayList<>();
+//
+//                for (String fn : formFiles) {
+//                    UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
+//                    if (uf == null) {
+//                        uf = new UploadedFile();
+//                        uf.setName(fn);
+//                        session.setAttribute(fsId + "_file" + fn, uf);
+//                    }
+//                    filesToPublish.add(uf);
+//                }
+//                // addContent(new _POJOListWrapper<>(filesToPublish, session));
+//                outcome.addPayload("filesToPublish", filesToPublish);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);
@@ -155,10 +155,9 @@ public class ProjectService extends RestProvider {
                 emps.put(e.getUserID(), e);
             }
 
-            outcome.setId(id);
+            Outcome outcome = projectDomain.getOutcome();
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
-            outcome.addPayload(project);
             outcome.addPayload(getActionBar(session, project));
 
             return Response.ok(outcome).build();
@@ -171,10 +170,10 @@ public class ProjectService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Project projectForm) {
+    public Response save(@PathParam("id") String id, Project dto) {
         _Session session = getSession();
 
-        _Validation validation = validate(session, projectForm);
+        _Validation validation = validate(session, dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
@@ -182,6 +181,7 @@ public class ProjectService extends RestProvider {
         try {
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
+            ProjectDomain projectDomain;
             boolean isNew = "new".equals(id);
 
             if (isNew) {
@@ -194,31 +194,10 @@ public class ProjectService extends RestProvider {
                 }
             }
 
-            project.setName(projectForm.getName());
-            project.setCustomer(projectForm.getCustomer());
-            project.setManager(projectForm.getManager());
-            project.setProgrammer(projectForm.getProgrammer());
-            project.setTester(projectForm.getTester());
-            project.setObservers(projectForm.getObservers());
-            project.setRepresentatives(projectForm.getRepresentatives());
-            project.setComment(projectForm.getComment());
-            project.setStatus(projectForm.getStatus());
-            project.setFinishDate(projectForm.getFinishDate());
-            project.setAttachments(getActualAttachments(project.getAttachments(), projectForm.getAttachments()));
-            project.setPrimaryLanguage(EnvConst.getDefaultLang());
+            dto.setAttachments(getActualAttachments(project.getAttachments(), dto.getAttachments()));
 
-            Set<Long> readers = new HashSet<>();
-            readers.add(projectForm.getManager());
-            readers.add(projectForm.getProgrammer());
-            if (projectForm.getTester() > 0) {
-                readers.add(projectForm.getTester());
-            }
-            readers.add(session.getUser().getId());
-            if (projectForm.getObservers() != null) {
-                readers.addAll(projectForm.getObservers());
-            }
-
-            project.setReaders(readers);
+            projectDomain = new ProjectDomain(project);
+            projectDomain.fillFromDto(dto, (User) session.getUser());
 
             if (isNew) {
                 project = dao.add(project);
@@ -228,12 +207,9 @@ public class ProjectService extends RestProvider {
             }
 
             project = dao.findById(project.getId());
+            projectDomain = new ProjectDomain(project);
 
-            outcome.setId(id);
-            outcome.setTitle(project.getName());
-            outcome.addPayload(project);
-
-            return Response.ok(outcome).build();
+            return Response.ok(projectDomain.getOutcome()).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
         }

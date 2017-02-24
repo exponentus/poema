@@ -1,6 +1,6 @@
-package helpdesk.services.demand;
+package helpdesk.services;
 
-import com.exponentus.common.model.ACL;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -18,14 +18,11 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
-import com.exponentus.user.IUser;
 import helpdesk.dao.DemandDAO;
+import helpdesk.domain.DemandDomain;
 import helpdesk.model.Demand;
-import helpdesk.model.constants.DemandStatusType;
-import projects.dao.ProjectDAO;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
-import staff.dao.OrganizationDAO;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -33,8 +30,6 @@ import javax.ws.rs.core.Response;
 
 @Path("demands")
 public class DemandService extends RestProvider {
-
-    private Outcome outcome = new Outcome();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,6 +47,7 @@ public class DemandService extends RestProvider {
             _Action newDocAction = new _Action("add_demand", "", "add_demand");
             actionBar.addAction(newDocAction);
 
+            Outcome outcome = new Outcome();
             outcome.setId("demands");
             outcome.setTitle("demands");
             outcome.addPayload(actionBar);
@@ -69,32 +65,31 @@ public class DemandService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         Demand entity;
+        DemandDomain demandDomain;
         try {
             boolean isNew = "new".equals(id);
             if (isNew) {
+                DemandType demandType = null;
                 entity = new Demand();
-                entity.setAuthor(session.getUser());
-                entity.setTitle("");
-                entity.setBody("");
-                entity.setStatus(DemandStatusType.DRAFT);
+                demandDomain = new DemandDomain(entity);
+
                 try {
                     DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
-                    entity.setDemandType(demandTypeDAO.findByName("bug"));
+                    demandType = demandTypeDAO.findByName("bug");
                 } catch (DAOException e) {
                     Server.logger.errorLogEntry(e);
                 }
+
+                demandDomain.composeDemand((User) session.getUser(), demandType);
             } else {
                 DemandDAO dao = new DemandDAO(session);
                 entity = dao.findById(id);
+                demandDomain = new DemandDomain(entity);
             }
 
-            outcome.setId(id);
-            outcome.addPayload(entity);
+            Outcome outcome = demandDomain.getOutcome();
             outcome.addPayload(getActionBar(session, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            if (!isNew) {
-                outcome.addPayload(new ACL(entity));
-            }
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -106,64 +101,49 @@ public class DemandService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Demand demandForm) {
+    public Response save(@PathParam("id") String id, Demand dto) {
         _Session session = getSession();
 
-        _Validation validation = validate(demandForm);
+        _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         Demand demand;
+        DemandDomain demandDomain;
         try {
-            ProjectDAO projectDAO = new ProjectDAO(session);
-            OrganizationDAO organizationDAO = new OrganizationDAO(session);
             DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
             DemandDAO demandDAO = new DemandDAO(session);
 
             boolean isNew = "new".equals(id);
             if (isNew) {
                 demand = new Demand();
+                demand.setAuthor(session.getUser());
             } else {
                 demand = demandDAO.findById(id);
             }
 
-            demand.setTitle(demandForm.getTitle());
-            if (demandForm.getCustomer() != null) {
-                demand.setCustomer(organizationDAO.findById(demandForm.getCustomer().getId()));
-            } else {
-                demand.setCustomer(null);
-            }
-            DemandType demandType = demandTypeDAO.findById(demandForm.getDemandType().getId());
-            demand.setDemandType(demandType);
-            if (demandForm.getProject() != null) {
-                demand.setProject(projectDAO.findById(demandForm.getProject().getId()));
-            } else {
-                demand.setProject(null);
-            }
-            demand.setStatus(demandForm.getStatus());
-            demand.setStatusDate(demandForm.getStatusDate());
-            demand.setBody(demandForm.getBody());
-            demand.setTags(demandForm.getTags());
-            demand.setAttachments(getActualAttachments(demand.getAttachments(), demandForm.getAttachments()));
+            DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
+            dto.setDemandType(demandType);
+            dto.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
+
+            demandDomain = new DemandDomain(demand);
+            demandDomain.fillFromDto(dto);
 
             if (isNew) {
                 RegNum rn = new RegNum();
-                demand.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.prefix));
-                IUser<Long> user = session.getUser();
-                demand.addReaderEditor(user);
+                demand.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
                 demand = demandDAO.add(demand);
             } else {
                 demand = demandDAO.update(demand);
             }
+
+            Outcome outcome = demandDomain.getOutcome();
+
+            return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
-
-        outcome.setId(id);
-        outcome.addPayload(demand);
-
-        return Response.ok(outcome).build();
     }
 
     @DELETE
@@ -197,9 +177,6 @@ public class DemandService extends RestProvider {
         }
     }
 
-    /*
-     * Action bar
-     */
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -214,9 +191,6 @@ public class DemandService extends RestProvider {
         return actionBar;
     }
 
-    /*
-     * Validate entity
-     */
     private _Validation validate(Demand demand) {
         _Validation ve = new _Validation();
 
