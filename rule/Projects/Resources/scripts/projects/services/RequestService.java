@@ -73,7 +73,7 @@ public class RequestService extends RestProvider {
 
             outcome = requestDomain.getOutcome();
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            outcome.addPayload(getActionBar(session, request));
+            outcome.addPayload(getActionBar(session, request, requestDomain));
             outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
@@ -166,7 +166,6 @@ public class RequestService extends RestProvider {
             if (resolutionType == ResolutionType.ACCEPTED) {
                 switch (request.getRequestType().getName()) {
                     case "implement":
-                        // task.setStatus(TaskStatusType.COMPLETED);
                         taskDomain.completeTask();
                         break;
                     case "prolong":
@@ -176,31 +175,21 @@ public class RequestService extends RestProvider {
                             _Validation ve = new _Validation();
                             ve.addError("dueDate", "date", "field_is_empty");
                             return responseValidationError(ve);
-                            // return Response.status(Response.Status.BAD_REQUEST).entity(ve).build();
                         }
-//                        task.setDueDate(newDueDate);
-//                        task.setStatus(TaskStatusType.PROCESSING);
                         taskDomain.prolongTask(newDueDate);
                         break;
                     case "cancel":
-                        // task.setStatus(TaskStatusType.CANCELLED);
                         taskDomain.cancelTask("");
                         break;
                     default:
-                        outcome.setMessage("I don't know what you want. Unknown request type: "
+                        throw new IllegalArgumentException("I don't know what you want. Unknown request type: "
                                 + request.getRequestType().getName());
-                        return Response.status(Response.Status.BAD_REQUEST).entity(outcome).build();
                 }
             } else {
-                // task.setStatus(TaskStatusType.PROCESSING);
                 taskDomain.returnToProcessing();
             }
 
             requestDomain.doResolution((User) getSession().getUser(), resolutionType, getWebFormData().getValueSilently("comment"));
-
-//            request.setResolution(resolutionType);
-//            request.setResolutionTime(new Date());
-//            request.setDecisionComment(getWebFormData().getValueSilently("comment"));
 
             requestDAO.update(request, false);
 
@@ -243,7 +232,7 @@ public class RequestService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Request request) {
+    private _ActionBar getActionBar(_Session session, Request request, RequestDomain requestDomain) {
         _ActionBar actionBar = new _ActionBar(session);
         if (request.isNew()) {
             actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
@@ -251,14 +240,11 @@ public class RequestService extends RestProvider {
             actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
         }
 
-        if (!request.isNew()) {
-            if (request.getTask().getAuthor().getId().equals(session.getUser().getId())
-                    && (request.getResolution() != ResolutionType.ACCEPTED
-                    && request.getResolution() != ResolutionType.DECLINED)) {
-                actionBar.addAction(new _Action("", "", "decline"));
-                actionBar.addAction(new _Action("", "", "accept"));
-            }
+        if (requestDomain.userCanDoResolution((User) session.getUser())) {
+            actionBar.addAction(new _Action("", "", "decline"));
+            actionBar.addAction(new _Action("", "", "accept"));
         }
+
         return actionBar;
     }
 
