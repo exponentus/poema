@@ -21,7 +21,6 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.OfficeMemoDomain;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalStatusType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -90,7 +89,7 @@ public class OfficeMemoService extends RestProvider {
 
             Outcome outcome = omd.getOutcome();
             outcome.addPayload("employees", empDao.findAll(false).getResult());
-            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(getActionBar(ses, entity, omd));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
@@ -160,9 +159,6 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -251,24 +247,29 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, OfficeMemo entity) throws DAOException {
+    private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
-        if (entity.getApproval().getStatus() == ApprovalStatusType.DRAFT) {
+
+        if (entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
+
+        if (omd.approvalCanBeStarted()) {
             actionBar.addAction(new _Action("start_approving", "", "start_approving"));
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
-        if (entity.getApproval().userCanDoDecision(employeeDAO.findByUser(session.getUser()))) {
+        if (omd.employeeCanDoDecisionApproval(employeeDAO.findByUser(session.getUser()))) {
             actionBar.addAction(new _Action("agree", "", "accept_approval_block"));
             actionBar.addAction(new _Action("disagree", "", "decline_approval_block"));
         }
 
         actionBar.addAction(new _Action("sign", "", "sign"));
-        if (!entity.isNew() && entity.isEditable()) {
+
+        if (omd.documentCanBeDeleted()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
 

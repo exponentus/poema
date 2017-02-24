@@ -61,6 +61,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
+    public boolean approvalCanBeStarted() {
+        return om.getApproval().getStatus() == ApprovalStatusType.DRAFT;
+    }
+
+    @Override
     public void startApproving() {
     /*
     DRAFT>PROCESSING. При статусе DRAFT должна быть кнопка “start approving”(Начать согласование).
@@ -104,6 +109,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
                 b.setStatus(ApprovalStatusType.AWAITING);
             }
         });
+    }
+
+    @Override
+    public boolean employeeCanDoDecisionApproval(Employee employee) {
+        return om.getApproval().userCanDoDecision(employee);
     }
 
     @Override
@@ -162,12 +172,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     @Override
     public void declineApprovalBlock(Employee employee, String decisionComment) {
         if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
-            throw new IllegalStateException("status error: " + om.getApproval().getStatus());
+            throw new IllegalStateException("Approval not PROCESSING, current status: " + om.getApproval().getStatus());
         }
 
         Block processBlock = om.getApproval().getProcessingBlock();
         if (processBlock == null) {
-            throw new IllegalStateException("not found processing Block");
+            throw new IllegalStateException("Not found processing Block");
         }
 
         processBlock.getApprover(employee).disagree(decisionComment);
@@ -203,6 +213,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
                 om.getApproval().setStatus(ApprovalStatusType.FINISHED);
             }
         }
+    }
+
+    @Override
+    public boolean documentCanBeDeleted() {
+        return !om.isNew() && om.isEditable();
     }
 
     @Override

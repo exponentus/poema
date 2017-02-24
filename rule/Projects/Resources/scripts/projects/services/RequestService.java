@@ -241,8 +241,8 @@ public class RequestService extends RestProvider {
         }
 
         if (requestDomain.userCanDoResolution((User) session.getUser())) {
-            actionBar.addAction(new _Action("", "", "decline"));
-            actionBar.addAction(new _Action("", "", "accept"));
+            actionBar.addAction(new _Action("decline", "", "decline"));
+            actionBar.addAction(new _Action("accept", "", "accept"));
         }
 
         return actionBar;

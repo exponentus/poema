@@ -174,7 +174,7 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(session, task));
+            outcome.addPayload(getActionBar(session, taskDomain));
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -341,32 +341,31 @@ public class TaskService extends RestProvider {
     }
 
     //
-    private _ActionBar getActionBar(_Session session, Task task) {
-
+    private _ActionBar getActionBar(_Session session, TaskDomain taskDomain) {
         _ActionBar actionBar = new _ActionBar(session);
-        if (task.isEditable()) {
+
+        if (taskDomain.taskIsEditable()) {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
-            if (!task.isNew()) {
+
+            if (taskDomain.taskCanBeDeleted()) {
                 actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
             }
         }
 
-        if (!task.isNew()) {
-            if (task.getAssignee().equals(session.getUser().getId())) {
-                if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
-                    actionBar.addAction(new _Action("acknowledged_task", "", "task_acknowledged"));
-                } else if (task.getStatus() == TaskStatusType.PROCESSING) {
-                    actionBar.addAction(new _Action("", "", "add_request"));
-                }
-            }
+        if (taskDomain.userCanDoAcknowledged((User) session.getUser())) {
+            actionBar.addAction(new _Action("acknowledged_task", "", "task_acknowledged"));
+        }
 
-            if (task.getAuthor().getId().equals(session.getUser().getId()) || session.getUser().isSuperUser()) {
-                if ((task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED)) {
-                    actionBar.addAction(new _Action("complete_task", "", "task_complete"));
-                    actionBar.addAction(new _Action("cancel_task", "", "task_cancel"));
-                }
-            }
+        if (taskDomain.userCanDoRequest((User) session.getUser())) {
+            actionBar.addAction(new _Action("", "", "add_request"));
+        }
 
+        if (taskDomain.userCanDoResolution((User) session.getUser())) {
+            actionBar.addAction(new _Action("complete_task", "", "task_complete"));
+            actionBar.addAction(new _Action("cancel_task", "", "task_cancel"));
+        }
+
+        if (taskDomain.userCanAddSubTask((User) session.getUser())) {
             actionBar.addAction(new _Action("add_subtask", "", "add_subtask"));
         }
         return actionBar;

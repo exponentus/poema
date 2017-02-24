@@ -39,8 +39,9 @@ public class RequestDomain implements IRequestDomain {
 
         if (request.isNew()) {
             request.setTask(dto.getTask());
-            request.setEditors(dto.getTask().getEditors());
+            request.resetReadersEditors();
             request.addReaderEditor(request.getAuthor());
+            request.addEditors(dto.getTask().getEditors());
         }
     }
 

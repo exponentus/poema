@@ -11,6 +11,10 @@ import java.util.Date;
 
 public interface ITaskDomain {
 
+    enum PERMISSIONS {
+        SAVE, DELETE, ACKNOWLEDGED, COMPLETE, CANCEL, PROCESSING
+    }
+
     enum Events {
         NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
     }
@@ -37,7 +41,17 @@ public interface ITaskDomain {
 
     void returnToProcessing();
 
-    // Set<String> getEvents();
+    boolean taskIsEditable();
+
+    boolean taskCanBeDeleted();
+
+    boolean userCanDoAcknowledged(User user);
+
+    boolean userCanDoRequest(User user);
+
+    boolean userCanDoResolution(User user);
+
+    boolean userCanAddSubTask(User user);
 
     Outcome getOutcome();
 }

@@ -212,6 +212,58 @@ public class TaskDomain implements ITaskDomain {
     }
 
     @Override
+    public boolean taskIsEditable() {
+        return task.isEditable();
+    }
+
+    @Override
+    public boolean taskCanBeDeleted() {
+        return !task.isNew() && task.isEditable();
+    }
+
+    @Override
+    public boolean userCanDoAcknowledged(User user) {
+        if (!task.isNew() && task.getAssignee().equals(user.getId())) {
+            if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean userCanDoRequest(User user) {
+        if (!task.isNew() && task.getAssignee().equals(user.getId())) {
+            if (task.getStatus() == TaskStatusType.PROCESSING) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean userCanDoResolution(User user) {
+        if (!task.isNew()) {
+            if (task.getAuthor().getId().equals(user.getId()) || user.isSuperUser()) {
+                if (task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean userCanAddSubTask(User user) {
+        if (!task.isNew()) {
+            if (task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public Outcome getOutcome() {
         Outcome outcome = new Outcome();
 

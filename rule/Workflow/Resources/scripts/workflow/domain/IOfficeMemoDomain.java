@@ -10,11 +10,17 @@ public interface IOfficeMemoDomain {
 
     void fillFromDto(OfficeMemo dto);
 
+    boolean approvalCanBeStarted();
+
     void startApproving();
+
+    boolean employeeCanDoDecisionApproval(Employee employee);
 
     void acceptApprovalBlock(Employee employee);
 
     void declineApprovalBlock(Employee employee, String decisionComment);
+
+    boolean documentCanBeDeleted();
 
     Outcome getOutcome();
 }
