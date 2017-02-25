@@ -1,6 +1,5 @@
 package workflow.services;
 
-import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -13,26 +12,23 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
+import workflow.domain.AssignmentDomain;
 import workflow.model.Assignment;
-import workflow.model.embedded.Control;
+import workflow.model.Incoming;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
-
-    private Outcome outcome = new Outcome();
 
     @GET
     @Path("{id}")
@@ -42,35 +38,32 @@ public class AssignmentService extends RestProvider {
             _Session ses = getSession();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
+            AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             Assignment entity;
-
+            AssignmentDomain ad;
             boolean isNew = "new".equals(id);
-            if (isNew) {
-                entity = new Assignment();
-                entity.setAuthor(ses.getUser());
-                entity.setAppliedAuthor(employee);
 
+            if (isNew) {
                 String incomingId = getWebFormData().getAnyValueSilently("incoming");
                 String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
+                Incoming incoming = null;
+                Assignment parent = null;
+
                 if (!incomingId.isEmpty()) {
-                    IncomingDAO incomingDAO = new IncomingDAO(ses);
-                    entity.setIncoming(incomingDAO.findById(incomingId));
+                    incoming = (new IncomingDAO(ses)).findById(incomingId);
                 } else if (!assignmentId.isEmpty()) {
-                    AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-                    Assignment parent = assignmentDAO.findById(assignmentId);
-                    entity.setParent(parent);
-                    entity.setIncoming(parent.getIncoming());
+                    parent = assignmentDAO.findById(assignmentId);
                 } else {
-                    throw new IllegalArgumentException("no parent document");
+                    throw new IllegalArgumentException("No parent document");
                 }
 
-                Control newControl = new Control();
-                newControl.setStartDate(new Date());
-                entity.setControl(newControl);
+                entity = new Assignment();
+                ad = new AssignmentDomain(entity);
+                ad.compose(employee, incoming, parent);
             } else {
-                AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
                 entity = assignmentDAO.findById(id);
+                ad = new AssignmentDomain(entity);
             }
 
             //
@@ -79,18 +72,10 @@ public class AssignmentService extends RestProvider {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
             //
 
-            outcome.setId(id);
-            outcome.addPayload(entity);
+            Outcome outcome = ad.getOutcome();
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            outcome.addPayload("employees", emps);
-            outcome.addPayload("incoming", entity.getIncoming());
-            if (entity.getParent() != null) {
-                outcome.addPayload("parent", entity.getParent());
-            }
-            if (!isNew) {
-                outcome.addPayload(new ACL(entity));
-            }
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
@@ -102,49 +87,39 @@ public class AssignmentService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Assignment assignmentForm) {
-        _Validation validation = validate(assignmentForm);
+    public Response save(@PathParam("id") String id, Assignment dto) {
+        _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session ses = getSession();
         Assignment entity;
+        AssignmentDomain domain;
 
         try {
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-
             boolean isNew = "new".equals(id);
+
             if (isNew) {
                 entity = new Assignment();
-                entity.setIncoming(assignmentForm.getIncoming());
-                entity.setParent(assignmentForm.getParent());
+                entity.setAuthor(ses.getUser());
             } else {
                 entity = assignmentDAO.findById(id);
             }
 
-            // entity.setIncoming(assignmentForm.getIncoming());
-            // entity.setParent(assignmentForm.getParent());
-            entity.setTitle(assignmentForm.getTitle());
-            entity.setBody(assignmentForm.getBody());
-            entity.setAppliedAuthor(assignmentForm.getAppliedAuthor());
-            entity.setObservers(assignmentForm.getObservers());
-            entity.setControl(assignmentForm.getControl());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), assignmentForm.getAttachments()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+            domain = new AssignmentDomain(entity);
+            domain.fillFromDto(dto);
 
             if (isNew) {
-                IUser<Long> user = ses.getUser();
-                entity.addReaderEditor(user);
                 entity = assignmentDAO.add(entity);
             } else {
                 entity = assignmentDAO.update(entity);
             }
 
-            outcome.setId(id);
-            outcome.setTitle(entity.getTitle());
-            outcome.addPayload(entity);
-
-            return Response.ok(outcome).build();
+            return Response.ok(domain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -167,9 +142,6 @@ public class AssignmentService extends RestProvider {
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -184,9 +156,6 @@ public class AssignmentService extends RestProvider {
         }
     }
 
-    /*
-     *
-     */
     private _ActionBar getActionBar(_Session session, Assignment entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -226,14 +195,6 @@ public class AssignmentService extends RestProvider {
         if (assignment.getControl().getAssigneeEntries() == null || assignment.getControl().getAssigneeEntries().isEmpty()) {
             ve.addError("control.assigneeEntries", "required", "field_is_empty");
         }
-
-//        if (assignment.getObservers() != null && assignment.getObservers().size() > 0) {
-//            UserDAO userDAO = new UserDAO(getSession());
-//            List<User> users = userDAO.findAllByIds(assignment.getObservers());
-//            if (assignment.getObservers().size() != users.size()) {
-//                ve.addError("observerUserIds", "required", "observer user not found");
-//            }
-//        }
 
         return ve;
     }

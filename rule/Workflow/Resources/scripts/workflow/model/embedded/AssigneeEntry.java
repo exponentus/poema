@@ -17,7 +17,7 @@ public class AssigneeEntry extends SimpleAppEntity {
 
     private Employee assignee;
 
-    private Employee resetter;
+    private Employee resetBy;
 
     @Column(name = "reset_time")
     private Date resetTime;
@@ -39,6 +39,14 @@ public class AssigneeEntry extends SimpleAppEntity {
 
     public void setAssignee(Employee assignee) {
         this.assignee = assignee;
+    }
+
+    public Employee getResetBy() {
+        return resetBy;
+    }
+
+    public void setResetBy(Employee resetBy) {
+        this.resetBy = resetBy;
     }
 
     public Date getResetTime() {
