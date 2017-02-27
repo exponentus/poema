@@ -118,6 +118,7 @@
   "no_data" : "no_data",
   "finished" : "Concluído",
   "new_document" : "new_document",
+  "related_documents" : "Execução",
   "current_approver" : "current_approver",
   "confirm_action" : "confirm_action",
   "addressee" : "addressee",

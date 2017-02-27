@@ -352,9 +352,9 @@
         <entry lang="POR">Pedidos</entry>
         <entry lang="SPA">Solicitudes</entry>
     </sentence>
-    <sentence mode="on" keyword="execution">
-        <entry lang="RUS">Выполнение</entry>
-        <entry lang="ENG">Execution</entry>
+    <sentence mode="on" keyword="related_documents">
+        <entry lang="RUS">Связанные документы</entry>
+        <entry lang="ENG">Related documents</entry>
         <entry lang="POR">Execução</entry>
         <entry lang="SPA">Ejecución</entry>
     </sentence>
