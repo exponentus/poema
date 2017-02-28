@@ -6,12 +6,6 @@
         <entry lang="POR">Poema</entry>
         <entry lang="SPA">Poema</entry>
     </sentence>
-    <sentence mode="on" keyword="loading">
-        <entry lang="RUS">Загрузка</entry>
-        <entry lang="ENG">Loading</entry>
-        <entry lang="POR">A carregar</entry>
-        <entry lang="SPA">Cargando</entry>
-    </sentence>
     <sentence mode="on" keyword="editors">
         <entry lang="RUS">Редакторы</entry>
         <entry lang="ENG">Editors</entry>
