@@ -1,6 +1,7 @@
 package projects.domain;
 
 import administrator.model.User;
+import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import projects.model.Request;
 import projects.model.Task;
@@ -77,7 +78,7 @@ public class RequestDomain implements IRequestDomain {
         outcome.addPayload(request.getTask());
 
         if (!request.isNew()) {
-            // outcome.addPayload(new ACL(request));
+            outcome.addPayload(new ACL(request));
         }
 
         return outcome;

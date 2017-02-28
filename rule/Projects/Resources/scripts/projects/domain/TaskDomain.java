@@ -1,6 +1,7 @@
 package projects.domain;
 
 import administrator.model.User;
+import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
@@ -282,7 +283,7 @@ public class TaskDomain implements ITaskDomain {
         outcome.addPayload(task);
         outcome.addPayload("parentTask", task.getParent());
         if (!task.isNew()) {
-            // outcome.addPayload(new ACL(task));
+            outcome.addPayload(new ACL(task));
         }
 
         return outcome;
