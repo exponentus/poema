@@ -171,9 +171,6 @@ public class IncomingService extends RestProvider {
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -188,17 +185,17 @@ public class IncomingService extends RestProvider {
         }
     }
 
-    /*
-     *
-     */
     private _ActionBar getActionBar(_Session session, Incoming entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        if (entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
+
         if (!entity.isNew()) {
             // dev396
-            if (entity.getAddressee().getUser().getId().equals(session.getUser().getId())
+            if (entity.getAddressee() != null && entity.getAddressee().getUser().getId().equals(session.getUser().getId())
                     || session.getUser().getRoles().contains("chancellery")) {
                 actionBar.addAction(new _Action("assignment", "", "new_assignment"));
             }

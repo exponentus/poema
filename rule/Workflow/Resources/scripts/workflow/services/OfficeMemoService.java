@@ -26,6 +26,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,8 +50,8 @@ public class OfficeMemoService extends RestProvider {
             // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
-            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            Map<UUID, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getId, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = new Outcome();
             outcome.setId("office-memo");
