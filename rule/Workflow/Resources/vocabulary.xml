@@ -152,6 +152,10 @@
         <entry lang="RUS">Согласующие</entry>
         <entry lang="ENG">Approvers</entry>
     </sentence>
+    <sentence mode="on" keyword="start_approving">
+        <entry lang="RUS">Начать согласование</entry>
+        <entry lang="ENG">Start approving</entry>
+    </sentence>
     <sentence mode="on" keyword="approval_block">
         <entry lang="RUS">Блок согласования</entry>
         <entry lang="ENG">Approval block</entry>
