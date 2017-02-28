@@ -111,6 +111,7 @@
   "just_close" : "just_close",
   "logout" : "logout",
   "markdown_write" : "markdown_write",
+  "request_error" : "Ошибка при выполнении запроса",
   "limit_view" : "limit_view",
   "decline" : "decline",
   "tasks" : "tasks",

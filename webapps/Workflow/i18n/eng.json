@@ -14,6 +14,7 @@
   "password" : "Password",
   "not_null_violation" : "a value cannot be null",
   "markdown_write" : "Write",
+  "request_error" : "Ошибка при выполнении запроса",
   "limit_view" : "An amount of documents is in a kind",
   "draft" : "Draft",
   "attach_file" : "Attach file",

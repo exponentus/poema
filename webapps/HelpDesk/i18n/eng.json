@@ -111,6 +111,7 @@
   "just_close" : "Just close the form",
   "logout" : "Logout",
   "markdown_write" : "Write",
+  "request_error" : "Ошибка при выполнении запроса",
   "limit_view" : "An amount of documents is in a kind",
   "decline" : "Decline",
   "tasks" : "Tasks",

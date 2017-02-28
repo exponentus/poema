@@ -14,6 +14,7 @@
   "password" : "Пароль",
   "not_null_violation" : "Значение должно быть не null",
   "markdown_write" : "Редактор",
+  "request_error" : "Ошибка при выполнении запроса",
   "limit_view" : "Количество документов в виде",
   "draft" : "Черновик",
   "attach_file" : "Прикрепить файл",
