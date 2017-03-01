@@ -24,7 +24,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.domain.TaskDomain;
+import projects.domain.impl.TaskDomain;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;

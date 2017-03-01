@@ -1,9 +1,10 @@
-package workflow.domain;
+package workflow.domain.impl;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import staff.model.Employee;
+import workflow.domain.IOfficeMemoDomain;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
@@ -40,7 +41,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public void fillFromDto(OfficeMemo dto) {
+    public void fillFromDto(Employee author, OfficeMemo dto) {
         om.setAppliedAuthor(dto.getAppliedAuthor());
         om.setAppliedRegDate(dto.getAppliedRegDate());
         om.setTitle(dto.getTitle());
@@ -55,6 +56,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         }
 
         if (om.isNew()) {
+            om.setAuthor(author.getUser());
             om.addReaderEditor(om.getAuthor());
             om.addReaderEditor(dto.getAppliedAuthor().getUser());
         }

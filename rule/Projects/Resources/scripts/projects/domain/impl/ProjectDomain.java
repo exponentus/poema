@@ -1,9 +1,10 @@
-package projects.domain;
+package projects.domain.impl;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.env.EnvConst;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import projects.domain.IProjectDomain;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 

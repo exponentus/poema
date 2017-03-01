@@ -1,10 +1,11 @@
-package projects.domain;
+package projects.domain.impl;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
+import projects.domain.ITaskDomain;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;

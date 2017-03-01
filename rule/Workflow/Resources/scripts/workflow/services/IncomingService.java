@@ -1,6 +1,6 @@
 package workflow.services;
 
-import com.exponentus.common.model.ACL;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -16,8 +16,8 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.user.IUser;
 import workflow.dao.IncomingDAO;
+import workflow.domain.impl.IncomingDomain;
 import workflow.model.Incoming;
 
 import javax.ws.rs.*;
@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 
 @Path("incomings")
 public class IncomingService extends RestProvider {
-
-    private Outcome outcome = new Outcome();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -52,6 +50,7 @@ public class IncomingService extends RestProvider {
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
             // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
+            Outcome outcome = new Outcome();
             outcome.setId("incomings");
             outcome.setTitle("incoming_documents");
             outcome.addPayload(actionBar);
@@ -68,43 +67,43 @@ public class IncomingService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Incoming entity;
+        IncomingDomain inDomain;
 
-        boolean isNew = "new".equals(id);
-        if (isNew) {
-            entity = new Incoming();
-        } else {
-            try {
+        try {
+            boolean isNew = "new".equals(id);
+            if (isNew) {
+                entity = new Incoming();
+                inDomain = new IncomingDomain(entity);
+                inDomain.compose((User) ses.getUser());
+            } else {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
                 entity = incomingDAO.findById(id);
-            } catch (DAOException e) {
-                return responseException(e);
+                inDomain = new IncomingDomain(entity);
             }
-        }
 
-        outcome.setId(id);
-        outcome.setTitle(entity.getTitle());
-        outcome.addPayload(entity);
-        outcome.addPayload(getActionBar(ses, entity));
-        outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-        if (!isNew) {
-            outcome.addPayload(new ACL(entity));
-        }
+            Outcome outcome = inDomain.getOutcome();
+            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-        return Response.ok(outcome).build();
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
     }
 
     @POST
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Incoming incomingForm) {
-        _Validation validation = validate(incomingForm);
+    public Response save(@PathParam("id") String id, Incoming dto) {
+        _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session ses = getSession();
         Incoming entity;
+        IncomingDomain inDomain;
 
         try {
             IncomingDAO incomingDAO = new IncomingDAO(ses);
@@ -116,35 +115,23 @@ public class IncomingService extends RestProvider {
                 entity = incomingDAO.findById(id);
             }
 
-            entity.setTitle(incomingForm.getTitle());
-            entity.setAppliedRegDate(incomingForm.getAppliedRegDate());
-            entity.setDocLanguage(incomingForm.getDocLanguage());
-            entity.setDocType(incomingForm.getDocType());
-            entity.setSender(incomingForm.getSender());
-            entity.setAddressee(incomingForm.getAddressee());
-            entity.setResponseTo(incomingForm.getResponseTo());
-            entity.setSenderRegNumber(incomingForm.getSenderRegNumber());
-            entity.setSenderAppliedRegDate(incomingForm.getSenderAppliedRegDate());
-            entity.setBody(incomingForm.getBody());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), incomingForm.getAttachments()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+            inDomain = new IncomingDomain(entity);
+            inDomain.fillFromDto((User) ses.getUser(), dto);
 
             if (isNew) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-                IUser<Long> user = ses.getUser();
-                entity.addReaderEditor(user);
                 entity = incomingDAO.add(entity, rn);
             } else {
                 entity = incomingDAO.update(entity);
             }
 
             entity = incomingDAO.findById(entity.getId());
+            inDomain = new IncomingDomain(entity);
 
-            outcome.setId(id);
-            outcome.setTitle(entity.getTitle());
-            outcome.addPayload(entity);
-
-            return Response.ok(outcome).build();
+            return Response.ok(inDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -159,14 +146,10 @@ public class IncomingService extends RestProvider {
             IncomingDAO dao = new IncomingDAO(ses);
             Incoming entity = dao.findById(id);
             if (entity != null) {
-                try {
-                    dao.delete(entity);
-                } catch (SecureException | DAOException e) {
-                    return responseException(e);
-                }
+                dao.delete(entity);
             }
             return Response.noContent().build();
-        } catch (DAOException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }

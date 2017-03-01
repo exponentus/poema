@@ -8,7 +8,7 @@ import workflow.model.OfficeMemo;
 public interface IOfficeMemoDomain {
     void composeOfficeMemo(User user, Employee appliedAuthor);
 
-    void fillFromDto(OfficeMemo dto);
+    void fillFromDto(Employee author, OfficeMemo dto);
 
     boolean approvalCanBeStarted();
 

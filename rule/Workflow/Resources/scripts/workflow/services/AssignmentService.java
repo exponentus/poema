@@ -16,7 +16,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
-import workflow.domain.AssignmentDomain;
+import workflow.domain.impl.AssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
 
@@ -98,12 +98,13 @@ public class AssignmentService extends RestProvider {
         AssignmentDomain domain;
 
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             boolean isNew = "new".equals(id);
 
             if (isNew) {
                 entity = new Assignment();
-                entity.setAuthor(ses.getUser());
             } else {
                 entity = assignmentDAO.findById(id);
             }
@@ -111,7 +112,7 @@ public class AssignmentService extends RestProvider {
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
             domain = new AssignmentDomain(entity);
-            domain.fillFromDto(dto);
+            domain.fillFromDto(employee, dto);
 
             if (isNew) {
                 entity = assignmentDAO.add(entity);

@@ -19,7 +19,7 @@ import com.exponentus.scripting.actions._ActionType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
-import workflow.domain.OfficeMemoDomain;
+import workflow.domain.impl.OfficeMemoDomain;
 import workflow.model.OfficeMemo;
 
 import javax.ws.rs.*;
@@ -127,7 +127,7 @@ public class OfficeMemoService extends RestProvider {
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
             OfficeMemoDomain omd = new OfficeMemoDomain(entity);
-            omd.fillFromDto(dto);
+            omd.fillFromDto(empDao.findByUser(ses.getUser()), dto);
 
             if (isNew) {
                 RegNum rn = new RegNum();

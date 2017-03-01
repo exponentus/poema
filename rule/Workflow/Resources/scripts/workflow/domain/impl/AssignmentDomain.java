@@ -1,8 +1,9 @@
-package workflow.domain;
+package workflow.domain.impl;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import staff.model.Employee;
+import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
 import workflow.model.embedded.Control;
@@ -19,7 +20,7 @@ public class AssignmentDomain implements IAssignmentDomain {
 
     @Override
     public void compose(Employee author, Incoming incoming, Assignment parent) {
-        entity.setAuthor(author.getAuthor());
+        entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
 
         if (parent == null) {
@@ -35,8 +36,9 @@ public class AssignmentDomain implements IAssignmentDomain {
     }
 
     @Override
-    public void fillFromDto(Assignment dto) {
+    public void fillFromDto(Employee author, Assignment dto) {
         if (entity.isNew()) {
+            entity.setAuthor(author.getUser());
             entity.setIncoming(dto.getIncoming());
             entity.setParent(dto.getParent());
 

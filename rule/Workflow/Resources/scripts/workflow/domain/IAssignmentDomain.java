@@ -8,7 +8,7 @@ import workflow.model.Incoming;
 public interface IAssignmentDomain {
     void compose(Employee author, Incoming incoming, Assignment parentAssignment);
 
-    void fillFromDto(Assignment dto);
+    void fillFromDto(Employee author, Assignment dto);
 
     Outcome getOutcome();
 }

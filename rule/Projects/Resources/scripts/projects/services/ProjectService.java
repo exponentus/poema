@@ -20,7 +20,7 @@ import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
-import projects.domain.ProjectDomain;
+import projects.domain.impl.ProjectDomain;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;

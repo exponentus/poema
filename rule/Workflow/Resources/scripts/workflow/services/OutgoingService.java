@@ -1,6 +1,6 @@
 package workflow.services;
 
-import com.exponentus.common.model.ACL;
+import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -16,8 +16,8 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.user.IUser;
 import workflow.dao.OutgoingDAO;
+import workflow.domain.impl.OutgoingDomain;
 import workflow.model.Outgoing;
 
 import javax.ws.rs.*;
@@ -30,8 +30,6 @@ import java.util.stream.Collectors;
 
 @Path("outgoings")
 public class OutgoingService extends RestProvider {
-
-    private Outcome outcome = new Outcome();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -51,6 +49,7 @@ public class OutgoingService extends RestProvider {
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
             // actionBar.addAction(new _Action("del_document", "", _ActionType.DELETE_DOCUMENT));
 
+            Outcome outcome = new Outcome();
             outcome.setId("outgoings");
             outcome.setTitle("outgoing_documents");
             outcome.addPayload(actionBar);
@@ -68,22 +67,22 @@ public class OutgoingService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Outgoing entity;
+        OutgoingDomain outDomain;
         try {
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new Outgoing();
+                outDomain = new OutgoingDomain(entity);
+                outDomain.compose((User) ses.getUser());
             } else {
                 OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
                 entity = outgoingDAO.findById(id);
+                outDomain = new OutgoingDomain(entity);
             }
 
-            outcome.setId(id);
-            outcome.addPayload(entity);
+            Outcome outcome = outDomain.getOutcome();
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            if (!isNew) {
-                outcome.addPayload(new ACL(entity));
-            }
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -95,14 +94,15 @@ public class OutgoingService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Outgoing outgoingForm) {
-        _Validation validation = validate(outgoingForm);
+    public Response save(@PathParam("id") String id, Outgoing dto) {
+        _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session ses = getSession();
         Outgoing entity;
+        OutgoingDomain outDomain;
         try {
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
@@ -113,34 +113,23 @@ public class OutgoingService extends RestProvider {
                 entity = outgoingDAO.findById(id);
             }
 
-            //
-            entity.setTitle(outgoingForm.getTitle());
-            entity.setAppliedRegDate(outgoingForm.getAppliedRegDate());
-            entity.setDocSubject(outgoingForm.getDocSubject());
-            entity.setDocLanguage(outgoingForm.getDocLanguage());
-            entity.setDocType(outgoingForm.getDocType());
-            entity.setRecipient(outgoingForm.getRecipient());
-            entity.setBody(outgoingForm.getBody());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), outgoingForm.getAttachments()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+            outDomain = new OutgoingDomain(entity);
+            outDomain.fillFromDto((User) ses.getUser(), dto);
 
             if (isNew) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-
-                IUser<Long> user = ses.getUser();
-                entity.addReaderEditor(user);
                 entity = outgoingDAO.add(entity);
             } else {
                 entity = outgoingDAO.update(entity);
             }
 
             entity = outgoingDAO.findById(entity.getId());
+            outDomain = new OutgoingDomain(entity);
 
-            outcome.setId(id);
-            outcome.setTitle(entity.getTitle());
-            outcome.addPayload(entity);
-
-            return Response.ok(outcome).build();
+            return Response.ok(outDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -155,21 +144,14 @@ public class OutgoingService extends RestProvider {
             OutgoingDAO dao = new OutgoingDAO(ses);
             Outgoing entity = dao.findById(id);
             if (entity != null) {
-                try {
-                    dao.delete(entity);
-                } catch (SecureException | DAOException e) {
-                    return responseException(e);
-                }
+                dao.delete(entity);
             }
             return Response.noContent().build();
-        } catch (DAOException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -184,9 +166,6 @@ public class OutgoingService extends RestProvider {
         }
     }
 
-    /*
-     *
-     */
     private _ActionBar getActionBar(_Session session, Outgoing entity) {
         _ActionBar actionBar = new _ActionBar(session);
 

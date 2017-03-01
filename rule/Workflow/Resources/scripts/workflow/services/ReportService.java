@@ -1,6 +1,5 @@
 package workflow.services;
 
-import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -18,12 +17,12 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
+import workflow.domain.impl.ReportDomain;
 import workflow.model.Report;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,42 +30,38 @@ import java.util.stream.Collectors;
 @Path("reports")
 public class ReportService extends RestProvider {
 
-    private Outcome outcome = new Outcome();
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         try {
             _Session ses = getSession();
-            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             Report entity;
+            ReportDomain reportDomain;
 
             boolean isNew = "new".equals(id);
             if (isNew) {
+                EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+                AssignmentDAO aDAO = new AssignmentDAO(ses);
+                String assignmentId = getWebFormData().getValue("assignment");
+
                 entity = new Report();
-                AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-                entity.setParent(assignmentDAO.findById(getWebFormData().getValue("assignment")));
-                entity.setAppliedAuthor(employeeDAO.findByUser(ses.getUser()));
-                entity.setAppliedRegDate(new Date());
+                reportDomain = new ReportDomain(entity);
+                reportDomain.compose(employeeDAO.findByUser(ses.getUser()), aDAO.findById(assignmentId));
             } else {
                 ReportDAO reportDAO = new ReportDAO(ses);
                 entity = reportDAO.findById(id);
+                reportDomain = new ReportDomain(entity);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            outcome.setId(id);
-            outcome.addPayload(entity);
+            Outcome outcome = reportDomain.getOutcome();
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
-            outcome.addPayload("assignment", entity.getParent());
-            if (!isNew) {
-                outcome.addPayload(new ACL(entity));
-            }
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
@@ -78,46 +73,38 @@ public class ReportService extends RestProvider {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Report reportForm) {
-        _Validation validation = validate(reportForm);
+    public Response save(@PathParam("id") String id, Report dto) {
+        _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
         }
 
         _Session ses = getSession();
         Report entity;
+        ReportDomain reportDomain;
+
         try {
             ReportDAO reportDAO = new ReportDAO(ses);
-
             boolean isNew = "new".equals(id);
+
             if (isNew) {
                 entity = new Report();
-                entity.setParent(reportForm.getParent());
             } else {
                 entity = reportDAO.findById(id);
             }
 
-            //
-            entity.setParent(reportForm.getParent());
-            entity.setTitle(reportForm.getTitle());
-            entity.setBody(reportForm.getBody());
-            entity.setAppliedAuthor(reportForm.getAppliedAuthor());
-            entity.setAppliedRegDate(reportForm.getAppliedRegDate());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), reportForm.getAttachments()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+            reportDomain = new ReportDomain(entity);
 
             if (isNew) {
                 IUser<Long> user = ses.getUser();
-                entity.addReaderEditor(user);
                 entity = reportDAO.add(entity);
             } else {
                 entity = reportDAO.update(entity);
             }
 
-            outcome.setId(id);
-            outcome.setTitle(entity.getTitle());
-            outcome.addPayload(entity);
-
-            return Response.ok(outcome).build();
+            return Response.ok(reportDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -140,9 +127,6 @@ public class ReportService extends RestProvider {
         }
     }
 
-    /*
-     * Get entity attachment or _thumbnail
-     */
     @GET
     @Path("{id}/attachments/{attachId}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
@@ -157,9 +141,6 @@ public class ReportService extends RestProvider {
         }
     }
 
-    /*
-     *
-     */
     private _ActionBar getActionBar(_Session session, Report entity) {
         _ActionBar actionBar = new _ActionBar(session);
 

@@ -1,12 +1,13 @@
 package workflow.domain;
 
+import administrator.model.User;
 import com.exponentus.rest.outgoingpojo.Outcome;
 import workflow.model.Outgoing;
 
 public interface IOutgoingDomain {
-    void compose();
+    void compose(User user);
 
-    void fillFromDto(Outgoing dto);
+    void fillFromDto(User user, Outgoing dto);
 
     Outcome getOutcome();
 }
