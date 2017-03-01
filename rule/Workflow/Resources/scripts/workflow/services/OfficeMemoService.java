@@ -79,7 +79,7 @@ public class OfficeMemoService extends RestProvider {
             if (isNew) {
                 entity = new OfficeMemo();
                 omd = new OfficeMemoDomain(entity);
-                omd.composeOfficeMemo((User) ses.getUser(), employeeDAO.findByUser(ses.getUser()));
+                omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(ses.getUser()));
             } else {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
                 entity = officeMemoDAO.findById(id);

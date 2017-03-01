@@ -6,7 +6,7 @@ import staff.model.Employee;
 import workflow.model.OfficeMemo;
 
 public interface IOfficeMemoDomain {
-    void composeOfficeMemo(User user, Employee appliedAuthor);
+    void composeNew(User user, Employee appliedAuthor);
 
     void fillFromDto(Employee author, OfficeMemo dto);
 

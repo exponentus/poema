@@ -73,7 +73,7 @@ public class OutgoingService extends RestProvider {
             if (isNew) {
                 entity = new Outgoing();
                 outDomain = new OutgoingDomain(entity);
-                outDomain.compose((User) ses.getUser());
+                outDomain.composeNew((User) ses.getUser());
             } else {
                 OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
                 entity = outgoingDAO.findById(id);

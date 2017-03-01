@@ -111,7 +111,7 @@ public class ProjectService extends RestProvider {
             } else {
                 project = new Project();
                 projectDomain = new ProjectDomain(project);
-                projectDomain.composeProject((User) session.getUser());
+                projectDomain.composeNew((User) session.getUser());
 
 //                String fsId = formData.getFormSesId();
 //                List<String> formFiles = null;

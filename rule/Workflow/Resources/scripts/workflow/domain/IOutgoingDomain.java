@@ -5,7 +5,7 @@ import com.exponentus.rest.outgoingpojo.Outcome;
 import workflow.model.Outgoing;
 
 public interface IOutgoingDomain {
-    void compose(User user);
+    void composeNew(User user);
 
     void fillFromDto(User user, Outgoing dto);
 

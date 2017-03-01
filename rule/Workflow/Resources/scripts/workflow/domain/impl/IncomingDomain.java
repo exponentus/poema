@@ -17,7 +17,11 @@ public class IncomingDomain implements IIncomingDomain {
     }
 
     @Override
-    public void compose(User user) {
+    public void composeNew(User user) {
+        if (!entity.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         entity.setAuthor(user);
         entity.setAppliedRegDate(new Date());
     }

@@ -152,7 +152,7 @@ public class TaskService extends RestProvider {
 
                 task = new Task();
                 taskDomain = new TaskDomain(task);
-                taskDomain.composeTask((User) user, project, parentTask, taskType, initiative, 10);
+                taskDomain.composeNew((User) user, project, parentTask, taskType, initiative, 10);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);

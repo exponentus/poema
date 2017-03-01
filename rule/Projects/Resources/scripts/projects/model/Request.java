@@ -49,10 +49,11 @@ public class Request extends SecureHierarchicalEntity<UUID> {
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "request_attachments", joinColumns = {@JoinColumn(name = "request_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id")}, indexes = {
-            @Index(columnList = "request_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "request_id", "attachment_id"}))
+    @JoinTable(name = "request_attachments",
+            joinColumns = {@JoinColumn(name = "request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "request_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
@@ -77,11 +78,6 @@ public class Request extends SecureHierarchicalEntity<UUID> {
             }
         }
     }
-
-    //@Override
-//    public long getAuthorId() {
-//        return author;
-//    }
 
     @JsonIgnore
     public Task getTask() {

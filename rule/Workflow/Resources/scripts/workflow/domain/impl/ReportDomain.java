@@ -18,7 +18,11 @@ public class ReportDomain implements IReportDomain {
     }
 
     @Override
-    public void compose(Employee author, Assignment parent) {
+    public void composeNew(Employee author, Assignment parent) {
+        if (!entity.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
         entity.setAppliedRegDate(new Date());

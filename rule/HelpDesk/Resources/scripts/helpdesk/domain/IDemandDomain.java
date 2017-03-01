@@ -7,13 +7,11 @@ import helpdesk.model.constants.DemandStatusType;
 import reference.model.DemandType;
 
 public interface IDemandDomain {
-    void composeDemand(User user, DemandType demandType);
+    void composeNew(User user, DemandType demandType);
 
     void fillFromDto(Demand dto);
 
     void changeStatus(DemandStatusType status);
-
-    void calculateStatus();
 
     Outcome getOutcome();
 }

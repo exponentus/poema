@@ -20,7 +20,11 @@ public class ProjectDomain implements IProjectDomain {
     }
 
     @Override
-    public void composeProject(User author) {
+    public void composeNew(User author) {
+        if (!project.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         project.setAuthor(author);
         project.setComment("");
         project.setStatus(ProjectStatusType.DRAFT);

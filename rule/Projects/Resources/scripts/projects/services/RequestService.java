@@ -65,7 +65,7 @@ public class RequestService extends RestProvider {
                 request = new Request();
                 requestDomain = new RequestDomain(request);
 
-                requestDomain.composeRequest((User) session.getUser(), taskDAO.findById(taskId));
+                requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
             }
 
             Map<Long, Employee> emps = new HashMap<>();

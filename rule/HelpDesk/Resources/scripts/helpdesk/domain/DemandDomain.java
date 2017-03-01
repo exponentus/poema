@@ -7,6 +7,8 @@ import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import reference.model.DemandType;
 
+import java.util.Date;
+
 public class DemandDomain implements IDemandDomain {
 
     private Demand demand;
@@ -16,7 +18,11 @@ public class DemandDomain implements IDemandDomain {
     }
 
     @Override
-    public void composeDemand(User user, DemandType demandType) {
+    public void composeNew(User user, DemandType demandType) {
+        if (!demand.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         demand.setAuthor(user);
         demand.setTitle("");
         demand.setBody("");
@@ -43,12 +49,8 @@ public class DemandDomain implements IDemandDomain {
 
     @Override
     public void changeStatus(DemandStatusType status) {
-
-    }
-
-    @Override
-    public void calculateStatus() {
-
+        demand.setStatus(status);
+        demand.setStatusDate(new Date());
     }
 
     @Override

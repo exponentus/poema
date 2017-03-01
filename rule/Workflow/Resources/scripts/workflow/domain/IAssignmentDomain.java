@@ -6,7 +6,7 @@ import workflow.model.Assignment;
 import workflow.model.Incoming;
 
 public interface IAssignmentDomain {
-    void compose(Employee author, Incoming incoming, Assignment parentAssignment);
+    void composeNew(Employee author, Incoming incoming, Assignment parentAssignment);
 
     void fillFromDto(Employee author, Assignment dto);
 

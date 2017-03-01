@@ -19,7 +19,7 @@ public interface ITaskDomain {
         NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
     }
 
-    void composeTask(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange);
+    void composeNew(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange);
 
     void fillFromDto(Task dto);
 

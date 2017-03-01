@@ -80,7 +80,7 @@ public class DemandService extends RestProvider {
                     Server.logger.errorLogEntry(e);
                 }
 
-                demandDomain.composeDemand((User) session.getUser(), demandType);
+                demandDomain.composeNew((User) session.getUser(), demandType);
             } else {
                 DemandDAO dao = new DemandDAO(session);
                 entity = dao.findById(id);

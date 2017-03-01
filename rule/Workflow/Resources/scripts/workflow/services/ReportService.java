@@ -47,7 +47,7 @@ public class ReportService extends RestProvider {
 
                 entity = new Report();
                 reportDomain = new ReportDomain(entity);
-                reportDomain.compose(employeeDAO.findByUser(ses.getUser()), aDAO.findById(assignmentId));
+                reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findById(assignmentId));
             } else {
                 ReportDAO reportDAO = new ReportDAO(ses);
                 entity = reportDAO.findById(id);

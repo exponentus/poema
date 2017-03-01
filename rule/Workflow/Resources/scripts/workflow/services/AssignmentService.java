@@ -60,7 +60,7 @@ public class AssignmentService extends RestProvider {
 
                 entity = new Assignment();
                 ad = new AssignmentDomain(entity);
-                ad.compose(employee, incoming, parent);
+                ad.composeNew(employee, incoming, parent);
             } else {
                 entity = assignmentDAO.findById(id);
                 ad = new AssignmentDomain(entity);

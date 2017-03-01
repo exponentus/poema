@@ -29,7 +29,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public void composeOfficeMemo(User user, Employee appliedAuthor) {
+    public void composeNew(User user, Employee appliedAuthor) {
+        if (!om.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         om.setAuthor(user);
         om.setAppliedRegDate(new Date());
         om.setAppliedAuthor(appliedAuthor);

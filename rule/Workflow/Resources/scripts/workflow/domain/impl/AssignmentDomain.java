@@ -19,7 +19,11 @@ public class AssignmentDomain implements IAssignmentDomain {
     }
 
     @Override
-    public void compose(Employee author, Incoming incoming, Assignment parent) {
+    public void composeNew(Employee author, Incoming incoming, Assignment parent) {
+        if (!entity.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
 

@@ -27,7 +27,7 @@ public class TaskDomain implements ITaskDomain {
     }
 
     @Override
-    public void composeTask(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange) {
+    public void composeNew(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange) {
         if (!task.isNew()) {
             throw new IllegalStateException("task_is_not_new");
         }

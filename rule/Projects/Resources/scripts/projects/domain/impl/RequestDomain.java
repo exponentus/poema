@@ -26,7 +26,11 @@ public class RequestDomain implements IRequestDomain {
     }
 
     @Override
-    public void composeRequest(User author, Task task) {
+    public void composeNew(User author, Task task) {
+        if (!request.isNew()) {
+            throw new IllegalStateException("entity_is_not_new");
+        }
+
         request.setAuthor(author);
         request.setTask(task);
     }

@@ -57,10 +57,11 @@ public class Demand extends SecureAppEntity<UUID> {
     private List<Tag> tags;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "demand_attachments", joinColumns = {@JoinColumn(name = "demand_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id")}, indexes = {
-            @Index(columnList = "demand_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "demand_id", "attachment_id"}))
+    @JoinTable(name = "demand_attachments",
+            joinColumns = {@JoinColumn(name = "demand_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "demand_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"demand_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
@@ -78,7 +79,6 @@ public class Demand extends SecureAppEntity<UUID> {
 
     public void setStatus(DemandStatusType status) {
         this.status = status;
-        statusDate = new Date();
     }
 
     public Date getStatusDate() {

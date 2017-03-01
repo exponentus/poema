@@ -7,7 +7,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 
 public interface IRequestDomain {
-    void composeRequest(User author, Task task);
+    void composeNew(User author, Task task);
 
     void fillFromDto(Request dto);
 

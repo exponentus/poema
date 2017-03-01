@@ -74,7 +74,7 @@ public class IncomingService extends RestProvider {
             if (isNew) {
                 entity = new Incoming();
                 inDomain = new IncomingDomain(entity);
-                inDomain.compose((User) ses.getUser());
+                inDomain.composeNew((User) ses.getUser());
             } else {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
                 entity = incomingDAO.findById(id);

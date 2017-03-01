@@ -67,10 +67,11 @@ public class Project extends SecureHierarchicalEntity<UUID> {
     private String comment;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "project_attachments", joinColumns = {@JoinColumn(name = "project_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id")}, indexes = {
-            @Index(columnList = "project_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "project_id", "attachment_id"}))
+    @JoinTable(name = "project_attachments",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "project_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
 
