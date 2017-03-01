@@ -84,6 +84,7 @@ public class ReportService extends RestProvider {
         ReportDomain reportDomain;
 
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             ReportDAO reportDAO = new ReportDAO(ses);
             boolean isNew = "new".equals(id);
 
@@ -96,6 +97,7 @@ public class ReportService extends RestProvider {
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
             reportDomain = new ReportDomain(entity);
+            reportDomain.fillFromDto(employeeDAO.findByUser(ses.getUser()), dto);
 
             if (isNew) {
                 IUser<Long> user = ses.getUser();
