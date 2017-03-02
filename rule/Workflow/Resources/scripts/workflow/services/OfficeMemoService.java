@@ -277,8 +277,8 @@ public class OfficeMemoService extends RestProvider {
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
         if (omd.employeeCanDoDecisionApproval(employeeDAO.findByUser(session.getUser()))) {
-            actionBar.addAction(new _Action("agree", "", "accept_approval_block"));
-            actionBar.addAction(new _Action("disagree", "", "decline_approval_block"));
+            actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 
         actionBar.addAction(new _Action("sign", "", "sign"));

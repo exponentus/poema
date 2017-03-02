@@ -41,13 +41,13 @@
         <entry lang="RUS">Подписать</entry>
         <entry lang="ENG">Sign</entry>
     </sentence>
-    <sentence mode="on" keyword="agree">
+    <sentence mode="on" keyword="accept">
         <entry lang="RUS">Согласен</entry>
-        <entry lang="ENG">Agree</entry>
+        <entry lang="ENG">Accept</entry>
     </sentence>
-    <sentence mode="on" keyword="disagree">
+    <sentence mode="on" keyword="decline">
         <entry lang="RUS">Не согласен</entry>
-        <entry lang="ENG">Disagree</entry>
+        <entry lang="ENG">Decline</entry>
     </sentence>
 
     <sentence mode="on" keyword="office_memo_plural">
