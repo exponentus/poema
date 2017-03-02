@@ -10,7 +10,7 @@
     <xsl:template name="layout">
         <xsl:text disable-output-escaping="yes">&lt;</xsl:text>!DOCTYPE html<xsl:text
             disable-output-escaping="yes">&gt;</xsl:text>
-        <html manifest="manifest.appcache?v=42">
+        <html manifest="manifest.appcache?v=43">
             <head>
                 <base href=""/>
                 <meta charset="utf-8"/>

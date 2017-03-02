@@ -1,8 +1,7 @@
 CACHE MANIFEST
-# version 42
+# version 43
 
 CACHE:
-p?id=index
 css/all.min.css
 img/favicon.png
 img/logo.png
