@@ -154,7 +154,7 @@
   "start_date" : "Start date",
   "my_tasks" : "My tasks",
   "authorization_was_failed" : "Authorization was failed",
-  "ft_search_return_null" : "Documnets have been not found, keyword",
+  "ft_search_return_null" : "Documents have been not found, keyword",
   "subtask" : "Subtask",
   "filter" : "Filter",
   "add_subtask" : "Add subtask",

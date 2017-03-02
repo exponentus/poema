@@ -135,7 +135,7 @@
   "start_date" : "Start date",
   "office_memo_plural" : "Officememo",
   "authorization_was_failed" : "Authorization was failed",
-  "ft_search_return_null" : "Documnets have been not found, keyword",
+  "ft_search_return_null" : "Documents have been not found, keyword",
   "filter" : "Filter",
   "organization" : "Organization",
   "report" : "Report",

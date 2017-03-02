@@ -151,7 +151,7 @@
   "notify_about_overdued_task" : "Notify about a expired task",
   "start_date" : "Start date",
   "authorization_was_failed" : "Authorization was failed",
-  "ft_search_return_null" : "Documnets have been not found, keyword",
+  "ft_search_return_null" : "Documents have been not found, keyword",
   "subtask" : "Subtask",
   "filter" : "Filter",
   "add_subtask" : "Add subtask",
