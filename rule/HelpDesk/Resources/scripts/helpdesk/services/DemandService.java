@@ -27,6 +27,7 @@ import reference.model.DemandType;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.UUID;
 
 @Path("demands")
 public class DemandService extends RestProvider {
@@ -98,10 +99,23 @@ public class DemandService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Demand dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Demand dto) {
+    public Response update(@PathParam("id") String id, Demand dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Demand dto) {
         _Session session = getSession();
 
         _Validation validation = validate(dto);
@@ -115,12 +129,10 @@ public class DemandService extends RestProvider {
             DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
             DemandDAO demandDAO = new DemandDAO(session);
 
-            boolean isNew = "new".equals(id);
-            if (isNew) {
+            if (dto.isNew()) {
                 demand = new Demand();
-                demand.setAuthor(session.getUser());
             } else {
-                demand = demandDAO.findById(id);
+                demand = demandDAO.findById(dto.getId());
             }
 
             DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
@@ -128,9 +140,9 @@ public class DemandService extends RestProvider {
             dto.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
 
             demandDomain = new DemandDomain(demand);
-            demandDomain.fillFromDto(dto);
+            demandDomain.fillFromDto((User) session.getUser(), dto);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 RegNum rn = new RegNum();
                 demand.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
                 demand = demandDAO.add(demand);

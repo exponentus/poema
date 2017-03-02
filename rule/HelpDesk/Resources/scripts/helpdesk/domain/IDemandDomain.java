@@ -9,7 +9,7 @@ import reference.model.DemandType;
 public interface IDemandDomain {
     void composeNew(User user, DemandType demandType);
 
-    void fillFromDto(Demand dto);
+    void fillFromDto(User user, Demand dto);
 
     void changeStatus(DemandStatusType status);
 

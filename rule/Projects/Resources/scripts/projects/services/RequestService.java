@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Path("requests")
 public class RequestService extends RestProvider {
@@ -83,16 +84,28 @@ public class RequestService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Request dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Request requestForm) {
+    public Response update(@PathParam("id") String id, Request dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
 
-        if (requestForm.getTask() == null || requestForm.getRequestType() == null) {
+    public Response save(Request requestDto) {
+        if (requestDto.getTask() == null || requestDto.getRequestType() == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("task or requestType empty").build();
         }
 
-        return addRequest(getSession(), requestForm);
+        return addRequest(getSession(), requestDto);
     }
 
     private Response addRequest(_Session session, Request requestDto) {

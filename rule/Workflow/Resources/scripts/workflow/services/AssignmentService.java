@@ -24,6 +24,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -84,10 +85,23 @@ public class AssignmentService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Assignment dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Assignment dto) {
+    public Response update(@PathParam("id") String id, Assignment dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Assignment dto) {
         _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -101,12 +115,11 @@ public class AssignmentService extends RestProvider {
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-            boolean isNew = "new".equals(id);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 entity = new Assignment();
             } else {
-                entity = assignmentDAO.findById(id);
+                entity = assignmentDAO.findById(dto.getId());
             }
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
@@ -114,7 +127,7 @@ public class AssignmentService extends RestProvider {
             domain = new AssignmentDomain(entity);
             domain.fillFromDto(employee, dto);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 entity = assignmentDAO.add(entity);
             } else {
                 entity = assignmentDAO.update(entity);

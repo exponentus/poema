@@ -24,6 +24,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -70,10 +71,23 @@ public class ReportService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Report dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Report dto) {
+    public Response update(@PathParam("id") String id, Report dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Report dto) {
         _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -86,12 +100,11 @@ public class ReportService extends RestProvider {
         try {
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             ReportDAO reportDAO = new ReportDAO(ses);
-            boolean isNew = "new".equals(id);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 entity = new Report();
             } else {
-                entity = reportDAO.findById(id);
+                entity = reportDAO.findById(dto.getId());
             }
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
@@ -99,7 +112,7 @@ public class ReportService extends RestProvider {
             reportDomain = new ReportDomain(entity);
             reportDomain.fillFromDto(employeeDAO.findByUser(ses.getUser()), dto);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 IUser<Long> user = ses.getUser();
                 entity = reportDAO.add(entity);
             } else {

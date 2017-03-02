@@ -30,10 +30,7 @@ import staff.model.Employee;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -167,10 +164,23 @@ public class ProjectService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Project dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Project dto) {
+    public Response update(@PathParam("id") String id, Project dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Project dto) {
         _Session session = getSession();
 
         _Validation validation = validate(session, dto);
@@ -182,12 +192,11 @@ public class ProjectService extends RestProvider {
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
             ProjectDomain projectDomain;
-            boolean isNew = "new".equals(id);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 project = new Project();
             } else {
-                project = dao.findById(id);
+                project = dao.findById(dto.getId());
 
                 if (project == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
@@ -199,7 +208,7 @@ public class ProjectService extends RestProvider {
             projectDomain = new ProjectDomain(project);
             projectDomain.fillFromDto(dto, (User) session.getUser());
 
-            if (isNew) {
+            if (dto.isNew()) {
                 project = dao.add(project);
                 new Messages(getAppEnv()).sendOfNewProject(project);
             } else {

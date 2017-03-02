@@ -104,7 +104,7 @@ public class OfficeMemoService extends RestProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(OfficeMemo dto) {
         dto.setId(null);
-        return save(null, dto);
+        return save(dto);
     }
 
     @PUT
@@ -113,10 +113,10 @@ public class OfficeMemoService extends RestProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, OfficeMemo dto) {
         dto.setId(UUID.fromString(id));
-        return save(id, dto);
+        return save(dto);
     }
 
-    public Response save(String id, OfficeMemo dto) {
+    public Response save(OfficeMemo dto) {
         _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -127,12 +127,11 @@ public class OfficeMemoService extends RestProvider {
             EmployeeDAO empDao = new EmployeeDAO(ses);
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
             OfficeMemo entity;
-            boolean isNew = (id == null);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 entity = new OfficeMemo();
             } else {
-                entity = officeMemoDAO.findById(id);
+                entity = officeMemoDAO.findById(dto.getId());
             }
 
             dto.setAppliedAuthor(empDao.findById(dto.getAppliedAuthor().getId()));
@@ -141,7 +140,7 @@ public class OfficeMemoService extends RestProvider {
             OfficeMemoDomain omd = new OfficeMemoDomain(entity);
             omd.fillFromDto(empDao.findByUser(ses.getUser()), dto);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
                 entity = officeMemoDAO.add(entity, rn);

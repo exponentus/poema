@@ -31,7 +31,7 @@ public class DemandDomain implements IDemandDomain {
     }
 
     @Override
-    public void fillFromDto(Demand dto) {
+    public void fillFromDto(User user, Demand dto) {
         demand.setStatus(dto.getStatus());
         demand.setStatusDate(dto.getStatusDate());
         demand.setTitle(dto.getTitle());
@@ -43,6 +43,7 @@ public class DemandDomain implements IDemandDomain {
         demand.setProject(dto.getProject());
 
         if (demand.isNew()) {
+            demand.setAuthor(user);
             demand.addReaderEditor(demand.getAuthor());
         }
     }

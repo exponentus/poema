@@ -185,10 +185,23 @@ public class TaskService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Task dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Task taskDto) {
+    public Response update(@PathParam("id") String id, Task dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Task taskDto) {
         _Validation validation = validate(taskDto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -199,9 +212,8 @@ public class TaskService extends RestProvider {
             TaskDAO taskDAO = new TaskDAO(session);
             Task task;
             TaskType taskType;
-            boolean isNew = "new".equals(id);
 
-            if (isNew) {
+            if (taskDto.isNew()) {
                 task = new Task();
                 taskDto.setAuthor(session.getUser());
 
@@ -209,7 +221,7 @@ public class TaskService extends RestProvider {
                     taskDto.setParent(taskDAO.findById(taskDto.getParent().getId()));
                 }
             } else {
-                task = taskDAO.findById(id);
+                task = taskDAO.findById(taskDto.getId());
             }
 
             taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
@@ -217,7 +229,7 @@ public class TaskService extends RestProvider {
             TaskDomain taskDomain = new TaskDomain(task);
             taskDomain.fillFromDto(taskDto);
 
-            if (isNew) {
+            if (taskDto.isNew()) {
                 RegNum rn = new com.exponentus.runtimeobj.RegNum();
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
@@ -227,7 +239,7 @@ public class TaskService extends RestProvider {
                 task = taskDAO.update(task);
             }
 
-            if (isNew && task.getStatus() == TaskStatusType.OPEN) {
+            if (taskDto.isNew() && task.getStatus() == TaskStatusType.OPEN) {
                 new Messages(getAppEnv()).sendToAssignee(task);
             }
 

@@ -91,10 +91,23 @@ public class OutgoingService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Outgoing dto) {
+        dto.setId(null);
+        return save(dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, Outgoing dto) {
+    public Response update(@PathParam("id") String id, Outgoing dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
+
+    public Response save(Outgoing dto) {
         _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -106,11 +119,10 @@ public class OutgoingService extends RestProvider {
         try {
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
-            boolean isNew = "new".equals(id);
-            if (isNew) {
+            if (dto.isNew()) {
                 entity = new Outgoing();
             } else {
-                entity = outgoingDAO.findById(id);
+                entity = outgoingDAO.findById(dto.getId());
             }
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
@@ -118,7 +130,7 @@ public class OutgoingService extends RestProvider {
             outDomain = new OutgoingDomain(entity);
             outDomain.fillFromDto((User) ses.getUser(), dto);
 
-            if (isNew) {
+            if (dto.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
                 entity = outgoingDAO.add(entity);
