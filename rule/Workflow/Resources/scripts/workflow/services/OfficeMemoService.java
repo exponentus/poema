@@ -100,10 +100,23 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(OfficeMemo dto) {
+        dto.setId(null);
+        return save(null, dto);
+    }
+
+    @PUT
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(@PathParam("id") String id, OfficeMemo dto) {
+    public Response update(@PathParam("id") String id, OfficeMemo dto) {
+        dto.setId(UUID.fromString(id));
+        return save(id, dto);
+    }
+
+    public Response save(String id, OfficeMemo dto) {
         _Validation validation = validate(dto);
         if (validation.hasError()) {
             return responseValidationError(validation);
@@ -114,11 +127,10 @@ public class OfficeMemoService extends RestProvider {
             EmployeeDAO empDao = new EmployeeDAO(ses);
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
             OfficeMemo entity;
+            boolean isNew = (id == null);
 
-            boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = new OfficeMemo();
-                entity.setAuthor(ses.getUser());
             } else {
                 entity = officeMemoDAO.findById(id);
             }
@@ -189,6 +201,7 @@ public class OfficeMemoService extends RestProvider {
             Outcome outcome = omd.getOutcome();
             outcome.setTitle("approving_started");
             outcome.setMessage("approving_started");
+            outcome.addPayload("result", "approving_started");
 
             return Response.ok(outcome).build();
         } catch (DAOException | SecureException e) {

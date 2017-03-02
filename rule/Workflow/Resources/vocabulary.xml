@@ -41,6 +41,14 @@
         <entry lang="RUS">Подписать</entry>
         <entry lang="ENG">Sign</entry>
     </sentence>
+    <sentence mode="on" keyword="agree">
+        <entry lang="RUS">Согласен</entry>
+        <entry lang="ENG">Agree</entry>
+    </sentence>
+    <sentence mode="on" keyword="disagree">
+        <entry lang="RUS">Не согласен</entry>
+        <entry lang="ENG">Disagree</entry>
+    </sentence>
 
     <sentence mode="on" keyword="office_memo_plural">
         <entry lang="RUS">Служебные записки</entry>
@@ -160,6 +168,16 @@
         <entry lang="RUS">Блок согласования</entry>
         <entry lang="ENG">Approval block</entry>
     </sentence>
+
+    <sentence mode="on" keyword="approval_block_accepted">
+        <entry lang="RUS">Блок согласования принят</entry>
+        <entry lang="ENG">Approval block accepted</entry>
+    </sentence>
+    <sentence mode="on" keyword="approval_block_declined">
+        <entry lang="RUS">Блок согласования отклонен</entry>
+        <entry lang="ENG">Approval block declined</entry>
+    </sentence>
+
     <sentence mode="on" keyword="add_approver">
         <entry lang="RUS">Добавить согласующего</entry>
         <entry lang="ENG">Add approver</entry>
