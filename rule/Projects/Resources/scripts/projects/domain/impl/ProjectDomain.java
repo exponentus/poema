@@ -68,6 +68,11 @@ public class ProjectDomain implements IProjectDomain {
     }
 
     @Override
+    public boolean projectCanBeDeleted() {
+        return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
+    }
+
+    @Override
     public Outcome getOutcome() {
         Outcome outcome = new Outcome();
 

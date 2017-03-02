@@ -11,5 +11,7 @@ public interface IProjectDomain {
 
     void calculateReaders();
 
+    boolean projectCanBeDeleted();
+
     Outcome getOutcome();
 }

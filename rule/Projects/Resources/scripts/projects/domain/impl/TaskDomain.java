@@ -220,7 +220,7 @@ public class TaskDomain implements ITaskDomain {
 
     @Override
     public boolean taskCanBeDeleted() {
-        return !task.isNew() && task.isEditable();
+        return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.DRAFT);
     }
 
     @Override

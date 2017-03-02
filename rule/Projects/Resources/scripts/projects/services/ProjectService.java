@@ -158,7 +158,7 @@ public class ProjectService extends RestProvider {
             Outcome outcome = projectDomain.getOutcome();
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(session, project));
+            outcome.addPayload(getActionBar(session, project, projectDomain));
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -246,12 +246,12 @@ public class ProjectService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Project project) {
+    private _ActionBar getActionBar(_Session session, Project project, ProjectDomain projectDomain) {
         _ActionBar actionBar = new _ActionBar(session);
         if (project.isEditable()) {
-            actionBar.addAction(new _Action("", "", _ActionType.SAVE_AND_CLOSE));
-            if (!project.isNew()) {
-                actionBar.addAction(new _Action("", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+            if (projectDomain.projectCanBeDeleted()) {
+                actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
             }
         }
         return actionBar;
