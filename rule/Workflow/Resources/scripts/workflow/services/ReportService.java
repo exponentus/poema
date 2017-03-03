@@ -88,16 +88,13 @@ public class ReportService extends RestProvider {
     }
 
     public Response save(Report dto) {
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session ses = getSession();
         Report entity;
         ReportDomain reportDomain;
 
         try {
+            validate(dto);
+
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             ReportDAO reportDAO = new ReportDAO(ses);
 
@@ -122,6 +119,8 @@ public class ReportService extends RestProvider {
             return Response.ok(reportDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -169,14 +168,14 @@ public class ReportService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Report entity) {
+    private void validate(Report entity) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override

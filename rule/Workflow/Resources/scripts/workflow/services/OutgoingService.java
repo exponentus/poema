@@ -108,15 +108,13 @@ public class OutgoingService extends RestProvider {
     }
 
     public Response save(Outgoing dto) {
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session ses = getSession();
         Outgoing entity;
         OutgoingDomain outDomain;
+
         try {
+            validate(dto);
+
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
             if (dto.isNew()) {
@@ -144,6 +142,8 @@ public class OutgoingService extends RestProvider {
             return Response.ok(outDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -191,14 +191,14 @@ public class OutgoingService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Outgoing outgoingForm) {
+    private void validate(Outgoing outgoingForm) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (outgoingForm.getTitle() == null || outgoingForm.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override

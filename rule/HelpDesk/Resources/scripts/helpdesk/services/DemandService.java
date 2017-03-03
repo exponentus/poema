@@ -117,15 +117,12 @@ public class DemandService extends RestProvider {
 
     public Response save(Demand dto) {
         _Session session = getSession();
-
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         Demand demand;
         DemandDomain demandDomain;
+
         try {
+            validate(dto);
+
             DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
             DemandDAO demandDAO = new DemandDAO(session);
 
@@ -155,6 +152,8 @@ public class DemandService extends RestProvider {
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -203,7 +202,7 @@ public class DemandService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Demand demand) {
+    private void validate(Demand demand) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
@@ -213,7 +212,7 @@ public class DemandService extends RestProvider {
             ve.addError("demandType", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override

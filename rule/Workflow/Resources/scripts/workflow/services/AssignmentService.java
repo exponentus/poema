@@ -102,16 +102,13 @@ public class AssignmentService extends RestProvider {
     }
 
     public Response save(Assignment dto) {
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session ses = getSession();
         Assignment entity;
         AssignmentDomain domain;
 
         try {
+            validate(dto);
+
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
@@ -136,6 +133,8 @@ public class AssignmentService extends RestProvider {
             return Response.ok(domain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -191,7 +190,7 @@ public class AssignmentService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Assignment assignment) {
+    private void validate(Assignment assignment) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
@@ -210,7 +209,7 @@ public class AssignmentService extends RestProvider {
             ve.addError("control.assigneeEntries", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override

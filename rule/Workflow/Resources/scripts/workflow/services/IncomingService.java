@@ -109,16 +109,13 @@ public class IncomingService extends RestProvider {
     }
 
     public Response save(Incoming dto) {
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session ses = getSession();
         Incoming entity;
         IncomingDomain inDomain;
 
         try {
+            validate(dto);
+
             IncomingDAO incomingDAO = new IncomingDAO(ses);
 
             if (dto.isNew()) {
@@ -146,6 +143,8 @@ public class IncomingService extends RestProvider {
             return Response.ok(inDomain.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -203,7 +202,7 @@ public class IncomingService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Incoming model) {
+    private void validate(Incoming model) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (model.getTitle() == null || model.getTitle().isEmpty()) {
@@ -228,7 +227,7 @@ public class IncomingService extends RestProvider {
             ve.addError("docType", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override

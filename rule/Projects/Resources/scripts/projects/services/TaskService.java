@@ -192,13 +192,11 @@ public class TaskService extends RestProvider {
     }
 
     public Response save(Task taskDto) {
-        _Validation validation = validate(taskDto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session session = getSession();
+
         try {
+            validate(taskDto);
+
             TaskDAO taskDAO = new TaskDAO(session);
             Task task;
             TaskType taskType;
@@ -236,6 +234,8 @@ public class TaskService extends RestProvider {
             return Response.ok((new TaskDomain(taskDAO.findById(task.getId()))).getOutcome()).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         } catch (Exception e) {
             return responseException(e);
         }
@@ -373,7 +373,7 @@ public class TaskService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(Task task) {
+    private void validate(Task task) throws _Validation.VException {
         _Validation ve = new _Validation();
         UserDAO userDAO = new UserDAO(getSession());
 
@@ -416,7 +416,7 @@ public class TaskService extends RestProvider {
             }
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     public static TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {

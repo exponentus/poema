@@ -117,13 +117,11 @@ public class OfficeMemoService extends RestProvider {
     }
 
     public Response save(OfficeMemo dto) {
-        _Validation validation = validate(dto);
-        if (validation.hasError()) {
-            return responseValidationError(validation);
-        }
-
         _Session ses = getSession();
+
         try {
+            validate(dto);
+
             EmployeeDAO empDao = new EmployeeDAO(ses);
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
             OfficeMemo entity;
@@ -151,6 +149,8 @@ public class OfficeMemoService extends RestProvider {
             return Response.ok(omd.getOutcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
         }
     }
 
@@ -289,7 +289,7 @@ public class OfficeMemoService extends RestProvider {
         return actionBar;
     }
 
-    private _Validation validate(OfficeMemo entity) {
+    private void validate(OfficeMemo entity) throws _Validation.VException {
         _Validation ve = new _Validation();
 
         if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
@@ -302,7 +302,7 @@ public class OfficeMemoService extends RestProvider {
             ve.addError("recipient", "required", "field_is_empty");
         }
 
-        return ve;
+        ve.assertValid();
     }
 
     @Override
