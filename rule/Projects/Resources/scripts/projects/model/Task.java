@@ -117,6 +117,7 @@ public class Task extends SecureHierarchicalEntity<UUID> {
     private List<IAppEntity> responses;
 
     public Task() {
+        super();
     }
 
     // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String,

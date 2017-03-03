@@ -12,7 +12,6 @@ import projects.model.constants.ProjectStatusType;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,19 +46,6 @@ public class ProjectDAO extends DAO<Project, UUID> {
                 conditionCount = cb.and(cb.equal(countRoot.get("status"), status), conditionCount);
             }
 
-            List<Order> orderBy = new ArrayList<>();
-            if (sortParams != null && !sortParams.isEmpty()) {
-                sortParams.values().forEach((fieldName, direction) -> {
-                    if (direction.isAscending()) {
-                        orderBy.add(cb.asc(root.get(fieldName)));
-                    } else {
-                        orderBy.add(cb.desc(root.get(fieldName)));
-                    }
-                });
-            } else {
-                orderBy.add(cb.desc(root.get("regDate")));
-            }
-
             cq.select(cb.construct(
                     Project.class,
                     root.get("id"),
@@ -73,7 +59,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
                     root.get("finishDate"),
                     cb.count(atts)))
                     .groupBy(root, root.get("customer").get("name"))
-                    .orderBy(orderBy);
+                    .orderBy(collectSortOrder(cb, root, sortParams));
 
             countRootCq.select(cb.count(countRoot));
 

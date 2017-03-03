@@ -30,7 +30,8 @@ import staff.model.Employee;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -97,6 +98,7 @@ public class ProjectService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         try {
+            EmployeeDAO empDao = new EmployeeDAO(session);
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
             ProjectDomain projectDomain;
@@ -109,48 +111,10 @@ public class ProjectService extends RestProvider {
                 project = new Project();
                 projectDomain = new ProjectDomain(project);
                 projectDomain.composeNew((User) session.getUser());
-
-//                String fsId = formData.getFormSesId();
-//                List<String> formFiles = null;
-//                Object obj = session.getAttribute(fsId);
-//                if (obj == null) {
-//                    formFiles = new ArrayList<>();
-//                } else {
-//                    _FormAttachments fAtts = (_FormAttachments) obj;
-//                    formFiles = fAtts.getFiles().stream().map(TempFile::getRealFileName).collect(Collectors.toList());
-//                }
-
-//                List<IPOJOObject> filesToPublish = new ArrayList<>();
-//
-//                for (String fn : formFiles) {
-//                    UploadedFile uf = (UploadedFile) session.getAttribute(fsId + "_file" + fn);
-//                    if (uf == null) {
-//                        uf = new UploadedFile();
-//                        uf.setName(fn);
-//                        session.setAttribute(fsId + "_file" + fn, uf);
-//                    }
-//                    filesToPublish.add(uf);
-//                }
-//                // addContent(new _POJOListWrapper<>(filesToPublish, session));
-//                outcome.addPayload("filesToPublish", filesToPublish);
             }
 
-            EmployeeDAO empDao = new EmployeeDAO(session);
-            Map<Long, Employee> emps = new HashMap<>();
-            List<Long> empIds = new ArrayList<>();
-            empIds.add(project.getManager());
-            empIds.add(project.getProgrammer());
-            empIds.add(project.getTester());
-            empIds.add(project.getAuthor().getId());
-            if (project.getObservers() != null) {
-                empIds.addAll(project.getObservers());
-            }
-            if (project.getRepresentatives() != null) {
-                empIds.addAll(project.getRepresentatives());
-            }
-            for (Employee e : empDao.findAllByUserIds(empIds)) {
-                emps.put(e.getUserID(), e);
-            }
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = projectDomain.getOutcome();
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());

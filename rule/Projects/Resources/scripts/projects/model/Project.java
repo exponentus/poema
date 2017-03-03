@@ -76,6 +76,7 @@ public class Project extends SecureHierarchicalEntity<UUID> {
     private List<Attachment> attachments = new ArrayList<>();
 
     public Project() {
+        super();
     }
 
     // Constructor for view
@@ -85,19 +86,17 @@ public class Project extends SecureHierarchicalEntity<UUID> {
         this.regDate = regDate;
         this.name = name;
         this.status = status;
-        //
+
         this.customer = new Organization();
         this.customer.setName(customer);
-        //
+
         this.manager = manager;
         this.programmer = programmer;
         this.tester = tester;
         this.finishDate = finishDate;
         if (countAtt > 0) {
             this.attachments = new ArrayList<>();
-            for (int i = 0; i < countAtt; i++) {
-                this.attachments.add(new Attachment());
-            }
+            this.attachments.add(new Attachment());
         }
     }
 

@@ -142,19 +142,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (sortParams != null && !sortParams.isEmpty()) {
-                List<Order> orderBy = new ArrayList<>();
-                sortParams.values().forEach((fieldName, direction) -> {
-                    if (direction.isAscending()) {
-                        orderBy.add(cb.asc(taskRoot.get(fieldName)));
-                    } else {
-                        orderBy.add(cb.desc(taskRoot.get(fieldName)));
-                    }
-                });
-                cq.orderBy(orderBy);
-            }
-
-            cq.select(taskRoot).distinct(true);
+            cq.select(taskRoot).distinct(true).orderBy(collectSortOrder(cb, taskRoot, sortParams));
             countCq.select(cb.countDistinct(taskRoot));
 
             if (condition != null) {
