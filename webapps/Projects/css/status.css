@@ -81,11 +81,14 @@ Pending = Orange
 
 .status-col-mobile .vp__list_it_val_text {
     border-radius: 2px;
+    display: block;
     height: 80%;
+    overflow: hidden;
     position: absolute;
     text-indent: 50px;
     top: 10%;
     left: 0;
+    white-space: nowrap;
     width: 4px;
 }
 

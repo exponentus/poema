@@ -120,14 +120,7 @@ public class TaskService extends RestProvider {
             Task task;
             TaskDomain taskDomain;
 
-            if (!isNew) {
-                task = taskDAO.findById(id);
-                if (task == null) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                }
-
-                taskDomain = new TaskDomain(task);
-            } else {
+            if (isNew) {
                 Project project = null;
                 Task parentTask = null;
 
@@ -153,21 +146,18 @@ public class TaskService extends RestProvider {
                 task = new Task();
                 taskDomain = new TaskDomain(task);
                 taskDomain.composeNew((User) user, project, parentTask, taskType, initiative, 10);
+            } else {
+                task = taskDAO.findById(id);
+                if (task == null) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                }
+
+                taskDomain = new TaskDomain(task);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);
-            Map<Long, Employee> emps = new HashMap<>();
-            List<Long> empIds = new ArrayList<>();
-            if (task.getAssignee() != null) {
-                empIds.add(task.getAssignee());
-            }
-            if (task.getObservers() != null) {
-                empIds.addAll(task.getObservers());
-            }
-            empIds.add(task.getAuthor().getId());
-            for (Employee e : empDao.findAllByUserIds(empIds)) {
-                emps.put(e.getUserID(), e);
-            }
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = taskDomain.getOutcome();
 

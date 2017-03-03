@@ -104,13 +104,17 @@ public class ProjectService extends RestProvider {
             ProjectDomain projectDomain;
             boolean isNew = "new".equals(id);
 
-            if (!isNew) {
-                project = dao.findById(id);
-                projectDomain = new ProjectDomain(project);
-            } else {
+            if (isNew) {
                 project = new Project();
                 projectDomain = new ProjectDomain(project);
                 projectDomain.composeNew((User) session.getUser());
+            } else {
+                project = dao.findById(id);
+                if (project == null) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                }
+
+                projectDomain = new ProjectDomain(project);
             }
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

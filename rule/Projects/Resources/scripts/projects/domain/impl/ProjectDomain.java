@@ -16,6 +16,10 @@ public class ProjectDomain implements IProjectDomain {
     private Project project;
 
     public ProjectDomain(Project project) {
+        if (project == null) {
+            throw new IllegalArgumentException("Error: project null");
+        }
+
         this.project = project;
     }
 

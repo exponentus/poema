@@ -52,21 +52,20 @@ public class RequestService extends RestProvider {
             RequestDomain requestDomain;
             EmployeeDAO empDao = new EmployeeDAO(session);
 
-            if (!isNew) {
+            if (isNew) {
+                String taskId = getWebFormData().getValueSilently("task");
+                TaskDAO taskDAO = new TaskDAO(session);
+
+                request = new Request();
+                requestDomain = new RequestDomain(request);
+                requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
+            } else {
                 request = requestDAO.findById(id);
                 if (request == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
                 requestDomain = new RequestDomain(request);
-            } else {
-                String taskId = getWebFormData().getValueSilently("task");
-                TaskDAO taskDAO = new TaskDAO(session);
-
-                request = new Request();
-                requestDomain = new RequestDomain(request);
-
-                requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
             }
 
             Map<Long, Employee> emps = new HashMap<>();
