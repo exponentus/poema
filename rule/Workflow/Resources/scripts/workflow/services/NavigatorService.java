@@ -8,26 +8,30 @@ import com.exponentus.scripting.outline._Outline;
 import com.exponentus.scripting.outline._OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 import java.util.LinkedList;
 
 @Path("navigator")
-public class NavService extends RestProvider {
+public class NavigatorService extends RestProvider {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getById(@PathParam("id") String id) {
+    public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline common_outline = new _Outline("workflow", "common");
-        common_outline.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos"));
-        common_outline.addEntry(new _OutlineEntry("incoming_documents", "", "incomings", "incomings"));
-        common_outline.addEntry(new _OutlineEntry("outgoing_documents", "", "outgoings", "outgoings"));
+        _Outline co = new _Outline("workflow", "common");
 
-        list.add(common_outline);
+        co.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos"));
+        co.addEntry(new _OutlineEntry("incoming_documents", "", "incomings", "incomings"));
+        co.addEntry(new _OutlineEntry("outgoing_documents", "", "outgoings", "outgoings"));
+
+        list.add(co);
 
         Outcome outcome = new Outcome();
         outcome.addPayload("nav", list);
