@@ -42,17 +42,29 @@ public class DemandService extends RestProvider {
         int pageSize = session.pageSize;
 
         try {
+            String slug = params.getValueSilently("slug");
+            String statusName = params.getValueSilently("status");
+            String demandTypeId = params.getValueSilently("demandType");
+
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             DemandFilter filter = new DemandFilter();
 
-            if (!getWebFormData().getValueSilently("status").isEmpty()) {
-                DemandStatusType status = DemandStatusType.valueOf(getWebFormData().getValueSilently("status"));
+            if (!statusName.isEmpty()) {
+                DemandStatusType status = DemandStatusType.valueOf(statusName);
                 filter.setStatus(status);
             }
-            if (!getWebFormData().getValueSilently("demandType").isEmpty()) {
+            if (!demandTypeId.isEmpty()) {
                 DemandType demandType = new DemandType();
-                demandType.setId(UUID.fromString(getWebFormData().getValueSilently("demandType")));
+                demandType.setId(UUID.fromString(demandTypeId));
                 filter.setDemandType(demandType);
+            } else if (!slug.isEmpty()) {
+                try {
+                    DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
+                    DemandType demandType = demandTypeDAO.findByName(slug);
+                    filter.setDemandType(demandType);
+                } catch (DAOException e) {
+                    Server.logger.errorLogEntry(e);
+                }
             }
 
             DemandDAO dao = new DemandDAO(session);
