@@ -33,7 +33,7 @@ public class NavigatorService extends RestProvider {
 
         _Outline co = new _Outline("", "common");
 
-        co.addEntry(new _OutlineEntry("demands_my", "", "demands/s/my", "demands/s/my"));
+        co.addEntry(new _OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", "demands/s/my"));
 
         try {
             _Session session = getSession();
@@ -41,13 +41,34 @@ public class NavigatorService extends RestProvider {
             DemandTypeDAO dtDAO = new DemandTypeDAO(session);
             List<DemandType> dts = dtDAO.findAll().getResult();
             for (DemandType dt : dts) {
-                co.addEntry(new _OutlineEntry(dt.getLocName(lang), "", "demands/s/" + dt.getName(), "demands/s/" + dt.getName()));
+                String icon;
+                switch (dt.getName()) {
+                    case "bug":
+                        icon = "fa fa-exclamation";
+                        break;
+                    case "coding":
+                        icon = "fa fa-code";
+                        break;
+                    case "recommendation":
+                        icon = "fa fa-lightbulb-o";
+                        break;
+                    case "wish":
+                        icon = "fa fa-heart-o";
+                        break;
+                    case "clarify":
+                        icon = "fa fa-question";
+                        break;
+                    default:
+                        icon = "";
+                        break;
+                }
+                co.addEntry(new _OutlineEntry(dt.getLocName(lang), "", icon, "demands/s/" + dt.getName(), "demands/s/" + dt.getName()));
             }
         } catch (DAOException e) {
             //
         }
 
-        co.addEntry(new _OutlineEntry("initiative_tasks", "", "tasks/s/initiative", "tasks/s/initiative"));
+        co.addEntry(new _OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", "tasks/s/initiative"));
         // co.addEntry(new _OutlineEntry("projects", "", "projects", "projects"));
 
         list.add(co);
