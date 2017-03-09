@@ -20,6 +20,8 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
+import helpdesk.dao.DemandDAO;
+import helpdesk.model.Demand;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
@@ -111,6 +113,7 @@ public class TaskService extends RestProvider {
         String fsId = formData.getFormSesId();
         String projectId = formData.getValueSilently("projectId");
         String parentTaskId = formData.getValueSilently("parentTaskId");
+        String demandId = formData.getValueSilently("demand");
         boolean initiative = formData.getBoolSilently("initiative");
         boolean isNew = "new".equals(id);
 
@@ -122,6 +125,7 @@ public class TaskService extends RestProvider {
 
             if (isNew) {
                 Project project = null;
+                Demand demand = null;
                 Task parentTask = null;
 
                 if (!parentTaskId.isEmpty()) {
@@ -135,6 +139,11 @@ public class TaskService extends RestProvider {
                     project = parentTask.getProject();
                 }
 
+                if (!demandId.isEmpty()) {
+                    DemandDAO demandDAO = new DemandDAO(session);
+                    demand = demandDAO.findById(demandId);
+                }
+
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 TaskType taskType = null;
                 try {
@@ -145,7 +154,7 @@ public class TaskService extends RestProvider {
 
                 task = new Task();
                 taskDomain = new TaskDomain(task);
-                taskDomain.composeNew((User) user, project, parentTask, taskType, initiative, 10);
+                taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
             } else {
                 task = taskDAO.findById(id);
                 if (task == null) {

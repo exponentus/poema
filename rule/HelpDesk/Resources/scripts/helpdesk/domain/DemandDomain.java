@@ -50,8 +50,14 @@ public class DemandDomain implements IDemandDomain {
 
     @Override
     public void changeStatus(DemandStatusType status) {
+        // DRAFT(566), PROCESSING(567), COMPLETED(568), CANCELLED(569), OPEN(570);
         demand.setStatus(status);
         demand.setStatusDate(new Date());
+    }
+
+    @Override
+    public void registerTask() {
+
     }
 
     @Override

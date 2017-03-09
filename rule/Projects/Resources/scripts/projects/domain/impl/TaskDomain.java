@@ -3,6 +3,7 @@ package projects.domain.impl;
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.domain.ITaskDomain;
@@ -27,7 +28,7 @@ public class TaskDomain implements ITaskDomain {
     }
 
     @Override
-    public void composeNew(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange) {
+    public void composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative, int dueDateRange) {
         if (!task.isNew()) {
             throw new IllegalStateException("task_is_not_new");
         }
@@ -37,8 +38,14 @@ public class TaskDomain implements ITaskDomain {
         task.setTaskType(taskType);
         task.setStatus(TaskStatusType.OPEN);
         task.setProject(project);
-        if (project != null) {
-            task.setAssignee(project.getProgrammer());
+        task.setDemand(demand);
+
+        if (project == null && demand != null) {
+            task.setProject(demand.getProject());
+        }
+
+        if (task.getProject() != null) {
+            task.setAssignee(task.getProject().getProgrammer());
         }
 
         if (parentTask != null) {
@@ -52,8 +59,8 @@ public class TaskDomain implements ITaskDomain {
         } else {
             task.setStartDate(new Date());
             task.setDueDate(new LocalDate(task.getStartDate()).plusDays(dueDateRange).toDate());
-            if (project != null) {
-                task.setObservers(project.getObservers());
+            if (task.getProject() != null) {
+                task.setObservers(task.getProject().getObservers());
             }
         }
     }
@@ -104,12 +111,6 @@ public class TaskDomain implements ITaskDomain {
     @Override
     public void changeStatus(TaskStatusType status) {
         task.setStatus(status);
-//        if (status != TaskStatusType.OPEN || status != TaskStatusType.DRAFT) { // TODO ? что имелось ввиду
-//            task.resetEditors();
-//
-//        } else {
-//            task.addReaderEditor(task.getAuthor());
-//        }
         /*
         Если задача становится draft,  то перестает быть видной для исполнителей и обсерверов.
         Т.е. Ситуация автор вдруг понял,  что задание ещё не достаточно четко сформулировано или что-то изменилось в требованиях и т.д.

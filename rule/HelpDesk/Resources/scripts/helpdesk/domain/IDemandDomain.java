@@ -13,5 +13,7 @@ public interface IDemandDomain {
 
     void changeStatus(DemandStatusType status);
 
+    void registerTask();
+
     Outcome getOutcome();
 }

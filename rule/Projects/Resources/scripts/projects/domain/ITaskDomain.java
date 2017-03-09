@@ -2,6 +2,7 @@ package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.rest.outgoingpojo.Outcome;
+import helpdesk.model.Demand;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
@@ -19,7 +20,7 @@ public interface ITaskDomain {
         NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
     }
 
-    void composeNew(User user, Project project, Task parentTask, TaskType taskType, boolean initiative, int dueDateRange);
+    void composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative, int dueDateRange);
 
     void fillFromDto(Task dto);
 
