@@ -19,8 +19,10 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
 import helpdesk.dao.DemandDAO;
+import helpdesk.dao.filter.DemandFilter;
 import helpdesk.domain.DemandDomain;
 import helpdesk.model.Demand;
+import helpdesk.model.constants.DemandStatusType;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -41,8 +43,20 @@ public class DemandService extends RestProvider {
 
         try {
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+            DemandFilter filter = new DemandFilter();
+
+            if (!getWebFormData().getValueSilently("status").isEmpty()) {
+                DemandStatusType status = DemandStatusType.valueOf(getWebFormData().getValueSilently("status"));
+                filter.setStatus(status);
+            }
+            if (!getWebFormData().getValueSilently("demandType").isEmpty()) {
+                DemandType demandType = new DemandType();
+                demandType.setId(UUID.fromString(getWebFormData().getValueSilently("demandType")));
+                filter.setDemandType(demandType);
+            }
+
             DemandDAO dao = new DemandDAO(session);
-            ViewPage<Demand> vp = dao.findViewPage(sortParams, params.getPage(), pageSize);
+            ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             _Action newDocAction = new _Action("add_demand", "", "add_demand");

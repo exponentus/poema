@@ -74,8 +74,8 @@ public class TaskService extends RestProvider {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             String title;
-            String tasksFor = getWebFormData().getValueSilently("for");
-            switch (tasksFor) {
+            String slug = getWebFormData().getValueSilently("slug");
+            switch (slug) {
                 case "inbox":
                     title = "tasks_assigned_to_me";
                     break;
@@ -443,13 +443,19 @@ public class TaskService extends RestProvider {
             filter.setAssigneeUserId(assigneeUserId);
         }
 
-        String tasksFor = formData.getValueSilently("for");
-        if ("inbox".equals(tasksFor)) {
-            filter.setAssigneeUserId(session.getUser().getId());
-        } else if ("my".equals(tasksFor)) {
-            filter.setAuthor((User) session.getUser());
-        } else if ("initiative".equals(tasksFor)) {
-            filter.setInitiative(true);
+        String slug = formData.getValueSilently("slug");
+        switch (slug) {
+            case "inbox":
+                filter.setAssigneeUserId(session.getUser().getId());
+                break;
+            case "my":
+                filter.setAuthor((User) session.getUser());
+                break;
+            case "initiative":
+                filter.setInitiative(true);
+                break;
+            default:
+                break;
         }
 
         if (formData.containsField("tagIds")) {
