@@ -83,7 +83,7 @@ public class ProjectDomain implements IProjectDomain {
         if (project.isNew()) {
             outcome.setTitle("new_project");
         } else {
-            outcome.setTitle(project.getName());
+            outcome.setTitle("project");
         }
 
         outcome.addPayload(project);

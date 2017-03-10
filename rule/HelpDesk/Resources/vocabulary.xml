@@ -60,12 +60,6 @@
         <entry lang="POR">Demand</entry>
         <entry lang="SPA">Demand</entry>
     </sentence>
-    <sentence mode="on" keyword="send_demand">
-        <entry lang="RUS">Отправить заявку</entry>
-        <entry lang="ENG">Send demand</entry>
-        <entry lang="POR">Send demand</entry>
-        <entry lang="SPA">Send demand</entry>
-    </sentence>
     <sentence mode="on" keyword="demands_my">
         <entry lang="RUS">Мои заявки</entry>
         <entry lang="ENG">My demands</entry>
