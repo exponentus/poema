@@ -142,6 +142,8 @@ public class TaskService extends RestProvider {
                 if (!demandId.isEmpty()) {
                     DemandDAO demandDAO = new DemandDAO(session);
                     demand = demandDAO.findById(demandId);
+                } else if (parentTask != null) {
+                    demand = parentTask.getDemand();
                 }
 
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
@@ -206,6 +208,7 @@ public class TaskService extends RestProvider {
         try {
             validate(taskDto);
 
+            DemandDAO demandDAO = new DemandDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
             Task task;
             TaskType taskType;
@@ -221,6 +224,9 @@ public class TaskService extends RestProvider {
                 task = taskDAO.findById(taskDto.getId());
             }
 
+            if (taskDto.getDemand() != null) {
+                taskDto.setDemand(demandDAO.findById(taskDto.getDemand().getId()));
+            }
             taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
 
             TaskDomain taskDomain = new TaskDomain(task);

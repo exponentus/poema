@@ -38,7 +38,11 @@ public class TaskDomain implements ITaskDomain {
         task.setTaskType(taskType);
         task.setStatus(TaskStatusType.OPEN);
         task.setProject(project);
-        task.setDemand(demand);
+        if (demand != null) {
+            task.setDemand(demand);
+        } else if (task.getParent() != null) {
+            task.setDemand(task.getParent().getDemand());
+        }
 
         if (project == null && demand != null) {
             task.setProject(demand.getProject());
