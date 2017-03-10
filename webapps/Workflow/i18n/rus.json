@@ -5,6 +5,7 @@
   "assignee_user" : "Исполнитель",
   "password" : "Пароль",
   "not_null_violation" : "Значение должно быть не null",
+  "messaging_type" : "Messaging type",
   "draft" : "Черновик",
   "attach_file" : "Прикрепить файл",
   "edit" : "Редактирование",
@@ -64,7 +65,7 @@
   "district" : "Район",
   "outgoing_document" : "Исходящий документ",
   "name" : "Наименование",
-  "page" : "страница",
+  "page" : "Страница",
   "region" : "Область",
   "incoming_documents" : "Входящие документы",
   "outgoing" : "Исходящий",
@@ -192,6 +193,7 @@
   "save_close" : "Сохранить и закрыть",
   "doc_subject" : "Характер документа",
   "category" : "Категория",
+  "user" : "Пользователь",
   "properties" : "Свойства",
   "sender_applied_reg_date" : "Дата исходящего"
 }

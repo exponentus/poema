@@ -5,6 +5,7 @@
   "assignee_user" : "assignee_user",
   "password" : "password",
   "not_null_violation" : "a value cannot be null",
+  "messaging_type" : "messaging_type",
   "draft" : "draft",
   "attach_file" : "attach_file",
   "edit" : "edit",
@@ -64,7 +65,7 @@
   "district" : "district",
   "outgoing_document" : "outgoing_document",
   "name" : "name",
-  "page" : "page",
+  "page" : "Page",
   "region" : "region",
   "incoming_documents" : "incoming_documents",
   "outgoing" : "outgoing",
@@ -192,6 +193,7 @@
   "save_close" : "save_close",
   "doc_subject" : "doc_subject",
   "category" : "category",
+  "user" : "user",
   "properties" : "properties",
   "sender_applied_reg_date" : "sender_applied_reg_date"
 }

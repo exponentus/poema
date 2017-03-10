@@ -5,6 +5,7 @@
   "assignee_user" : "Assignee",
   "password" : "Password",
   "not_null_violation" : "a value cannot be null",
+  "messaging_type" : "Messaging type",
   "draft" : "Draft",
   "attach_file" : "Attach file",
   "edit" : "Editing",
@@ -64,7 +65,7 @@
   "district" : "District",
   "outgoing_document" : "Outgoing document",
   "name" : "Name",
-  "page" : "page",
+  "page" : "Page",
   "region" : "Region",
   "incoming_documents" : "Incoming documents",
   "outgoing" : "Outgoing",
@@ -123,7 +124,7 @@
   "short_name" : "Short name",
   "status" : "Status",
   "validation_error" : "Validation error",
-  "is_hidden" : "Is hidden",
+  "is_hidden" : "Hidden",
   "save" : "Save",
   "user_profile" : "View the properties current user",
   "iin" : "IIN",
@@ -192,6 +193,7 @@
   "save_close" : "Save and close",
   "doc_subject" : "Document subject",
   "category" : "Category",
+  "user" : "User",
   "properties" : "Properties",
   "sender_applied_reg_date" : "Date"
 }

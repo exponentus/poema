@@ -5,6 +5,7 @@
   "assignee_user" : "Исполнитель",
   "password" : "Пароль",
   "not_null_violation" : "Значение должно быть не null",
+  "messaging_type" : "Messaging type",
   "draft" : "Черновик",
   "attach_file" : "Прикрепить файл",
   "new_request" : "Запрос",
@@ -71,7 +72,7 @@
   "related_documents" : "Связанные документы",
   "district" : "Район",
   "name" : "Название",
-  "page" : "страница",
+  "page" : "Страница",
   "region" : "Область",
   "color" : "Цвет",
   "waiting" : "Ожидание срока",
@@ -221,6 +222,7 @@
   "save_close" : "Сохранить и закрыть",
   "notify_about_cancel_task" : "Уведомление о отмене задания",
   "category" : "Категория",
+  "user" : "Пользователь",
   "properties" : "Свойства",
   "customer" : "Заказчик"
 }

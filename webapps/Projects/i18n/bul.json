@@ -5,6 +5,7 @@
   "assignee_user" : "assignee_user",
   "password" : "password",
   "not_null_violation" : "a value cannot be null",
+  "messaging_type" : "messaging_type",
   "draft" : "draft",
   "attach_file" : "attach_file",
   "new_request" : "new_request",
@@ -71,7 +72,7 @@
   "related_documents" : "related_documents",
   "district" : "district",
   "name" : "name",
-  "page" : "page",
+  "page" : "Page",
   "region" : "region",
   "color" : "color",
   "waiting" : "waiting",
@@ -221,6 +222,7 @@
   "save_close" : "save_close",
   "notify_about_cancel_task" : "notify_about_cancel_task",
   "category" : "category",
+  "user" : "user",
   "properties" : "properties",
   "customer" : "customer"
 }

@@ -5,6 +5,7 @@
   "assignee_user" : "Executante",
   "password" : "password",
   "not_null_violation" : "a value cannot be null",
+  "messaging_type" : "messaging_type",
   "draft" : "Rascunho",
   "attach_file" : "attach_file",
   "new_request" : "Pedido",
@@ -71,7 +72,7 @@
   "related_documents" : "Execução",
   "district" : "district",
   "name" : "Nome",
-  "page" : "page",
+  "page" : "Page",
   "region" : "region",
   "color" : "color",
   "waiting" : "À espera",
@@ -221,6 +222,7 @@
   "save_close" : "save_close",
   "notify_about_cancel_task" : "Notificar",
   "category" : "category",
+  "user" : "user",
   "properties" : "properties",
   "customer" : "Cliente"
 }
