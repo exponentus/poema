@@ -95,14 +95,20 @@ public class DemandService extends RestProvider {
         DemandDomain demandDomain;
         try {
             boolean isNew = "new".equals(id);
+
             if (isNew) {
+                String demandTypeName = getWebFormData().getValueSilently("demandType");
                 DemandType demandType = null;
                 entity = new Demand();
                 demandDomain = new DemandDomain(entity);
 
                 try {
                     DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
-                    demandType = demandTypeDAO.findByName("bug");
+                    if (demandTypeName.isEmpty() || demandTypeName.equals("my")) {
+                        demandType = demandTypeDAO.findByName("bug");
+                    } else {
+                        demandType = demandTypeDAO.findByName(demandTypeName);
+                    }
                 } catch (DAOException e) {
                     Server.logger.errorLogEntry(e);
                 }
