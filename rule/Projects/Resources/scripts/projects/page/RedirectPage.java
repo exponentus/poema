@@ -1,7 +1,7 @@
 package projects.page;
 
-import com.exponentus.scripting._Session;
 import com.exponentus.scripting.WebFormData;
+import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoPage;
 
 public class RedirectPage extends _DoPage {
@@ -19,7 +19,7 @@ public class RedirectPage extends _DoPage {
                 addContent("redirect", path + "/demands/" + formData.getValueSilently("demandId"));
                 break;
             case "task-form":
-                addContent("redirect", path + "/task/" + formData.getValueSilently("taskId"));
+                addContent("redirect", path + "/tasks/" + formData.getValueSilently("taskId"));
                 break;
             case "task-requests":
                 addContent("redirect", path + "/requests/" + formData.getValueSilently("requestId"));
