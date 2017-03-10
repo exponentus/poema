@@ -55,20 +55,21 @@
     background-color: rgba(100, 131, 146, 0.1);
 }
 
-.helpdesk .form-group .control-label {
-    width: 130px;
-}
-
-.helpdesk .form-group:not(.vertical) .control-label + .controls {
-    margin: 0 0 0 140px;
+@media ( min-width: 800px) {
+    .helpdesk .form-group .control-label {
+        width: 140px;
+    }
+    .helpdesk .form-group:not(.vertical) .control-label + .controls {
+        margin: 0 0 0 150px;
+    }
 }
 
 .helpdesk nb-select > .select.input,
-.helpdesk .select__toggle {
+.helpdesk nb-select .select__toggle {
     border-color: transparent;
 }
 
 .helpdesk nb-select > .select.input,
-.helpdesk .select:not(.is-focused) .select__toggle {
+.helpdesk nb-select > .select:not(.is-focused) .select__toggle {
     border-bottom-color: #d9d9d9;
 }
