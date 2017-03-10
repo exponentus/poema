@@ -4,7 +4,6 @@
   "projects" : "Projetos",
   "assignee_user" : "Executante",
   "initiative_tasks" : "Initiative tasks",
-  "send_demand" : "Send demand",
   "password" : "password",
   "not_null_violation" : "a value cannot be null",
   "draft" : "Rascunho",

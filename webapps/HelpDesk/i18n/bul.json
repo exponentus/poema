@@ -4,7 +4,6 @@
   "projects" : "projects",
   "assignee_user" : "assignee_user",
   "initiative_tasks" : "initiative_tasks",
-  "send_demand" : "send_demand",
   "password" : "password",
   "not_null_violation" : "a value cannot be null",
   "draft" : "draft",
