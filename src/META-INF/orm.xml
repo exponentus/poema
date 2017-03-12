@@ -11,5 +11,7 @@
     <converter class="workflow.model.util.ApprovalStatusTypeConverter"/>   
     <converter class="workflow.model.util.ApprovalTypeConverter"/>  
     <converter class="workflow.model.util.DecisionTypeConverter"/>   
-    <converter class="helpdesk.model.util.DemandStatusConverter"/>   
+    <converter class="helpdesk.model.util.DemandStatusConverter"/> 
+    <converter class="workflow.model.util.ApprovalSchemaTypeConverter"/>  
+    <converter class="workflow.model.util.ApprovalResultTypeConverter"/>
 </entity-mappings>

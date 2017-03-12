@@ -3,6 +3,7 @@
   "cancel" : "Cancel",
   "officememo" : "Officememo",
   "assignee_user" : "Assignee",
+  "deleting_is_restricted" : "Deleting is restricted",
   "password" : "Password",
   "not_null_violation" : "a value cannot be null",
   "messaging_type" : "Messaging type",

@@ -3,6 +3,7 @@
   "cancel" : "Отмена",
   "officememo" : "Служебная записка",
   "assignee_user" : "Исполнитель",
+  "deleting_is_restricted" : "Недостаточно прав для удаления",
   "password" : "Пароль",
   "not_null_violation" : "Значение должно быть не null",
   "messaging_type" : "Messaging type",
