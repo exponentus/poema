@@ -47,6 +47,22 @@ public class Approval {
 		this.status = status;
 	}
 
+	public ApprovalSchemaType getSchema() {
+		return schema;
+	}
+
+	public void setSchema(ApprovalSchemaType schema) {
+		this.schema = schema;
+	}
+
+	public ApprovalResultType getResult() {
+		return result;
+	}
+
+	public void setResult(ApprovalResultType result) {
+		this.result = result;
+	}
+
 	public List<Block> getBlocks() {
 		return blocks;
 	}
