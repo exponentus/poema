@@ -4,6 +4,7 @@
   "projects" : "Projects",
   "assignee_user" : "Assignee",
   "initiative_tasks" : "Initiative tasks",
+  "deleting_is_restricted" : "Deleting is restricted",
   "password" : "Password",
   "not_null_violation" : "a value cannot be null",
   "messaging_type" : "Messaging type",
