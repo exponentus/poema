@@ -1,108 +1,130 @@
 package workflow.model.embedded;
 
-/**
- * @author Kayra created 07-04-2016
- */
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import staff.model.Employee;
-import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
-import workflow.model.constants.DecisionType;
-import workflow.model.util.ApprovalStatusTypeConverter;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
-import java.util.List;
+
+/**
+ * @author Kayra created 07-04-2016
+ */
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import staff.model.Employee;
+import workflow.model.constants.ApprovalResultType;
+import workflow.model.constants.ApprovalSchemaType;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.constants.ApprovalType;
+import workflow.model.constants.DecisionType;
+import workflow.model.util.ApprovalResultTypeConverter;
+import workflow.model.util.ApprovalStatusTypeConverter;
 
 @Embeddable
 public class Approval {
 
-    @Convert(converter = ApprovalStatusTypeConverter.class)
-    private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
+	@Convert(converter = ApprovalStatusTypeConverter.class)
+	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Block> blocks;
+	@Convert(converter = ApprovalStatusTypeConverter.class)
+	private ApprovalSchemaType schema;
 
-    private int version;
+	@Convert(converter = ApprovalResultTypeConverter.class)
+	private ApprovalResultType result;
 
-    public ApprovalStatusType getStatus() {
-        return status;
-    }
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Block> blocks;
 
-    public void setStatus(ApprovalStatusType status) {
-        this.status = status;
-    }
+	private int version;
 
-    public List<Block> getBlocks() {
-        return blocks;
-    }
+	public ApprovalStatusType getStatus() {
+		return status;
+	}
 
-    public void setBlocks(List<Block> blocks) {
-        this.blocks = blocks;
-    }
+	public void setStatus(ApprovalStatusType status) {
+		this.status = status;
+	}
 
-    public int getVersion() {
-        return version;
-    }
+	public ApprovalSchemaType getSchema() {
+		return schema;
+	}
 
-    public void setVersion(int version) {
-        this.version = version;
-    }
+	public void setSchema(ApprovalSchemaType schema) {
+		this.schema = schema;
+	}
 
-    @JsonIgnore
-    public Block getProcessingBlock() {
-        if (getStatus() == ApprovalStatusType.FINISHED) {
-            return null;
-        }
+	public ApprovalResultType getResult() {
+		return result;
+	}
 
-        if (blocks == null || blocks.isEmpty()) {
-            return null;
-        }
+	public void setResult(ApprovalResultType result) {
+		this.result = result;
+	}
 
-        return blocks.stream()
-                .filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING)
-                .findFirst().orElse(null);
-    }
+	public List<Block> getBlocks() {
+		return blocks;
+	}
 
-    @JsonIgnore
-    public Block getNextBlock() {
-        if (getStatus() == ApprovalStatusType.FINISHED) {
-            return null;
-        }
+	public void setBlocks(List<Block> blocks) {
+		this.blocks = blocks;
+	}
 
-        if (blocks == null || blocks.isEmpty()) {
-            return null;
-        }
+	public int getVersion() {
+		return version;
+	}
 
-        return blocks.stream()
-                .sorted((a, b) -> (a.getPosition() > b.getPosition() ? 1 : -1))
-                .filter(block -> {
-                    if (getStatus() == ApprovalStatusType.DRAFT) {
-                        return block.getStatus() == ApprovalStatusType.DRAFT;
-                    } else {
-                        return block.getStatus() == ApprovalStatusType.AWAITING;
-                    }
-                })
-                .findFirst().orElse(null);
-    }
+	public void setVersion(int version) {
+		this.version = version;
+	}
 
-    public boolean userCanDoDecision(Employee emp) {
-        if (getStatus() == ApprovalStatusType.PROCESSING) {
-            Block block = getProcessingBlock();
-            if (block != null) {
-                if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-                    return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
-                } else if (block.getType() == ApprovalType.PARALLEL) {
-                    return block.getApprovers().stream()
-                            .filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
-                            .count() > 0;
-                }
-            }
-        }
+	@JsonIgnore
+	public Block getProcessingBlock() {
+		if (getStatus() == ApprovalStatusType.FINISHED) {
+			return null;
+		}
 
-        return false;
-    }
+		if (blocks == null || blocks.isEmpty()) {
+			return null;
+		}
+
+		return blocks.stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING).findFirst()
+				.orElse(null);
+	}
+
+	@JsonIgnore
+	public Block getNextBlock() {
+		if (getStatus() == ApprovalStatusType.FINISHED) {
+			return null;
+		}
+
+		if (blocks == null || blocks.isEmpty()) {
+			return null;
+		}
+
+		return blocks.stream().sorted((a, b) -> (a.getPosition() > b.getPosition() ? 1 : -1)).filter(block -> {
+			if (getStatus() == ApprovalStatusType.DRAFT) {
+				return block.getStatus() == ApprovalStatusType.DRAFT;
+			} else {
+				return block.getStatus() == ApprovalStatusType.AWAITING;
+			}
+		}).findFirst().orElse(null);
+	}
+
+	public boolean userCanDoDecision(Employee emp) {
+		if (getStatus() == ApprovalStatusType.PROCESSING) {
+			Block block = getProcessingBlock();
+			if (block != null) {
+				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+					return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+				} else if (block.getType() == ApprovalType.PARALLEL) {
+					return block.getApprovers().stream().filter(it -> it.getEmployee().getId().equals(emp.getId())
+							&& it.getDecisionType() == DecisionType.UNKNOWN).count() > 0;
+				}
+			}
+		}
+
+		return false;
+	}
 }
