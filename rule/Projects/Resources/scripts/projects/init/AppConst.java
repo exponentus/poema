@@ -1,9 +1,9 @@
 package projects.init;
 
+import com.exponentus.common.init.DefaultAppConst;
 import com.exponentus.webserver.constants.ApplicationMode;
 
-public class AppConst {
-	public static String MODULE_VERSION = "1.0";
+public class AppConst extends DefaultAppConst {
 	public static String NAME = "Projects";
 	public static String NAME_ENG = "Projects";
 	public static String NAME_RUS = "Проекты";
