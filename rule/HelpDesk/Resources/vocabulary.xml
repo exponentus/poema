@@ -127,13 +127,13 @@
         <entry lang="SPA">Fecha de inicio</entry>
     </sentence>
     <sentence mode="on" keyword="due_date">
-        <entry lang="RUS">Дата окончания</entry>
+        <entry lang="RUS">Срок исполнения</entry>
         <entry lang="ENG">Due date</entry>
         <entry lang="POR">Data de vencimento</entry>
         <entry lang="SPA">Fecha de finalización</entry>
     </sentence>
     <sentence mode="on" keyword="new_due_date_help">
-        <entry lang="RUS">Новая дата окончания</entry>
+        <entry lang="RUS">Новый срок исполнения</entry>
         <entry lang="ENG">New due date</entry>
         <entry lang="POR">Nova data de vencimento</entry>
         <entry lang="SPA">Nueva fecha de finalización</entry>

@@ -186,7 +186,7 @@
   "editable" : "editable",
   "assignment" : "assignment",
   "approval_block" : "approval_block",
-  "due_date" : "due_date",
+  "due_date" : "Fecha de finalización",
   "control" : "control",
   "field_is_empty" : "field_is_empty",
   "serial" : "serial",

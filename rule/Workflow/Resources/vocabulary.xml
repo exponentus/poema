@@ -208,8 +208,10 @@
         <entry lang="ENG">Start date</entry>
     </sentence>
     <sentence mode="on" keyword="due_date">
-        <entry lang="RUS">Дата исполнения</entry>
+        <entry lang="RUS">Срок исполнения</entry>
         <entry lang="ENG">Due date</entry>
+        <entry lang="POR">Data de vencimento</entry>
+        <entry lang="SPA">Fecha de finalización</entry>
     </sentence>
     <sentence mode="on" keyword="assignee_user">
         <entry lang="RUS">Исполнитель</entry>
