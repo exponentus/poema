@@ -1,26 +1,27 @@
 package workflow.domain;
 
+import com.exponentus.rest.outgoingdto.Outcome;
+
 import administrator.model.User;
-import com.exponentus.rest.outgoingpojo.Outcome;
 import staff.model.Employee;
 import workflow.model.OfficeMemo;
 
 public interface IOfficeMemoDomain {
-    void composeNew(User user, Employee appliedAuthor);
+	void composeNew(User user, Employee appliedAuthor);
 
-    void fillFromDto(Employee author, OfficeMemo dto);
+	void fillFromDto(Employee author, OfficeMemo dto);
 
-    boolean approvalCanBeStarted();
+	boolean approvalCanBeStarted();
 
-    void startApproving();
+	void startApproving();
 
-    boolean employeeCanDoDecisionApproval(Employee employee);
+	boolean employeeCanDoDecisionApproval(Employee employee);
 
-    void acceptApprovalBlock(Employee employee);
+	void acceptApprovalBlock(Employee employee);
 
-    void declineApprovalBlock(Employee employee, String decisionComment);
+	void declineApprovalBlock(Employee employee, String decisionComment);
 
-    boolean documentCanBeDeleted();
+	boolean documentCanBeDeleted();
 
-    Outcome getOutcome();
+	Outcome getOutcome();
 }

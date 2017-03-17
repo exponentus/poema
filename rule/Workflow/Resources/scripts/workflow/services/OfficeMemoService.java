@@ -24,7 +24,7 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.ServiceDescriptor;
 import com.exponentus.rest.ServiceMethod;
-import com.exponentus.rest.outgoingpojo.Outcome;
+import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;

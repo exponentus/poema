@@ -1,17 +1,18 @@
 package projects.domain;
 
+import com.exponentus.rest.outgoingdto.Outcome;
+
 import administrator.model.User;
-import com.exponentus.rest.outgoingpojo.Outcome;
 import projects.model.Project;
 
 public interface IProjectDomain {
-    void composeNew(User author);
+	void composeNew(User author);
 
-    void fillFromDto(Project dto, User author);
+	void fillFromDto(Project dto, User author);
 
-    void calculateReaders();
+	void calculateReaders();
 
-    boolean projectCanBeDeleted();
+	boolean projectCanBeDeleted();
 
-    Outcome getOutcome();
+	Outcome getOutcome();
 }
