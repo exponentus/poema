@@ -47,7 +47,7 @@ public class Request extends SecureHierarchicalEntity<UUID> {
 	private Task task;
 
 	@NotNull
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "request_type")
 	private RequestType requestType;
 
