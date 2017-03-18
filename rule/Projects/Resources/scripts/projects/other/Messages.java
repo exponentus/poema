@@ -21,7 +21,6 @@ import administrator.model.User;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
-import reference.model.RequestType;
 
 public class Messages {
 	protected static Log4jLogger logger = new Log4jLogger("Messaging");
@@ -145,8 +144,7 @@ public class Messages {
 			}
 
 			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
-			RequestType rt = request.getRequestType();
-			memo.addVar("requestType", rt.getLocName(lang));
+			memo.addVar("requestType", request.getRequestType().getLocName(lang));
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
