@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -23,8 +22,6 @@ import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.rest.RestProvider;
-import com.exponentus.rest.ServiceDescriptor;
-import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.Validator;
@@ -122,14 +119,4 @@ public class PromoService extends RestProvider {
 		return pojo;
 	}
 
-	@Override
-	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
-		sd.setName(getClass().getName());
-		ServiceMethod m = new ServiceMethod();
-		m.setMethod(HttpMethod.POST);
-		m.setURL("/" + sd.getAppName() + sd.getUrlMapping() + "/service/sendmail");
-		m.setAnonymous(true);
-		sd.addMethod(m);
-		return sd;
-	}
 }

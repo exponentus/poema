@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.HttpMethod;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,15 +20,12 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
-import com.exponentus.rest.ServiceDescriptor;
-import com.exponentus.rest.ServiceMethod;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-import com.exponentus.user.IUser;
 
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -120,7 +116,6 @@ public class ReportService extends RestProvider {
 			reportDomain.fillFromDto(employeeDAO.findByUser(ses.getUser()), dto);
 
 			if (dto.isNew()) {
-				IUser<Long> user = ses.getUser();
 				entity = reportDAO.add(entity);
 			} else {
 				entity = reportDAO.update(entity);
@@ -188,13 +183,4 @@ public class ReportService extends RestProvider {
 		ve.assertValid();
 	}
 
-	@Override
-	public ServiceDescriptor updateDescription(ServiceDescriptor sd) {
-		sd.setName(getClass().getName());
-		ServiceMethod m = new ServiceMethod();
-		m.setMethod(HttpMethod.GET);
-		m.setURL("/" + sd.getAppName() + sd.getUrlMapping());
-		sd.addMethod(m);
-		return sd;
-	}
 }
