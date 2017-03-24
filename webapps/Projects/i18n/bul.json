@@ -17,6 +17,7 @@
   "org_category" : "org_category",
   "completed" : "completed",
   "password_new" : "password_new",
+  "version" : "version",
   "tags" : "tags",
   "accept" : "accept",
   "message_too_long" : "Посланието е твърде дълго",

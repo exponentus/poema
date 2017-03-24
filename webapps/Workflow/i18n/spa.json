@@ -13,6 +13,7 @@
   "locality" : "locality",
   "org_category" : "org_category",
   "password_new" : "password_new",
+  "version" : "version",
   "accept" : "accept",
   "message_too_long" : "The message is too long",
   "reg_date" : "reg_date",

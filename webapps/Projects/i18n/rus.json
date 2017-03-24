@@ -17,6 +17,7 @@
   "org_category" : "Тип организации",
   "completed" : "Завершен",
   "password_new" : "Новый пароль",
+  "version" : "Версия",
   "tags" : "Метки",
   "accept" : "Принять",
   "message_too_long" : "Капча не верная",

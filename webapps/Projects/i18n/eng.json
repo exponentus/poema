@@ -17,6 +17,7 @@
   "org_category" : "Organization type",
   "completed" : "Completed",
   "password_new" : "New password",
+  "version" : "Version",
   "tags" : "Tags",
   "accept" : "Accept",
   "message_too_long" : "The message is too long",
