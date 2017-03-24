@@ -21,8 +21,6 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    // TEST
-    // @Override
     public ViewPage<Project> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
