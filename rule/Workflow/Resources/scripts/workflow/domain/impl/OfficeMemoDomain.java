@@ -16,6 +16,7 @@ import workflow.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class OfficeMemoDomain implements IOfficeMemoDomain {
@@ -128,6 +129,8 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
                 b.setStatus(ApprovalStatusType.AWAITING);
             }
         });
+
+        om.setEditors(new HashSet<>());
     }
 
     @Override

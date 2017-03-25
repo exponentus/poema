@@ -19,8 +19,6 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.OfficeMemoDomain;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalSchemaType;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -139,10 +137,6 @@ public class OfficeMemoService extends RestProvider {
             OfficeMemoDomain omd = new OfficeMemoDomain(entity);
             omd.fillFromDto(empDao.findByUser(ses.getUser()), dto);
 
-            // * temporary block to avoid a error*//
-            dto.getApproval().setResult(ApprovalResultType.UNKNOWN);
-            dto.getApproval().setSchema(ApprovalSchemaType.UNKNOWN);
-
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
@@ -200,7 +194,7 @@ public class OfficeMemoService extends RestProvider {
 
             omd.startApproving();
 
-            officeMemoDAO.update(om);
+            officeMemoDAO.update(om, false);
 
             Outcome outcome = omd.getOutcome();
             outcome.setTitle("approving_started");
