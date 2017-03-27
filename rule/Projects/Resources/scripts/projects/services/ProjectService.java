@@ -218,6 +218,13 @@ public class ProjectService extends RestProvider {
         }
     }
 
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
+
     private _ActionBar getActionBar(_Session session, Project project, ProjectDomain projectDomain) {
         _ActionBar actionBar = new _ActionBar(session);
         actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));

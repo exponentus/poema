@@ -245,6 +245,13 @@ public class RequestService extends RestProvider {
         }
     }
 
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
+
     private _ActionBar getActionBar(_Session session, Request request, RequestDomain requestDomain) {
         _ActionBar actionBar = new _ActionBar(session);
 

@@ -184,6 +184,13 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
+
     @POST
     @Path("{id}/actions/startApproving")
     public Response startApproving(@PathParam("id") String id) {
