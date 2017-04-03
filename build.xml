@@ -1,24 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <project name="poema" default="replace">
 	<description>
 	</description>
-	<property name="vendor" value="flabser.com" />
+
+
+    <property name="vendor" value="exponentus.com" />
+
 	<!-- Application path -->
-	<property name="application.dir" value="nbapp" />
+	<property name="application.dir" value="run" />
 	<!-- Temporary folder path -->
 	<property name="tmp.dir" value="tmp" />
 	<!-- Directory for backup  -->
 	<property name="backup.dir" value="backup" />
+
 	<!-- source folders   -->
 	<property name="app_temp_repo.dir" value="." />
 	<property name="nb_repo.dir" value="${app_temp_repo.dir}/nb/trunk" />
 	<property name="officeframe_repo.dir" value="${app_temp_repo.dir}/officeframe/trunk" />
 	<property name="poema_repo.dir" value="${app_temp_repo.dir}/poema/trunk" />
+
+
 	<!-- application folders   -->
 	<property name="application_libs.dir" value="${application.dir}/libs" />
 	<property name="application_rule.dir" value="${application.dir}/rule" />
 	<property name="application_webapps.dir" value="${application.dir}/webapps" />
 	<property name="application_xsl.dir" value="${application.dir}/xsl" />
 	<property name="application_resources.dir" value="${application.dir}/resources" />
+
+
 	<!-- NextBase core source   -->
 	<property name="app_nb_jar.name" value="nb" />
 	<property name="nb_prj.dir" value="${nb_repo.dir}" />
@@ -29,6 +38,7 @@
 	<property name="xsl_nb.dir" value="${nb_prj.dir}/xsl" />
 	<property name="administrator_src.dir" value="${nb_prj.dir}/rule/Administrator/Resources/scripts" />
 	<property name="jpa_xml_nb.dir" value="${src_nb.dir}" />
+
 	<!-- Officeframe module source   -->
 	<property name="app_officeframe_jar.name" value="officeframe" />
 	<property name="officeframe_prj.dir" value="${officeframe_repo.dir}" />
@@ -38,17 +48,20 @@
 	<property name="reference_src.dir" value="${officeframe_prj.dir}/rule/Reference/Resources/scripts" />
 	<property name="staff_src.dir" value="${officeframe_prj.dir}/rule/Staff/Resources/scripts" />
 	<property name="workspace_src.dir" value="${officeframe_prj.dir}/rule/Workspace/Resources/scripts" />
+	<property name="discussing_src.dir" value="${officeframe_prj.dir}/rule/Discussing/Resources/scripts" />
 	<property name="jpa_xml_officeframe.dir" value="${officeframe_prj.dir}/src" />
+
 	<!-- Poema module source   -->
 	<property name="app_poema_jar.name" value="poema" />
 	<property name="poema_prj.dir" value="${poema_repo.dir}" />
 	<property name="resources_poema.dir" value="${poema_prj.dir}/resources" />
 	<property name="rule_poema.dir" value="${poema_prj.dir}/rule" />
 	<property name="webapps_poema.dir" value="${poema_prj.dir}/webapps" />
-	<property name="projects_src.dir" value="${poema_prj.dir}/rule/Projects/Resources/scripts" />
-	<property name="workflow_src.dir" value="${poema_prj.dir}/rule/Workflow/Resources/scripts" />
-	<property name="helpdesk_src.dir" value="${poema_prj.dir}/rule/HelpDesk/Resources/scripts" />
+	<property name="poema_src.dir" value="${poema_prj.dir}/rule/Projects/Resources/scripts" />
+    <property name="workflow_src.dir" value="${poema_prj.dir}/rule/Workflow/Resources/scripts"/>  
+    <property name="helpdesk_src.dir" value="${poema_prj.dir}/rule/HelpDesk/Resources/scripts"/>
 	<property name="jpa_xml_poema.dir" value="${poema_prj.dir}/src" />
+
 	<!-- temporary compiled class folders   -->
 	<property name="tmp_rule.dir" value="${tmp.dir}/rule" />
 	<property name="tmp_webapps.dir" value="${tmp.dir}/webapps" />
@@ -58,11 +71,14 @@
 	<property name="tmp_jar_officeframe.dir" value="${tmp.dir}/officeframe/jar" />
 	<property name="tmp_classes_poema.dir" value="${tmp.dir}/poema/classes" />
 	<property name="tmp_jar_poema.dir" value="${tmp.dir}/poema/jar" />
+
+
 	<!-- compiler options -->
 	<property name="includeantruntime" value="false" />
 	<property name="compile.debug" value="true" />
 	<property name="compile.deprecation" value="false" />
 	<property name="compile.optimize" value="true" />
+
 	<path id="compile_nb.classpath">
 		<fileset dir="${libs_nb.dir}">
 			<include name="**/*.jar" />
@@ -87,11 +103,13 @@
 			<include name="officeframe.jar" />
 		</fileset>
 	</path>
+
 	<target name="backup" description="Backup settings of the application">
 		<echo>Making backup original settings files</echo>
 		<copy overwrite="true" failonerror="false" file="${application.dir}/resources/config.properties" tofile="${backup.dir}/config.properties" />
 		<copy overwrite="true" failonerror="false" file="${application.dir}/cfg.xml" tofile="${backup.dir}/cfg.xml" />
 	</target>
+
 	<target name="clean" description="Delete generated and temporary directories and files">
 		<echo>Cleaning application and temporary directories</echo>
 		<delete quiet="true" dir="${application.dir}" />
@@ -99,12 +117,13 @@
 		<!--<delete quiet="true" dir="${app_temp_repo.dir}" />-->
 		<!--<delete quiet="true" dir="${nb_repo.dir}" />
 		<delete quiet="true" dir="${officeframe_repo.dir}" />
-		<delete quiet="true" dir="${poema_repo.dir}" />
--->
+		<delete quiet="true" dir="${poema_repo.dir}" />-->
+		
 		<property name="nb_repo.dir" value="${app_temp_repo.dir}/nb" />
-		<property name="officeframe_repo.dir" value="${app_temp_repo.dir}/officeframe" />
-		<property name="poema_repo.dir" value="${app_temp_repo.dir}/poema" />
+		    <property name="officeframe_repo.dir" value="${app_temp_repo.dir}/officeframe" />
+		    <property name="poema_repo.dir" value="${app_temp_repo.dir}/poema" />
 	</target>
+
 	<target name="prepare" description="Create directories and files before compile">
 		<echo>Prepare the directories</echo>
 		<mkdir dir="${application.dir}" />
@@ -116,24 +135,30 @@
 		<mkdir dir="${tmp_classes_poema.dir}" />
 		<mkdir dir="${tmp_jar_poema.dir}" />
 	</target>
-	<path id="svnant.classpath">
-		<fileset dir="/usr/share/ant/lib1">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
-	<svnSetting svnkit="true" javahl="false" username="" password="" failonerror="true" id="svn.settings" />
-	<target name="get_from_repo" description="Getting from the repository">
-		<echo>Check out from GitHub</echo>
-		<svn refid="svn.settings">
-			<checkout url="https://github.com/exponentus/nb" revision="HEAD" destPath="${app_temp_repo.dir}/nb" />
-			<checkout url="https://github.com/exponentus/officeframe" revision="HEAD" destPath="${app_temp_repo.dir}/officeframe" />
-			<checkout url="https://github.com/exponentus/poema" revision="HEAD" destPath="${app_temp_repo.dir}/poema" />
-		</svn>
-	</target>
-	<target name="compile_nb" depends="backup, clean, prepare, get_from_repo" unless="full" description="Compile Java sources">
+	
+	   <path id="svnant.classpath">
+	        <fileset dir="/usr/share/ant/lib1">
+	            <include name="**/*.jar" />
+	        </fileset>
+	    </path>
+
+	    <typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+
+	    <svnSetting svnkit="true" javahl="false" username="" password="" failonerror="true" id="svn.settings" />
+
+
+	    <target name="get_from_repo" description="Getting from the repository">
+	        <echo>Check out from GitHub</echo>
+	        <svn refid="svn.settings">
+	            <checkout url="https://github.com/exponentus/nb" revision="HEAD" destPath="${app_temp_repo.dir}/nb" />
+	            <checkout url="https://github.com/exponentus/officeframe" revision="HEAD" destPath="${app_temp_repo.dir}/officeframe" />
+	            <checkout url="https://github.com/exponentus/poema" revision="HEAD" destPath="${app_temp_repo.dir}/poema" />
+	        </svn>
+	    </target>
+	
+	<target name="compile_nb" depends="backup, clean, prepare, get_from_repo" unless="full"  description="Compile Java sources">
 		<echo>Compiling NextBase core</echo>
-		<javac srcdir="${src_nb.dir}:${administrator_src.dir}" destdir="${tmp_classes_nb.dir}" debug="${compile.debug}" nowarn="true" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}">
+		<javac srcdir="${src_nb.dir}:${administrator_src.dir}" destdir="${tmp_classes_nb.dir}" debug="${compile.debug}" nowarn="true" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}" >
 			<classpath refid="compile_nb.classpath" />
 			<compilerarg value="-Xlint:unchecked" />
 			<compilerarg value="-Xlint:deprecation" />
@@ -143,26 +168,30 @@
 		<tstamp>
 			<format property="TODAY" pattern="HH:mm d-MMMM-yyyy" locale="en,RU" />
 		</tstamp>
-		<pathconvert property="manifest_nb.classpath" pathsep=" " refid="compile_nb.classpath">
-			<map from="/var/lib/jenkins/jobs/poema/workspace/${libs_nb.dir}/" to="" />
+		<pathconvert property="manifest_nb.classpath" pathsep=" " refid="compile_nb.classpath">			
+			<map from='/var/lib/jenkins/jobs/poema/workspace/${libs_nb.dir}/' to='' />			
 		</pathconvert>
 		<jar destfile="${tmp_jar_nb.dir}/${app_nb_jar.name}.jar">
 			<fileset dir="${tmp_classes_nb.dir}" />
 			<manifest>
-				<attribute name="Implementation-Vendor" value="${vendor}" />
+				<attribute name="Implementation-Vendor" value="${vendor}"/>
 				<attribute name="Built-Date" value="${TODAY}" />
-				<attribute name="Main-Class" value="com.exponentus.server.Server" />
+			    <attribute name="Main-Class" value="com.exponentus.server.Server" />
 				<attribute name="Class-Path" value="${manifest_nb.classpath} ${app_nb_jar.name}.jar ${app_officeframe_jar.name}.jar ${app_poema_jar.name}.jar" />
+			
 			</manifest>
 		</jar>
 	</target>
+
 	<target name="compile_officeframe" depends="compile_nb" description="Create JAR distribution">
 		<echo>Compiling Officeframe modules</echo>
-		<javac srcdir="${reference_src.dir}:     ${staff_src.dir}:${workspace_src.dir}" destdir="${tmp_classes_officeframe.dir}" nowarn="true" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}">
+		<javac srcdir="${reference_src.dir}:
+			 ${staff_src.dir}:${workspace_src.dir}:${discussing_src.dir}" destdir="${tmp_classes_officeframe.dir}" nowarn="true" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}">
 			<classpath refid="compile_officeframe.classpath" />
 			<compilerarg value="-Xlint:unchecked" />
 			<compilerarg value="-Xlint:deprecation" />
 		</javac>
+
 		<jar destfile="${tmp_jar_officeframe.dir}/${app_officeframe_jar.name}.jar">
 			<fileset dir="${tmp_classes_officeframe.dir}" />
 			<manifest>
@@ -170,19 +199,20 @@
 			</manifest>
 		</jar>
 	</target>
+
 	<target name="compile_poema" depends="compile_officeframe" description="Create JAR distribution">
 		<echo>Compiling poema modules </echo>
-		<javac srcdir="${projects_src.dir}:${workflow_src.dir}:${helpdesk_src.dir}" destdir="${tmp_classes_poema.dir}" debug="${compile.debug}" nowarn="true" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}">
+		<javac srcdir="${poema_src.dir}:${workflow_src.dir}:${helpdesk_src.dir}" destdir="${tmp_classes_poema.dir}" debug="${compile.debug}" nowarn="true" deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="${includeantruntime}" >
 			<classpath refid="compile_poema.classpath" />
 			<compilerarg value="-Xlint:unchecked" />
 			<compilerarg value="-Xlint:deprecation" />
-			<compilerarg value="-XDignore.symbol.file" />
+			<compilerarg value="-XDignore.symbol.file"/>
 		</javac>
 		<tstamp>
 			<format property="TODAY" pattern="HH:mm d-MMMM-yyyy" locale="en,RU" />
 		</tstamp>
 		<copy file="${jpa_xml_poema.dir}/META-INF/persistence.xml" tofile="${tmp_classes_poema.dir}/META-INF/persistence.xml" />
-		<copy file="${jpa_xml_poema.dir}/META-INF/orm.xml" tofile="${tmp_classes_poema.dir}/META-INF/orm.xml" />
+                <copy file="${jpa_xml_poema.dir}/META-INF/orm.xml" tofile="${tmp_classes_poema.dir}/META-INF/orm.xml" />
 		<jar destfile="${tmp_jar_poema.dir}/${app_poema_jar.name}.jar">
 			<fileset dir="${tmp_classes_poema.dir}" />
 			<manifest>
@@ -190,6 +220,7 @@
 			</manifest>
 		</jar>
 	</target>
+
 	<target name="replace" depends="compile_poema" description="Update of the work system">
 		<echo>Copying application program files</echo>
 		<copy overwrite="true" todir="${tmp_rule.dir}">
@@ -202,6 +233,7 @@
 			<fileset dir="${webapps_officeframe.dir}" />
 			<fileset dir="${webapps_poema.dir}" />
 		</copy>
+
 		<sync todir="${application_libs.dir}">
 			<fileset dir="${libs_nb.dir}" />
 		</sync>
@@ -219,19 +251,22 @@
 		<sync todir="${application_resources.dir}">
 			<fileset dir="${resources_poema.dir}" />
 		</sync>
+
 		<echo>Copying application jar files</echo>
 		<copy overwrite="true" file="${tmp_jar_nb.dir}/${app_nb_jar.name}.jar" tofile="${application.dir}/libs/${app_nb_jar.name}.jar" />
-		<copy overwrite="true" file="${tmp_jar_officeframe.dir}/${app_officeframe_jar.name}.jar" tofile="${application.dir}/libs/${app_officeframe_jar.name}.jar" />
-		<copy overwrite="true" file="${tmp_jar_poema.dir}/${app_poema_jar.name}.jar" tofile="${application.dir}/libs/${app_poema_jar.name}.jar" />
+		<copy overwrite="true" file="${tmp_jar_officeframe.dir}/${app_officeframe_jar.name}.jar" tofile="${application.dir}/libs/${app_officeframe_jar.name}.jar"/>
+		<copy overwrite="true" file="${tmp_jar_poema.dir}/${app_poema_jar.name}.jar" tofile="${application.dir}/libs/${app_poema_jar.name}.jar"/>
 		<echo>Restore original settings files</echo>
 		<copy overwrite="true" failonerror="false" file="${backup.dir}/config.properties" tofile="${application.dir}/resources/config.properties" />
 		<copy overwrite="true" failonerror="false" file="${backup.dir}/cfg.xml" tofile="${application.dir}/cfg.xml" />
 		<echo>Copying additional files</echo>
-		<copy overwrite="true" file="${nb_prj.dir}/start.bat" tofile="${application.dir}/start.bat"/>
-		<copy overwrite="true" file="${nb_prj.dir}/start.sh" tofile="${application.dir}/start.sh"/>
-		<copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll"/>
-		<copy overwrite="true" file="${nb_prj.dir}/ip-to-country.bin" tofile="${application.dir}/ip-to-country.bin"/>
+		<copy overwrite="true" file="${nb_prj.dir}/start.bat" tofile="${application.dir}/start.bat" />
+		<copy overwrite="true" file="${nb_prj.dir}/start.sh" tofile="${application.dir}/start.sh" />
+		<copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />
+		<copy overwrite="true" file="${nb_prj.dir}/ip-to-country.bin" tofile="${application.dir}/ip-to-country.bin" />
 		<echo>Copying main dictionary</echo>
-		<copy overwrite="true" file="${nb_prj.dir}/resources/vocabulary.xml" tofile="${application.dir}/resources/vocabulary.xml"/>
+		<copy overwrite="true" file="${nb_prj.dir}/resources/vocabulary.xml" tofile="${application.dir}/resources/vocabulary.xml" />
+		
+
 	</target>
 </project>
