@@ -86,6 +86,22 @@
         <entry lang="RUS">Исходящий</entry>
         <entry lang="ENG">Outgoing</entry>
     </sentence>
+    <sentence mode="on" keyword="projects">
+        <entry lang="RUS">Проекты</entry>
+        <entry lang="ENG">Projects</entry>
+    </sentence>
+    <sentence mode="on" keyword="org_documents">
+        <entry lang="RUS">Документы организации</entry>
+        <entry lang="ENG">Documents of the organization</entry>
+    </sentence>
+    <sentence mode="on" keyword="applications_for_vehicle">
+        <entry lang="RUS">Заявки на транспорт</entry>
+        <entry lang="ENG">Applications for vehicle</entry>
+    </sentence>
+    <sentence mode="on" keyword="application_for_vehicle">
+        <entry lang="RUS">Заявка на транспорт</entry>
+        <entry lang="ENG">Application for vehicle</entry>
+    </sentence>
     <sentence mode="on" keyword="approvals">
         <entry lang="RUS">Согласование</entry>
         <entry lang="ENG">Approvals</entry>
