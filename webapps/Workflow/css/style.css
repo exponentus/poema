@@ -18,22 +18,6 @@
     padding-bottom: 0;
 }
 
-.reference .navbar {
-    background: #B2DFDB;
-}
-
-.staff .navbar {
-    background: #ECEFF1;
-}
-
-.projects .navbar {
-    background: #EDE7F6;
-}
-
-.workflow .navbar {
-    background: #C8E6C9;
-}
-
 .doc-version {}
 
 .doc-version-label {}
