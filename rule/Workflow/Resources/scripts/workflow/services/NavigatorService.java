@@ -22,13 +22,19 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline co = new _Outline("workflow", "common");
+        _Outline co = new _Outline("projects", "common");
+        co.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos/projects"));
+        co.addEntry(new _OutlineEntry("application_for_vehicle", "", "applications_for_vehicle_prj", "applications_for_vehicle/projects"));
 
-        co.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos"));
-        co.addEntry(new _OutlineEntry("incoming_documents", "", "incomings", "incomings"));
-        co.addEntry(new _OutlineEntry("outgoing_documents", "", "outgoings", "outgoings"));
+        _Outline odo = new _Outline("org_documents", "org_documents");
+
+        odo.addEntry(new _OutlineEntry("incoming_documents", "", "incomings", "incomings"));
+        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "outgoings", "outgoings"));
+        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos"));
+        odo.addEntry(new _OutlineEntry("applications_for_vehicle", "", "applications_for_vehicle", "applications_for_vehicle"));
 
         list.add(co);
+        list.add(odo);
 
         Outcome outcome = new Outcome();
         outcome.addPayload("nav", list);
