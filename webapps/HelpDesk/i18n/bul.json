@@ -145,6 +145,7 @@
   "iin" : "iin",
   "undefined" : "undefined",
   "unknown" : "Неизвестен",
+  "ui_theme" : "ui_theme",
   "task_title" : "task_title",
   "just_back" : "just_back",
   "org_name" : "org_name",

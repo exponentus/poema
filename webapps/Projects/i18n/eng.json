@@ -148,6 +148,7 @@
   "iin" : "IIN",
   "undefined" : "Undefined",
   "unknown" : "Unknown",
+  "ui_theme" : "Theme",
   "task_title" : "Task name",
   "just_back" : "Return to the previous page",
   "org_name" : "Organization",

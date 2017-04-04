@@ -132,6 +132,7 @@
   "iin" : "iin",
   "undefined" : "undefined",
   "unknown" : "Desconhecido",
+  "ui_theme" : "Theme",
   "just_back" : "just_back",
   "org_name" : "org_name",
   "message_too_short" : "The message is too short",
