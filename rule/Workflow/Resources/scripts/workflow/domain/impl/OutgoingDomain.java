@@ -1,5 +1,7 @@
 package workflow.domain.impl;
 
+import java.util.Date;
+
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 
@@ -20,6 +22,7 @@ public class OutgoingDomain implements IOutgoingDomain {
 		if (!entity.isNew()) {
 			throw new IllegalStateException("entity_is_not_new");
 		}
+		entity.setAppliedRegDate(new Date());
 	}
 
 	@Override
