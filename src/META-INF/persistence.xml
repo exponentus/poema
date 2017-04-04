@@ -246,8 +246,10 @@
         <class>reference.model.DocumentSubject</class>
         <class>reference.model.TextTemplate</class>
         <class>reference.model.DemandType</class>
+        <class>reference.model.Vehicle</class>
         <!-- The application module entities -->
         <class>workflow.model.OfficeMemo</class>
+        <class>workflow.model.ApplicationForVehicle</class>
         <class>workflow.model.Incoming</class>
         <class>workflow.model.Outgoing</class>
         <class>workflow.model.Assignment</class>
