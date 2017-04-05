@@ -36,6 +36,7 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.OfficeMemoDomain;
 import workflow.model.OfficeMemo;
+import workflow.other.Messages;
 
 @Path("office-memos")
 public class OfficeMemoService extends RestProvider {
@@ -210,7 +211,7 @@ public class OfficeMemoService extends RestProvider {
 			omd.startApproving(om);
 
 			officeMemoDAO.update(om, false);
-
+			new Messages(getAppEnv()).notifyToApprove(om.getApproval().getProcessingBlock().getApprovers());
 			Outcome outcome = omd.getOutcome(om);
 			outcome.setTitle("approving_started");
 			outcome.setMessage("approving_started");

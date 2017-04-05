@@ -23,6 +23,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.Tag;
@@ -38,6 +39,9 @@ import workflow.model.embedded.IApproval;
 @Entity
 @Table(name = "office_memos")
 public class OfficeMemo extends SecureHierarchicalEntity<UUID> implements IApproval {
+
+	@JsonIgnore
+	private List<Assignment> assignments;
 
 	@Column(name = "reg_number")
 	private String regNumber;
@@ -109,6 +113,14 @@ public class OfficeMemo extends SecureHierarchicalEntity<UUID> implements IAppro
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public List<Assignment> getAssignments() {
+		return assignments;
+	}
+
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
 	}
 
 	public List<Tag> getTags() {
