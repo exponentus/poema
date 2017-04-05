@@ -21,21 +21,9 @@ import java.util.stream.Collectors;
 
 public class OfficeMemoDomain implements IOfficeMemoDomain {
 
-    private OfficeMemo om;
-
-    public OfficeMemoDomain(OfficeMemo officeMemo) {
-        if (officeMemo == null) {
-            throw new IllegalArgumentException("Error: officeMemo null");
-        }
-
-        this.om = officeMemo;
-    }
-
     @Override
-    public void composeNew(User user, Employee appliedAuthor) {
-        if (!om.isNew()) {
-            throw new IllegalStateException("entity_is_not_new");
-        }
+    public OfficeMemo composeNew(User user, Employee appliedAuthor) {
+        OfficeMemo om = new OfficeMemo();
 
         om.setAuthor(user);
         om.setAppliedRegDate(new Date());
@@ -48,10 +36,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         approval.setVersion(1);
         approval.setBlocks(new ArrayList<>());
         om.setApproval(approval);
+
+        return om;
     }
 
     @Override
-    public void fillFromDto(Employee author, OfficeMemo dto) {
+    public void fillFromDto(OfficeMemo om, OfficeMemo dto, Employee author) {
         om.setAppliedAuthor(dto.getAppliedAuthor());
         om.setAppliedRegDate(dto.getAppliedRegDate());
         om.setTitle(dto.getTitle());
@@ -76,12 +66,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public boolean approvalCanBeStarted() {
+    public boolean approvalCanBeStarted(OfficeMemo om) {
         return om.getApproval().getStatus() == ApprovalStatusType.DRAFT;
     }
 
     @Override
-    public void startApproving() {
+    public void startApproving(OfficeMemo om) {
         /*
          * DRAFT>PROCESSING. При статусе DRAFT должна быть кнопка “start
 		 * approving”(Начать согласование). Берем первый блок, и выдаем права,
@@ -134,12 +124,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public boolean employeeCanDoDecisionApproval(Employee employee) {
+    public boolean employeeCanDoDecisionApproval(OfficeMemo om, Employee employee) {
         return om.getApproval().userCanDoDecision(employee);
     }
 
     @Override
-    public void acceptApprovalBlock(Employee employee) {
+    public void acceptApprovalBlock(OfficeMemo om, Employee employee) {
         /*
          * При согласен (у workflow.model.embedded.Approver DecisionType = YES)
 		 * при последовательном отбираем права на кнопки “Согласен, Отклонить” И
@@ -197,7 +187,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public void declineApprovalBlock(Employee employee, String decisionComment) {
+    public void declineApprovalBlock(OfficeMemo om, Employee employee, String decisionComment) {
         if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
             throw new IllegalStateException("Approval not PROCESSING, current status: " + om.getApproval().getStatus());
         }
@@ -244,12 +234,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
-    public boolean documentCanBeDeleted() {
+    public boolean documentCanBeDeleted(OfficeMemo om) {
         return !om.isNew() && om.isEditable();
     }
 
     @Override
-    public Outcome getOutcome() {
+    public Outcome getOutcome(OfficeMemo om) {
         Outcome outcome = new Outcome();
 
         outcome.setTitle(om.getTitle());

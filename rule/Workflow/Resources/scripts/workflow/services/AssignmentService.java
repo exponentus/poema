@@ -39,7 +39,7 @@ public class AssignmentService extends RestProvider {
             Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             Assignment entity;
-            AssignmentDomain ad;
+            AssignmentDomain ad = new AssignmentDomain();
             boolean isNew = "new".equals(id);
 
             if (isNew) {
@@ -57,21 +57,16 @@ public class AssignmentService extends RestProvider {
                     throw new IllegalArgumentException("No parent document");
                 }
 
-                entity = new Assignment();
-                ad = new AssignmentDomain(entity);
-                ad.composeNew(employee, incoming, parent);
+                entity = ad.composeNew(employee, incoming, parent);
             } else {
                 entity = assignmentDAO.findById(id);
-                ad = new AssignmentDomain(entity);
             }
 
-            //
             EmployeeDAO empDao = new EmployeeDAO(ses);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
-            //
 
-            Outcome outcome = ad.getOutcome();
+            Outcome outcome = ad.getOutcome(entity);
             outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
@@ -102,7 +97,7 @@ public class AssignmentService extends RestProvider {
     public Response save(Assignment dto) {
         _Session ses = getSession();
         Assignment entity;
-        AssignmentDomain domain;
+        AssignmentDomain domain = new AssignmentDomain();
 
         try {
             validate(dto);
@@ -119,8 +114,7 @@ public class AssignmentService extends RestProvider {
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            domain = new AssignmentDomain(entity);
-            domain.fillFromDto(employee, dto);
+            domain.fillFromDto(entity, dto, employee);
 
             if (dto.isNew()) {
                 entity = assignmentDAO.add(entity);
@@ -128,7 +122,7 @@ public class AssignmentService extends RestProvider {
                 entity = assignmentDAO.update(entity);
             }
 
-            return Response.ok(domain.getOutcome()).build();
+            return Response.ok(domain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {

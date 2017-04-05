@@ -7,24 +7,18 @@ import workflow.model.ApplicationForVehicle;
 
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
 
-    private ApplicationForVehicle entity;
-
-    public ApplicationForVehicleDomain(ApplicationForVehicle entity) {
-        this.entity = entity;
+    @Override
+    public ApplicationForVehicle composeNew(Employee author) {
+        return new ApplicationForVehicle();
     }
 
     @Override
-    public void composeNew(Employee author) {
-
-    }
-
-    @Override
-    public void fillFromDto(Employee author, ApplicationForVehicle dto) {
+    public void fillFromDto(ApplicationForVehicle entity, ApplicationForVehicle dto, Employee author) {
 
     }
 
     @Override
-    public Outcome getOutcome() {
+    public Outcome getOutcome(ApplicationForVehicle entity) {
         return null;
     }
 }

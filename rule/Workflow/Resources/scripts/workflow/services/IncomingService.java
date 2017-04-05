@@ -14,6 +14,8 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import workflow.dao.IncomingDAO;
 import workflow.domain.impl.IncomingDomain;
 import workflow.model.Incoming;
@@ -23,7 +25,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("incomings")
@@ -46,8 +50,6 @@ public class IncomingService extends RestProvider {
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action("add_new", "", "new_incoming"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
-            // actionBar.addAction(new _Action("del_document", "",
-            // _ActionType.DELETE_DOCUMENT));
 
             Outcome outcome = new Outcome();
             outcome.setId("incomings");
@@ -66,21 +68,23 @@ public class IncomingService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Incoming entity;
-        IncomingDomain inDomain;
+        IncomingDomain inDomain = new IncomingDomain();
 
         try {
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = new Incoming();
-                inDomain = new IncomingDomain(entity);
-                inDomain.composeNew((User) ses.getUser());
+                entity = inDomain.composeNew((User) ses.getUser());
             } else {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
                 entity = incomingDAO.findById(id);
-                inDomain = new IncomingDomain(entity);
             }
 
-            Outcome outcome = inDomain.getOutcome();
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
+            Outcome outcome = inDomain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -110,7 +114,7 @@ public class IncomingService extends RestProvider {
     public Response save(Incoming dto) {
         _Session ses = getSession();
         Incoming entity;
-        IncomingDomain inDomain;
+        IncomingDomain inDomain = new IncomingDomain();
 
         try {
             validate(dto);
@@ -125,8 +129,7 @@ public class IncomingService extends RestProvider {
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            inDomain = new IncomingDomain(entity);
-            inDomain.fillFromDto((User) ses.getUser(), dto);
+            inDomain.fillFromDto(entity, dto, (User) ses.getUser());
 
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
@@ -137,9 +140,8 @@ public class IncomingService extends RestProvider {
             }
 
             entity = incomingDAO.findById(entity.getId());
-            inDomain = new IncomingDomain(entity);
 
-            return Response.ok(inDomain.getOutcome()).build();
+            return Response.ok(inDomain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {

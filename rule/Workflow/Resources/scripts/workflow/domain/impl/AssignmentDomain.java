@@ -1,80 +1,73 @@
 package workflow.domain.impl;
 
-import java.util.Date;
-
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
-
 import staff.model.Employee;
 import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
 import workflow.model.embedded.Control;
 
+import java.util.Date;
+
 public class AssignmentDomain implements IAssignmentDomain {
 
-	private Assignment entity;
+    @Override
+    public Assignment composeNew(Employee author, Incoming incoming, Assignment parent) {
+        Assignment entity = new Assignment();
 
-	public AssignmentDomain(Assignment assignment) {
-		this.entity = assignment;
-	}
+        entity.setAuthor(author.getUser());
+        entity.setAppliedAuthor(author);
 
-	@Override
-	public void composeNew(Employee author, Incoming incoming, Assignment parent) {
-		if (!entity.isNew()) {
-			throw new IllegalStateException("entity_is_not_new");
-		}
+        if (parent == null) {
+            entity.setIncoming(incoming);
+        } else {
+            entity.setParent(parent);
+            entity.setIncoming(parent.getIncoming());
+        }
 
-		entity.setAuthor(author.getUser());
-		entity.setAppliedAuthor(author);
+        Control newControl = new Control();
+        newControl.setStartDate(new Date());
+        entity.setControl(newControl);
 
-		if (parent == null) {
-			entity.setIncoming(incoming);
-		} else {
-			entity.setParent(parent);
-			entity.setIncoming(parent.getIncoming());
-		}
+        return entity;
+    }
 
-		Control newControl = new Control();
-		newControl.setStartDate(new Date());
-		entity.setControl(newControl);
-	}
+    @Override
+    public void fillFromDto(Assignment entity, Assignment dto, Employee author) {
+        if (entity.isNew()) {
+            entity.setAuthor(author.getUser());
+            entity.setIncoming(dto.getIncoming());
+            entity.setParent(dto.getParent());
 
-	@Override
-	public void fillFromDto(Employee author, Assignment dto) {
-		if (entity.isNew()) {
-			entity.setAuthor(author.getUser());
-			entity.setIncoming(dto.getIncoming());
-			entity.setParent(dto.getParent());
+            entity.addReaderEditor(entity.getAuthor());
+            if (dto.getAppliedAuthor() != null) {
+                entity.addReaderEditor(dto.getAppliedAuthor().getUser());
+            }
+        }
 
-			entity.addReaderEditor(entity.getAuthor());
-			if (dto.getAppliedAuthor() != null) {
-				entity.addReaderEditor(dto.getAppliedAuthor().getUser());
-			}
-		}
+        entity.setTitle(dto.getTitle());
+        entity.setBody(dto.getBody());
+        entity.setAppliedAuthor(dto.getAppliedAuthor());
+        entity.setObservers(dto.getObservers());
+        entity.setControl(dto.getControl());
+        entity.setAttachments(dto.getAttachments());
+    }
 
-		entity.setTitle(dto.getTitle());
-		entity.setBody(dto.getBody());
-		entity.setAppliedAuthor(dto.getAppliedAuthor());
-		entity.setObservers(dto.getObservers());
-		entity.setControl(dto.getControl());
-		entity.setAttachments(dto.getAttachments());
-	}
+    @Override
+    public Outcome getOutcome(Assignment entity) {
+        Outcome outcome = new Outcome();
 
-	@Override
-	public Outcome getOutcome() {
-		Outcome outcome = new Outcome();
+        outcome.setTitle(entity.getTitle());
+        outcome.addPayload(entity);
+        outcome.addPayload("incoming", entity.getIncoming());
+        if (entity.getParent() != null) {
+            outcome.addPayload("parent", entity.getParent());
+        }
+        if (!entity.isNew()) {
+            outcome.addPayload(new ACL(entity));
+        }
 
-		outcome.setTitle(entity.getTitle());
-		outcome.addPayload(entity);
-		outcome.addPayload("incoming", entity.getIncoming());
-		if (entity.getParent() != null) {
-			outcome.addPayload("parent", entity.getParent());
-		}
-		if (!entity.isNew()) {
-			outcome.addPayload(new ACL(entity));
-		}
-
-		return outcome;
-	}
+        return outcome;
+    }
 }

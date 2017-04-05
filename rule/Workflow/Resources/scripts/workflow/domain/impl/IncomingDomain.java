@@ -1,62 +1,54 @@
 package workflow.domain.impl;
 
-import java.util.Date;
-
+import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
-
-import administrator.model.User;
 import workflow.domain.IIncomingDomain;
 import workflow.model.Incoming;
 
+import java.util.Date;
+
 public class IncomingDomain implements IIncomingDomain {
 
-	private Incoming entity;
+    @Override
+    public Incoming composeNew(User user) {
+        Incoming entity = new Incoming();
+        entity.setAuthor(user);
+        entity.setAppliedRegDate(new Date());
 
-	public IncomingDomain(Incoming entity) {
-		this.entity = entity;
-	}
+        return entity;
+    }
 
-	@Override
-	public void composeNew(User user) {
-		if (!entity.isNew()) {
-			throw new IllegalStateException("entity_is_not_new");
-		}
+    @Override
+    public void fillFromDto(Incoming entity, Incoming dto, User user) {
+        entity.setTitle(dto.getTitle());
+        entity.setAppliedRegDate(dto.getAppliedRegDate());
+        entity.setDocLanguage(dto.getDocLanguage());
+        entity.setDocType(dto.getDocType());
+        entity.setSender(dto.getSender());
+        entity.setAddressee(dto.getAddressee());
+        entity.setResponseTo(dto.getResponseTo());
+        entity.setSenderRegNumber(dto.getSenderRegNumber());
+        entity.setSenderAppliedRegDate(dto.getSenderAppliedRegDate());
+        entity.setBody(dto.getBody());
+        entity.setAttachments(dto.getAttachments());
 
-		entity.setAuthor(user);
-		entity.setAppliedRegDate(new Date());
-	}
+        if (entity.isNew()) {
+            entity.setAuthor(user);
+            entity.addReaderEditor(entity.getAuthor());
+        }
+    }
 
-	@Override
-	public void fillFromDto(User user, Incoming dto) {
-		entity.setTitle(dto.getTitle());
-		entity.setAppliedRegDate(dto.getAppliedRegDate());
-		entity.setDocLanguage(dto.getDocLanguage());
-		entity.setDocType(dto.getDocType());
-		entity.setSender(dto.getSender());
-		entity.setAddressee(dto.getAddressee());
-		entity.setResponseTo(dto.getResponseTo());
-		entity.setSenderRegNumber(dto.getSenderRegNumber());
-		entity.setSenderAppliedRegDate(dto.getSenderAppliedRegDate());
-		entity.setBody(dto.getBody());
-		entity.setAttachments(dto.getAttachments());
+    @Override
+    public Outcome getOutcome(Incoming entity) {
+        Outcome outcome = new Outcome();
 
-		if (entity.isNew()) {
-			entity.setAuthor(user);
-			entity.addReaderEditor(entity.getAuthor());
-		}
-	}
+        outcome.setTitle(entity.getTitle());
+        outcome.addPayload(entity);
+        if (!entity.isNew()) {
+            outcome.addPayload(new ACL(entity));
+        }
 
-	@Override
-	public Outcome getOutcome() {
-		Outcome outcome = new Outcome();
-
-		outcome.setTitle(entity.getTitle());
-		outcome.addPayload(entity);
-		if (!entity.isNew()) {
-			outcome.addPayload(new ACL(entity));
-		}
-
-		return outcome;
-	}
+        return outcome;
+    }
 }

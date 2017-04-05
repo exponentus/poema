@@ -5,9 +5,9 @@ import staff.model.Employee;
 import workflow.model.ApplicationForVehicle;
 
 public interface IApplicationForVehicleDomain {
-    void composeNew(Employee author);
+    ApplicationForVehicle composeNew(Employee author);
 
-    void fillFromDto(Employee author, ApplicationForVehicle dto);
+    void fillFromDto(ApplicationForVehicle entity, ApplicationForVehicle dto, Employee author);
 
-    Outcome getOutcome();
+    Outcome getOutcome(ApplicationForVehicle entity);
 }

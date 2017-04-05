@@ -71,24 +71,23 @@ public class OfficeMemoService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         OfficeMemo entity;
-        OfficeMemoDomain omd;
+        OfficeMemoDomain omd = new OfficeMemoDomain();
         try {
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = new OfficeMemo();
-                omd = new OfficeMemoDomain(entity);
-                omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(ses.getUser()));
+                entity = omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(ses.getUser()));
             } else {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
                 entity = officeMemoDAO.findById(id);
-                omd = new OfficeMemoDomain(entity);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = omd.getOutcome();
-            outcome.addPayload("employees", empDao.findAll(false).getResult());
+            Outcome outcome = omd.getOutcome(entity);
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity, omd));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -134,8 +133,8 @@ public class OfficeMemoService extends RestProvider {
             dto.setAppliedAuthor(empDao.findById(dto.getAppliedAuthor().getId()));
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            OfficeMemoDomain omd = new OfficeMemoDomain(entity);
-            omd.fillFromDto(empDao.findByUser(ses.getUser()), dto);
+            OfficeMemoDomain omd = new OfficeMemoDomain();
+            omd.fillFromDto(entity, dto, empDao.findByUser(ses.getUser()));
 
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
@@ -145,7 +144,7 @@ public class OfficeMemoService extends RestProvider {
                 entity = officeMemoDAO.update(entity);
             }
 
-            return Response.ok(omd.getOutcome()).build();
+            return Response.ok(omd.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {
@@ -197,13 +196,13 @@ public class OfficeMemoService extends RestProvider {
         try {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
             OfficeMemo om = officeMemoDAO.findById(id);
-            OfficeMemoDomain omd = new OfficeMemoDomain(om);
+            OfficeMemoDomain omd = new OfficeMemoDomain();
 
-            omd.startApproving();
+            omd.startApproving(om);
 
             officeMemoDAO.update(om, false);
 
-            Outcome outcome = omd.getOutcome();
+            Outcome outcome = omd.getOutcome(om);
             outcome.setTitle("approving_started");
             outcome.setMessage("approving_started");
             outcome.addPayload("result", "approving_started");
@@ -223,13 +222,13 @@ public class OfficeMemoService extends RestProvider {
 
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
             OfficeMemo om = officeMemoDAO.findById(id);
-            OfficeMemoDomain omd = new OfficeMemoDomain(om);
+            OfficeMemoDomain omd = new OfficeMemoDomain();
 
-            omd.acceptApprovalBlock(employee);
+            omd.acceptApprovalBlock(om, employee);
 
             officeMemoDAO.update(om, false);
 
-            Outcome outcome = omd.getOutcome();
+            Outcome outcome = omd.getOutcome(om);
             outcome.setTitle("acceptApprovalBlock");
             outcome.setMessage("acceptApprovalBlock");
 
@@ -248,15 +247,15 @@ public class OfficeMemoService extends RestProvider {
 
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
             OfficeMemo om = officeMemoDAO.findById(id);
-            OfficeMemoDomain omd = new OfficeMemoDomain(om);
+            OfficeMemoDomain omd = new OfficeMemoDomain();
 
             String decisionComment = getWebFormData().getValueSilently("comment");
 
-            omd.declineApprovalBlock(employee, decisionComment);
+            omd.declineApprovalBlock(om, employee, decisionComment);
 
             officeMemoDAO.update(om, false);
 
-            Outcome outcome = omd.getOutcome();
+            Outcome outcome = omd.getOutcome(om);
             outcome.setTitle("declineApprovalBlock");
             outcome.setMessage("declineApprovalBlock");
 
@@ -275,20 +274,20 @@ public class OfficeMemoService extends RestProvider {
             actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
         }
 
-        if (omd.approvalCanBeStarted()) {
+        if (omd.approvalCanBeStarted(entity)) {
             actionBar.addAction(new _Action("start_approving", "", "start_approving"));
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
-        if (omd.employeeCanDoDecisionApproval(employeeDAO.findByUser(session.getUser()))) {
+        if (omd.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
             actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
             actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 
         actionBar.addAction(new _Action("sign", "", "sign"));
 
-        if (omd.documentCanBeDeleted()) {
+        if (omd.documentCanBeDeleted(entity)) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
 

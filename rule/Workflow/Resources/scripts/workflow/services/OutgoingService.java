@@ -14,6 +14,8 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import workflow.dao.OutgoingDAO;
 import workflow.domain.impl.OutgoingDomain;
 import workflow.model.Outgoing;
@@ -23,7 +25,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("outgoings")
@@ -66,20 +70,22 @@ public class OutgoingService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Outgoing entity;
-        OutgoingDomain outDomain;
+        OutgoingDomain outDomain = new OutgoingDomain();
         try {
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = new Outgoing();
-                outDomain = new OutgoingDomain(entity);
-                outDomain.composeNew((User) ses.getUser());
+                entity = outDomain.composeNew((User) ses.getUser());
             } else {
                 OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
                 entity = outgoingDAO.findById(id);
-                outDomain = new OutgoingDomain(entity);
             }
 
-            Outcome outcome = outDomain.getOutcome();
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
+            Outcome outcome = outDomain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -109,7 +115,7 @@ public class OutgoingService extends RestProvider {
     public Response save(Outgoing dto) {
         _Session ses = getSession();
         Outgoing entity;
-        OutgoingDomain outDomain;
+        OutgoingDomain outDomain = new OutgoingDomain();
 
         try {
             validate(dto);
@@ -124,8 +130,7 @@ public class OutgoingService extends RestProvider {
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            outDomain = new OutgoingDomain(entity);
-            outDomain.fillFromDto((User) ses.getUser(), dto);
+            outDomain.fillFromDto(entity, dto, (User) ses.getUser());
 
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
@@ -136,9 +141,8 @@ public class OutgoingService extends RestProvider {
             }
 
             entity = outgoingDAO.findById(entity.getId());
-            outDomain = new OutgoingDomain(entity);
 
-            return Response.ok(outDomain.getOutcome()).build();
+            return Response.ok(outDomain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {

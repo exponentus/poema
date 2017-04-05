@@ -35,7 +35,7 @@ public class ReportService extends RestProvider {
         try {
             _Session ses = getSession();
             Report entity;
-            ReportDomain reportDomain;
+            ReportDomain reportDomain = new ReportDomain();
 
             boolean isNew = "new".equals(id);
             if (isNew) {
@@ -43,23 +43,20 @@ public class ReportService extends RestProvider {
                 AssignmentDAO aDAO = new AssignmentDAO(ses);
                 String assignmentId = getWebFormData().getValue("assignment");
 
-                entity = new Report();
-                reportDomain = new ReportDomain(entity);
-                reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findById(assignmentId));
+                entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findById(assignmentId));
             } else {
                 ReportDAO reportDAO = new ReportDAO(ses);
                 entity = reportDAO.findById(id);
-                reportDomain = new ReportDomain(entity);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = reportDomain.getOutcome();
+            Outcome outcome = reportDomain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
@@ -87,7 +84,7 @@ public class ReportService extends RestProvider {
     public Response save(Report dto) {
         _Session ses = getSession();
         Report entity;
-        ReportDomain reportDomain;
+        ReportDomain reportDomain = new ReportDomain();
 
         try {
             validate(dto);
@@ -103,8 +100,7 @@ public class ReportService extends RestProvider {
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            reportDomain = new ReportDomain(entity);
-            reportDomain.fillFromDto(employeeDAO.findByUser(ses.getUser()), dto);
+            reportDomain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
 
             if (dto.isNew()) {
                 entity = reportDAO.add(entity);
@@ -112,7 +108,7 @@ public class ReportService extends RestProvider {
                 entity = reportDAO.update(entity);
             }
 
-            return Response.ok(reportDomain.getOutcome()).build();
+            return Response.ok(reportDomain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {

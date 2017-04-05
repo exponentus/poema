@@ -27,7 +27,6 @@ public class NavigatorService extends RestProvider {
         co.addEntry(new _OutlineEntry("application_for_vehicle", "", "applications_for_vehicle_prj", "applications_for_vehicle/projects"));
 
         _Outline odo = new _Outline("org_documents", "org_documents");
-
         odo.addEntry(new _OutlineEntry("incoming_documents", "", "incomings", "incomings"));
         odo.addEntry(new _OutlineEntry("outgoing_documents", "", "outgoings", "outgoings"));
         odo.addEntry(new _OutlineEntry("office_memo_plural", "", "office-memos", "office-memos"));

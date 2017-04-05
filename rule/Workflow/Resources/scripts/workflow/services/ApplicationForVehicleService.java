@@ -14,6 +14,7 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import workflow.dao.ApplicationForVehicleDAO;
 import workflow.domain.impl.ApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
@@ -21,9 +22,9 @@ import workflow.model.ApplicationForVehicle;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("applications_for_vehicle")
@@ -35,18 +36,14 @@ public class ApplicationForVehicleService extends RestProvider {
         _Session session = getSession();
         int pageSize = session.pageSize;
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-        String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
-        List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
 
         try {
-            ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(session);
-            ViewPage vp = incomingDAO.findAll(getWebFormData().getPage(), pageSize);
+            ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
+            ViewPage vp = avDAO.findAll(getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action("add_new", "", "new_incoming"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
-            // actionBar.addAction(new _Action("del_document", "",
-            // _ActionType.DELETE_DOCUMENT));
 
             Outcome outcome = new Outcome();
             outcome.setId("applications_for_vehicle");
@@ -65,23 +62,25 @@ public class ApplicationForVehicleService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         ApplicationForVehicle entity;
-        ApplicationForVehicleDomain avDomain;
+        ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
         try {
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             boolean isNew = "new".equals(id);
 
             if (isNew) {
-                entity = new ApplicationForVehicle();
-                avDomain = new ApplicationForVehicleDomain(entity);
-                avDomain.composeNew(employeeDAO.findByUser(ses.getUser()));
+                entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
             } else {
                 ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(ses);
                 entity = incomingDAO.findById(id);
-                avDomain = new ApplicationForVehicleDomain(entity);
             }
 
-            Outcome outcome = avDomain.getOutcome();
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -111,37 +110,35 @@ public class ApplicationForVehicleService extends RestProvider {
     public Response save(ApplicationForVehicle dto) {
         _Session ses = getSession();
         ApplicationForVehicle entity;
-        ApplicationForVehicleDomain inDomain;
+        ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
         try {
             validate(dto);
 
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-            ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(ses);
+            ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(ses);
 
             if (dto.isNew()) {
                 entity = new ApplicationForVehicle();
             } else {
-                entity = incomingDAO.findById(dto.getId());
+                entity = avDAO.findById(dto.getId());
             }
 
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-            inDomain = new ApplicationForVehicleDomain(entity);
-            inDomain.fillFromDto(employeeDAO.findByUser(ses.getUser()), dto);
+            domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
 
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-                entity = incomingDAO.add(entity, rn);
+                entity = avDAO.add(entity, rn);
             } else {
-                entity = incomingDAO.update(entity);
+                entity = avDAO.update(entity);
             }
 
-            entity = incomingDAO.findById(entity.getId());
-            inDomain = new ApplicationForVehicleDomain(entity);
+            entity = avDAO.findById(entity.getId());
 
-            return Response.ok(inDomain.getOutcome()).build();
+            return Response.ok(domain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {
