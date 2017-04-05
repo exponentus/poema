@@ -152,11 +152,13 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		 * Approval...
 		 */
 
-		if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
+		Approval approval = om.getApproval();
+
+		if (approval.getStatus() != ApprovalStatusType.PROCESSING) {
 			throw new IllegalStateException("Approval not PROCESSING, current status: " + om.getApproval().getStatus());
 		}
 
-		Block processBlock = om.getApproval().getProcessingBlock();
+		Block processBlock = approval.getProcessingBlock();
 		if (processBlock == null) {
 			throw new IllegalStateException("Not found processing Block");
 		}
@@ -173,7 +175,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		} else {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
 
-			Block nextBlock = om.getApproval().getNextBlock();
+			Block nextBlock = approval.getNextBlock();
 			if (nextBlock != null) {
 				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
 
@@ -192,18 +194,20 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 					throw new IllegalStateException("Block type error: " + nextBlock.getType());
 				}
 			} else {
-				om.getApproval().setStatus(ApprovalStatusType.FINISHED);
+				approval.setResult(ApprovalResultType.ACCEPTED);
+				approval.setStatus(ApprovalStatusType.FINISHED);
 			}
 		}
 	}
 
 	@Override
 	public void declineApprovalBlock(Employee employee, String decisionComment) {
-		if (om.getApproval().getStatus() != ApprovalStatusType.PROCESSING) {
+		Approval approval = om.getApproval();
+		if (approval.getStatus() != ApprovalStatusType.PROCESSING) {
 			throw new IllegalStateException("Approval not PROCESSING, current status: " + om.getApproval().getStatus());
 		}
 
-		Block processBlock = om.getApproval().getProcessingBlock();
+		Block processBlock = approval.getProcessingBlock();
 		if (processBlock == null) {
 			throw new IllegalStateException("Not found processing Block");
 		}
@@ -220,7 +224,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		} else {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
 
-			Block nextBlock = om.getApproval().getNextBlock();
+			Block nextBlock = approval.getNextBlock();
 			if (nextBlock != null) {
 				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
 
@@ -239,7 +243,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 					throw new IllegalStateException("Block type error: " + nextBlock.getType());
 				}
 			} else {
-				om.getApproval().setStatus(ApprovalStatusType.FINISHED);
+				if (approval.getSchema() == ApprovalSchemaType.IN_ANY_CASE_DECIDE_SIGNER) {
+
+				}
+				approval.setResult(ApprovalResultType.ACCEPTED);
+				approval.setStatus(ApprovalStatusType.FINISHED);
 			}
 		}
 	}
