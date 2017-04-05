@@ -42,7 +42,7 @@ public class ApplicationForVehicleService extends RestProvider {
             ViewPage vp = avDAO.findAll(getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("add_new", "", "add_new"));
+            actionBar.addAction(new _Action("add_new", "", "new_application_for_vehicle"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
 
             Outcome outcome = new Outcome();

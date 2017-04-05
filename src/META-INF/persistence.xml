@@ -2,7 +2,7 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
-             
+
     <persistence-unit name="Administrator" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
@@ -18,16 +18,15 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>com.exponentus.common.model.RecycleBin</class>
-        <class>com.exponentus.common.model.ViewEntry</class>             
+        <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
     </persistence-unit>
 
-
     <persistence-unit name="Staff" transaction-type="RESOURCE_LOCAL">
-   		<class>com.exponentus.common.model.ViewEntry</class>
+        <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Obligatory the application module entities -->
         <class>administrator.model.Language</class>
         <class>administrator.model.Application</class>
@@ -53,7 +52,7 @@
         <class>reference.model.Position</class>
         <class>reference.model.OrgCategory</class>
         <!-- Obligatory the application module entities -->
-        <class>administrator.model.Language</class>  
+        <class>administrator.model.Language</class>
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -91,6 +90,7 @@
         <class>reference.model.DocumentSubject</class>
         <class>reference.model.TextTemplate</class>
         <class>reference.model.DocumentTypeCategory</class>
+        <class>reference.model.Vehicle</class>
         <!-- Specific Reference module entities -->
         <class>reference.model.TaskType</class>
         <class>reference.model.RequestType</class>
@@ -98,7 +98,7 @@
         <class>reference.model.DemandType</class>
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
-        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode> 
+        <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     </persistence-unit>
 
     <persistence-unit name="Workspace" transaction-type="RESOURCE_LOCAL">
@@ -131,7 +131,7 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-     	<class>com.exponentus.common.model.ViewEntry</class>
+        <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -266,11 +266,11 @@
         <class>projects.model.Task</class>
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
-        <!-- Common module entities -->               
+        <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.ViewEntry</class>
-      <!--  <class>com.exponentus.common.model.ViewEntry</class>-->
+        <!--  <class>com.exponentus.common.model.ViewEntry</class>-->
         <!-- Because of suppose importing data from Domino -->
         <class>administrator.model.Collation</class>
         <shared-cache-mode>NONE</shared-cache-mode>
