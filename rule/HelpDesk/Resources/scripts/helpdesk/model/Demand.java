@@ -6,7 +6,8 @@ import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.constants.DemandStatusType;
-import helpdesk.model.util.DemandStatusConverter;
+import helpdesk.model.constants.converter.DemandStatusConverter;
+
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.model.Project;
 import reference.model.DemandType;

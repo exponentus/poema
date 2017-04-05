@@ -1,16 +1,12 @@
 package workflow.model.embedded;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToMany;
 
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import staff.model.Employee;
@@ -19,11 +15,9 @@ import workflow.model.constants.ApprovalSchemaType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.ApprovalType;
 import workflow.model.constants.DecisionType;
-import workflow.model.exception.ApprovalException;
-import workflow.model.exception.ApprovalExceptionType;
-import workflow.model.util.ApprovalResultTypeConverter;
-import workflow.model.util.ApprovalSchemaTypeConverter;
-import workflow.model.util.ApprovalStatusTypeConverter;
+import workflow.model.constants.converter.ApprovalResultTypeConverter;
+import workflow.model.constants.converter.ApprovalSchemaTypeConverter;
+import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 
 /**
  * @author Kayra created 07-04-2016
@@ -84,48 +78,6 @@ public class Approval {
 
 	public void setVersion(int version) {
 		this.version = version;
-	}
-
-	@JsonIgnore
-	public void start(SecureAppEntity<UUID> primeEntity) throws ApprovalException {
-
-		if (status != ApprovalStatusType.DRAFT) {
-			if (status == ApprovalStatusType.FINISHED) {
-				throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, "approval_was_finished");
-			}
-			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, "approval_is_not_draft");
-		}
-
-		Block block = getNextBlock();
-
-		if (block.getType() == ApprovalType.SERIAL) {
-			Approver approver = block.getNextApprover();
-			approver.setCurrent(true);
-			primeEntity.addReader(approver.getEmployee().getUser());
-
-		} else if (block.getType() == ApprovalType.PARALLEL) {
-			primeEntity.addReaders(block.getApprovers().stream()
-					.map(approver -> approver.getEmployee().getUser().getId()).collect(Collectors.toList()));
-
-		} else if (block.getType() == ApprovalType.SIGNING) {
-			Approver approver = block.getNextApprover();
-			approver.setCurrent(true);
-			primeEntity.addReader(approver.getEmployee().getUser());
-
-		} else {
-			throw new ApprovalException(ApprovalExceptionType.BLOCK_ERROR, "block_type_error " + block.getType());
-		}
-
-		setStatus(ApprovalStatusType.PROCESSING);
-		block.setStatus(ApprovalStatusType.PROCESSING);
-
-		getBlocks().forEach(b -> {
-			if (!block.getId().equals(b.getId())) {
-				b.setStatus(ApprovalStatusType.AWAITING);
-			}
-		});
-
-		primeEntity.setEditors(new HashSet<>());
 	}
 
 	@JsonIgnore

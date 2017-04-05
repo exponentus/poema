@@ -3,7 +3,7 @@ package workflow.model.embedded;
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
 import staff.model.Employee;
 import workflow.model.constants.DecisionType;
-import workflow.model.util.DecisionTypeConverter;
+import workflow.model.constants.converter.DecisionTypeConverter;
 
 import javax.persistence.*;
 import java.util.Date;

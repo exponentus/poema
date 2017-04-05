@@ -1,4 +1,4 @@
-package helpdesk.model.util;
+package helpdesk.model.constants.converter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

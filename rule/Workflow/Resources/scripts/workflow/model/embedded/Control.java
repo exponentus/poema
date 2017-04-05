@@ -3,7 +3,7 @@ package workflow.model.embedded;
 import com.exponentus.user.IUser;
 import reference.model.ControlType;
 import workflow.model.constants.ControlStatusType;
-import workflow.model.util.ControlStatusTypeConverter;
+import workflow.model.constants.converter.ControlStatusTypeConverter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
