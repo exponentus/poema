@@ -1,97 +1,86 @@
 package projects.domain.impl;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.env.EnvConst;
 import com.exponentus.rest.outgoingdto.Outcome;
-
-import administrator.model.User;
 import projects.domain.IProjectDomain;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class ProjectDomain implements IProjectDomain {
 
-	private Project project;
+    @Override
+    public Project composeNew(User author) {
+        Project project = new Project();
 
-	public ProjectDomain(Project project) {
-		if (project == null) {
-			throw new IllegalArgumentException("Error: project null");
-		}
+        project.setAuthor(author);
+        project.setComment("");
+        project.setStatus(ProjectStatusType.DRAFT);
 
-		this.project = project;
-	}
+        return project;
+    }
 
-	@Override
-	public void composeNew(User author) {
-		if (!project.isNew()) {
-			throw new IllegalStateException("entity_is_not_new");
-		}
+    @Override
+    public void fillFromDto(Project project, Project dto, User author) {
+        if (project.isNew()) {
+            project.setAuthor(author);
+        }
+        project.setName(dto.getName());
+        project.setCustomer(dto.getCustomer());
+        project.setManager(dto.getManager());
+        project.setProgrammer(dto.getProgrammer());
+        project.setTester(dto.getTester());
+        project.setObservers(dto.getObservers());
+        project.setRepresentatives(dto.getRepresentatives());
+        project.setComment(dto.getComment());
+        project.setStatus(dto.getStatus());
+        project.setFinishDate(dto.getFinishDate());
+        project.setAttachments(dto.getAttachments());
+        project.setPrimaryLanguage(EnvConst.getDefaultLang());
 
-		project.setAuthor(author);
-		project.setComment("");
-		project.setStatus(ProjectStatusType.DRAFT);
-	}
+        calculateReaders(project);
+    }
 
-	@Override
-	public void fillFromDto(Project dto, User author) {
-		if (project.isNew()) {
-			project.setAuthor(author);
-		}
-		project.setName(dto.getName());
-		project.setCustomer(dto.getCustomer());
-		project.setManager(dto.getManager());
-		project.setProgrammer(dto.getProgrammer());
-		project.setTester(dto.getTester());
-		project.setObservers(dto.getObservers());
-		project.setRepresentatives(dto.getRepresentatives());
-		project.setComment(dto.getComment());
-		project.setStatus(dto.getStatus());
-		project.setFinishDate(dto.getFinishDate());
-		project.setAttachments(dto.getAttachments());
-		project.setPrimaryLanguage(EnvConst.getDefaultLang());
+    @Override
+    public void calculateReaders(Project project) {
+        Set<Long> readers = new HashSet<>();
+        readers.add(project.getAuthor().getId());
+        readers.add(project.getManager());
+        readers.add(project.getProgrammer());
+        if (project.getTester() > 0) {
+            readers.add(project.getTester());
+        }
+        if (project.getObservers() != null) {
+            readers.addAll(project.getObservers());
+        }
 
-		calculateReaders();
-	}
+        project.setReaders(readers);
+    }
 
-	@Override
-	public void calculateReaders() {
-		Set<Long> readers = new HashSet<>();
-		readers.add(project.getAuthor().getId());
-		readers.add(project.getManager());
-		readers.add(project.getProgrammer());
-		if (project.getTester() > 0) {
-			readers.add(project.getTester());
-		}
-		if (project.getObservers() != null) {
-			readers.addAll(project.getObservers());
-		}
+    @Override
+    public boolean projectCanBeDeleted(Project project) {
+        return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
+    }
 
-		project.setReaders(readers);
-	}
+    @Override
+    public Outcome getOutcome(Project project) {
+        Outcome outcome = new Outcome();
 
-	@Override
-	public boolean projectCanBeDeleted() {
-		return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
-	}
+        if (project.isNew()) {
+            outcome.setTitle("new_project");
+        } else {
+            outcome.setTitle("project");
+        }
 
-	@Override
-	public Outcome getOutcome() {
-		Outcome outcome = new Outcome();
+        outcome.addPayload(project);
+        if (!project.isNew()) {
+            outcome.addPayload(new ACL(project));
+        }
 
-		if (project.isNew()) {
-			outcome.setTitle("new_project");
-		} else {
-			outcome.setTitle("project");
-		}
-
-		outcome.addPayload(project);
-		if (!project.isNew()) {
-			outcome.addPayload(new ACL(project));
-		}
-
-		return outcome;
-	}
+        return outcome;
+    }
 }

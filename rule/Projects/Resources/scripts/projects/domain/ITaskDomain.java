@@ -1,60 +1,59 @@
 package projects.domain;
 
-import java.util.Date;
-
-import com.exponentus.rest.outgoingdto.Outcome;
-
 import administrator.model.User;
+import com.exponentus.rest.outgoingdto.Outcome;
 import helpdesk.model.Demand;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
 
+import java.util.Date;
+
 public interface ITaskDomain {
 
-	enum PERMISSIONS {
-		SAVE, DELETE, ACKNOWLEDGED, COMPLETE, CANCEL, PROCESSING
-	}
+    enum PERMISSIONS {
+        SAVE, DELETE, ACKNOWLEDGED, COMPLETE, CANCEL, PROCESSING
+    }
 
-	enum Events {
-		NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
-	}
+    enum Events {
+        NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
+    }
 
-	void composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative,
-			int dueDateRange);
+    Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative,
+                    int dueDateRange);
 
-	void fillFromDto(Task dto);
+    void fillFromDto(Task entity, Task dto);
 
-	void changeStatus(TaskStatusType status);
+    void changeStatus(Task entity, TaskStatusType status);
 
-	void calculateStatus();
+    void calculateStatus(Task entity);
 
-	void changeAssignee(User newAssignee);
+    void changeAssignee(Task entity, User newAssignee);
 
-	void calculateReaders();
+    void calculateReaders(Task entity);
 
-	void acknowledgedTask(User user) throws Exception;
+    void acknowledgedTask(Task entity, User user) throws Exception;
 
-	void completeTask();
+    void completeTask(Task entity);
 
-	void prolongTask(Date newDueDate);
+    void prolongTask(Task entity, Date newDueDate);
 
-	void cancelTask(String cancellationComment);
+    void cancelTask(Task entity, String cancellationComment);
 
-	void returnToProcessing();
+    void returnToProcessing(Task entity);
 
-	boolean taskIsEditable();
+    boolean taskIsEditable(Task entity);
 
-	boolean taskCanBeDeleted();
+    boolean taskCanBeDeleted(Task entity);
 
-	boolean userCanDoAcknowledged(User user);
+    boolean userCanDoAcknowledged(Task entity, User user);
 
-	boolean userCanDoRequest(User user);
+    boolean userCanDoRequest(Task entity, User user);
 
-	boolean userCanDoResolution(User user);
+    boolean userCanDoResolution(Task entity, User user);
 
-	boolean userCanAddSubTask(User user);
+    boolean userCanAddSubTask(Task entity, User user);
 
-	Outcome getOutcome();
+    Outcome getOutcome(Task entity);
 }

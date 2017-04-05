@@ -118,7 +118,7 @@ public class TaskService extends RestProvider {
             TaskDAO taskDAO = new TaskDAO(session);
             IUser<Long> user = session.getUser();
             Task task;
-            TaskDomain taskDomain;
+            TaskDomain taskDomain = new TaskDomain();
 
             if (isNew) {
                 Project project = null;
@@ -151,28 +151,23 @@ public class TaskService extends RestProvider {
                     Server.logger.errorLogEntry(e);
                 }
 
-                task = new Task();
-                taskDomain = new TaskDomain(task);
-                taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
+                task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
             } else {
                 task = taskDAO.findById(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
-
-                taskDomain = new TaskDomain(task);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = taskDomain.getOutcome();
-
+            Outcome outcome = taskDomain.getOutcome(task);
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(session, taskDomain));
+            outcome.addPayload(getActionBar(session, taskDomain, task));
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -226,8 +221,8 @@ public class TaskService extends RestProvider {
             }
             taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
 
-            TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.fillFromDto(taskDto);
+            TaskDomain taskDomain = new TaskDomain();
+            taskDomain.fillFromDto(task, taskDto);
 
             if (taskDto.isNew()) {
                 RegNum rn = new com.exponentus.runtimeobj.RegNum();
@@ -243,7 +238,7 @@ public class TaskService extends RestProvider {
                 new Messages(getAppEnv()).sendToAssignee(task);
             }
 
-            return Response.ok((new TaskDomain(taskDAO.findById(task.getId()))).getOutcome()).build();
+            return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {
@@ -302,14 +297,14 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(id);
 
-            TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.acknowledgedTask((User) getSession().getUser());
+            TaskDomain taskDomain = new TaskDomain();
+            taskDomain.acknowledgedTask(task, (User) getSession().getUser());
 
             dao.update(task, false);
 
             new Messages(getAppEnv()).sendOfNewAcknowledging(task);
 
-            return Response.ok(taskDomain.getOutcome()).build();
+            return Response.ok(taskDomain.getOutcome(task)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         } catch (Exception e) {
@@ -326,14 +321,14 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(id);
 
-            TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.completeTask();
+            TaskDomain taskDomain = new TaskDomain();
+            taskDomain.completeTask(task);
 
             dao.update(task, false);
 
             new Messages(getAppEnv()).sendOfTaskCompleted(task);
 
-            return Response.ok(taskDomain.getOutcome()).build();
+            return Response.ok(taskDomain.getOutcome(task)).build();
         } catch (SecureException | DAOException | DatabaseException e) {
             return responseException(e);
         }
@@ -348,47 +343,47 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(id);
 
-            TaskDomain taskDomain = new TaskDomain(task);
-            taskDomain.cancelTask(comment);
+            TaskDomain taskDomain = new TaskDomain();
+            taskDomain.cancelTask(task, comment);
 
             dao.update(task, false);
 
             new Messages(getAppEnv()).sendOfTaskCancelled(task);
 
-            return Response.ok(taskDomain.getOutcome()).build();
+            return Response.ok(taskDomain.getOutcome(task)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
     }
 
     //
-    private _ActionBar getActionBar(_Session session, TaskDomain taskDomain) {
+    private _ActionBar getActionBar(_Session session, TaskDomain taskDomain, Task task) {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
 
-        if (taskDomain.taskIsEditable()) {
+        if (taskDomain.taskIsEditable(task)) {
             actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
         }
 
-        if (taskDomain.userCanDoRequest((User) session.getUser())) {
+        if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
             actionBar.addAction(new _Action("new_request", "", "add_request"));
         }
 
-        if (taskDomain.userCanDoAcknowledged((User) session.getUser())) {
+        if (taskDomain.userCanDoAcknowledged(task, (User) session.getUser())) {
             actionBar.addAction(new _Action("acknowledged_task", "", "task_acknowledged"));
         }
 
-        if (taskDomain.userCanDoResolution((User) session.getUser())) {
+        if (taskDomain.userCanDoResolution(task, (User) session.getUser())) {
             actionBar.addAction(new _Action("complete_task", "", "task_complete", "fa fa-check-square-o", ""));
             actionBar.addAction(new _Action("cancel_task", "", "task_cancel", "fa fa-ban", ""));
         }
 
-        if (taskDomain.userCanAddSubTask((User) session.getUser())) {
+        if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
             actionBar.addAction(new _Action("add_subtask", "", "add_subtask"));
         }
 
-        if (taskDomain.taskCanBeDeleted()) {
+        if (taskDomain.taskCanBeDeleted(task)) {
             actionBar.addAction(new _Action("delete", "", "delete_document", "", "btn-warning-effect"));
         }
 

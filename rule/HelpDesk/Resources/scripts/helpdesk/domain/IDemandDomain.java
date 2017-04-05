@@ -1,20 +1,19 @@
 package helpdesk.domain;
 
-import com.exponentus.rest.outgoingdto.Outcome;
-
 import administrator.model.User;
+import com.exponentus.rest.outgoingdto.Outcome;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import reference.model.DemandType;
 
 public interface IDemandDomain {
-	void composeNew(User user, DemandType demandType);
+    Demand composeNew(User user, DemandType demandType);
 
-	void fillFromDto(User user, Demand dto);
+    void fillFromDto(Demand entity, Demand dto, User user);
 
-	void changeStatus(DemandStatusType status);
+    void changeStatus(Demand entity, DemandStatusType status);
 
-	void registerTask();
+    void registerTask(Demand entity);
 
-	Outcome getOutcome();
+    Outcome getOutcome(Demand entity);
 }

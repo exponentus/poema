@@ -1,93 +1,82 @@
 package projects.domain.impl;
 
-import static projects.model.constants.ResolutionType.ACCEPTED;
-import static projects.model.constants.ResolutionType.DECLINED;
-
-import java.util.Date;
-
+import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
-
-import administrator.model.User;
 import projects.domain.IRequestDomain;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
 
+import java.util.Date;
+
+import static projects.model.constants.ResolutionType.ACCEPTED;
+import static projects.model.constants.ResolutionType.DECLINED;
+
 public class RequestDomain implements IRequestDomain {
 
-	private Request request;
+    @Override
+    public Request composeNew(User author, Task task) {
+        Request request = new Request();
 
-	public RequestDomain(Request request) {
-		if (request == null) {
-			throw new IllegalArgumentException("Error: request null");
-		}
+        request.setAuthor(author);
+        request.setTask(task);
 
-		this.request = request;
-	}
+        return request;
+    }
 
-	@Override
-	public void composeNew(User author, Task task) {
-		if (!request.isNew()) {
-			throw new IllegalStateException("entity_is_not_new");
-		}
+    @Override
+    public void fillFromDto(Request request, Request dto) {
+        request.setAuthor(dto.getAuthor());
+        request.setLastModifier(dto.getAuthor().getId());
+        request.setRequestType(dto.getRequestType());
+        request.setComment(dto.getComment());
+        request.setAttachments(dto.getAttachments());
 
-		request.setAuthor(author);
-		request.setTask(task);
-	}
+        if (request.isNew()) {
+            request.setTask(dto.getTask());
+            request.resetReadersEditors();
+            request.addReaderEditor(request.getAuthor());
+            request.addEditors(dto.getTask().getEditors());
+        }
+    }
 
-	@Override
-	public void fillFromDto(Request dto) {
-		request.setAuthor(dto.getAuthor());
-		request.setLastModifier(dto.getAuthor().getId());
-		request.setRequestType(dto.getRequestType());
-		request.setComment(dto.getComment());
-		request.setAttachments(dto.getAttachments());
+    @Override
+    public boolean userCanDoResolution(Request request, User user) {
+        if (request.isNew()) {
+            return false;
+        }
 
-		if (request.isNew()) {
-			request.setTask(dto.getTask());
-			request.resetReadersEditors();
-			request.addReaderEditor(request.getAuthor());
-			request.addEditors(dto.getTask().getEditors());
-		}
-	}
+        ResolutionType rt = request.getResolution();
+        long taskAuthorId = request.getTask().getAuthor().getId();
 
-	@Override
-	public boolean userCanDoResolution(User user) {
-		if (request.isNew()) {
-			return false;
-		}
+        return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
+    }
 
-		ResolutionType rt = request.getResolution();
-		long taskAuthorId = request.getTask().getAuthor().getId();
+    @Override
+    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) {
+        if (!userCanDoResolution(request, user)) {
+            throw new IllegalStateException(
+                    "User " + user.getLogin() + " can not do resolution or request already resolved. "
+                            + "Current resolution: " + request.getResolution());
+        }
 
-		return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
-	}
+        request.setResolution(resolutionType);
+        request.setResolutionTime(new Date());
+        request.setDecisionComment(decisionComment);
+    }
 
-	@Override
-	public void doResolution(User user, ResolutionType resolutionType, String decisionComment) {
-		if (!userCanDoResolution(user)) {
-			throw new IllegalStateException(
-					"User " + user.getLogin() + " can not do resolution or request already resolved. "
-							+ "Current resolution: " + request.getResolution());
-		}
+    @Override
+    public Outcome getOutcome(Request request) {
+        Outcome outcome = new Outcome();
 
-		request.setResolution(resolutionType);
-		request.setResolutionTime(new Date());
-		request.setDecisionComment(decisionComment);
-	}
+        outcome.addPayload(request);
+        outcome.addPayload(request.getTask());
 
-	@Override
-	public Outcome getOutcome() {
-		Outcome outcome = new Outcome();
+        if (!request.isNew()) {
+            outcome.addPayload(new ACL(request));
+        }
 
-		outcome.addPayload(request);
-		outcome.addPayload(request.getTask());
-
-		if (!request.isNew()) {
-			outcome.addPayload(new ACL(request));
-		}
-
-		return outcome;
-	}
+        return outcome;
+    }
 }

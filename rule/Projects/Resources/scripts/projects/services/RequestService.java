@@ -35,8 +35,6 @@ import java.util.UUID;
 @Path("requests")
 public class RequestService extends RestProvider {
 
-    private Outcome outcome = new Outcome();
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -47,29 +45,25 @@ public class RequestService extends RestProvider {
             boolean isNew = "new".equals(id);
             RequestDAO requestDAO = new RequestDAO(session);
             Request request;
-            RequestDomain requestDomain;
+            RequestDomain requestDomain = new RequestDomain();
             EmployeeDAO empDao = new EmployeeDAO(session);
 
             if (isNew) {
                 String taskId = getWebFormData().getValueSilently("task");
                 TaskDAO taskDAO = new TaskDAO(session);
 
-                request = new Request();
-                requestDomain = new RequestDomain(request);
-                requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
+                request = requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
             } else {
                 request = requestDAO.findById(id);
                 if (request == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
-
-                requestDomain = new RequestDomain(request);
             }
 
             Map<Long, Employee> emps = new HashMap<>();
             emps.put(request.getAuthor().getId(), empDao.findByUser(request.getAuthor()));
 
-            outcome = requestDomain.getOutcome();
+            Outcome outcome = requestDomain.getOutcome(request);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(session, request, requestDomain));
             outcome.addPayload("employees", emps);
@@ -126,11 +120,11 @@ public class RequestService extends RestProvider {
             requestDto.setRequestType(requestTypeDAO.findById(requestDto.getRequestType().getId()));
             requestDto.setAttachments(getActualAttachments(request.getAttachments(), requestDto.getAttachments()));
 
-            TaskDomain taskDomain = new TaskDomain(task);
-            RequestDomain requestDomain = new RequestDomain(request);
+            TaskDomain taskDomain = new TaskDomain();
+            RequestDomain requestDomain = new RequestDomain();
 
-            requestDomain.fillFromDto(requestDto);
-            taskDomain.changeStatus(TaskStatusType.PENDING);
+            requestDomain.fillFromDto(request, requestDto);
+            taskDomain.changeStatus(task, TaskStatusType.PENDING);
 
             task.getRequests().add(request);
 
@@ -138,7 +132,7 @@ public class RequestService extends RestProvider {
 
             new Messages(getAppEnv()).sendOfNewRequest(request, task);
 
-            return Response.ok(requestDomain.getOutcome()).build();
+            return Response.ok(requestDomain.getOutcome(request)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -172,13 +166,13 @@ public class RequestService extends RestProvider {
                 return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
             }
 
-            TaskDomain taskDomain = new TaskDomain(request.getTask());
-            RequestDomain requestDomain = new RequestDomain(request);
+            TaskDomain taskDomain = new TaskDomain();
+            RequestDomain requestDomain = new RequestDomain();
 
             if (resolutionType == ResolutionType.ACCEPTED) {
                 switch (request.getRequestType().getName()) {
                     case "implement":
-                        taskDomain.completeTask();
+                        taskDomain.completeTask(request.getTask());
                         break;
                     case "prolong":
                         // prolong new due date
@@ -188,27 +182,27 @@ public class RequestService extends RestProvider {
                             ve.addError("dueDate", "date", "field_is_empty");
                             return responseValidationError(ve);
                         }
-                        taskDomain.prolongTask(newDueDate);
+                        taskDomain.prolongTask(request.getTask(), newDueDate);
                         break;
                     case "cancel":
-                        taskDomain.cancelTask("");
+                        taskDomain.cancelTask(request.getTask(), "");
                         break;
                     default:
                         throw new IllegalArgumentException(
                                 "I don't know what you want. Unknown request type: " + request.getRequestType().getName());
                 }
             } else {
-                taskDomain.returnToProcessing();
+                taskDomain.returnToProcessing(request.getTask());
             }
 
-            requestDomain.doResolution((User) getSession().getUser(), resolutionType,
+            requestDomain.doResolution(request, (User) getSession().getUser(), resolutionType,
                     getWebFormData().getValueSilently("comment"));
 
             requestDAO.update(request, false);
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
-            return Response.ok(outcome).build();
+            return Response.ok(new Outcome()).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
@@ -261,7 +255,7 @@ public class RequestService extends RestProvider {
             actionBar.addAction(new _Action("send_request", "", "save_and_close", "", "btn-primary"));
         }
 
-        if (requestDomain.userCanDoResolution((User) session.getUser())) {
+        if (requestDomain.userCanDoResolution(request, (User) session.getUser())) {
             actionBar.addAction(new _Action("accept", "", "accept", "", "btn-primary"));
             actionBar.addAction(new _Action("decline", "", "decline"));
         }

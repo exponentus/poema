@@ -97,26 +97,22 @@ public class ProjectService extends RestProvider {
             EmployeeDAO empDao = new EmployeeDAO(session);
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
-            ProjectDomain projectDomain;
+            ProjectDomain projectDomain = new ProjectDomain();
             boolean isNew = "new".equals(id);
 
             if (isNew) {
-                project = new Project();
-                projectDomain = new ProjectDomain(project);
-                projectDomain.composeNew((User) session.getUser());
+                project = projectDomain.composeNew((User) session.getUser());
             } else {
                 project = dao.findById(id);
                 if (project == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
-
-                projectDomain = new ProjectDomain(project);
             }
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = projectDomain.getOutcome();
+            Outcome outcome = projectDomain.getOutcome(project);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(session, project, projectDomain));
@@ -152,7 +148,7 @@ public class ProjectService extends RestProvider {
 
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
-            ProjectDomain projectDomain;
+            ProjectDomain projectDomain = new ProjectDomain();
 
             if (dto.isNew()) {
                 project = new Project();
@@ -166,8 +162,7 @@ public class ProjectService extends RestProvider {
 
             dto.setAttachments(getActualAttachments(project.getAttachments(), dto.getAttachments()));
 
-            projectDomain = new ProjectDomain(project);
-            projectDomain.fillFromDto(dto, (User) session.getUser());
+            projectDomain.fillFromDto(project, dto, (User) session.getUser());
 
             if (dto.isNew()) {
                 project = dao.add(project);
@@ -177,9 +172,8 @@ public class ProjectService extends RestProvider {
             }
 
             project = dao.findById(project.getId());
-            projectDomain = new ProjectDomain(project);
 
-            return Response.ok(projectDomain.getOutcome()).build();
+            return Response.ok(projectDomain.getOutcome(project)).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
         } catch (_Validation.VException e) {
@@ -230,7 +224,7 @@ public class ProjectService extends RestProvider {
         actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
         if (project.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
-            if (projectDomain.projectCanBeDeleted()) {
+            if (projectDomain.projectCanBeDeleted(project)) {
                 actionBar.addAction(new _Action("delete", "", "delete_document", "", "btn-warning-effect"));
             }
         }

@@ -89,15 +89,13 @@ public class DemandService extends RestProvider {
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         Demand entity;
-        DemandDomain demandDomain;
+        DemandDomain demandDomain = new DemandDomain();
         try {
             boolean isNew = "new".equals(id);
 
             if (isNew) {
                 String demandTypeName = getWebFormData().getValueSilently("demandType");
                 DemandType demandType = null;
-                entity = new Demand();
-                demandDomain = new DemandDomain(entity);
 
                 try {
                     DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
@@ -110,14 +108,13 @@ public class DemandService extends RestProvider {
                     Server.logger.errorLogEntry(e);
                 }
 
-                demandDomain.composeNew((User) session.getUser(), demandType);
+                entity = demandDomain.composeNew((User) session.getUser(), demandType);
             } else {
                 DemandDAO dao = new DemandDAO(session);
                 entity = dao.findById(id);
-                demandDomain = new DemandDomain(entity);
             }
 
-            Outcome outcome = demandDomain.getOutcome();
+            Outcome outcome = demandDomain.getOutcome(entity);
             outcome.addPayload(getActionBar(session, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -147,7 +144,8 @@ public class DemandService extends RestProvider {
     public Response save(Demand dto) {
         _Session session = getSession();
         Demand demand;
-        DemandDomain demandDomain;
+        DemandDomain demandDomain = new DemandDomain();
+        ;
 
         try {
             validate(dto);
@@ -165,8 +163,7 @@ public class DemandService extends RestProvider {
             dto.setDemandType(demandType);
             dto.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
 
-            demandDomain = new DemandDomain(demand);
-            demandDomain.fillFromDto((User) session.getUser(), dto);
+            demandDomain.fillFromDto(demand, dto, (User) session.getUser());
 
             if (dto.isNew()) {
                 RegNum rn = new RegNum();
@@ -176,7 +173,7 @@ public class DemandService extends RestProvider {
                 demand = demandDAO.update(demand);
             }
 
-            Outcome outcome = demandDomain.getOutcome();
+            Outcome outcome = demandDomain.getOutcome(demand);
 
             return Response.ok(outcome).build();
         } catch (SecureException | DAOException e) {
