@@ -3,7 +3,7 @@
     <hostname>localhost</hostname>
     <port></port>
     <orgname>Avanti's projects</orgname>  
-    <orglogo>/Workspace/img/occ.jpg</orglogo>  
+    <orglogo>/Workspace/img/f.jpg</orglogo>  
     <tls mode="OFF">
         <port>38700</port>
         <certfile>server.crt</certfile>

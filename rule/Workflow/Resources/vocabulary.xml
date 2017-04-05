@@ -184,7 +184,10 @@
         <entry lang="RUS">Блок согласования</entry>
         <entry lang="ENG">Approval block</entry>
     </sentence>
-
+	<sentence mode="on" keyword="approving_start_succesfull">
+        <entry lang="RUS">Блок согласования принят</entry>
+        <entry lang="ENG">Approval block accepted</entry>
+    </sentence>
     <sentence mode="on" keyword="approval_block_accepted">
         <entry lang="RUS">Блок согласования принят</entry>
         <entry lang="ENG">Approval block accepted</entry>
@@ -207,8 +210,9 @@
         <entry lang="ENG">Time limit</entry>
     </sentence>
     <sentence mode="on" keyword="approval_block_time_limit_help">
-        <entry lang="RUS">approval_block_time_limit_help</entry>
-        <entry lang="ENG">approval_block_time_limit_help</entry>
+        <entry lang="RUS">время по прошествии, которого документ переходит к следующему согласователю</entry>
+        <entry lang="ENG">after this time limit the approval process go forward</entry>
+        <entry lang="KAZ">время по прошествии, которого документ переходит к следующему согласователю</entry>
     </sentence>
 
     <sentence mode="on" keyword="control">

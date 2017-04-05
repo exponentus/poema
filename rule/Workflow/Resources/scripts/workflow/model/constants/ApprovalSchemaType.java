@@ -1,7 +1,7 @@
 package workflow.model.constants;
 
 public enum ApprovalSchemaType {
-	UNKNOWN(0), REJECT_IF_NO(456), ACCEPT_IN_ANY_CASE(457);
+	UNKNOWN(0), REJECT_IF_NO(456), IN_ANY_CASE_DECIDE_SIGNER(457);
 
 	private int code;
 

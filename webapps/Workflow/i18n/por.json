@@ -84,6 +84,7 @@
   "applied_author" : "applied_author",
   "content" : "content",
   "value_is_non_latin" : "value_is_non_latin",
+  "approving_start_succesfull" : "approving_start_succesfull",
   "captcha_incorrect" : "Captcha is incorrect",
   "street" : "street",
   "applications_for_vehicle" : "applications_for_vehicle",
