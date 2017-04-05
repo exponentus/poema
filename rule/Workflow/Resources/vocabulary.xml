@@ -102,6 +102,10 @@
         <entry lang="RUS">Заявка на транспорт</entry>
         <entry lang="ENG">Application for vehicle</entry>
     </sentence>
+    <sentence mode="on" keyword="applicationforvehicle">
+        <entry lang="RUS">Заявка на транспорт</entry>
+        <entry lang="ENG">Application for vehicle</entry>
+    </sentence>
     <sentence mode="on" keyword="approvals">
         <entry lang="RUS">Согласование</entry>
         <entry lang="ENG">Approvals</entry>
@@ -184,7 +188,7 @@
         <entry lang="RUS">Блок согласования</entry>
         <entry lang="ENG">Approval block</entry>
     </sentence>
-	<sentence mode="on" keyword="approving_start_succesfull">
+    <sentence mode="on" keyword="approving_start_succesfull">
         <entry lang="RUS">Блок согласования принят</entry>
         <entry lang="ENG">Approval block accepted</entry>
     </sentence>
