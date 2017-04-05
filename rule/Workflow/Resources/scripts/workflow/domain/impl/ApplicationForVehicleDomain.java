@@ -6,11 +6,17 @@ import staff.model.Employee;
 import workflow.domain.IApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
 
+import java.util.Date;
+
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
 
     @Override
     public ApplicationForVehicle composeNew(Employee author) {
-        return new ApplicationForVehicle();
+        ApplicationForVehicle entity = new ApplicationForVehicle();
+        entity.setAppliedRegDate(new Date());
+        entity.setAppliedAuthor(author);
+
+        return entity;
     }
 
     @Override
