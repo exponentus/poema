@@ -160,6 +160,7 @@
   "error_500" : "Internal Server Error",
   "control_type" : "control_type",
   "incoming" : "incoming",
+  "applicationforvehicle" : "applicationforvehicle",
   "password_incorrect" : "PASSWORD_INCORRECT",
   "author" : "author",
   "accepted" : "Aceitaram",

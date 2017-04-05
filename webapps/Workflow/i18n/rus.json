@@ -160,6 +160,7 @@
   "error_500" : "Внутренняя ошибка сервера",
   "control_type" : "Тип контроля",
   "incoming" : "Входящий",
+  "applicationforvehicle" : "Заявка на транспорт",
   "password_incorrect" : "Не верный пароль",
   "author" : "Автор",
   "accepted" : "Принято",

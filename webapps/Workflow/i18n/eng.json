@@ -160,6 +160,7 @@
   "error_500" : "Internal Server Error",
   "control_type" : "Control type",
   "incoming" : "Incoming",
+  "applicationforvehicle" : "Application for vehicle",
   "password_incorrect" : "Password is wrong",
   "author" : "Author",
   "accepted" : "Accepted",
