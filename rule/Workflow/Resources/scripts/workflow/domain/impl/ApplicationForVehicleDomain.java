@@ -5,7 +5,12 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import staff.model.Employee;
 import workflow.domain.IApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
+import workflow.model.constants.ApprovalResultType;
+import workflow.model.constants.ApprovalSchemaType;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Approval;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
@@ -13,8 +18,18 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
     @Override
     public ApplicationForVehicle composeNew(Employee author) {
         ApplicationForVehicle entity = new ApplicationForVehicle();
+
+        entity.setAuthor(author.getUser());
         entity.setAppliedRegDate(new Date());
         entity.setAppliedAuthor(author);
+
+        Approval approval = new Approval();
+        approval.setStatus(ApprovalStatusType.DRAFT);
+        approval.setSchema(ApprovalSchemaType.REJECT_IF_NO);
+        approval.setResult(ApprovalResultType.UNKNOWN);
+        approval.setVersion(1);
+        approval.setBlocks(new ArrayList<>());
+        entity.setApproval(approval);
 
         return entity;
     }

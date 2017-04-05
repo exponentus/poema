@@ -124,6 +124,7 @@ public class ApplicationForVehicleService extends RestProvider {
                 entity = avDAO.findById(dto.getId());
             }
 
+            dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
             domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
