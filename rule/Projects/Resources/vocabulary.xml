@@ -162,12 +162,6 @@
         <entry lang="POR">Corpo</entry>
         <entry lang="SPA">Cuerpo</entry>
     </sentence>
-    <sentence mode="on" keyword="tags">
-        <entry lang="RUS">Метки</entry>
-        <entry lang="ENG">Tags</entry>
-        <entry lang="POR">Etiquetas</entry>
-        <entry lang="SPA">Etiquetas</entry>
-    </sentence>
     <sentence mode="on" keyword="publish_to_customer">
         <entry lang="RUS">Опубликовать заказчику</entry>
         <entry lang="ENG">Publish to the customer</entry>

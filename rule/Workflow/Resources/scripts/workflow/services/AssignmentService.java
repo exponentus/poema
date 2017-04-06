@@ -112,7 +112,6 @@ public class AssignmentService extends RestProvider {
                 entity = assignmentDAO.findById(dto.getId());
             }
 
-            dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
             dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
             domain.fillFromDto(entity, dto, employee);

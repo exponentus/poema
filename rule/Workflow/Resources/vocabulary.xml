@@ -249,4 +249,34 @@
         <entry lang="POR">Execução</entry>
         <entry lang="SPA">Ejecución</entry>
     </sentence>
+      <sentence mode="on" keyword="vehicle">
+        <entry lang="RUS">Транспортное средство</entry>
+        <entry lang="ENG">Vehicle</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Көлік</entry>
+    </sentence>
+    <sentence mode="on" keyword="use_from">
+        <entry lang="RUS">От</entry>
+        <entry lang="ENG">From</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Басталуы</entry>
+    </sentence>
+     <sentence mode="on" keyword="use_to">
+        <entry lang="RUS">До</entry>
+        <entry lang="ENG">Until</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Дейін</entry>
+    </sentence>
+    <sentence mode="on" keyword="route">
+        <entry lang="RUS">Маршрут</entry>
+        <entry lang="ENG">Route</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Бағыт</entry>
+    </sentence>
+  
+    
 </vocabulary>
