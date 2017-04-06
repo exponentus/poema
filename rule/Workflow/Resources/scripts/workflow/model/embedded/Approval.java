@@ -9,14 +9,14 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import reference.model.constants.ApprovalSchemaType;
+import reference.model.constants.ApprovalType;
+import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalSchemaType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
-import workflow.model.constants.converter.ApprovalSchemaTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 
 /**

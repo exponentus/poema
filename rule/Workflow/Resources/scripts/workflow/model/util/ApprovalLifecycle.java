@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 
 import com.exponentus.user.IUser;
 
+import reference.model.constants.ApprovalSchemaType;
+import reference.model.constants.ApprovalType;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalSchemaType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
 import workflow.model.embedded.Approval;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;

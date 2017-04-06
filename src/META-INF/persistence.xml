@@ -91,6 +91,8 @@
         <class>reference.model.TextTemplate</class>
         <class>reference.model.DocumentTypeCategory</class>
         <class>reference.model.Vehicle</class>
+        <class>reference.model.ApprovalRoute</class>
+        <class>reference.model.embedded.RouteBlock</class>
         <!-- Specific Reference module entities -->
         <class>reference.model.TaskType</class>
         <class>reference.model.RequestType</class>

@@ -17,11 +17,11 @@ import com.exponentus.dataengine.jpa.SimpleAppEntity;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import reference.model.constants.ApprovalType;
+import reference.model.constants.converter.ApprovalTypeConverter;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
-import workflow.model.constants.converter.ApprovalTypeConverter;
 import workflow.model.exception.ApprovalException;
 import workflow.model.exception.ApprovalExceptionType;
 

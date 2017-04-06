@@ -32,11 +32,11 @@ import lotus.domino.RichTextItem;
 import lotus.domino.View;
 import lotus.domino.ViewEntry;
 import lotus.domino.ViewEntryCollection;
+import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.ApprovalType;
 import workflow.model.embedded.Approval;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
@@ -44,7 +44,7 @@ import workflow.model.embedded.Block;
 @Command(name = "import_sz_nsf")
 public class SyncOfficeMemoNSF extends ImportNSF {
 	private static final String TMP_FIELD_NAME = "officememo_tmp_file";
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, OfficeMemo> entities = new HashMap<>();
@@ -98,7 +98,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						} else {
 							approver.setEmployee(employeeDAO.findByUser(dummyUser));
 						}
-						
+
 						List<Block> blocks = new ArrayList<Block>();
 						Block block = new Block();
 						block.setType(ApprovalType.SIGNING);
@@ -140,7 +140,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						}
 						entity.setAttachments(attachments);
 						normalizeACL(uDao, entity, doc);
-						
+
 						Document prjDoc = prjView.getDocumentByKey(entity.getRegNumber());
 						if (prjDoc != null) {
 							DocumentCollection col = prjDoc.getResponses();
@@ -171,20 +171,20 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 										Block b = new Block();
 										b.setType(ApprovalType.SIGNING);
 									} else if (respForm.equals("InfoForm")) {
-										
+
 									} else if (respForm.equals("ExtraForm")) {
 
 									} else if (respForm.equals("DocLink")) {
-										
+
 									}
 								}
-								
+
 								tmpDoc = col.getNextDocument();
 								respDoc.recycle();
 								respDoc = tmpDoc;
 							}
 						}
-						
+
 						entities.put(unId, entity);
 					}
 				}
@@ -192,7 +192,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 				entry.recycle();
 				entry = tmpEntry;
 			}
-			
+
 			logger.infoLogEntry("has been found " + entities.size() + " records");
 			for (Entry<String, OfficeMemo> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
