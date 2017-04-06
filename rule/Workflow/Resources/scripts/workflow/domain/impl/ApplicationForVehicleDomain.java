@@ -43,6 +43,8 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
 		entity.setRoute(dto.getRoute());
 		entity.setTags(dto.getTags());
 		entity.setAttachments(dto.getAttachments());
+		entity.setBlocks(dto.getBlocks());
+		entity.setSchema(dto.getSchema());
 
 		if (entity.isNew()) {
 			dto.setVersion(1);
