@@ -108,7 +108,16 @@ public class ApprovalLifecycle {
 	public void decline(IUser<Long> user, String decisionComment) throws ApprovalException {
 
 		Block processBlock = getCurrentBlock();
+		if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {
+			throw new ApprovalException(ApprovalExceptionType.THERE_IS_NO_COMMENT);
+		}
 		processBlock.getApprover(user).disagree(decisionComment);
+
+		if (approval.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
+			approval.setResult(ApprovalResultType.REJECTED);
+			approval.setStatus(ApprovalStatusType.FINISHED);
+			return;
+		}
 
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
@@ -139,9 +148,6 @@ public class ApprovalLifecycle {
 					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 				}
 			} else {
-				if (approval.getSchema() == ApprovalSchemaType.IN_ANY_CASE_DECIDE_SIGNER) {
-
-				}
 				approval.setResult(ApprovalResultType.ACCEPTED);
 				approval.setStatus(ApprovalStatusType.FINISHED);
 			}
