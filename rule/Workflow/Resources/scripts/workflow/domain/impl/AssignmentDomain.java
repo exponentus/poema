@@ -6,6 +6,7 @@ import staff.model.Employee;
 import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
+import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Control;
 
 import java.util.Date;
@@ -50,6 +51,11 @@ public class AssignmentDomain implements IAssignmentDomain {
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());
         entity.setObservers(dto.getObservers());
+        // TODO fix, rm
+        for (AssigneeEntry it : dto.getControl().getAssigneeEntries()) {
+            it.setResetBy(author);
+        }
+        //
         entity.setControl(dto.getControl());
         entity.setAttachments(dto.getAttachments());
     }

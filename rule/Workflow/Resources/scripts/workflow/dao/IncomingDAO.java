@@ -115,15 +115,15 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
         Root<Report> rootR = cqr.from(Report.class);
         Join attCount = rootR.join("attachments", JoinType.LEFT);
-        cqr.select(cba.construct(
-                Report.class,
-                rootR.get("id"),
-                rootR.get("regDate"),
-                rootR.get("title"),
-                rootR.get("body"),
-                rootR.get("appliedAuthor"),
-                rootR.get("appliedRegDate"),
-                cba.count(attCount)));
+//        cqr.select(cba.construct(
+//                Report.class,
+//                rootR.get("id"),
+//                rootR.get("regDate"),
+//                rootR.get("title"),
+//                rootR.get("body"),
+//                rootR.get("appliedAuthor"),
+//                rootR.get("appliedRegDate"),
+//                cba.count(attCount)));
 
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
@@ -131,8 +131,8 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
             conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
         }
 
-        cqr.where(conditionR);
-        cqr.groupBy(rootR);
+        cqr.select(rootR).where(conditionR);
+        // cqr.groupBy(rootR, rootR.get("appliedAuthor"));
         cqr.orderBy(cbr.desc(rootR.get("regDate")));
 
         TypedQuery<Report> typedQueryR = em.createQuery(cqr);
