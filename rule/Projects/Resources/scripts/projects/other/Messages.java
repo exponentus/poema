@@ -125,6 +125,10 @@ public class Messages {
 
 	}
 
+	public void sendReminderToAssignee(Task task) {
+
+	}
+
 	public void sendOfNewRequest(Request request, Task task) {
 		try {
 			String msgTemplate = "new_request";

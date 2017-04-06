@@ -67,7 +67,6 @@ public class ApprovalLifecycle {
 
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
-			// add next approver for read
 			if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
 				nextApprover.setCurrent(true);
 				entity.addReader(nextApprover.getEmployee().getUser());
@@ -117,7 +116,6 @@ public class ApprovalLifecycle {
 
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
-			// add next approver for read
 			if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
 				nextApprover.setCurrent(true);
 				entity.addReader(nextApprover.getEmployee().getUser());
