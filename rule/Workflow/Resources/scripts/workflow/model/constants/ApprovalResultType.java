@@ -1,7 +1,7 @@
 package workflow.model.constants;
 
 public enum ApprovalResultType {
-	UNKNOWN(0), ACCEPTED(46), REJECTED(47);
+	UNKNOWN(0), ACCEPTED(46), REJECTED(47), PROJECT(48);
 
 	private int code;
 

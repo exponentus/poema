@@ -1,9 +1,0 @@
-echo ***********************************************************
-echo *        Synchronize data with SmartDoc                   *
-echo ***********************************************************
-run task import_in_nsf
-run task import_kr_nsf
-run task import_ki_nsf
-echo ***********************************************************
-echo *           Synchronizing was finished                    *
-echo ***********************************************************

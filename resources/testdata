@@ -1,0 +1,10 @@
+echo ***********************************************************
+echo *                 Generate test data                      *
+echo ***********************************************************
+run task gen_test_users
+run batch initpsd
+run task gen_test_orgs_xls
+run task gen_test_emps
+echo ***********************************************************
+echo *                     Finished                            *
+echo ***********************************************************

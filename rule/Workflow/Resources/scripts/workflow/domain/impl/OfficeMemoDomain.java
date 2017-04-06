@@ -1,6 +1,5 @@
 package workflow.domain.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import com.exponentus.common.model.ACL;
@@ -8,11 +7,9 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 
 import administrator.model.User;
-import reference.model.constants.ApprovalSchemaType;
 import staff.model.Employee;
 import workflow.domain.IOfficeMemoDomain;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
@@ -22,15 +19,9 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 	@Override
 	public OfficeMemo composeNew(User user, Employee appliedAuthor) {
 		OfficeMemo om = new OfficeMemo();
-
 		om.setAuthor(user);
 		om.setAppliedRegDate(new Date());
 		om.setAppliedAuthor(appliedAuthor);
-		om.setStatus(ApprovalStatusType.DRAFT);
-		om.setSchema(ApprovalSchemaType.REJECT_IF_NO);
-		om.setResult(ApprovalResultType.UNKNOWN);
-		om.setVersion(1);
-		om.setBlocks(new ArrayList<>());
 		return om;
 	}
 

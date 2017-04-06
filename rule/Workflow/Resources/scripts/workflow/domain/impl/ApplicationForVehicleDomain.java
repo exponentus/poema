@@ -1,17 +1,13 @@
 package workflow.domain.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 
-import reference.model.constants.ApprovalSchemaType;
 import staff.model.Employee;
 import workflow.domain.IApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
 
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
 
@@ -22,13 +18,6 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
 		entity.setAuthor(author.getUser());
 		entity.setAppliedRegDate(new Date());
 		entity.setAppliedAuthor(author);
-
-		entity.setStatus(ApprovalStatusType.DRAFT);
-		entity.setSchema(ApprovalSchemaType.REJECT_IF_NO);
-		entity.setResult(ApprovalResultType.UNKNOWN);
-		entity.setVersion(1);
-		entity.setBlocks(new ArrayList<>());
-
 		return entity;
 	}
 

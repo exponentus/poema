@@ -1,5 +1,6 @@
 package workflow.model.embedded;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,18 +31,18 @@ import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 public abstract class Approval extends SecureHierarchicalEntity<UUID> implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
-	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
+	private ApprovalStatusType status = ApprovalStatusType.DRAFT;
 
 	@Convert(converter = ApprovalSchemaTypeConverter.class)
-	private ApprovalSchemaType schema;
+	private ApprovalSchemaType schema = ApprovalSchemaType.REJECT_IF_NO;
 
 	@Convert(converter = ApprovalResultTypeConverter.class)
-	private ApprovalResultType result;
+	private ApprovalResultType result = ApprovalResultType.PROJECT;
 
 	@OneToMany(cascade = CascadeType.ALL)
-	private List<Block> blocks;
+	private List<Block> blocks = new ArrayList<>();
 
-	private int version;
+	private int version = 1;
 
 	public ApprovalStatusType getStatus() {
 		return status;

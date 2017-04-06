@@ -2,15 +2,15 @@
 #
 #COMMON
 run task fill_region_types
-stini reference.init.FillLocalityTypes
-stini reference.init.FillCountries
-stini reference.init.FillRegions
-stini reference.init.FillDistricts
-stini reference.init.FillLocalities
-stini reference.init.FillCityDistricts
-stini reference.init.FillDepartmentType
+run task fill_locality_types
+run task fill_countries
+run task fill_regions
+run task fill_districts
+run task fill_localities
+run task fill_city_districts
+run task fill_department_types
 run task fill_doc_langs
-stini reference.init.FillOrgCategories
+run task fill_org_categories
 stini staff.init.FillDefaultLabels
 stini staff.init.FillDefaultRoles
 #stini staff.init.FillTestOrgs
