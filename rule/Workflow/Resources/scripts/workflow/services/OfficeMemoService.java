@@ -211,7 +211,7 @@ public class OfficeMemoService extends RestProvider {
 			omd.startApproving(om);
 
 			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyToApprove(om.getApproval().getProcessingBlock().getApprovers());
+			new Messages(getAppEnv()).notifyToApprove(om.getProcessingBlock().getApprovers());
 			Outcome outcome = omd.getOutcome(om);
 			outcome.setTitle("approving_started");
 			outcome.setMessage("approving_started");

@@ -200,8 +200,8 @@
         <entry lang="SPA">Gestor</entry>
     </sentence>
     <sentence mode="on" keyword="programmer">
-        <entry lang="RUS">Главный программист</entry>
-        <entry lang="ENG">Lead developer</entry>
+        <entry lang="RUS">Ответственный исполнитель</entry>
+        <entry lang="ENG">Team leader</entry>
         <entry lang="POR">Líder de desenvolvimento</entry>
         <entry lang="SPA">Lider de desarrollo</entry>
     </sentence>
@@ -211,12 +211,7 @@
         <entry lang="POR">Provador</entry>
         <entry lang="SPA">Testeador</entry>
     </sentence>
-    <sentence mode="on" keyword="observers">
-        <entry lang="RUS">Наблюдатели</entry>
-        <entry lang="ENG">Observers</entry>
-        <entry lang="POR">Observedarores</entry>
-        <entry lang="SPA">Observadores</entry>
-    </sentence>
+
     <sentence mode="on" keyword="comment">
         <entry lang="RUS">Комментарий</entry>
         <entry lang="ENG">Comment</entry>
@@ -334,12 +329,7 @@
         <entry lang="POR">Pedidos</entry>
         <entry lang="SPA">Solicitudes</entry>
     </sentence>
-    <sentence mode="on" keyword="related_documents">
-        <entry lang="RUS">Связанные документы</entry>
-        <entry lang="ENG">Related documents</entry>
-        <entry lang="POR">Execução</entry>
-        <entry lang="SPA">Ejecución</entry>
-    </sentence>
+
     <sentence mode="on" keyword="cancel_reason">
         <entry lang="RUS">Причина отмены</entry>
         <entry lang="ENG">Cancel reason</entry>

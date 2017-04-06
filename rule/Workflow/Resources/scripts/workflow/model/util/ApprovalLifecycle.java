@@ -1,6 +1,5 @@
 package workflow.model.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
@@ -10,7 +9,6 @@ import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approval;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
@@ -19,20 +17,18 @@ import workflow.model.exception.ApprovalExceptionType;
 
 public class ApprovalLifecycle {
 	private IApproval entity;
-	private Approval approval;
 
 	public ApprovalLifecycle(IApproval entity) {
 		this.entity = entity;
-		this.approval = entity.getApproval();
 	}
 
 	public void start() throws ApprovalException {
 
-		if (approval.getStatus() != ApprovalStatusType.DRAFT) {
-			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, approval.getStatus().name());
+		if (entity.getStatus() != ApprovalStatusType.DRAFT) {
+			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
-		Block block = approval.getNextBlock();
+		Block block = entity.getNextBlock();
 
 		if (block.getType() == ApprovalType.SERIAL) {
 			Approver approver = block.getNextApprover();
@@ -52,10 +48,10 @@ public class ApprovalLifecycle {
 			throw new ApprovalException(ApprovalExceptionType.BLOCK_TYPE_ERROR, block.getType().name());
 		}
 
-		approval.setStatus(ApprovalStatusType.PROCESSING);
+		entity.setStatus(ApprovalStatusType.PROCESSING);
 		block.setStatus(ApprovalStatusType.PROCESSING);
 
-		approval.getBlocks().forEach(b -> {
+		entity.getBlocks().forEach(b -> {
 			if (!block.getId().equals(b.getId())) {
 				b.setStatus(ApprovalStatusType.AWAITING);
 			}
@@ -79,7 +75,7 @@ public class ApprovalLifecycle {
 		} else {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
 
-			Block nextBlock = approval.getNextBlock();
+			Block nextBlock = entity.getNextBlock();
 			if (nextBlock != null) {
 				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
 
@@ -98,8 +94,8 @@ public class ApprovalLifecycle {
 					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 				}
 			} else {
-				approval.setResult(ApprovalResultType.ACCEPTED);
-				approval.setStatus(ApprovalStatusType.FINISHED);
+				entity.setResult(ApprovalResultType.ACCEPTED);
+				entity.setStatus(ApprovalStatusType.FINISHED);
 			}
 		}
 
@@ -113,9 +109,9 @@ public class ApprovalLifecycle {
 		}
 		processBlock.getApprover(user).disagree(decisionComment);
 
-		if (approval.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
-			approval.setResult(ApprovalResultType.REJECTED);
-			approval.setStatus(ApprovalStatusType.FINISHED);
+		if (entity.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
+			entity.setResult(ApprovalResultType.REJECTED);
+			entity.setStatus(ApprovalStatusType.FINISHED);
 			return;
 		}
 
@@ -129,7 +125,7 @@ public class ApprovalLifecycle {
 		} else {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
 
-			Block nextBlock = approval.getNextBlock();
+			Block nextBlock = entity.getNextBlock();
 			if (nextBlock != null) {
 				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
 
@@ -148,28 +144,18 @@ public class ApprovalLifecycle {
 					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 				}
 			} else {
-				approval.setResult(ApprovalResultType.ACCEPTED);
-				approval.setStatus(ApprovalStatusType.FINISHED);
+				entity.setResult(ApprovalResultType.ACCEPTED);
+				entity.setStatus(ApprovalStatusType.FINISHED);
 			}
 		}
 	}
 
-	public static Approval getDefaultApproval() {
-		Approval approval = new Approval();
-		approval.setStatus(ApprovalStatusType.DRAFT);
-		approval.setSchema(ApprovalSchemaType.REJECT_IF_NO);
-		approval.setResult(ApprovalResultType.UNKNOWN);
-		approval.setVersion(1);
-		approval.setBlocks(new ArrayList<>());
-		return approval;
-	}
-
 	private Block getCurrentBlock() throws ApprovalException {
-		if (approval.getStatus() != ApprovalStatusType.PROCESSING) {
-			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, approval.getStatus().name());
+		if (entity.getStatus() != ApprovalStatusType.PROCESSING) {
+			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
-		Block processBlock = approval.getProcessingBlock();
+		Block processBlock = entity.getProcessingBlock();
 		if (processBlock == null) {
 			throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 		}

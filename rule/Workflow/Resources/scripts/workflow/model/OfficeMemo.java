@@ -3,14 +3,14 @@ package workflow.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,7 +21,6 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -29,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.Tag;
 import staff.model.Employee;
 import workflow.model.embedded.Approval;
-import workflow.model.embedded.IApproval;
 
 /**
  * @author Kayra created 07-04-2016
@@ -38,7 +36,8 @@ import workflow.model.embedded.IApproval;
 @JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
-public class OfficeMemo extends SecureHierarchicalEntity<UUID> implements IApproval {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public class OfficeMemo extends Approval {
 
 	@JsonIgnore
 	private List<Assignment> assignments;
@@ -71,9 +70,6 @@ public class OfficeMemo extends SecureHierarchicalEntity<UUID> implements IAppro
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "officememo_tags")
 	private List<Tag> tags;
-
-	@Embedded
-	private Approval approval;
 
 	public String getRegNumber() {
 		return regNumber;
@@ -141,16 +137,9 @@ public class OfficeMemo extends SecureHierarchicalEntity<UUID> implements IAppro
 		this.attachments = attachments;
 	}
 
-	public Approval getApproval() {
-		return approval;
-	}
-
-	public void setApproval(Approval approval) {
-		this.approval = approval;
-	}
-
 	@Override
 	public String getURL() {
 		return "office-memos/" + getIdentifier();
 	}
+
 }

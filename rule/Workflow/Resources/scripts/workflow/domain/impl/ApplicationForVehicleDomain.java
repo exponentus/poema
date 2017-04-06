@@ -12,7 +12,6 @@ import workflow.domain.IApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approval;
 
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
 
@@ -24,13 +23,11 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
 		entity.setAppliedRegDate(new Date());
 		entity.setAppliedAuthor(author);
 
-		Approval approval = new Approval();
-		approval.setStatus(ApprovalStatusType.DRAFT);
-		approval.setSchema(ApprovalSchemaType.REJECT_IF_NO);
-		approval.setResult(ApprovalResultType.UNKNOWN);
-		approval.setVersion(1);
-		approval.setBlocks(new ArrayList<>());
-		entity.setApproval(approval);
+		entity.setStatus(ApprovalStatusType.DRAFT);
+		entity.setSchema(ApprovalSchemaType.REJECT_IF_NO);
+		entity.setResult(ApprovalResultType.UNKNOWN);
+		entity.setVersion(1);
+		entity.setBlocks(new ArrayList<>());
 
 		return entity;
 	}
@@ -58,14 +55,10 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
 		entity.setTags(dto.getTags());
 		entity.setAttachments(dto.getAttachments());
 
-		if (dto.getApproval() != null) {
-			if (entity.isNew()) {
-				dto.getApproval().setVersion(1);
-			}
-			entity.setApproval(dto.getApproval());
-		} else {
-			entity.setApproval(null);
+		if (entity.isNew()) {
+			dto.setVersion(1);
 		}
+
 	}
 
 	@Override

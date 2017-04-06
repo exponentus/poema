@@ -1,5 +1,6 @@
 package workflow.domain.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.exponentus.common.model.ACL;
@@ -7,9 +8,11 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 
 import administrator.model.User;
+import reference.model.constants.ApprovalSchemaType;
 import staff.model.Employee;
 import workflow.domain.IOfficeMemoDomain;
 import workflow.model.OfficeMemo;
+import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
@@ -23,8 +26,11 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		om.setAuthor(user);
 		om.setAppliedRegDate(new Date());
 		om.setAppliedAuthor(appliedAuthor);
-		om.setApproval(ApprovalLifecycle.getDefaultApproval());
-
+		om.setStatus(ApprovalStatusType.DRAFT);
+		om.setSchema(ApprovalSchemaType.REJECT_IF_NO);
+		om.setResult(ApprovalResultType.UNKNOWN);
+		om.setVersion(1);
+		om.setBlocks(new ArrayList<>());
 		return om;
 	}
 
@@ -37,13 +43,8 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		om.setRecipient(dto.getRecipient());
 		om.setAttachments(dto.getAttachments());
 
-		if (dto.getApproval() != null) {
-			if (om.isNew()) {
-				dto.getApproval().setVersion(1);
-			}
-			om.setApproval(dto.getApproval());
-		} else {
-			om.setApproval(null);
+		if (om.isNew()) {
+			dto.setVersion(1);
 		}
 
 		if (om.isNew()) {
@@ -55,7 +56,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 
 	@Override
 	public boolean approvalCanBeStarted(OfficeMemo om) {
-		return om.getApproval().getStatus() == ApprovalStatusType.DRAFT;
+		return om.getStatus() == ApprovalStatusType.DRAFT;
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 
 	@Override
 	public boolean employeeCanDoDecisionApproval(OfficeMemo om, Employee employee) {
-		return om.getApproval().userCanDoDecision(employee);
+		return om.userCanDoDecision(employee);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 {
   "markdown_preview" : "markdown_preview",
   "cancel" : "cancel",
+  "add_assignee" : "add_assignee",
   "projects" : "Proyectos",
   "assignee_user" : "Ejecutor",
   "deleting_is_restricted" : "Deleting is restricted",
@@ -70,8 +71,8 @@
   "телефон" : "Телефон",
   "tasks_all" : "Todas las tareas",
   "no_data" : "no_data",
-  "tasks_assigned_to_me" : "Asignadas a mi",
   "related_documents" : "Ejecución",
+  "tasks_assigned_to_me" : "Asignadas a mi",
   "district" : "district",
   "name" : "Nombre",
   "page" : "Page",

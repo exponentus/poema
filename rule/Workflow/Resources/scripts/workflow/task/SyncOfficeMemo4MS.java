@@ -82,14 +82,14 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					} else {
 						sz.setAuthor(dummyUser);
 					}
-					
+
 					String coordStatus = getStringValue(conn, docId, "coordination");
 					ApprovalStatusType status = coordStatusCollation.get(Integer.parseInt(coordStatus));
 					if (status == null) {
 						logger.errorLogEntry("wrong reference ext value \"" + coordStatus + "\" (coordination)");
 						status = ApprovalStatusType.UNKNOWN;
 					}
-					sz.getApproval().setStatus(status);
+					sz.setStatus(status);
 
 					String recipient = getStringValue(conn, docId, "recipient");
 					IUser<Long> r = uDao.findByLogin(recipient);
@@ -103,7 +103,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					} else {
 						logger.errorLogEntry("wrong ext value \"" + recipient + "\" (login)");
 					}
-					
+
 					sz.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
 					sz.setBody("#" + getStringValue(conn, docId, "corrstring") + "#"
 							+ getStringValue(conn, docId, "briefcontent"));
@@ -147,7 +147,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		}
 		logger.infoLogEntry("done...");
 	}
-	
+
 	private String getStringValue(Connection conn, int docId, String fieldName) {
 		try {
 			Statement s = conn.createStatement();
@@ -164,7 +164,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 			return "";
 		}
 	}
-	
+
 	private int getIntValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		String sql = "SELECT valueasnumber FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
@@ -176,7 +176,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 			return 0;
 		}
 	}
-	
+
 	private Date getDateValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		try {
@@ -198,15 +198,16 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		Map<String, String> paths = new HashMap<String, String>();
 		Statement s = conn.createStatement();
 		String sql = "SELECT * FROM custom_blobs_maindocs as cf WHERE cf.docid = " + docId + ";";
-		//LargeObjectManager lobj = ((org.postgresql.PGConnection) ((DelegatingConnection) conn).getInnermostDelegate())
-		//		.getLargeObjectAPI();
+		// LargeObjectManager lobj = ((org.postgresql.PGConnection)
+		// ((DelegatingConnection) conn).getInnermostDelegate())
+		// .getLargeObjectAPI();
 
 		ResultSet rs = s.executeQuery(sql);
 		while (rs.next()) {
 			String originalName = rs.getString("originalname");
 			String path = ses.getTmpDir().getAbsolutePath() + File.separator + originalName;
 			File file = new File(path);
-			
+
 			try {
 				FileOutputStream out = new FileOutputStream(file);
 				byte[] fileBytes = rs.getBytes("value");
@@ -240,16 +241,16 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		collation.put(110, "Letter");
 		collation.put(111, "Task");
 		return collation;
-		
+
 	}
-	
-	//int STATUS_DRAFT = 351;
-	//int STATUS_COORDINTING = 352;
-	//int STATUS_REJECTED = 354;
-	//int STATUS_SIGNING = 355;
-	//int STATUS_SIGNED = 356;
-	//int STATUS_NEWVERSION = 360;
-	
+
+	// int STATUS_DRAFT = 351;
+	// int STATUS_COORDINTING = 352;
+	// int STATUS_REJECTED = 354;
+	// int STATUS_SIGNING = 355;
+	// int STATUS_SIGNED = 356;
+	// int STATUS_NEWVERSION = 360;
+
 	private Map<Integer, ApprovalStatusType> coordStatusCollationMapInit() {
 		Map<Integer, ApprovalStatusType> depTypeCollation = new HashMap<>();
 		depTypeCollation.put(350, ApprovalStatusType.UNKNOWN);
@@ -264,7 +265,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		depTypeCollation.put(360, ApprovalStatusType.UNKNOWN);
 		depTypeCollation.put(361, ApprovalStatusType.UNKNOWN);
 		depTypeCollation.put(362, ApprovalStatusType.UNKNOWN);
-		
+
 		return depTypeCollation;
 
 	}
@@ -285,7 +286,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return blocks;
 	}
 
@@ -296,7 +297,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		@JacksonXmlElementWrapper(useWrapping = false)
 		private FormsBlock[] blocks;
 
-		//getters, setters, toString
+		// getters, setters, toString
 	}
 
 	class FormsBlock {
@@ -308,16 +309,16 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		private String type;
 
 		private String status;
-		
-		//	@JacksonXmlProperty(localName = "client_token")
-		//	private String clientToken;
-		
-		//	@JacksonXmlProperty(localName = "client_secret")
-		//	private String clientSecret;
 
-		//getters, setters, toString
+		// @JacksonXmlProperty(localName = "client_token")
+		// private String clientToken;
+
+		// @JacksonXmlProperty(localName = "client_secret")
+		// private String clientSecret;
+
+		// getters, setters, toString
 	}
-	
+
 	public static void main(String[] args) {
 		new SyncOfficeMemo4MS().parse();
 	}

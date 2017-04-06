@@ -37,7 +37,6 @@ import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approval;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 
@@ -106,9 +105,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						approvers.add(approver);
 						block.setApprovers(approvers);
 						blocks.add(block);
-						Approval approval = new Approval();
-						approval.setBlocks(blocks);
-						entity.setApproval(approval);
+						entity.setBlocks(blocks);
 
 						IUser<Long> recipient = uDao.findByExtKey(doc.getItemValueString("RecipientOnlyNA"));
 						if (recipient != null) {
@@ -163,8 +160,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 										} else if (type.equalsIgnoreCase("coordinated")) {
 											b.setStatus(ApprovalStatusType.FINISHED);
 										}
-										Approval apprv = entity.getApproval();
-										apprv.getBlocks().add(b);
+										entity.getBlocks().add(b);
 									} else if (respForm.equals("SignForm")) {
 										String coordStatus = respDoc.getItemValueString("CoordStatus");
 										System.out.println(coordStatus);
