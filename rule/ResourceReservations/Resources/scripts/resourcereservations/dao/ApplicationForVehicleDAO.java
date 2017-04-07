@@ -1,16 +1,15 @@
 package resourcereservations.dao;
 
-import java.util.UUID;
-
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.scripting._Session;
+import resourcereservations.model.ApplicationForVehicle;
 
-import workflow.model.ApplicationForVehicle;
+import java.util.UUID;
 
 public class ApplicationForVehicleDAO extends DAO<ApplicationForVehicle, UUID> {
 
-	public ApplicationForVehicleDAO(_Session session) throws DAOException {
-		super(ApplicationForVehicle.class, session);
-	}
+    public ApplicationForVehicleDAO(_Session session) throws DAOException {
+        super(ApplicationForVehicle.class, session);
+    }
 }

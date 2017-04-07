@@ -2,8 +2,8 @@ package resourcereservations.domain;
 
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
+import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
-import workflow.model.ApplicationForVehicle;
 import workflow.model.exception.ApprovalException;
 
 public interface IApplicationForVehicleDomain {
