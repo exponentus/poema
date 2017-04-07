@@ -1,4 +1,4 @@
-package workflow.services;
+package resourcereservations.services;
 
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -22,14 +22,10 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline odo = new _Outline("", "org_documents");
-        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-inbox", "incomings", "incomings"));
-        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-envelope-o", "outgoings", "outgoings"));
-        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-pencil-square-o", "office-memos", "office-memos"));
-        odo.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle",
-                "applications_for_vehicle"));
+        _Outline co = new _Outline("", "common");
+        co.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle", "applications_for_vehicle"));
 
-        list.add(odo);
+        list.add(co);
 
         Outcome outcome = new Outcome();
         outcome.addPayload("nav", list);

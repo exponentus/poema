@@ -15,6 +15,8 @@ import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.domain.impl.RequestDomain;
 import projects.domain.impl.TaskDomain;
+import projects.exception.RequestException;
+import projects.exception.TaskException;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
@@ -203,7 +205,7 @@ public class RequestService extends RestProvider {
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
             return Response.ok(new Outcome()).build();
-        } catch (SecureException | DAOException e) {
+        } catch (SecureException | DAOException | TaskException | RequestException e) {
             return responseException(e);
         }
     }

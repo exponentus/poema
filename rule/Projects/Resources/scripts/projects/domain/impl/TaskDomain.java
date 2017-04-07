@@ -7,6 +7,7 @@ import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.domain.ITaskDomain;
+import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
@@ -165,33 +166,33 @@ public class TaskDomain implements ITaskDomain {
     }
 
     @Override
-    public void acknowledgedTask(Task task, User user) throws Exception {
+    public void acknowledgedTask(Task task, User user) throws TaskException {
         if (!task.getAssignee().equals(user.getId())) {
-            throw new Exception("not_assignee_user");
+            throw new TaskException("not_assignee_user");
         } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
-            throw new IllegalStateException("task_status_is_not_open");
+            throw new TaskException("task_status_is_not_open");
         }
 
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
     @Override
-    public void completeTask(Task task) {
+    public void completeTask(Task task) throws TaskException {
         if (task.getStatus() == TaskStatusType.COMPLETED) {
-            throw new IllegalStateException("task already completed");
+            throw new TaskException("task already completed");
         }
 
         changeStatus(task, TaskStatusType.COMPLETED);
     }
 
     @Override
-    public void prolongTask(Task task, Date newDueDate) {
+    public void prolongTask(Task task, Date newDueDate) throws TaskException {
         if (newDueDate == null) {
-            throw new IllegalArgumentException("newDueDate is null");
+            throw new TaskException("newDueDate is null");
         }
 
         if (task.getDueDate().after(newDueDate)) {
-            throw new IllegalArgumentException(
+            throw new TaskException(
                     "new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
         }
 
@@ -200,9 +201,9 @@ public class TaskDomain implements ITaskDomain {
     }
 
     @Override
-    public void cancelTask(Task task, String comment) {
+    public void cancelTask(Task task, String comment) throws TaskException {
         if (task.getStatus() == TaskStatusType.CANCELLED) {
-            throw new IllegalStateException("task already cancelled");
+            throw new TaskException("task already cancelled");
         }
 
         changeStatus(task, TaskStatusType.CANCELLED);
