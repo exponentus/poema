@@ -1,0 +1,119 @@
+.approval {
+    padding: 8px;
+}
+
+.approval__status {
+    padding: 0;
+}
+
+.approval__actions {
+    margin: 0;
+    padding: 0;
+}
+
+.approval__blocks {
+    margin: 8px 0 0;
+    padding: 0;
+    width: 100%;
+}
+
+.approval__block {
+    border: 1px solid #eee;
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+}
+
+.approval__block:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.approval__block.is-new {
+    border-left-color: blue;
+}
+
+.approval__block.is-current {
+    background: #f5f5f5;
+}
+
+.approval__block-status,
+.approval__block-type,
+.approval__block-approvers {
+    padding: 8px;
+}
+
+.approval__block-status,
+.approval__block-type {
+    width: 20%;
+}
+
+.approval__block-approvers {
+    width: 60%;
+}
+
+@media ( max-width: 800px) {
+    .approval__block {
+        flex-wrap: wrap;
+        margin: 8px 0;
+    }
+    .approval__block-status,
+    .approval__block-type {
+        width: 50%;
+    }
+    .approval__block-approvers {
+        border-top: 1px dotted #eee;
+        width: 100%;
+    }
+}
+
+
+/* .approver-list */
+
+.approver-list {
+    display: block;
+    width: 100%;
+}
+
+.approver-list + nb-select {
+    display: block;
+    margin-top: 2px;
+}
+
+.approver-list-it {
+    align-items: center;
+    display: flex;
+    flex-flow: row nowrap;
+    min-height: 36px;
+    padding: 6px;
+}
+
+.approver-list-it:hover {
+    background: #f5f5f5;
+}
+
+.approver-list-it-body {
+    flex: 1;
+}
+
+@media ( min-width: 800px) {
+    .approver-list-it:not(:hover):not(:focus) .approver-list-it-buttons {
+        display: none;
+    }
+}
+
+.approver-list-it.is-current .approver-list-it-name {
+    font-weight: bold;
+}
+
+.approver-decision-yes {
+    color: green;
+}
+
+.approver-decision-no {
+    color: red;
+}
+
+.approver-current-label {
+    display: inline-block;
+}
