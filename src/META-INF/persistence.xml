@@ -278,6 +278,38 @@
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
+ 	 <persistence-unit name="ResourceReservations" transaction-type="RESOURCE_LOCAL">
+        <!-- Obligatory the application module entities -->
+        <class>administrator.model.User</class>
+        <class>administrator.model.Application</class>
+        <class>administrator.model.Language</class>
+        <class>administrator.model.Sentence</class>
+        <class>administrator.model.embedded.UserApplication</class>
+        <!-- Common Staff module entities -->
+        <class>staff.model.Organization</class>
+        <class>staff.model.Department</class>
+        <class>staff.model.Employee</class>
+        <class>staff.model.Role</class>
+        <class>staff.model.OrganizationLabel</class>
+        <!-- Common Reference module entities -->
+        <class>reference.model.Position</class>
+        <class>reference.model.DepartmentType</class>
+        <class>reference.model.OrgCategory</class>
+        <class>reference.model.DocumentLanguage</class>
+        <class>reference.model.Tag</class>
+        <class>reference.model.Vehicle</class>
+        <!-- The application module entities -->
+        <class>resurcereservations.model.ApplicationForVehicle</class>
+        <class>workflow.model.embedded.Approval</class>
+        <class>workflow.model.embedded.Approver</class>
+        <class>workflow.model.embedded.Block</class>
+        <!-- Common module entities -->
+        <class>com.exponentus.common.model.Attachment</class>
+        <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <class>com.exponentus.common.model.ViewEntry</class>
+        <shared-cache-mode>NONE</shared-cache-mode>
+    </persistence-unit>
+    
     <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.Language</class>
     </persistence-unit>

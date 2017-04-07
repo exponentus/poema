@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<vocabulary primary="ENG">
+    <sentence mode="on" keyword="draft">
+        <entry lang="RUS">Черновик</entry>
+        <entry lang="ENG">Draft</entry>
+        <entry lang="POR">Rascunho</entry>
+        <entry lang="SPA">Boceto</entry>
+    </sentence>
+    <sentence mode="on" keyword="processing">
+        <entry lang="RUS">В работе</entry>
+        <entry lang="ENG">Processing</entry>
+        <entry lang="POR">Em processamento</entry>
+        <entry lang="SPA">En procesamiento</entry>
+    </sentence>
+    <sentence mode="on" keyword="finished">
+        <entry lang="RUS">Завершен</entry>
+        <entry lang="ENG">Finished</entry>
+        <entry lang="POR">Concluído</entry>
+        <entry lang="SPA">Terminado</entry>
+    </sentence>
+    <sentence mode="on" keyword="serial">
+        <entry lang="RUS">Последовательно</entry>
+        <entry lang="ENG">Serial</entry>
+    </sentence>
+    <sentence mode="on" keyword="parallel">
+        <entry lang="RUS">Паралельно</entry>
+        <entry lang="ENG">Parallel</entry>
+    </sentence>
+    <sentence mode="on" keyword="signing">
+        <entry lang="RUS">Подписание</entry>
+        <entry lang="ENG">Signing</entry>
+    </sentence>
+    <sentence mode="on" keyword="acl_tab_title">
+        <entry lang="RUS">Доступ</entry>
+        <entry lang="ENG">ACL</entry>
+        <entry lang="POR">Controlo de acesso</entry>
+        <entry lang="SPA">Control de acceso</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="sign">
+        <entry lang="RUS">Подписать</entry>
+        <entry lang="ENG">Sign</entry>
+    </sentence>
+    <sentence mode="on" keyword="accept">
+        <entry lang="RUS">Согласен</entry>
+        <entry lang="ENG">Accept</entry>
+    </sentence>
+    <sentence mode="on" keyword="decline">
+        <entry lang="RUS">Не согласен</entry>
+        <entry lang="ENG">Decline</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="office_memo_plural">
+        <entry lang="RUS">Служебные записки</entry>
+        <entry lang="ENG">Officememo</entry>
+    </sentence>
+    <sentence mode="on" keyword="officememo">
+        <entry lang="RUS">Служебная записка</entry>
+        <entry lang="ENG">Officememo</entry>
+    </sentence>
+    <sentence mode="on" keyword="office_memo">
+        <entry lang="RUS">Служебная записка</entry>
+        <entry lang="ENG">Officememo</entry>
+    </sentence>
+    <sentence mode="on" keyword="incoming_documents">
+        <entry lang="RUS">Входящие документы</entry>
+        <entry lang="ENG">Incoming documents</entry>
+    </sentence>
+    <sentence mode="on" keyword="outgoing_documents">
+        <entry lang="RUS">Исходящие документы</entry>
+        <entry lang="ENG">Outgoing documents</entry>
+    </sentence>
+    <sentence mode="on" keyword="incoming_document">
+        <entry lang="RUS">Входящий документ</entry>
+        <entry lang="ENG">Incoming document</entry>
+    </sentence>
+    <sentence mode="on" keyword="incoming">
+        <entry lang="RUS">Входящий</entry>
+        <entry lang="ENG">Incoming</entry>
+    </sentence>
+    <sentence mode="on" keyword="outgoing_document">
+        <entry lang="RUS">Исходящий документ</entry>
+        <entry lang="ENG">Outgoing document</entry>
+    </sentence>
+    <sentence mode="on" keyword="outgoing">
+        <entry lang="RUS">Исходящий</entry>
+        <entry lang="ENG">Outgoing</entry>
+    </sentence>
+    <sentence mode="on" keyword="projects">
+        <entry lang="RUS">Проекты</entry>
+        <entry lang="ENG">Projects</entry>
+    </sentence>
+    <sentence mode="on" keyword="org_documents">
+        <entry lang="RUS">Документы организации</entry>
+        <entry lang="ENG">Documents of the organization</entry>
+    </sentence>
+    <sentence mode="on" keyword="applications_for_vehicle">
+        <entry lang="RUS">Заявки на транспорт</entry>
+        <entry lang="ENG">Applications for vehicle</entry>
+    </sentence>
+    <sentence mode="on" keyword="application_for_vehicle">
+        <entry lang="RUS">Заявка на транспорт</entry>
+        <entry lang="ENG">Application for vehicle</entry>
+    </sentence>
+    <sentence mode="on" keyword="applicationforvehicle">
+        <entry lang="RUS">Заявка на транспорт</entry>
+        <entry lang="ENG">Application for vehicle</entry>
+    </sentence>
+    <sentence mode="on" keyword="approvals">
+        <entry lang="RUS">Согласование</entry>
+        <entry lang="ENG">Approvals</entry>
+    </sentence>
+    <sentence mode="on" keyword="signer">
+        <entry lang="RUS">Подписывающий</entry>
+        <entry lang="ENG">Signer</entry>
+    </sentence>
+    <sentence mode="on" keyword="reg_documents">
+        <entry lang="RUS">Регистрационные документы</entry>
+        <entry lang="KAZ">Регистрационные документы</entry>
+        <entry lang="ENG">Registration documents</entry>
+    </sentence>
+    <sentence mode="on" keyword="applied_reg_date">
+        <entry lang="RUS">Дата регистрации</entry>
+        <entry lang="ENG">Date</entry>
+    </sentence>
+    <sentence mode="on" keyword="doc_subject">
+        <entry lang="RUS">Характер документа</entry>
+        <entry lang="ENG">Document subject</entry>
+    </sentence>
+    <sentence mode="on" keyword="doc_language">
+        <entry lang="RUS">Язык документа</entry>
+        <entry lang="ENG">Language</entry>
+    </sentence>
+    <sentence mode="on" keyword="doc_type">
+        <entry lang="RUS">Тип документа</entry>
+        <entry lang="ENG">Document type</entry>
+    </sentence>
+    <sentence mode="on" keyword="sender_applied_reg_date">
+        <entry lang="RUS">Дата исходящего</entry>
+        <entry lang="ENG">Date</entry>
+    </sentence>
+    <sentence mode="on" keyword="sender_reg_number">
+        <entry lang="RUS">№ Исходящeго</entry>
+        <entry lang="ENG">Outgoing №</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="title">
+        <entry lang="RUS">Заголовок</entry>
+        <entry lang="ENG">Title</entry>
+    </sentence>
+    <sentence mode="on" keyword="body">
+        <entry lang="RUS">Содержание</entry>
+        <entry lang="ENG">Content</entry>
+    </sentence>
+    <sentence mode="on" keyword="summary">
+        <entry lang="RUS">Краткое содержание</entry>
+        <entry lang="ENG">Summary</entry>
+    </sentence>
+    <sentence mode="on" keyword="response_to">
+        <entry lang="RUS">Является ответом на</entry>
+        <entry lang="ENG">This is answer to</entry>
+    </sentence>
+    <sentence mode="on" keyword="assignment">
+        <entry lang="RUS">Поручение</entry>
+        <entry lang="ENG">Assignment</entry>
+    </sentence>
+    <sentence mode="on" keyword="addressee">
+        <entry lang="RUS">Кому адресован</entry>
+        <entry lang="ENG">Addressee</entry>
+    </sentence>
+    <sentence mode="on" keyword="applied_author">
+        <entry lang="RUS">Автор</entry>
+        <entry lang="ENG">Author</entry>
+    </sentence>
+    <sentence mode="on" keyword="require_comment_if_no">
+        <entry lang="RUS">Комментарий если не согласен</entry>
+        <entry lang="ENG">Комментарий если не согласен</entry>
+    </sentence>
+    <sentence mode="on" keyword="approvers">
+        <entry lang="RUS">Согласующие</entry>
+        <entry lang="ENG">Approvers</entry>
+    </sentence>
+    <sentence mode="on" keyword="start_approving">
+        <entry lang="RUS">Начать согласование</entry>
+        <entry lang="ENG">Start approving</entry>
+    </sentence>
+    <sentence mode="on" keyword="approval_block">
+        <entry lang="RUS">Блок согласования</entry>
+        <entry lang="ENG">Approval block</entry>
+    </sentence>
+    <sentence mode="on" keyword="approving_start_succesfull">
+        <entry lang="RUS">Блок согласования принят</entry>
+        <entry lang="ENG">Approval block accepted</entry>
+    </sentence>
+    <sentence mode="on" keyword="approval_block_accepted">
+        <entry lang="RUS">Блок согласования принят</entry>
+        <entry lang="ENG">Approval block accepted</entry>
+    </sentence>
+    <sentence mode="on" keyword="approval_block_declined">
+        <entry lang="RUS">Блок согласования отклонен</entry>
+        <entry lang="ENG">Approval block declined</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="add_approver">
+        <entry lang="RUS">Добавить согласующего</entry>
+        <entry lang="ENG">Add approver</entry>
+    </sentence>
+    <sentence mode="on" keyword="current_approver">
+        <entry lang="RUS">Текущий</entry>
+        <entry lang="ENG">Current</entry>
+    </sentence>
+    <sentence mode="on" keyword="time_limit">
+        <entry lang="RUS">Ограничение времени</entry>
+        <entry lang="ENG">Time limit</entry>
+    </sentence>
+    <sentence mode="on" keyword="approval_block_time_limit_help">
+        <entry lang="RUS">время по прошествии, которого документ переходит к следующему согласователю</entry>
+        <entry lang="ENG">after this time limit the approval process go forward</entry>
+        <entry lang="KAZ">время по прошествии, которого документ переходит к следующему согласователю</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="control">
+        <entry lang="RUS">Контроль</entry>
+        <entry lang="ENG">Control</entry>
+    </sentence>
+    <sentence mode="on" keyword="control_type">
+        <entry lang="RUS">Тип контроля</entry>
+        <entry lang="ENG">Control type</entry>
+    </sentence>
+    <sentence mode="on" keyword="start_date">
+        <entry lang="RUS">Дата начала</entry>
+        <entry lang="ENG">Start date</entry>
+    </sentence>
+    <sentence mode="on" keyword="due_date">
+        <entry lang="RUS">Срок исполнения</entry>
+        <entry lang="ENG">Due date</entry>
+        <entry lang="POR">Data de vencimento</entry>
+        <entry lang="SPA">Fecha de finalización</entry>
+    </sentence>
+    <sentence mode="on" keyword="assignee_user">
+        <entry lang="RUS">Исполнитель</entry>
+        <entry lang="ENG">Assignee</entry>
+        <entry lang="POR">Executante</entry>
+        <entry lang="SPA">Ejecutor</entry>
+    </sentence>
+    <sentence mode="on" keyword="related_documents">
+        <entry lang="RUS">Связанные документы</entry>
+        <entry lang="ENG">Related documents</entry>
+        <entry lang="POR">Execução</entry>
+        <entry lang="SPA">Ejecución</entry>
+    </sentence>
+      <sentence mode="on" keyword="vehicle">
+        <entry lang="RUS">Транспортное средство</entry>
+        <entry lang="ENG">Vehicle</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Көлік</entry>
+    </sentence>
+    <sentence mode="on" keyword="use_from">
+        <entry lang="RUS">От</entry>
+        <entry lang="ENG">From</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Басталуы</entry>
+    </sentence>
+     <sentence mode="on" keyword="use_to">
+        <entry lang="RUS">До</entry>
+        <entry lang="ENG">Until</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Дейін</entry>
+    </sentence>
+    <sentence mode="on" keyword="route">
+        <entry lang="RUS">Маршрут</entry>
+        <entry lang="ENG">Route</entry>
+        <entry lang="POR"></entry>
+        <entry lang="SPA"></entry>
+        <entry lang="KAZ">Бағыт</entry>
+    </sentence>
+  
+    
+</vocabulary>
