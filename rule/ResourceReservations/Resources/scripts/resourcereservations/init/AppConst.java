@@ -10,5 +10,6 @@ public class AppConst extends DefaultAppConst {
 	public static String NAME_KAZ = "Ресурс брондау";
 	public static final ApplicationMode AVAILABLE_MODE[] = { ApplicationMode.REST };
 	public static final String DEFAULT_PAGE = "index";
+	public static final String[] ROLES = { "vehicle_reservation_decider" };
 
 }
