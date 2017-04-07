@@ -4,7 +4,7 @@
     <xsltfile>DEFAULT</xsltfile>
     <element mode="ON" type="SCRIPT">
         <events>
-            <doscript source="JAVA_CLASS">workflow.page.Index</doscript>
+            <doscript source="JAVA_CLASS">resourcereservations.page.Index</doscript>
         </events>
     </element>
     <caption name="brand"/>

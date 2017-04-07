@@ -1,6 +1,7 @@
 {
   "markdown_preview" : "markdown_preview",
   "cancel" : "cancel",
+  "add_assignee" : "add_assignee",
   "projects" : "Projetos",
   "assignee_user" : "Executante",
   "initiative_tasks" : "Initiative tasks",

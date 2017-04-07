@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import projects.domain.IRequestDomain;
+import projects.exception.RequestException;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
@@ -54,9 +55,9 @@ public class RequestDomain implements IRequestDomain {
     }
 
     @Override
-    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) {
+    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws RequestException {
         if (!userCanDoResolution(request, user)) {
-            throw new IllegalStateException(
+            throw new RequestException(
                     "User " + user.getLogin() + " can not do resolution or request already resolved. "
                             + "Current resolution: " + request.getResolution());
         }

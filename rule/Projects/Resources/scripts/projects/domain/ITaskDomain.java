@@ -3,6 +3,7 @@ package projects.domain;
 import administrator.model.User;
 import com.exponentus.rest.outgoingdto.Outcome;
 import helpdesk.model.Demand;
+import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
@@ -11,14 +12,6 @@ import reference.model.TaskType;
 import java.util.Date;
 
 public interface ITaskDomain {
-
-    enum PERMISSIONS {
-        SAVE, DELETE, ACKNOWLEDGED, COMPLETE, CANCEL, PROCESSING
-    }
-
-    enum Events {
-        NotifyAssigneeOfNewTask, NotifyOfTaskAcknowledging, NotifyOfTaskCompleted, NotifyOfTaskCancelled
-    }
 
     Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative,
                     int dueDateRange);
@@ -33,13 +26,13 @@ public interface ITaskDomain {
 
     void calculateReaders(Task entity);
 
-    void acknowledgedTask(Task entity, User user) throws Exception;
+    void acknowledgedTask(Task entity, User user) throws TaskException;
 
-    void completeTask(Task entity);
+    void completeTask(Task entity) throws TaskException;
 
-    void prolongTask(Task entity, Date newDueDate);
+    void prolongTask(Task entity, Date newDueDate) throws TaskException;
 
-    void cancelTask(Task entity, String cancellationComment);
+    void cancelTask(Task entity, String cancellationComment) throws TaskException;
 
     void returnToProcessing(Task entity);
 

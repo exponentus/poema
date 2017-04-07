@@ -18,6 +18,8 @@ import staff.model.Employee;
 import workflow.dao.ApplicationForVehicleDAO;
 import workflow.domain.impl.ApplicationForVehicleDomain;
 import workflow.model.ApplicationForVehicle;
+import workflow.model.exception.ApprovalException;
+import workflow.other.Messages;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -81,7 +83,7 @@ public class ApplicationForVehicleService extends RestProvider {
 
             Outcome outcome = domain.getOutcome(entity);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(getActionBar(ses, entity, domain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
@@ -185,12 +187,91 @@ public class ApplicationForVehicleService extends RestProvider {
         return getAttachment(id, attachId);
     }
 
-    private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity) {
+    @POST
+    @Path("{id}/actions/startApproving")
+    public Response startApproving(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findById(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+
+            domain.startApproving(entity);
+
+            officeMemoDAO.update(entity, false);
+            new Messages(getAppEnv()).notifyToApprove(entity.getProcessingBlock().getApprovers());
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("approving_started");
+            outcome.setMessage("approving_started");
+            outcome.addPayload("result", "approving_started");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("{id}/actions/acceptApprovalBlock")
+    public Response acceptApprovalBlock(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findById(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+
+            domain.acceptApprovalBlock(entity, getSession().getUser());
+
+            officeMemoDAO.update(entity, false);
+
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("acceptApprovalBlock");
+            outcome.setMessage("acceptApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("{id}/actions/declineApprovalBlock")
+    public Response declineApprovalBlock(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findById(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+
+            String decisionComment = getWebFormData().getValueSilently("comment");
+
+            domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
+
+            officeMemoDAO.update(entity, false);
+
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("declineApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
         if (entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
+        }
+        if (domain.approvalCanBeStarted(entity)) {
+            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+        }
+
+        EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
+
+        if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
+            actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 
         // actionBar.addAction(new _Action("sign", "", "sign"));
@@ -206,6 +287,18 @@ public class ApplicationForVehicleService extends RestProvider {
 
         if (model.getTitle() == null || model.getTitle().isEmpty()) {
             ve.addError("title", "required", "field_is_empty");
+        }
+        if (model.getVehicle() == null) {
+            ve.addError("vehicle", "required", "field_is_empty");
+        }
+        if (model.getUseFrom() == null) {
+            ve.addError("useFrom", "required", "field_is_empty");
+        }
+        if (model.getUseTo() == null) {
+            ve.addError("useTo", "required", "field_is_empty");
+        }
+        if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
+            ve.addError("route", "required", "field_is_empty");
         }
 
         ve.assertValid();

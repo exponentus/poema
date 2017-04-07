@@ -24,6 +24,7 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.impl.TaskDomain;
+import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -94,8 +95,6 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            return responseException(e);
-        } catch (Exception e) {
             return responseException(e);
         }
     }
@@ -171,8 +170,6 @@ public class TaskService extends RestProvider {
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
-            return responseException(e);
-        } catch (Exception e) {
             return responseException(e);
         }
     }
@@ -262,8 +259,6 @@ public class TaskService extends RestProvider {
             return Response.noContent().build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
-        } catch (Exception e) {
-            return responseException(e);
         }
     }
 
@@ -305,9 +300,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfNewAcknowledging(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException e) {
-            return responseException(e);
-        } catch (Exception e) {
+        } catch (SecureException | DAOException | TaskException e) {
             return responseException(e);
         }
     }
@@ -329,7 +322,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfTaskCompleted(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException | DatabaseException e) {
+        } catch (SecureException | DAOException | DatabaseException | TaskException e) {
             return responseException(e);
         }
     }
@@ -351,7 +344,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfTaskCancelled(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException e) {
+        } catch (SecureException | DAOException | TaskException e) {
             return responseException(e);
         }
     }
