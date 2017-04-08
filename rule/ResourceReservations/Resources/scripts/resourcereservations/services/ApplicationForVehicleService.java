@@ -13,11 +13,11 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import resourcereservations.dao.ApplicationForVehicleDAO;
+import resourcereservations.domain.impl.ApplicationForVehicleDomain;
+import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.dao.ApplicationForVehicleDAO;
-import workflow.domain.impl.ApplicationForVehicleDomain;
-import workflow.model.ApplicationForVehicle;
 import workflow.model.exception.ApprovalException;
 import workflow.other.Messages;
 
@@ -259,7 +259,7 @@ public class ApplicationForVehicleService extends RestProvider {
     private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
+        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
         if (entity.isEditable()) {
             actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
         }
