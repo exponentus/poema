@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.exponentus.common.dao.AttachmentDAO;
-import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.MsgException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting.event._DoForm;
 import com.exponentus.user.IUser;
 
@@ -84,7 +82,7 @@ public class Comments extends _DoForm {
 	private void saveComment(_Session session, WebFormData formData, String taskId, String commentId) {
 		try {
 			TaskDAO taskDAO = new TaskDAO(session);
-			Task task = taskDAO.findById(taskId);
+			Task task = taskDAO.findByIdentefier(taskId);
 			if (task == null) {
 				addContent("error", "task not found");
 				setBadRequest();
@@ -112,7 +110,7 @@ public class Comments extends _DoForm {
 				comment = new Comment();
 				comment.setTask(task);
 			} else {
-				comment = commentDAO.findById(commentId);
+				comment = commentDAO.findByIdentefier(commentId);
 			}
 			comment.setComment(formData.getValueSilently("comment"));
 			comment.setAttachments(getActualAttachments(comment.getAttachments()));
@@ -160,7 +158,7 @@ public class Comments extends _DoForm {
 	private void deleteComment(_Session session, String commentId) {
 		try {
 			CommentDAO commentDAO = new CommentDAO(session);
-			Comment comment = commentDAO.findById(commentId);
+			Comment comment = commentDAO.findByIdentefier(commentId);
 
 			if (!comment.getTask().getEditors().contains(session.getUser().getId())) {
 				addContent("error", "task: no editor access");

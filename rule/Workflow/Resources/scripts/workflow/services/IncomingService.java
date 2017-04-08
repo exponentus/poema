@@ -85,7 +85,7 @@ public class IncomingService extends RestProvider {
 				entity = inDomain.composeNew((User) ses.getUser());
 			} else {
 				IncomingDAO incomingDAO = new IncomingDAO(ses);
-				entity = incomingDAO.findById(id);
+				entity = incomingDAO.findByIdentefier(id);
 			}
 
 			EmployeeDAO empDao = new EmployeeDAO(ses);
@@ -165,7 +165,7 @@ public class IncomingService extends RestProvider {
 		_Session ses = getSession();
 		try {
 			IncomingDAO dao = new IncomingDAO(ses);
-			Incoming entity = dao.findById(id);
+			Incoming entity = dao.findByIdentefier(id);
 			if (entity != null) {
 				dao.delete(entity);
 			}
@@ -181,7 +181,7 @@ public class IncomingService extends RestProvider {
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
 		try {
 			IncomingDAO dao = new IncomingDAO(getSession());
-			Incoming entity = dao.findById(id);
+			Incoming entity = dao.findByIdentefier(id);
 
 			return getAttachment(entity, attachId);
 		} catch (DAOException e) {

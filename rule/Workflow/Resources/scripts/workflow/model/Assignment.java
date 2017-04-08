@@ -65,7 +65,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 	private Control control;
 
 	@Transient
-	private List<IAppEntity> responses;
+	private List<IAppEntity<UUID>> responses;
 
 	public Assignment() {
 
@@ -149,11 +149,11 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 		}
 	}
 
-	public List<IAppEntity> getResponses() {
+	public List<IAppEntity<UUID>> getResponses() {
 		return responses;
 	}
 
-	public void setResponses(List<IAppEntity> responses) {
+	public void setResponses(List<IAppEntity<UUID>> responses) {
 		this.responses = responses;
 	}
 }
