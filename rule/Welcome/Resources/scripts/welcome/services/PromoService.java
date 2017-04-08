@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.exception.MsgException;
-import com.exponentus.localization.LanguageCode;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;

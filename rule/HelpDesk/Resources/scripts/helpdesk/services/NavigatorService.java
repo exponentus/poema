@@ -1,7 +1,7 @@
 package helpdesk.services;
 
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.localization.LanguageCode;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;

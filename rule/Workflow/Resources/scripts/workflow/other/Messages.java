@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.env.EnvConst;
-import com.exponentus.localization.LanguageCode;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.localization.Vocabulary;
 import com.exponentus.log.Log4jLogger;
 

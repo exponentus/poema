@@ -1,6 +1,6 @@
 package welcome.page.form;
 
-import com.exponentus.localization.LanguageCode;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.WebFormData;
