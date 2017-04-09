@@ -4,65 +4,30 @@
     <sentence mode="on" keyword="applications_for_vehicle">
         <entry lang="RUS">Заявки на транспорт</entry>
         <entry lang="ENG">Applications for vehicle</entry>
+        <entry lang="KAZ">Көлік құралына арналған өтініштер</entry>
     </sentence>
     <sentence mode="on" keyword="application_for_vehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
         <entry lang="ENG">Application for vehicle</entry>
+        <entry lang="KAZ">Көлік құралына арналған өтініш</entry>
     </sentence>
     <sentence mode="on" keyword="applicationforvehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
         <entry lang="ENG">Application for vehicle</entry>
+        <entry lang="KAZ">Көлік құралына арналған өтініш</entry>
     </sentence>
 
     <sentence mode="on" keyword="reg_documents">
         <entry lang="RUS">Регистрационные документы</entry>
         <entry lang="KAZ">Регистрационные документы</entry>
-        <entry lang="ENG">Registration documents</entry>
-    </sentence>
-    <sentence mode="on" keyword="applied_reg_date">
-        <entry lang="RUS">Дата регистрации</entry>
-        <entry lang="ENG">Date</entry>
+        <entry lang="ENG">Tіркеу құжаттары</entry>
     </sentence>
 
-    <sentence mode="on" keyword="doc_language">
-        <entry lang="RUS">Язык документа</entry>
-        <entry lang="ENG">Language</entry>
-    </sentence>
-    <sentence mode="on" keyword="doc_type">
-        <entry lang="RUS">Тип документа</entry>
-        <entry lang="ENG">Document type</entry>
-    </sentence>
- 
 
-    <sentence mode="on" keyword="add_approver">
-        <entry lang="RUS">Добавить согласующего</entry>
-        <entry lang="ENG">Add approver</entry>
-    </sentence>
-    <sentence mode="on" keyword="current_approver">
-        <entry lang="RUS">Текущий</entry>
-        <entry lang="ENG">Current</entry>
-    </sentence>
-    <sentence mode="on" keyword="time_limit">
-        <entry lang="RUS">Ограничение времени</entry>
-        <entry lang="ENG">Time limit</entry>
-    </sentence>
-    <sentence mode="on" keyword="approval_block_time_limit_help">
-        <entry lang="RUS">время по прошествии, которого документ переходит к следующему согласователю</entry>
-        <entry lang="ENG">after this time limit the approval process go forward</entry>
-        <entry lang="KAZ">oсы уақыттан кейін бекіту процесін шектеу алға</entry>
-    </sentence>
-
-    <sentence mode="on" keyword="control">
-        <entry lang="RUS">Контроль</entry>
-        <entry lang="ENG">Control</entry>
-    </sentence>
-    <sentence mode="on" keyword="control_type">
-        <entry lang="RUS">Тип контроля</entry>
-        <entry lang="ENG">Control type</entry>
-    </sentence>
     <sentence mode="on" keyword="start_date">
         <entry lang="RUS">Дата начала</entry>
         <entry lang="ENG">Start date</entry>
+          <entry lang="KAZ">Басталуы</entry>
     </sentence>
     <sentence mode="on" keyword="due_date">
         <entry lang="RUS">Срок исполнения</entry>
