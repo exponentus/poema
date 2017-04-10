@@ -93,6 +93,7 @@
         <class>reference.model.Vehicle</class>
         <class>reference.model.ApprovalRoute</class>
         <class>reference.model.embedded.RouteBlock</class>
+        <class>reference.model.WorkType</class>
         <!-- Specific Reference module entities -->
         <class>reference.model.TaskType</class>
         <class>reference.model.RequestType</class>
@@ -311,6 +312,43 @@
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
+  <persistence-unit name="Audit" transaction-type="RESOURCE_LOCAL">
+        <!-- Obligatory the application module entities -->
+        <class>administrator.model.User</class>
+        <class>administrator.model.Application</class>
+        <class>administrator.model.Language</class>
+        <class>administrator.model.embedded.UserApplication</class>
+        <!-- Common Staff module entities -->
+        <class>staff.model.Organization</class>
+        <class>staff.model.Department</class>
+        <class>staff.model.Employee</class>
+        <class>staff.model.Role</class>
+        <class>staff.model.OrganizationLabel</class>
+        <!-- Common Reference module entities -->
+        <class>reference.model.Position</class>
+        <class>reference.model.DepartmentType</class>
+        <class>reference.model.OrgCategory</class>
+        <class>reference.model.DocumentLanguage</class>
+        <class>reference.model.DocumentType</class>
+        <class>reference.model.Tag</class>
+        <class>reference.model.WorkType</class>
+        <!-- The application module entities -->
+        <class>audit.model.Observation</class>
+        <class>audit.model.PlaceOfOrigin</class>
+        <class>audit.model.Project</class>
+        <class>audit.model.Report</class>
+        <!-- Common module entities -->
+        <class>com.exponentus.common.model.ViewEntry</class>
+        <class>com.exponentus.common.model.Attachment</class>
+        <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        
+         <!-- Workflow module entities -->     
+       <!--  <class>workflow.model.embedded.Approval</class>
+        <class>workflow.model.embedded.Approver</class>
+        <class>workflow.model.embedded.Block</class>   -->
+        
+        <shared-cache-mode>NONE</shared-cache-mode>
+    </persistence-unit>
     <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.Language</class>
     </persistence-unit>

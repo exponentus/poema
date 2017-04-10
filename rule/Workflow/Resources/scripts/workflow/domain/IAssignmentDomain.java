@@ -1,14 +1,15 @@
 package workflow.domain;
 
 import com.exponentus.rest.outgoingdto.Outcome;
+
 import staff.model.Employee;
 import workflow.model.Assignment;
-import workflow.model.Incoming;
+import workflow.model.embedded.PrimaryDocument;
 
 public interface IAssignmentDomain {
-    Assignment composeNew(Employee author, Incoming incoming, Assignment parentAssignment);
+	Assignment composeNew(Employee author, PrimaryDocument parent);
 
-    void fillFromDto(Assignment entity, Assignment dto, Employee author);
+	void fillFromDto(Assignment entity, Assignment dto, Employee author);
 
-    Outcome getOutcome(Assignment entity);
+	Outcome getOutcome(Assignment entity);
 }

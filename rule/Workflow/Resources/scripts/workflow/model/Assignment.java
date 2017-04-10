@@ -83,17 +83,6 @@ public class Assignment extends PrimaryDocument {
 		this.appliedAuthor = appliedAuthor;
 	}
 
-	// @JsonIgnore
-	public Incoming getIncoming() {
-		return null;
-		// return incoming;
-	}
-
-	// @JsonProperty
-	public void setIncoming(Incoming incoming) {
-		// this.incoming = incoming;
-	}
-
 	public PrimaryDocument getParent() {
 		return parent;
 	}
