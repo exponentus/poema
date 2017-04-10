@@ -1,21 +1,5 @@
 package resourcereservations.services;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -24,293 +8,341 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
-
+import reference.model.Tag;
+import reference.model.Vehicle;
 import resourcereservations.dao.ApplicationForVehicleDAO;
+import resourcereservations.dao.filter.ApplicationForVehicleFilter;
 import resourcereservations.domain.impl.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import workflow.model.constants.ApprovalResultType;
+import workflow.model.constants.ApprovalStatusType;
 import workflow.model.exception.ApprovalException;
 import workflow.other.Messages;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Path("applications_for_vehicle")
 public class ApplicationForVehicleService extends RestProvider {
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getView() {
-		_Session session = getSession();
-		int pageSize = session.pageSize;
-		SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getView() {
+        _Session session = getSession();
+        WebFormData params = getWebFormData();
+        int pageSize = session.pageSize;
+        SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
 
-		try {
-			ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
-			ViewPage vp = avDAO.findAll(getWebFormData().getPage(), pageSize);
+        try {
+            ApplicationForVehicleFilter filter = new ApplicationForVehicleFilter();
 
-			_ActionBar actionBar = new _ActionBar(session);
-			actionBar.addAction(new _Action("add_new", "", "new_application_for_vehicle"));
-			actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
+            // setup filter
+            String vehicleId = params.getValueSilently("vehicle");
+            if (!vehicleId.isEmpty()) {
+                Vehicle vehicle = new Vehicle();
+                vehicle.setId(UUID.fromString(vehicleId));
+                filter.setVehicle(vehicle);
+            }
 
-			Outcome outcome = new Outcome();
-			outcome.setId("applications_for_vehicle");
-			outcome.setTitle("applications_for_vehicle");
-			outcome.addPayload(actionBar);
-			outcome.addPayload(vp);
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            String statusName = params.getValueSilently("status");
+            if (!statusName.isEmpty()) {
+                filter.setStatus(ApprovalStatusType.valueOf(statusName));
+            }
 
-	@GET
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getById(@PathParam("id") String id) {
-		_Session ses = getSession();
-		ApplicationForVehicle entity;
-		ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+            String resultName = params.getValueSilently("result");
+            if (!resultName.isEmpty()) {
+                filter.setResult(ApprovalResultType.valueOf(resultName));
+            }
 
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			boolean isNew = "new".equals(id);
+            if (params.containsField("tag")) {
+                List<Tag> tags = new ArrayList<>();
+                String[] tagIds = params.getListOfValuesSilently("tag");
+                for (String tid : tagIds) {
+                    Tag tag = new Tag();
+                    tag.setId(UUID.fromString(tid));
+                    tags.add(tag);
+                }
+                filter.setTags(tags);
+            }
+            //
 
-			if (isNew) {
-				entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
-			} else {
-				ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(ses);
-				entity = incomingDAO.findByIdentefier(id);
-			}
+            ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
+            ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
-			EmployeeDAO empDao = new EmployeeDAO(ses);
-			Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-					.collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(new _Action("add_new", "", "new_application_for_vehicle"));
+            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
 
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.addPayload("employees", emps);
-			outcome.addPayload(getActionBar(ses, entity, domain));
-			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            Outcome outcome = new Outcome();
+            outcome.setId("applications_for_vehicle");
+            outcome.setTitle("applications_for_vehicle");
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getById(@PathParam("id") String id) {
+        _Session ses = getSession();
+        ApplicationForVehicle entity;
+        ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-	@POST
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(ApplicationForVehicle dto) {
-		dto.setId(null);
-		return save(dto);
-	}
+        try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            boolean isNew = "new".equals(id);
 
-	@PUT
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, ApplicationForVehicle dto) {
-		dto.setId(UUID.fromString(id));
-		return save(dto);
-	}
+            if (isNew) {
+                entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
+            } else {
+                ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(ses);
+                entity = incomingDAO.findByIdentefier(id);
+            }
 
-	public Response save(ApplicationForVehicle dto) {
-		_Session ses = getSession();
-		ApplicationForVehicle entity;
-		ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-		try {
-			validate(dto);
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
+            outcome.addPayload(getActionBar(ses, entity, domain));
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(ses);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-			if (dto.isNew()) {
-				entity = new ApplicationForVehicle();
-			} else {
-				entity = avDAO.findById(dto.getId());
-			}
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(ApplicationForVehicle dto) {
+        dto.setId(null);
+        return save(dto);
+    }
 
-			dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
-			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+    @PUT
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") String id, ApplicationForVehicle dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
 
-			domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
+    public Response save(ApplicationForVehicle dto) {
+        _Session ses = getSession();
+        ApplicationForVehicle entity;
+        ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			if (dto.isNew()) {
-				RegNum rn = new RegNum();
-				entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-				entity = avDAO.add(entity, rn);
-			} else {
-				entity = avDAO.update(entity);
-			}
+        try {
+            validate(dto);
 
-			entity = avDAO.findById(entity.getId());
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(ses);
 
-			return Response.ok(domain.getOutcome(entity)).build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		} catch (_Validation.VException e) {
-			return responseValidationError(e.getValidation());
-		}
-	}
+            if (dto.isNew()) {
+                entity = new ApplicationForVehicle();
+            } else {
+                entity = avDAO.findById(dto.getId());
+            }
 
-	@DELETE
-	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response delete(@PathParam("id") String id) {
-		_Session ses = getSession();
-		try {
-			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(ses);
-			ApplicationForVehicle entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
+            dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = dao.findByIdentefier(id);
+            domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
 
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            if (dto.isNew()) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+                entity = avDAO.add(entity, rn);
+            } else {
+                entity = avDAO.update(entity);
+            }
 
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
-	}
+            entity = avDAO.findById(entity.getId());
 
-	@POST
-	@Path("{id}/actions/startApproving")
-	public Response startApproving(@PathParam("id") String id) {
-		try {
-			ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+            return Response.ok(domain.getOutcome(entity)).build();
+        } catch (SecureException | DAOException e) {
+            return responseException(e);
+        } catch (_Validation.VException e) {
+            return responseValidationError(e.getValidation());
+        }
+    }
 
-			domain.startApproving(entity);
+    @DELETE
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response delete(@PathParam("id") String id) {
+        _Session ses = getSession();
+        try {
+            ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(ses);
+            ApplicationForVehicle entity = dao.findByIdentefier(id);
+            if (entity != null) {
+                dao.delete(entity);
+            }
+            return Response.noContent().build();
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+    }
 
-			officeMemoDAO.update(entity, false);
-			new Messages(getAppEnv()).notifyToApprove(entity.getProcessingBlock().getApprovers());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("approving_started");
-			outcome.setMessage("approving_started");
-			outcome.addPayload("result", "approving_started");
+    @GET
+    @Path("{id}/attachments/{attachId}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        try {
+            ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = dao.findByIdentefier(id);
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+            return getAttachment(entity, attachId);
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-	@POST
-	@Path("{id}/actions/acceptApprovalBlock")
-	public Response acceptApprovalBlock(@PathParam("id") String id) {
-		try {
-			ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
 
-			domain.acceptApprovalBlock(entity, getSession().getUser());
+    @POST
+    @Path("{id}/action/startApproving")
+    public Response startApproving(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			officeMemoDAO.update(entity, false);
+            domain.startApproving(entity);
 
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("acceptApprovalBlock");
-			outcome.setMessage("acceptApprovalBlock");
+            officeMemoDAO.update(entity, false);
+            new Messages(getAppEnv()).notifyToApprove(entity.getProcessingBlock().getApprovers());
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("approving_started");
+            outcome.setMessage("approving_started");
+            outcome.addPayload("result", "approving_started");
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-	@POST
-	@Path("{id}/actions/declineApprovalBlock")
-	public Response declineApprovalBlock(@PathParam("id") String id) {
-		try {
-			ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+    @POST
+    @Path("{id}/action/acceptApprovalBlock")
+    public Response acceptApprovalBlock(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			String decisionComment = getWebFormData().getValueSilently("comment");
+            domain.acceptApprovalBlock(entity, getSession().getUser());
 
-			domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
+            officeMemoDAO.update(entity, false);
 
-			officeMemoDAO.update(entity, false);
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("acceptApprovalBlock");
+            outcome.setMessage("acceptApprovalBlock");
 
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("declineApprovalBlock");
-			outcome.setMessage("declineApprovalBlock");
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+    @POST
+    @Path("{id}/action/declineApprovalBlock")
+    public Response declineApprovalBlock(@PathParam("id") String id) {
+        try {
+            ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
+            ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
+            ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-	private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain)
-			throws DAOException {
-		_ActionBar actionBar = new _ActionBar(session);
+            String decisionComment = getWebFormData().getValueSilently("comment");
 
-		actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
-		if (entity.isEditable()) {
-			actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
-		}
-		if (domain.approvalCanBeStarted(entity)) {
-			actionBar.addAction(new _Action("start_approving", "", "start_approving"));
-		}
+            domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
 
-		EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
+            officeMemoDAO.update(entity, false);
 
-		if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
-			actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
-		}
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("declineApprovalBlock");
 
-		// actionBar.addAction(new _Action("sign", "", "sign"));
-		if (!entity.isNew() && entity.isEditable()) {
-			actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
-		}
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-		return actionBar;
-	}
+    private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain)
+            throws DAOException {
+        _ActionBar actionBar = new _ActionBar(session);
 
-	private void validate(ApplicationForVehicle model) throws _Validation.VException {
-		_Validation ve = new _Validation();
+        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
+        if (entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
+        }
+        if (domain.approvalCanBeStarted(entity)) {
+            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+        }
 
-		if (model.getTitle() == null || model.getTitle().isEmpty()) {
-			ve.addError("title", "required", "field_is_empty");
-		}
-		if (model.getVehicle() == null) {
-			ve.addError("vehicle", "required", "field_is_empty");
-		}
-		if (model.getUseFrom() == null) {
-			ve.addError("useFrom", "required", "field_is_empty");
-		}
-		if (model.getUseTo() == null) {
-			ve.addError("useTo", "required", "field_is_empty");
-		}
-		if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
-			ve.addError("route", "required", "field_is_empty");
-		}
+        EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
-		ve.assertValid();
-	}
+        if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
+            actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
+        }
+
+        // actionBar.addAction(new _Action("sign", "", "sign"));
+        if (!entity.isNew() && entity.isEditable()) {
+            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
+        }
+
+        return actionBar;
+    }
+
+    private void validate(ApplicationForVehicle model) throws _Validation.VException {
+        _Validation ve = new _Validation();
+
+        if (model.getTitle() == null || model.getTitle().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+        if (model.getVehicle() == null) {
+            ve.addError("vehicle", "required", "field_is_empty");
+        }
+        if (model.getUseFrom() == null) {
+            ve.addError("useFrom", "required", "field_is_empty");
+        }
+        if (model.getUseTo() == null) {
+            ve.addError("useTo", "required", "field_is_empty");
+        }
+        if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
+            ve.addError("route", "required", "field_is_empty");
+        }
+
+        ve.assertValid();
+    }
 }
