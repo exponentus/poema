@@ -342,6 +342,11 @@ public class ApplicationForVehicleService extends RestProvider {
         if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
             ve.addError("route", "required", "field_is_empty");
         }
+//        if (model.getBlocks() != null && !model.getBlocks().isEmpty()) {
+//            if (model.getBlocks().get(0).getApprovers().size() == 0) {
+//                ve.addError("blocks_approvers", "required", "field_is_empty");
+//            }
+//        }
 
         ve.assertValid();
     }

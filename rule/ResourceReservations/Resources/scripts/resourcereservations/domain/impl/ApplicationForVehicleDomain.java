@@ -3,13 +3,16 @@ package resourcereservations.domain.impl;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
+import reference.model.constants.ApprovalType;
 import resourcereservations.domain.IApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Block;
 import workflow.model.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
@@ -21,6 +24,16 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
         entity.setAuthor(author.getUser());
         entity.setAppliedRegDate(new Date());
         entity.setAppliedAuthor(author);
+
+        ArrayList<Block> blocks = new ArrayList();
+        Block block = new Block();
+        block.setType(ApprovalType.SIGNING);
+        block.setPosition(1);
+        block.setStatus(ApprovalStatusType.DRAFT);
+        block.setApprovers(new ArrayList<>());
+        blocks.add(block);
+        entity.setBlocks(blocks);
+
         return entity;
     }
 
