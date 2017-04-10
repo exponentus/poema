@@ -4,11 +4,14 @@ import java.util.Date;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 import com.exponentus.server.Server;
 
 import administrator.model.User;
+import reference.dao.DocumentSubjectDAO;
+import reference.model.DocumentSubject;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.IIncomingDomain;
@@ -33,6 +36,10 @@ public class IncomingDomain implements IIncomingDomain {
 		entity.setDocType(dto.getDocType());
 		entity.setSender(dto.getSender());
 		try {
+			DocumentSubjectDAO sDao = new DocumentSubjectDAO(ses);
+			ViewPage<DocumentSubject> vp = sDao.findAll();
+			entity.setDocSubject(vp.getResult().get(0));
+
 			EmployeeDAO eDao = new EmployeeDAO(ses);
 			Employee emp = eDao.findById(dto.getAddressee().getId());
 			entity.setAddressee(emp);

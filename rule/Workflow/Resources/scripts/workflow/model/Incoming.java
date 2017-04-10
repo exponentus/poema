@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -21,10 +23,8 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -34,16 +34,14 @@ import reference.model.DocumentType;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.Organization;
+import workflow.model.embedded.PrimaryDocument;
 
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "incomings")
-public class Incoming extends SecureHierarchicalEntity<UUID> {
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "incoming", fetch = FetchType.LAZY)
-	private List<Assignment> assignments;
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Incoming extends PrimaryDocument {
 
 	@Column(name = "reg_number", unique = true)
 	private String regNumber;
@@ -219,14 +217,6 @@ public class Incoming extends SecureHierarchicalEntity<UUID> {
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
-	}
-
-	public List<Assignment> getAssignments() {
-		return assignments;
-	}
-
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
 	}
 
 	@Override

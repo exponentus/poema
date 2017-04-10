@@ -64,8 +64,8 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 		Root<Assignment> root = cq.from(Assignment.class);
 		cq.select(root).distinct(true);
 
-		Predicate condition = cb.equal(root.get("incoming"), incoming);
-		condition = cb.and(cb.isEmpty(root.get("parent")), condition);
+		Predicate condition = cb.equal(root.get("parent"), incoming);
+		// condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
 		if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
 			condition = cb.and(root.get("readers").in(user.getId()), condition);

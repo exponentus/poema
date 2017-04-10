@@ -39,7 +39,7 @@ import reference.model.RequestType;
 @JsonRootName("request")
 @Entity
 @Table(name = "requests")
-public class Request extends SecureHierarchicalEntity<UUID> {
+public class Request extends SecureHierarchicalEntity {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -162,7 +162,7 @@ public class Request extends SecureHierarchicalEntity<UUID> {
 
 	@Override
 	@JsonIgnore
-	public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
+	public SecureHierarchicalEntity getParentEntity(_Session ses) {
 		return task;
 	}
 

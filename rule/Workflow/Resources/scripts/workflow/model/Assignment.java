@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,16 +29,14 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import administrator.model.User;
 import staff.model.Employee;
 import workflow.model.embedded.Control;
+import workflow.model.embedded.PrimaryDocument;
 
 @JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "assignments")
-public class Assignment extends SecureHierarchicalEntity<UUID> {
-
-	@JsonIgnore
-	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-	private List<Assignment> childAssignments;
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Assignment extends PrimaryDocument {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
@@ -48,12 +48,7 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 	@JsonIgnore
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	private Incoming incoming;
-
-	@JsonIgnore
-	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Assignment parent;
+	private PrimaryDocument parent;
 
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
@@ -88,22 +83,23 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 		this.appliedAuthor = appliedAuthor;
 	}
 
-	@JsonIgnore
+	// @JsonIgnore
 	public Incoming getIncoming() {
-		return incoming;
+		return null;
+		// return incoming;
 	}
 
-	@JsonProperty
+	// @JsonProperty
 	public void setIncoming(Incoming incoming) {
-		this.incoming = incoming;
+		// this.incoming = incoming;
 	}
 
-	public Assignment getParent() {
+	public PrimaryDocument getParent() {
 		return parent;
 	}
 
 	@JsonProperty
-	public void setParent(Assignment parent) {
+	public void setParent(PrimaryDocument parent) {
 		this.parent = parent;
 	}
 
@@ -131,22 +127,17 @@ public class Assignment extends SecureHierarchicalEntity<UUID> {
 		this.control = control;
 	}
 
-	//
-	public List<Assignment> getChildAssignments() {
-		return childAssignments;
-	}
-
 	public List<Report> getReports() {
 		return reports;
 	}
 
 	@Override
-	public SecureHierarchicalEntity<UUID> getParentEntity(_Session ses) {
-		if (parent != null) {
-			return parent;
-		} else {
-			return incoming;
-		}
+	public SecureHierarchicalEntity getParentEntity(_Session ses) {
+		return null;
+		/*
+		 * if (parent != null) { return parent; } else { // return incoming; }
+		 * return parent;
+		 */
 	}
 
 	public List<IAppEntity<UUID>> getResponses() {

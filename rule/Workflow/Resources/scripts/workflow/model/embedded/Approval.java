@@ -2,14 +2,12 @@ package workflow.model.embedded;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
-import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import reference.model.constants.ApprovalSchemaType;
@@ -22,13 +20,8 @@ import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 
-/**
- * @author Kayra created 07-04-2016
- */
-
-// @Embeddable
 @MappedSuperclass
-public abstract class Approval extends SecureHierarchicalEntity<UUID> implements IApproval {
+public abstract class Approval extends PrimaryDocument implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;

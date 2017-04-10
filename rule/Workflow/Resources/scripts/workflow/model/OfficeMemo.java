@@ -29,17 +29,15 @@ import reference.model.Tag;
 import staff.model.Employee;
 import workflow.model.embedded.Approval;
 
-/**
- * @author Kayra created 07-04-2016
- */
-
 @JsonRootName("officeMemo")
 @Entity
 @Table(name = "office_memos")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class OfficeMemo extends Approval {
 
 	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY)
+	@JoinColumn(name = "officememo_id")
 	private List<Assignment> assignments;
 
 	@Column(name = "reg_number")
