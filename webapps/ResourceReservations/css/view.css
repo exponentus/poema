@@ -2,18 +2,9 @@
     background: #eee;
 }
 
-.vw-reg-number,
-.vw-doc-language,
-.vw-doc-type,
-.vw-recipient,
-.vw-sender {}
-
-.vw-content {
-    min-width: 260px;
-    width: 25%;
-}
-
-.vw-summary {
-    min-width: 260px;
-    width: 20%;
+.vw-tags .vp__list_it_val_text {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    display: inline-block;
 }
