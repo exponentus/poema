@@ -16,6 +16,7 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import reference.model.Tag;
 import reference.model.Vehicle;
+import reference.model.constants.ApprovalType;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationForVehicleFilter;
 import resourcereservations.domain.impl.ApplicationForVehicleDomain;
@@ -312,7 +313,11 @@ public class ApplicationForVehicleService extends RestProvider {
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
         if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-            actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            if (entity.getProcessingBlock().getType() == ApprovalType.SIGNING) {
+                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+            } else {
+                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            }
             actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 

@@ -14,6 +14,7 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
@@ -277,11 +278,15 @@ public class OfficeMemoService extends RestProvider {
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
         if (omd.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-            actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            if (entity.getProcessingBlock().getType() == ApprovalType.SIGNING) {
+                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+            } else {
+                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            }
             actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 
-        actionBar.addAction(new _Action("sign", "", "sign"));
+        // actionBar.addAction(new _Action("sign", "", "sign"));
 
         if (omd.documentCanBeDeleted(entity)) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
