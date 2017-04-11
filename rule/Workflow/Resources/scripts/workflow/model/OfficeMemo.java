@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -23,6 +24,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.Tag;
@@ -64,6 +66,10 @@ public class OfficeMemo extends Approval {
 									"office_memo_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
+
+	@JsonProperty("observerUserIds")
+	@ElementCollection
+	private List<Long> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "officememo_tags")
@@ -115,6 +121,14 @@ public class OfficeMemo extends Approval {
 
 	public void setAssignments(List<Assignment> assignments) {
 		this.assignments = assignments;
+	}
+
+	public List<Long> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
 	}
 
 	public List<Tag> getTags() {

@@ -1,15 +1,28 @@
 package resourcereservations.model;
 
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
+
 import reference.model.Tag;
 import reference.model.Vehicle;
 import staff.model.Employee;
 import workflow.model.embedded.Approval;
-
-import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
 
 @JsonRootName("applicationForVehicle")
 @Entity
@@ -17,123 +30,135 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ApplicationForVehicle extends Approval {
 
-    @Column(name = "reg_number")
-    private String regNumber;
+	@Column(name = "reg_number")
+	private String regNumber;
 
-    @Column(name = "applied_reg_date")
-    private Date appliedRegDate;
+	@Column(name = "applied_reg_date")
+	private Date appliedRegDate;
 
-    @JoinColumn(name = "applied_author", nullable = false)
-    private Employee appliedAuthor;
+	@JoinColumn(name = "applied_author", nullable = false)
+	private Employee appliedAuthor;
 
-    @JoinColumn(nullable = false)
-    private Employee recipient;
+	@JoinColumn(nullable = false)
+	private Employee recipient;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(nullable = false)
-    private Vehicle vehicle;
+	@ManyToOne(optional = true)
+	@JoinColumn(nullable = false)
+	private Vehicle vehicle;
 
-    @FTSearchable
-    @Column(columnDefinition = "TEXT")
-    private String body;
+	@FTSearchable
+	@Column(columnDefinition = "TEXT")
+	private String body;
 
-    @FTSearchable
-    @Column(name = "use_from")
-    private Date useFrom;
+	@FTSearchable
+	@Column(name = "use_from")
+	private Date useFrom;
 
-    @FTSearchable
-    @Column(name = "use_to")
-    private Date useTo;
+	@FTSearchable
+	@Column(name = "use_to")
+	private Date useTo;
 
-    @FTSearchable
-    private String route;
+	@FTSearchable
+	private String route;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "application_for_vehicle_tags")
-    private List<Tag> tags;
+	@JsonProperty("observerUserIds")
+	@ElementCollection
+	private List<Long> observers;
 
-    public String getRegNumber() {
-        return regNumber;
-    }
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "application_for_vehicle_tags")
+	private List<Tag> tags;
 
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
-    }
+	public String getRegNumber() {
+		return regNumber;
+	}
 
-    public Date getAppliedRegDate() {
-        return appliedRegDate;
-    }
+	public void setRegNumber(String regNumber) {
+		this.regNumber = regNumber;
+	}
 
-    public void setAppliedRegDate(Date appliedRegDate) {
-        this.appliedRegDate = appliedRegDate;
-    }
+	public Date getAppliedRegDate() {
+		return appliedRegDate;
+	}
 
-    public Employee getAppliedAuthor() {
-        return appliedAuthor;
-    }
+	public void setAppliedRegDate(Date appliedRegDate) {
+		this.appliedRegDate = appliedRegDate;
+	}
 
-    public void setAppliedAuthor(Employee appliedAuthor) {
-        this.appliedAuthor = appliedAuthor;
-    }
+	public Employee getAppliedAuthor() {
+		return appliedAuthor;
+	}
 
-    public Employee getRecipient() {
-        return recipient;
-    }
+	public void setAppliedAuthor(Employee appliedAuthor) {
+		this.appliedAuthor = appliedAuthor;
+	}
 
-    public void setRecipient(Employee recipient) {
-        this.recipient = recipient;
-    }
+	public Employee getRecipient() {
+		return recipient;
+	}
 
-    public String getBody() {
-        return body;
-    }
+	public void setRecipient(Employee recipient) {
+		this.recipient = recipient;
+	}
 
-    public void setBody(String body) {
-        this.body = body;
-    }
+	public String getBody() {
+		return body;
+	}
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
+	public void setBody(String body) {
+		this.body = body;
+	}
 
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
 
-    public Date getUseFrom() {
-        return useFrom;
-    }
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
+	}
 
-    public void setUseFrom(Date useFrom) {
-        this.useFrom = useFrom;
-    }
+	public Date getUseFrom() {
+		return useFrom;
+	}
 
-    public Date getUseTo() {
-        return useTo;
-    }
+	public void setUseFrom(Date useFrom) {
+		this.useFrom = useFrom;
+	}
 
-    public void setUseTo(Date useTo) {
-        this.useTo = useTo;
-    }
+	public Date getUseTo() {
+		return useTo;
+	}
 
-    public String getRoute() {
-        return route;
-    }
+	public void setUseTo(Date useTo) {
+		this.useTo = useTo;
+	}
 
-    public void setRoute(String route) {
-        this.route = route;
-    }
+	public String getRoute() {
+		return route;
+	}
 
-    public List<Tag> getTags() {
-        return tags;
-    }
+	public void setRoute(String route) {
+		this.route = route;
+	}
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
+	public List<Long> getObservers() {
+		return observers;
+	}
 
-    @Override
-    public String getURL() {
-        return "applications_for_vehicle/" + getIdentifier();
-    }
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
+	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
+	public String getURL() {
+		return "applications_for_vehicle/" + getIdentifier();
+	}
 }

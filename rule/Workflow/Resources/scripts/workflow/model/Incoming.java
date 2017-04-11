@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -26,6 +27,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.DocumentLanguage;
@@ -79,6 +81,10 @@ public class Incoming extends PrimaryDocument {
 									"incoming_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
+
+	@JsonProperty("observerUserIds")
+	@ElementCollection
+	private List<Long> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "incoming_tags")
@@ -209,6 +215,14 @@ public class Incoming extends PrimaryDocument {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public List<Long> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
 	}
 
 	public List<Tag> getTags() {

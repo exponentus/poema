@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
@@ -48,6 +49,10 @@ public class Report extends SecureHierarchicalEntity {
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
 	private String body;
+
+	@JsonProperty("observerUserIds")
+	@ElementCollection
+	private List<Long> observers;
 
 	@JoinTable(name = "report_attachments", joinColumns = { @JoinColumn(name = "report_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
@@ -107,6 +112,14 @@ public class Report extends SecureHierarchicalEntity {
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public List<Long> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(List<Long> observers) {
+		this.observers = observers;
 	}
 
 	@Override

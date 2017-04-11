@@ -6,18 +6,7 @@
         <entry lang="POR">Poema</entry>
         <entry lang="SPA">Poema</entry>
     </sentence>
-    <sentence mode="on" keyword="editors">
-        <entry lang="RUS">Редакторы</entry>
-        <entry lang="ENG">Editors</entry>
-        <entry lang="POR">Editores</entry>
-        <entry lang="SPA">Editores</entry>
-    </sentence>
-    <sentence mode="on" keyword="readers">
-        <entry lang="RUS">Читатели</entry>
-        <entry lang="ENG">Readers</entry>
-        <entry lang="POR">Leitores</entry>
-        <entry lang="SPA">Lectores</entry>
-    </sentence>
+  
     <sentence mode="on" keyword="inbox">
         <entry lang="RUS">Входящие</entry>
         <entry lang="ENG">Inbox</entry>
@@ -167,13 +156,7 @@
         <entry lang="ENG">Publish to the customer</entry>
         <entry lang="POR">Partilhar com o cliente</entry>
         <entry lang="SPA">Compartir con el cliente</entry>
-    </sentence>
-    <sentence mode="on" keyword="acl_tab_title">
-        <entry lang="RUS">Доступ</entry>
-        <entry lang="ENG">ACL</entry>
-        <entry lang="POR">Controlo de acesso</entry>
-        <entry lang="SPA">Control de acceso</entry>
-    </sentence>
+    </sentence> 
 
     <sentence mode="on" keyword="name">
         <entry lang="RUS">Название</entry>

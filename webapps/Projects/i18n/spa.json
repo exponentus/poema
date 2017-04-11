@@ -179,7 +179,6 @@
   "view_mode_plain" : null,
   "task_type" : "Tipo de tarea",
   "publish_to_customer" : "Compartir con el cliente",
-  "signing" : null,
   "inbox" : "Correo entrante",
   "notify_about_new_task_short" : "Notificarle acerca de una nueva tarea",
   "localized_names" : null,
