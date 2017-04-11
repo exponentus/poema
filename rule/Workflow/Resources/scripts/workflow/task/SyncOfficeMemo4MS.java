@@ -20,9 +20,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.DatabaseUtil;
 import com.exponentus.dataengine.IDBConnectionPool;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jdbc.DatabaseUtil;
 import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.forms.Import4MS;
