@@ -1,6 +1,7 @@
-#Init primary data for Projects (Software developing model)
-#
-#COMMON
+echo ***********************************************************
+echo *                 Generate test data                      *
+echo ***********************************************************
+run task gen_test_users
 run task fill_region_types
 run task fill_locality_types
 run task fill_countries
@@ -13,12 +14,17 @@ run task fill_doc_langs
 run task fill_org_categories
 run task fill_document_types
 run task fill_document_subjs
+run task fill_vehicles
 stini staff.init.FillDefaultLabels
 stini staff.init.FillDefaultRoles
-#stini staff.init.FillTestOrgs
-#SPECIFIC
 run task fill_tags
 run task fill_positions
 stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
 run task fill_demand_types
+run task fill_control_types
+run task gen_test_orgs_xls
+run task gen_test_emps
+echo ***********************************************************
+echo *                     Finished                            *
+echo ***********************************************************

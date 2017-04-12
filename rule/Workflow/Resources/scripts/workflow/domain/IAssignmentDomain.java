@@ -4,10 +4,10 @@ import com.exponentus.rest.outgoingdto.Outcome;
 
 import staff.model.Employee;
 import workflow.model.Assignment;
-import workflow.model.embedded.PrimaryDocument;
+import workflow.model.ControlledDocument;
 
 public interface IAssignmentDomain {
-	Assignment composeNew(Employee author, PrimaryDocument primaryDocument, Assignment parent);
+	Assignment composeNew(Employee author, ControlledDocument parent);
 
 	void fillFromDto(Assignment entity, Assignment dto, Employee author);
 

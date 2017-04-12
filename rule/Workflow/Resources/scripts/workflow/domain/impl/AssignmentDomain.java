@@ -8,23 +8,19 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import staff.model.Employee;
 import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
+import workflow.model.ControlledDocument;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Control;
-import workflow.model.embedded.PrimaryDocument;
 
 public class AssignmentDomain implements IAssignmentDomain {
 
 	@Override
-	public Assignment composeNew(Employee author, PrimaryDocument primaryDocument, Assignment parent) {
+	public Assignment composeNew(Employee author, ControlledDocument parent) {
 		Assignment entity = new Assignment();
 
 		entity.setAuthor(author.getUser());
 		entity.setAppliedAuthor(author);
-		if (primaryDocument != null) {
-			entity.setPrimaryDocument(primaryDocument);
-		} else {
-			entity.setParent(parent);
-		}
+		entity.setParent(parent);
 		Control newControl = new Control();
 		newControl.setStartDate(new Date());
 		entity.setControl(newControl);
@@ -36,7 +32,7 @@ public class AssignmentDomain implements IAssignmentDomain {
 	public void fillFromDto(Assignment entity, Assignment dto, Employee author) {
 		if (entity.isNew()) {
 			entity.setAuthor(author.getUser());
-			// entity.setParent(dto.getParent());
+			entity.setParent(dto.getParent());
 
 			entity.addReaderEditor(entity.getAuthor());
 			if (dto.getAppliedAuthor() != null) {
@@ -63,12 +59,12 @@ public class AssignmentDomain implements IAssignmentDomain {
 
 		outcome.setTitle(entity.getTitle());
 		outcome.addPayload(entity);
-		PrimaryDocument parent = entity.getPrimaryDocument();
+
+		ControlledDocument parent = entity.getParent();
 		if (parent != null) {
 			outcome.addPayload("parent", parent);
-		} else {
-			outcome.addPayload("parent", entity.getParent());
 		}
+
 		if (!entity.isNew()) {
 			outcome.addPayload(new ACL(entity));
 		}

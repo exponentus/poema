@@ -14,6 +14,7 @@ import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
+import workflow.model.ControlledDocument;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
@@ -21,7 +22,7 @@ import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 
 @MappedSuperclass
-public abstract class Approval extends PrimaryDocument implements IApproval {
+public class ApprovedControlledDocument extends ControlledDocument implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;
@@ -37,58 +38,8 @@ public abstract class Approval extends PrimaryDocument implements IApproval {
 
 	private int version = 1;
 
-	public ApprovalStatusType getStatus() {
-		return status;
-	}
-
-	public void setStatus(ApprovalStatusType status) {
-		this.status = status;
-	}
-
-	public ApprovalSchemaType getSchema() {
-		return schema;
-	}
-
-	public void setSchema(ApprovalSchemaType schema) {
-		this.schema = schema;
-	}
-
-	public ApprovalResultType getResult() {
-		return result;
-	}
-
-	public void setResult(ApprovalResultType result) {
-		this.result = result;
-	}
-
 	public List<Block> getBlocks() {
 		return blocks;
-	}
-
-	public void setBlocks(List<Block> blocks) {
-		this.blocks = blocks;
-	}
-
-	public int getVersion() {
-		return version;
-	}
-
-	public void setVersion(int version) {
-		this.version = version;
-	}
-
-	@JsonIgnore
-	public Block getProcessingBlock() {
-		if (getStatus() == ApprovalStatusType.FINISHED) {
-			return null;
-		}
-
-		if (blocks == null || blocks.isEmpty()) {
-			return null;
-		}
-
-		return blocks.stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING).findFirst()
-				.orElse(null);
 	}
 
 	@JsonIgnore
@@ -108,6 +59,56 @@ public abstract class Approval extends PrimaryDocument implements IApproval {
 				return block.getStatus() == ApprovalStatusType.AWAITING;
 			}
 		}).findFirst().orElse(null);
+	}
+
+	@JsonIgnore
+	public Block getProcessingBlock() {
+		if (getStatus() == ApprovalStatusType.FINISHED) {
+			return null;
+		}
+
+		if (blocks == null || blocks.isEmpty()) {
+			return null;
+		}
+
+		return blocks.stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING).findFirst()
+				.orElse(null);
+	}
+
+	public ApprovalResultType getResult() {
+		return result;
+	}
+
+	public ApprovalSchemaType getSchema() {
+		return schema;
+	}
+
+	public ApprovalStatusType getStatus() {
+		return status;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public void setBlocks(List<Block> blocks) {
+		this.blocks = blocks;
+	}
+
+	public void setResult(ApprovalResultType result) {
+		this.result = result;
+	}
+
+	public void setSchema(ApprovalSchemaType schema) {
+		this.schema = schema;
+	}
+
+	public void setStatus(ApprovalStatusType status) {
+		this.status = status;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
 	}
 
 	public boolean userCanDoDecision(Employee emp) {

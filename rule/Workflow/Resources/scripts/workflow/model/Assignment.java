@@ -8,12 +8,13 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
@@ -21,20 +22,18 @@ import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import administrator.model.User;
 import staff.model.Employee;
 import workflow.model.embedded.Control;
-import workflow.model.embedded.PrimaryDocument;
 
 @JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "assignments")
-// @Inheritance(strategy = InheritanceType.JOINED)
-public class Assignment extends SecureHierarchicalEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Assignment extends ControlledDocument {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
@@ -43,15 +42,8 @@ public class Assignment extends SecureHierarchicalEntity {
 	@JoinColumn(name = "applied_author", nullable = false)
 	private Employee appliedAuthor;
 
-	@JsonIgnore
-	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	private PrimaryDocument primaryDocument;
-
-	@JsonIgnore
-	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Assignment parent;
+	@ManyToOne
+	private ControlledDocument parent;
 
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
@@ -86,24 +78,6 @@ public class Assignment extends SecureHierarchicalEntity {
 		this.appliedAuthor = appliedAuthor;
 	}
 
-	public PrimaryDocument getPrimaryDocument() {
-		return primaryDocument;
-	}
-
-	@JsonProperty
-	public void setPrimaryDocument(PrimaryDocument parent) {
-		this.primaryDocument = parent;
-	}
-
-	public Assignment getParent() {
-		return parent;
-	}
-
-	@JsonProperty
-	public void setParent(Assignment parent) {
-		this.parent = parent;
-	}
-
 	public String getBody() {
 		return body;
 	}
@@ -132,13 +106,17 @@ public class Assignment extends SecureHierarchicalEntity {
 		return reports;
 	}
 
+	public ControlledDocument getParent() {
+		return parent;
+	}
+
+	public void setParent(ControlledDocument parent) {
+		this.parent = parent;
+	}
+
 	@Override
 	public SecureHierarchicalEntity getParentEntity(_Session ses) {
-		return null;
-		/*
-		 * if (parent != null) { return parent; } else { // return incoming; }
-		 * return parent;
-		 */
+		return parent;
 	}
 
 	public List<IAppEntity<UUID>> getResponses() {

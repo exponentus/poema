@@ -214,7 +214,7 @@
         <entry lang="ENG">Time limit</entry>
     </sentence>
     <sentence mode="on" keyword="approval_block_time_limit_help">
-        <entry lang="RUS">время по прошествии, которого документ переходит к следующему согласователю</entry>
+        <entry lang="RUS">время по прошествии которого документ переходит к следующему согласователю</entry>
         <entry lang="ENG">after this time limit the approval process go forward</entry>
         <entry lang="KAZ">время по прошествии, которого документ переходит к следующему согласователю</entry>
     </sentence>

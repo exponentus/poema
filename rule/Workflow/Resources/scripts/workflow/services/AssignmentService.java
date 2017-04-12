@@ -31,8 +31,10 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
+import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.AssignmentDomain;
 import workflow.model.Assignment;
+import workflow.model.ControlledDocument;
 import workflow.model.Incoming;
 
 @Path("assignments")
@@ -53,20 +55,23 @@ public class AssignmentService extends RestProvider {
 
 			if (isNew) {
 				String incomingId = getWebFormData().getAnyValueSilently("incoming");
+				String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
 				String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
 				Incoming incoming = null;
-				Assignment parent = null;
+				ControlledDocument parent = null;
 
 				if (!incomingId.isEmpty()) {
-					incoming = (new IncomingDAO(ses)).findByIdentefier(incomingId);
+					parent = (new IncomingDAO(ses)).findByIdentefier(incomingId);
+				} else if (!officeMemoId.isEmpty()) {
+					parent = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
 				} else if (!assignmentId.isEmpty()) {
 					parent = assignmentDAO.findByIdentefier(assignmentId);
 				} else {
 					throw new IllegalArgumentException("No parent document");
 				}
 
-				entity = ad.composeNew(employee, incoming, parent);
+				entity = ad.composeNew(employee, parent);
 			} else {
 				entity = assignmentDAO.findByIdentefier(id);
 			}

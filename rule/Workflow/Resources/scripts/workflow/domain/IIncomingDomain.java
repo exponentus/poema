@@ -2,12 +2,12 @@ package workflow.domain;
 
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
 
-import administrator.model.User;
 import workflow.model.Incoming;
 
 public interface IIncomingDomain {
-	Incoming composeNew(User user);
+	Incoming composeNew(IUser<Long> user);
 
 	void fillFromDto(Incoming entity, Incoming dto, _Session ses);
 

@@ -251,7 +251,8 @@
         <class>reference.model.DemandType</class>
         <class>reference.model.Vehicle</class>
         <!-- The application module entities -->
-        <class>workflow.model.embedded.PrimaryDocument</class>
+        <class>workflow.model.ControlledDocument</class>
+        <class>workflow.model.embedded.ApprovedControlledDocument</class> 
         <class>workflow.model.OfficeMemo</class>
         <class>workflow.model.ApplicationForVehicle</class>
         <class>workflow.model.Incoming</class>
