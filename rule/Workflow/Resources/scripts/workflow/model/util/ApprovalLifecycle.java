@@ -41,6 +41,9 @@ public class ApprovalLifecycle {
 
 		} else if (block.getType() == ApprovalType.SIGNING) {
 			Approver approver = block.getNextApprover();
+			if (approver == null) {
+				throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET, block.getType().name());
+			}
 			approver.setCurrent(true);
 			entity.addReader(approver.getEmployee().getUser());
 

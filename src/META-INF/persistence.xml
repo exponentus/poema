@@ -295,6 +295,7 @@
         <class>staff.model.Role</class>
         <class>staff.model.OrganizationLabel</class>
         <!-- Common Reference module entities -->
+
         <class>reference.model.Position</class>
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
@@ -303,6 +304,7 @@
         <class>reference.model.Vehicle</class>
         <class>reference.model.MeetingRoom</class>
         <!-- The application module entities -->
+        <class>resourcereservations.model.Reservation</class>
         <class>resourcereservations.model.ApplicationForVehicle</class>
         <class>resourcereservations.model.ApplicationForMeetingRoom</class>
         <class>workflow.model.embedded.Approval</class>
