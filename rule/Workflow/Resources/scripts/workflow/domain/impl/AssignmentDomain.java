@@ -15,15 +15,16 @@ import workflow.model.embedded.PrimaryDocument;
 public class AssignmentDomain implements IAssignmentDomain {
 
 	@Override
-	public Assignment composeNew(Employee author, PrimaryDocument parent) {
+	public Assignment composeNew(Employee author, PrimaryDocument primaryDocument, Assignment parent) {
 		Assignment entity = new Assignment();
 
 		entity.setAuthor(author.getUser());
 		entity.setAppliedAuthor(author);
-		if (parent != null) {
+		if (primaryDocument != null) {
+			entity.setPrimaryDocument(primaryDocument);
+		} else {
 			entity.setParent(parent);
 		}
-
 		Control newControl = new Control();
 		newControl.setStartDate(new Date());
 		entity.setControl(newControl);
@@ -62,9 +63,11 @@ public class AssignmentDomain implements IAssignmentDomain {
 
 		outcome.setTitle(entity.getTitle());
 		outcome.addPayload(entity);
-		PrimaryDocument parent = entity.getParent();
+		PrimaryDocument parent = entity.getPrimaryDocument();
 		if (parent != null) {
 			outcome.addPayload("parent", parent);
+		} else {
+			outcome.addPayload("parent", entity.getParent());
 		}
 		if (!entity.isNew()) {
 			outcome.addPayload(new ACL(entity));

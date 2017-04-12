@@ -63,7 +63,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 					String parent = doc.getParentDocumentUNID();
 					Incoming inc = iDao.findByExtKey(parent);
 					if (inc != null) {
-						entity.setParent(inc);
+						entity.setPrimaryDocument(inc);
 						entity = entities.put(doc.getUniversalID(), entity);
 					} else {
 						Assignment parentEntity = dao.findByExtKey(parent);

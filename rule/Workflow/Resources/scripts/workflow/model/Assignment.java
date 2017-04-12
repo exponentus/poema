@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -35,8 +33,8 @@ import workflow.model.embedded.PrimaryDocument;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "assignments")
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Assignment extends PrimaryDocument {
+// @Inheritance(strategy = InheritanceType.JOINED)
+public class Assignment extends SecureHierarchicalEntity {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
@@ -48,7 +46,12 @@ public class Assignment extends PrimaryDocument {
 	@JsonIgnore
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	private PrimaryDocument parent;
+	private PrimaryDocument primaryDocument;
+
+	@JsonIgnore
+	@NotNull
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Assignment parent;
 
 	@FTSearchable
 	@Column(columnDefinition = "TEXT")
@@ -83,12 +86,21 @@ public class Assignment extends PrimaryDocument {
 		this.appliedAuthor = appliedAuthor;
 	}
 
-	public PrimaryDocument getParent() {
+	public PrimaryDocument getPrimaryDocument() {
+		return primaryDocument;
+	}
+
+	@JsonProperty
+	public void setPrimaryDocument(PrimaryDocument parent) {
+		this.primaryDocument = parent;
+	}
+
+	public Assignment getParent() {
 		return parent;
 	}
 
 	@JsonProperty
-	public void setParent(PrimaryDocument parent) {
+	public void setParent(Assignment parent) {
 		this.parent = parent;
 	}
 

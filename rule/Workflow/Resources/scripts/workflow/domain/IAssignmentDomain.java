@@ -7,7 +7,7 @@ import workflow.model.Assignment;
 import workflow.model.embedded.PrimaryDocument;
 
 public interface IAssignmentDomain {
-	Assignment composeNew(Employee author, PrimaryDocument parent);
+	Assignment composeNew(Employee author, PrimaryDocument primaryDocument, Assignment parent);
 
 	void fillFromDto(Assignment entity, Assignment dto, Employee author);
 
