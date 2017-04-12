@@ -42,7 +42,7 @@ public class Assignment extends ControlledDocument {
 	@JoinColumn(name = "applied_author", nullable = false)
 	private Employee appliedAuthor;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private ControlledDocument parent;
 
 	@FTSearchable
