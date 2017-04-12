@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <vocabulary primary="ENG">
+    <sentence mode="on" keyword="all_applications">
+        <entry lang="RUS">Все заявки</entry>
+        <entry lang="ENG">All applications</entry>
+        <entry lang="KAZ">Барлық өтінімдер</entry>
+    </sentence>
+    <sentence mode="on" keyword="my_applications">
+        <entry lang="RUS">Мои заявки</entry>
+        <entry lang="ENG">My applications</entry>
+        <entry lang="KAZ">Менің өтінімдерім</entry>
+    </sentence>
 
     <sentence mode="on" keyword="applications_for_vehicle">
         <entry lang="RUS">Заявки на транспорт</entry>
@@ -17,17 +27,10 @@
         <entry lang="KAZ">Көлік құралына арналған өтініш</entry>
     </sentence>
 
-    <sentence mode="on" keyword="reg_documents">
-        <entry lang="RUS">Регистрационные документы</entry>
-        <entry lang="KAZ">Регистрационные документы</entry>
-        <entry lang="ENG">Tіркеу құжаттары</entry>
-    </sentence>
-
-
     <sentence mode="on" keyword="start_date">
         <entry lang="RUS">Дата начала</entry>
         <entry lang="ENG">Start date</entry>
-          <entry lang="KAZ">Басталуы</entry>
+        <entry lang="KAZ">Басталуы</entry>
     </sentence>
     <sentence mode="on" keyword="due_date">
         <entry lang="RUS">Срок исполнения</entry>
@@ -35,44 +38,25 @@
         <entry lang="POR">Data de vencimento</entry>
         <entry lang="SPA">Fecha de finalización</entry>
     </sentence>
-    <sentence mode="on" keyword="assignee_user">
-        <entry lang="RUS">Исполнитель</entry>
-        <entry lang="ENG">Assignee</entry>
-        <entry lang="POR">Executante</entry>
-        <entry lang="SPA">Ejecutor</entry>
-    </sentence>
-    <sentence mode="on" keyword="related_documents">
-        <entry lang="RUS">Связанные документы</entry>
-        <entry lang="ENG">Related documents</entry>
-        <entry lang="POR">Execução</entry>
-        <entry lang="SPA">Ejecución</entry>
-    </sentence>
+
     <sentence mode="on" keyword="vehicle">
         <entry lang="RUS">Транспортное средство</entry>
         <entry lang="ENG">Vehicle</entry>
-        <entry lang="POR"></entry>
-        <entry lang="SPA"></entry>
         <entry lang="KAZ">Көлік</entry>
     </sentence>
     <sentence mode="on" keyword="use_from">
         <entry lang="RUS">От</entry>
         <entry lang="ENG">From</entry>
-        <entry lang="POR"></entry>
-        <entry lang="SPA"></entry>
         <entry lang="KAZ">Басталуы</entry>
     </sentence>
     <sentence mode="on" keyword="use_to">
         <entry lang="RUS">До</entry>
         <entry lang="ENG">Until</entry>
-        <entry lang="POR"></entry>
-        <entry lang="SPA"></entry>
         <entry lang="KAZ">Дейін</entry>
     </sentence>
     <sentence mode="on" keyword="route">
         <entry lang="RUS">Маршрут</entry>
         <entry lang="ENG">Route</entry>
-        <entry lang="POR"></entry>
-        <entry lang="SPA"></entry>
         <entry lang="KAZ">Бағыт</entry>
     </sentence>
 </vocabulary>

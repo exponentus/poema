@@ -34,6 +34,7 @@ public class ReportDomain implements IReportDomain {
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());
         entity.setAppliedRegDate(dto.getAppliedRegDate());
+        entity.setObservers(dto.getObservers());
         entity.setAttachments(dto.getAttachments());
     }
 

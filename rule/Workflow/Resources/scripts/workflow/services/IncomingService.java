@@ -203,7 +203,7 @@ public class IncomingService extends RestProvider {
                 actionBar.addAction(new _Action("assignment", "", "new_assignment"));
             }
         }
-        actionBar.addAction(new _Action("sign", "", "sign"));
+        // actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }

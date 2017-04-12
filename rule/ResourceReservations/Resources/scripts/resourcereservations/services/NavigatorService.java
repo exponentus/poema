@@ -22,9 +22,15 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline co = new _Outline("", "common");
-        co.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle", "applications_for_vehicle"));
+        _Outline o = new _Outline("", "common");
+        o.addEntry(new _OutlineEntry("all_applications", "", "fa fa-list", "applications", "applications"));
+        o.addEntry(new _OutlineEntry("my_applications", "", "fa fa-user-o", "applications_my", "applications/my"));
 
+        _Outline co = new _Outline("", "application_types");
+        co.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle", "applications_for_vehicle"));
+        // co.addEntry(new _OutlineEntry("applications_for_room", "", "fa fa-home", "applications_for_room", "applications_for_room"));
+
+        list.add(o);
         list.add(co);
 
         Outcome outcome = new Outcome();

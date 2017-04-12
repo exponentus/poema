@@ -27,6 +27,7 @@ public class OutgoingDomain implements IOutgoingDomain {
         entity.setDocType(dto.getDocType());
         entity.setRecipient(dto.getRecipient());
         entity.setBody(dto.getBody());
+        entity.setObservers(dto.getObservers());
         entity.setAttachments(dto.getAttachments());
 
         if (entity.isNew()) {

@@ -34,6 +34,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         om.setAttachments(dto.getAttachments());
         om.setBlocks(dto.getBlocks());
         om.setSchema(dto.getSchema());
+        om.setObservers(dto.getObservers());
 
         if (om.isNew()) {
             dto.setVersion(1);
