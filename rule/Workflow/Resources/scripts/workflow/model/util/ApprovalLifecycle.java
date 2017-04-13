@@ -1,6 +1,8 @@
 package workflow.model.util;
 
+import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.exponentus.user.IUser;
@@ -9,6 +11,7 @@ import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.constants.DecisionType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
@@ -36,9 +39,11 @@ public class ApprovalLifecycle {
 			entity.addReader(approver.getEmployee().getUser());
 
 		} else if (block.getType() == ApprovalType.PARALLEL) {
-			entity.addReaders(block.getApprovers().stream().map(approver -> approver.getEmployee().getUserID())
-					.collect(Collectors.toList()));
-
+			List<Approver> approvers = block.getApprovers();
+			for (Approver approver : approvers) {
+				approver.setCurrent(true);
+				entity.addReader(approver.getEmployee().getUser());
+			}
 		} else if (block.getType() == ApprovalType.SIGNING) {
 			Approver approver = block.getNextApprover();
 			if (approver == null) {
@@ -66,7 +71,13 @@ public class ApprovalLifecycle {
 	public void accept(IUser<Long> user) throws ApprovalException {
 
 		Block processBlock = getCurrentBlock();
-		processBlock.getApprover(user).agree();
+		Approver currentApprover = processBlock.getApprover(user);
+		if (currentApprover.getEmployee() == null) {
+			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
+		}
+		currentApprover.setDecisionType(DecisionType.YES);
+		currentApprover.setDecisionTime(new Date());
+		currentApprover.setCurrent(false);
 
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
@@ -86,6 +97,7 @@ public class ApprovalLifecycle {
 					_nextApprover.setCurrent(true);
 					entity.addReader(_nextApprover.getEmployee().getUser());
 				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
+
 					entity.addReaders(nextBlock.getApprovers().stream()
 							.map(approver -> approver.getEmployee().getUserID()).collect(Collectors.toList()));
 				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
@@ -109,7 +121,14 @@ public class ApprovalLifecycle {
 		if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {
 			throw new ApprovalException(ApprovalExceptionType.THERE_IS_NO_COMMENT);
 		}
-		processBlock.getApprover(user).disagree(decisionComment);
+		Approver currentApprover = processBlock.getApprover(user);
+		if (currentApprover.getEmployee() == null) {
+			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
+		}
+		currentApprover.setDecisionType(DecisionType.NO);
+		currentApprover.setDecisionTime(new Date());
+		currentApprover.setCurrent(false);
+		currentApprover.setDecisionComment(decisionComment);
 
 		if (entity.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
 			entity.setResult(ApprovalResultType.REJECTED);

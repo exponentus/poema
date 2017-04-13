@@ -26,10 +26,7 @@
         <entry lang="RUS">Паралельно</entry>
         <entry lang="ENG">Parallel</entry>
     </sentence>
-    <sentence mode="on" keyword="signing">
-        <entry lang="RUS">Подписание</entry>
-        <entry lang="ENG">Signing</entry>
-    </sentence>
+   
     <sentence mode="on" keyword="acl_tab_title">
         <entry lang="RUS">Доступ</entry>
         <entry lang="ENG">ACL</entry>
@@ -172,11 +169,7 @@
         <entry lang="RUS">Автор</entry>
         <entry lang="ENG">Author</entry>
     </sentence>
-    <sentence mode="on" keyword="require_comment_if_no">
-        <entry lang="RUS">Комментарий если не согласен</entry>
-        <entry lang="ENG">Комментарий если не согласен</entry>
-    </sentence>
-  
+
 
     <sentence mode="on" keyword="current_approver">
         <entry lang="RUS">Текущий</entry>
@@ -184,12 +177,7 @@
         <entry lang="KAZ">Ағымдағы</entry>
     </sentence>
   
-    <sentence mode="on" keyword="approval_block_time_limit_help">
-        <entry lang="RUS">время по прошествии которого документ переходит к следующему согласователю</entry>
-        <entry lang="ENG">after this time limit the approval process go forward</entry>
-        <entry lang="KAZ">время по прошествии, которого документ переходит к следующему согласователю</entry>
-    </sentence>
-
+   
     <sentence mode="on" keyword="control">
         <entry lang="RUS">Контроль</entry>
         <entry lang="ENG">Control</entry>

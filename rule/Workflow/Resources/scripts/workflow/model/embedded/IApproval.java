@@ -12,11 +12,15 @@ import workflow.model.constants.ApprovalStatusType;
 
 public interface IApproval {
 
+	IUser<Long> getAuthor();
+
+	String getURL();
+
 	void addReader(IUser<Long> user);
 
 	void addReaders(List<Long> readers);
 
-	Iterable<Block> getBlocks();
+	List<Block> getBlocks();
 
 	Block getNextBlock();
 

@@ -16,8 +16,6 @@ import com.exponentus.dataengine.jpa.SimpleAppEntity;
 import staff.model.Employee;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.DecisionTypeConverter;
-import workflow.model.exception.ApprovalException;
-import workflow.model.exception.ApprovalExceptionType;
 
 /**
  * @author Kayra created 07-04-2016
@@ -103,24 +101,4 @@ public class Approver extends SimpleAppEntity {
 		this.position = position;
 	}
 
-	public void agree() throws ApprovalException {
-		if (employee == null) {
-			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
-		}
-
-		setDecisionType(DecisionType.YES);
-		setDecisionTime(new Date());
-		setCurrent(false);
-	}
-
-	public void disagree(String decisionComment) throws ApprovalException {
-		if (employee == null) {
-			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
-		}
-
-		setDecisionType(DecisionType.NO);
-		setDecisionTime(new Date());
-		setDecisionComment(decisionComment);
-		setCurrent(false);
-	}
 }
