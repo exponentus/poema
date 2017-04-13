@@ -159,7 +159,7 @@
   "content" : "Content",
   "value_is_non_latin" : "The value should be consist from Latin letters",
   "captcha_incorrect" : "Captcha is incorrect",
-  "your_profile" : "Сіздің профиль",
+  "your_profile" : "Your profile",
   "parallel" : "Parallel",
   "error_400" : "The server cannot or will not process the request due to an apparent client error",
   "street" : "Street",
