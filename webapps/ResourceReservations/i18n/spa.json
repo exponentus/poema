@@ -178,6 +178,7 @@
   "due_date" : "Fecha de finalización",
   "no_connection" : null,
   "field_is_empty" : null,
+  "application" : null,
   "serial" : null,
   "dialog_no_selected_value" : null,
   "save_close" : null,

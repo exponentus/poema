@@ -10,7 +10,11 @@
         <entry lang="ENG">My applications</entry>
         <entry lang="KAZ">Менің өтінімдерім</entry>
     </sentence>
-
+ 	<sentence mode="on" keyword="application">
+        <entry lang="RUS">Заявка</entry>
+        <entry lang="ENG">Applications</entry>
+        <entry lang="KAZ">Өтініш</entry>
+    </sentence>
     <sentence mode="on" keyword="applications_for_vehicle">
         <entry lang="RUS">Заявки на транспорт</entry>
         <entry lang="ENG">Applications for vehicle</entry>

@@ -178,6 +178,7 @@
   "due_date" : "Due date",
   "no_connection" : "No connection to the server",
   "field_is_empty" : "The field is empty",
+  "application" : "Applications",
   "serial" : "Serial",
   "dialog_no_selected_value" : "No selected",
   "save_close" : "Save and close",

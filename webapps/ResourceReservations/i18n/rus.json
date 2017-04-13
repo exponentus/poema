@@ -178,6 +178,7 @@
   "due_date" : "Срок исполнения",
   "no_connection" : "Отсутствует соединение с сервером",
   "field_is_empty" : "Поле не заполнено",
+  "application" : "Заявка",
   "serial" : "Последовательно",
   "dialog_no_selected_value" : "Вы не сделали выбор",
   "save_close" : "Сохранить и закрыть",
