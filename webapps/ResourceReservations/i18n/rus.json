@@ -173,7 +173,7 @@
   "all_applications" : "Все заявки",
   "apply" : "Применить",
   "editable" : "Редактирование",
-  "password_confirm_not_equals" : "Passwords do not match",
+  "password_confirm_not_equals" : "Пароли не совпадают",
   "approval_block" : "Блок согласования",
   "due_date" : "Срок исполнения",
   "no_connection" : "Отсутствует соединение с сервером",

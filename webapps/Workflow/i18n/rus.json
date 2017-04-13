@@ -97,7 +97,7 @@
   "summary" : "Краткое содержание",
   "apply" : "Применить",
   "approval_block_time_limit_help" : "время по прошествии которого документ переходит к следующему согласователю",
-  "password_confirm_not_equals" : "Passwords do not match",
+  "password_confirm_not_equals" : "Пароли не совпадают",
   "no_connection" : "Отсутствует соединение с сервером",
   "recipient" : "Получатель",
   "filter_auto" : "Авто",
