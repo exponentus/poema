@@ -1,5 +1,8 @@
 package workflow.model.exception;
 
+import com.exponentus.env.Environment;
+import com.exponentus.localization.constants.LanguageCode;
+
 public class ApprovalException extends Exception {
 	private static final long serialVersionUID = 1L;
 	private ApprovalExceptionType id;
@@ -23,6 +26,10 @@ public class ApprovalException extends Exception {
 
 	public String getAddInfo() {
 		return addInfo;
+	}
+
+	public String getLocMessage(LanguageCode lang) {
+		return Environment.vocabulary.getWord(id.name(), lang);
 	}
 
 }
