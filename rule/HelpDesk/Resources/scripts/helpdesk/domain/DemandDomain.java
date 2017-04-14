@@ -35,6 +35,7 @@ public class DemandDomain implements IDemandDomain {
         demand.setDemandType(dto.getDemandType());
         demand.setCustomer(dto.getCustomer());
         demand.setProject(dto.getProject());
+        demand.setAttachments(dto.getAttachments());
 
         if (demand.isNew()) {
             demand.setAuthor(user);

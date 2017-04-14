@@ -145,7 +145,6 @@ public class DemandService extends RestProvider {
         _Session session = getSession();
         Demand demand;
         DemandDomain demandDomain = new DemandDomain();
-        ;
 
         try {
             validate(dto);
