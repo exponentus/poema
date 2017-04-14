@@ -45,6 +45,7 @@ import staff.model.Employee;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.exception.ApprovalException;
+import workflow.model.util.ApprovalLifecycle;
 import workflow.other.Messages;
 
 @Path("applications_for_vehicle")
@@ -265,14 +266,14 @@ public class ApplicationForVehicleService extends RestProvider {
 	@Path("{id}/action/acceptApprovalBlock")
 	public Response acceptApprovalBlock(@PathParam("id") String id) {
 		try {
-			ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
+			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
+			ApplicationForVehicle entity = dao.findByIdentefier(id);
 			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
 			domain.acceptApprovalBlock(entity, getSession().getUser());
 
-			officeMemoDAO.update(entity, false);
-
+			dao.update(entity, false);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("acceptApprovalBlock");
 			outcome.setMessage("acceptApprovalBlock");
@@ -287,16 +288,16 @@ public class ApplicationForVehicleService extends RestProvider {
 	@Path("{id}/action/declineApprovalBlock")
 	public Response declineApprovalBlock(@PathParam("id") String id) {
 		try {
-			ApplicationForVehicleDAO officeMemoDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = officeMemoDAO.findByIdentefier(id);
+			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
+			ApplicationForVehicle entity = dao.findByIdentefier(id);
 			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
 			String decisionComment = getWebFormData().getValueSilently("comment");
 
 			domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
 
-			officeMemoDAO.update(entity, false);
-
+			dao.update(entity, false);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
@@ -322,7 +323,7 @@ public class ApplicationForVehicleService extends RestProvider {
 		EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
 		if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			if (entity.getProcessingBlock().getType() == ApprovalType.SIGNING) {
+			if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
 				actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
 			} else {
 				actionBar.addAction(new _Action("accept", "", "accept_approval_block"));

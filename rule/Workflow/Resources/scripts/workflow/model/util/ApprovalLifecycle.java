@@ -70,7 +70,7 @@ public class ApprovalLifecycle {
 
 	public void accept(IUser<Long> user) throws ApprovalException {
 
-		Block processBlock = getCurrentBlock();
+		Block processBlock = getCurrentBlock(entity);
 		Approver currentApprover = processBlock.getApprover(user);
 		if (currentApprover.getEmployee() == null) {
 			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
@@ -117,7 +117,7 @@ public class ApprovalLifecycle {
 
 	public void decline(IUser<Long> user, String decisionComment) throws ApprovalException {
 
-		Block processBlock = getCurrentBlock();
+		Block processBlock = getCurrentBlock(entity);
 		if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {
 			throw new ApprovalException(ApprovalExceptionType.THERE_IS_NO_COMMENT);
 		}
@@ -170,15 +170,28 @@ public class ApprovalLifecycle {
 		}
 	}
 
-	private Block getCurrentBlock() throws ApprovalException {
+	public static Block getCurrentBlock(IApproval entity) throws ApprovalException {
 		if (entity.getStatus() != ApprovalStatusType.PROCESSING) {
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
-		Block processBlock = entity.getProcessingBlock();
+		Block processBlock = getProcessingBlock(entity);
 		if (processBlock == null) {
 			throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 		}
 		return processBlock;
+	}
+
+	public static Block getProcessingBlock(IApproval entity) {
+		if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+			return null;
+		}
+
+		if (entity.getBlocks() == null || entity.getBlocks().isEmpty()) {
+			return null;
+		}
+
+		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING)
+				.findFirst().orElse(null);
 	}
 }

@@ -24,8 +24,6 @@ public interface IApproval {
 
 	Block getNextBlock();
 
-	Block getProcessingBlock();
-
 	ApprovalResultType getResult();
 
 	ApprovalSchemaType getSchema();

@@ -38,6 +38,7 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.OfficeMemoDomain;
 import workflow.model.OfficeMemo;
 import workflow.model.exception.ApprovalException;
+import workflow.model.util.ApprovalLifecycle;
 import workflow.other.Messages;
 
 @Path("office-memos")
@@ -236,7 +237,7 @@ public class OfficeMemoService extends RestProvider {
 			omd.acceptApprovalBlock(om, getSession().getUser());
 
 			officeMemoDAO.update(om, false);
-
+			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
 			Outcome outcome = omd.getOutcome(om);
 			outcome.setTitle("acceptApprovalBlock");
 			outcome.setMessage("acceptApprovalBlock");
@@ -260,7 +261,7 @@ public class OfficeMemoService extends RestProvider {
 			omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
 
 			officeMemoDAO.update(om, false);
-
+			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
 			Outcome outcome = omd.getOutcome(om);
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
@@ -287,7 +288,7 @@ public class OfficeMemoService extends RestProvider {
 		EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
 		if (omd.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			if (entity.getProcessingBlock().getType() == ApprovalType.SIGNING) {
+			if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
 				actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
 			} else {
 				actionBar.addAction(new _Action("accept", "", "accept_approval_block"));

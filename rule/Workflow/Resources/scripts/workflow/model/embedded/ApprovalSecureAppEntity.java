@@ -21,6 +21,7 @@ import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
+import workflow.model.util.ApprovalLifecycle;
 
 @MappedSuperclass
 public class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IApproval {
@@ -80,20 +81,6 @@ public class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IA
 	}
 
 	@JsonIgnore
-	public Block getProcessingBlock() {
-		if (getStatus() == ApprovalStatusType.FINISHED) {
-			return null;
-		}
-
-		if (blocks == null || blocks.isEmpty()) {
-			return null;
-		}
-
-		return blocks.stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING).findFirst()
-				.orElse(null);
-	}
-
-	@JsonIgnore
 	public Block getNextBlock() {
 		if (getStatus() == ApprovalStatusType.FINISHED) {
 			return null;
@@ -114,7 +101,7 @@ public class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IA
 
 	public boolean userCanDoDecision(Employee emp) {
 		if (getStatus() == ApprovalStatusType.PROCESSING) {
-			Block block = getProcessingBlock();
+			Block block = ApprovalLifecycle.getProcessingBlock(this);
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
 					return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());

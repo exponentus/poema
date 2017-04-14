@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.env.EnvConst;
-import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.localization.Vocabulary;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.log.Log4jLogger;
 import com.exponentus.messaging.MessageType;
 import com.exponentus.messaging.email.MailAgent;
@@ -125,8 +125,44 @@ public class Messages {
 
 	}
 
-	public void sendReminderToAssignee(Task task) {
+	public void sendReminderToAssignee(Task task, String subject, String body) {
+		try {
+			UserDAO userDAO = new UserDAO();
+			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			String msgTemplate = "reminder_to_assignee";
+			User user = null;
 
+			Memo memo = new Memo();
+			memo.addVar("content", body);
+
+			try {
+				user = (User) assigneeUser;
+				lang = user.getDefaultLang();
+			} catch (ClassCastException e) {
+
+			}
+
+			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+
+			if (user != null) {
+				String slackAddr = user.getSlack();
+				if (slackAddr != null && !slackAddr.equals("")) {
+					SlackAgent sa = new SlackAgent();
+					String template = appEnv.templates.getTemplate(MessageType.SLACK, msgTemplate, lang);
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+						return;
+					}
+				}
+
+				List<String> recipients = new ArrayList<>();
+				recipients.add(assigneeUser.getEmail());
+				MailAgent ma = new MailAgent();
+				ma.sendMessage(recipients, subject,
+						memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, msgTemplate, lang)));
+			}
+		} catch (Exception e) {
+			logger.errorLogEntry(e);
+		}
 	}
 
 	public void sendOfNewRequest(Request request, Task task) {
