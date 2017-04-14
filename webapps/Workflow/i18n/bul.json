@@ -55,6 +55,7 @@
   "workspace" : "Работно място",
   "notes" : null,
   "incoming_document" : null,
+  "time_limit" : null,
   "acl_tab_title" : null,
   "project" : null,
   "new_" : null,

@@ -55,6 +55,7 @@
   "workspace" : "Еspacio de trabajo",
   "notes" : null,
   "incoming_document" : null,
+  "time_limit" : null,
   "acl_tab_title" : "Control de acceso",
   "project" : null,
   "new_" : null,
