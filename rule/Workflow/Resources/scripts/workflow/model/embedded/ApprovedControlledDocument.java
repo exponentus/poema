@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
@@ -38,6 +39,9 @@ public class ApprovedControlledDocument extends ControlledDocument implements IA
 	private List<Block> blocks = new ArrayList<>();
 
 	private int version = 1;
+
+	@Column(name = "ver_support")
+	private boolean versionsSupport;
 
 	public List<Block> getBlocks() {
 		return blocks;
@@ -112,6 +116,16 @@ public class ApprovedControlledDocument extends ControlledDocument implements IA
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean isVersionsSupport() {
+		return versionsSupport;
+	}
+
+	@Override
+	public void setVersionsSupport(boolean versionsSupport) {
+		this.versionsSupport = versionsSupport;
 	}
 
 }

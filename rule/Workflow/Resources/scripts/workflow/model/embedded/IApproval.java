@@ -30,6 +30,10 @@ public interface IApproval {
 
 	ApprovalStatusType getStatus();
 
+	boolean isVersionsSupport();
+
+	void setVersionsSupport(boolean vs);
+
 	int getVersion();
 
 	void setBlocks(List<Block> blocks);

@@ -16,6 +16,7 @@ import com.exponentus.messaging.slack.SlackAgent;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalType;
+import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
@@ -29,6 +30,7 @@ public class Messages {
 	private AppEnv appEnv;
 	private static final String NOTIFY_TO_APPROVE_TEMPLATE = "notify_to_approve";
 	private static final String NOTIFY_TO_SIGN_TEMPLATE = "notify_to_sign";
+	private static final String NOTIFY_PROJECT_AUTHOR = "notify_project_author";
 
 	public Messages(AppEnv appEnv) {
 		this.appEnv = appEnv;
@@ -54,6 +56,47 @@ public class Messages {
 			}
 		}
 
+	}
+
+	public void notifyAuthor(IApproval approval, String title) {
+		User user = null;
+		if (approval.getStatus() == ApprovalStatusType.FINISHED) {
+			try {
+				user = (User) approval.getAuthor();
+				lang = user.getDefaultLang();
+			} catch (ClassCastException e) {
+
+			}
+
+			Memo memo = new Memo();
+			memo.addVar("title", title);
+			memo.addVar("author", approval.getAuthor().getUserName());
+			memo.addVar("result", appEnv.vocabulary.getWord(approval.getResult().name(), lang));
+
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#/" + appEnv.appName
+					+ "/" + approval.getURL() + "&lang=" + lang);
+
+			if (user != null) {
+				try {
+					String slackAddr = user.getSlack();
+					if (slackAddr != null && !slackAddr.equals("")) {
+						SlackAgent sa = new SlackAgent();
+						String template = appEnv.templates.getTemplate(MessageType.SLACK, NOTIFY_PROJECT_AUTHOR, lang);
+						if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+							return;
+						}
+					}
+
+					List<String> recipients = new ArrayList<>();
+					recipients.add(user.getEmail());
+					MailAgent ma = new MailAgent();
+					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_PROJECT_AUTHOR, lang),
+							memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, NOTIFY_PROJECT_AUTHOR, lang)));
+				} catch (MsgException e) {
+					logger.errorLogEntry(e);
+				}
+			}
+		}
 	}
 
 	private List<Approver> getCurrentApprovers(Block block) {
