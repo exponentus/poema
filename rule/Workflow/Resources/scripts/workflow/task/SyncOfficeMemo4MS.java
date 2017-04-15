@@ -255,7 +255,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		Map<Integer, ApprovalStatusType> depTypeCollation = new HashMap<>();
 		depTypeCollation.put(350, ApprovalStatusType.UNKNOWN);
 		depTypeCollation.put(351, ApprovalStatusType.DRAFT);
-		depTypeCollation.put(352, ApprovalStatusType.PROCESSING);
+		depTypeCollation.put(352, ApprovalStatusType.PENDING);
 		depTypeCollation.put(353, ApprovalStatusType.FINISHED);
 		depTypeCollation.put(354, ApprovalStatusType.UNKNOWN);
 		depTypeCollation.put(355, ApprovalStatusType.UNKNOWN);

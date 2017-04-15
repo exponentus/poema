@@ -50,38 +50,47 @@
     <sentence mode="on" keyword="office_memo_plural">
         <entry lang="RUS">Служебные записки</entry>
         <entry lang="ENG">Officememo</entry>
+         <entry lang="KAZ">Қызметтік жазбалар</entry>
     </sentence>
     <sentence mode="on" keyword="officememo">
         <entry lang="RUS">Служебная записка</entry>
         <entry lang="ENG">Officememo</entry>
+         <entry lang="KAZ">Қызметтік жазба</entry>
     </sentence>
     <sentence mode="on" keyword="office_memo">
         <entry lang="RUS">Служебная записка</entry>
         <entry lang="ENG">Officememo</entry>
+         <entry lang="KAZ">Қызметтік жазба</entry>
     </sentence>
     <sentence mode="on" keyword="incoming_documents">
         <entry lang="RUS">Входящие документы</entry>
         <entry lang="ENG">Incoming documents</entry>
+         <entry lang="KAZ">Кіріс құжаттары</entry>
     </sentence>
     <sentence mode="on" keyword="outgoing_documents">
         <entry lang="RUS">Исходящие документы</entry>
         <entry lang="ENG">Outgoing documents</entry>
+         <entry lang="KAZ">Шығыс құжаттары</entry>
     </sentence>
     <sentence mode="on" keyword="incoming_document">
         <entry lang="RUS">Входящий документ</entry>
         <entry lang="ENG">Incoming document</entry>
+         <entry lang="KAZ">Шығыс құжат</entry>
     </sentence>
     <sentence mode="on" keyword="incoming">
         <entry lang="RUS">Входящий</entry>
         <entry lang="ENG">Incoming</entry>
+         <entry lang="KAZ">Кіріс құжат</entry>
     </sentence>
     <sentence mode="on" keyword="outgoing_document">
         <entry lang="RUS">Исходящий документ</entry>
         <entry lang="ENG">Outgoing document</entry>
+         <entry lang="KAZ">Шығыс құжаттары</entry>
     </sentence>
     <sentence mode="on" keyword="outgoing">
         <entry lang="RUS">Исходящий</entry>
         <entry lang="ENG">Outgoing</entry>
+         <entry lang="KAZ">Шығыс құжат</entry>
     </sentence>
     <sentence mode="on" keyword="projects">
         <entry lang="RUS">Проекты</entry>
@@ -90,18 +99,19 @@
     <sentence mode="on" keyword="org_documents">
         <entry lang="RUS">Документы организации</entry>
         <entry lang="ENG">Documents of the organization</entry>
+         <entry lang="KAZ">Ұйымның құжаттар</entry>
     </sentence>
     <sentence mode="on" keyword="applications_for_vehicle">
         <entry lang="RUS">Заявки на транспорт</entry>
-        <entry lang="ENG">Applications for vehicle</entry>
+        <entry lang="ENG">Requests for vehicle</entry>
     </sentence>
     <sentence mode="on" keyword="application_for_vehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
-        <entry lang="ENG">Application for vehicle</entry>
+        <entry lang="ENG">Request for vehicle</entry>
     </sentence>
     <sentence mode="on" keyword="applicationforvehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
-        <entry lang="ENG">Application for vehicle</entry>
+        <entry lang="ENG">Request for vehicle</entry>
     </sentence>
     <sentence mode="on" keyword="approvals">
         <entry lang="RUS">Согласование</entry>

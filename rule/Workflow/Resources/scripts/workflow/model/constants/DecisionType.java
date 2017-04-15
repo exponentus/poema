@@ -5,7 +5,7 @@ package workflow.model.constants;
  * @author Kayra created 07-04-2016
  */
 public enum DecisionType {
-	UNKNOWN(0), YES(12), NO(13);
+	UNKNOWN(0), YES(12), NO(13), SKIPPED(14);
 
 	private int code;
 

@@ -156,7 +156,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 										}
 										String coordStatus = respDoc.getItemValueString("CoordStatus");
 										if (coordStatus.equals("awaiting")) {
-											b.setStatus(ApprovalStatusType.PROCESSING);
+											b.setStatus(ApprovalStatusType.PENDING);
 										} else if (type.equalsIgnoreCase("coordinated")) {
 											b.setStatus(ApprovalStatusType.FINISHED);
 										}

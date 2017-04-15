@@ -39,7 +39,7 @@ public class Messages {
 	public void notifyApprovers(IApproval approval, String title) {
 		try {
 			Block block = ApprovalLifecycle.getCurrentBlock(approval);
-			for (Approver currentApprover : getCurrentApprovers(block)) {
+			for (Approver currentApprover : ApprovalLifecycle.getCurrentApprovers(block)) {
 				try {
 					if (block.getType() == ApprovalType.SIGNING) {
 						sendToApprover(approval, currentApprover, title, NOTIFY_TO_SIGN_TEMPLATE);
@@ -97,16 +97,6 @@ public class Messages {
 				}
 			}
 		}
-	}
-
-	private List<Approver> getCurrentApprovers(Block block) {
-		List<Approver> approvers = new ArrayList<Approver>();
-		for (Approver approver : block.getApprovers()) {
-			if (approver.isCurrent()) {
-				approvers.add(approver);
-			}
-		}
-		return approvers;
 	}
 
 	private void sendToApprover(IApproval approval, Approver currentApprover, String title, String templateName)

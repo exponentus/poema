@@ -1,5 +1,6 @@
 package workflow.model.util;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ public class ApprovalLifecycle {
 		}
 
 		Block block = entity.getNextBlock();
-
+		Date currentTime = new Date();
 		if (block.getType() == ApprovalType.SERIAL) {
 			Approver approver = block.getNextApprover();
 			approver.setCurrent(true);
@@ -42,6 +43,7 @@ public class ApprovalLifecycle {
 			List<Approver> approvers = block.getApprovers();
 			for (Approver approver : approvers) {
 				approver.setCurrent(true);
+				approver.setStartTime(currentTime);
 				entity.addReader(approver.getEmployee().getUser());
 			}
 		} else if (block.getType() == ApprovalType.SIGNING) {
@@ -50,14 +52,15 @@ public class ApprovalLifecycle {
 				throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET, block.getType().name());
 			}
 			approver.setCurrent(true);
+			approver.setStartTime(currentTime);
 			entity.addReader(approver.getEmployee().getUser());
 
 		} else {
 			throw new ApprovalException(ApprovalExceptionType.BLOCK_TYPE_ERROR, block.getType().name());
 		}
 
-		entity.setStatus(ApprovalStatusType.PROCESSING);
-		block.setStatus(ApprovalStatusType.PROCESSING);
+		entity.setStatus(ApprovalStatusType.PENDING);
+		block.setStatus(ApprovalStatusType.PENDING);
 
 		entity.getBlocks().forEach(b -> {
 			if (!block.getId().equals(b.getId())) {
@@ -79,6 +82,7 @@ public class ApprovalLifecycle {
 		currentApprover.setDecisionTime(new Date());
 		currentApprover.setCurrent(false);
 
+		Date currentTime = new Date();
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
 			if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
@@ -90,11 +94,12 @@ public class ApprovalLifecycle {
 
 			Block nextBlock = entity.getNextBlock();
 			if (nextBlock != null) {
-				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
+				nextBlock.setStatus(ApprovalStatusType.PENDING);
 
 				if (nextBlock.getType() == ApprovalType.SERIAL) {
 					Approver _nextApprover = nextBlock.getNextApprover();
 					_nextApprover.setCurrent(true);
+					_nextApprover.setStartTime(currentTime);
 					entity.addReader(_nextApprover.getEmployee().getUser());
 				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
 
@@ -103,6 +108,7 @@ public class ApprovalLifecycle {
 				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
 					Approver approver = nextBlock.getNextApprover();
 					approver.setCurrent(true);
+					approver.setStartTime(currentTime);
 					entity.addReader(approver.getEmployee().getUser());
 				} else {
 					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
@@ -136,6 +142,7 @@ public class ApprovalLifecycle {
 			return;
 		}
 
+		Date currentTime = new Date();
 		Approver nextApprover = processBlock.getNextApprover();
 		if (nextApprover != null) {
 			if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
@@ -147,11 +154,12 @@ public class ApprovalLifecycle {
 
 			Block nextBlock = entity.getNextBlock();
 			if (nextBlock != null) {
-				nextBlock.setStatus(ApprovalStatusType.PROCESSING);
+				nextBlock.setStatus(ApprovalStatusType.PENDING);
 
 				if (nextBlock.getType() == ApprovalType.SERIAL) {
 					Approver _nextApprover = nextBlock.getNextApprover();
 					_nextApprover.setCurrent(true);
+					_nextApprover.setStartTime(currentTime);
 					entity.addReader(_nextApprover.getEmployee().getUser());
 				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
 					entity.addReaders(nextBlock.getApprovers().stream()
@@ -159,6 +167,7 @@ public class ApprovalLifecycle {
 				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
 					Approver approver = nextBlock.getNextApprover();
 					approver.setCurrent(true);
+					approver.setStartTime(currentTime);
 					entity.addReader(approver.getEmployee().getUser());
 				} else {
 					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
@@ -170,8 +179,58 @@ public class ApprovalLifecycle {
 		}
 	}
 
+	public void skip(IUser<Long> user) throws ApprovalException {
+
+		Block processBlock = getCurrentBlock(entity);
+		Approver currentApprover = processBlock.getApprover(user);
+		if (currentApprover.getEmployee() == null) {
+			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
+		}
+		currentApprover.setDecisionType(DecisionType.YES);
+		currentApprover.setDecisionTime(new Date());
+		currentApprover.setCurrent(false);
+
+		Date currentTime = new Date();
+		Approver nextApprover = processBlock.getNextApprover();
+		if (nextApprover != null) {
+			if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
+				nextApprover.setCurrent(true);
+				entity.addReader(nextApprover.getEmployee().getUser());
+			}
+		} else {
+			processBlock.setStatus(ApprovalStatusType.FINISHED);
+
+			Block nextBlock = entity.getNextBlock();
+			if (nextBlock != null) {
+				nextBlock.setStatus(ApprovalStatusType.PENDING);
+
+				if (nextBlock.getType() == ApprovalType.SERIAL) {
+					Approver _nextApprover = nextBlock.getNextApprover();
+					_nextApprover.setCurrent(true);
+					_nextApprover.setStartTime(currentTime);
+					entity.addReader(_nextApprover.getEmployee().getUser());
+				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
+
+					entity.addReaders(nextBlock.getApprovers().stream()
+							.map(approver -> approver.getEmployee().getUserID()).collect(Collectors.toList()));
+				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
+					Approver approver = nextBlock.getNextApprover();
+					approver.setCurrent(true);
+					approver.setStartTime(currentTime);
+					entity.addReader(approver.getEmployee().getUser());
+				} else {
+					throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
+				}
+			} else {
+				entity.setResult(ApprovalResultType.ACCEPTED);
+				entity.setStatus(ApprovalStatusType.FINISHED);
+			}
+		}
+
+	}
+
 	public static Block getCurrentBlock(IApproval entity) throws ApprovalException {
-		if (entity.getStatus() != ApprovalStatusType.PROCESSING) {
+		if (entity.getStatus() != ApprovalStatusType.PENDING) {
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
@@ -191,7 +250,17 @@ public class ApprovalLifecycle {
 			return null;
 		}
 
-		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PROCESSING)
-				.findFirst().orElse(null);
+		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst()
+				.orElse(null);
+	}
+
+	public static List<Approver> getCurrentApprovers(Block block) {
+		List<Approver> approvers = new ArrayList<Approver>();
+		for (Approver approver : block.getApprovers()) {
+			if (approver.isCurrent()) {
+				approvers.add(approver);
+			}
+		}
+		return approvers;
 	}
 }

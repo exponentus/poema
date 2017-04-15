@@ -103,7 +103,7 @@ public class ApprovedControlledDocument extends ControlledDocument implements IA
 	}
 
 	public boolean userCanDoDecision(Employee emp) {
-		if (getStatus() == ApprovalStatusType.PROCESSING) {
+		if (getStatus() == ApprovalStatusType.PENDING) {
 			Block block = ApprovalLifecycle.getProcessingBlock(this);
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {

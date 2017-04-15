@@ -31,6 +31,9 @@ public class Approver extends SimpleAppEntity {
 	@Convert(converter = DecisionTypeConverter.class)
 	private DecisionType decisionType = DecisionType.UNKNOWN;
 
+	@Column(name = "start_time")
+	private Date startTime;
+
 	@Column(name = "decision_time")
 	private Date decisionTime;
 
@@ -59,6 +62,14 @@ public class Approver extends SimpleAppEntity {
 
 	public void setDecisionType(DecisionType type) {
 		this.decisionType = type;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
 	public Date getDecisionTime() {
