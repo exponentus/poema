@@ -98,6 +98,7 @@
   "interface" : "interface",
   "applied_author" : "Author",
   "content" : "Content",
+  "skipped" : "Skipped",
   "value_is_non_latin" : "The value should be consist from Latin letters",
   "captcha_incorrect" : "Captcha is incorrect",
   "street" : "Street",

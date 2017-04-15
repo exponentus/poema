@@ -98,6 +98,7 @@
   "interface" : null,
   "applied_author" : null,
   "content" : null,
+  "skipped" : "Saltado",
   "value_is_non_latin" : null,
   "captcha_incorrect" : "Captcha is incorrect",
   "street" : null,
