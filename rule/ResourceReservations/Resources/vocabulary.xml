@@ -10,28 +10,33 @@
         <entry lang="ENG">My applications</entry>
         <entry lang="KAZ">Менің өтінімдерім</entry>
     </sentence>
- 	<sentence mode="on" keyword="application">
+    <sentence mode="on" keyword="application">
         <entry lang="RUS">Заявка</entry>
         <entry lang="ENG">Applications</entry>
-        <entry lang="KAZ">Өтініш</entry>
+        <entry lang="KAZ">Өтінім</entry>
     </sentence>
     <sentence mode="on" keyword="applications_for_vehicle">
         <entry lang="RUS">Заявки на транспорт</entry>
         <entry lang="ENG">Applications for vehicle</entry>
-        <entry lang="KAZ">Көлік құралына арналған өтініштер</entry>
+        <entry lang="KAZ">Көлік құралына өтінімдер</entry>
     </sentence>
     <sentence mode="on" keyword="application_for_vehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
         <entry lang="ENG">Application for vehicle</entry>
-        <entry lang="KAZ">Көлік құралына арналған өтініш</entry>
+        <entry lang="KAZ">Көлік құралына өтінім</entry>
     </sentence>
     <sentence mode="on" keyword="applicationforvehicle">
         <entry lang="RUS">Заявка на транспорт</entry>
         <entry lang="ENG">Application for vehicle</entry>
-        <entry lang="KAZ">Көлік құралына арналған өтініш</entry>
+        <entry lang="KAZ">Көлік құралына өтінім</entry>
+    </sentence>
+    <sentence mode="on" keyword="applications_for_meeting_room">
+        <entry lang="RUS">Заявки на комнаты для переговоров</entry>
+        <entry lang="ENG">Application for meeting room</entry>
+        <entry lang="KAZ">Келіссөз бөлмесіне өтінім</entry>
     </sentence>
 
-    <sentence mode="on" keyword="start_date">
+    <!--<sentence mode="on" keyword="start_date">
         <entry lang="RUS">Дата начала</entry>
         <entry lang="ENG">Start date</entry>
         <entry lang="KAZ">Басталуы</entry>
@@ -41,12 +46,22 @@
         <entry lang="ENG">Due date</entry>
         <entry lang="POR">Data de vencimento</entry>
         <entry lang="SPA">Fecha de finalización</entry>
-    </sentence>
+    </sentence>-->
 
     <sentence mode="on" keyword="vehicle">
         <entry lang="RUS">Транспортное средство</entry>
         <entry lang="ENG">Vehicle</entry>
         <entry lang="KAZ">Көлік</entry>
+    </sentence>
+    <sentence mode="on" keyword="meeting_room">
+        <entry lang="RUS">Комната для переговоров</entry>
+        <entry lang="ENG">Meeting room</entry>
+        <entry lang="KAZ">Келіссөз бөлмесі</entry>
+    </sentence>
+    <sentence mode="on" keyword="meetingroom">
+        <entry lang="RUS">Комната для переговоров</entry>
+        <entry lang="ENG">Meeting room</entry>
+        <entry lang="KAZ">Келіссөз бөлмесі</entry>
     </sentence>
     <sentence mode="on" keyword="use_from">
         <entry lang="RUS">От</entry>
