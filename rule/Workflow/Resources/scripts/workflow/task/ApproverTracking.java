@@ -26,7 +26,7 @@ import workflow.model.embedded.IApproval;
 import workflow.model.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
 
-@Command(name = "approver_tracking", trigger = Trigger.EVERY_5MIN)
+@Command(name = "approver_tracking", trigger = Trigger.EVERY_5_MIN)
 public class ApproverTracking extends _Do {
 	private Date current = new Date();
 
