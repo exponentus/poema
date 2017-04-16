@@ -3,8 +3,13 @@ package workflow.domain.impl;
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.user.IUser;
+import staff.model.Employee;
 import workflow.domain.IOutgoingDomain;
 import workflow.model.Outgoing;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.exception.ApprovalException;
+import workflow.model.util.ApprovalLifecycle;
 
 import java.util.Date;
 
@@ -30,10 +35,41 @@ public class OutgoingDomain implements IOutgoingDomain {
         entity.setObservers(dto.getObservers());
         entity.setAttachments(dto.getAttachments());
 
+        entity.setBlocks(dto.getBlocks());
+        entity.setSchema(dto.getSchema());
+
         if (entity.isNew()) {
             entity.setAuthor(user);
             entity.addReaderEditor(entity.getAuthor());
         }
+    }
+
+    @Override
+    public boolean approvalCanBeStarted(Outgoing om) {
+        return om.getStatus() == ApprovalStatusType.DRAFT;
+    }
+
+    @Override
+    public void startApproving(Outgoing om) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+        lifecycle.start();
+    }
+
+    @Override
+    public boolean employeeCanDoDecisionApproval(Outgoing om, Employee employee) {
+        return om.userCanDoDecision(employee);
+    }
+
+    @Override
+    public void acceptApprovalBlock(Outgoing om, IUser<Long> user) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+        lifecycle.accept(user);
+    }
+
+    @Override
+    public void declineApprovalBlock(Outgoing om, IUser<Long> user, String decisionComment) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+        lifecycle.decline(user, decisionComment);
     }
 
     @Override

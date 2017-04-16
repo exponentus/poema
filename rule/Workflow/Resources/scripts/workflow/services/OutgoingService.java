@@ -14,11 +14,15 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OutgoingDAO;
 import workflow.domain.impl.OutgoingDomain;
 import workflow.model.Outgoing;
+import workflow.model.exception.ApprovalException;
+import workflow.model.util.ApprovalLifecycle;
+import workflow.other.Messages;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -86,7 +90,7 @@ public class OutgoingService extends RestProvider {
 
             Outcome outcome = outDomain.getOutcome(entity);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(getActionBar(ses, entity, outDomain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
@@ -188,11 +192,99 @@ public class OutgoingService extends RestProvider {
         return getAttachment(id, attachId);
     }
 
-    private _ActionBar getActionBar(_Session session, Outgoing entity) {
+    @POST
+    @Path("{id}/action/startApproving")
+    public Response startApproving(@PathParam("id") String id) {
+        try {
+            OutgoingDAO officeMemoDAO = new OutgoingDAO(getSession());
+            Outgoing om = officeMemoDAO.findByIdentefier(id);
+            OutgoingDomain omd = new OutgoingDomain();
+
+            omd.startApproving(om);
+
+            officeMemoDAO.update(om, false);
+            new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+            Outcome outcome = omd.getOutcome(om);
+            outcome.setTitle("approving_started");
+            outcome.setMessage("approving_started");
+            outcome.addPayload("result", "approving_started");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("{id}/action/acceptApprovalBlock")
+    public Response acceptApprovalBlock(@PathParam("id") String id) {
+        try {
+            OutgoingDAO officeMemoDAO = new OutgoingDAO(getSession());
+            Outgoing om = officeMemoDAO.findByIdentefier(id);
+            OutgoingDomain omd = new OutgoingDomain();
+
+            omd.acceptApprovalBlock(om, getSession().getUser());
+
+            officeMemoDAO.update(om, false);
+            new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+            Outcome outcome = omd.getOutcome(om);
+            outcome.setTitle("acceptApprovalBlock");
+            outcome.setMessage("acceptApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("{id}/action/declineApprovalBlock")
+    public Response declineApprovalBlock(@PathParam("id") String id) {
+        try {
+            OutgoingDAO officeMemoDAO = new OutgoingDAO(getSession());
+            Outgoing om = officeMemoDAO.findByIdentefier(id);
+            OutgoingDomain omd = new OutgoingDomain();
+
+            String decisionComment = getWebFormData().getValueSilently("comment");
+
+            omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
+
+            officeMemoDAO.update(om, false);
+            new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+            Outcome outcome = omd.getOutcome(om);
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("declineApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
+    private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
         actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-        actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+
+        if (entity.isEditable()) {
+            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+        }
+
+        if (outDomain.approvalCanBeStarted(entity)) {
+            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+        }
+
+        EmployeeDAO employeeDAO = new EmployeeDAO(session);
+
+        if (outDomain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
+            if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
+                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+            } else {
+                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+            }
+            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
+        }
+
         // actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
