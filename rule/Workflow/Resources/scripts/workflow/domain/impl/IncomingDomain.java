@@ -40,7 +40,6 @@ public class IncomingDomain implements IIncomingDomain {
 			EmployeeDAO eDao = new EmployeeDAO(ses);
 			Employee emp = eDao.findById(dto.getAddressee().getId());
 			entity.setAddressee(emp);
-			entity.addReader(emp.getUser());
 		} catch (DAOException e) {
 			Server.logger.errorLogEntry(e);
 		}
@@ -53,8 +52,8 @@ public class IncomingDomain implements IIncomingDomain {
 
 		if (entity.isNew()) {
 			entity.setAuthor(ses.getUser());
-			entity.addReaderEditor(entity.getAuthor());
 		}
+
 	}
 
 	@Override

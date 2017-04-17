@@ -1,5 +1,7 @@
 package workflow.services;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -27,15 +29,18 @@ import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 
+import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import workflow.dao.AssigneeEntryDAO;
 import workflow.dao.AssignmentDAO;
+import workflow.dao.ControlledDocumentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.AssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
-import workflow.model.Incoming;
+import workflow.model.embedded.AssigneeEntry;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
@@ -58,7 +63,6 @@ public class AssignmentService extends RestProvider {
 				String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
 				String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
-				Incoming incoming = null;
 				ControlledDocument parent = null;
 
 				if (!incomingId.isEmpty()) {
@@ -131,13 +135,55 @@ public class AssignmentService extends RestProvider {
 
 			domain.fillFromDto(entity, dto, employee);
 
+			// ACL routines
+			entity.resetReadersEditors();
+			entity.addReaderEditor(entity.getAuthor());
+			if (dto.getAppliedAuthor() != null) {
+				entity.addReaderEditor(dto.getAppliedAuthor().getUser());
+			}
+
+			for (AssigneeEntry ae : dto.getControl().getAssigneeEntries()) {
+				entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
+			}
+
+			List<User> observers = dto.getObservers();
+			if (observers != null) {
+				for (User observer : dto.getObservers()) {
+					entity.addReader(observer);
+				}
+			}
+
 			entity = assignmentDAO.save(entity);
+
+			ControlledDocumentDAO dao = new ControlledDocumentDAO(ses);
+			ControlledDocument parent = dao.findById(entity.getParent().getId());
+			parent.resetEditors();
+			dao.update(parent);
 
 			return Response.ok(domain.getOutcome(entity)).build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
 		} catch (_Validation.VException e) {
 			return responseValidationError(e.getValidation());
+		}
+	}
+
+	@POST
+	@Path("{id}/action/resetAssignee")
+	public Response resetAssignee(@PathParam("id") String id) {
+		try {
+			_Session ses = getSession();
+			AssigneeEntryDAO dao = new AssigneeEntryDAO();
+			AssigneeEntry om = dao.findByIdentefier(id);
+			om.setResetTime(new Date());
+			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+			Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
+			om.setResetBy(employee);
+			dao.update(om);
+
+			return Response.ok(new Outcome()).build();
+		} catch (DAOException e) {
+			return responseException(e);
 		}
 	}
 

@@ -99,6 +99,28 @@ public class Messages {
 		}
 	}
 
+	public void notifyRecipient(IApproval approval, String title) {
+		try {
+			Block block = ApprovalLifecycle.getCurrentBlock(approval);
+			for (Approver currentApprover : ApprovalLifecycle.getCurrentApprovers(block)) {
+				try {
+					if (block.getType() == ApprovalType.SIGNING) {
+						sendToApprover(approval, currentApprover, title, NOTIFY_TO_SIGN_TEMPLATE);
+					} else {
+						sendToApprover(approval, currentApprover, title, NOTIFY_TO_APPROVE_TEMPLATE);
+					}
+				} catch (MsgException e) {
+					logger.errorLogEntry(e);
+				}
+			}
+		} catch (ApprovalException e) {
+			if (e.getType() != ApprovalExceptionType.WRONG_STATUS) {
+				logger.errorLogEntry(e);
+			}
+		}
+
+	}
+
 	private void sendToApprover(IApproval approval, Approver currentApprover, String title, String templateName)
 			throws MsgException {
 		User user = null;

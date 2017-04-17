@@ -9,7 +9,6 @@ import staff.model.Employee;
 import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
-import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Control;
 
 public class AssignmentDomain implements IAssignmentDomain {
@@ -33,24 +32,15 @@ public class AssignmentDomain implements IAssignmentDomain {
 		if (entity.isNew()) {
 			entity.setAuthor(author.getUser());
 			entity.setParent(dto.getParent());
-
-			entity.addReaderEditor(entity.getAuthor());
-			if (dto.getAppliedAuthor() != null) {
-				entity.addReaderEditor(dto.getAppliedAuthor().getUser());
-			}
 		}
 
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
 		entity.setAppliedAuthor(dto.getAppliedAuthor());
 		entity.setObservers(dto.getObservers());
-		// TODO fix, rm
-		for (AssigneeEntry it : dto.getControl().getAssigneeEntries()) {
-			it.setResetBy(author);
-		}
-		//
 		entity.setControl(dto.getControl());
 		entity.setAttachments(dto.getAttachments());
+
 	}
 
 	@Override

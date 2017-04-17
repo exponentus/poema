@@ -3,7 +3,7 @@
 	<converter class="com.exponentus.common.model.util.PostgresUuidConverter"/>
 	<converter class="com.exponentus.common.model.util.LocalizedValConverter"/> 
 	<converter class="com.exponentus.common.model.constants.converter.ReportTypeConverter"/>     
- 	
+
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.ApplicationModeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
@@ -13,6 +13,8 @@
     <converter class="reference.model.constants.converter.ApprovalSchemaTypeConverter"/>
     <converter class="reference.model.constants.converter.ApprovalTypeConverter"/>           
     
+     	<converter class="staff.model.util.EmployeeConvertor"/>
+     	
     <converter class="workflow.model.constants.converter.ControlStatusTypeConverter"/> 
     <converter class="workflow.model.constants.converter.ApprovalStatusTypeConverter"/>   
     <converter class="workflow.model.constants.converter.DecisionTypeConverter"/>  

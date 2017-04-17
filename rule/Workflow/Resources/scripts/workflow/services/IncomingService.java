@@ -33,6 +33,7 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 
+import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.IncomingDAO;
@@ -139,6 +140,18 @@ public class IncomingService extends RestProvider {
 			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
 			inDomain.fillFromDto(entity, dto, ses);
+
+			// ACL routines
+			entity.resetReadersEditors();
+			entity.addReaderEditor(entity.getAuthor());
+			entity.addReader(entity.getAddressee().getUser());
+
+			List<User> observers = dto.getObservers();
+			if (observers != null) {
+				for (User observer : dto.getObservers()) {
+					entity.addReader(observer);
+				}
+			}
 
 			if (dto.isNew()) {
 				RegNum rn = new RegNum();
