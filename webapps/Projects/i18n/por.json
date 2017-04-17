@@ -80,6 +80,7 @@
   "no_data" : null,
   "related_documents" : "Execução",
   "tasks_assigned_to_me" : "Atribuidas a mim",
+  "current_approver" : null,
   "district" : null,
   "name" : "Nome",
   "page" : null,
