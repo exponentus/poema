@@ -36,18 +36,6 @@
         <entry lang="KAZ">Келіссөз бөлмесіне өтінім</entry>
     </sentence>
 
-    <!--<sentence mode="on" keyword="start_date">
-        <entry lang="RUS">Дата начала</entry>
-        <entry lang="ENG">Start date</entry>
-        <entry lang="KAZ">Басталуы</entry>
-    </sentence>
-    <sentence mode="on" keyword="due_date">
-        <entry lang="RUS">Срок исполнения</entry>
-        <entry lang="ENG">Due date</entry>
-        <entry lang="POR">Data de vencimento</entry>
-        <entry lang="SPA">Fecha de finalización</entry>
-    </sentence>-->
-
     <sentence mode="on" keyword="vehicle">
         <entry lang="RUS">Транспортное средство</entry>
         <entry lang="ENG">Vehicle</entry>
@@ -77,5 +65,16 @@
         <entry lang="RUS">Маршрут</entry>
         <entry lang="ENG">Route</entry>
         <entry lang="KAZ">Бағыт</entry>
+    </sentence>
+
+    <sentence mode="on" keyword="placeholder_application_title">
+        <entry lang="RUS">Заголовок, цель заявки, кратко описание...</entry>
+        <entry lang="ENG">Title</entry>
+        <entry lang="KAZ">Тақырып, өтінім мақсаты, қысқа сипаттама...</entry>
+    </sentence>
+    <sentence mode="on" keyword="btn_label_add_application">
+        <entry lang="RUS">Добавить заявку</entry>
+        <entry lang="ENG">Add application</entry>
+        <entry lang="KAZ">Жаңа өтінім</entry>
     </sentence>
 </vocabulary>

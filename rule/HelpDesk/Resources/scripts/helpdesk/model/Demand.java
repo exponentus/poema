@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.constants.converter.DemandStatusConverter;
-
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.model.Project;
 import reference.model.DemandType;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @JsonRootName("demand")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "demands")
+@Table(name = "help_desk__demands")
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
