@@ -25,7 +25,7 @@ import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 import workflow.model.util.ApprovalLifecycle;
 
 @MappedSuperclass
-public class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IApproval {
+public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;
@@ -128,5 +128,8 @@ public class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IA
 	public void setVersionsSupport(boolean versionsSupport) {
 		this.versionsSupport = versionsSupport;
 	}
+
+	@Override
+	public abstract List<Employee> getRecipients();
 
 }

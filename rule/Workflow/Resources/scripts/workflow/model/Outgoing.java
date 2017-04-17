@@ -30,6 +30,7 @@ import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
 import reference.model.Tag;
+import staff.model.Employee;
 import staff.model.Organization;
 import workflow.model.embedded.ApprovalSecureAppEntity;
 
@@ -162,5 +163,12 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	@Override
 	public String getURL() {
 		return "outgoings/" + getIdentifier();
+	}
+
+	@Override
+	public List<Employee> getRecipients() {
+		List<Employee> recipients = new ArrayList<Employee>();
+		// recipients.add(recipient);
+		return recipients;
 	}
 }

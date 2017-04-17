@@ -10,6 +10,7 @@ import com.exponentus.user.IUser;
 
 import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
+import staff.model.Employee;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
@@ -102,7 +103,6 @@ public class ApprovalLifecycle {
 					_nextApprover.setStartTime(currentTime);
 					entity.addReader(_nextApprover.getEmployee().getUser());
 				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
-
 					entity.addReaders(nextBlock.getApprovers().stream()
 							.map(approver -> approver.getEmployee().getUserID()).collect(Collectors.toList()));
 				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
@@ -116,6 +116,10 @@ public class ApprovalLifecycle {
 			} else {
 				entity.setResult(ApprovalResultType.ACCEPTED);
 				entity.setStatus(ApprovalStatusType.FINISHED);
+				for (Employee em : entity.getRecipients()) {
+					entity.addReader(em.getUser());
+				}
+
 			}
 		}
 

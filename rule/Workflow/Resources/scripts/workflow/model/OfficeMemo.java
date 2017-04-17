@@ -123,6 +123,13 @@ public class OfficeMemo extends ApprovedControlledDocument {
 	}
 
 	@Override
+	public List<Employee> getRecipients() {
+		List<Employee> recipients = new ArrayList<Employee>();
+		recipients.add(recipient);
+		return recipients;
+	}
+
+	@Override
 	public List<Attachment> getAttachments() {
 		return attachments;
 	}

@@ -34,19 +34,6 @@
         <entry lang="SPA">Control de acceso</entry>
     </sentence>
 
-    <sentence mode="on" keyword="sign">
-        <entry lang="RUS">Подписать</entry>
-        <entry lang="ENG">Sign</entry>
-    </sentence>
-    <sentence mode="on" keyword="accept">
-        <entry lang="RUS">Согласен</entry>
-        <entry lang="ENG">Accept</entry>
-    </sentence>
-    <sentence mode="on" keyword="decline">
-        <entry lang="RUS">Не согласен</entry>
-        <entry lang="ENG">Decline</entry>
-    </sentence>
-
     <sentence mode="on" keyword="office_memo_plural">
         <entry lang="RUS">Служебные записки</entry>
         <entry lang="ENG">Officememo</entry>
@@ -181,11 +168,6 @@
     </sentence>
 
 
-    <sentence mode="on" keyword="current_approver">
-        <entry lang="RUS">Текущий</entry>
-        <entry lang="ENG">Current</entry>
-        <entry lang="KAZ">Ағымдағы</entry>
-    </sentence>
   
    
     <sentence mode="on" keyword="control">

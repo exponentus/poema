@@ -1,5 +1,6 @@
 package resourcereservations.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -122,6 +123,13 @@ public class Reservation extends ApprovalSecureAppEntity {
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	@Override
+	public List<Employee> getRecipients() {
+		List<Employee> recipients = new ArrayList<Employee>();
+		recipients.add(recipient);
+		return recipients;
 	}
 
 }

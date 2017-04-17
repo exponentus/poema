@@ -24,7 +24,7 @@ import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 import workflow.model.util.ApprovalLifecycle;
 
 @MappedSuperclass
-public class ApprovedControlledDocument extends ControlledDocument implements IApproval {
+public abstract class ApprovedControlledDocument extends ControlledDocument implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;
@@ -127,5 +127,8 @@ public class ApprovedControlledDocument extends ControlledDocument implements IA
 	public void setVersionsSupport(boolean versionsSupport) {
 		this.versionsSupport = versionsSupport;
 	}
+
+	@Override
+	public abstract List<Employee> getRecipients();
 
 }

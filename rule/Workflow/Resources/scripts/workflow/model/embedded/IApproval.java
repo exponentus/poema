@@ -30,6 +30,8 @@ public interface IApproval {
 
 	ApprovalStatusType getStatus();
 
+	List<Employee> getRecipients();
+
 	boolean isVersionsSupport();
 
 	void setVersionsSupport(boolean vs);
