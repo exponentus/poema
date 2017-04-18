@@ -2,29 +2,20 @@ package workflow.model.embedded;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import com.exponentus.env.Environment;
 
 import staff.model.Employee;
 
-@Entity
-@Table(name = "assignee_entries")
-public class AssigneeEntry extends SimpleAppEntity {
+public class AssigneeEntry {
 
-	@Column(name = "is_coordinator")
 	private boolean isCoordinator;
 
 	private Employee assignee;
 
 	private Employee resetBy;
 
-	@Column(name = "reset_time")
 	private Date resetTime;
 
-	@Column(name = "resetter_info")
 	private String resetterInfo;
 
 	public boolean isCoordinator() {
@@ -36,7 +27,7 @@ public class AssigneeEntry extends SimpleAppEntity {
 	}
 
 	public Employee getAssignee() {
-		return assignee;
+		return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
 	}
 
 	public void setAssignee(Employee assignee) {

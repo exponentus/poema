@@ -49,6 +49,7 @@ public class Assignment extends ControlledDocument {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
+	@JoinColumn(name = "assignment_observers")
 	private List<User> observers;
 
 	@Embedded

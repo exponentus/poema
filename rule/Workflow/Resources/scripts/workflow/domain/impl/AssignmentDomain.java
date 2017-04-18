@@ -9,6 +9,7 @@ import staff.model.Employee;
 import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
+import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.Control;
 
 public class AssignmentDomain implements IAssignmentDomain {
@@ -22,6 +23,7 @@ public class AssignmentDomain implements IAssignmentDomain {
 		entity.setParent(parent);
 		Control newControl = new Control();
 		newControl.setStartDate(new Date());
+		newControl.setStatus(ControlStatusType.DRAFT);
 		entity.setControl(newControl);
 
 		return entity;
@@ -40,6 +42,11 @@ public class AssignmentDomain implements IAssignmentDomain {
 		entity.setObservers(dto.getObservers());
 		entity.setControl(dto.getControl());
 		entity.setAttachments(dto.getAttachments());
+
+		Control control = entity.getControl();
+		if (control.getAssigneeEntries().size() > 0) {
+			control.setStatus(ControlStatusType.PROCESSING);
+		}
 
 	}
 

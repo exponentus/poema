@@ -32,7 +32,6 @@ import com.exponentus.scripting.actions._ActionType;
 import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.dao.AssigneeEntryDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ControlledDocumentDAO;
 import workflow.dao.IncomingDAO;
@@ -40,7 +39,9 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.AssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
+import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
+import workflow.model.embedded.Control;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
@@ -169,20 +170,40 @@ public class AssignmentService extends RestProvider {
 	}
 
 	@POST
-	@Path("{id}/action/resetAssignee")
-	public Response resetAssignee(@PathParam("id") String id) {
+	@Path("action/resetAssignee")
+	public Response resetAssignee(Assignment dto) {
 		try {
 			_Session ses = getSession();
-			AssigneeEntryDAO dao = new AssigneeEntryDAO();
-			AssigneeEntry om = dao.findByIdentefier(id);
-			om.setResetTime(new Date());
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
-			om.setResetBy(employee);
-			dao.update(om);
+			AssignmentDAO dao = new AssignmentDAO(ses);
+			Assignment entity = dao.findById(dto.getId());
+			Control control = entity.getControl();
+			List<AssigneeEntry> assigneeEntities = control.getAssigneeEntries();
+			Control dtoControl = dto.getControl();
+			List<AssigneeEntry> dtoAssigneeEntities = dtoControl.getAssigneeEntries();
+			for (AssigneeEntry dtoEntry : dtoAssigneeEntities) {
+				for (AssigneeEntry entry : assigneeEntities) {
+					if (dtoEntry.getAssignee().equals(entry.getAssignee())) {
+						entry.setResetBy(new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+						entry.setResetTime(new Date());
+					}
+				}
+			}
+
+			int completedAsignee = 0;
+			for (AssigneeEntry entry : assigneeEntities) {
+				if (entry.getResetTime() != null) {
+					completedAsignee++;
+				}
+			}
+
+			if (completedAsignee == assigneeEntities.size()) {
+				control.setStatus(ControlStatusType.COMPLETED);
+			}
+
+			dao.update(entity);
 
 			return Response.ok(new Outcome()).build();
-		} catch (DAOException e) {
+		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
 	}
@@ -261,10 +282,12 @@ public class AssignmentService extends RestProvider {
 			ve.addError("control.dueDate", "required", "field_is_empty");
 		}
 
-		if (assignment.getControl().getAssigneeEntries() == null
-				|| assignment.getControl().getAssigneeEntries().isEmpty()) {
-			ve.addError("control.assigneeEntries", "required", "field_is_empty");
-		}
+		/*
+		 * if (assignment.getControl().getAssigneeEntries() == null ||
+		 * assignment.getControl().getAssigneeEntries().isEmpty()) {
+		 * ve.addError("control.assigneeEntries", "required", "field_is_empty");
+		 * }
+		 */
 
 		ve.assertValid();
 	}
