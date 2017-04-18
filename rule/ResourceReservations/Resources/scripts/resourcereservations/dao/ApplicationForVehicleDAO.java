@@ -6,10 +6,11 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import resourcereservations.dao.filter.ApplicationForVehicleFilter;
+import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.model.ApplicationForVehicle;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,7 +25,11 @@ public class ApplicationForVehicleDAO extends DAO<ApplicationForVehicle, UUID> {
         super(ApplicationForVehicle.class, session);
     }
 
-    public ViewPage<ApplicationForVehicle> findViewPage(ApplicationForVehicleFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ApplicationForVehicleDAO(EntityManagerFactory emf) {
+        super(ApplicationForVehicle.class, emf);
+    }
+
+    public ViewPage<ApplicationForVehicle> findViewPage(ApplicationFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
         }

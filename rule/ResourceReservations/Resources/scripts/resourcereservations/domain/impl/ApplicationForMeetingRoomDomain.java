@@ -24,6 +24,7 @@ public class ApplicationForMeetingRoomDomain implements IApplicationForMeetingRo
         entity.setAuthor(author.getUser());
         entity.setAppliedRegDate(new Date());
         entity.setAppliedAuthor(author);
+        entity.setRecipient(author);
 
         ArrayList<Block> blocks = new ArrayList();
         Block block = new Block();

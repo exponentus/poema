@@ -18,7 +18,7 @@ import reference.model.Tag;
 import reference.model.Vehicle;
 import reference.model.constants.ApprovalType;
 import resourcereservations.dao.ApplicationForVehicleDAO;
-import resourcereservations.dao.filter.ApplicationForVehicleFilter;
+import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.domain.impl.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
@@ -51,7 +51,7 @@ public class ApplicationForVehicleService extends RestProvider {
         SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
 
         try {
-            ApplicationForVehicleFilter filter = new ApplicationForVehicleFilter();
+            ApplicationFilter filter = new ApplicationFilter();
 
             // setup filter
             String vehicleId = params.getValueSilently("vehicle");
@@ -87,7 +87,7 @@ public class ApplicationForVehicleService extends RestProvider {
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("add_new", "", "new_application_for_vehicle"));
+            actionBar.addAction(new _Action("btn_label_add_application", "", "new_application_for_vehicle"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
 
             Outcome outcome = new Outcome();
@@ -322,7 +322,6 @@ public class ApplicationForVehicleService extends RestProvider {
             actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
         }
 
-        // actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
         }
@@ -348,11 +347,6 @@ public class ApplicationForVehicleService extends RestProvider {
         if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
             ve.addError("route", "required", "field_is_empty");
         }
-        // if (model.getBlocks() != null && !model.getBlocks().isEmpty()) {
-        // if (model.getBlocks().get(0).getApprovers().size() == 0) {
-        // ve.addError("blocks_approvers", "required", "field_is_empty");
-        // }
-        // }
 
         ve.assertValid();
     }

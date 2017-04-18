@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @JsonRootName("applicationForMeetingRoom")
 @Entity
-@Table(name = "applications_for_meeting_room")
+@Table(name = "rr__applications_for_meeting_room")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class ApplicationForMeetingRoom extends Reservation {
 

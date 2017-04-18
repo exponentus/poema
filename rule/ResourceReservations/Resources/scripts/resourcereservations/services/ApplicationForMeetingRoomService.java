@@ -80,7 +80,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
             ViewPage vp = avDAO.findViewPage(sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("add_new", "", "new_application_for_vehicle"));
+            actionBar.addAction(new _Action("btn_label_add_application", "", "new_application_for_vehicle"));
             actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
 
             Outcome outcome = new Outcome();

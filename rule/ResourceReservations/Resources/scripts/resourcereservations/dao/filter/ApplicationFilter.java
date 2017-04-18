@@ -1,5 +1,6 @@
 package resourcereservations.dao.filter;
 
+import reference.model.MeetingRoom;
 import reference.model.Tag;
 import reference.model.Vehicle;
 import workflow.model.constants.ApprovalResultType;
@@ -7,11 +8,13 @@ import workflow.model.constants.ApprovalStatusType;
 
 import java.util.List;
 
-public class ApplicationForVehicleFilter {
+public class ApplicationFilter {
     private ApprovalStatusType status;
     private ApprovalResultType result;
-    private Vehicle vehicle;
     private List<Tag> tags;
+
+    private Vehicle vehicle;
+    private MeetingRoom room;
 
     public ApprovalStatusType getStatus() {
         return status;
@@ -29,6 +32,14 @@ public class ApplicationForVehicleFilter {
         this.result = result;
     }
 
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
     public Vehicle getVehicle() {
         return vehicle;
     }
@@ -37,11 +48,11 @@ public class ApplicationForVehicleFilter {
         this.vehicle = vehicle;
     }
 
-    public List<Tag> getTags() {
-        return tags;
+    public MeetingRoom getRoom() {
+        return room;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setRoom(MeetingRoom room) {
+        this.room = room;
     }
 }
