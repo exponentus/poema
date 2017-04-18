@@ -28,6 +28,7 @@ import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
+import com.exponentus.user.SuperUser;
 
 import administrator.model.User;
 import staff.dao.EmployeeDAO;
@@ -156,7 +157,7 @@ public class AssignmentService extends RestProvider {
 
 			entity = assignmentDAO.save(entity);
 
-			ControlledDocumentDAO dao = new ControlledDocumentDAO(ses);
+			ControlledDocumentDAO dao = new ControlledDocumentDAO(new _Session(new SuperUser()));
 			ControlledDocument parent = dao.findById(entity.getParent().getId());
 			parent.resetEditors();
 			dao.update(parent);

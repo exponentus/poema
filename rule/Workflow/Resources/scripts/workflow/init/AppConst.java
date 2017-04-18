@@ -10,5 +10,5 @@ public class AppConst extends DefaultAppConst {
 	public static String NAME_RUS = "Документооборот";
 	public static String NAME_KAZ = "Құжат айналымы";
 	public static final InterfaceType AVAILABLE_MODE[] = { InterfaceType.SPA };
-	public static final String[] ROLES = { "can_sign_outgoing" };
+	public static final String[] ROLES = { "can_sign_outgoing", "chancellery" };
 }
