@@ -82,7 +82,7 @@
   "staff" : "Structure",
   "my_applications" : "My applications",
   "org_documents" : "Documents of the organization",
-  "часов" : "hours",
+  "часов" : null,
   "login_name" : "Login",
   "readers" : "Readers",
   "org_categories" : "Organizaton categories",
