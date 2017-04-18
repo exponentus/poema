@@ -209,4 +209,9 @@ public class Observation extends SecureHierarchicalEntity {
     public SecureHierarchicalEntity getParentEntity(_Session ses) {
         return project;
     }
+
+    @Override
+    public String getURL() {
+        return "observations/" + getIdentifier();
+    }
 }

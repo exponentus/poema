@@ -177,4 +177,9 @@ public class Project extends SecureHierarchicalEntity {
     public String getTitle() {
         return name;
     }
+
+    @Override
+    public String getURL() {
+        return "projects/" + getIdentifier();
+    }
 }

@@ -149,6 +149,6 @@ public class Demand extends SecureAppEntity<UUID> {
 
     @Override
     public String getURL() {
-        return "p?id=" + this.getClass().getSimpleName().toLowerCase() + "-form&demandId=" + getIdentifier();
+        return "demands/" + getIdentifier();
     }
 }
