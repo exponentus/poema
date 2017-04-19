@@ -26,7 +26,7 @@ import workflow.model.exception.ApprovalException;
 import workflow.model.exception.ApprovalExceptionType;
 
 @Entity
-@Table(name = "blocks")
+@Table(name = "wf_blocks")
 public class Block extends SimpleAppEntity {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)

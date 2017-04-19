@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 
 @Entity
-@Table(name = "controlled_documents")
+@Table(name = "wf_controlled_documents")
 @NamedQuery(name = "ControlledDocument.findAll", query = "SELECT m FROM ControlledDocument AS m ORDER BY m.regDate")
 public class ControlledDocument extends SecureHierarchicalEntity {
 

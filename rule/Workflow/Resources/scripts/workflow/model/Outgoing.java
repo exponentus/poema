@@ -38,7 +38,7 @@ import workflow.model.embedded.ApprovalSecureAppEntity;
  * @author Kayra created 07-04-2016
  */
 
-@JsonRootName("outgoing")
+@JsonRootName("wf_outgoing")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "outgoings")

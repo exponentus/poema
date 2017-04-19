@@ -39,7 +39,7 @@ import staff.model.Organization;
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "incomings")
+@Table(name = "wf_incomings")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Incoming extends ControlledDocument {
 

@@ -31,7 +31,7 @@ import workflow.model.embedded.ApprovedControlledDocument;
 
 @JsonRootName("officeMemo")
 @Entity
-@Table(name = "office_memos")
+@Table(name = "wf_office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class OfficeMemo extends ApprovedControlledDocument {
 
