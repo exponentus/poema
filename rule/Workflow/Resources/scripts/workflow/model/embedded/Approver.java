@@ -22,7 +22,7 @@ import workflow.model.constants.converter.DecisionTypeConverter;
  */
 
 @Entity
-@Table(name = "approvers")
+@Table(name = "wf_approvers")
 public class Approver extends SimpleAppEntity {
 
 	@JoinColumn(nullable = false)
