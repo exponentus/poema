@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -25,23 +27,23 @@ import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import administrator.model.User;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.Organization;
+import staff.model.embedded.Observer;
 import workflow.model.embedded.ApprovalSecureAppEntity;
 
 /**
  * @author Kayra created 07-04-2016
  */
 
-@JsonRootName("wf_outgoing")
+@JsonRootName("outgoing")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "outgoings")
+@Table(name = "wf__outgoings")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Outgoing extends ApprovalSecureAppEntity {
 
@@ -72,7 +74,9 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
-	private List<User> observers;
+	@ElementCollection
+	@CollectionTable(name = "wf__outgoing_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "outgoing_tags")
@@ -134,11 +138,11 @@ public class Outgoing extends ApprovalSecureAppEntity {
 		this.body = body;
 	}
 
-	public List<User> getObservers() {
+	public List<Observer> getObservers() {
 		return observers;
 	}
 
-	public void setObservers(List<User> observers) {
+	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
 	}
 

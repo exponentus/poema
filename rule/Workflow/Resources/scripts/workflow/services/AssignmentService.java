@@ -30,9 +30,9 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.SuperUser;
 
-import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ControlledDocumentDAO;
 import workflow.dao.IncomingDAO;
@@ -139,26 +139,41 @@ public class AssignmentService extends RestProvider {
 
 			// ACL routines
 			entity.resetReadersEditors();
-			entity.addReaderEditor(entity.getAuthor());
-			if (dto.getAppliedAuthor() != null) {
-				entity.addReaderEditor(dto.getAppliedAuthor().getUser());
+
+			Control control = entity.getControl();
+			if (control.getAssigneeEntries().size() > 0) {
+				control.setStatus(ControlStatusType.PROCESSING);
 			}
 
-			for (AssigneeEntry ae : dto.getControl().getAssigneeEntries()) {
+			for (AssigneeEntry ae : control.getAssigneeEntries()) {
 				entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
 			}
 
-			List<User> observers = dto.getObservers();
+			List<Observer> observers = entity.getObservers();
 			if (observers != null) {
-				for (User observer : dto.getObservers()) {
-					entity.addReader(observer);
+				for (Observer observer : observers) {
+					// entity.addReader(observer.getEmployee().getUserID());
 				}
 			}
 
-			entity = assignmentDAO.save(entity);
-
 			ControlledDocumentDAO dao = new ControlledDocumentDAO(new _Session(new SuperUser()));
 			ControlledDocument parent = dao.findById(entity.getParent().getId());
+			entity.addReaders(parent.getReaders());
+
+			if (control.getStatus() == ControlStatusType.DRAFT) {
+				entity.addReaderEditor(entity.getAuthor());
+				if (entity.getAppliedAuthor() != null) {
+					entity.addReaderEditor(entity.getAppliedAuthor().getUser());
+				}
+				entity = assignmentDAO.save(entity);
+			} else {
+				entity.addReader(entity.getAuthor());
+				if (entity.getAppliedAuthor() != null) {
+					entity.addReader(entity.getAppliedAuthor().getUser());
+				}
+				entity = new AssignmentDAO(new _Session(new SuperUser())).save(entity);
+			}
+
 			parent.resetEditors();
 			dao.update(parent);
 
@@ -273,6 +288,10 @@ public class AssignmentService extends RestProvider {
 
 		if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
 			ve.addError("title", "required", "field_is_empty");
+		}
+
+		if (assignment.getControl().getControlType() == null) {
+			ve.addError("control.controlType", "required", "field_is_empty");
 		}
 
 		if (assignment.getControl().getStartDate() == null) {

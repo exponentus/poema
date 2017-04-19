@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
@@ -26,13 +28,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import administrator.model.User;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 
 @JsonRootName("report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf_reports")
+@Table(name = "wf__reports")
 public class Report extends SecureHierarchicalEntity {
 
 	@JoinColumn(name = "applied_author", nullable = false)
@@ -50,7 +52,9 @@ public class Report extends SecureHierarchicalEntity {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
-	private List<User> observers;
+	@ElementCollection
+	@CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<Observer> observers;
 
 	@JoinTable(name = "report_attachments", joinColumns = { @JoinColumn(name = "report_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
@@ -112,11 +116,11 @@ public class Report extends SecureHierarchicalEntity {
 		this.body = body;
 	}
 
-	public List<User> getObservers() {
+	public List<Observer> getObservers() {
 		return observers;
 	}
 
-	public void setObservers(List<User> observers) {
+	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
 	}
 

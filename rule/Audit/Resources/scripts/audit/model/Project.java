@@ -35,7 +35,7 @@ import audit.model.constants.ProjectStatusType;
 @JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "audit_construction__projects")
+@Table(name = "audit__construction__projects")
 public class Project extends SecureHierarchicalEntity {
 
 	@JsonIgnore

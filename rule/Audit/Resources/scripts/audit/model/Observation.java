@@ -43,7 +43,7 @@ import staff.model.Organization;
 @JsonRootName("observation")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "audit_construction__observations")
+@Table(name = "audit__construction__observations")
 public class Observation extends SecureHierarchicalEntity {
 
 	@NotNull

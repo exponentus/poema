@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -24,14 +26,14 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import administrator.model.User;
 import reference.model.Tag;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 import workflow.model.embedded.ApprovedControlledDocument;
 
 @JsonRootName("officeMemo")
 @Entity
-@Table(name = "wf_office_memos")
+@Table(name = "wf__office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class OfficeMemo extends ApprovedControlledDocument {
 
@@ -60,7 +62,9 @@ public class OfficeMemo extends ApprovedControlledDocument {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
-	private List<User> observers;
+	@ElementCollection
+	@CollectionTable(name = "wf__office_memo_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "officememo_tags")
@@ -106,11 +110,11 @@ public class OfficeMemo extends ApprovedControlledDocument {
 		this.body = body;
 	}
 
-	public List<User> getObservers() {
+	public List<Observer> getObservers() {
 		return observers;
 	}
 
-	public void setObservers(List<User> observers) {
+	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
 	}
 

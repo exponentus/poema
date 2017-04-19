@@ -43,11 +43,6 @@ public class AssignmentDomain implements IAssignmentDomain {
 		entity.setControl(dto.getControl());
 		entity.setAttachments(dto.getAttachments());
 
-		Control control = entity.getControl();
-		if (control.getAssigneeEntries().size() > 0) {
-			control.setStatus(ControlStatusType.PROCESSING);
-		}
-
 	}
 
 	@Override

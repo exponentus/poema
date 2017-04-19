@@ -37,10 +37,6 @@ public class Control {
 	@Convert(converter = ControlStatusTypeConverter.class)
 	private ControlStatusType status = ControlStatusType.UNKNOWN;
 
-	// @ElementCollection(fetch = FetchType.EAGER)
-	// @Convert(converter = AssigneeEntryConverter.class)
-	// @Column(name = "assignee", columnDefinition = "json")
-	// @CollectionTable(name = "assignee_entries")
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<AssigneeEntry> assigneeEntries;
 

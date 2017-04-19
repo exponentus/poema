@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Index;
@@ -28,18 +30,18 @@ import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import administrator.model.User;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.Organization;
+import staff.model.embedded.Observer;
 
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf_incomings")
+@Table(name = "wf__incomings")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Incoming extends ControlledDocument {
 
@@ -78,7 +80,9 @@ public class Incoming extends ControlledDocument {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
-	private List<User> observers;
+	@ElementCollection
+	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "incoming_tags")
@@ -203,11 +207,11 @@ public class Incoming extends ControlledDocument {
 		this.body = body;
 	}
 
-	public List<User> getObservers() {
+	public List<Observer> getObservers() {
 		return observers;
 	}
 
-	public void setObservers(List<User> observers) {
+	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
 	}
 

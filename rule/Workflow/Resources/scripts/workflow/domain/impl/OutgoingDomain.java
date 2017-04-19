@@ -1,87 +1,84 @@
 package workflow.domain.impl;
 
-import administrator.model.User;
+import java.util.Date;
+
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
+
+import administrator.model.User;
 import staff.model.Employee;
 import workflow.domain.IOutgoingDomain;
 import workflow.model.Outgoing;
+import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
 
-import java.util.Date;
-
 public class OutgoingDomain implements IOutgoingDomain {
 
-    @Override
-    public Outgoing composeNew(User user) {
-        Outgoing entity = new Outgoing();
-        entity.setAppliedRegDate(new Date());
+	@Override
+	public Outgoing composeNew(User user) {
+		Outgoing entity = new Outgoing();
+		entity.setAppliedRegDate(new Date());
+		return entity;
+	}
 
-        return entity;
-    }
+	@Override
+	public void fillFromDto(Outgoing entity, Outgoing dto, User user) {
+		entity.setTitle(dto.getTitle());
+		entity.setAppliedRegDate(dto.getAppliedRegDate());
+		entity.setDocSubject(dto.getDocSubject());
+		entity.setDocLanguage(dto.getDocLanguage());
+		entity.setDocType(dto.getDocType());
+		entity.setRecipient(dto.getRecipient());
+		entity.setBody(dto.getBody());
+		entity.setObservers(dto.getObservers());
+		entity.setAttachments(dto.getAttachments());
+		entity.setBlocks(dto.getBlocks());
+		entity.setSchema(dto.getSchema());
+		entity.setStatus(ApprovalStatusType.FINISHED);
+		entity.setResult(ApprovalResultType.WITHOUT_APPROVAL);
+	}
 
-    @Override
-    public void fillFromDto(Outgoing entity, Outgoing dto, User user) {
-        entity.setTitle(dto.getTitle());
-        entity.setAppliedRegDate(dto.getAppliedRegDate());
-        entity.setDocSubject(dto.getDocSubject());
-        entity.setDocLanguage(dto.getDocLanguage());
-        entity.setDocType(dto.getDocType());
-        entity.setRecipient(dto.getRecipient());
-        entity.setBody(dto.getBody());
-        entity.setObservers(dto.getObservers());
-        entity.setAttachments(dto.getAttachments());
+	@Override
+	public boolean approvalCanBeStarted(Outgoing om) {
+		return om.getStatus() == ApprovalStatusType.DRAFT;
+	}
 
-        entity.setBlocks(dto.getBlocks());
-        entity.setSchema(dto.getSchema());
+	@Override
+	public void startApproving(Outgoing om) throws ApprovalException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+		lifecycle.start();
+	}
 
-        if (entity.isNew()) {
-            entity.setAuthor(user);
-            entity.addReaderEditor(entity.getAuthor());
-        }
-    }
+	@Override
+	public boolean employeeCanDoDecisionApproval(Outgoing om, Employee employee) {
+		return om.userCanDoDecision(employee);
+	}
 
-    @Override
-    public boolean approvalCanBeStarted(Outgoing om) {
-        return om.getStatus() == ApprovalStatusType.DRAFT;
-    }
+	@Override
+	public void acceptApprovalBlock(Outgoing om, IUser<Long> user) throws ApprovalException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+		lifecycle.accept(user);
+	}
 
-    @Override
-    public void startApproving(Outgoing om) throws ApprovalException {
-        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-        lifecycle.start();
-    }
+	@Override
+	public void declineApprovalBlock(Outgoing om, IUser<Long> user, String decisionComment) throws ApprovalException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+		lifecycle.decline(user, decisionComment);
+	}
 
-    @Override
-    public boolean employeeCanDoDecisionApproval(Outgoing om, Employee employee) {
-        return om.userCanDoDecision(employee);
-    }
+	@Override
+	public Outcome getOutcome(Outgoing entity) {
+		Outcome outcome = new Outcome();
 
-    @Override
-    public void acceptApprovalBlock(Outgoing om, IUser<Long> user) throws ApprovalException {
-        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-        lifecycle.accept(user);
-    }
+		outcome.setTitle(entity.getTitle());
+		outcome.addPayload(entity);
+		if (!entity.isNew()) {
+			outcome.addPayload(new ACL(entity));
+		}
 
-    @Override
-    public void declineApprovalBlock(Outgoing om, IUser<Long> user, String decisionComment) throws ApprovalException {
-        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-        lifecycle.decline(user, decisionComment);
-    }
-
-    @Override
-    public Outcome getOutcome(Outgoing entity) {
-        Outcome outcome = new Outcome();
-
-        outcome.setTitle(entity.getTitle());
-        outcome.addPayload(entity);
-        if (!entity.isNew()) {
-            outcome.addPayload(new ACL(entity));
-        }
-
-        return outcome;
-    }
+		return outcome;
+	}
 }

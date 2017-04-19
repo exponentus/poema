@@ -33,9 +33,9 @@ import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 
-import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 import workflow.dao.IncomingDAO;
 import workflow.domain.impl.IncomingDomain;
 import workflow.model.Incoming;
@@ -146,10 +146,10 @@ public class IncomingService extends RestProvider {
 			entity.addReaderEditor(entity.getAuthor());
 			entity.addReader(entity.getAddressee().getUser());
 
-			List<User> observers = dto.getObservers();
+			List<Observer> observers = entity.getObservers();
 			if (observers != null) {
-				for (User observer : dto.getObservers()) {
-					entity.addReader(observer);
+				for (Observer observer : observers) {
+					// entity.addReader(observer.getEmployee().getUserID());
 				}
 			}
 
@@ -244,6 +244,9 @@ public class IncomingService extends RestProvider {
 		}
 		if (model.getAddressee() == null) {
 			ve.addError("addressee", "required", "field_is_empty");
+		}
+		if (model.getDocLanguage() == null) {
+			ve.addError("docLanguage", "required", "field_is_empty");
 		}
 		if (model.getSenderRegNumber() == null || model.getSenderRegNumber().isEmpty()) {
 			ve.addError("senderRegNumber", "required", "field_is_empty");

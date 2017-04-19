@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonRootName("report")
 @Entity
-@Table(name = "audit_construction__reports")
+@Table(name = "audit__construction__reports")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQuery(name = "Report.findAll", query = "SELECT m FROM Report AS m ORDER BY m.regDate")
 public class Report extends ReportTemplate {

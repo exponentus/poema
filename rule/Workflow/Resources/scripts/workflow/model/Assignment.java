@@ -4,7 +4,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,14 +26,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-import administrator.model.User;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 import workflow.model.embedded.Control;
 
 @JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf_assignments")
+@Table(name = "wf__assignments")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Assignment extends ControlledDocument {
 
@@ -49,8 +51,9 @@ public class Assignment extends ControlledDocument {
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
-	@JoinColumn(name = "assignment_observers")
-	private List<User> observers;
+	@ElementCollection
+	@CollectionTable(name = "wf__assignment_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<Observer> observers;
 
 	@Embedded
 	private Control control;
@@ -87,11 +90,11 @@ public class Assignment extends ControlledDocument {
 		this.body = body;
 	}
 
-	public List<User> getObservers() {
+	public List<Observer> getObservers() {
 		return observers;
 	}
 
-	public void setObservers(List<User> observers) {
+	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
 	}
 

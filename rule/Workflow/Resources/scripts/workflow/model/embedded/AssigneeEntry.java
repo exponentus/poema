@@ -17,7 +17,7 @@ import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
 
 @Entity
-@Table(name = "wf_assignee_entities")
+@Table(name = "wf__assignee_entities")
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
 public class AssigneeEntry extends SimpleAppEntity {
 
