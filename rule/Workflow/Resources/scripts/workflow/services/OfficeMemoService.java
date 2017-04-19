@@ -306,6 +306,13 @@ public class OfficeMemoService extends RestProvider {
 			actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
 		}
 
+		if (!entity.isNew()) {
+			if (entity.getRecipient().getUserID() == session.getUser().getId()
+					&& entity.getStatus() == ApprovalStatusType.FINISHED) {
+				actionBar.addAction(new _Action("assignment", "", "new_assignment"));
+			}
+		}
+
 		// actionBar.addAction(new _Action("sign", "", "sign"));
 
 		if (omd.documentCanBeDeleted(entity)) {
