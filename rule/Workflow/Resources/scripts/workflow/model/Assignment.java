@@ -31,7 +31,7 @@ import workflow.model.embedded.Control;
 @JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "assignments")
+@Table(name = "wf_assignments")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Assignment extends ControlledDocument {
 

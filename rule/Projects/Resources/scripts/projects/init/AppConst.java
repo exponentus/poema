@@ -12,6 +12,5 @@ public class AppConst extends DefaultAppConst {
 	public static String NAME_POR = "Projetos";
 	public static String NAME_SPA = "Proyectos";
 	public static final InterfaceType AVAILABLE_MODE[] = { InterfaceType.SPA };
-	public static String DEFAULT_PAGE = "index";
 
 }

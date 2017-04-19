@@ -254,7 +254,7 @@ public class AssignmentService extends RestProvider {
 		if (entity.isNew() || entity.isEditable()) {
 			actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
 		}
-		if (!entity.isNew()) {
+		if (!entity.isNew() && entity.getControl().getStatus() != ControlStatusType.DRAFT) {
 			actionBar.addAction(new _Action("assignment", "", "new_assignment"));
 		}
 		if (entity.getControl().assigneesContainsUser(session.getUser())) {

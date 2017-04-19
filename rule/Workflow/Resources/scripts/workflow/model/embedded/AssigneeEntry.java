@@ -2,16 +2,31 @@ package workflow.model.embedded;
 
 import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Table;
+
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
+
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
 import com.exponentus.env.Environment;
 
 import staff.model.Employee;
+import staff.model.util.EmployeeConverter;
 
-public class AssigneeEntry {
+@Entity
+@Table(name = "wf_assignee_entities")
+@Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
+public class AssigneeEntry extends SimpleAppEntity {
 
 	private boolean isCoordinator;
 
 	private Employee assignee;
 
+	@Convert("emp_conv")
+	@Basic(fetch = FetchType.LAZY, optional = true)
 	private Employee resetBy;
 
 	private Date resetTime;

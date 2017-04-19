@@ -263,7 +263,7 @@
         <class>workflow.model.embedded.Approver</class>
         <class>workflow.model.embedded.Block</class>
         <class>workflow.model.embedded.Control</class>
-       <!--  <class>workflow.model.embedded.AssigneeEntry</class> -->
+     	 <class>workflow.model.embedded.AssigneeEntry</class> 
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
         <!-- Projects module entities -->

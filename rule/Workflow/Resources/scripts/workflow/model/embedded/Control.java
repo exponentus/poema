@@ -3,13 +3,12 @@ package workflow.model.embedded;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,6 @@ import com.exponentus.user.IUser;
 import reference.model.ControlType;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
-import workflow.model.util.AssigneeEntryConverter;
 
 @Embeddable
 public class Control {
@@ -39,10 +37,11 @@ public class Control {
 	@Convert(converter = ControlStatusTypeConverter.class)
 	private ControlStatusType status = ControlStatusType.UNKNOWN;
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	@Convert(converter = AssigneeEntryConverter.class)
-	@Column(name = "assignee", columnDefinition = "json")
-	@CollectionTable(name = "assignee_entries")
+	// @ElementCollection(fetch = FetchType.EAGER)
+	// @Convert(converter = AssigneeEntryConverter.class)
+	// @Column(name = "assignee", columnDefinition = "json")
+	// @CollectionTable(name = "assignee_entries")
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<AssigneeEntry> assigneeEntries;
 
 	public ControlType getControlType() {
