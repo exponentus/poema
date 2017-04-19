@@ -38,7 +38,8 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
 		om.setObservers(dto.getObservers());
 
 		if (om.isNew()) {
-			dto.setVersion(1);
+			om.setVersion(1);
+			om.setAuthor(author.getUser());
 		}
 
 	}

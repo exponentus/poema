@@ -50,6 +50,10 @@ public class IncomingDomain implements IIncomingDomain {
 		entity.setObservers(dto.getObservers());
 		entity.setAttachments(dto.getAttachments());
 
+		if (entity.isNew()) {
+			entity.setAuthor(ses.getUser());
+		}
+
 	}
 
 	@Override

@@ -145,6 +145,8 @@ public class OutgoingService extends RestProvider {
 
 			outDomain.fillFromDto(entity, dto, (User) ses.getUser());
 
+			entity.addReaderEditor(entity.getAuthor());
+
 			if (dto.isNew()) {
 				RegNum rn = new RegNum();
 				entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));

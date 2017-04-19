@@ -39,6 +39,10 @@ public class OutgoingDomain implements IOutgoingDomain {
 		entity.setSchema(dto.getSchema());
 		entity.setStatus(ApprovalStatusType.FINISHED);
 		entity.setResult(ApprovalResultType.WITHOUT_APPROVAL);
+
+		if (entity.isNew()) {
+			entity.setAuthor(user);
+		}
 	}
 
 	@Override
