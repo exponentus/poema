@@ -30,11 +30,8 @@ public class NavigatorService extends RestProvider {
 		_Outline co = new _Outline("", "application_types");
 		co.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle",
 				"applications_for_vehicle"));
-		/*
-		 * co.addEntry(new _OutlineEntry("applications_for_meeting_room", "",
-		 * "fa fa-home", "applications_for_meeting_room",
-		 * "applications_for_meeting_room"));
-		 */
+		co.addEntry(new _OutlineEntry("applications_for_meeting_room", "", "fa fa-home",
+				"applications_for_meeting_room", "applications_for_meeting_room"));
 
 		list.add(o);
 		list.add(co);
