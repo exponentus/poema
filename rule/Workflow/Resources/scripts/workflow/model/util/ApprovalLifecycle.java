@@ -79,6 +79,10 @@ public class ApprovalLifecycle {
 		if (currentApprover.getEmployee() == null) {
 			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
 		}
+		if (currentApprover.getDecisionType() != DecisionType.UNKNOWN) {
+			throw new ApprovalException(ApprovalExceptionType.APPROVER_ALREADY_HAS_DECISION);
+		}
+
 		currentApprover.setDecisionType(DecisionType.YES);
 		currentApprover.setDecisionTime(new Date());
 		currentApprover.setCurrent(false);
@@ -135,6 +139,10 @@ public class ApprovalLifecycle {
 		if (currentApprover.getEmployee() == null) {
 			throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
 		}
+		if (currentApprover.getDecisionType() != DecisionType.UNKNOWN) {
+			throw new ApprovalException(ApprovalExceptionType.APPROVER_ALREADY_HAS_DECISION);
+		}
+
 		currentApprover.setDecisionType(DecisionType.NO);
 		currentApprover.setDecisionTime(new Date());
 		currentApprover.setCurrent(false);

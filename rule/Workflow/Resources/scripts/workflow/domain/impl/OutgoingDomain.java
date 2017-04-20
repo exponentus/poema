@@ -35,6 +35,8 @@ public class OutgoingDomain implements IOutgoingDomain {
 		entity.setBody(dto.getBody());
 		entity.setObservers(dto.getObservers());
 		entity.setAttachments(dto.getAttachments());
+		entity.setTags(dto.getTags());
+
 		entity.setBlocks(dto.getBlocks());
 		entity.setSchema(dto.getSchema());
 		entity.setStatus(ApprovalStatusType.FINISHED);
