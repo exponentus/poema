@@ -37,7 +37,7 @@ import staff.model.Organization;
 @JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "projects")
+@Table(name = "prj__projects")
 public class Project extends SecureHierarchicalEntity {
 
 	@JsonIgnore
@@ -83,10 +83,11 @@ public class Project extends SecureHierarchicalEntity {
 	private String comment;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "project_attachments", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "project_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"project_id", "attachment_id" }))
+	@JoinTable(name = "prj__project_attachments", joinColumns = {
+			@JoinColumn(name = "project_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "attachment_id") }, indexes = {
+							@Index(columnList = "project_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+									"project_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 

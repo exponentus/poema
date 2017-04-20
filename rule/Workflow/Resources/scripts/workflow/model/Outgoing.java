@@ -66,7 +66,7 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	private String body;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "outgoing_attachments", joinColumns = {
+	@JoinTable(name = "wf__outgoing_attachments", joinColumns = {
 			@JoinColumn(name = "outgoing_id") }, inverseJoinColumns = {
 					@JoinColumn(name = "attachment_id") }, indexes = {
 							@Index(columnList = "outgoing_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -79,7 +79,7 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "outgoing_tags")
+	@JoinTable(name = "wf__outgoing_tags")
 	private List<Tag> tags;
 
 	public String getRegNumber() {

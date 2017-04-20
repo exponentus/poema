@@ -43,6 +43,7 @@ import workflow.model.ControlledDocument;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Control;
+import workflow.other.Messages;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
@@ -176,6 +177,8 @@ public class AssignmentService extends RestProvider {
 
 			parent.resetEditors();
 			dao.update(parent);
+
+			new Messages(getAppEnv()).notifyAssignees(entity);
 
 			return Response.ok(domain.getOutcome(entity)).build();
 		} catch (SecureException | DAOException e) {

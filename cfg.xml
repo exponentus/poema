@@ -9,13 +9,13 @@
 		<certfile>server.crt</certfile>
 		<certkeyfile>server.key</certkeyfile>
 	</tls>
-	<mail mode="OFF">
-		<smtphost></smtphost>
-		<smtpauth></smtpauth>
-		<smtpport></smtpport>
-		<smtpuser></smtpuser>
-		<smtppassword></smtppassword>
-		<smtpusername></smtpusername>
+	<mail mode="ON">
+		<smtphost>exponentus.com</smtphost>
+		<smtpauth>true</smtpauth>
+		<smtpport>2525</smtpport>
+		<smtpuser>test@exponentus.com</smtpuser>
+		<smtppassword>test22</smtppassword>
+		<smtpusername>Poema</smtpusername>
 	</mail>
 
 	<slack mode="OFF">
@@ -24,7 +24,7 @@
 
 	<translator mode="ON">
 		<yandex>
-			<token></token>
+			<token>trnsl.1.1.20170415T110613Z.4e1ffdbe3fc650fa.8419218cba5694531e4b5063d58a8d28c03c096c</token>
 		</yandex>
 	</translator>
 

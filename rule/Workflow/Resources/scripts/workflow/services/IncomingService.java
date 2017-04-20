@@ -39,6 +39,7 @@ import staff.model.embedded.Observer;
 import workflow.dao.IncomingDAO;
 import workflow.domain.impl.IncomingDomain;
 import workflow.model.Incoming;
+import workflow.other.Messages;
 
 @Path("incomings")
 public class IncomingService extends RestProvider {
@@ -162,6 +163,8 @@ public class IncomingService extends RestProvider {
 			}
 
 			entity = incomingDAO.findById(entity.getId());
+
+			new Messages(getAppEnv()).notifyAddressee(entity);
 
 			return Response.ok(inDomain.getOutcome(entity)).build();
 		} catch (SecureException | DAOException e) {

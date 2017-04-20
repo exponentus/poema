@@ -72,7 +72,7 @@ public class Incoming extends ControlledDocument {
 	private String body;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "incoming_attachments", joinColumns = {
+	@JoinTable(name = "wf__incoming_attachments", joinColumns = {
 			@JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
 					@JoinColumn(name = "attachment_id") }, indexes = {
 							@Index(columnList = "incoming_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -85,7 +85,7 @@ public class Incoming extends ControlledDocument {
 	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "incoming_tags")
+	@JoinTable(name = "wf__incoming_tags")
 	private List<Tag> tags;
 
 	@Transient

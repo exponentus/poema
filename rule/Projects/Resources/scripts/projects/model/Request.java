@@ -38,7 +38,7 @@ import reference.model.RequestType;
 
 @JsonRootName("request")
 @Entity
-@Table(name = "requests")
+@Table(name = "prj__requests")
 public class Request extends SecureHierarchicalEntity {
 
 	@NotNull
@@ -66,10 +66,11 @@ public class Request extends SecureHierarchicalEntity {
 	private String comment;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "request_attachments", joinColumns = { @JoinColumn(name = "request_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "request_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"request_id", "attachment_id" }))
+	@JoinTable(name = "prj__request_attachments", joinColumns = {
+			@JoinColumn(name = "request_id") }, inverseJoinColumns = {
+					@JoinColumn(name = "attachment_id") }, indexes = {
+							@Index(columnList = "request_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+									"request_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 

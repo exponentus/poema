@@ -54,7 +54,7 @@ public class OfficeMemo extends ApprovedControlledDocument {
 	private String body;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "office_memo_attachments", joinColumns = {
+	@JoinTable(name = "wf__office_memo_attachments", joinColumns = {
 			@JoinColumn(name = "office_memo_id") }, inverseJoinColumns = {
 					@JoinColumn(name = "attachment_id") }, indexes = {
 							@Index(columnList = "office_memo_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
@@ -67,7 +67,7 @@ public class OfficeMemo extends ApprovedControlledDocument {
 	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "officememo_tags")
+	@JoinTable(name = "wf__officememo_tags")
 	private List<Tag> tags;
 
 	public String getRegNumber() {

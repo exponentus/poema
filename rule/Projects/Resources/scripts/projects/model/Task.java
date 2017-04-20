@@ -48,7 +48,7 @@ import reference.model.TaskType;
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "tasks")
+@Table(name = "prj__tasks")
 public class Task extends SecureHierarchicalEntity {
 
 	@NotNull
@@ -125,7 +125,7 @@ public class Task extends SecureHierarchicalEntity {
 	private List<Request> requests;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "task_attachments", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
+	@JoinTable(name = "prj__task_attachments", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
 					@Index(columnList = "task_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
 							"task_id", "attachment_id" }))

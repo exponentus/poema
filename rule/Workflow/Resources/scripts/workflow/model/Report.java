@@ -56,8 +56,8 @@ public class Report extends SecureHierarchicalEntity {
 	@CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers;
 
-	@JoinTable(name = "report_attachments", joinColumns = { @JoinColumn(name = "report_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "attachment_id") }, indexes = {
+	@JoinTable(name = "wf__report_attachments", joinColumns = {
+			@JoinColumn(name = "report_id") }, inverseJoinColumns = { @JoinColumn(name = "attachment_id") }, indexes = {
 					@Index(columnList = "report_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
 							"report_id", "attachment_id" }))
 	@CascadeOnDelete
