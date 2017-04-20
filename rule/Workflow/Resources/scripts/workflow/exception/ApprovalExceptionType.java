@@ -1,4 +1,4 @@
-package workflow.model.exception;
+package workflow.exception;
 
 public enum ApprovalExceptionType {
     WRONG_STATUS, BLOCK_TYPE_ERROR, BLOCK_NOT_FOUND, WRONG_BLOCK_TYPE,

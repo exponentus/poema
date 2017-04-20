@@ -4,11 +4,11 @@ import administrator.model.User;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
+import workflow.exception.ApprovalException;
 import workflow.model.OfficeMemo;
-import workflow.model.exception.ApprovalException;
 
 public interface IOfficeMemoDomain {
-    OfficeMemo composeNew(User user, Employee appliedAuthor);
+    OfficeMemo composeNew(User user, Employee appliedAuthor) throws ApprovalException;
 
     void fillFromDto(OfficeMemo entity, OfficeMemo dto, Employee author);
 
@@ -21,6 +21,8 @@ public interface IOfficeMemoDomain {
     void acceptApprovalBlock(OfficeMemo entity, IUser<Long> user) throws ApprovalException;
 
     void declineApprovalBlock(OfficeMemo entity, IUser<Long> user, String decisionComment) throws ApprovalException;
+
+    void calculateReadersEditors(OfficeMemo entity);
 
     boolean documentCanBeDeleted(OfficeMemo entity);
 

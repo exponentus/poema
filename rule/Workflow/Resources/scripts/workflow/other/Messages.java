@@ -20,8 +20,8 @@ import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
-import workflow.model.exception.ApprovalException;
-import workflow.model.exception.ApprovalExceptionType;
+import workflow.exception.ApprovalException;
+import workflow.exception.ApprovalExceptionType;
 import workflow.model.util.ApprovalLifecycle;
 
 public class Messages {

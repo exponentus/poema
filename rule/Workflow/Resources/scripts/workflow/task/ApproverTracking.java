@@ -23,7 +23,7 @@ import workflow.model.constants.DecisionType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
-import workflow.model.exception.ApprovalException;
+import workflow.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
 
 @Command(name = "approver_tracking", trigger = Trigger.EVERY_5_MIN)
