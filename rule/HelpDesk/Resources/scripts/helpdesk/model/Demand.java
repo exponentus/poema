@@ -70,10 +70,13 @@ public class Demand extends SecureAppEntity<UUID> {
 	private String body;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+
 	@JoinTable(name = "hd__tags")
+
 	private List<Tag> tags;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
 	@JoinTable(name = "hd__attachments", joinColumns = { @JoinColumn(name = "demand_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
 					@Index(columnList = "demand_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {

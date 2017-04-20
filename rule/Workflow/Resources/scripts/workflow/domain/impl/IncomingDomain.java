@@ -49,6 +49,7 @@ public class IncomingDomain implements IIncomingDomain {
 		entity.setBody(dto.getBody());
 		entity.setObservers(dto.getObservers());
 		entity.setAttachments(dto.getAttachments());
+		entity.setTags(dto.getTags());
 
 		if (entity.isNew()) {
 			entity.setAuthor(ses.getUser());

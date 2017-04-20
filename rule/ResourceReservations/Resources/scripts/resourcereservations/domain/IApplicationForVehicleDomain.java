@@ -4,7 +4,7 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
-import workflow.model.exception.ApprovalException;
+import workflow.exception.ApprovalException;
 
 public interface IApplicationForVehicleDomain {
     ApplicationForVehicle composeNew(Employee author);

@@ -51,7 +51,7 @@ public class Reservation extends ApprovalSecureAppEntity {
 	private Date useTo;
 
 	@ElementCollection
-	@CollectionTable(name = "wf__reservation_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	@CollectionTable(name = "rr__reservation_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers;
 
 	@ManyToMany(fetch = FetchType.EAGER)

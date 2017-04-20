@@ -5,7 +5,7 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
 import workflow.model.Outgoing;
-import workflow.model.exception.ApprovalException;
+import workflow.exception.ApprovalException;
 
 public interface IOutgoingDomain {
     Outgoing composeNew(User user);

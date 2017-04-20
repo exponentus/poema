@@ -20,7 +20,7 @@ import resourcereservations.domain.impl.ApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.model.exception.ApprovalException;
+import workflow.exception.ApprovalException;
 import workflow.model.util.ApprovalLifecycle;
 import workflow.other.Messages;
 

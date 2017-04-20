@@ -135,6 +135,11 @@ public class Report extends SecureHierarchicalEntity {
 	}
 
 	@Override
+	public String getURL() {
+		return "reports/" + getIdentifier();
+	}
+
+	@Override
 	public SecureHierarchicalEntity getParentEntity(_Session ses) {
 		return parent;
 	}
