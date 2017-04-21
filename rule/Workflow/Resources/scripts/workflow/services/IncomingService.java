@@ -168,6 +168,7 @@ public class IncomingService extends RestProvider {
 
 			return Response.ok(inDomain.getOutcome(entity)).build();
 		} catch (SecureException | DAOException e) {
+			logError(e);
 			return responseException(e);
 		} catch (_Validation.VException e) {
 			return responseValidationError(e.getValidation());
