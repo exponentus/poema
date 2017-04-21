@@ -14,12 +14,14 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
 import helpdesk.dao.DemandDAO;
 import helpdesk.dao.filter.DemandFilter;
 import helpdesk.domain.DemandDomain;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
+import projects.constants.Action;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -223,16 +225,16 @@ public class DemandService extends RestProvider {
     private _ActionBar getActionBar(_Session session, Demand entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
+        actionBar.addAction(Action.close);
         if (entity.isNew() || entity.isEditable()) {
             String actLabel = entity.isNew() ? "send" : "save_close";
-            actionBar.addAction(new _Action(actLabel, "", "save_and_close", "", "btn-primary"));
+            actionBar.addAction(new _Action(_ActionType.SAVE_AND_CLOSE).caption(actLabel).cls("btn-primary"));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("create_task", "", "create_task"));
+            actionBar.addAction(new _Action(_ActionType.CUSTOM_ACTION).id("create_task").caption("create_task"));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("delete", "", "delete_document", "", "btn-warning-effect"));
+            actionBar.addAction(Action.deleteDocument);
         }
 
         return actionBar;

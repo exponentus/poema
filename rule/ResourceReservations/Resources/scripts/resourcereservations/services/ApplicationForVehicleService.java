@@ -11,12 +11,11 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 import reference.model.Tag;
 import reference.model.Vehicle;
 import reference.model.constants.ApprovalType;
+import resourcereservations.constants.Action;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.domain.impl.ApplicationForVehicleDomain;
@@ -87,8 +86,8 @@ public class ApplicationForVehicleService extends RestProvider {
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("btn_label_add_application", "", "new_application_for_vehicle"));
-            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
+            actionBar.addAction(Action.newApplicationForVehicle);
+            actionBar.addAction(Action.refreshVew);
 
             Outcome outcome = new Outcome();
             outcome.setId("applications_for_vehicle");
@@ -303,27 +302,25 @@ public class ApplicationForVehicleService extends RestProvider {
             throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
+        actionBar.addAction(Action.close);
         if (entity.isEditable()) {
-            actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
+            actionBar.addAction(Action.saveAndClose);
         }
         if (domain.approvalCanBeStarted(entity)) {
-            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+            actionBar.addAction(Action.startApproving);
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
-
         if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
             if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+                actionBar.addAction(Action.signApprovalBlock);
             } else {
-                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+                actionBar.addAction(Action.acceptApprovalBlock);
             }
-            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
+            actionBar.addAction(Action.declineApprovalBlock);
         }
-
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(Action.deleteDocument);
         }
 
         return actionBar;

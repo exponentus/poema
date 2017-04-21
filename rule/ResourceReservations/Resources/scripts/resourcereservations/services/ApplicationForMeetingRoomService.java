@@ -11,10 +11,9 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 import reference.model.constants.ApprovalType;
+import resourcereservations.constants.Action;
 import resourcereservations.dao.ApplicationForMeetingRoomDAO;
 import resourcereservations.domain.impl.ApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
@@ -80,8 +79,8 @@ public class ApplicationForMeetingRoomService extends RestProvider {
             ViewPage vp = avDAO.findViewPage(sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("btn_label_add_application", "", "new_application_for_vehicle"));
-            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
+            actionBar.addAction(Action.newApplicationForMeetingRoom);
+            actionBar.addAction(Action.refreshVew);
 
             Outcome outcome = new Outcome();
             outcome.setId("applications_for_vehicle");
@@ -224,11 +223,11 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/startApproving")
-    public Response startApproving(@PathParam("id") String id) {
+    @Path("action/startApproving")
+    public Response startApproving(ApplicationForMeetingRoom dto) {
         try {
             ApplicationForMeetingRoomDAO afvDAO = new ApplicationForMeetingRoomDAO(getSession());
-            ApplicationForMeetingRoom entity = afvDAO.findByIdentefier(id);
+            ApplicationForMeetingRoom entity = afvDAO.findById(dto.getId());
             ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
             domain.startApproving(entity);
@@ -247,11 +246,11 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(@PathParam("id") String id) {
+    @Path("action/acceptApprovalBlock")
+    public Response acceptApprovalBlock(ApplicationForMeetingRoom dto) {
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-            ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
+            ApplicationForMeetingRoom entity = dao.findById(dto.getId());
             ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
             domain.acceptApprovalBlock(entity, getSession().getUser());
@@ -269,11 +268,11 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/declineApprovalBlock")
-    public Response declineApprovalBlock(@PathParam("id") String id) {
+    @Path("action/declineApprovalBlock")
+    public Response declineApprovalBlock(ApplicationForMeetingRoom dto) {
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-            ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
+            ApplicationForMeetingRoom entity = dao.findById(dto.getId());
             ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
             String decisionComment = getWebFormData().getValueSilently("comment");
@@ -296,28 +295,25 @@ public class ApplicationForMeetingRoomService extends RestProvider {
             throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", "close", "fa fa-chevron-left", "btn-back"));
+        actionBar.addAction(Action.close);
         if (entity.isEditable()) {
-            actionBar.addAction(new _Action("save_close", "", "save_and_close", "", "btn-primary"));
+            actionBar.addAction(Action.saveAndClose);
         }
         if (domain.approvalCanBeStarted(entity)) {
-            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+            actionBar.addAction(Action.startApproving);
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
-
         if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
             if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+                actionBar.addAction(Action.signApprovalBlock);
             } else {
-                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+                actionBar.addAction(Action.acceptApprovalBlock);
             }
-            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
+            actionBar.addAction(Action.declineApprovalBlock);
         }
-
-        // actionBar.addAction(new _Action("sign", "", "sign"));
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(Action.deleteDocument);
         }
 
         return actionBar;
