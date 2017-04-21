@@ -17,11 +17,11 @@ import com.exponentus.scripting.actions._ActionType;
 import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import workflow.constants.Action;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.impl.OfficeMemoDomain;
 import workflow.exception.ApprovalException;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalStatusType;
 import workflow.model.util.ApprovalLifecycle;
 import workflow.other.Messages;
 
@@ -48,10 +48,8 @@ public class OfficeMemoService extends RestProvider {
             ViewPage<OfficeMemo> vp = officeMemoDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("add_new", "", "new_office_memo"));
-            actionBar.addAction(new _Action("", "", "refresh", "fa fa-refresh", ""));
-            // actionBar.addAction(new _Action("del_document", "",
-            // _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(Action.newOfficeMemo);
+            actionBar.addAction(Action.refreshVew);
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<UUID, Employee> emps = empDao.findAll(false).getResult().stream()
@@ -197,11 +195,11 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/startApproving")
-    public Response startApproving(@PathParam("id") String id) {
+    @Path("action/startApproving")
+    public Response startApproving(OfficeMemo dto) {
         try {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-            OfficeMemo om = officeMemoDAO.findByIdentefier(id);
+            OfficeMemo om = officeMemoDAO.findById(dto.getId());
             OfficeMemoDomain omd = new OfficeMemoDomain();
 
             omd.startApproving(om);
@@ -221,11 +219,11 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(@PathParam("id") String id) {
+    @Path("action/acceptApprovalBlock")
+    public Response acceptApprovalBlock(OfficeMemo dto) {
         try {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-            OfficeMemo om = officeMemoDAO.findByIdentefier(id);
+            OfficeMemo om = officeMemoDAO.findById(dto.getId());
             OfficeMemoDomain omd = new OfficeMemoDomain();
 
             omd.acceptApprovalBlock(om, getSession().getUser());
@@ -244,11 +242,11 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/declineApprovalBlock")
-    public Response declineApprovalBlock(@PathParam("id") String id) {
+    @Path("action/declineApprovalBlock")
+    public Response declineApprovalBlock(OfficeMemo dto) {
         try {
             OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-            OfficeMemo om = officeMemoDAO.findByIdentefier(id);
+            OfficeMemo om = officeMemoDAO.findById(dto.getId());
             OfficeMemoDomain omd = new OfficeMemoDomain();
 
             String decisionComment = getWebFormData().getValueSilently("comment");
@@ -270,38 +268,29 @@ public class OfficeMemoService extends RestProvider {
     private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
-        actionBar.addAction(new _Action("close", "", _ActionType.CLOSE));
-
+        actionBar.addAction(Action.close);
         if (entity.isEditable()) {
-            actionBar.addAction(new _Action("save_close", "", _ActionType.SAVE_AND_CLOSE));
+            actionBar.addAction(Action.saveAndClose);
         }
-
         if (omd.approvalCanBeStarted(entity)) {
-            actionBar.addAction(new _Action("start_approving", "", "start_approving"));
+            actionBar.addAction(Action.startApproving);
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
 
         if (omd.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
             if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-                actionBar.addAction(new _Action("sign", "", "sign_approval_block"));
+                actionBar.addAction(Action.signApprovalBlock);
             } else {
-                actionBar.addAction(new _Action("accept", "", "accept_approval_block"));
+                actionBar.addAction(Action.acceptApprovalBlock);
             }
-            actionBar.addAction(new _Action("decline", "", "decline_approval_block"));
+            actionBar.addAction(Action.declineApprovalBlock);
         }
-
-        if (!entity.isNew()) {
-            if (entity.getRecipient().getUserID().equals(session.getUser().getId())
-                    && entity.getStatus() == ApprovalStatusType.FINISHED) {
-                actionBar.addAction(new _Action("assignment", "", "new_assignment"));
-            }
+        if (omd.canCreateAssignment(entity, (User) session.getUser())) {
+            actionBar.addAction(new _Action(_ActionType.LINK, "assignment").url("assignments/new?officememo=" + entity.getIdentifier()));
         }
-
-        // actionBar.addAction(new _Action("sign", "", "sign"));
-
         if (omd.documentCanBeDeleted(entity)) {
-            actionBar.addAction(new _Action("delete", "", _ActionType.DELETE_DOCUMENT));
+            actionBar.addAction(Action.deleteDocument);
         }
 
         return actionBar;
