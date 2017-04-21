@@ -40,7 +40,7 @@ public class ReportService extends RestProvider {
             if (isNew) {
                 EmployeeDAO employeeDAO = new EmployeeDAO(ses);
                 AssignmentDAO aDAO = new AssignmentDAO(ses);
-                String assignmentId = getWebFormData().getValue("assignment");
+                String assignmentId = getWebFormData().getValueSilently("assignment");
 
                 entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()),
                         aDAO.findByIdentefier(assignmentId));

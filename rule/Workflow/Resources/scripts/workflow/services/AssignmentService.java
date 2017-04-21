@@ -39,8 +39,6 @@ import java.util.stream.Collectors;
 @Path("assignments")
 public class AssignmentService extends RestProvider {
 
-    public enum AssignmentActionType {resetAssignee}
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -82,7 +80,7 @@ public class AssignmentService extends RestProvider {
 
             Outcome outcome = ad.getOutcome(entity);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(getActionBar(ses, entity).getActions());
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
@@ -249,8 +247,9 @@ public class AssignmentService extends RestProvider {
             actionBar.addAction(new _Action(_ActionType.LINK, "assignment").url("assignments/new?assignment=" + entity.getIdentifier()));
         }
         if (entity.getControl().assigneesContainsUser(session.getUser())) {
-            actionBar.addAction(new _Action(_ActionType.LINK, "report").url("reports/new?assignment=" + entity.getIdentifier()));
+            actionBar.addAction(new _Action(_ActionType.LINK, "report").url("resetAssignee"));
         }
+        // actionBar.addAction(new _Action(_ActionType.API, "reset_assignee").url("assignments/new?assignment=" + entity.getIdentifier()));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(Action.deleteDocument);
         }
