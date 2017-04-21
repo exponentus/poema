@@ -5,7 +5,6 @@
 #########################
 cfg.xml
 /resources/config.properties
-/resources/utilstorage/*
 /tmp/
 /rule/*/Resources/report/templates/*.jasper
 /rule/*/Resources/report/.metadata/**

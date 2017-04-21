@@ -170,7 +170,6 @@
   "error_401" : "Unauthorized",
   "btn_label_add_application" : null,
   "today" : null,
-  "notify_assignee" : null,
   "department" : null,
   "comments" : null,
   "editable" : null,
