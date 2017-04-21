@@ -80,7 +80,7 @@ public class AssignmentService extends RestProvider {
 
             Outcome outcome = ad.getOutcome(entity);
             outcome.addPayload("employees", emps);
-            outcome.addPayload(getActionBar(ses, entity).getActions());
+            outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
