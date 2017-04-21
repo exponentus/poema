@@ -213,7 +213,7 @@ public class IncomingService extends RestProvider {
             actionBar.addAction(Action.saveAndClose);
         }
         if (domain.canCreateAssignment(entity, (User) session.getUser())) {
-            actionBar.addAction(new _Action(_ActionType.LINK, "assignment").url("assignments/new?incoming=" + entity.getIdentifier()));
+            actionBar.addAction(new _Action(_ActionType.LINK).caption("assignment").url("assignments/new?incoming=" + entity.getIdentifier()));
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(Action.deleteDocument);

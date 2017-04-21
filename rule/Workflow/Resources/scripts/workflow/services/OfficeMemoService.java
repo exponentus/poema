@@ -287,7 +287,7 @@ public class OfficeMemoService extends RestProvider {
             actionBar.addAction(Action.declineApprovalBlock);
         }
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
-            actionBar.addAction(new _Action(_ActionType.LINK, "assignment").url("assignments/new?officememo=" + entity.getIdentifier()));
+            actionBar.addAction(new _Action(_ActionType.LINK).caption("assignment").url("assignments/new?officememo=" + entity.getIdentifier()));
         }
         if (omd.documentCanBeDeleted(entity)) {
             actionBar.addAction(Action.deleteDocument);
