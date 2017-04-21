@@ -72,6 +72,13 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     }
 
     @Override
+    public boolean canCreateAssignment(OfficeMemo entity, User user) {
+        return !entity.isNew()
+                && entity.getRecipient().getUserID().equals(user.getId())
+                && entity.getStatus() == ApprovalStatusType.FINISHED;
+    }
+
+    @Override
     public void calculateReadersEditors(OfficeMemo entity) {
         entity.resetReadersEditors();
         if (entity.getStatus() == ApprovalStatusType.DRAFT) {

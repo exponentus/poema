@@ -22,6 +22,8 @@ public interface IOfficeMemoDomain {
 
     void declineApprovalBlock(OfficeMemo entity, IUser<Long> user, String decisionComment) throws ApprovalException;
 
+    boolean canCreateAssignment(OfficeMemo entity, User user);
+
     void calculateReadersEditors(OfficeMemo entity);
 
     boolean documentCanBeDeleted(OfficeMemo entity);
