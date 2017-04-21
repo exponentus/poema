@@ -98,7 +98,7 @@ public class Task extends SecureHierarchicalEntity {
 	private boolean initiative;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "task_tags")
+	@JoinTable(name = "prj__task_tags")
 	private List<Tag> tags;
 
 	@Column(name = "customer_observation")
@@ -133,7 +133,7 @@ public class Task extends SecureHierarchicalEntity {
 	private List<Attachment> attachments = new ArrayList<>();
 
 	@Transient
-	private List<IAppEntity> responses;
+	private List<IAppEntity<UUID>> responses;
 
 	public Task() {
 		super();
@@ -361,11 +361,11 @@ public class Task extends SecureHierarchicalEntity {
 	}
 
 	//
-	public List<IAppEntity> getResponses() {
+	public List<IAppEntity<UUID>> getResponses() {
 		return responses;
 	}
 
-	public void setResponses(List<IAppEntity> responses) {
+	public void setResponses(List<IAppEntity<UUID>> responses) {
 		this.responses = responses;
 	}
 

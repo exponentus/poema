@@ -5,6 +5,7 @@ import com.exponentus.common.init.DefaultAppConst;
 import administrator.model.constants.InterfaceType;
 
 public class AppConst extends DefaultAppConst {
+	public static String CODE = "prj";
 	public static String NAME = "Projects";
 	public static String NAME_ENG = "Projects";
 	public static String NAME_RUS = "Проекты";
