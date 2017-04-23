@@ -285,9 +285,12 @@ public class OfficeMemoService extends RestProvider {
 			OfficeMemoDomain omd = new OfficeMemoDomain();
 
 			String decisionComment = getWebFormData().getValueSilently("comment");
+			if (!decisionComment.isEmpty()) {
+				omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
+			} else {
+				return responseValidationError(new DTOException().addError("comment", "required", "field_is_empty"));
 
-			omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
-
+			}
 			officeMemoDAO.update(om, false);
 			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
 			Outcome outcome = omd.getOutcome(om);
@@ -390,4 +393,5 @@ public class OfficeMemoService extends RestProvider {
 
 		}
 	}
+
 }

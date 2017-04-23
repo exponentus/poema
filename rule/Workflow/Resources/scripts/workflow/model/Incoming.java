@@ -45,17 +45,21 @@ import staff.model.embedded.Observer;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Incoming extends ControlledDocument {
 
+	@FTSearchable
 	@Column(name = "reg_number", unique = true)
 	private String regNumber;
 
+	@FTSearchable
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 
 	private Organization sender;
 
+	@FTSearchable
 	@Column(name = "sender_reg_number")
 	private String senderRegNumber;
 
+	@FTSearchable
 	@Column(name = "sender_applied_reg_date")
 	private Date senderAppliedRegDate;
 
