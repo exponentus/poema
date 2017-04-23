@@ -24,6 +24,9 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.FormValidator;
+import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
@@ -122,8 +125,14 @@ public class OfficeMemoService extends RestProvider {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response add(OfficeMemo dto) {
-		dto.setId(null);
-		return save(dto);
+		try {
+			dto.setId(null);
+			return Response.ok(new OfficeMemoDomain().getOutcome(save(dto, new BasicValidator(dto)))).build();
+		} catch (SecureException | DAOException e) {
+			return responseException(e);
+		} catch (DTOException e) {
+			return responseValidationError(e);
+		}
 	}
 
 	@PUT
@@ -131,47 +140,48 @@ public class OfficeMemoService extends RestProvider {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") String id, OfficeMemo dto) {
-		dto.setId(UUID.fromString(id));
-		return save(dto);
-	}
-
-	public Response save(OfficeMemo dto) {
-		_Session ses = getSession();
-
 		try {
-			validate(dto);
-
-			EmployeeDAO empDao = new EmployeeDAO(ses);
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-			OfficeMemo entity;
-
-			if (dto.isNew()) {
-				entity = new OfficeMemo();
-			} else {
-				entity = officeMemoDAO.findById(dto.getId());
-			}
-
-			dto.setAppliedAuthor(empDao.findById(dto.getAppliedAuthor().getId()));
-			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-
-			OfficeMemoDomain omd = new OfficeMemoDomain();
-			omd.fillFromDto(entity, dto, empDao.findByUser(ses.getUser()));
-			omd.calculateReadersEditors(entity);
-
-			if (dto.isNew()) {
-				RegNum rn = new RegNum();
-				entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-				entity = officeMemoDAO.add(entity, rn);
-			} else {
-				entity = officeMemoDAO.update(entity);
-			}
-
-			return Response.ok(omd.getOutcome(entity)).build();
+			dto.setId(UUID.fromString(id));
+			return Response.ok(new OfficeMemoDomain().getOutcome(save(dto, new BasicValidator(dto)))).build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
-		} catch (_Validation.VException e) {
-			return responseValidationError(e.getValidation());
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		}
+	}
+
+	public OfficeMemo save(OfficeMemo dto, FormValidator validator) throws DTOException, DAOException, SecureException {
+		_Session ses = getSession();
+
+		validator.validate();
+
+		EmployeeDAO empDao = new EmployeeDAO(ses);
+		OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
+		OfficeMemo entity;
+
+		if (dto.isNew()) {
+			entity = new OfficeMemo();
+		} else {
+			entity = officeMemoDAO.findById(dto.getId());
+		}
+
+		dto.setAppliedAuthor(empDao.findById(dto.getAppliedAuthor().getId()));
+		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+		OfficeMemoDomain omd = new OfficeMemoDomain();
+		omd.fillFromDto(entity, dto, empDao.findByUser(ses.getUser()));
+		omd.calculateReadersEditors(entity);
+
+		if (dto.isNew()) {
+			RegNum rn = new RegNum();
+			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+			entity = officeMemoDAO.add(entity, rn);
+		} else {
+			entity = officeMemoDAO.update(entity);
+		}
+
+		return entity;
+
 	}
 
 	@DELETE
@@ -216,21 +226,28 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
 		try {
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
+			OfficeMemo entity = save(dto, new ValidatorToApproving(dto));
+			if (entity != null) {
+				OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+				OfficeMemo om = officeMemoDAO.findById(dto.getId());
+				OfficeMemoDomain omd = new OfficeMemoDomain();
 
-			omd.startApproving(om);
+				omd.startApproving(om);
 
-			officeMemoDAO.update(om, false);
+				officeMemoDAO.update(om, false);
 
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
-			outcome.setTitle("approving_started");
-			outcome.setMessage("approving_started");
-			outcome.addPayload("result", "approving_started");
+				new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+				Outcome outcome = omd.getOutcome(om);
+				outcome.setTitle("approving_started");
+				outcome.setMessage("approving_started");
+				outcome.addPayload("result", "approving_started");
 
-			return Response.ok(outcome).build();
+				return Response.ok(outcome).build();
+			} else {
+				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			}
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}
@@ -329,5 +346,48 @@ public class OfficeMemoService extends RestProvider {
 		}
 
 		ve.assertValid();
+	}
+
+	class BasicValidator extends FormValidator {
+		OfficeMemo dto;
+		DTOException fe = new DTOException();
+
+		BasicValidator(OfficeMemo dto) {
+			this.dto = dto;
+		}
+
+		@Override
+		public void validate() throws DTOException {
+			if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
+				fe.addError("title", "required", "field_is_empty");
+			}
+			if (dto.getAppliedAuthor() == null) {
+				fe.addError("appliedAuthor", "required", "field_is_empty");
+			}
+			if (dto.getRecipient() == null) {
+				fe.addError("recipient", "required", "field_is_empty");
+			}
+			if (fe.hasError()) {
+				throw fe;
+			}
+		}
+	}
+
+	class ValidatorToApproving extends BasicValidator {
+
+		ValidatorToApproving(OfficeMemo dto) {
+			super(dto);
+		}
+
+		@Override
+		public void validate() throws DTOException {
+			if (dto.getBlocks().get(0).getApprovers().size() == 0) {
+				fe.addError("block", "required", "there is no any appover");
+			}
+			if (fe.hasError()) {
+				throw fe;
+			}
+
+		}
 	}
 }

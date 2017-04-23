@@ -32,7 +32,6 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
-import com.exponentus.scripting._Validation.VException;
 import com.exponentus.scripting.actions._ActionBar;
 
 import reference.model.Tag;
@@ -46,7 +45,6 @@ import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.exception.ApprovalException;
-import workflow.exception.ApprovalExceptionType;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.util.ApprovalLifecycle;
@@ -158,8 +156,6 @@ public class ApplicationForVehicleService extends RestProvider {
 					.build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
-		} catch (_Validation.VException e) {
-			return responseValidationError(e.getValidation());
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		}
@@ -176,15 +172,13 @@ public class ApplicationForVehicleService extends RestProvider {
 					.build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
-		} catch (_Validation.VException e) {
-			return responseValidationError(e.getValidation());
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		}
 	}
 
 	public ApplicationForVehicle save(ApplicationForVehicle dto, FormValidator validator)
-			throws DAOException, SecureException, VException, DTOException {
+			throws DAOException, SecureException, DTOException {
 		_Session ses = getSession();
 
 		validator.validate();
@@ -265,7 +259,7 @@ public class ApplicationForVehicleService extends RestProvider {
 	@Path("action/startApproving")
 	public Response startApproving(ApplicationForVehicle dto) {
 		try {
-			ApplicationForVehicle entity = save(dto, new ValidatorToStartApproving(dto));
+			ApplicationForVehicle entity = save(dto, new ValidatorToApproving(dto));
 			if (entity != null) {
 				ApplicationForVehicleDAO afvDAO = new ApplicationForVehicleDAO(getSession());
 				ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
@@ -283,20 +277,10 @@ public class ApplicationForVehicleService extends RestProvider {
 			} else {
 				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
 			}
-		} catch (ApprovalException e) {
-			if (e.getType() == ApprovalExceptionType.APPROVER_IS_NOT_SET) {
-				_Validation ve = new _Validation();
-				ve.addError("approver", "required", "field_is_empty");
-				return responseValidationError(ve.new VException(ve).getValidation());
-			} else {
-				return responseException(e);
-			}
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		} catch (_Validation.VException e) {
-			return responseValidationError(e.getValidation());
 		} catch (DTOException e) {
 			return responseValidationError(e);
+		} catch (DAOException | SecureException | ApprovalException e) {
+			return responseException(e);
 		}
 	}
 
@@ -435,9 +419,9 @@ public class ApplicationForVehicleService extends RestProvider {
 		}
 	}
 
-	class ValidatorToStartApproving extends BasicValidator {
+	class ValidatorToApproving extends BasicValidator {
 
-		ValidatorToStartApproving(ApplicationForVehicle model) {
+		ValidatorToApproving(ApplicationForVehicle model) {
 			super(model);
 		}
 
