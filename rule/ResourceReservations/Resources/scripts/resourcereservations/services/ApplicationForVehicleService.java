@@ -24,6 +24,9 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.FormValidator;
+import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
@@ -151,11 +154,14 @@ public class ApplicationForVehicleService extends RestProvider {
 	public Response add(ApplicationForVehicle dto) {
 		try {
 			dto.setId(null);
-			return Response.ok(new ApplicationForVehicleDomain().getOutcome(save(dto))).build();
+			return Response.ok(new ApplicationForVehicleDomain().getOutcome(save(dto, new BasicValidator(dto))))
+					.build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
 		} catch (_Validation.VException e) {
 			return responseValidationError(e.getValidation());
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		}
 	}
 
@@ -166,18 +172,22 @@ public class ApplicationForVehicleService extends RestProvider {
 	public Response update(@PathParam("id") String id, ApplicationForVehicle dto) {
 		try {
 			dto.setId(UUID.fromString(id));
-			return Response.ok(new ApplicationForVehicleDomain().getOutcome(save(dto))).build();
+			return Response.ok(new ApplicationForVehicleDomain().getOutcome(save(dto, new BasicValidator(dto))))
+					.build();
 		} catch (SecureException | DAOException e) {
 			return responseException(e);
 		} catch (_Validation.VException e) {
 			return responseValidationError(e.getValidation());
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		}
 	}
 
-	public ApplicationForVehicle save(ApplicationForVehicle dto) throws DAOException, SecureException, VException {
+	public ApplicationForVehicle save(ApplicationForVehicle dto, FormValidator validator)
+			throws DAOException, SecureException, VException, DTOException {
 		_Session ses = getSession();
 
-		validate(dto);
+		validator.validate();
 
 		EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 		ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(ses);
@@ -217,8 +227,12 @@ public class ApplicationForVehicleService extends RestProvider {
 		try {
 			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(ses);
 			ApplicationForVehicle entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
+			if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+				if (entity != null) {
+					dao.delete(entity);
+				}
+			} else {
+				return responseException(new DTOException(DTOExceptionType.IMPROPER_CONDITION));
 			}
 			return Response.noContent().build();
 		} catch (DAOException | SecureException e) {
@@ -251,20 +265,24 @@ public class ApplicationForVehicleService extends RestProvider {
 	@Path("action/startApproving")
 	public Response startApproving(ApplicationForVehicle dto) {
 		try {
-			ApplicationForVehicle entity = save(dto);
-			ApplicationForVehicleDAO afvDAO = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+			ApplicationForVehicle entity = save(dto, new ValidatorToStartApproving(dto));
+			if (entity != null) {
+				ApplicationForVehicleDAO afvDAO = new ApplicationForVehicleDAO(getSession());
+				ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			domain.startApproving(entity);
+				domain.startApproving(entity);
 
-			afvDAO.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("approving_started");
-			outcome.setMessage("approving_started");
-			outcome.addPayload("result", "approving_started");
+				afvDAO.update(entity, false);
+				new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+				Outcome outcome = domain.getOutcome(entity);
+				outcome.setTitle("approving_started");
+				outcome.setMessage("approving_started");
+				outcome.addPayload("result", "approving_started");
 
-			return Response.ok(outcome).build();
+				return Response.ok(outcome).build();
+			} else {
+				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			}
 		} catch (ApprovalException e) {
 			if (e.getType() == ApprovalExceptionType.APPROVER_IS_NOT_SET) {
 				_Validation ve = new _Validation();
@@ -277,50 +295,60 @@ public class ApplicationForVehicleService extends RestProvider {
 			return responseException(e);
 		} catch (_Validation.VException e) {
 			return responseValidationError(e.getValidation());
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		}
 	}
 
 	@POST
-	@Path("{id}/action/acceptApprovalBlock")
-	public Response acceptApprovalBlock(@PathParam("id") String id) {
+	@Path("action/acceptApprovalBlock")
+	public Response acceptApprovalBlock(ApplicationForVehicle dto) {
 		try {
 			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = dao.findByIdentefier(id);
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+			ApplicationForVehicle entity = dao.findById(dto.getId());
+			if (entity != null) {
+				ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			domain.acceptApprovalBlock(entity, getSession().getUser());
+				domain.acceptApprovalBlock(entity, getSession().getUser());
 
-			dao.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("acceptApprovalBlock");
-			outcome.setMessage("acceptApprovalBlock");
+				dao.update(entity, false);
+				new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+				Outcome outcome = domain.getOutcome(entity);
+				outcome.setTitle("acceptApprovalBlock");
+				outcome.setMessage("acceptApprovalBlock");
 
-			return Response.ok(outcome).build();
+				return Response.ok(outcome).build();
+			} else {
+				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			}
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}
 	}
 
 	@POST
-	@Path("{id}/action/declineApprovalBlock")
-	public Response declineApprovalBlock(@PathParam("id") String id) {
+	@Path("action/declineApprovalBlock")
+	public Response declineApprovalBlock(ApplicationForVehicle dto) {
 		try {
 			ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-			ApplicationForVehicle entity = dao.findByIdentefier(id);
-			ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
+			ApplicationForVehicle entity = dao.findById(dto.getId());
+			if (entity != null) {
+				ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-			String decisionComment = getWebFormData().getValueSilently("comment");
+				String decisionComment = getWebFormData().getValueSilently("comment");
 
-			domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
+				domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
 
-			dao.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("declineApprovalBlock");
-			outcome.setMessage("declineApprovalBlock");
+				dao.update(entity, false);
+				new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+				Outcome outcome = domain.getOutcome(entity);
+				outcome.setTitle("declineApprovalBlock");
+				outcome.setMessage("declineApprovalBlock");
 
-			return Response.ok(outcome).build();
+				return Response.ok(outcome).build();
+			} else {
+				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			}
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}
@@ -374,5 +402,54 @@ public class ApplicationForVehicleService extends RestProvider {
 		}
 
 		ve.assertValid();
+	}
+
+	class BasicValidator extends FormValidator {
+		ApplicationForVehicle model;
+		DTOException fe = new DTOException();
+
+		BasicValidator(ApplicationForVehicle model) {
+			this.model = model;
+		}
+
+		@Override
+		public void validate() throws DTOException {
+			if (model.getTitle() == null || model.getTitle().isEmpty()) {
+				fe.addError("title", "required", "field_is_empty");
+			}
+			if (model.getVehicle() == null) {
+				fe.addError("vehicle", "required", "field_is_empty");
+			}
+			if (model.getUseFrom() == null) {
+				fe.addError("useFrom", "required", "field_is_empty");
+			}
+			if (model.getUseTo() == null) {
+				fe.addError("useTo", "required", "field_is_empty");
+			}
+			if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
+				fe.addError("route", "required", "field_is_empty");
+			}
+			if (fe.hasError()) {
+				throw fe;
+			}
+		}
+	}
+
+	class ValidatorToStartApproving extends BasicValidator {
+
+		ValidatorToStartApproving(ApplicationForVehicle model) {
+			super(model);
+		}
+
+		@Override
+		public void validate() throws DTOException {
+			if (model.getBlocks().get(0).getApprovers().size() == 0) {
+				fe.addError("block", "required", "there is no any appover");
+			}
+			if (fe.hasError()) {
+				throw fe;
+			}
+
+		}
 	}
 }
