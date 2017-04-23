@@ -3,7 +3,8 @@
 	<converter class="com.exponentus.common.model.util.PostgresUuidConverter"/>
 	<converter class="com.exponentus.common.model.util.LocalizedValConverter"/> 
 	<converter class="com.exponentus.common.model.constants.converter.ReportTypeConverter"/>     
-
+<!-- 	<converter class="com.exponentus.common.model.util.ReaderConverter"/> -->
+	
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.ApplicationModeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>

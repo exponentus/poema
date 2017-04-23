@@ -46,20 +46,18 @@ import staff.model.embedded.Observer;
 public class Incoming extends ControlledDocument {
 
 	@FTSearchable
-	@Column(name = "reg_number", unique = true)
+	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
-	@FTSearchable
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 
 	private Organization sender;
 
 	@FTSearchable
-	@Column(name = "sender_reg_number")
+	@Column(name = "sender_reg_number", length = 64)
 	private String senderRegNumber;
 
-	@FTSearchable
 	@Column(name = "sender_applied_reg_date")
 	private Date senderAppliedRegDate;
 

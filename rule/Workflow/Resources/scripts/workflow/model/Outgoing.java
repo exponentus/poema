@@ -47,7 +47,7 @@ import workflow.model.embedded.ApprovalSecureAppEntity;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Outgoing extends ApprovalSecureAppEntity {
 
-	@Column(name = "reg_number")
+	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
 	@Column(name = "applied_reg_date")

@@ -45,7 +45,7 @@ public class Demand extends SecureAppEntity<UUID> {
 	private Project project;
 
 	@FTSearchable(ignoreLang = true)
-	@Column(name = "reg_number", length = 140)
+	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
 	@Convert(converter = DemandStatusConverter.class)

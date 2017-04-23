@@ -62,7 +62,7 @@ public class Task extends SecureHierarchicalEntity {
 	private Task parent;
 
 	@FTSearchable(ignoreLang = true, regEx = "[^0-9]*")
-	@Column(name = "reg_number", length = 140)
+	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
 	@NotNull

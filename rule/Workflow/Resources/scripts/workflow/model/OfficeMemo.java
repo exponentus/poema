@@ -24,6 +24,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.Tag;
@@ -32,12 +33,13 @@ import staff.model.embedded.Observer;
 import workflow.model.embedded.ApprovedControlledDocument;
 
 @JsonRootName("officeMemo")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class OfficeMemo extends ApprovedControlledDocument {
 
-	@Column(name = "reg_number")
+	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
 	@Column(name = "applied_reg_date")
