@@ -2,6 +2,7 @@ package resourcereservations.model;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.MeetingRoom;
+import resourcereservations.init.AppConst;
 
 import javax.persistence.*;
 
@@ -25,6 +26,6 @@ public class ApplicationForMeetingRoom extends Reservation {
 
     @Override
     public String getURL() {
-        return "applications_for_meeting_room/" + getIdentifier();
+        return AppConst.BASE_URL + "applications_for_meeting_room/" + getIdentifier();
     }
 }

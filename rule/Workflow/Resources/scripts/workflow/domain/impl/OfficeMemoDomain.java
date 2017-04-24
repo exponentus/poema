@@ -98,7 +98,7 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         Outcome outcome = new Outcome();
 
         outcome.setTitle(om.getTitle());
-        outcome.addPayload(om);
+        outcome.addPayload(om.getEntityKind(), om);
         if (!om.isNew()) {
             outcome.addPayload(new ACL(om));
         }

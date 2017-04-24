@@ -101,7 +101,7 @@ public class ApplicationForMeetingRoomDomain implements IApplicationForMeetingRo
         Outcome outcome = new Outcome();
 
         outcome.setTitle(entity.getTitle());
-        outcome.addPayload(entity);
+        outcome.addPayload(entity.getEntityKind(), entity);
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));
         }

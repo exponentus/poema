@@ -2,15 +2,16 @@ package workflow.constants;
 
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionType;
+import workflow.init.AppConst;
 
 /**
  * Created by medin on 4/21/17.
  */
 public class Action {
 
-    public static final _Action newIncoming = new _Action(_ActionType.LINK).caption("incoming").url("incomings/new");
-    public static final _Action newOutgoing = new _Action(_ActionType.LINK).caption("outgoing").url("outgoings/new");
-    public static final _Action newOfficeMemo = new _Action(_ActionType.LINK).caption("office_memo").url("office-memos/new");
+    public static final _Action newIncoming = new _Action(_ActionType.LINK).caption("incoming").url(AppConst.BASE_URL + "incomings/new");
+    public static final _Action newOutgoing = new _Action(_ActionType.LINK).caption("outgoing").url(AppConst.BASE_URL + "outgoings/new");
+    public static final _Action newOfficeMemo = new _Action(_ActionType.LINK).caption("office_memo").url(AppConst.BASE_URL + "office-memos/new");
 
     public static final _Action startApproving = new _Action(_ActionType.API_ACTION).id("startApproving").caption("start_approving").url("startApproving");
     public static final _Action signApprovalBlock = new _Action(_ActionType.API_ACTION).id("acceptApprovalBlock").caption("sign").url("acceptApprovalBlock");

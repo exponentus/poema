@@ -2,14 +2,15 @@ package resourcereservations.constants;
 
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionType;
+import resourcereservations.init.AppConst;
 
 /**
  * Created by medin on 4/21/17.
  */
 public class Action {
 
-    public static final _Action newApplicationForVehicle = new _Action(_ActionType.LINK).caption("btn_label_add_application").url("applications_for_vehicle/new");
-    public static final _Action newApplicationForMeetingRoom = new _Action(_ActionType.LINK).caption("btn_label_add_application").url("applications_for_meeting_room/new");
+    public static final _Action newApplicationForVehicle = new _Action(_ActionType.LINK).caption("btn_label_add_application").url(AppConst.BASE_URL + "applications_for_vehicle/new");
+    public static final _Action newApplicationForMeetingRoom = new _Action(_ActionType.LINK).caption("btn_label_add_application").url(AppConst.BASE_URL + "applications_for_meeting_room/new");
 
     public static final _Action startApproving = new _Action(_ActionType.API_ACTION).id("startApproving").caption("start_approving").url("startApproving");
     public static final _Action signApprovalBlock = new _Action(_ActionType.API_ACTION).id("signApprovalBlock").caption("sign").url("acceptApprovalBlock");

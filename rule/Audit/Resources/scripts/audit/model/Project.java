@@ -1,6 +1,7 @@
 package audit.model;
 
 import administrator.model.User;
+import audit.init.AppConst;
 import audit.model.constants.ProjectStatusType;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
@@ -180,6 +181,6 @@ public class Project extends SecureHierarchicalEntity {
 
     @Override
     public String getURL() {
-        return "projects/" + getIdentifier();
+        return AppConst.BASE_URL + "projects/" + getIdentifier();
     }
 }

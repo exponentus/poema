@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.init.AppConst;
 import workflow.model.embedded.Control;
 
 import javax.persistence.*;
@@ -106,7 +107,7 @@ public class Assignment extends ControlledDocument {
 
     @Override
     public String getURL() {
-        return "assignments/" + getIdentifier();
+        return AppConst.BASE_URL + "assignments/" + getIdentifier();
     }
 
     @Override
