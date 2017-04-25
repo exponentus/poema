@@ -15,6 +15,8 @@ import java.util.List;
 
 public class AssignmentDomain implements IAssignmentDomain {
 
+    enum permissions {RESET_ASSIGNEE}
+
     @Override
     public Assignment composeNew(Employee author, ControlledDocument parent) {
         Assignment entity = new Assignment();

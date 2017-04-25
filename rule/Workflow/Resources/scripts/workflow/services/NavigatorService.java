@@ -5,6 +5,7 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.outline._Outline;
 import com.exponentus.scripting.outline._OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
+import workflow.init.AppConst;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,9 +24,9 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         _Outline odo = new _Outline("", "org_documents");
-        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-inbox", "incomings", "incomings"));
-        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-envelope-o", "outgoings", "outgoings"));
-        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-pencil-square-o", "office-memos", "office-memos"));
+        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-inbox", "incomings", AppConst.BASE_URL + "incomings"));
+        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-envelope-o", "outgoings", AppConst.BASE_URL + "outgoings"));
+        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-pencil-square-o", "office-memos", AppConst.BASE_URL + "office-memos"));
 
         list.add(odo);
 

@@ -19,6 +19,7 @@ import com.exponentus.server.Server;
 import helpdesk.dao.DemandDAO;
 import helpdesk.dao.filter.DemandFilter;
 import helpdesk.domain.DemandDomain;
+import helpdesk.init.AppConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import projects.constants.Action;
@@ -70,7 +71,7 @@ public class DemandService extends RestProvider {
             ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            _Action newDocAction = new _Action("add_demand", "", "add_demand");
+            _Action newDocAction = new _Action(_ActionType.LINK).caption("add_demand").url(AppConst.BASE_URL + "demands/new?type=" + slug);
             actionBar.addAction(newDocAction);
 
             Outcome outcome = new Outcome();
