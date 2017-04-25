@@ -14,11 +14,13 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.constants.Action;
 import projects.dao.ProjectDAO;
 import projects.domain.impl.ProjectDomain;
+import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
@@ -71,7 +73,8 @@ public class ProjectService extends RestProvider {
             ViewPage<Project> vp = projectDAO.findViewPage1(sortParams, status, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("new_project", "", "new_project"));
+            actionBar.addAction(new _Action(_ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
+            actionBar.addAction(Action.refreshVew);
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

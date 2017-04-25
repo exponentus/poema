@@ -5,6 +5,7 @@ import audit.dao.ObservationDAO;
 import audit.dao.ProjectDAO;
 import audit.dao.filter.ObservationFilter;
 import audit.domain.impl.ObservationDomain;
+import audit.init.AppConst;
 import audit.model.Observation;
 import audit.model.Project;
 import audit.model.constants.ObservationStatusType;
@@ -81,7 +82,8 @@ public class ObservationService extends RestProvider {
             ViewPage<Observation> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("new_observation", "", "new_observation"));
+            actionBar.addAction(new _Action(_ActionType.LINK).caption("new_observation").url(AppConst.BASE_URL + "observations/new"));
+            actionBar.addAction(new _Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

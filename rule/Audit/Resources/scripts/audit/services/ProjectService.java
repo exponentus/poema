@@ -4,6 +4,7 @@ import administrator.model.User;
 import audit.dao.ProjectDAO;
 import audit.dao.filter.ProjectFilter;
 import audit.domain.impl.ProjectDomain;
+import audit.init.AppConst;
 import audit.model.Project;
 import audit.model.constants.ProjectStatusType;
 import com.exponentus.dataengine.exception.DAOException;
@@ -56,7 +57,8 @@ public class ProjectService extends RestProvider {
             ViewPage<Project> vp = projectDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action("new_project", "", "new_project"));
+            actionBar.addAction(new _Action(_ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
+            actionBar.addAction(new _Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
