@@ -10,7 +10,6 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 
 import administrator.model.User;
-import reference.dao.DocumentSubjectDAO;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.IIncomingDomain;
@@ -34,8 +33,7 @@ public class IncomingDomain implements IIncomingDomain {
 		entity.setDocLanguage(dto.getDocLanguage());
 		entity.setDocType(dto.getDocType());
 		try {
-			DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
-			entity.setDocSubject(dsDao.findAll().getResult().get(0));
+			entity.setDocSubject(dto.getDocSubject());
 			entity.setSender(dto.getSender());
 
 			EmployeeDAO eDao = new EmployeeDAO(ses);
