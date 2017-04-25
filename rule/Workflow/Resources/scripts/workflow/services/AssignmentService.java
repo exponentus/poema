@@ -31,6 +31,7 @@ import workflow.other.Messages;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -47,7 +48,7 @@ public class AssignmentService extends RestProvider {
         try {
             _Session ses = getSession();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-            Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
+            Employee currentUserEmployee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             Assignment entity;
             AssignmentDomain ad = new AssignmentDomain();
@@ -70,7 +71,7 @@ public class AssignmentService extends RestProvider {
                     throw new IllegalArgumentException("No parent document");
                 }
 
-                entity = ad.composeNew(employee, parent);
+                entity = ad.composeNew(currentUserEmployee, parent);
             } else {
                 entity = assignmentDAO.findByIdentefier(id);
             }
@@ -80,7 +81,15 @@ public class AssignmentService extends RestProvider {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = ad.getOutcome(entity);
+
+            // permissions
+            Map<String, Boolean> permissions = new HashMap<>();
+            if (entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
+                permissions.put("RESET_ASSIGNEE", true);
+            }
+
             outcome.addPayload("employees", emps);
+            outcome.addPayload("permissions", permissions);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
@@ -253,8 +262,6 @@ public class AssignmentService extends RestProvider {
             actionBar.addAction(new _Action(_ActionType.LINK).caption("report")
                     .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
         }
-        // actionBar.addAction(new
-        // _Action(_ActionType.API_ACTION).id("resetAssignee").caption("reset_assignee").url("resetAssignee"));
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(Action.deleteDocument);
         }
