@@ -44,10 +44,10 @@ import resourcereservations.domain.impl.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.exception.ApprovalException;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 import workflow.other.Messages;
 
 @Path("applications_for_vehicle")

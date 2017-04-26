@@ -7,10 +7,10 @@ import reference.model.constants.ApprovalType;
 import resourcereservations.domain.IApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
 import staff.model.Employee;
-import workflow.exception.ApprovalException;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 
 import java.util.ArrayList;
 import java.util.Date;

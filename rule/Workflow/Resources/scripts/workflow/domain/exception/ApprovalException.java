@@ -1,4 +1,4 @@
-package workflow.exception;
+package workflow.domain.exception;
 
 import com.exponentus.env.Environment;
 import com.exponentus.localization.constants.LanguageCode;

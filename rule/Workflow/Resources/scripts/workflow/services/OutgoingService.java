@@ -18,8 +18,8 @@ import staff.model.Employee;
 import workflow.constants.Action;
 import workflow.dao.OutgoingDAO;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 import workflow.domain.impl.OutgoingDomain;
-import workflow.exception.ApprovalException;
 import workflow.model.Outgoing;
 import workflow.other.Messages;
 

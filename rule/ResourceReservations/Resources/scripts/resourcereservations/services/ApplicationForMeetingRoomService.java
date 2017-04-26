@@ -19,8 +19,8 @@ import resourcereservations.domain.impl.ApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.exception.ApprovalException;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 import workflow.other.Messages;
 
 import javax.ws.rs.*;

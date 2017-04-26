@@ -23,9 +23,9 @@ import workflow.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
-import workflow.exception.ApprovalException;
-import workflow.exception.ApprovalExceptionType;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
+import workflow.domain.exception.ApprovalExceptionType;
 
 public class Messages {
 	protected static Log4jLogger logger = new Log4jLogger("Messaging");

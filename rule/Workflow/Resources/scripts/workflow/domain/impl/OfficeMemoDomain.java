@@ -6,7 +6,7 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
 import workflow.domain.IOfficeMemoDomain;
-import workflow.exception.ApprovalException;
+import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.domain.ApprovalLifecycle;

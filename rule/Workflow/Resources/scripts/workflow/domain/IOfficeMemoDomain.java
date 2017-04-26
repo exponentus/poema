@@ -4,7 +4,7 @@ import administrator.model.User;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
-import workflow.exception.ApprovalException;
+import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 
 public interface IOfficeMemoDomain {

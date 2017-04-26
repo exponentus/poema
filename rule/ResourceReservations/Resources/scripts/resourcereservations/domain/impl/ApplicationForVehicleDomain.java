@@ -7,10 +7,10 @@ import reference.model.constants.ApprovalType;
 import resourcereservations.domain.IApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
-import workflow.exception.ApprovalException;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 
 import java.util.ArrayList;
 import java.util.Date;

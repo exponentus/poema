@@ -18,13 +18,12 @@ import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 
+import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.constants.DecisionType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
-import workflow.exception.ApprovalException;
-import workflow.domain.ApprovalLifecycle;
 
 @Command(name = "approver_tracking", trigger = Trigger.EVERY_5_MIN)
 public class ApproverTracking extends _Do {
@@ -44,10 +43,8 @@ public class ApproverTracking extends _Do {
 							List<Approver> approvers = ApprovalLifecycle.getCurrentApprovers(currentBlock);
 							for (Approver currentApprover : approvers) {
 								long diff = current.getTime() - currentApprover.getStartTime().getTime();
-								if (TimeUnit.MILLISECONDS.toMinutes(diff) > currentBlock.getTimeLimit()) {
-									currentApprover.setDecisionType(DecisionType.SKIPPED);
-									currentApprover.setDecisionTime(current);
-									currentApprover.setCurrent(false);
+								if (TimeUnit.MILLISECONDS.toMinutes(diff) >= currentBlock.getTimeLimit()) {
+									new ApprovalLifecycle(approval).skip();
 									try {
 										dao.update(approval);
 									} catch (SecureException | DAOException e) {
