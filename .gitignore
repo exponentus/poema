@@ -35,3 +35,4 @@ cfg.xml
 node_modules/
 .vscode/
 /webserver/
+/webapps/Workspace/manifest.appcache
