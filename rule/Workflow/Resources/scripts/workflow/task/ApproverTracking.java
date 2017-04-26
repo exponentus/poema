@@ -24,7 +24,7 @@ import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 import workflow.exception.ApprovalException;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 
 @Command(name = "approver_tracking", trigger = Trigger.EVERY_5_MIN)
 public class ApproverTracking extends _Do {

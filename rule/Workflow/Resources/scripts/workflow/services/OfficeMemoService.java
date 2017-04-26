@@ -22,11 +22,11 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.constants.Action;
 import workflow.dao.OfficeMemoDAO;
+import workflow.domain.ApprovalLifecycle;
 import workflow.domain.impl.OfficeMemoDomain;
 import workflow.exception.ApprovalException;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
-import workflow.model.util.ApprovalLifecycle;
 import workflow.other.Messages;
 
 import javax.ws.rs.*;

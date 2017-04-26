@@ -9,7 +9,7 @@ import workflow.domain.IOfficeMemoDomain;
 import workflow.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 
 import java.util.Date;
 

@@ -10,7 +10,7 @@ import staff.model.Employee;
 import workflow.exception.ApprovalException;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 
 import java.util.ArrayList;
 import java.util.Date;

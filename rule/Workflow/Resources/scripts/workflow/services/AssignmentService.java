@@ -239,7 +239,7 @@ public class AssignmentService extends RestProvider {
 
             domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
 
-            dao.update(entity);
+            dao.update(entity, false);
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException | SecureException e) {
