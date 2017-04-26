@@ -22,7 +22,7 @@ import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 
 @MappedSuperclass
 public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> implements IApproval {

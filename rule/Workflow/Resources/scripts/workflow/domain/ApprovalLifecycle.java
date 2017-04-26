@@ -1,4 +1,4 @@
-package workflow.model.util;
+package workflow.domain;
 
 import com.exponentus.user.IUser;
 import reference.model.constants.ApprovalSchemaType;

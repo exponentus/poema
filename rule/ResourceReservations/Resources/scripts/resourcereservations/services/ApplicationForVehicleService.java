@@ -47,7 +47,7 @@ import staff.model.Employee;
 import workflow.exception.ApprovalException;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 import workflow.other.Messages;
 
 @Path("applications_for_vehicle")

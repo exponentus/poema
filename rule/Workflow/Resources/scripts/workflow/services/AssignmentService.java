@@ -84,7 +84,7 @@ public class AssignmentService extends RestProvider {
 
             // permissions
             Map<String, Boolean> permissions = new HashMap<>();
-            if (entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
+            if (!entity.isNew() && entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
                 permissions.put("RESET_ASSIGNEE", true);
             }
 
@@ -239,7 +239,7 @@ public class AssignmentService extends RestProvider {
 
             domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
 
-            dao.update(entity);
+            dao.update(entity, false);
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException | SecureException e) {

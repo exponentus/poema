@@ -1,75 +1,74 @@
 package workflow.model.embedded;
 
-import java.util.Date;
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import com.exponentus.env.Environment;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import org.eclipse.persistence.annotations.Convert;
+import org.eclipse.persistence.annotations.Converter;
+import staff.model.Employee;
+import staff.model.util.EmployeeConverter;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Table;
+import java.util.Date;
 
-import org.eclipse.persistence.annotations.Convert;
-import org.eclipse.persistence.annotations.Converter;
-
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
-import com.exponentus.env.Environment;
-
-import staff.model.Employee;
-import staff.model.util.EmployeeConverter;
-
+@JsonRootName("assigneeEntry")
 @Entity
 @Table(name = "wf__assignee_entities")
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
 public class AssigneeEntry extends SimpleAppEntity {
 
-	private boolean isCoordinator;
+    private boolean isCoordinator;
 
-	private Employee assignee;
+    private Employee assignee;
 
-	@Convert("emp_conv")
-	@Basic(fetch = FetchType.LAZY, optional = true)
-	private Employee resetBy;
+    @Convert("emp_conv")
+    @Basic(fetch = FetchType.LAZY, optional = true)
+    private Employee resetBy;
 
-	private Date resetTime;
+    private Date resetTime;
 
-	private String resetterInfo;
+    private String resetterInfo;
 
-	public boolean isCoordinator() {
-		return isCoordinator;
-	}
+    public boolean isCoordinator() {
+        return isCoordinator;
+    }
 
-	public void setCoordinator(boolean isCoordinator) {
-		this.isCoordinator = isCoordinator;
-	}
+    public void setCoordinator(boolean isCoordinator) {
+        this.isCoordinator = isCoordinator;
+    }
 
-	public Employee getAssignee() {
-		return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
-	}
+    public Employee getAssignee() {
+        return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
+    }
 
-	public void setAssignee(Employee assignee) {
-		this.assignee = assignee;
-	}
+    public void setAssignee(Employee assignee) {
+        this.assignee = assignee;
+    }
 
-	public Employee getResetBy() {
-		return resetBy;
-	}
+    public Employee getResetBy() {
+        return resetBy;
+    }
 
-	public void setResetBy(Employee resetBy) {
-		this.resetBy = resetBy;
-	}
+    public void setResetBy(Employee resetBy) {
+        this.resetBy = resetBy;
+    }
 
-	public Date getResetTime() {
-		return resetTime;
-	}
+    public Date getResetTime() {
+        return resetTime;
+    }
 
-	public void setResetTime(Date resetTime) {
-		this.resetTime = resetTime;
-	}
+    public void setResetTime(Date resetTime) {
+        this.resetTime = resetTime;
+    }
 
-	public String getResetterInfo() {
-		return resetterInfo;
-	}
+    public String getResetterInfo() {
+        return resetterInfo;
+    }
 
-	public void setResetterInfo(String resetterInfo) {
-		this.resetterInfo = resetterInfo;
-	}
+    public void setResetterInfo(String resetterInfo) {
+        this.resetterInfo = resetterInfo;
+    }
 }

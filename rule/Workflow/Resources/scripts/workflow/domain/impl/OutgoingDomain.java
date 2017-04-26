@@ -10,7 +10,7 @@ import workflow.exception.ApprovalException;
 import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.util.ApprovalLifecycle;
+import workflow.domain.ApprovalLifecycle;
 
 import java.util.Date;
 
