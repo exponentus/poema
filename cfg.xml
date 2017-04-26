@@ -13,7 +13,7 @@
 		<smtphost></smtphost>
 		<smtpauth>true</smtpauth>
 		<smtpport>2525</smtpport>
-		<smtpuser>test@exponentus.com</smtpuser>
+		<smtpuser></smtpuser>
 		<smtppassword></smtppassword>
 		<smtpusername></smtpusername>
 	</mail>
@@ -24,7 +24,7 @@
 
 	<translator mode="ON">
 		<yandex>
-			<token></token>
+			<token>c</token>
 		</yandex>
 	</translator>
 
