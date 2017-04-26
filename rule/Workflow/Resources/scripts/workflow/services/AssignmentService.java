@@ -84,7 +84,7 @@ public class AssignmentService extends RestProvider {
 
             // permissions
             Map<String, Boolean> permissions = new HashMap<>();
-            if (entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
+            if (!entity.isNew() && entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
                 permissions.put("RESET_ASSIGNEE", true);
             }
 
