@@ -68,7 +68,7 @@ public class Messages {
 
 			lang = project.getPrimaryLanguage();
 
-			memo.addVar("url", appEnv.getURL() + "/" + project.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + project.getURL() + "&lang=" + lang);
 			MailAgent ma = new MailAgent();
 			// ma.description = "notify about new project";
 			ma.sendMessage(mailRecipients, appEnv.vocabulary.getWord("notify_about_new_project_short", lang),
@@ -101,7 +101,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -142,7 +142,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -183,7 +183,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 			memo.addVar("requestType", request.getRequestType().getLocName(lang));
 
 			if (user != null) {
@@ -228,7 +228,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + request.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + request.getURL() + "&lang=" + lang);
 			memo.addVar("requestResolution", v.getWord(request.getResolution().name(), lang));
 
 			if (user != null) {
@@ -277,7 +277,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -322,7 +322,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -367,7 +367,7 @@ public class Messages {
 
 				}
 
-				memo.addVar("url", appEnv.getURL() + "/" + task.getURL() + "&lang=" + lang);
+				memo.addVar("url", appEnv.getURL() + "/#/" + task.getURL() + "&lang=" + lang);
 
 				if (user != null) {
 					String slackAddr = user.getSlack();
