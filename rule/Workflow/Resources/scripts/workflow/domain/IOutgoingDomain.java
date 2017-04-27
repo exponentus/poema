@@ -22,5 +22,7 @@ public interface IOutgoingDomain {
 
     void declineApprovalBlock(Outgoing entity, IUser<Long> user, String decisionComment) throws ApprovalException;
 
+    void skipApprovalBlock(Outgoing om) throws ApprovalException;
+
     Outcome getOutcome(Outgoing entity);
 }

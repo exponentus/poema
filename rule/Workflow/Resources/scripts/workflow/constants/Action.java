@@ -17,6 +17,7 @@ public class Action {
     public static final _Action signApprovalBlock = new _Action(_ActionType.API_ACTION).id("acceptApprovalBlock").caption("sign").url("acceptApprovalBlock");
     public static final _Action acceptApprovalBlock = new _Action(_ActionType.API_ACTION).id("acceptApprovalBlock").caption("accept").url("acceptApprovalBlock");
     public static final _Action declineApprovalBlock = new _Action(_ActionType.API_ACTION).id("declineApprovalBlock").caption("decline").url("declineApprovalBlock");
+    public static final _Action skipApprovalBlock = new _Action(_ActionType.API_ACTION).id("skipApprovalBlock").caption("skip").url("skipApprovalBlock");
 
     public static final _Action refreshVew = new _Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh");
     public static final _Action close = new _Action(_ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back");

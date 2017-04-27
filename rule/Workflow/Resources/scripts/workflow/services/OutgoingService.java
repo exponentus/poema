@@ -260,6 +260,28 @@ public class OutgoingService extends RestProvider {
         }
     }
 
+    @POST
+    @Path("action/skipApprovalBlock")
+    public Response skipApprovalBlock(Outgoing dto) {
+        try {
+            OutgoingDAO dao = new OutgoingDAO(getSession());
+            Outgoing entity = dao.findById(dto.getId());
+            OutgoingDomain omd = new OutgoingDomain();
+
+            omd.skipApprovalBlock(entity);
+
+            dao.update(entity, false);
+            new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+            Outcome outcome = omd.getOutcome(entity);
+            outcome.setTitle("skipApprovalBlock");
+            outcome.setMessage("skipApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
     private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -280,6 +302,7 @@ public class OutgoingService extends RestProvider {
                 actionBar.addAction(Action.acceptApprovalBlock);
             }
             actionBar.addAction(Action.declineApprovalBlock);
+            actionBar.addAction(Action.skipApprovalBlock);
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(Action.deleteDocument);

@@ -5,11 +5,11 @@ import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
+import workflow.domain.ApprovalLifecycle;
 import workflow.domain.IOfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.domain.ApprovalLifecycle;
 
 import java.util.Date;
 
@@ -69,6 +69,12 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
     public void declineApprovalBlock(OfficeMemo om, IUser<Long> user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.decline(user, decisionComment);
+    }
+
+    @Override
+    public void skipApprovalBlock(OfficeMemo om) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+        lifecycle.skip();
     }
 
     @Override

@@ -295,6 +295,28 @@ public class OfficeMemoService extends RestProvider {
         }
     }
 
+    @POST
+    @Path("action/skipApprovalBlock")
+    public Response skipApprovalBlock(OfficeMemo dto) {
+        try {
+            OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+            OfficeMemo om = officeMemoDAO.findById(dto.getId());
+            OfficeMemoDomain omd = new OfficeMemoDomain();
+
+            omd.skipApprovalBlock(om);
+
+            officeMemoDAO.update(om, false);
+            new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+            Outcome outcome = omd.getOutcome(om);
+            outcome.setTitle("skipApprovalBlock");
+            outcome.setMessage("skipApprovalBlock");
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
+
     private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -315,6 +337,7 @@ public class OfficeMemoService extends RestProvider {
                 actionBar.addAction(Action.acceptApprovalBlock);
             }
             actionBar.addAction(Action.declineApprovalBlock);
+            actionBar.addAction(Action.skipApprovalBlock);
         }
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new _Action(_ActionType.LINK).caption("assignment")
