@@ -32,6 +32,8 @@ public class AssigneeEntry extends SimpleAppEntity {
 
     private String resetterInfo;
 
+    private int sort;
+
     public boolean isCoordinator() {
         return isCoordinator;
     }
@@ -70,5 +72,13 @@ public class AssigneeEntry extends SimpleAppEntity {
 
     public void setResetterInfo(String resetterInfo) {
         this.resetterInfo = resetterInfo;
+    }
+
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 }

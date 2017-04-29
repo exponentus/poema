@@ -7,10 +7,10 @@ import reference.model.constants.ApprovalType;
 import resourcereservations.domain.IApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
 import staff.model.Employee;
-import workflow.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Block;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +29,7 @@ public class ApplicationForMeetingRoomDomain implements IApplicationForMeetingRo
         ArrayList<Block> blocks = new ArrayList();
         Block block = new Block();
         block.setType(ApprovalType.SIGNING);
-        block.setPosition(1);
+        block.setSort(1);
         block.setStatus(ApprovalStatusType.DRAFT);
         block.setApprovers(new ArrayList<>());
         blocks.add(block);

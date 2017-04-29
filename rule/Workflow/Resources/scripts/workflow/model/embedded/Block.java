@@ -26,6 +26,7 @@ public class Block extends SimpleAppEntity {
     private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("sort")
     private List<Approver> approvers;
 
     @Convert(converter = ApprovalTypeConverter.class)
@@ -37,7 +38,7 @@ public class Block extends SimpleAppEntity {
     @Column(name = "time_limit")
     private int timeLimit;
 
-    private int position;
+    private int sort;
 
     public ApprovalStatusType getStatus() {
         return status;
@@ -79,23 +80,23 @@ public class Block extends SimpleAppEntity {
         this.timeLimit = timeLimit;
     }
 
-    public int getPosition() {
-        return position;
+    public int getSort() {
+        return sort;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
+    public void setSort(int sort) {
+        this.sort = sort;
     }
 
     @JsonIgnore
     public Approver getCurrentApprover() {
-        return approvers.stream().sorted((a, b) -> a.getPosition() > b.getPosition() ? 1 : -1)
+        return approvers.stream().sorted((a, b) -> a.getSort() > b.getSort() ? 1 : -1)
                 .filter(Approver::isCurrent).findFirst().orElse(null);
     }
 
     @JsonIgnore
     public Approver getNextApprover() {
-        return approvers.stream().sorted((a, b) -> a.getPosition() > b.getPosition() ? 1 : -1)
+        return approvers.stream().sorted((a, b) -> a.getSort() > b.getSort() ? 1 : -1)
                 .filter(approver -> approver.getDecisionType() == DecisionType.UNKNOWN).findFirst().orElse(null);
     }
 

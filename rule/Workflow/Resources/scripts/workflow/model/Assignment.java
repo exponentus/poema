@@ -26,6 +26,7 @@ public class Assignment extends ControlledDocument {
 
     @JsonIgnore
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    @OrderBy("appliedRegDate")
     private List<Report> reports;
 
     @JoinColumn(name = "applied_author", nullable = false)

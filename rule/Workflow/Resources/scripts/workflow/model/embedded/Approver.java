@@ -1,21 +1,13 @@
 package workflow.model.embedded;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
-
 import staff.model.Employee;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.DecisionTypeConverter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Kayra created 07-04-2016
@@ -25,91 +17,91 @@ import workflow.model.constants.converter.DecisionTypeConverter;
 @Table(name = "wf__approvers")
 public class Approver extends SimpleAppEntity {
 
-	@JoinColumn(nullable = false)
-	private Employee employee;
+    @JoinColumn(nullable = false)
+    private Employee employee;
 
-	@Convert(converter = DecisionTypeConverter.class)
-	private DecisionType decisionType = DecisionType.UNKNOWN;
+    @Convert(converter = DecisionTypeConverter.class)
+    private DecisionType decisionType = DecisionType.UNKNOWN;
 
-	@Column(name = "start_time")
-	private Date startTime;
+    @Column(name = "start_time")
+    private Date startTime;
 
-	@Column(name = "decision_time")
-	private Date decisionTime;
+    @Column(name = "decision_time")
+    private Date decisionTime;
 
-	@Column(name = "decision_comment")
-	private String decisionComment;
+    @Column(name = "decision_comment")
+    private String decisionComment;
 
-	@Column(name = "is_current")
-	private boolean isCurrent;
+    @Column(name = "is_current")
+    private boolean isCurrent;
 
-	private int position;
+    private int sort;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Block> blocks;
+    @OneToMany(cascade = CascadeType.ALL)
+    @OrderBy("sort")
+    private List<Block> blocks;
 
-	public Employee getEmployee() {
-		return employee;
-	}
+    public Employee getEmployee() {
+        return employee;
+    }
 
-	public void setEmployee(Employee employee) {
-		this.employee = employee;
-	}
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
 
-	public DecisionType getDecisionType() {
-		return decisionType;
-	}
+    public DecisionType getDecisionType() {
+        return decisionType;
+    }
 
-	public void setDecisionType(DecisionType type) {
-		this.decisionType = type;
-	}
+    public void setDecisionType(DecisionType type) {
+        this.decisionType = type;
+    }
 
-	public Date getStartTime() {
-		return startTime;
-	}
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	public Date getDecisionTime() {
-		return decisionTime;
-	}
+    public Date getDecisionTime() {
+        return decisionTime;
+    }
 
-	public void setDecisionTime(Date decisionTime) {
-		this.decisionTime = decisionTime;
-	}
+    public void setDecisionTime(Date decisionTime) {
+        this.decisionTime = decisionTime;
+    }
 
-	public String getDecisionComment() {
-		return decisionComment;
-	}
+    public String getDecisionComment() {
+        return decisionComment;
+    }
 
-	public void setDecisionComment(String decisionComment) {
-		this.decisionComment = decisionComment;
-	}
+    public void setDecisionComment(String decisionComment) {
+        this.decisionComment = decisionComment;
+    }
 
-	public boolean isCurrent() {
-		return isCurrent;
-	}
+    public boolean isCurrent() {
+        return isCurrent;
+    }
 
-	public void setCurrent(boolean isCurrent) {
-		this.isCurrent = isCurrent;
-	}
+    public void setCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
+    }
 
-	public List<Block> getBlocks() {
-		return blocks;
-	}
+    public List<Block> getBlocks() {
+        return blocks;
+    }
 
-	public void setBlocks(List<Block> blocks) {
-		this.blocks = blocks;
-	}
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
+    }
 
-	public int getPosition() {
-		return position;
-	}
+    public int getSort() {
+        return sort;
+    }
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
-
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
 }
