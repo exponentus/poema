@@ -111,7 +111,7 @@ public class ReportService extends RestProvider {
 				exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(filePath));
 				exporter.exportReport();
 			}
-			Server.logger.infoLogEntry(
+			Server.logger.info(
 					"Report \"" + name + "\" is ready, estimated time is " + TimeUtil.getTimeDiffInMilSec(start_time));
 			TempFileCleaner.addFileToDelete(filePath);
 			return getAttachment(filePath, reportId + type);

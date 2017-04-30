@@ -40,7 +40,7 @@ public class IncomingDomain implements IIncomingDomain {
 			Employee emp = eDao.findById(dto.getAddressee().getId());
 			entity.setAddressee(emp);
 		} catch (DAOException e) {
-			Server.logger.errorLogEntry(e);
+			Server.logger.exception(e);
 		}
 
 		entity.setSenderRegNumber(dto.getSenderRegNumber());

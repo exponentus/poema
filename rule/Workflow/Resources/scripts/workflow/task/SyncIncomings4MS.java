@@ -92,7 +92,7 @@ public class SyncIncomings4MS extends Import4MS {
 					if (docType != null) {
 						inc.setDocType(docType);
 					} else {
-						logger.errorLogEntry("reference ext value has not been found \"" + vidName + "\" (vid)");
+						logger.error("reference ext value has not been found \"" + vidName + "\" (vid)");
 					}
 
 					String har = ConvertorEnvConst.GAG_KEY;
@@ -100,13 +100,13 @@ public class SyncIncomings4MS extends Import4MS {
 					if (docSubj != null) {
 						inc.setDocSubject(docSubj);
 					} else {
-						logger.errorLogEntry("reference ext value has not been found \"" + har + "\" (har)");
+						logger.error("reference ext value has not been found \"" + har + "\" (har)");
 					}
 
 					int docLangVal = getIntValue(conn, docId, "lang");
 					LanguageCode intRefKey = docLangCollation.get(docLangVal);
 					if (intRefKey == null) {
-						logger.errorLogEntry("wrong reference ext value \"" + docLangVal + "\" (lang)");
+						logger.error("wrong reference ext value \"" + docLangVal + "\" (lang)");
 						intRefKey = LanguageCode.UNKNOWN;
 					}
 					DocumentLanguage docLang = dlDao.findByCode(intRefKey);
@@ -130,10 +130,10 @@ public class SyncIncomings4MS extends Import4MS {
 						if (e != null) {
 							inc.setAddressee(e);
 						} else {
-							logger.errorLogEntry("wrong ext value \"" + r + "\" (user id)");
+							logger.error("wrong ext value \"" + r + "\" (user id)");
 						}
 					} else {
-						logger.errorLogEntry("wrong ext value \"" + recipient + "\" (login)");
+						logger.error("wrong ext value \"" + recipient + "\" (login)");
 					}
 
 					inc.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
@@ -157,16 +157,16 @@ public class SyncIncomings4MS extends Import4MS {
 
 					normalizeACL(uDao, docId, inc, conn);
 					entities.put(extKey, inc);
-					logger.infoLogEntry(inc + " has been added");
+					logger.info(inc + " has been added");
 				}
 				s.close();
 				conn.commit();
-				logger.infoLogEntry("has been found " + entities.size() + " records");
+				logger.info("has been found " + entities.size() + " records");
 				for (Entry<String, Incoming> ee : entities.entrySet()) {
 					save(iDao, ee.getValue(), ee.getKey());
 				}
 			} else {
-				logger.errorLogEntry("dummy user did not defined");
+				logger.error("dummy user did not defined");
 			}
 		} catch (SQLException e) {
 			DatabaseUtil.errorPrint(e);
@@ -177,7 +177,7 @@ public class SyncIncomings4MS extends Import4MS {
 		} finally {
 			dbPool.returnConnection(conn);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 
 	private String getStringValue(Connection conn, int docId, String fieldName) {

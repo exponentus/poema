@@ -79,7 +79,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						try {
 							inc.setAppliedRegDate(doc.getFirstItem("Dvn").getDateTimeValue().toJavaDate());
 						} catch (NotesException ne) {
-							logger.errorLogEntry(ne.text);
+							logger.error(ne.text);
 						}
 						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
@@ -93,7 +93,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						if (docType != null) {
 							inc.setDocType(docType);
 						} else {
-							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
+							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
 
 						String har = doc.getItemValueString("Har");
@@ -101,13 +101,13 @@ public class SyncIncomingsNSF extends ImportNSF {
 						if (docSubj != null) {
 							inc.setDocSubject(docSubj);
 						} else {
-							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
+							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
 						
 						String docLangVal = doc.getItemValueString("langName");
 						LanguageCode intRefKey = docLangCollation.get(docLangVal);
 						if (intRefKey == null) {
-							logger.errorLogEntry("wrong reference ext value \"" + docLangVal + "\"");
+							logger.error("wrong reference ext value \"" + docLangVal + "\"");
 							intRefKey = LanguageCode.UNKNOWN;
 						}
 						DocumentLanguage docLang = dlDao.findByCode(intRefKey);
@@ -154,16 +154,16 @@ public class SyncIncomingsNSF extends ImportNSF {
 				entry = tmpEntry;
 			}
 
-			logger.infoLogEntry("has been found " + entities.size() + " records");
+			logger.info("has been found " + entities.size() + " records");
 			for (Entry<String, Incoming> ee : entities.entrySet()) {
 				save(iDao, ee.getValue(), ee.getKey());
 			}
 		} catch (NotesException e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 
 	private Map<String, LanguageCode> docLangCollationMapInit() {

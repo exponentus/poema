@@ -48,13 +48,13 @@ public class ApproverTracking extends _Do {
 									try {
 										dao.update(approval);
 									} catch (SecureException | DAOException e) {
-										Server.logger.errorLogEntry(e);
+										Server.logger.exception(e);
 									}
 								}
 							}
 						}
 					} catch (ApprovalException e) {
-						Server.logger.errorLogEntry(e);
+						Server.logger.exception(e);
 					}
 				}
 			}

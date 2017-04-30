@@ -9,6 +9,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
         <class>staff.model.Employee</class>
@@ -21,6 +23,7 @@
         <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+
         <!-- Because of it suppose importing from Domino -->
         <class>administrator.model.Collation</class>
     </persistence-unit>
@@ -33,6 +36,8 @@
         <class>administrator.model.User</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -65,6 +70,8 @@
         <class>administrator.model.User</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -112,6 +119,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -132,6 +141,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
@@ -168,6 +179,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
@@ -204,9 +217,12 @@
         <class>administrator.model.User</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -230,6 +246,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -288,6 +306,8 @@
         <class>administrator.model.Language</class>
         <class>administrator.model.Sentence</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -323,6 +343,8 @@
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
         <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>

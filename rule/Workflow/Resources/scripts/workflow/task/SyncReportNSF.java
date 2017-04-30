@@ -76,7 +76,7 @@ public class SyncReportNSF extends ImportNSF {
 						try {
 							entity.setAppliedRegDate(doc.getFirstItem("DateIsp").getDateTimeValue().toJavaDate());
 						} catch (NotesException ne) {
-							logger.errorLogEntry(ne.text);
+							logger.error(ne.text);
 						}
 						
 						IUser<Long> authorKi = uDao.findByExtKey(doc.getItemValueString("IntExecutNA"));
@@ -111,7 +111,7 @@ public class SyncReportNSF extends ImportNSF {
 						normalizeACL(uDao, entity, doc);
 						entity = entities.put(doc.getUniversalID(), entity);
 					} else {
-						logger.warningLogEntry("parent has not been found (" + parent + "), record was skipped");
+						logger.warning("parent has not been found (" + parent + "), record was skipped");
 						
 					}
 				}
@@ -120,16 +120,16 @@ public class SyncReportNSF extends ImportNSF {
 				entry = tmpEntry;
 			}
 
-			logger.infoLogEntry("has been found " + entities.size() + " records");
+			logger.info("has been found " + entities.size() + " records");
 			for (Entry<String, Report> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
 			}
 		} catch (NotesException e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 	
 }

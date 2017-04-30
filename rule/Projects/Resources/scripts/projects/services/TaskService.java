@@ -149,7 +149,7 @@ public class TaskService extends RestProvider {
                 try {
                     taskType = taskTypeDAO.findByName("Programming");
                 } catch (DAOException e) {
-                    Server.logger.errorLogEntry(e);
+                    Server.logger.exception(e);
                 }
 
                 task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);

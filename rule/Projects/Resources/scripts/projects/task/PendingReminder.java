@@ -75,7 +75,7 @@ public class PendingReminder extends _Do {
 								user_lang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
-						MailAgent ma = new MailAgent();
+						MailAgent ma = new MailAgent("task_pending");
 						ma.sendMessage(recipients,
 								getCurrentAppEnv().vocabulary.getWord("notify_about_pending_task", user_lang),
 								memo.getBody(body));
@@ -83,7 +83,7 @@ public class PendingReminder extends _Do {
 				}
 			}
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
 
 	}

@@ -63,7 +63,7 @@ public class DemandService extends RestProvider {
                     DemandType demandType = demandTypeDAO.findByName(slug);
                     filter.setDemandType(demandType);
                 } catch (DAOException e) {
-                    Server.logger.errorLogEntry(e);
+                    Server.logger.exception(e);
                 }
             }
 
@@ -108,7 +108,7 @@ public class DemandService extends RestProvider {
                         demandType = demandTypeDAO.findByName(demandTypeName);
                     }
                 } catch (DAOException e) {
-                    Server.logger.errorLogEntry(e);
+                    Server.logger.exception(e);
                 }
 
                 entity = demandDomain.composeNew((User) session.getUser(), demandType);

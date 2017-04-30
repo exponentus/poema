@@ -32,7 +32,7 @@ public class OverdueReminder extends _Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Tag tag;
 	private TaskDAO tDao;
-	
+
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			TagDAO tagDAO = new TagDAO(session);
@@ -47,7 +47,7 @@ public class OverdueReminder extends _Do {
 				processRemind(vp, session);
 			}
 		} catch (DAOException e) {
-			Server.logger.errorLogEntry(e);
+			Server.logger.exception(e);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class OverdueReminder extends _Do {
 								user_lang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
-						MailAgent ma = new MailAgent();
+						MailAgent ma = new MailAgent("task_overdued");
 						ma.sendMessage(recipients,
 								getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", user_lang),
 								memo.getBody(body));
@@ -94,7 +94,7 @@ public class OverdueReminder extends _Do {
 				}
 			}
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
 
 	}

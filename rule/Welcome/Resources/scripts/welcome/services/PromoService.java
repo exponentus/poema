@@ -31,6 +31,7 @@ import welcome.model.ReCaptchaResponse;
 
 @Path("service")
 public class PromoService extends RestProvider {
+	private static final String CONTACT_US_TEMPLATE = "contact_us";
 
 	@POST
 	@Path("/sendmail")
@@ -56,7 +57,7 @@ public class PromoService extends RestProvider {
 		//
 		ArrayList<String> recipients = new ArrayList<>();
 		recipients.add(recipient);
-		MailAgent ma = new MailAgent();
+		MailAgent ma = new MailAgent(CONTACT_US_TEMPLATE);
 		Memo memo = new Memo();
 		memo.addVar("subj", subj);
 		memo.addVar("msg", msg);
@@ -80,10 +81,8 @@ public class PromoService extends RestProvider {
 
 	private static ArrayList<String> validateSimpleMailForm(String email, String subj, String msg, String captcha) {
 		ArrayList<String> errors = new ArrayList<>();
-		boolean isValid = true;
 
 		if (!Validator.checkEmail(email)) {
-			isValid = false;
 			errors.add("EMAIL_IS_INCORRECT");
 		}
 		/*

@@ -74,7 +74,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						try {
 							entity.setAppliedRegDate(doc.getFirstItem("Dvn").getDateTimeValue().toJavaDate());
 						} catch (NotesException ne) {
-							logger.errorLogEntry(ne.text);
+							logger.error(ne.text);
 						}
 						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
@@ -88,7 +88,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						if (docType != null) {
 							entity.setDocType(docType);
 						} else {
-							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
+							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
 						
 						String har = doc.getItemValueString("Har");
@@ -96,7 +96,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						if (docSubj != null) {
 							entity.setDocSubject(docSubj);
 						} else {
-							logger.errorLogEntry("reference ext value has not been found \"" + vid + "\"");
+							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
 						
 						String corrId = doc.getItemValueString("CorrID");
@@ -141,16 +141,16 @@ public class SyncOutgoingsNSF extends ImportNSF {
 				entry = tmpEntry;
 			}
 
-			logger.infoLogEntry("has been found " + entities.size() + " records");
+			logger.info("has been found " + entities.size() + " records");
 			for (Entry<String, Outgoing> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
 			}
 		} catch (NotesException e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 	
 }

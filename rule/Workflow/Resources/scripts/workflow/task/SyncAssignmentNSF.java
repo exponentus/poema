@@ -71,7 +71,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 							// entity.setPrimaryDocument(parentEntity.getPrimaryDocument());
 							entity = entities.put(doc.getUniversalID(), entity);
 						} else {
-							logger.warningLogEntry("parent has not been found (" + parent + "), record was skipped");
+							logger.warning("parent has not been found (" + parent + "), record was skipped");
 						}
 					}
 				}
@@ -80,16 +80,16 @@ public class SyncAssignmentNSF extends ImportNSF {
 				entry = tmpEntry;
 			}
 
-			logger.infoLogEntry("has been found " + entities.size() + " records");
+			logger.info("has been found " + entities.size() + " records");
 			for (Entry<String, Assignment> ee : entities.entrySet()) {
 				save(dao, ee.getValue(), ee.getKey());
 			}
 		} catch (NotesException e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 
 	public Assignment fillEntity(UserDAO uDao, EmployeeDAO employeeDAO, AssignmentDAO dao, Document doc, User dummyUser,
@@ -121,7 +121,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 			String ct = doc.getItemValueString("ControlView");
 			String controlRefKey = controlTypeCollation.get(ct);
 			if (controlRefKey == null) {
-				logger.errorLogEntry("wrong reference ext value \"" + ct + "\"");
+				logger.error("wrong reference ext value \"" + ct + "\"");
 				controlRefKey = ConvertorEnvConst.GAG_KEY;
 			}
 			ControlType controlType = ctDao.findByName(controlRefKey);
@@ -153,9 +153,9 @@ public class SyncAssignmentNSF extends ImportNSF {
 			entity.setBody(doc.getItemValueString("Content"));
 			normalizeACL(uDao, entity, doc);
 		} catch (NotesException e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		} catch (Exception e) {
-			logger.errorLogEntry(e);
+			logger.exception(e);
 		}
 		return entity;
 	}

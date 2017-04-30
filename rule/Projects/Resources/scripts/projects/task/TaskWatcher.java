@@ -32,7 +32,7 @@ public class TaskWatcher extends _Do {
 					task.setStatus(TaskStatusType.OPEN);
 					try {
 						tDao.update(task);
-						logger.infoLogEntry("The task \"" + task.getTitle() + "\" was put in processing");
+						logger.info("The task \"" + task.getTitle() + "\" was put in processing");
 						new Messages(appEnv).sendToAssignee(task);
 					} catch (SecureException | DAOException e) {
 						setError(e);

@@ -86,7 +86,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					String coordStatus = getStringValue(conn, docId, "coordination");
 					ApprovalStatusType status = coordStatusCollation.get(Integer.parseInt(coordStatus));
 					if (status == null) {
-						logger.errorLogEntry("wrong reference ext value \"" + coordStatus + "\" (coordination)");
+						logger.error("wrong reference ext value \"" + coordStatus + "\" (coordination)");
 						status = ApprovalStatusType.UNKNOWN;
 					}
 					sz.setStatus(status);
@@ -98,10 +98,10 @@ public class SyncOfficeMemo4MS extends Import4MS {
 						if (e != null) {
 							sz.setRecipient(e);
 						} else {
-							logger.errorLogEntry("wrong ext value \"" + r + "\" (user id)");
+							logger.error("wrong ext value \"" + r + "\" (user id)");
 						}
 					} else {
-						logger.errorLogEntry("wrong ext value \"" + recipient + "\" (login)");
+						logger.error("wrong ext value \"" + recipient + "\" (login)");
 					}
 
 					sz.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
@@ -125,16 +125,16 @@ public class SyncOfficeMemo4MS extends Import4MS {
 
 					normalizeACL(uDao, docId, sz, conn);
 					entities.put(extKey, sz);
-					logger.infoLogEntry(sz + " has been added");
+					logger.info(sz + " has been added");
 				}
 				s.close();
 				conn.commit();
-				logger.infoLogEntry("has been found " + entities.size() + " records");
+				logger.info("has been found " + entities.size() + " records");
 				for (Entry<String, OfficeMemo> ee : entities.entrySet()) {
 					save(iDao, ee.getValue(), ee.getKey());
 				}
 			} else {
-				logger.errorLogEntry("dummy user did not defined");
+				logger.error("dummy user did not defined");
 			}
 		} catch (SQLException e) {
 			DatabaseUtil.errorPrint(e);
@@ -145,7 +145,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 		} finally {
 			dbPool.returnConnection(conn);
 		}
-		logger.infoLogEntry("done...");
+		logger.info("done...");
 	}
 
 	private String getStringValue(Connection conn, int docId, String fieldName) {
