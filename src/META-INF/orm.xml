@@ -8,9 +8,10 @@
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.ApplicationModeConverter"/>
  	<converter class="administrator.model.util.UserStatusCodeConverter"/>
-    <converter class="administrator.model.util.InterfaceTypeConvertor"/>  
-    <converter class="administrator.model.util.VisibilityModeConvertor"/> 
-   
+    <converter class="administrator.model.util.MessagingTypeConverter"/>   
+    <converter class="administrator.model.constants.converter.InterfaceTypeConvertor"/>  
+    <converter class="administrator.model.constants.converter.VisibilityModeConvertor"/> 
+    
     <converter class="reference.model.constants.converter.ApprovalSchemaTypeConverter"/>
     <converter class="reference.model.constants.converter.ApprovalTypeConverter"/> 
       	

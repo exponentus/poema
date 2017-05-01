@@ -6,8 +6,10 @@ import java.util.List;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.messaging.MessageType;
+import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
@@ -76,13 +78,14 @@ public class OverdueReminder extends _Do {
 					}
 					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
-						memo.addVar("url", getCurrentAppEnv().getURL() + "/");
+						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#/"
+								+ getCurrentAppEnv().appName + "/");
 						IUser<Long> i_user = userDAO.findById(user.getId());
 						LanguageCode user_lang = i_user.getDefaultLang();
 						memo.addVar("lang", "&lang=" + user_lang);
 						memo.addVar("user", user.getUserName());
 
-						String body = getCurrentAppEnv().templates.getTemplate(MessageType.EMAIL, "task_overdued",
+						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_overdued",
 								user_lang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());

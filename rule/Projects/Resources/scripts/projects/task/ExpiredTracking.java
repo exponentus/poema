@@ -10,7 +10,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.messaging.MessageType;
+import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
@@ -64,8 +64,7 @@ public class ExpiredTracking extends _Do {
 					task.setTags(tags);
 					try {
 						tDao.update(task);
-						logger.info(
-								"The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
+						logger.info("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
 						sendNotify(env, session, task);
 					} catch (SecureException | DAOException e) {
 						setError(e);
@@ -117,7 +116,7 @@ public class ExpiredTracking extends _Do {
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent("task_overdued");
 				ma.sendMessage(recipients, env.vocabulary.getWord("notify_about_overdued_task", lang),
-						memo.getBody(env.templates.getTemplate(MessageType.EMAIL, "task_overdued", lang)));
+						memo.getBody(env.templates.getTemplate(MessagingType.EMAIL, "task_overdued", lang)));
 			}
 		} catch (Exception e) {
 			logger.exception(e);

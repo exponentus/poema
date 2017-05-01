@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.exception.MsgException;
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.messaging.MessageType;
+import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.rest.RestProvider;
@@ -63,7 +63,7 @@ public class PromoService extends RestProvider {
 		memo.addVar("msg", msg);
 		try {
 			if (ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_new_message", lang),
-					memo.getBody(appEnv.templates.getTemplate(MessageType.EMAIL, "contact_us", lang)))) {
+					memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, "contact_us", lang)))) {
 				res.addMessage("message_has_sent_succesfully", lang);
 				return Response.status(HttpServletResponse.SC_OK).entity(res).build();
 			} else {

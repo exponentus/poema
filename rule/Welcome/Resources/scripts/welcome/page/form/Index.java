@@ -1,9 +1,9 @@
 package welcome.page.form;
 
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.messaging.MessageType;
-import com.exponentus.scripting._Session;
+import com.exponentus.messaging.MessagingType;
 import com.exponentus.scripting.WebFormData;
+import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._DoPage;
 
 import administrator.dao.LanguageDAO;
@@ -22,7 +22,7 @@ public class Index extends _DoPage {
 			} else if (session.getLang() == null) {
 				session.setLang(LanguageCode.ENG);
 			}
-			addValue("template", getCurrentAppEnv().templates.getTemplate(MessageType.SITE, "faq", l));
+			addValue("template", getCurrentAppEnv().templates.getTemplate(MessagingType.SITE, "faq", l));
 		} catch (Exception e) {
 			addContent("error", "the " + toLang + " language is not available");
 		}
