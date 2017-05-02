@@ -47,8 +47,6 @@ public class OfficeMemoDomain {
     }
 
     public void startApproving(OfficeMemo om) throws ApprovalException, DTOException {
-        validateApproving(om);
-
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.start();
     }
@@ -101,16 +99,6 @@ public class OfficeMemoDomain {
         }
         if (om.getRecipient() == null) {
             e.addError("recipient", "required", "field_is_empty");
-        }
-        if (e.hasError()) {
-            throw e;
-        }
-    }
-
-    private void validateApproving(OfficeMemo om) throws DTOException {
-        DTOException e = new DTOException();
-        if (om.getBlocks().get(0).getApprovers().size() == 0) {
-            e.addError("block", "required", "there is no any appover");
         }
         if (e.hasError()) {
             throw e;
