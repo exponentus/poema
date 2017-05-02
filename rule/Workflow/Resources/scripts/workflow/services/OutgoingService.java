@@ -7,10 +7,10 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._ActionBar;
 import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
@@ -18,8 +18,8 @@ import staff.model.Employee;
 import workflow.constants.Action;
 import workflow.dao.OutgoingDAO;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.OutgoingDomain;
 import workflow.domain.exception.ApprovalException;
-import workflow.domain.impl.OutgoingDomain;
 import workflow.model.Outgoing;
 import workflow.other.Messages;
 
@@ -119,8 +119,6 @@ public class OutgoingService extends RestProvider {
         OutgoingDomain outDomain = new OutgoingDomain();
 
         try {
-            validate(dto);
-
             OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
             if (dto.isNew()) {
@@ -148,8 +146,8 @@ public class OutgoingService extends RestProvider {
             return Response.ok(outDomain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -309,29 +307,5 @@ public class OutgoingService extends RestProvider {
         }
 
         return actionBar;
-    }
-
-    private void validate(Outgoing outgoingForm) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (outgoingForm.getTitle() == null || outgoingForm.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-        if (outgoingForm.getRecipient() == null) {
-            ve.addError("recipient", "required", "field_is_empty");
-        }
-
-        if (outgoingForm.getDocSubject() == null) {
-            ve.addError("docSubject", "required", "field_is_empty");
-        }
-
-        if (outgoingForm.getDocLanguage() == null) {
-            ve.addError("docLanguage", "required", "field_is_empty");
-        }
-
-        if (outgoingForm.getDocType() == null) {
-            ve.addError("docType", "required", "field_is_empty");
-        }
-        ve.assertValid();
     }
 }

@@ -5,15 +5,15 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._ActionBar;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.constants.Action;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
-import workflow.domain.impl.ReportDomain;
+import workflow.domain.ReportDomain;
 import workflow.model.Report;
 
 import javax.ws.rs.*;
@@ -87,8 +87,6 @@ public class ReportService extends RestProvider {
         ReportDomain reportDomain = new ReportDomain();
 
         try {
-            validate(dto);
-
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             ReportDAO reportDAO = new ReportDAO(ses);
 
@@ -113,8 +111,8 @@ public class ReportService extends RestProvider {
             return Response.ok(reportDomain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -166,15 +164,5 @@ public class ReportService extends RestProvider {
         }
 
         return actionBar;
-    }
-
-    private void validate(Report entity) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-
-        ve.assertValid();
     }
 }

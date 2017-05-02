@@ -7,13 +7,11 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
-import com.exponentus.rest.validation.FormValidator;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -23,8 +21,8 @@ import staff.model.Employee;
 import workflow.constants.Action;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.ApprovalLifecycle;
+import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
-import workflow.domain.impl.OfficeMemoDomain;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
 import workflow.other.Messages;
@@ -117,14 +115,8 @@ public class OfficeMemoService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(OfficeMemo dto) {
-        try {
-            dto.setId(null);
-            return Response.ok(new OfficeMemoDomain().getOutcome(save(dto, new BasicValidator(dto)))).build();
-        } catch (SecureException | DAOException e) {
-            return responseException(e);
-        } catch (DTOException e) {
-            return responseValidationError(e);
-        }
+        dto.setId(null);
+        return saveRequest(dto);
     }
 
     @PUT
@@ -132,20 +124,23 @@ public class OfficeMemoService extends RestProvider {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, OfficeMemo dto) {
+        dto.setId(UUID.fromString(id));
+        return saveRequest(dto);
+    }
+
+    private Response saveRequest(OfficeMemo dto) {
         try {
-            dto.setId(UUID.fromString(id));
-            return Response.ok(new OfficeMemoDomain().getOutcome(save(dto, new BasicValidator(dto)))).build();
-        } catch (SecureException | DAOException e) {
+            OfficeMemoDomain omd = new OfficeMemoDomain();
+            Outcome outcome = omd.getOutcome(save(dto));
+
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | DTOException e) {
             return responseException(e);
-        } catch (DTOException e) {
-            return responseValidationError(e);
         }
     }
 
-    public OfficeMemo save(OfficeMemo dto, FormValidator validator) throws DTOException, DAOException, SecureException {
+    private OfficeMemo save(OfficeMemo dto) throws SecureException, DAOException, DTOException {
         _Session ses = getSession();
-
-        validator.validate();
 
         EmployeeDAO empDao = new EmployeeDAO(ses);
         OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
@@ -173,7 +168,6 @@ public class OfficeMemoService extends RestProvider {
         }
 
         return entity;
-
     }
 
     @DELETE
@@ -218,7 +212,7 @@ public class OfficeMemoService extends RestProvider {
     @Path("action/startApproving")
     public Response startApproving(OfficeMemo dto) {
         try {
-            OfficeMemo entity = save(dto, new ValidatorToApproving(dto));
+            OfficeMemo entity = save(dto);
             if (entity != null) {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
                 OfficeMemo om = officeMemoDAO.findById(dto.getId());
@@ -348,64 +342,5 @@ public class OfficeMemoService extends RestProvider {
         }
 
         return actionBar;
-    }
-
-    private void validate(OfficeMemo entity) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-        if (entity.getAppliedAuthor() == null) {
-            ve.addError("appliedAuthor", "required", "field_is_empty");
-        }
-        if (entity.getRecipient() == null) {
-            ve.addError("recipient", "required", "field_is_empty");
-        }
-
-        ve.assertValid();
-    }
-
-    class BasicValidator extends FormValidator {
-        OfficeMemo dto;
-        DTOException fe = new DTOException();
-
-        BasicValidator(OfficeMemo dto) {
-            this.dto = dto;
-        }
-
-        @Override
-        public void validate() throws DTOException {
-            if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
-                fe.addError("title", "required", "field_is_empty");
-            }
-            if (dto.getAppliedAuthor() == null) {
-                fe.addError("appliedAuthor", "required", "field_is_empty");
-            }
-            if (dto.getRecipient() == null) {
-                fe.addError("recipient", "required", "field_is_empty");
-            }
-            if (fe.hasError()) {
-                throw fe;
-            }
-        }
-    }
-
-    class ValidatorToApproving extends BasicValidator {
-
-        ValidatorToApproving(OfficeMemo dto) {
-            super(dto);
-        }
-
-        @Override
-        public void validate() throws DTOException {
-            if (dto.getBlocks().get(0).getApprovers().size() == 0) {
-                fe.addError("block", "required", "there is no any appover");
-            }
-            if (fe.hasError()) {
-                throw fe;
-            }
-
-        }
     }
 }

@@ -2,6 +2,7 @@ package audit.services;
 
 import audit.dao.StatDAO;
 import com.exponentus.rest.RestProvider;
+import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 
 import javax.ws.rs.GET;
@@ -20,7 +21,11 @@ public class StatService extends RestProvider {
         _Session session = getSession();
         try {
             StatDAO dao = new StatDAO(session);
-            return Response.ok(dao.findStatDataByObsStatus()).build();
+
+            Outcome outcome = new Outcome();
+            outcome.addPayload("data", dao.findStatDataByObsStatus());
+
+            return Response.ok(outcome).build();
         } catch (Exception e) {
             return responseException(e);
         }
@@ -33,7 +38,11 @@ public class StatService extends RestProvider {
         _Session session = getSession();
         try {
             StatDAO dao = new StatDAO(session);
-            return Response.ok(dao.findStatInspector()).build();
+
+            Outcome outcome = new Outcome();
+            outcome.addPayload("data", dao.findStatInspector());
+
+            return Response.ok(outcome).build();
         } catch (Exception e) {
             return responseException(e);
         }

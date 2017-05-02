@@ -1,9 +1,9 @@
-package workflow.domain.impl;
+package workflow.domain;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import staff.model.Employee;
-import workflow.domain.IAssignmentDomain;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
 import workflow.model.constants.ControlStatusType;
@@ -13,11 +13,10 @@ import workflow.model.embedded.Control;
 import java.util.Date;
 import java.util.List;
 
-public class AssignmentDomain implements IAssignmentDomain {
+public class AssignmentDomain {
 
     enum permissions {RESET_ASSIGNEE}
 
-    @Override
     public Assignment composeNew(Employee author, ControlledDocument parent) {
         Assignment entity = new Assignment();
 
@@ -32,8 +31,9 @@ public class AssignmentDomain implements IAssignmentDomain {
         return entity;
     }
 
-    @Override
-    public void fillFromDto(Assignment entity, Assignment dto, Employee author) {
+    public void fillFromDto(Assignment entity, Assignment dto, Employee author) throws DTOException {
+        validate(dto);
+
         if (entity.isNew()) {
             entity.setAuthor(author.getUser());
             entity.setParent(dto.getParent());
@@ -48,7 +48,6 @@ public class AssignmentDomain implements IAssignmentDomain {
 
     }
 
-    @Override
     public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {
         Control control = entity.getControl();
         List<AssigneeEntry> assigneeEntities = control.getAssigneeEntries();
@@ -75,7 +74,28 @@ public class AssignmentDomain implements IAssignmentDomain {
         }
     }
 
-    @Override
+    private void validate(Assignment assignment) throws DTOException {
+        DTOException ve = new DTOException();
+        if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+
+        if (assignment.getControl().getControlType() == null) {
+            ve.addError("control.controlType", "required", "field_is_empty");
+        }
+
+        if (assignment.getControl().getStartDate() == null) {
+            ve.addError("control.startDate", "required", "field_is_empty");
+        }
+
+        if (assignment.getControl().getDueDate() == null) {
+            ve.addError("control.dueDate", "required", "field_is_empty");
+        }
+        if (ve.hasError()) {
+            throw ve;
+        }
+    }
+
     public Outcome getOutcome(Assignment entity) {
         Outcome outcome = new Outcome();
 

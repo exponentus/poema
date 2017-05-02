@@ -23,11 +23,17 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline odo = new _Outline("", "org_documents");
-        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-inbox", "incomings", AppConst.BASE_URL + "incomings"));
-        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-envelope-o", "outgoings", AppConst.BASE_URL + "outgoings"));
-        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-pencil-square-o", "office-memos", AppConst.BASE_URL + "office-memos"));
+        _Outline t = new _Outline("", "wf_assignment");
+        t.addEntry(new _OutlineEntry("assignments_all", "", "fa fa-tasks", "assignments_all", AppConst.BASE_URL + "assignments"));
+        t.addEntry(new _OutlineEntry("assignments_my", "", "fa fa-pencil", "assignments_my", AppConst.BASE_URL + "assignments/my"));
+        t.addEntry(new _OutlineEntry("assignments_inbox", "", "fa fa-inbox", "assignments_inbox", AppConst.BASE_URL + "assignments/inbox"));
 
+        _Outline odo = new _Outline("", "org_documents");
+        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-file-text-o", "incomings", AppConst.BASE_URL + "incomings"));
+        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-file-text-o", "outgoings", AppConst.BASE_URL + "outgoings"));
+        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-file-text-o", "office-memos", AppConst.BASE_URL + "office-memos"));
+
+        list.add(t);
         list.add(odo);
 
         Outcome outcome = new Outcome();

@@ -2,9 +2,8 @@ package workflow.domain.exception;
 
 import com.exponentus.env.Environment;
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.rest.IAppError;
 
-public class ApprovalException extends Exception implements IAppError {
+public class ApprovalException extends Exception {
     private static final long serialVersionUID = 1L;
     private ApprovalExceptionType id;
     private String addInfo;

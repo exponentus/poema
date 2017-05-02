@@ -1,12 +1,14 @@
 package workflow.services;
 
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -19,7 +21,7 @@ import workflow.dao.AssignmentDAO;
 import workflow.dao.ControlledDocumentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
-import workflow.domain.impl.AssignmentDomain;
+import workflow.domain.AssignmentDomain;
 import workflow.init.AppConst;
 import workflow.model.Assignment;
 import workflow.model.ControlledDocument;
@@ -40,6 +42,45 @@ import java.util.stream.Collectors;
 
 @Path("assignments")
 public class AssignmentService extends RestProvider {
+
+    @GET
+    @Path("my")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getMyAssignments() {
+        return getView();
+    }
+
+    @GET
+    @Path("inbox")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAssignmentsInbox() {
+        return getView();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getView() {
+        _Session session = getSession();
+        int pageSize = session.pageSize;
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
+
+        try {
+            AssignmentDAO assignmentDAO = new AssignmentDAO(session);
+            ViewPage vp = assignmentDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(Action.refreshVew);
+
+            Outcome outcome = new Outcome();
+            outcome.setId("assignments");
+            outcome.setTitle("assignments");
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
     @GET
     @Path("{id}")
@@ -122,8 +163,6 @@ public class AssignmentService extends RestProvider {
         AssignmentDomain domain = new AssignmentDomain();
 
         try {
-            validate(dto);
-
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             Employee employee = employeeDAO.findByUserId(ses.getUser().getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
@@ -185,8 +224,8 @@ public class AssignmentService extends RestProvider {
             return Response.ok(domain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -267,34 +306,5 @@ public class AssignmentService extends RestProvider {
         }
 
         return actionBar;
-    }
-
-    private void validate(Assignment assignment) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-
-        if (assignment.getControl().getControlType() == null) {
-            ve.addError("control.controlType", "required", "field_is_empty");
-        }
-
-        if (assignment.getControl().getStartDate() == null) {
-            ve.addError("control.startDate", "required", "field_is_empty");
-        }
-
-        if (assignment.getControl().getDueDate() == null) {
-            ve.addError("control.dueDate", "required", "field_is_empty");
-        }
-
-		/*
-         * if (assignment.getControl().getAssigneeEntries() == null ||
-		 * assignment.getControl().getAssigneeEntries().isEmpty()) {
-		 * ve.addError("control.assigneeEntries", "required", "field_is_empty");
-		 * }
-		 */
-
-        ve.assertValid();
     }
 }

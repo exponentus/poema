@@ -1,21 +1,19 @@
-package workflow.domain.impl;
+package workflow.domain;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;
 import staff.model.Employee;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.IOfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 
 import java.util.Date;
 
-public class OfficeMemoDomain implements IOfficeMemoDomain {
+public class OfficeMemoDomain {
 
-    @Override
     public OfficeMemo composeNew(User user, Employee appliedAuthor) throws ApprovalException {
         OfficeMemo om = new OfficeMemo();
         om.setAuthor(user);
@@ -25,8 +23,9 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         return om;
     }
 
-    @Override
-    public void fillFromDto(OfficeMemo om, OfficeMemo dto, Employee author) {
+    public void fillFromDto(OfficeMemo om, OfficeMemo dto, Employee author) throws DTOException {
+        validate(dto);
+
         om.setAppliedAuthor(dto.getAppliedAuthor());
         om.setAppliedRegDate(dto.getAppliedRegDate());
         om.setTitle(dto.getTitle());
@@ -43,48 +42,42 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         }
     }
 
-    @Override
     public boolean approvalCanBeStarted(OfficeMemo om) {
         return om.getStatus() == ApprovalStatusType.DRAFT;
     }
 
-    @Override
-    public void startApproving(OfficeMemo om) throws ApprovalException {
+    public void startApproving(OfficeMemo om) throws ApprovalException, DTOException {
+        validateApproving(om);
+
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.start();
     }
 
-    @Override
     public boolean employeeCanDoDecisionApproval(OfficeMemo om, Employee employee) {
         return om.userCanDoDecision(employee);
     }
 
-    @Override
     public void acceptApprovalBlock(OfficeMemo om, IUser<Long> user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.accept(user);
     }
 
-    @Override
     public void declineApprovalBlock(OfficeMemo om, IUser<Long> user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.decline(user, decisionComment);
     }
 
-    @Override
     public void skipApprovalBlock(OfficeMemo om) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.skip();
     }
 
-    @Override
     public boolean canCreateAssignment(OfficeMemo entity, User user) {
         return !entity.isNew()
                 && entity.getRecipient().getUserID().equals(user.getId())
                 && entity.getStatus() == ApprovalStatusType.FINISHED;
     }
 
-    @Override
     public void calculateReadersEditors(OfficeMemo entity) {
         entity.resetReadersEditors();
         if (entity.getStatus() == ApprovalStatusType.DRAFT) {
@@ -94,12 +87,36 @@ public class OfficeMemoDomain implements IOfficeMemoDomain {
         }
     }
 
-    @Override
     public boolean documentCanBeDeleted(OfficeMemo om) {
         return !om.isNew() && om.isEditable();
     }
 
-    @Override
+    private void validate(OfficeMemo om) throws DTOException {
+        DTOException e = new DTOException();
+        if (om.getTitle() == null || om.getTitle().isEmpty()) {
+            e.addError("title", "required", "field_is_empty");
+        }
+        if (om.getAppliedAuthor() == null) {
+            e.addError("appliedAuthor", "required", "field_is_empty");
+        }
+        if (om.getRecipient() == null) {
+            e.addError("recipient", "required", "field_is_empty");
+        }
+        if (e.hasError()) {
+            throw e;
+        }
+    }
+
+    private void validateApproving(OfficeMemo om) throws DTOException {
+        DTOException e = new DTOException();
+        if (om.getBlocks().get(0).getApprovers().size() == 0) {
+            e.addError("block", "required", "there is no any appover");
+        }
+        if (e.hasError()) {
+            throw e;
+        }
+    }
+
     public Outcome getOutcome(OfficeMemo om) {
         Outcome outcome = new Outcome();
 

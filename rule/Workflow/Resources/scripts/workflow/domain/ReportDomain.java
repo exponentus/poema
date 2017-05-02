@@ -1,17 +1,16 @@
-package workflow.domain.impl;
+package workflow.domain;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import staff.model.Employee;
-import workflow.domain.IReportDomain;
 import workflow.model.Assignment;
 import workflow.model.Report;
 
 import java.util.Date;
 
-public class ReportDomain implements IReportDomain {
+public class ReportDomain {
 
-    @Override
     public Report composeNew(Employee author, Assignment parent) {
         if (parent == null) {
             throw new IllegalArgumentException("parent null");
@@ -26,8 +25,9 @@ public class ReportDomain implements IReportDomain {
         return entity;
     }
 
-    @Override
-    public void fillFromDto(Report entity, Report dto, Employee author) {
+    public void fillFromDto(Report entity, Report dto, Employee author) throws DTOException {
+        validate(dto);
+
         if (entity.isNew()) {
             if (dto.getParent() == null) {
                 throw new IllegalArgumentException("parent null");
@@ -45,7 +45,18 @@ public class ReportDomain implements IReportDomain {
         entity.setAttachments(dto.getAttachments());
     }
 
-    @Override
+    private void validate(Report entity) throws DTOException {
+        DTOException ve = new DTOException();
+
+        if (entity.getTitle() == null || entity.getTitle().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+
+        if (ve.hasError()) {
+            throw ve;
+        }
+    }
+
     public Outcome getOutcome(Report entity) {
         Outcome outcome = new Outcome();
 
