@@ -1,6 +1,5 @@
 package workflow.domain;
 
-import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;
 import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
@@ -27,7 +26,7 @@ public class ApprovalLifecycle {
         this.entity = entity;
     }
 
-    public void start() throws ApprovalException, DTOException {
+    public void start() throws ApprovalException {
         // validate
         if (entity.getStatus() != ApprovalStatusType.DRAFT) {
             throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
