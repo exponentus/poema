@@ -1,10 +1,10 @@
-package resourcereservations.domain.impl;
+package resourcereservations.domain;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;
 import reference.model.constants.ApprovalType;
-import resourcereservations.domain.IApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
 import workflow.domain.ApprovalLifecycle;
@@ -15,9 +15,8 @@ import workflow.model.embedded.Block;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain {
+public class ApplicationForVehicleDomain {
 
-    @Override
     public ApplicationForVehicle composeNew(Employee author) {
         ApplicationForVehicle entity = new ApplicationForVehicle();
 
@@ -38,8 +37,9 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
         return entity;
     }
 
-    @Override
-    public void fillFromDto(ApplicationForVehicle entity, ApplicationForVehicle dto, Employee author) {
+    public void fillFromDto(ApplicationForVehicle entity, ApplicationForVehicle dto, Employee author) throws DTOException {
+        validate(dto);
+
         if (entity.isNew()) {
             entity.setAuthor(author.getUser());
 
@@ -69,36 +69,53 @@ public class ApplicationForVehicleDomain implements IApplicationForVehicleDomain
         }
     }
 
-    @Override
     public boolean approvalCanBeStarted(ApplicationForVehicle entity) {
         return entity.getStatus() == ApprovalStatusType.DRAFT;
     }
 
-    @Override
     public void startApproving(ApplicationForVehicle om) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
         lifecycle.start();
     }
 
-    @Override
     public boolean employeeCanDoDecisionApproval(ApplicationForVehicle entity, Employee employee) {
         return entity.userCanDoDecision(employee);
     }
 
-    @Override
     public void acceptApprovalBlock(ApplicationForVehicle entity, IUser<Long> user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.accept(user);
     }
 
-    @Override
     public void declineApprovalBlock(ApplicationForVehicle entity, IUser<Long> user, String decisionComment)
             throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.decline(user, decisionComment);
     }
 
-    @Override
+    private void validate(ApplicationForVehicle model) throws DTOException {
+        DTOException fe = new DTOException();
+
+        if (model.getTitle() == null || model.getTitle().isEmpty()) {
+            fe.addError("title", "required", "field_is_empty");
+        }
+        if (model.getVehicle() == null) {
+            fe.addError("vehicle", "required", "field_is_empty");
+        }
+        if (model.getUseFrom() == null) {
+            fe.addError("useFrom", "required", "field_is_empty");
+        }
+        if (model.getUseTo() == null) {
+            fe.addError("useTo", "required", "field_is_empty");
+        }
+        if (model.getRoute() == null || model.getRoute().trim().isEmpty()) {
+            fe.addError("route", "required", "field_is_empty");
+        }
+        if (fe.hasError()) {
+            throw fe;
+        }
+    }
+
     public Outcome getOutcome(ApplicationForVehicle entity) {
         Outcome outcome = new Outcome();
 

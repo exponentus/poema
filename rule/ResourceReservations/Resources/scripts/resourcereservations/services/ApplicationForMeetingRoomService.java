@@ -6,16 +6,16 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._ActionBar;
 import reference.model.constants.ApprovalType;
 import resourcereservations.constants.Action;
 import resourcereservations.dao.ApplicationForMeetingRoomDAO;
-import resourcereservations.domain.impl.ApplicationForMeetingRoomDomain;
+import resourcereservations.domain.ApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -150,8 +150,6 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
         try {
-            validate(dto);
-
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(ses);
 
@@ -179,8 +177,8 @@ public class ApplicationForMeetingRoomService extends RestProvider {
             return Response.ok(domain.getOutcome(entity)).build();
         } catch (SecureException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -317,15 +315,5 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         }
 
         return actionBar;
-    }
-
-    private void validate(ApplicationForMeetingRoom model) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (model.getTitle() == null || model.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-
-        ve.assertValid();
     }
 }
