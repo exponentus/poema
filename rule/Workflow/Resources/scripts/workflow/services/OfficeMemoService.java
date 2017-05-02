@@ -134,7 +134,9 @@ public class OfficeMemoService extends RestProvider {
             Outcome outcome = omd.getOutcome(save(dto));
 
             return Response.ok(outcome).build();
-        } catch (DAOException | SecureException | DTOException e) {
+        } catch (DTOException e) {
+            return responseValidationError(e);
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }
