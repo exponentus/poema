@@ -78,8 +78,7 @@ public class OverdueReminder extends _Do {
 					}
 					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
-						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#/"
-								+ getCurrentAppEnv().appName + "/");
+						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#");
 						IUser<Long> i_user = userDAO.findById(user.getId());
 						LanguageCode user_lang = i_user.getDefaultLang();
 						memo.addVar("lang", "&lang=" + user_lang);
