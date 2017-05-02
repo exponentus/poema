@@ -1,9 +1,8 @@
-package projects.domain.impl;
+package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
-import projects.domain.IRequestDomain;
 import projects.exception.RequestException;
 import projects.model.Request;
 import projects.model.Task;
@@ -14,9 +13,8 @@ import java.util.Date;
 import static projects.model.constants.ResolutionType.ACCEPTED;
 import static projects.model.constants.ResolutionType.DECLINED;
 
-public class RequestDomain implements IRequestDomain {
+public class RequestDomain {
 
-    @Override
     public Request composeNew(User author, Task task) {
         Request request = new Request();
 
@@ -26,7 +24,6 @@ public class RequestDomain implements IRequestDomain {
         return request;
     }
 
-    @Override
     public void fillFromDto(Request request, Request dto) {
         request.setAuthor(dto.getAuthor());
         request.setLastModifier(dto.getAuthor().getId());
@@ -42,7 +39,6 @@ public class RequestDomain implements IRequestDomain {
         }
     }
 
-    @Override
     public boolean userCanDoResolution(Request request, User user) {
         if (request.isNew()) {
             return false;
@@ -54,7 +50,6 @@ public class RequestDomain implements IRequestDomain {
         return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
     }
 
-    @Override
     public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws RequestException {
         if (!userCanDoResolution(request, user)) {
             throw new RequestException(
@@ -67,7 +62,6 @@ public class RequestDomain implements IRequestDomain {
         request.setDecisionComment(decisionComment);
     }
 
-    @Override
     public Outcome getOutcome(Request request) {
         Outcome outcome = new Outcome();
 

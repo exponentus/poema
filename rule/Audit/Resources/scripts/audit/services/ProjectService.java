@@ -3,7 +3,7 @@ package audit.services;
 import administrator.model.User;
 import audit.dao.ProjectDAO;
 import audit.dao.filter.ProjectFilter;
-import audit.domain.impl.ProjectDomain;
+import audit.domain.ProjectDomain;
 import audit.init.AppConst;
 import audit.model.Project;
 import audit.model.constants.ProjectStatusType;
@@ -13,10 +13,10 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -132,8 +132,6 @@ public class ProjectService extends RestProvider {
         _Session session = getSession();
 
         try {
-            validate(session, dto);
-
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
             ProjectDomain projectDomain = new ProjectDomain();
@@ -164,8 +162,8 @@ public class ProjectService extends RestProvider {
             return Response.ok(projectDomain.getOutcome(project)).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -214,29 +212,5 @@ public class ProjectService extends RestProvider {
             actionBar.addAction(new _Action(_ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));
         }
         return actionBar;
-    }
-
-    private void validate(_Session session, Project entity) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
-            ve.addError("name", "required", "field_is_empty");
-        } else if (entity.getName().length() > 140) {
-            ve.addError("name", "maxlen_140", "field_is_too_long");
-        }
-
-        if (entity.getManager() == null) {
-            ve.addError("manager", "required", "field_is_empty");
-        }
-
-        if (entity.getFinishDate() == null) {
-            ve.addError("finishDate", "date", "field_is_empty");
-        }
-
-        if (entity.getComment() != null && entity.getComment().trim().length() > 2048) {
-            ve.addError("comment", "maxlen_2048", "field_is_too_long");
-        }
-
-        ve.assertValid();
     }
 }

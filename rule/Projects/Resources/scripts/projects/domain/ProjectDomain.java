@@ -1,19 +1,17 @@
-package projects.domain.impl;
+package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.env.EnvConst;
 import com.exponentus.rest.outgoingdto.Outcome;
-import projects.domain.IProjectDomain;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class ProjectDomain implements IProjectDomain {
+public class ProjectDomain {
 
-    @Override
     public Project composeNew(User author) {
         Project project = new Project();
 
@@ -24,7 +22,6 @@ public class ProjectDomain implements IProjectDomain {
         return project;
     }
 
-    @Override
     public void fillFromDto(Project project, Project dto, User author) {
         if (project.isNew()) {
             project.setAuthor(author);
@@ -45,7 +42,6 @@ public class ProjectDomain implements IProjectDomain {
         calculateReaders(project);
     }
 
-    @Override
     public void calculateReaders(Project project) {
         Set<Long> readers = new HashSet<>();
         readers.add(project.getAuthor().getId());
@@ -61,12 +57,10 @@ public class ProjectDomain implements IProjectDomain {
         project.setReaders(readers);
     }
 
-    @Override
     public boolean projectCanBeDeleted(Project project) {
         return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
     }
 
-    @Override
     public Outcome getOutcome(Project project) {
         Outcome outcome = new Outcome();
 

@@ -4,7 +4,7 @@ import administrator.model.User;
 import audit.dao.ObservationDAO;
 import audit.dao.ProjectDAO;
 import audit.dao.filter.ObservationFilter;
-import audit.domain.impl.ObservationDomain;
+import audit.domain.ObservationDomain;
 import audit.init.AppConst;
 import audit.model.Observation;
 import audit.model.Project;
@@ -15,11 +15,11 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -171,8 +171,6 @@ public class ObservationService extends RestProvider {
         _Session session = getSession();
 
         try {
-            validate(session, dto);
-
             ProjectDAO projectDAO = new ProjectDAO(session);
             ObservationDAO dao = new ObservationDAO(session);
             Observation entity;
@@ -210,10 +208,10 @@ public class ObservationService extends RestProvider {
             entity = dao.findById(entity.getId());
 
             return Response.ok(domain.getOutcome(entity)).build();
+        } catch (DTOException e) {
+            return responseValidationError(e);
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
         }
     }
 
@@ -262,31 +260,5 @@ public class ObservationService extends RestProvider {
             actionBar.addAction(new _Action(_ActionType.CUSTOM_ACTION).id("detect_gps_location").caption("detect_gps_location").icon("fa fa-map-marker"));
         }
         return actionBar;
-    }
-
-    private void validate(_Session session, Observation entity) throws _Validation.VException {
-        _Validation ve = new _Validation();
-
-        if (entity.getTitle() == null || entity.getTitle().trim().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-
-        if (entity.getProject() == null) {
-            ve.addError("project", "required", "field_is_empty");
-        }
-
-        if (entity.getWorkType() == null) {
-            ve.addError("workType", "required", "field_is_empty");
-        }
-
-        // if (entity.getPlaceOfOrigin() == null) {
-        // ve.addError("placeOfOrigin", "required", "field_is_empty");
-        // }
-
-        if (entity.getBody() != null && entity.getBody().trim().length() > 5000) {
-            ve.addError("body", "maxlen_5000", "field_is_too_long");
-        }
-
-        ve.assertValid();
     }
 }

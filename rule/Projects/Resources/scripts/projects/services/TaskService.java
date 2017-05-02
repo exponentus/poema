@@ -8,11 +8,11 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -25,7 +25,7 @@ import projects.constants.Action;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.domain.impl.TaskDomain;
+import projects.domain.TaskDomain;
 import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Task;
@@ -240,8 +240,8 @@ public class TaskService extends RestProvider {
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         } catch (Exception e) {
             return responseException(e);
         }
@@ -381,8 +381,8 @@ public class TaskService extends RestProvider {
         return actionBar;
     }
 
-    private void validate(Task task) throws _Validation.VException {
-        _Validation ve = new _Validation();
+    private void validate(Task task) throws DTOException {
+        DTOException ve = new DTOException();
         UserDAO userDAO = new UserDAO(getSession());
 
         if (task.getParent() == null && task.getProject() == null) {
@@ -424,7 +424,9 @@ public class TaskService extends RestProvider {
             }
         }
 
-        ve.assertValid();
+        if (ve.hasError()) {
+            throw ve;
+        }
     }
 
     public static TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {

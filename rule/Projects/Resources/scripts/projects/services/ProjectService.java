@@ -9,9 +9,9 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -19,7 +19,7 @@ import com.exponentus.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.constants.Action;
 import projects.dao.ProjectDAO;
-import projects.domain.impl.ProjectDomain;
+import projects.domain.ProjectDomain;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
@@ -180,8 +180,8 @@ public class ProjectService extends RestProvider {
             return Response.ok(projectDomain.getOutcome(project)).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
-        } catch (_Validation.VException e) {
-            return responseValidationError(e.getValidation());
+        } catch (DTOException e) {
+            return responseValidationError(e);
         }
     }
 
@@ -235,8 +235,8 @@ public class ProjectService extends RestProvider {
         return actionBar;
     }
 
-    private void validate(_Session session, Project project) throws _Validation.VException {
-        _Validation ve = new _Validation();
+    private void validate(_Session session, Project project) throws DTOException {
+        DTOException ve = new DTOException();
 
         UserDAO userDAO = new UserDAO(session);
 
@@ -300,6 +300,8 @@ public class ProjectService extends RestProvider {
             ve.addError("comment", "maxlen_2048", "field_is_too_long");
         }
 
-        ve.assertValid();
+        if (ve.hasError()) {
+            throw ve;
+        }
     }
 }

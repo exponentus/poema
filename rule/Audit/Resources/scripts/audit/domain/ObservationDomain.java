@@ -1,12 +1,12 @@
-package audit.domain.impl;
+package audit.domain;
 
 import administrator.model.User;
-import audit.domain.IObservationDomain;
 import audit.model.Observation;
 import audit.model.Project;
 import audit.model.constants.ObservationStatusType;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.ISimpleAppEntity;
 import com.exponentus.user.IUser;
 import reference.model.WorkType;
@@ -16,9 +16,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ObservationDomain implements IObservationDomain {
+public class ObservationDomain {
 
-    @Override
     public Observation composeNew(User author, Project project, WorkType workType) {
         Observation entity = new Observation();
 
@@ -30,8 +29,9 @@ public class ObservationDomain implements IObservationDomain {
         return entity;
     }
 
-    @Override
-    public void fillFromDto(Observation entity, Observation dto, User author) {
+    public void fillFromDto(Observation entity, Observation dto, User author) throws DTOException {
+        validate(dto);
+
         entity.setTitle(dto.getTitle());
         entity.setProject(dto.getProject());
         entity.setWorkType(dto.getWorkType());
@@ -48,7 +48,6 @@ public class ObservationDomain implements IObservationDomain {
         calculateReaders(entity);
     }
 
-    @Override
     public void calculateReaders(Observation entity) {
         Set<IUser<Long>> readers = new HashSet<>();
         readers.add(entity.getAuthor());
@@ -62,13 +61,32 @@ public class ObservationDomain implements IObservationDomain {
         entity.addReaders(entity.getProject().getReaders());
     }
 
-    @Override
     public void changeStatus(Observation entity, ObservationStatusType statusType) {
         entity.setStatus(statusType);
         entity.setStatusDate(new Date());
     }
 
-    @Override
+    private void validate(Observation entity) throws DTOException {
+        DTOException ve = new DTOException();
+
+        if (entity.getTitle() == null || entity.getTitle().trim().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+        if (entity.getProject() == null) {
+            ve.addError("project", "required", "field_is_empty");
+        }
+        if (entity.getWorkType() == null) {
+            ve.addError("workType", "required", "field_is_empty");
+        }
+        if (entity.getBody() != null && entity.getBody().trim().length() > 5000) {
+            ve.addError("body", "maxlen_5000", "field_is_too_long");
+        }
+
+        if (ve.hasError()) {
+            throw ve;
+        }
+    }
+
     public Outcome getOutcome(Observation entity) {
         Outcome outcome = new Outcome();
 

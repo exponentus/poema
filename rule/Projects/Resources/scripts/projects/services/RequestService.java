@@ -6,8 +6,8 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting._Validation;
 import com.exponentus.scripting.actions._Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
@@ -15,8 +15,8 @@ import com.exponentus.util.TimeUtil;
 import projects.constants.Action;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
-import projects.domain.impl.RequestDomain;
-import projects.domain.impl.TaskDomain;
+import projects.domain.RequestDomain;
+import projects.domain.TaskDomain;
 import projects.exception.RequestException;
 import projects.exception.TaskException;
 import projects.model.Request;
@@ -182,7 +182,7 @@ public class RequestService extends RestProvider {
                         // prolong new due date
                         Date newDueDate = TimeUtil.stringToDate(getWebFormData().getValueSilently("dueDate"));
                         if (newDueDate == null) {
-                            _Validation ve = new _Validation();
+                            DTOException ve = new DTOException();
                             ve.addError("dueDate", "date", "field_is_empty");
                             return responseValidationError(ve);
                         }

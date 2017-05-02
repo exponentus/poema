@@ -3,15 +3,15 @@ package helpdesk.domain;
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import reference.model.DemandType;
 
 import java.util.Date;
 
-public class DemandDomain implements IDemandDomain {
+public class DemandDomain {
 
-    @Override
     public Demand composeNew(User user, DemandType demandType) {
         Demand demand = new Demand();
 
@@ -24,8 +24,9 @@ public class DemandDomain implements IDemandDomain {
         return demand;
     }
 
-    @Override
-    public void fillFromDto(Demand demand, Demand dto, User user) {
+    public void fillFromDto(Demand demand, Demand dto, User user) throws DTOException {
+        validate(dto);
+
         demand.setStatus(dto.getStatus());
         demand.setStatusDate(dto.getStatusDate());
         demand.setTitle(dto.getTitle());
@@ -43,7 +44,6 @@ public class DemandDomain implements IDemandDomain {
         }
     }
 
-    @Override
     public void changeStatus(Demand demand, DemandStatusType status) {
         // DRAFT(566), PROCESSING(567), COMPLETED(568), CANCELLED(569),
         // OPEN(570);
@@ -51,12 +51,25 @@ public class DemandDomain implements IDemandDomain {
         demand.setStatusDate(new Date());
     }
 
-    @Override
     public void registerTask(Demand demand) {
 
     }
 
-    @Override
+    private void validate(Demand demand) throws DTOException {
+        DTOException ve = new DTOException();
+
+        if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
+            ve.addError("title", "required", "field_is_empty");
+        }
+        if (demand.getDemandType() == null) {
+            ve.addError("demandType", "required", "field_is_empty");
+        }
+
+        if (ve.hasError()) {
+            throw ve;
+        }
+    }
+
     public Outcome getOutcome(Demand demand) {
         Outcome outcome = new Outcome();
 

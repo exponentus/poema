@@ -1,4 +1,4 @@
-package projects.domain.impl;
+package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
@@ -6,7 +6,6 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
-import projects.domain.ITaskDomain;
 import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Request;
@@ -18,9 +17,8 @@ import reference.model.TaskType;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TaskDomain implements ITaskDomain {
+public class TaskDomain {
 
-    @Override
     public Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType,
                            boolean initiative, int dueDateRange) {
         Task task = new Task();
@@ -63,7 +61,6 @@ public class TaskDomain implements ITaskDomain {
         return task;
     }
 
-    @Override
     public void fillFromDto(Task task, Task dto) {
         if (task.isNew()) {
             task.setAuthor(dto.getAuthor());
@@ -106,7 +103,6 @@ public class TaskDomain implements ITaskDomain {
         calculateReaders(task);
     }
 
-    @Override
     public void changeStatus(Task task, TaskStatusType status) {
         task.setStatus(status);
         /*
@@ -124,7 +120,6 @@ public class TaskDomain implements ITaskDomain {
         task.setStatusDate(new Date());
     }
 
-    @Override
     public void calculateStatus(Task task) {
         if (task.getStartDate() == null) {
             changeStatus(task, TaskStatusType.DRAFT);
@@ -140,7 +135,6 @@ public class TaskDomain implements ITaskDomain {
         }
     }
 
-    @Override
     public void changeAssignee(Task task, User newAssignee) {
         task.setAssignee(newAssignee.getId());
 
@@ -149,7 +143,6 @@ public class TaskDomain implements ITaskDomain {
         // }
     }
 
-    @Override
     public void calculateReaders(Task task) {
         if (task.getStatus() != TaskStatusType.DRAFT) {
 
@@ -165,7 +158,6 @@ public class TaskDomain implements ITaskDomain {
         }
     }
 
-    @Override
     public void acknowledgedTask(Task task, User user) throws TaskException {
         if (!task.getAssignee().equals(user.getId())) {
             throw new TaskException("not_assignee_user");
@@ -176,7 +168,6 @@ public class TaskDomain implements ITaskDomain {
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
-    @Override
     public void completeTask(Task task) throws TaskException {
         if (task.getStatus() == TaskStatusType.COMPLETED) {
             throw new TaskException("task already completed");
@@ -185,7 +176,6 @@ public class TaskDomain implements ITaskDomain {
         changeStatus(task, TaskStatusType.COMPLETED);
     }
 
-    @Override
     public void prolongTask(Task task, Date newDueDate) throws TaskException {
         if (newDueDate == null) {
             throw new TaskException("newDueDate is null");
@@ -200,7 +190,6 @@ public class TaskDomain implements ITaskDomain {
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
-    @Override
     public void cancelTask(Task task, String comment) throws TaskException {
         if (task.getStatus() == TaskStatusType.CANCELLED) {
             throw new TaskException("task already cancelled");
@@ -210,23 +199,19 @@ public class TaskDomain implements ITaskDomain {
         task.setCancellationComment(comment);
     }
 
-    @Override
     public void returnToProcessing(Task task) {
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
-    @Override
     public boolean taskIsEditable(Task task) {
         return task.isEditable();
     }
 
-    @Override
     public boolean taskCanBeDeleted(Task task) {
         return !task.isNew() && task.isEditable()
                 && (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.DRAFT);
     }
 
-    @Override
     public boolean userCanDoAcknowledged(Task task, User user) {
         if (!task.isNew() && task.getAssignee().equals(user.getId())) {
             if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
@@ -236,7 +221,6 @@ public class TaskDomain implements ITaskDomain {
         return false;
     }
 
-    @Override
     public boolean userCanDoRequest(Task task, User user) {
         if (!task.isNew() && task.getAssignee().equals(user.getId())) {
             if (task.getStatus() == TaskStatusType.PROCESSING) {
@@ -246,7 +230,6 @@ public class TaskDomain implements ITaskDomain {
         return false;
     }
 
-    @Override
     public boolean userCanDoResolution(Task task, User user) {
         if (!task.isNew()) {
             if (task.getAuthor().getId().equals(user.getId()) || user.isSuperUser()) {
@@ -258,7 +241,6 @@ public class TaskDomain implements ITaskDomain {
         return false;
     }
 
-    @Override
     public boolean userCanAddSubTask(Task task, User user) {
         if (!task.isNew()) {
             if (task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
@@ -268,7 +250,6 @@ public class TaskDomain implements ITaskDomain {
         return false;
     }
 
-    @Override
     public Outcome getOutcome(Task task) {
         Outcome outcome = new Outcome();
 

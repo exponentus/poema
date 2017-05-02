@@ -1,11 +1,11 @@
-package audit.domain.impl;
+package audit.domain;
 
 import administrator.model.User;
-import audit.domain.IProjectDomain;
 import audit.model.Project;
 import audit.model.constants.ProjectStatusType;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.ISimpleAppEntity;
 import com.exponentus.user.IUser;
 
@@ -14,9 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ProjectDomain implements IProjectDomain {
+public class ProjectDomain {
 
-    @Override
     public Project composeNew(User author) {
         Project project = new Project();
 
@@ -28,8 +27,9 @@ public class ProjectDomain implements IProjectDomain {
         return project;
     }
 
-    @Override
-    public void fillFromDto(Project project, Project dto, User author) {
+    public void fillFromDto(Project project, Project dto, User author) throws DTOException {
+        validate(dto);
+
         if (project.isNew()) {
             project.setAuthor(author);
         }
@@ -52,7 +52,6 @@ public class ProjectDomain implements IProjectDomain {
         calculateReaders(project);
     }
 
-    @Override
     public void calculateReaders(Project project) {
         Set<IUser<Long>> readers = new HashSet<>();
         readers.add(project.getAuthor());
@@ -75,22 +74,44 @@ public class ProjectDomain implements IProjectDomain {
         project.setReaders(readersId);
     }
 
-    @Override
     public void completeProject(Project project) {
         project.setStatus(ProjectStatusType.COMPLETED);
     }
 
-    @Override
     public void activateProject(Project project) {
         project.setStatus(ProjectStatusType.ACTIVE);
     }
 
-    @Override
     public void mergeProject(Project project) {
         project.setStatus(ProjectStatusType.MERGED);
     }
 
-    @Override
+    private void validate(Project entity) throws DTOException {
+        DTOException ve = new DTOException();
+
+        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
+            ve.addError("name", "required", "field_is_empty");
+        } else if (entity.getName().length() > 140) {
+            ve.addError("name", "maxlen_140", "field_is_too_long");
+        }
+
+        if (entity.getManager() == null) {
+            ve.addError("manager", "required", "field_is_empty");
+        }
+
+        if (entity.getFinishDate() == null) {
+            ve.addError("finishDate", "date", "field_is_empty");
+        }
+
+        if (entity.getComment() != null && entity.getComment().trim().length() > 2048) {
+            ve.addError("comment", "maxlen_2048", "field_is_too_long");
+        }
+
+        if (ve.hasError()) {
+            throw ve;
+        }
+    }
+
     public Outcome getOutcome(Project project) {
         Outcome outcome = new Outcome();
 
