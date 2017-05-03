@@ -24,7 +24,7 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         _Outline o = new _Outline("", "common");
-        o.addEntry(new _OutlineEntry("all_applications", "", "fa fa-list", "applications", AppConst.BASE_URL + "applications"));
+        o.addEntry(new _OutlineEntry("all_applications", "", "fa fa-tasks", "applications", AppConst.BASE_URL + "applications"));
         o.addEntry(new _OutlineEntry("my_applications", "", "fa fa-user-o", "applications_my", AppConst.BASE_URL + "applications/my"));
 
         _Outline co = new _Outline("", "application_types");
