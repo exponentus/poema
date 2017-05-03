@@ -22,10 +22,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Path("navigator")
+@Produces(MediaType.APPLICATION_JSON)
 public class NavigatorService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 

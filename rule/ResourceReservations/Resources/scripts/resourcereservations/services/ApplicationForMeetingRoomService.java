@@ -32,10 +32,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("applications_for_meeting_room")
+@Produces(MediaType.APPLICATION_JSON)
 public class ApplicationForMeetingRoomService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
@@ -95,7 +95,6 @@ public class ApplicationForMeetingRoomService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         ApplicationForMeetingRoom entity;
@@ -128,7 +127,6 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(ApplicationForMeetingRoom dto) {
         dto.setId(null);
@@ -137,7 +135,6 @@ public class ApplicationForMeetingRoomService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, ApplicationForMeetingRoom dto) {
         dto.setId(UUID.fromString(id));
@@ -184,7 +181,6 @@ public class ApplicationForMeetingRoomService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
         try {

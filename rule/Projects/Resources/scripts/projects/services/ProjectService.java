@@ -36,12 +36,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("projects")
+@Produces(MediaType.APPLICATION_JSON)
 public class ProjectService extends RestProvider {
 
     private Outcome outcome = new Outcome();
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
 
         _Session session = getSession();
@@ -94,7 +94,6 @@ public class ProjectService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         try {
@@ -128,7 +127,6 @@ public class ProjectService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Project dto) {
         dto.setId(null);
@@ -137,7 +135,6 @@ public class ProjectService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Project dto) {
         dto.setId(UUID.fromString(id));
@@ -187,7 +184,6 @@ public class ProjectService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             ProjectDAO dao = new ProjectDAO(getSession());

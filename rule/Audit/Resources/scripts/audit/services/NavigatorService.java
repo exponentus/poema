@@ -16,10 +16,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Path("navigator")
+@Produces(MediaType.APPLICATION_JSON)
 public class NavigatorService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 

@@ -12,11 +12,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("stat")
+@Produces(MediaType.APPLICATION_JSON)
 public class StatService extends RestProvider {
 
     @GET
     @Path("status")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getByStatus() {
         _Session session = getSession();
         try {
@@ -33,7 +33,6 @@ public class StatService extends RestProvider {
 
     @GET
     @Path("inspector")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getByInspector() {
         _Session session = getSession();
         try {

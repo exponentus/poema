@@ -62,14 +62,14 @@ public class AssignmentDomain {
             }
         }
 
-        int completedAsignee = 0;
+        int completedAssignee = 0;
         for (AssigneeEntry entry : assigneeEntities) {
             if (entry.getResetTime() != null) {
-                completedAsignee++;
+                completedAssignee++;
             }
         }
 
-        if (completedAsignee == assigneeEntities.size()) {
+        if (completedAssignee == assigneeEntities.size()) {
             control.setStatus(ControlStatusType.COMPLETED);
         }
     }

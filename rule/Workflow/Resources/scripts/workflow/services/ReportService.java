@@ -25,11 +25,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("reports")
+@Produces(MediaType.APPLICATION_JSON)
 public class ReportService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         try {
             _Session ses = getSession();
@@ -65,7 +65,6 @@ public class ReportService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Report dto) {
         dto.setId(null);
@@ -74,7 +73,6 @@ public class ReportService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Report dto) {
         dto.setId(UUID.fromString(id));
@@ -118,7 +116,6 @@ public class ReportService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             _Session ses = getSession();

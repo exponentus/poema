@@ -32,10 +32,10 @@ import javax.ws.rs.core.Response;
 import java.util.UUID;
 
 @Path("demands")
+@Produces(MediaType.APPLICATION_JSON)
 public class DemandService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
@@ -88,7 +88,6 @@ public class DemandService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         Demand entity;
@@ -128,7 +127,6 @@ public class DemandService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Demand dto) {
         dto.setId(null);
@@ -137,7 +135,6 @@ public class DemandService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Demand dto) {
         dto.setId(UUID.fromString(id));
@@ -185,7 +182,6 @@ public class DemandService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
         try {

@@ -40,10 +40,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("observations")
+@Produces(MediaType.APPLICATION_JSON)
 public class ObservationService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
 
         _Session session = getSession();
@@ -103,7 +103,6 @@ public class ObservationService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         try {
@@ -151,7 +150,6 @@ public class ObservationService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Observation dto) {
         dto.setId(null);
@@ -160,7 +158,6 @@ public class ObservationService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Observation dto) {
         dto.setId(UUID.fromString(id));
@@ -217,7 +214,6 @@ public class ObservationService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             ObservationDAO dao = new ObservationDAO(getSession());

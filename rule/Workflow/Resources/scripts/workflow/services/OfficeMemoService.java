@@ -38,10 +38,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("office-memos")
+@Produces(MediaType.APPLICATION_JSON)
 public class OfficeMemoService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
@@ -81,7 +81,6 @@ public class OfficeMemoService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         OfficeMemo entity;
@@ -112,7 +111,6 @@ public class OfficeMemoService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(OfficeMemo dto) {
         dto.setId(null);
@@ -121,7 +119,6 @@ public class OfficeMemoService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, OfficeMemo dto) {
         dto.setId(UUID.fromString(id));
@@ -174,7 +171,6 @@ public class OfficeMemoService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
         try {

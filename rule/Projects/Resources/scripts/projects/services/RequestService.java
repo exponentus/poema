@@ -37,11 +37,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Path("requests")
+@Produces(MediaType.APPLICATION_JSON)
 public class RequestService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
 
@@ -79,7 +79,6 @@ public class RequestService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Request dto) {
         dto.setId(null);
@@ -88,7 +87,6 @@ public class RequestService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Request dto) {
         dto.setId(UUID.fromString(id));
@@ -144,7 +142,6 @@ public class RequestService extends RestProvider {
 
     @POST
     @Path("{id}/action/accept")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doRequestAccept(@PathParam("id") String id, Request requestDTO) {
         return doResolution(id, ResolutionType.ACCEPTED, requestDTO);
@@ -152,7 +149,6 @@ public class RequestService extends RestProvider {
 
     @POST
     @Path("{id}/action/decline")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doRequestDecline(@PathParam("id") String id, Request requestDto) {
         return doResolution(id, ResolutionType.DECLINED, requestDto);
@@ -214,7 +210,6 @@ public class RequestService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             RequestDAO dao = new RequestDAO(getSession());

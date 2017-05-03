@@ -46,10 +46,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("tasks")
+@Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getViewPage() {
         try {
             _Session session = getSession();
@@ -103,7 +103,6 @@ public class TaskService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         WebFormData formData = getWebFormData();
@@ -177,7 +176,6 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Task dto) {
         dto.setId(null);
@@ -186,7 +184,6 @@ public class TaskService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Task dto) {
         dto.setId(UUID.fromString(id));
@@ -249,7 +246,6 @@ public class TaskService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
@@ -287,7 +283,6 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("{id}/action/acknowledged")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskAcknowledged(@PathParam("id") String id) {
         try {
@@ -309,7 +304,6 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("{id}/action/complete")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskComplete(@PathParam("id") String id) {
         try {
@@ -331,7 +325,6 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("{id}/action/cancel")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskCancel(@PathParam("id") String id, @QueryParam("comment") String comment) {
         try {

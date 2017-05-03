@@ -1,18 +1,10 @@
 package workflow.dao.filter;
 
 import staff.model.Employee;
+import workflow.model.Assignment;
 
-public class AssignmentFilter {
-    private Employee appliedAuthor;
+public class AssignmentFilter extends Assignment {
     private Employee assignee;
-
-    public Employee getAppliedAuthor() {
-        return appliedAuthor;
-    }
-
-    public void setAppliedAuthor(Employee appliedAuthor) {
-        this.appliedAuthor = appliedAuthor;
-    }
 
     public Employee getAssignee() {
         return assignee;

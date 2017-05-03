@@ -36,10 +36,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("incomings")
+@Produces(MediaType.APPLICATION_JSON)
 public class IncomingService extends RestProvider {
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getView() {
         _Session session = getSession();
         int pageSize = session.pageSize;
@@ -69,7 +69,6 @@ public class IncomingService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
         Incoming entity;
@@ -100,7 +99,6 @@ public class IncomingService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Incoming dto) {
         dto.setId(null);
@@ -109,7 +107,6 @@ public class IncomingService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Incoming dto) {
         dto.setId(UUID.fromString(id));
@@ -168,7 +165,6 @@ public class IncomingService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         _Session ses = getSession();
         try {

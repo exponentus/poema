@@ -42,26 +42,24 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Path("assignments")
+@Produces(MediaType.APPLICATION_JSON)
 public class AssignmentService extends RestProvider {
 
     @GET
     @Path("my")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getMyAssignments() {
-        return getView("my");
+        return getView("_my");
     }
 
     @GET
     @Path("inbox")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAssignmentsInbox() {
-        return getView("inbox");
+        return getView("_inbox");
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        return getView("");
+        return getView("_all");
     }
 
     public Response getView(String slug) {
@@ -75,14 +73,10 @@ public class AssignmentService extends RestProvider {
             Employee currentUserEmp = employeeDAO.findByUser(session.getUser());
 
             switch (slug) {
-                case "my":
+                case "_my":
                     filter.setAppliedAuthor(currentUserEmp);
                     break;
-                case "inbox":
-//                    AssigneeEntry assigneeEntry = new AssigneeEntry();
-//                    assigneeEntry.setAssignee(currentUserEmp);
-//                    List<AssigneeEntry> entries = new ArrayList<>();
-//                    entries.add(assigneeEntry);
+                case "_inbox":
                     filter.setAssignee(currentUserEmp);
                     break;
             }
@@ -95,7 +89,7 @@ public class AssignmentService extends RestProvider {
 
             Outcome outcome = new Outcome();
             outcome.setId("assignments");
-            outcome.setTitle("assignments");
+            outcome.setTitle("assignments" + slug);
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
             return Response.ok(outcome).build();
@@ -106,7 +100,6 @@ public class AssignmentService extends RestProvider {
 
     @GET
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response getById(@PathParam("id") String id) {
         try {
             _Session ses = getSession();
@@ -163,7 +156,6 @@ public class AssignmentService extends RestProvider {
     }
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Assignment dto) {
         dto.setId(null);
@@ -172,7 +164,6 @@ public class AssignmentService extends RestProvider {
 
     @PUT
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Assignment dto) {
         dto.setId(UUID.fromString(id));
@@ -253,7 +244,6 @@ public class AssignmentService extends RestProvider {
 
     @DELETE
     @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response delete(@PathParam("id") String id) {
         try {
             _Session ses = getSession();
@@ -266,27 +256,6 @@ public class AssignmentService extends RestProvider {
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
-    }
-
-    @GET
-    @Path("{id}/attachments/{attachId}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        try {
-            AssignmentDAO dao = new AssignmentDAO(getSession());
-            Assignment entity = dao.findByIdentefier(id);
-
-            return getAttachment(entity, attachId);
-        } catch (DAOException e) {
-            return responseException(e);
-        }
-    }
-
-    @GET
-    @Path("{id}/attachments/{attachId}/{fileName}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        return getAttachment(id, attachId);
     }
 
     @POST
