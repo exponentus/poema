@@ -24,7 +24,7 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         _Outline t = new _Outline("", "wf_assignment");
-        t.addEntry(new _OutlineEntry("assignments", "", "fa fa-tasks", "assignments", AppConst.BASE_URL + "assignments"));
+        t.addEntry(new _OutlineEntry("assignments_all", "", "fa fa-tasks", "assignments_all", AppConst.BASE_URL + "assignments"));
         t.addEntry(new _OutlineEntry("assignments_my", "", "fa fa-pencil", "assignments_my", AppConst.BASE_URL + "assignments/my"));
         t.addEntry(new _OutlineEntry("assignments_inbox", "", "fa fa-inbox", "assignments_inbox", AppConst.BASE_URL + "assignments/inbox"));
 
