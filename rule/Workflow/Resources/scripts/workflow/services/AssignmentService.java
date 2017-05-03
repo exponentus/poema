@@ -21,6 +21,7 @@ import workflow.dao.AssignmentDAO;
 import workflow.dao.ControlledDocumentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
+import workflow.dao.filter.AssignmentFilter;
 import workflow.domain.AssignmentDomain;
 import workflow.init.AppConst;
 import workflow.model.Assignment;
@@ -47,26 +48,47 @@ public class AssignmentService extends RestProvider {
     @Path("my")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMyAssignments() {
-        return getView();
+        return getView("my");
     }
 
     @GET
     @Path("inbox")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAssignmentsInbox() {
-        return getView();
+        return getView("inbox");
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getView() {
+    public Response getAll() {
+        return getView("");
+    }
+
+    public Response getView(String slug) {
         _Session session = getSession();
         int pageSize = session.pageSize;
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
+        AssignmentFilter filter = new AssignmentFilter();
 
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(session);
+            Employee currentUserEmp = employeeDAO.findByUser(session.getUser());
+
+            switch (slug) {
+                case "my":
+                    filter.setAppliedAuthor(currentUserEmp);
+                    break;
+                case "inbox":
+//                    AssigneeEntry assigneeEntry = new AssigneeEntry();
+//                    assigneeEntry.setAssignee(currentUserEmp);
+//                    List<AssigneeEntry> entries = new ArrayList<>();
+//                    entries.add(assigneeEntry);
+                    filter.setAssignee(currentUserEmp);
+                    break;
+            }
+
             AssignmentDAO assignmentDAO = new AssignmentDAO(session);
-            ViewPage vp = assignmentDAO.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(Action.refreshVew);
