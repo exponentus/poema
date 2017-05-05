@@ -19,33 +19,20 @@ import java.util.UUID;
 public class TaskShortDTO {
 
     public UUID id;
-
     public String kind = "task";
 
     public String regNumber;
-
     public TaskType taskType;
-
     public TaskStatusType status = TaskStatusType.UNKNOWN;
-
     public Date statusDate;
-
     public TaskPriorityType priority = TaskPriorityType.NORMAL;
-
     public String cancellationComment;
-
     public String body;
-
     public Long assignee;
-
     public Date startDate;
-
     public Date dueDate;
-
     public List<Tag> tags;
-
     public Long responsesCount;
-
     public List<IAppEntity<UUID>> responses;
 
     public TaskShortDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags) {

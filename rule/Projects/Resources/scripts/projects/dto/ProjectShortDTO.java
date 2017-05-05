@@ -18,34 +18,22 @@ import java.util.UUID;
 public class ProjectShortDTO {
 
     public UUID id;
-
     public String kind = "project";
 
     public String name;
-
     public ProjectStatusType status = ProjectStatusType.UNKNOWN;
-
     public LanguageCode primaryLanguage;
-
     public String customer;
-
     @JsonProperty("managerUserId")
     public long manager;
-
     @JsonProperty("programmerUserId")
     public long programmer;
-
     @JsonProperty("testerUserId")
     public long tester;
-
     public Date startDate;
-
     public Date finishDate;
-
     public String comment;
-
     public boolean hasAttachments;
-
     public List<Attachment> attachments = new ArrayList<>();
 
     public ProjectShortDTO(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {

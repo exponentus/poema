@@ -16,19 +16,13 @@ import java.util.UUID;
 public class RequestShortDTO {
 
     public UUID id;
-
     public String kind = "request";
 
     public Task task;
-
     public RequestType requestType;
-
     public ResolutionType resolution = ResolutionType.UNKNOWN;
-
     public Date resolutionTime;
-
     public String decisionComment;
-
     public String comment;
 
     public RequestShortDTO(UUID id, Task task, RequestType requestType, ResolutionType resolution, Date resolutionTime, String decisionComment, String comment) {
