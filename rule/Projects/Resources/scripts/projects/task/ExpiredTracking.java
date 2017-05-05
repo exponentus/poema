@@ -43,8 +43,8 @@ public class ExpiredTracking extends _Do {
 			if (tag != null) {
 				tDao = new TaskDAO(session);
 				processTask(appEnv,
-						tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING), 0, 0), session);
-				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN), 0, 0),
+						tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)), session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)),
 						session);
 			} else {
 				logger.warning("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");

@@ -1,6 +1,5 @@
 package projects.model;
 
-import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.scripting._Session;
@@ -18,7 +17,6 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @JsonRootName("request")
 @Entity
@@ -50,35 +48,13 @@ public class Request extends SecureHierarchicalEntity {
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "prj__request_attachments", joinColumns = {
-            @JoinColumn(name = "request_id")}, inverseJoinColumns = {
-            @JoinColumn(name = "attachment_id")}, indexes = {
-            @Index(columnList = "request_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
-            "request_id", "attachment_id"}))
+    @JoinTable(name = "prj__request_attachments",
+            joinColumns = {@JoinColumn(name = "request_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "request_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"request_id", "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
-
-    public Request() {
-        super();
-    }
-
-    public Request(UUID id, Date regDate, User author, RequestType requestType, ResolutionType resolution,
-                   Date resolutionTime, String decisionComment, String comment, Long countAtt) {
-        this.id = id;
-        this.regDate = regDate;
-        this.author = author;
-        this.requestType = requestType;
-        this.resolution = resolution;
-        this.resolutionTime = resolutionTime;
-        this.decisionComment = decisionComment;
-        this.comment = comment;
-        if (countAtt > 0) {
-            this.attachments = new ArrayList<>();
-            for (int i = 0; i < countAtt; i++) {
-                this.attachments.add(new Attachment());
-            }
-        }
-    }
 
     @JsonIgnore
     public Task getTask() {

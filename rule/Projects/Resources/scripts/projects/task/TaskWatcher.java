@@ -26,7 +26,7 @@ public class TaskWatcher extends _Do {
 			TaskDAO tDao = new TaskDAO(ses);
 			TaskFilter filter = new TaskFilter();
 			filter.setStatus(TaskStatusType.WAITING);
-			ViewPage<Task> result = tDao.findAllByTaskFilter(filter, 0, 0);
+			ViewPage<Task> result = tDao.findAllByTaskFilter(filter);
 			for (Task task : result.getResult()) {
 				if (current.after(task.getStartDate())) {
 					task.setStatus(TaskStatusType.OPEN);

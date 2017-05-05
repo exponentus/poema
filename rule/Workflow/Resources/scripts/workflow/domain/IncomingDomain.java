@@ -6,7 +6,6 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -24,23 +23,20 @@ public class IncomingDomain {
         return entity;
     }
 
-    public void fillFromDto(Incoming entity, Incoming dto, _Session ses) throws DTOException {
+    public void fillFromDto(Incoming entity, Incoming dto, _Session ses) throws DTOException, DAOException {
         validate(dto);
 
         entity.setTitle(dto.getTitle());
         entity.setAppliedRegDate(new Date());
         entity.setDocLanguage(dto.getDocLanguage());
         entity.setDocType(dto.getDocType());
-        try {
-            entity.setDocSubject(dto.getDocSubject());
-            entity.setSender(dto.getSender());
 
-            EmployeeDAO eDao = new EmployeeDAO(ses);
-            Employee emp = eDao.findById(dto.getAddressee().getId());
-            entity.setAddressee(emp);
-        } catch (DAOException e) {
-            Server.logger.exception(e);
-        }
+        entity.setDocSubject(dto.getDocSubject());
+        entity.setSender(dto.getSender());
+
+        EmployeeDAO eDao = new EmployeeDAO(ses);
+        Employee emp = eDao.findById(dto.getAddressee().getId());
+        entity.setAddressee(emp);
 
         entity.setSenderRegNumber(dto.getSenderRegNumber());
         entity.setSenderAppliedRegDate(dto.getSenderAppliedRegDate());
@@ -52,7 +48,6 @@ public class IncomingDomain {
         if (entity.isNew()) {
             entity.setAuthor(ses.getUser());
         }
-
     }
 
     public boolean canCreateAssignment(Incoming entity, User user) {

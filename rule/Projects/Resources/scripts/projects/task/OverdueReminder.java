@@ -44,8 +44,8 @@ public class OverdueReminder extends _Do {
 			if (tag != null) {
 				tDao = new TaskDAO(session);
 				ViewPage<Task> vp = tDao
-						.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags), 0, 0);
-				vp.merge(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags), 0, 0));
+						.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
+				vp.merge(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
 				processRemind(vp, session);
 			}
 		} catch (DAOException e) {

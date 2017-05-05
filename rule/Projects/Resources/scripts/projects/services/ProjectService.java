@@ -3,7 +3,6 @@ package projects.services;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.Selector;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -20,6 +19,7 @@ import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.constants.Action;
 import projects.dao.ProjectDAO;
 import projects.domain.ProjectDomain;
+import projects.dto.ProjectShortDTO;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
@@ -49,28 +49,13 @@ public class ProjectService extends RestProvider {
             int pageSize = getWebFormData().getNumberValueSilently("limit", session.pageSize);
             SortParams sortParams = getWebFormData().getSortParams(SortParams.asc("name"));
             ProjectDAO projectDAO = new ProjectDAO(session);
-            Selector<Project> select = projectDAO.getSelector();
-            select.setPageNum(getWebFormData().getPage());
-            select.setPageSize(pageSize);
-            select.setSortParams(sortParams);
-            select.addField("id");
-            select.addField("regDate");
-            select.addField("name");
-            select.addField("status");
-            select.addField(select.getRoot().get("customer").get("name"));
-            select.addField("manager");
-            select.addField("tester");
-            select.addField("programmer");
-            select.addField("finishDate");
-            select.addField("comment");
-            select.addAttachmentCount();
 
             ProjectStatusType status = null;
             if (!getWebFormData().getValueSilently("status").isEmpty()) {
                 status = ProjectStatusType.valueOf(getWebFormData().getValueSilently("status"));
             }
 
-            ViewPage<Project> vp = projectDAO.findViewPage1(sortParams, status, getWebFormData().getPage(), pageSize);
+            ViewPage<ProjectShortDTO> vp = projectDAO.findViewPage1(sortParams, status, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(new _Action(_ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));

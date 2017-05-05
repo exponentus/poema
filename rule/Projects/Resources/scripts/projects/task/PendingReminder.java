@@ -34,7 +34,7 @@ public class PendingReminder extends _Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			tDao = new TaskDAO(session);
-			ViewPage<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING), 0, 0);
+			ViewPage<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING));
 			processRemind(vp, session);
 		} catch (DAOException e) {
 			logError(e);

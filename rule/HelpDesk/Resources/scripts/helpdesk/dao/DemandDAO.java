@@ -1,6 +1,5 @@
 package helpdesk.dao;
 
-import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
@@ -72,16 +71,7 @@ public class DemandDAO extends DAO<Demand, UUID> {
             TypedQuery<Demand> typedQuery = em.createQuery(cq);
             Query query = em.createQuery(countCq);
             long count = (long) query.getSingleResult();
-            int maxPage = 1;
-            if (pageNum != 0 || pageSize != 0) {
-                maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-                if (pageNum == 0) {
-                    pageNum = 1;
-                }
-                int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-                typedQuery.setFirstResult(firstRec);
-                typedQuery.setMaxResults(pageSize);
-            }
+            int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
             List<Demand> result = typedQuery.getResultList();
 

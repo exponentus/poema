@@ -3,7 +3,6 @@ package audit.dao;
 import administrator.model.User;
 import audit.dao.filter.ProjectFilter;
 import audit.model.Project;
-import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.SecureAppEntity;
@@ -64,16 +63,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
             TypedQuery<Project> typedQuery = em.createQuery(cq);
             Query query = em.createQuery(countCq);
             long count = (long) query.getSingleResult();
-            int maxPage = 1;
-            if (pageNum != 0 || pageSize != 0) {
-                maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-                if (pageNum == 0) {
-                    pageNum = 1;
-                }
-                int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-                typedQuery.setFirstResult(firstRec);
-                typedQuery.setMaxResults(pageSize);
-            }
+            int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
             List<Project> result = typedQuery.getResultList();
 
