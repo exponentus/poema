@@ -1,27 +1,24 @@
 package workflow.model;
 
-import java.util.List;
+import com.exponentus.common.model.SecureHierarchicalEntity;
 
 import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import java.util.List;
 
 @Entity
 @Table(name = "wf__controlled_documents")
-@NamedQuery(name = "ControlledDocument.findAll", query = "SELECT m FROM ControlledDocument AS m ORDER BY m.regDate")
 public class ControlledDocument extends SecureHierarchicalEntity {
 
-	@OneToMany
-	private List<Assignment> assignments;
+    @OneToMany
+    private List<Assignment> assignments;
 
-	public List<Assignment> getAssignments() {
-		return assignments;
-	}
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
 
-	public void setAssignments(List<Assignment> assignments) {
-		this.assignments = assignments;
-	}
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
+    }
 }

@@ -44,7 +44,7 @@ public class ProjectShortDTO {
 
     public String comment;
 
-    public boolean hasAttachment;
+    public boolean hasAttachments;
 
     public List<Attachment> attachments = new ArrayList<>();
 
@@ -60,9 +60,9 @@ public class ProjectShortDTO {
         this.startDate = startDate;
         this.finishDate = finishDate;
         this.comment = comment;
-        this.hasAttachment = attachmentCount > 0;
+        this.hasAttachments = attachmentCount > 0;
 
-        if (hasAttachment) {
+        if (hasAttachments) {
             this.attachments = new ArrayList<>();
             this.attachments.add(new Attachment());
         }

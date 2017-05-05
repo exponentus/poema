@@ -27,7 +27,6 @@ public class ProjectDAO extends DAO<Project, UUID> {
         try {
             CriteriaQuery<ProjectShortDTO> cq = cb.createQuery(ProjectShortDTO.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
-            Root<Project> countRoot = countRootCq.from(Project.class);
             Root<Project> root = cq.from(Project.class);
             Join atts = root.join("attachments", JoinType.LEFT);
 
@@ -36,12 +35,12 @@ public class ProjectDAO extends DAO<Project, UUID> {
 
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
-                conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
+                conditionCount = cb.and(root.get("readers").in(user.getId()));
             }
 
             if (status != null) {
                 condition = cb.and(cb.equal(root.get("status"), status), condition);
-                conditionCount = cb.and(cb.equal(countRoot.get("status"), status), conditionCount);
+                conditionCount = cb.and(cb.equal(root.get("status"), status), conditionCount);
             }
 
             cq.select(cb.construct(
@@ -62,7 +61,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
                     .groupBy(root, root.get("customer").get("name"))
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(countRoot));
+            countRootCq.select(cb.count(root));
 
             if (condition != null) {
                 cq.where(condition);

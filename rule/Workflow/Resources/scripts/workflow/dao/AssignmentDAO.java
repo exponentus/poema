@@ -5,6 +5,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.AssignmentFilter;
+import workflow.dto.AssignmentViewDTO;
 import workflow.model.Assignment;
 
 import javax.persistence.EntityManager;
@@ -13,7 +14,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.List;
 import java.util.UUID;
 
 public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
@@ -22,60 +22,65 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
         super(Assignment.class, session);
     }
 
-    public ViewPage<Assignment> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<AssignmentViewDTO> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<Assignment> cq = cb.createQuery(Assignment.class);
+            CriteriaQuery<AssignmentViewDTO> cq = cb.createQuery(AssignmentViewDTO.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
-            Root<Assignment> countRoot = countRootCq.from(Assignment.class);
             Root<Assignment> root = cq.from(Assignment.class);
 
             Predicate condition = null;
-            // Predicate conditionCount = null;
+            Predicate conditionCount = null;
 
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
-                // conditionCount = cb.and(countRoot.get("readers").in(user.getId()));
+                conditionCount = cb.and(root.get("readers").in(user.getId()));
             }
 
             if (filter.getAppliedAuthor() != null) {
                 if (condition == null) {
                     condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));
-                    // conditionCount = cb.and(cb.equal(countRoot.get("appliedAuthor"), filter.getAppliedAuthor()));
+                    conditionCount = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));
                 } else {
                     condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()), condition);
-                    // conditionCount = cb.and(cb.equal(countRoot.get("appliedAuthor"), filter.getAppliedAuthor()), conditionCount);
+                    conditionCount = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()), conditionCount);
                 }
             }
 
             if (filter.getAssignee() != null) {
                 if (condition == null) {
                     condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()));
-                    // conditionCount = cb.and(countRoot.get("control").get("assigneeEntries").in(filter.getAssigneeEntries()));
+                    conditionCount = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()));
                 } else {
                     condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()), condition);
-                    // conditionCount = cb.and(countRoot.get("control").get("assigneeEntries").in(filter.getAssigneeEntries()), conditionCount);
+                    conditionCount = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()), conditionCount);
                 }
             }
 
-            cq.select(root).distinct(true).orderBy(collectSortOrder(cb, root, sortParams));
+            cq.select(cb.construct(
+                    AssignmentViewDTO.class,
+                    root.get("id"),
+                    root.get("appliedAuthor").get("name"),
+                    root.get("body"),
+                    root.get("control")
+            ))
+                    .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(countRoot));
+            countRootCq.select(cb.count(root));
 
             if (condition != null) {
                 cq.where(condition);
-                countRootCq.where(condition);
+                countRootCq.where(conditionCount);
             }
 
-            TypedQuery<Assignment> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> query = em.createQuery(countRootCq);
+            TypedQuery<AssignmentViewDTO> typedQuery = em.createQuery(cq);
+            TypedQuery<Long> countQuery = em.createQuery(countRootCq);
 
-            long count = query.getSingleResult();
+            long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
-            List<Assignment> result = typedQuery.getResultList();
 
-            return new ViewPage<>(result, count, maxPage, pageNum);
+            return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
         } finally {
             em.close();
         }

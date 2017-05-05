@@ -13,7 +13,6 @@ import workflow.init.AppConst;
 import workflow.model.embedded.Control;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,19 +47,6 @@ public class Assignment extends ControlledDocument {
 
     @Transient
     private List<IAppEntity<UUID>> responses;
-
-    public Assignment() {
-
-    }
-
-    // test
-    public Assignment(UUID id, Date regDate, String title, String body, Employee appliedAuthor) {
-        this.id = id;
-        this.regDate = regDate;
-        this.title = title;
-        this.body = body;
-        this.appliedAuthor = appliedAuthor;
-    }
 
     public Employee getAppliedAuthor() {
         return appliedAuthor;
