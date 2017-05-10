@@ -20,7 +20,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.actions._Action;
+import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -82,8 +82,8 @@ public class ObservationService extends RestProvider {
             ViewPage<Observation> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action(_ActionType.LINK).caption("new_observation").url(AppConst.BASE_URL + "observations/new"));
-            actionBar.addAction(new _Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
+            actionBar.addAction(new Action(_ActionType.LINK).caption("new_observation").url(AppConst.BASE_URL + "observations/new"));
+            actionBar.addAction(new Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
@@ -250,10 +250,10 @@ public class ObservationService extends RestProvider {
 
     private _ActionBar getActionBar(_Session session, Observation entity, ObservationDomain domain) {
         _ActionBar actionBar = new _ActionBar(session);
-        actionBar.addAction(new _Action(_ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
+        actionBar.addAction(new Action(_ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
         if (entity.isEditable()) {
-            actionBar.addAction(new _Action(_ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));
-            actionBar.addAction(new _Action(_ActionType.CUSTOM_ACTION).id("detect_gps_location").caption("detect_gps_location").icon("fa fa-map-marker"));
+            actionBar.addAction(new Action(_ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));
+            actionBar.addAction(new Action(_ActionType.CUSTOM_ACTION).id("detect_gps_location").caption("detect_gps_location").icon("fa fa-map-marker"));
         }
         return actionBar;
     }

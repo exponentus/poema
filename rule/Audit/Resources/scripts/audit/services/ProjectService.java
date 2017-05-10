@@ -17,7 +17,7 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.actions._Action;
+import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.scripting.actions._ActionType;
 import org.eclipse.persistence.exceptions.DatabaseException;
@@ -57,8 +57,8 @@ public class ProjectService extends RestProvider {
             ViewPage<Project> vp = projectDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(new _Action(_ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
-            actionBar.addAction(new _Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
+            actionBar.addAction(new Action(_ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
+            actionBar.addAction(new Action(_ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
@@ -203,9 +203,9 @@ public class ProjectService extends RestProvider {
 
     private _ActionBar getActionBar(_Session session, Project project, ProjectDomain domain) {
         _ActionBar actionBar = new _ActionBar(session);
-        actionBar.addAction(new _Action(_ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
+        actionBar.addAction(new Action(_ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
         if (project.isEditable()) {
-            actionBar.addAction(new _Action(_ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));
+            actionBar.addAction(new Action(_ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));
         }
         return actionBar;
     }
