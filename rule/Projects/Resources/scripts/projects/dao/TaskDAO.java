@@ -27,11 +27,11 @@ public class TaskDAO extends DAO<Task, UUID> {
         super(Task.class, session);
     }
 
-    public ViewPage<Task> findAllByTaskFilter(TaskFilter filter) {
-        return findAll(filter, SortParams.desc("regDate"), 0, 0);
+    public List<Task> findAllByTaskFilter(TaskFilter filter) {
+        return findViewPage(filter, SortParams.desc("regDate"), 0, 0).getResult();
     }
 
-    public ViewPage<Task> findAll(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<Task> findViewPage(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
         }
@@ -164,7 +164,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 
     public ViewPage<Task> findAllWithResponses(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize,
                                                List<UUID> expandedIds) {
-        ViewPage<Task> vp = findAll(filter, sortParams, pageNum, pageSize);
+        ViewPage<Task> vp = findViewPage(filter, sortParams, pageNum, pageSize);
 
         if (vp.getResult().isEmpty() || !filter.isTreeMode()) {
             return vp;

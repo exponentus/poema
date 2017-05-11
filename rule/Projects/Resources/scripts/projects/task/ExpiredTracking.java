@@ -55,8 +55,8 @@ public class ExpiredTracking extends _Do {
 
 	}
 
-	private void processTask(AppEnv env, ViewPage<Task> result, _Session session) {
-		for (Task task : result.getResult()) {
+	private void processTask(AppEnv env, List<Task> tasks, _Session session) {
+		for (Task task : tasks) {
 			if (current.after(task.getDueDate())) {
 				if (!task.getTags().contains(tag)) {
 					List<Tag> tags = task.getTags();

@@ -1,21 +1,5 @@
 package resourcereservations.services;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -28,7 +12,6 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
-
 import reference.model.constants.ApprovalType;
 import resourcereservations.constants.ActionFactory;
 import resourcereservations.dao.ApplicationForMeetingRoomDAO;
@@ -40,286 +23,296 @@ import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
 import workflow.other.Messages;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Path("applications_for_meeting_room")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApplicationForMeetingRoomService extends RestProvider {
 
-	@GET
-	public Response getView() {
-		_Session session = getSession();
-		WebFormData params = getWebFormData();
-		int pageSize = session.pageSize;
-		SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+    private ActionFactory action = new ActionFactory();
 
-		try {
-			// ApplicationForMeetingRoomFilter filter = new
-			// ApplicationForMeetingRoomFilter();
+    @GET
+    public Response getView() {
+        _Session session = getSession();
+        WebFormData params = getWebFormData();
+        int pageSize = session.pageSize;
+        SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
 
-			// setup filter
-			// String vehicleId = params.getValueSilently("vehicle");
-			// if (!vehicleId.isEmpty()) {
-			// Vehicle vehicle = new Vehicle();
-			// vehicle.setId(UUID.fromString(vehicleId));
-			// filter.setVehicle(vehicle);
-			// }
-			//
-			// String statusName = params.getValueSilently("status");
-			// if (!statusName.isEmpty()) {
-			// filter.setStatus(ApprovalStatusType.valueOf(statusName));
-			// }
-			//
-			// String resultName = params.getValueSilently("result");
-			// if (!resultName.isEmpty()) {
-			// filter.setResult(ApprovalResultType.valueOf(resultName));
-			// }
-			//
-			// if (params.containsField("tag")) {
-			// List<Tag> tags = new ArrayList<>();
-			// String[] tagIds = params.getListOfValuesSilently("tag");
-			// for (String tid : tagIds) {
-			// Tag tag = new Tag();
-			// tag.setId(UUID.fromString(tid));
-			// tags.add(tag);
-			// }
-			// filter.setTags(tags);
-			// }
-			//
+        try {
+            // ApplicationForMeetingRoomFilter filter = new
+            // ApplicationForMeetingRoomFilter();
 
-			ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(session);
-			ViewPage vp = avDAO.findViewPage(sortParams, params.getPage(), pageSize);
+            // setup filter
+            // String vehicleId = params.getValueSilently("vehicle");
+            // if (!vehicleId.isEmpty()) {
+            // Vehicle vehicle = new Vehicle();
+            // vehicle.setId(UUID.fromString(vehicleId));
+            // filter.setVehicle(vehicle);
+            // }
+            //
+            // String statusName = params.getValueSilently("status");
+            // if (!statusName.isEmpty()) {
+            // filter.setStatus(ApprovalStatusType.valueOf(statusName));
+            // }
+            //
+            // String resultName = params.getValueSilently("result");
+            // if (!resultName.isEmpty()) {
+            // filter.setResult(ApprovalResultType.valueOf(resultName));
+            // }
+            //
+            // if (params.containsField("tag")) {
+            // List<Tag> tags = new ArrayList<>();
+            // String[] tagIds = params.getListOfValuesSilently("tag");
+            // for (String tid : tagIds) {
+            // Tag tag = new Tag();
+            // tag.setId(UUID.fromString(tid));
+            // tags.add(tag);
+            // }
+            // filter.setTags(tags);
+            // }
+            //
 
-			_ActionBar actionBar = new _ActionBar(session);
-			actionBar.addAction(new ActionFactory().newApplicationForMeetingRoom);
-			actionBar.addAction(new ActionFactory().refreshVew);
+            ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(session);
+            ViewPage vp = avDAO.findViewPage(sortParams, params.getPage(), pageSize);
 
-			Outcome outcome = new Outcome();
-			outcome.setId("applications_for_vehicle");
-			outcome.setTitle("applications_for_vehicle");
-			outcome.addPayload(actionBar);
-			outcome.addPayload(vp);
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(action.newApplicationForMeetingRoom);
+            actionBar.addAction(action.refreshVew);
 
-	@GET
-	@Path("{id}")
-	public Response getById(@PathParam("id") String id) {
-		_Session ses = getSession();
-		ApplicationForMeetingRoom entity;
-		ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
+            Outcome outcome = new Outcome();
+            outcome.setId("applications_for_vehicle");
+            outcome.setTitle("applications_for_vehicle");
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			boolean isNew = "new".equals(id);
+    @GET
+    @Path("{id}")
+    public Response getById(@PathParam("id") String id) {
+        _Session ses = getSession();
+        ApplicationForMeetingRoom entity;
+        ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
-			if (isNew) {
-				entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
-			} else {
-				ApplicationForMeetingRoomDAO incomingDAO = new ApplicationForMeetingRoomDAO(ses);
-				entity = incomingDAO.findByIdentefier(id);
-			}
+        try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            boolean isNew = "new".equals(id);
 
-			EmployeeDAO empDao = new EmployeeDAO(ses);
-			Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-					.collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            if (isNew) {
+                entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
+            } else {
+                ApplicationForMeetingRoomDAO incomingDAO = new ApplicationForMeetingRoomDAO(ses);
+                entity = incomingDAO.findByIdentefier(id);
+            }
 
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.addPayload("employees", emps);
-			outcome.addPayload(getActionBar(ses, entity, domain));
-			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
+            outcome.addPayload(getActionBar(ses, entity, domain));
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(ApplicationForMeetingRoom dto) {
-		dto.setId(null);
-		return save(dto);
-	}
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, ApplicationForMeetingRoom dto) {
-		dto.setId(UUID.fromString(id));
-		return save(dto);
-	}
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(ApplicationForMeetingRoom dto) {
+        dto.setId(null);
+        return save(dto);
+    }
 
-	public Response save(ApplicationForMeetingRoom dto) {
-		_Session ses = getSession();
-		ApplicationForMeetingRoom entity;
-		ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") String id, ApplicationForMeetingRoom dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
 
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(ses);
+    public Response save(ApplicationForMeetingRoom dto) {
+        _Session ses = getSession();
+        ApplicationForMeetingRoom entity;
+        ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
-			if (dto.isNew()) {
-				entity = new ApplicationForMeetingRoom();
-			} else {
-				entity = avDAO.findById(dto.getId());
-			}
+        try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(ses);
 
-			dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
-			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+            if (dto.isNew()) {
+                entity = new ApplicationForMeetingRoom();
+            } else {
+                entity = avDAO.findById(dto.getId());
+            }
 
-			domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
+            dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-			if (dto.isNew()) {
-				RegNum rn = new RegNum();
-				entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-				entity = avDAO.add(entity, rn);
-			} else {
-				entity = avDAO.update(entity);
-			}
+            domain.fillFromDto(entity, dto, employeeDAO.findByUser(ses.getUser()));
 
-			entity = avDAO.findById(entity.getId());
+            if (dto.isNew()) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+                entity = avDAO.add(entity, rn);
+            } else {
+                entity = avDAO.update(entity);
+            }
 
-			return Response.ok(domain.getOutcome(entity)).build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		} catch (DTOException e) {
-			return responseValidationError(e);
-		}
-	}
+            entity = avDAO.findById(entity.getId());
 
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		_Session ses = getSession();
-		try {
-			ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(ses);
-			ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
+            return Response.ok(domain.getOutcome(entity)).build();
+        } catch (SecureException | DAOException e) {
+            return responseException(e);
+        } catch (DTOException e) {
+            return responseValidationError(e);
+        }
+    }
 
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-			ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") String id) {
+        _Session ses = getSession();
+        try {
+            ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(ses);
+            ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
+            if (entity != null) {
+                dao.delete(entity);
+            }
+            return Response.noContent().build();
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+    }
 
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+    @GET
+    @Path("{id}/attachments/{attachId}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        try {
+            ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
+            ApplicationForMeetingRoom entity = dao.findByIdentefier(id);
 
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
-	}
+            return getAttachment(entity, attachId);
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-	@POST
-	@Path("action/startApproving")
-	public Response startApproving(ApplicationForMeetingRoom dto) {
-		try {
-			ApplicationForMeetingRoomDAO afvDAO = new ApplicationForMeetingRoomDAO(getSession());
-			ApplicationForMeetingRoom entity = afvDAO.findById(dto.getId());
-			ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
 
-			domain.startApproving(entity);
+    @POST
+    @Path("action/startApproving")
+    public Response startApproving(ApplicationForMeetingRoom dto) {
+        try {
+            ApplicationForMeetingRoomDAO afvDAO = new ApplicationForMeetingRoomDAO(getSession());
+            ApplicationForMeetingRoom entity = afvDAO.findById(dto.getId());
+            ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
-			afvDAO.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("approving_started");
-			outcome.setMessage("approving_started");
-			outcome.addPayload("result", "approving_started");
+            domain.startApproving(entity);
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+            afvDAO.update(entity, false);
+            new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("approving_started");
+            outcome.setMessage("approving_started");
+            outcome.addPayload("result", "approving_started");
 
-	@POST
-	@Path("action/acceptApprovalBlock")
-	public Response acceptApprovalBlock(ApplicationForMeetingRoom dto) {
-		try {
-			ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-			ApplicationForMeetingRoom entity = dao.findById(dto.getId());
-			ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-			domain.acceptApprovalBlock(entity, getSession().getUser());
+    @POST
+    @Path("action/acceptApprovalBlock")
+    public Response acceptApprovalBlock(ApplicationForMeetingRoom dto) {
+        try {
+            ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
+            ApplicationForMeetingRoom entity = dao.findById(dto.getId());
+            ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
-			dao.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("acceptApprovalBlock");
-			outcome.setMessage("acceptApprovalBlock");
+            domain.acceptApprovalBlock(entity, getSession().getUser());
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+            dao.update(entity, false);
+            new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("acceptApprovalBlock");
+            outcome.setMessage("acceptApprovalBlock");
 
-	@POST
-	@Path("action/declineApprovalBlock")
-	public Response declineApprovalBlock(ApplicationForMeetingRoom dto) {
-		try {
-			ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-			ApplicationForMeetingRoom entity = dao.findById(dto.getId());
-			ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-			String decisionComment = getWebFormData().getValueSilently("comment");
+    @POST
+    @Path("action/declineApprovalBlock")
+    public Response declineApprovalBlock(ApplicationForMeetingRoom dto) {
+        try {
+            ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
+            ApplicationForMeetingRoom entity = dao.findById(dto.getId());
+            ApplicationForMeetingRoomDomain domain = new ApplicationForMeetingRoomDomain();
 
-			domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
+            String decisionComment = getWebFormData().getValueSilently("comment");
 
-			dao.update(entity, false);
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-			Outcome outcome = domain.getOutcome(entity);
-			outcome.setTitle("declineApprovalBlock");
-			outcome.setMessage("declineApprovalBlock");
+            domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
 
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
+            dao.update(entity, false);
+            new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("declineApprovalBlock");
 
-	private _ActionBar getActionBar(_Session session, ApplicationForMeetingRoom entity,
-			ApplicationForMeetingRoomDomain domain) throws DAOException {
-		_ActionBar actionBar = new _ActionBar(session);
+            return Response.ok(outcome).build();
+        } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        }
+    }
 
-		actionBar.addAction(new ActionFactory().close);
-		if (entity.isEditable()) {
-			actionBar.addAction(new ActionFactory().saveAndClose);
-		}
-		if (domain.approvalCanBeStarted(entity)) {
-			actionBar.addAction(new ActionFactory().startApproving);
-		}
+    private _ActionBar getActionBar(_Session session, ApplicationForMeetingRoom entity,
+                                    ApplicationForMeetingRoomDomain domain) throws DAOException {
+        _ActionBar actionBar = new _ActionBar(session);
 
-		EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
-		if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-				actionBar.addAction(new ActionFactory().signApprovalBlock);
-			} else {
-				actionBar.addAction(new ActionFactory().acceptApprovalBlock);
-			}
-			actionBar.addAction(new ActionFactory().declineApprovalBlock);
-		}
-		if (!entity.isNew() && entity.isEditable()) {
-			actionBar.addAction(new ActionFactory().deleteDocument);
-		}
+        actionBar.addAction(action.close);
+        if (entity.isEditable()) {
+            actionBar.addAction(action.saveAndClose);
+        }
+        if (domain.approvalCanBeStarted(entity)) {
+            actionBar.addAction(action.startApproving);
+        }
 
-		return actionBar;
-	}
+        EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
+        if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
+            if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
+                actionBar.addAction(action.signApprovalBlock);
+            } else {
+                actionBar.addAction(action.acceptApprovalBlock);
+            }
+            actionBar.addAction(action.declineApprovalBlock);
+        }
+        if (!entity.isNew() && entity.isEditable()) {
+            actionBar.addAction(action.deleteDocument);
+        }
+
+        return actionBar;
+    }
 }

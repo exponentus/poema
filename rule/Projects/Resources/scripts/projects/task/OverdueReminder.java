@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.localization.constants.LanguageCode;
@@ -43,19 +42,19 @@ public class OverdueReminder extends _Do {
 			tags.add(tag);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				ViewPage<Task> vp = tDao
+				List<Task> tl = tDao
 						.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
-				vp.merge(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
-				processRemind(vp, session);
+				tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
+				processRemind(tl, session);
 			}
 		} catch (DAOException e) {
 			Server.logger.exception(e);
 		}
 	}
 
-	private void processRemind(ViewPage<Task> result, _Session session) {
+	private void processRemind(List<Task> taskList, _Session session) {
 		List<Task> tasks = new ArrayList<>();
-		for (Task task : result.getResult()) {
+		for (Task task : taskList) {
 			tasks.add(task);
 		}
 		sendNotify(session, tasks);

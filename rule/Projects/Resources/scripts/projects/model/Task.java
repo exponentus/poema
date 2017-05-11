@@ -1,9 +1,7 @@
 package projects.model;
 
-import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
-import com.exponentus.common.model.SimpleReferenceEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
@@ -115,66 +113,6 @@ public class Task extends SecureHierarchicalEntity {
 
     @Transient
     private List<IAppEntity<UUID>> responses;
-
-    public Task() {
-        super();
-    }
-
-    // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String,
-    // java.lang.Long
-    // java.util.UUID, java.util.Date, java.lang.Long, java.lang.String,
-    // java.lang.String, java.lang.String, reference.model.Tag, java.lang.Long
-    public Task(UUID id, Date regDate, User author, String tname, String locName, Long countAtt) {
-        this.id = id;
-        this.regDate = regDate;
-        this.author = author;
-        this.title = tname;
-        // this.body = locName;
-        // this.tags = tags;
-    }
-
-    public Task(UUID id, Date regDate, User author, String title, String body, Tag tag, Long countAtt) {
-        this.id = id;
-        this.regDate = regDate;
-        this.author = author;
-        this.title = title;
-        this.body = body;
-        if (tag != null) {
-            this.tags = new ArrayList<>();
-            this.tags.add(tag);
-        }
-    }
-
-    // java.util.UUID, java.util.Date, java.lang.Long, reference.model.TaskType,
-    // java.lang.String, java.lang.Long
-    public Task(UUID id, Date regDate, User author, TaskType taskType, String title, Long countAtt) {
-        this.id = id;
-        this.regDate = regDate;
-        this.author = author;
-        this.taskType = taskType;
-        this.title = title;
-        if (countAtt > 0) {
-            this.attachments = new ArrayList<>();
-            for (int i = 0; i < countAtt; i++) {
-                this.attachments.add(new Attachment());
-            }
-        }
-    }
-
-    public Task(UUID id, Date regDate, String title, SimpleReferenceEntity sre, Long countAtt) {
-        this.id = id;
-        this.regDate = regDate;
-        this.title = title;
-        this.taskType = new TaskType();
-        this.taskType.setName(sre.getName());
-        this.taskType.setLocName(sre.getLocName());
-        if (countAtt > 0) {
-            this.attachments = new ArrayList<>();
-            for (int i = 0; i < countAtt; i++) {
-                this.attachments.add(new Attachment());
-            }
-        }
-    }
 
     public Project getProject() {
         return project;

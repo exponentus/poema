@@ -17,6 +17,4 @@ public class ActionFactory extends ConventionalActionFactory {
     public Action signApprovalBlock = new Action(_ActionType.API_ACTION).id("signApprovalBlock").caption("sign").url("acceptApprovalBlock");
     public Action acceptApprovalBlock = new Action(_ActionType.API_ACTION).id("acceptApprovalBlock").caption("accept").url("acceptApprovalBlock");
     public Action declineApprovalBlock = new Action(_ActionType.API_ACTION).id("declineApprovalBlock").caption("decline").url("declineApprovalBlock");
-
-  
 }

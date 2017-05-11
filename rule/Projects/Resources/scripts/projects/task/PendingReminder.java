@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.localization.constants.LanguageCode;
@@ -34,7 +33,7 @@ public class PendingReminder extends _Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			tDao = new TaskDAO(session);
-			ViewPage<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING));
+			List<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING));
 			processRemind(vp, session);
 		} catch (DAOException e) {
 			logError(e);
@@ -42,9 +41,9 @@ public class PendingReminder extends _Do {
 		}
 	}
 
-	private void processRemind(ViewPage<Task> result, _Session session) {
+	private void processRemind(List<Task> taskList, _Session session) {
 		List<Task> tasks = new ArrayList<>();
-		for (Task task : result.getResult()) {
+		for (Task task : taskList) {
 			tasks.add(task);
 		}
 		sendNotify(session, tasks);

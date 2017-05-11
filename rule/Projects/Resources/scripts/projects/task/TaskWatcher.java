@@ -1,10 +1,10 @@
 package projects.task;
 
 import java.util.Date;
+import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._Do;
@@ -26,8 +26,8 @@ public class TaskWatcher extends _Do {
 			TaskDAO tDao = new TaskDAO(ses);
 			TaskFilter filter = new TaskFilter();
 			filter.setStatus(TaskStatusType.WAITING);
-			ViewPage<Task> result = tDao.findAllByTaskFilter(filter);
-			for (Task task : result.getResult()) {
+			List<Task> taskList = tDao.findAllByTaskFilter(filter);
+			for (Task task : taskList) {
 				if (current.after(task.getStartDate())) {
 					task.setStatus(TaskStatusType.OPEN);
 					try {
