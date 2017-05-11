@@ -10,7 +10,7 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.localization.Vocabulary;
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.log.Log4jLogger;
+import com.exponentus.log.CommonLogger;
 import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
@@ -24,7 +24,7 @@ import projects.model.Request;
 import projects.model.Task;
 
 public class Messages {
-	protected static Log4jLogger logger = new Log4jLogger("Messaging");
+	protected static CommonLogger logger = new CommonLogger("Messaging");
 
 	private LanguageCode lang = EnvConst.getDefaultLang();
 	private AppEnv appEnv;
