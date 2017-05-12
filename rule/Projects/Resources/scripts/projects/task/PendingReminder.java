@@ -56,29 +56,31 @@ public class PendingReminder extends _Do {
 				List<User> allUsers = userDAO.findAll();
 				for (User user : allUsers) {
 					Memo memo = new Memo();
-					List<TaskString> tasks_ftu = new ArrayList<>();
-					int tasks_count = 0;
+					List<TaskString> tasksFtu = new ArrayList<>();
+					int tasksCount = 0;
 					for (Task task : tasks) {
 						if (user.getId().equals(task.getAuthor().getId())) {
-							tasks_ftu.add(new TaskString(task, session));
-							tasks_count++;
+							tasksFtu.add(new TaskString(task, session));
+							tasksCount++;
 						}
 					}
-					if (tasks_count > 0) {
-						memo.addVar("tasks", tasks_ftu);
+					if (tasksCount > 0) {
+						memo.addVar("tasks", tasksFtu);
 						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#");
-						IUser<Long> i_user = userDAO.findById(user.getId());
-						LanguageCode user_lang = i_user.getDefaultLang();
-						memo.addVar("lang", "&lang=" + user_lang);
+						IUser<Long> u = userDAO.findById(user.getId());
+						LanguageCode userLang = u.getDefaultLang();
+						memo.addVar("lang", "&lang=" + userLang);
 						memo.addVar("user", user.getUserName());
+						memo.addVar("to_unsubscr", Environment.getFullHostName() + "/Projects" + EnvConst.REST_PREFIX
+								+ "/service/messaging/unsubcribemail/");
 
 						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_pending",
-								user_lang);
+								userLang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
 						MailAgent ma = new MailAgent("task_pending");
 						ma.sendMessage(recipients,
-								getCurrentAppEnv().vocabulary.getWord("notify_about_pending_task", user_lang),
+								getCurrentAppEnv().vocabulary.getWord("notify_about_pending_task", userLang),
 								memo.getBody(body));
 					}
 				}
