@@ -7,15 +7,15 @@ import workflow.model.embedded.Control;
 import java.util.Date;
 import java.util.List;
 
-public class ControlDTO {
+public class ControlShortDTO {
 
     public ControlType controlType;
     public Date startDate;
     public Date dueDate;
     public ControlStatusType status = ControlStatusType.UNKNOWN;
-    public List<AssigneeEntryDTO> assigneeEntries;
+    public List<AssigneeEntryShortDTO> assigneeEntries;
 
-    public ControlDTO(Control control) {
+    public ControlShortDTO(Control control) {
         controlType = control.getControlType();
         startDate = control.getStartDate();
         dueDate = control.getDueDate();

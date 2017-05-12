@@ -18,7 +18,7 @@ import com.exponentus.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
 import projects.domain.ProjectDomain;
-import projects.dto.ProjectShortDTO;
+import projects.dto.ProjectViewEntryDTO;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
@@ -56,7 +56,7 @@ public class ProjectService extends RestProvider {
                 status = ProjectStatusType.valueOf(getWebFormData().getValueSilently("status"));
             }
 
-            ViewPage<ProjectShortDTO> vp = projectDAO.findViewPage1(sortParams, status, getWebFormData().getPage(),
+            ViewPage<ProjectViewEntryDTO> vp = projectDAO.findViewPage1(sortParams, status, getWebFormData().getPage(),
                     pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);

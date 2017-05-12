@@ -1,21 +1,14 @@
 package projects.dto;
 
-import com.exponentus.common.model.Attachment;
 import com.exponentus.localization.constants.LanguageCode;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import projects.init.AppConst;
 import projects.model.constants.ProjectStatusType;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("project")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProjectShortDTO {
+public class ProjectViewEntryDTO {
 
     public UUID id;
     public String kind = "project";
@@ -34,9 +27,8 @@ public class ProjectShortDTO {
     public Date finishDate;
     public String comment;
     public boolean hasAttachments;
-    public List<Attachment> attachments = new ArrayList<>();
 
-    public ProjectShortDTO(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {
+    public ProjectViewEntryDTO(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -49,11 +41,6 @@ public class ProjectShortDTO {
         this.finishDate = finishDate;
         this.comment = comment;
         this.hasAttachments = attachmentCount > 0;
-
-        if (hasAttachments) {
-            this.attachments = new ArrayList<>();
-            this.attachments.add(new Attachment());
-        }
     }
 
     public String getURL() {

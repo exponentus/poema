@@ -1,8 +1,6 @@
 package projects.dto;
 
 import com.exponentus.runtimeobj.IAppEntity;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import projects.init.AppConst;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
@@ -14,9 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("task")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class TaskShortDTO {
+public class TaskViewEntryDTO {
 
     public UUID id;
     public String kind = "task";
@@ -32,10 +28,11 @@ public class TaskShortDTO {
     public Date startDate;
     public Date dueDate;
     public List<Tag> tags;
+    public boolean hasAttachments;
     public Long responsesCount;
     public List<IAppEntity<UUID>> responses;
 
-    public TaskShortDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags) {
+    public TaskViewEntryDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
         this.taskType = taskType;
@@ -48,9 +45,10 @@ public class TaskShortDTO {
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.tags = tags;
+        this.hasAttachments = attachmentCount > 0;
     }
 
-    public TaskShortDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, Tag tag) {
+    public TaskViewEntryDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, Tag tag, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
         this.taskType = taskType;
@@ -64,6 +62,7 @@ public class TaskShortDTO {
         this.dueDate = dueDate;
         this.tags = new ArrayList<>();
         this.tags.add(tag);
+        this.hasAttachments = attachmentCount > 0;
     }
 
     public String getURL() {

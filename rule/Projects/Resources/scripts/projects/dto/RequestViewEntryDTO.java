@@ -1,7 +1,5 @@
 package projects.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.StringUtils;
 import projects.init.AppConst;
 import projects.model.Task;
@@ -11,9 +9,7 @@ import reference.model.RequestType;
 import java.util.Date;
 import java.util.UUID;
 
-@JsonRootName("request")
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class RequestShortDTO {
+public class RequestViewEntryDTO {
 
     public UUID id;
     public String kind = "request";
@@ -25,7 +21,7 @@ public class RequestShortDTO {
     public String decisionComment;
     public String comment;
 
-    public RequestShortDTO(UUID id, Task task, RequestType requestType, ResolutionType resolution, Date resolutionTime, String decisionComment, String comment) {
+    public RequestViewEntryDTO(UUID id, Task task, RequestType requestType, ResolutionType resolution, Date resolutionTime, String decisionComment, String comment) {
         this.id = id;
         this.task = task;
         this.requestType = requestType;

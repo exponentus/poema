@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class IncomingViewDTO {
+public class IncomingViewEntryDTO {
 
     public UUID id;
     public String kind = "incoming";
@@ -27,6 +27,7 @@ public class IncomingViewDTO {
     public DocumentType docType;
     public DocumentSubject docSubject;
     public String body;
+    public boolean hasAttachments;
 
     public String getURL() {
         return AppConst.BASE_URL + "incomings/" + id;

@@ -5,7 +5,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.AssignmentFilter;
-import workflow.dto.AssignmentViewDTO;
+import workflow.dto.AssignmentViewEntryDTO;
 import workflow.model.Assignment;
 
 import javax.persistence.EntityManager;
@@ -22,11 +22,11 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
         super(Assignment.class, session);
     }
 
-    public ViewPage<AssignmentViewDTO> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<AssignmentViewEntryDTO> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<AssignmentViewDTO> cq = cb.createQuery(AssignmentViewDTO.class);
+            CriteriaQuery<AssignmentViewEntryDTO> cq = cb.createQuery(AssignmentViewEntryDTO.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
             Root<Assignment> root = cq.from(Assignment.class);
 
@@ -59,7 +59,7 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
             }
 
             cq.select(cb.construct(
-                    AssignmentViewDTO.class,
+                    AssignmentViewEntryDTO.class,
                     root.get("id"),
                     root.get("appliedAuthor").get("name"),
                     root.get("body"),
@@ -74,7 +74,7 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
                 countRootCq.where(conditionCount);
             }
 
-            TypedQuery<AssignmentViewDTO> typedQuery = em.createQuery(cq);
+            TypedQuery<AssignmentViewEntryDTO> typedQuery = em.createQuery(cq);
             TypedQuery<Long> countQuery = em.createQuery(countRootCq);
 
             long count = countQuery.getSingleResult();

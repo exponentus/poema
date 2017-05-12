@@ -1,6 +1,9 @@
 package workflow.dto;
 
-import staff.model.Employee;
+import reference.model.DocumentLanguage;
+import reference.model.DocumentSubject;
+import reference.model.DocumentType;
+import staff.model.Organization;
 import workflow.init.AppConst;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
@@ -8,20 +11,23 @@ import workflow.model.constants.ApprovalStatusType;
 import java.util.Date;
 import java.util.UUID;
 
-public class OfficeMemoViewDTO {
+public class OutgoingViewEntryDTO {
 
     public UUID id;
-    public String kind = "officeMemo";
+    public String kind = "outgoing";
 
     public ApprovalStatusType status = ApprovalStatusType.DRAFT;
     public ApprovalResultType result = ApprovalResultType.PROJECT;
     public String regNumber;
     public Date appliedRegDate;
-    public Employee appliedAuthor;
-    public Employee recipient;
+    public Organization recipient;
+    public DocumentLanguage docLanguage;
+    public DocumentType docType;
+    public DocumentSubject docSubject;
     public String body;
+    public boolean hasAttachments;
 
     public String getURL() {
-        return AppConst.BASE_URL + "office-memos/" + id;
+        return AppConst.BASE_URL + "outgoings/" + id;
     }
 }

@@ -5,7 +5,7 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import projects.dto.ProjectShortDTO;
+import projects.dto.ProjectViewEntryDTO;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
@@ -21,11 +21,11 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<ProjectShortDTO> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
+    public ViewPage<ProjectViewEntryDTO> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<ProjectShortDTO> cq = cb.createQuery(ProjectShortDTO.class);
+            CriteriaQuery<ProjectViewEntryDTO> cq = cb.createQuery(ProjectViewEntryDTO.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
             Root<Project> root = cq.from(Project.class);
             Join atts = root.join("attachments", JoinType.LEFT);
@@ -44,7 +44,7 @@ public class ProjectDAO extends DAO<Project, UUID> {
             }
 
             cq.select(cb.construct(
-                    ProjectShortDTO.class,
+                    ProjectViewEntryDTO.class,
                     root.get("id"),
                     root.get("name"),
                     root.get("status"),
@@ -68,13 +68,13 @@ public class ProjectDAO extends DAO<Project, UUID> {
                 countRootCq.where(conditionCount);
             }
 
-            TypedQuery<ProjectShortDTO> typedQuery = em.createQuery(cq);
+            TypedQuery<ProjectViewEntryDTO> typedQuery = em.createQuery(cq);
             TypedQuery<Long> query = em.createQuery(countRootCq);
 
             long count = query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
-            List<ProjectShortDTO> result = typedQuery.getResultList();
+            List<ProjectViewEntryDTO> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {
