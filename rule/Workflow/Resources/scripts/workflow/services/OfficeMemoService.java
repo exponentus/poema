@@ -331,7 +331,6 @@ public class OfficeMemoService extends RestProvider {
                 actionBar.addAction(action.acceptApprovalBlock);
             }
             actionBar.addAction(action.declineApprovalBlock);
-            actionBar.addAction(action.skipApprovalBlock);
         }
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(_ActionType.LINK).caption("assignment")
