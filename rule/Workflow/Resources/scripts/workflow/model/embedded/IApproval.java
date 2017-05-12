@@ -2,6 +2,7 @@ package workflow.model.embedded;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import com.exponentus.user.IUser;
 
@@ -11,6 +12,8 @@ import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 
 public interface IApproval {
+
+	UUID getId();
 
 	IUser<Long> getAuthor();
 
