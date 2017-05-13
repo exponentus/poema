@@ -83,7 +83,7 @@ public class Incoming extends ControlledDocument {
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
-	@ElementCollection(fetch = FetchType.EAGER)
+	@ElementCollection
 	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers;
 

@@ -166,7 +166,7 @@ public class OfficeMemoService extends RestProvider {
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
 		OfficeMemoDomain omd = new OfficeMemoDomain();
-		omd.fillFromDto(entity, dto, empDao.findByUser(ses.getUser()));
+		omd.fillFromDto(entity, dto, empDao.findByUser(ses.getUser()), ses);
 		omd.calculateReadersEditors(entity);
 
 		if (dto.isNew()) {

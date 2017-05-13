@@ -2,8 +2,8 @@ package workflow.services;
 
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
-import com.exponentus.scripting.outline._Outline;
-import com.exponentus.scripting.outline._OutlineEntry;
+import com.exponentus.scripting.outline.Outline;
+import com.exponentus.scripting.outline.OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import workflow.init.AppConst;
 
@@ -23,15 +23,15 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline t = new _Outline("", "wf_assignment");
-        t.addEntry(new _OutlineEntry("assignments_all", "", "fa fa-tasks", "assignments_all", AppConst.BASE_URL + "assignments"));
-        t.addEntry(new _OutlineEntry("assignments_my", "", "fa fa-pencil", "assignments_my", AppConst.BASE_URL + "assignments/my"));
-        t.addEntry(new _OutlineEntry("assignments_inbox", "", "fa fa-inbox", "assignments_inbox", AppConst.BASE_URL + "assignments/inbox"));
+        Outline t = new Outline("", "wf_assignment");
+        t.addEntry(new OutlineEntry("assignments_all", "", "fa fa-tasks", "assignments_all", AppConst.BASE_URL + "assignments"));
+        t.addEntry(new OutlineEntry("assignments_my", "", "fa fa-pencil", "assignments_my", AppConst.BASE_URL + "assignments/my"));
+        t.addEntry(new OutlineEntry("assignments_inbox", "", "fa fa-inbox", "assignments_inbox", AppConst.BASE_URL + "assignments/inbox"));
 
-        _Outline odo = new _Outline("", "org_documents");
-        odo.addEntry(new _OutlineEntry("incoming_documents", "", "fa fa-file-text-o", "incomings", AppConst.BASE_URL + "incomings"));
-        odo.addEntry(new _OutlineEntry("outgoing_documents", "", "fa fa-file-text-o", "outgoings", AppConst.BASE_URL + "outgoings"));
-        odo.addEntry(new _OutlineEntry("office_memo_plural", "", "fa fa-file-text-o", "office-memos", AppConst.BASE_URL + "office-memos"));
+        Outline odo = new Outline("", "org_documents");
+        odo.addEntry(new OutlineEntry("incoming_documents", "", "fa fa-file-text-o", "incomings", AppConst.BASE_URL + "incomings"));
+        odo.addEntry(new OutlineEntry("outgoing_documents", "", "fa fa-file-text-o", "outgoings", AppConst.BASE_URL + "outgoings"));
+        odo.addEntry(new OutlineEntry("office_memo_plural", "", "fa fa-file-text-o", "office-memos", AppConst.BASE_URL + "office-memos"));
 
         list.add(t);
         list.add(odo);

@@ -1,17 +1,23 @@
 package workflow.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.exponentus.common.domain.IDomain;
 import com.exponentus.common.model.ACL;
+import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
 import administrator.model.User;
+import staff.dao.EmployeeDAO;
 import staff.model.Employee;
+import staff.model.embedded.Observer;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
@@ -27,7 +33,8 @@ public class OfficeMemoDomain implements IDomain {
 		return om;
 	}
 
-	public void fillFromDto(OfficeMemo om, OfficeMemo dto, Employee author) throws DTOException {
+	public void fillFromDto(OfficeMemo om, OfficeMemo dto, Employee author, _Session ses)
+			throws DTOException, DAOException {
 		validate(dto);
 
 		om.setAppliedAuthor(dto.getAppliedAuthor());
@@ -38,7 +45,15 @@ public class OfficeMemoDomain implements IDomain {
 		om.setAttachments(dto.getAttachments());
 		om.setBlocks(dto.getBlocks());
 		om.setSchema(dto.getSchema());
-		om.setObservers(dto.getObservers());
+
+		EmployeeDAO eDao = new EmployeeDAO(ses);
+		List<Observer> observers = new ArrayList<Observer>();
+		for (Observer o : dto.getObservers()) {
+			Observer observer = new Observer();
+			observer.setEmployee(eDao.findById(o.getEmployee().getId()));
+			observers.add(observer);
+		}
+		om.setObservers(observers);
 
 		if (om.isNew()) {
 			om.setVersion(1);
@@ -85,6 +100,12 @@ public class OfficeMemoDomain implements IDomain {
 			entity.addReaderEditor(entity.getAuthor());
 		} else {
 			entity.addReader(entity.getAuthor());
+		}
+		List<Observer> observers = entity.getObservers();
+		if (observers != null) {
+			for (Observer observer : observers) {
+				entity.addReader(observer.getEmployee().getUserID());
+			}
 		}
 	}
 

@@ -2,8 +2,8 @@ package resourcereservations.services;
 
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
-import com.exponentus.scripting.outline._Outline;
-import com.exponentus.scripting.outline._OutlineEntry;
+import com.exponentus.scripting.outline.Outline;
+import com.exponentus.scripting.outline.OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import resourcereservations.init.AppConst;
 
@@ -23,14 +23,14 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline o = new _Outline("", "common");
-        o.addEntry(new _OutlineEntry("all_applications", "", "fa fa-tasks", "applications", AppConst.BASE_URL + "applications"));
-        o.addEntry(new _OutlineEntry("my_applications", "", "fa fa-user-o", "applications_my", AppConst.BASE_URL + "applications/my"));
+        Outline o = new Outline("", "common");
+        o.addEntry(new OutlineEntry("all_applications", "", "fa fa-tasks", "applications", AppConst.BASE_URL + "applications"));
+        o.addEntry(new OutlineEntry("my_applications", "", "fa fa-user-o", "applications_my", AppConst.BASE_URL + "applications/my"));
 
-        _Outline co = new _Outline("", "application_types");
-        co.addEntry(new _OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle",
+        Outline co = new Outline("", "application_types");
+        co.addEntry(new OutlineEntry("applications_for_vehicle", "", "fa fa-car", "applications_for_vehicle",
                 AppConst.BASE_URL + "applications_for_vehicle"));
-        co.addEntry(new _OutlineEntry("applications_for_meeting_room", "", "fa fa-home",
+        co.addEntry(new OutlineEntry("applications_for_meeting_room", "", "fa fa-home",
                 "applications_for_meeting_room", AppConst.BASE_URL + "applications_for_meeting_room"));
 
         list.add(o);

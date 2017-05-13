@@ -5,8 +5,8 @@ import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.outline._Outline;
-import com.exponentus.scripting.outline._OutlineEntry;
+import com.exponentus.scripting.outline.Outline;
+import com.exponentus.scripting.outline.OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import helpdesk.init.AppConst;
 import reference.dao.DemandTypeDAO;
@@ -29,9 +29,9 @@ public class NavigatorService extends RestProvider {
     public Response getNav() {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
-        _Outline co = new _Outline("", "common");
+        Outline co = new Outline("", "common");
 
-        co.addEntry(new _OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", AppConst.BASE_URL + "demands/s/my"));
+        co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", AppConst.BASE_URL + "demands/s/my"));
 
         try {
             _Session session = getSession();
@@ -60,14 +60,14 @@ public class NavigatorService extends RestProvider {
                         icon = "";
                         break;
                 }
-                co.addEntry(new _OutlineEntry(dt.getLocName(lang), "", icon, "demands/s/" + dt.getName(), AppConst.BASE_URL + "demands/s/" + dt.getName()));
+                co.addEntry(new OutlineEntry(dt.getLocName(lang), "", icon, "demands/s/" + dt.getName(), AppConst.BASE_URL + "demands/s/" + dt.getName()));
             }
         } catch (DAOException e) {
             e.printStackTrace();
         }
 
-        _Outline to = new _Outline("", "tasks");
-        to.addEntry(new _OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", AppConst.BASE_URL + "tasks/s/initiative"));
+        Outline to = new Outline("", "tasks");
+        to.addEntry(new OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", AppConst.BASE_URL + "tasks/s/initiative"));
 
         list.add(co);
         list.add(to);
