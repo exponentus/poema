@@ -28,8 +28,8 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.user.SuperUser;
 
 import staff.dao.EmployeeDAO;
@@ -295,11 +295,11 @@ public class AssignmentService extends RestProvider {
 			actionBar.addAction(action.saveAndClose);
 		}
 		if (!entity.isNew() && entity.getControl().getStatus() != ControlStatusType.DRAFT) {
-			actionBar.addAction(new Action(_ActionType.LINK).caption("assignment")
+			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
 		}
 		if (entity.getControl().assigneesContainsUser(session.getUser())) {
-			actionBar.addAction(new Action(_ActionType.LINK).caption("report")
+			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
 		}
 		if (!entity.isNew() && entity.isEditable()) {

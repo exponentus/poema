@@ -26,8 +26,8 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.server.Server;
 
 import administrator.model.User;
@@ -80,7 +80,7 @@ public class DemandService extends RestProvider {
 			ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
 			_ActionBar actionBar = new _ActionBar(session);
-			Action newDocAction = new Action(_ActionType.LINK).caption("add_demand")
+			Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
 					.url(AppConst.BASE_URL + "demands/new?type=" + slug);
 			actionBar.addAction(newDocAction);
 
@@ -233,10 +233,10 @@ public class DemandService extends RestProvider {
 		actionBar.addAction(new ConventionalActionFactory().close);
 		if (entity.isNew() || entity.isEditable()) {
 			String actLabel = entity.isNew() ? "send" : "save_close";
-			actionBar.addAction(new Action(_ActionType.SAVE_AND_CLOSE).caption(actLabel).cls("btn-primary"));
+			actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption(actLabel).cls("btn-primary"));
 		}
 		if (!entity.isNew() && entity.isEditable()) {
-			actionBar.addAction(new Action(_ActionType.CUSTOM_ACTION).id("create_task").caption("create_task"));
+			actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("create_task").caption("create_task"));
 		}
 		if (!entity.isNew() && entity.isEditable()) {
 			actionBar.addAction(new ConventionalActionFactory().deleteDocument);

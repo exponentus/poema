@@ -24,8 +24,8 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 import com.exponentus.util.TimeUtil;
 
 import administrator.model.User;
@@ -260,13 +260,12 @@ public class RequestService extends RestProvider {
 		actionBar.addAction(new ActionFactory().close);
 
 		if (request.isNew()) {
-			actionBar.addAction(new Action(_ActionType.SAVE_AND_CLOSE).caption("send_request").cls("btn-primary"));
+			actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption("send_request").cls("btn-primary"));
 		}
 
 		if (requestDomain.userCanDoResolution(request, (User) session.getUser())) {
-			actionBar.addAction(
-					new Action(_ActionType.CUSTOM_ACTION).id("accept").caption("accept").cls("btn-primary"));
-			actionBar.addAction(new Action(_ActionType.CUSTOM_ACTION).id("decline").caption("decline"));
+			actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("accept").caption("accept").cls("btn-primary"));
+			actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("decline").caption("decline"));
 		}
 
 		return actionBar;

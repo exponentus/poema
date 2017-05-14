@@ -30,8 +30,8 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.scripting.actions._ActionType;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalType;
@@ -342,7 +342,7 @@ public class OfficeMemoService extends RestProvider {
 			actionBar.addAction(action.declineApprovalBlock);
 		}
 		if (omd.canCreateAssignment(entity, (User) session.getUser())) {
-			actionBar.addAction(new Action(_ActionType.LINK).caption("assignment")
+			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?officememo=" + entity.getIdentifier()));
 		}
 		if (omd.documentCanBeDeleted(entity)) {
