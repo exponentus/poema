@@ -18,9 +18,9 @@ public class Index extends _DoPage {
 			LanguageCode l = LanguageCode.ENG;
 			if (toLang.length() > 0) {
 				l = LanguageCode.valueOf(toLang.toUpperCase().trim());
-				session.setLang(l);
+				session.setLanguage(l);
 			} else if (session.getLang() == null) {
-				session.setLang(LanguageCode.ENG);
+				session.setLanguage(LanguageCode.ENG);
 			}
 			addValue("template", getCurrentAppEnv().templates.getTemplate(MessagingType.SITE, "faq", l));
 		} catch (Exception e) {
