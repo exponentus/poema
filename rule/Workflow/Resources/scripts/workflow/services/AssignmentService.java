@@ -1,23 +1,5 @@
 package workflow.services;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -31,7 +13,7 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.user.SuperUser;
-
+import reference.model.ControlType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -50,262 +32,285 @@ import workflow.model.embedded.Control;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Path("assignments")
 @Produces(MediaType.APPLICATION_JSON)
 public class AssignmentService extends RestProvider {
 
-	private ActionFactory action = new ActionFactory();
+    private ActionFactory action = new ActionFactory();
 
-	@GET
-	@Path("my")
-	public Response getMyAssignments() {
-		return getView("_my");
-	}
+    @GET
+    @Path("my")
+    public Response getMyAssignments() {
+        return getView("_my");
+    }
 
-	@GET
-	@Path("inbox")
-	public Response getAssignmentsInbox() {
-		return getView("_inbox");
-	}
+    @GET
+    @Path("inbox")
+    public Response getAssignmentsInbox() {
+        return getView("_inbox");
+    }
 
-	@GET
-	public Response getAll() {
-		return getView("_all");
-	}
+    @GET
+    public Response getAll() {
+        return getView("_all");
+    }
 
-	public Response getView(String slug) {
-		_Session session = getSession();
-		int pageSize = session.pageSize;
-		SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-		AssignmentFilter filter = new AssignmentFilter();
+    public Response getView(String slug) {
+        _Session session = getSession();
+        int pageSize = session.pageSize;
+        SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
+        String statusName = getWebFormData().getAnyValueSilently("status");
+        String controlTypeId = getWebFormData().getAnyValueSilently("controlType");
+        AssignmentFilter filter = new AssignmentFilter();
 
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(session);
-			Employee currentUserEmp = employeeDAO.findByUser(session.getUser());
+        try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(session);
+            Employee currentUserEmp = employeeDAO.findByUser(session.getUser());
 
-			switch (slug) {
-			case "_my":
-				filter.setAppliedAuthor(currentUserEmp);
-				break;
-			case "_inbox":
-				filter.setAssignee(currentUserEmp);
-				break;
-			}
+            switch (slug) {
+                case "_my":
+                    filter.setAppliedAuthor(currentUserEmp);
+                    break;
+                case "_inbox":
+                    filter.setAssignee(currentUserEmp);
+                    break;
+            }
 
-			AssignmentDAO assignmentDAO = new AssignmentDAO(session);
-			ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
+            if (!statusName.isEmpty()) {
+                ControlStatusType controlStatusType = ControlStatusType.valueOf(statusName);
+                filter.setControlStatusType(controlStatusType);
+            }
 
-			_ActionBar actionBar = new _ActionBar(session);
-			actionBar.addAction(action.refreshVew);
+            if (!controlTypeId.isEmpty()) {
+                ControlType controlType = new ControlType();
+                controlType.setId(UUID.fromString(controlTypeId));
+                filter.setControlType(controlType);
+            }
 
-			Outcome outcome = new Outcome();
-			outcome.setId("assignments");
-			outcome.setTitle("assignments" + slug);
-			outcome.addPayload(actionBar);
-			outcome.addPayload(vp);
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            AssignmentDAO assignmentDAO = new AssignmentDAO(session);
+            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
 
-	@GET
-	@Path("{id}")
-	public Response getById(@PathParam("id") String id) {
-		try {
-			_Session ses = getSession();
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			Employee currentUserEmployee = employeeDAO.findByUserId(ses.getUser().getId());
-			AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-			Assignment entity;
-			AssignmentDomain ad = new AssignmentDomain();
-			boolean isNew = "new".equals(id);
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(action.refreshVew);
 
-			if (isNew) {
-				String incomingId = getWebFormData().getAnyValueSilently("incoming");
-				String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
-				String assignmentId = getWebFormData().getAnyValueSilently("assignment");
+            Outcome outcome = new Outcome();
+            outcome.setId("assignments");
+            outcome.setTitle("assignments" + slug);
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-				ControlledDocument parent = null;
+    @GET
+    @Path("{id}")
+    public Response getById(@PathParam("id") String id) {
+        try {
+            _Session ses = getSession();
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            Employee currentUserEmployee = employeeDAO.findByUserId(ses.getUser().getId());
+            AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
+            Assignment entity;
+            AssignmentDomain ad = new AssignmentDomain();
+            boolean isNew = "new".equals(id);
 
-				if (!incomingId.isEmpty()) {
-					parent = (new IncomingDAO(ses)).findByIdentefier(incomingId);
-				} else if (!officeMemoId.isEmpty()) {
-					parent = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
-				} else if (!assignmentId.isEmpty()) {
-					parent = assignmentDAO.findByIdentefier(assignmentId);
-				} else {
-					throw new IllegalArgumentException("No parent document");
-				}
+            if (isNew) {
+                String incomingId = getWebFormData().getAnyValueSilently("incoming");
+                String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
+                String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
-				entity = ad.composeNew(currentUserEmployee, parent);
-			} else {
-				entity = assignmentDAO.findByIdentefier(id);
-			}
+                ControlledDocument parent = null;
 
-			EmployeeDAO empDao = new EmployeeDAO(ses);
-			Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-					.collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+                if (!incomingId.isEmpty()) {
+                    parent = (new IncomingDAO(ses)).findByIdentefier(incomingId);
+                } else if (!officeMemoId.isEmpty()) {
+                    parent = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
+                } else if (!assignmentId.isEmpty()) {
+                    parent = assignmentDAO.findByIdentefier(assignmentId);
+                } else {
+                    throw new IllegalArgumentException("No parent document");
+                }
 
-			Outcome outcome = ad.getOutcome(entity);
+                entity = ad.composeNew(currentUserEmployee, parent);
+            } else {
+                entity = assignmentDAO.findByIdentefier(id);
+            }
 
-			// permissions
-			Map<String, Boolean> permissions = new HashMap<>();
-			if (!entity.isNew() && entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
-				permissions.put("RESET_ASSIGNEE", true);
-			}
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-			outcome.addPayload("employees", emps);
-			outcome.addPayload("permissions", permissions);
-			outcome.addPayload(getActionBar(ses, entity));
-			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            Outcome outcome = ad.getOutcome(entity);
 
-			return Response.ok(outcome).build();
-		} catch (Exception e) {
-			return responseException(e);
-		}
-	}
+            // permissions
+            Map<String, Boolean> permissions = new HashMap<>();
+            if (!entity.isNew() && entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
+                permissions.put("RESET_ASSIGNEE", true);
+            }
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(Assignment dto) {
-		dto.setId(null);
-		return save(dto);
-	}
+            outcome.addPayload("employees", emps);
+            outcome.addPayload("permissions", permissions);
+            outcome.addPayload(getActionBar(ses, entity));
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, Assignment dto) {
-		dto.setId(UUID.fromString(id));
-		return save(dto);
-	}
+            return Response.ok(outcome).build();
+        } catch (Exception e) {
+            return responseException(e);
+        }
+    }
 
-	public Response save(Assignment dto) {
-		_Session ses = getSession();
-		Assignment entity;
-		AssignmentDomain domain = new AssignmentDomain();
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Assignment dto) {
+        dto.setId(null);
+        return save(dto);
+    }
 
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") String id, Assignment dto) {
+        dto.setId(UUID.fromString(id));
+        return save(dto);
+    }
 
-			if (dto.isNew()) {
-				entity = new Assignment();
-			} else {
-				entity = assignmentDAO.findById(dto.getId());
-			}
+    public Response save(Assignment dto) {
+        _Session ses = getSession();
+        Assignment entity;
+        AssignmentDomain domain = new AssignmentDomain();
 
-			dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
-			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+        try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+            AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
 
-			domain.fillFromDto(entity, dto, ses);
+            if (dto.isNew()) {
+                entity = new Assignment();
+            } else {
+                entity = assignmentDAO.findById(dto.getId());
+            }
 
-			// ACL routines
-			entity.resetReadersEditors();
+            dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
+            dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
 
-			Control control = entity.getControl();
-			if (control.getAssigneeEntries().size() > 0) {
-				control.setStatus(ControlStatusType.PROCESSING);
-			}
+            domain.fillFromDto(entity, dto, ses);
 
-			for (AssigneeEntry ae : control.getAssigneeEntries()) {
-				entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
-			}
+            // ACL routines
+            entity.resetReadersEditors();
 
-			List<Observer> observers = entity.getObservers();
-			if (observers != null) {
-				for (Observer observer : observers) {
-					entity.addReader(observer.getEmployee().getUserID());
-				}
-			}
+            Control control = entity.getControl();
+            if (control.getAssigneeEntries().size() > 0) {
+                control.setStatus(ControlStatusType.PROCESSING);
+            }
 
-			ControlledDocumentDAO<ControlledDocument, UUID> dao = new ControlledDocumentDAO<ControlledDocument, UUID>(
-					ControlledDocument.class, new _Session(new SuperUser()));
-			ControlledDocument parent = dao.findById(entity.getParent().getId());
-			entity.addReaders(parent.getReaders());
+            for (AssigneeEntry ae : control.getAssigneeEntries()) {
+                entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
+            }
 
-			if (control.getStatus() == ControlStatusType.DRAFT) {
-				entity.addReaderEditor(entity.getAuthor());
-				if (entity.getAppliedAuthor() != null) {
-					entity.addReaderEditor(entity.getAppliedAuthor().getUser());
-				}
-				entity = assignmentDAO.save(entity);
-			} else {
-				entity.addReader(entity.getAuthor());
-				if (entity.getAppliedAuthor() != null) {
-					entity.addReader(entity.getAppliedAuthor().getUser());
-				}
-				entity = new AssignmentDAO(new _Session(new SuperUser())).save(entity);
-			}
+            List<Observer> observers = entity.getObservers();
+            if (observers != null) {
+                for (Observer observer : observers) {
+                    entity.addReader(observer.getEmployee().getUserID());
+                }
+            }
 
-			parent.resetEditors();
-			dao.update(parent);
+            ControlledDocumentDAO<ControlledDocument, UUID> dao = new ControlledDocumentDAO<ControlledDocument, UUID>(
+                    ControlledDocument.class, new _Session(new SuperUser()));
+            ControlledDocument parent = dao.findById(entity.getParent().getId());
+            entity.addReaders(parent.getReaders());
 
-			new Messages(getAppEnv()).notifyAssignees(entity);
+            if (control.getStatus() == ControlStatusType.DRAFT) {
+                entity.addReaderEditor(entity.getAuthor());
+                if (entity.getAppliedAuthor() != null) {
+                    entity.addReaderEditor(entity.getAppliedAuthor().getUser());
+                }
+                entity = assignmentDAO.save(entity);
+            } else {
+                entity.addReader(entity.getAuthor());
+                if (entity.getAppliedAuthor() != null) {
+                    entity.addReader(entity.getAppliedAuthor().getUser());
+                }
+                entity = new AssignmentDAO(new _Session(new SuperUser())).save(entity);
+            }
 
-			return Response.ok(domain.getOutcome(entity)).build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		} catch (DTOException e) {
-			return responseValidationError(e);
-		}
-	}
+            parent.resetEditors();
+            dao.update(parent);
 
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		try {
-			_Session ses = getSession();
-			AssignmentDAO dao = new AssignmentDAO(ses);
-			Assignment entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		}
-	}
+            new Messages(getAppEnv()).notifyAssignees(entity);
 
-	@POST
-	@Path("action/resetAssignee")
-	public Response resetAssignee(Assignment dto) {
-		try {
-			_Session ses = getSession();
-			AssignmentDAO dao = new AssignmentDAO(ses);
-			Assignment entity = dao.findById(dto.getId());
-			AssignmentDomain domain = new AssignmentDomain();
+            return Response.ok(domain.getOutcome(entity)).build();
+        } catch (SecureException | DAOException e) {
+            return responseException(e);
+        } catch (DTOException e) {
+            return responseValidationError(e);
+        }
+    }
 
-			domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") String id) {
+        try {
+            _Session ses = getSession();
+            AssignmentDAO dao = new AssignmentDAO(ses);
+            Assignment entity = dao.findByIdentefier(id);
+            if (entity != null) {
+                dao.delete(entity);
+            }
+            return Response.noContent().build();
+        } catch (SecureException | DAOException e) {
+            return responseException(e);
+        }
+    }
 
-			dao.update(entity, false);
+    @POST
+    @Path("action/resetAssignee")
+    public Response resetAssignee(Assignment dto) {
+        try {
+            _Session ses = getSession();
+            AssignmentDAO dao = new AssignmentDAO(ses);
+            Assignment entity = dao.findById(dto.getId());
+            AssignmentDomain domain = new AssignmentDomain();
 
-			return Response.ok(new Outcome()).build();
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
+            domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
 
-	private _ActionBar getActionBar(_Session session, Assignment entity) {
-		_ActionBar actionBar = new _ActionBar(session);
+            dao.update(entity, false);
 
-		actionBar.addAction(action.close);
-		if (entity.isNew() || entity.isEditable()) {
-			actionBar.addAction(action.saveAndClose);
-		}
-		if (!entity.isNew() && entity.getControl().getStatus() != ControlStatusType.DRAFT) {
-			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
-					.url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
-		}
-		if (entity.getControl().assigneesContainsUser(session.getUser())) {
-			actionBar.addAction(new Action(ActionType.LINK).caption("report")
-					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
-		}
-		if (!entity.isNew() && entity.isEditable()) {
-			actionBar.addAction(action.deleteDocument);
-		}
+            return Response.ok(new Outcome()).build();
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+    }
 
-		return actionBar;
-	}
+    private _ActionBar getActionBar(_Session session, Assignment entity) {
+        _ActionBar actionBar = new _ActionBar(session);
+
+        actionBar.addAction(action.close);
+        if (entity.isNew() || entity.isEditable()) {
+            actionBar.addAction(action.saveAndClose);
+        }
+        if (!entity.isNew() && entity.getControl().getStatus() != ControlStatusType.DRAFT) {
+            actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
+                    .url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
+        }
+        if (entity.getControl().assigneesContainsUser(session.getUser())) {
+            actionBar.addAction(new Action(ActionType.LINK).caption("report")
+                    .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
+        }
+        if (!entity.isNew() && entity.isEditable()) {
+            actionBar.addAction(action.deleteDocument);
+        }
+
+        return actionBar;
+    }
 }

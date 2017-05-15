@@ -38,6 +38,26 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
                 conditionCount = cb.and(root.get("readers").in(user.getId()));
             }
 
+            if (filter.getControlStatusType() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()));
+                    conditionCount = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()), condition);
+                    conditionCount = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()), conditionCount);
+                }
+            }
+
+            if (filter.getControlType() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()));
+                    conditionCount = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()), condition);
+                    conditionCount = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()), conditionCount);
+                }
+            }
+
             if (filter.getAppliedAuthor() != null) {
                 if (condition == null) {
                     condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));
