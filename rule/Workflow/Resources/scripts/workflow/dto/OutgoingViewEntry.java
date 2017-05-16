@@ -11,7 +11,7 @@ import workflow.model.constants.ApprovalStatusType;
 import java.util.Date;
 import java.util.UUID;
 
-public class OutgoingViewEntryDTO {
+public class OutgoingViewEntry {
 
     public UUID id;
     public String kind = "outgoing";

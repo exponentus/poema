@@ -8,7 +8,7 @@ import workflow.model.constants.ApprovalStatusType;
 import java.util.Date;
 import java.util.UUID;
 
-public class OfficeMemoViewEntryDTO {
+public class OfficeMemoViewEntry {
 
     public UUID id;
     public String kind = "officeMemo";

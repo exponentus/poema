@@ -13,7 +13,6 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.user.SuperUser;
-import reference.model.ControlType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -69,9 +68,7 @@ public class AssignmentService extends RestProvider {
         _Session session = getSession();
         int pageSize = session.pageSize;
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-        String statusName = getWebFormData().getAnyValueSilently("status");
-        String controlTypeId = getWebFormData().getAnyValueSilently("controlType");
-        AssignmentFilter filter = new AssignmentFilter();
+        AssignmentFilter filter = new AssignmentFilter(getWebFormData());
 
         try {
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
@@ -84,17 +81,6 @@ public class AssignmentService extends RestProvider {
                 case "_inbox":
                     filter.setAssignee(currentUserEmp);
                     break;
-            }
-
-            if (!statusName.isEmpty()) {
-                ControlStatusType controlStatusType = ControlStatusType.valueOf(statusName);
-                filter.setControlStatusType(controlStatusType);
-            }
-
-            if (!controlTypeId.isEmpty()) {
-                ControlType controlType = new ControlType();
-                controlType.setId(UUID.fromString(controlTypeId));
-                filter.setControlType(controlType);
             }
 
             AssignmentDAO assignmentDAO = new AssignmentDAO(session);

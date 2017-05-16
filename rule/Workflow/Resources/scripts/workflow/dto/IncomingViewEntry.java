@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class IncomingViewEntryDTO {
+public class IncomingViewEntry {
 
     public UUID id;
     public String kind = "incoming";

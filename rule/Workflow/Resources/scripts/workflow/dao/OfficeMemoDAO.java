@@ -37,6 +37,22 @@ public class OfficeMemoDAO extends ControlledDocumentDAO<OfficeMemo, UUID> {
                 condition = cb.and(root.get("readers").in(user.getId()));
             }
 
+            if (filter.getStatus() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()), condition);
+                }
+            }
+
+            if (filter.getResult() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()), condition);
+                }
+            }
+
             if (filter.getAppliedAuthor() != null) {
                 if (condition == null) {
                     condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));

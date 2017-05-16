@@ -1,8 +1,11 @@
 package workflow.dao.filter;
 
+import com.exponentus.scripting.WebFormData;
 import reference.model.ControlType;
 import staff.model.Employee;
 import workflow.model.constants.ControlStatusType;
+
+import java.util.UUID;
 
 public class AssignmentFilter {
 
@@ -10,6 +13,24 @@ public class AssignmentFilter {
     private ControlType controlType;
     private Employee appliedAuthor;
     private Employee assignee;
+
+    public AssignmentFilter() {
+    }
+
+    public AssignmentFilter(WebFormData formData) {
+
+
+        if (!formData.getAnyValueSilently("status").isEmpty()) {
+            ControlStatusType controlStatusType = ControlStatusType.valueOf(formData.getAnyValueSilently("status"));
+            setControlStatusType(controlStatusType);
+        }
+
+        if (!formData.getAnyValueSilently("controlType").isEmpty()) {
+            ControlType controlType = new ControlType();
+            controlType.setId(UUID.fromString(formData.getAnyValueSilently("controlType")));
+            setControlType(controlType);
+        }
+    }
 
     public ControlStatusType getControlStatusType() {
         return controlStatusType;
