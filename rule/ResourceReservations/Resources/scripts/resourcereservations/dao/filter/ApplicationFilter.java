@@ -1,12 +1,15 @@
 package resourcereservations.dao.filter;
 
+import com.exponentus.scripting.WebFormData;
 import reference.model.MeetingRoom;
 import reference.model.Tag;
 import reference.model.Vehicle;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ApplicationFilter {
     private ApprovalStatusType status;
@@ -15,6 +18,39 @@ public class ApplicationFilter {
 
     private Vehicle vehicle;
     private MeetingRoom room;
+
+    public ApplicationFilter() {
+    }
+
+    public ApplicationFilter(WebFormData params) {
+        String vehicleId = params.getValueSilently("vehicle");
+        if (!vehicleId.isEmpty()) {
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(UUID.fromString(vehicleId));
+            setVehicle(vehicle);
+        }
+
+        String statusName = params.getValueSilently("status");
+        if (!statusName.isEmpty()) {
+            setStatus(ApprovalStatusType.valueOf(statusName));
+        }
+
+        String resultName = params.getValueSilently("result");
+        if (!resultName.isEmpty()) {
+            setResult(ApprovalResultType.valueOf(resultName));
+        }
+
+        if (params.containsField("tag")) {
+            List<Tag> tags = new ArrayList<>();
+            String[] tagIds = params.getListOfValuesSilently("tag");
+            for (String tid : tagIds) {
+                Tag tag = new Tag();
+                tag.setId(UUID.fromString(tid));
+                tags.add(tag);
+            }
+            setTags(tags);
+        }
+    }
 
     public ApprovalStatusType getStatus() {
         return status;

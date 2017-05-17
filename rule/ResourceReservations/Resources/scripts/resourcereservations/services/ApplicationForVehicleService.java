@@ -13,8 +13,6 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
-import reference.model.Tag;
-import reference.model.Vehicle;
 import reference.model.constants.ApprovalType;
 import resourcereservations.constants.ActionFactory;
 import resourcereservations.dao.ApplicationForVehicleDAO;
@@ -25,15 +23,12 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
-import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.other.Messages;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -51,40 +46,9 @@ public class ApplicationForVehicleService extends RestProvider {
         WebFormData params = getWebFormData();
         int pageSize = session.pageSize;
         SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+        ApplicationFilter filter = new ApplicationFilter(params);
 
         try {
-            ApplicationFilter filter = new ApplicationFilter();
-
-            // setup filter
-            String vehicleId = params.getValueSilently("vehicle");
-            if (!vehicleId.isEmpty()) {
-                Vehicle vehicle = new Vehicle();
-                vehicle.setId(UUID.fromString(vehicleId));
-                filter.setVehicle(vehicle);
-            }
-
-            String statusName = params.getValueSilently("status");
-            if (!statusName.isEmpty()) {
-                filter.setStatus(ApprovalStatusType.valueOf(statusName));
-            }
-
-            String resultName = params.getValueSilently("result");
-            if (!resultName.isEmpty()) {
-                filter.setResult(ApprovalResultType.valueOf(resultName));
-            }
-
-            if (params.containsField("tag")) {
-                List<Tag> tags = new ArrayList<>();
-                String[] tagIds = params.getListOfValuesSilently("tag");
-                for (String tid : tagIds) {
-                    Tag tag = new Tag();
-                    tag.setId(UUID.fromString(tid));
-                    tags.add(tag);
-                }
-                filter.setTags(tags);
-            }
-            //
-
             ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
