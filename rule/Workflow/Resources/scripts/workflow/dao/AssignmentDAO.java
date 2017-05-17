@@ -5,7 +5,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.AssignmentFilter;
-import workflow.dto.AssignmentViewEntryDTO;
+import workflow.dto.AssignmentViewEntry;
 import workflow.model.Assignment;
 
 import javax.persistence.EntityManager;
@@ -22,11 +22,11 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
         super(Assignment.class, session);
     }
 
-    public ViewPage<AssignmentViewEntryDTO> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<AssignmentViewEntry> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<AssignmentViewEntryDTO> cq = cb.createQuery(AssignmentViewEntryDTO.class);
+            CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
             Root<Assignment> root = cq.from(Assignment.class);
 
@@ -36,6 +36,26 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
                 conditionCount = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            if (filter.getControlStatusType() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()));
+                    conditionCount = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()), condition);
+                    conditionCount = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()), conditionCount);
+                }
+            }
+
+            if (filter.getControlType() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()));
+                    conditionCount = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()), condition);
+                    conditionCount = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()), conditionCount);
+                }
             }
 
             if (filter.getAppliedAuthor() != null) {
@@ -59,7 +79,7 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
             }
 
             cq.select(cb.construct(
-                    AssignmentViewEntryDTO.class,
+                    AssignmentViewEntry.class,
                     root.get("id"),
                     root.get("appliedAuthor").get("name"),
                     root.get("body"),
@@ -74,7 +94,7 @@ public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
                 countRootCq.where(conditionCount);
             }
 
-            TypedQuery<AssignmentViewEntryDTO> typedQuery = em.createQuery(cq);
+            TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
             TypedQuery<Long> countQuery = em.createQuery(countRootCq);
 
             long count = countQuery.getSingleResult();

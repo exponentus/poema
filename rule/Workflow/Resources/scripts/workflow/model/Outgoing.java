@@ -18,6 +18,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -51,6 +53,7 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 

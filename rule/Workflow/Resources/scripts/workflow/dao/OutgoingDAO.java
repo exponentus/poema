@@ -23,7 +23,6 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
         super(Outgoing.class, session);
     }
 
-
     public ViewPage<Outgoing> findViewPage(OutgoingFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -37,6 +36,22 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
 
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            if (filter.getStatus() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()), condition);
+                }
+            }
+
+            if (filter.getResult() != null) {
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()));
+                } else {
+                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()), condition);
+                }
             }
 
             if (filter.getRecipient() != null) {

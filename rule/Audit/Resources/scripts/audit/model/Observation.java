@@ -44,6 +44,7 @@ public class Observation extends SecureHierarchicalEntity {
     @Column(length = 16)
     private ObservationStatusType status = ObservationStatusType.UNKNOWN;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "status_date")
     private Date statusDate;
 

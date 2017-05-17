@@ -4,7 +4,7 @@ import workflow.model.embedded.AssigneeEntry;
 
 import java.util.Date;
 
-public class AssigneeEntryShortDTO {
+public class AssigneeEntryShort {
 
     public Long id;
 
@@ -15,7 +15,7 @@ public class AssigneeEntryShortDTO {
     public String resetterInfo;
     public int sort;
 
-    public AssigneeEntryShortDTO(AssigneeEntry ae) {
+    public AssigneeEntryShort(AssigneeEntry ae) {
         this.id = ae.getId();
         this.isCoordinator = ae.isCoordinator();
         this.assignee = ae.getAssignee().getName();

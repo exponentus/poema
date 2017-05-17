@@ -5,20 +5,20 @@ import workflow.model.embedded.Control;
 
 import java.util.UUID;
 
-public class AssignmentViewEntryDTO {
+public class AssignmentViewEntry {
 
     public UUID id;
     public String kind = "assignment";
 
     public String appliedAuthor;
     public String body;
-    public ControlShortDTO control;
+    public ControlShort control;
 
-    public AssignmentViewEntryDTO(UUID id, String appliedAuthor, String body, Control control) {
+    public AssignmentViewEntry(UUID id, String appliedAuthor, String body, Control control) {
         this.id = id;
         this.appliedAuthor = appliedAuthor;
         this.body = body;
-        this.control = new ControlShortDTO(control);
+        this.control = new ControlShort(control);
     }
 
     public String getURL() {

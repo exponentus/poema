@@ -19,6 +19,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
@@ -50,6 +52,7 @@ public class Incoming extends ControlledDocument {
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 
@@ -59,6 +62,7 @@ public class Incoming extends ControlledDocument {
 	@Column(name = "sender_reg_number", length = 64)
 	private String senderRegNumber;
 
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "sender_applied_reg_date")
 	private Date senderAppliedRegDate;
 
