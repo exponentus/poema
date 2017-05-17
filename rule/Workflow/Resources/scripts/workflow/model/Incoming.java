@@ -85,7 +85,7 @@ public class Incoming extends ControlledDocument {
 
 	@ElementCollection
 	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
-	private List<Observer> observers;
+	private List<Observer> observers = new ArrayList<Observer>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__incoming_tags")
