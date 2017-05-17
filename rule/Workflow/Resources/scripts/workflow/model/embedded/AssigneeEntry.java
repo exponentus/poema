@@ -8,10 +8,7 @@ import org.eclipse.persistence.annotations.Converter;
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
 
-import javax.persistence.Basic;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @JsonRootName("assigneeEntry")
@@ -28,6 +25,7 @@ public class AssigneeEntry extends SimpleAppEntity {
     @Basic(fetch = FetchType.LAZY, optional = true)
     private Employee resetBy;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date resetTime;
 
     private String resetterInfo;

@@ -26,6 +26,7 @@ public class OfficeMemo extends ApprovedControlledDocument {
     @Column(name = "reg_number", unique = true, length = 64)
     private String regNumber;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 

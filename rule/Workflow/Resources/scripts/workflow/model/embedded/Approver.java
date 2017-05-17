@@ -23,9 +23,11 @@ public class Approver extends SimpleAppEntity {
     @Convert(converter = DecisionTypeConverter.class)
     private DecisionType decisionType = DecisionType.UNKNOWN;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "start_time")
     private Date startTime;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "decision_time")
     private Date decisionTime;
 

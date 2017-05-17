@@ -28,6 +28,7 @@ public class Report extends SecureHierarchicalEntity {
     @JoinColumn(name = "applied_author", nullable = false)
     private Employee appliedAuthor;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
