@@ -93,11 +93,9 @@ public class IncomingDomain {
         if (model.getDocType() == null) {
             ve.addError("docType", "required", "field_is_empty");
         }
-
         if (model.getDocSubject() == null) {
             ve.addError("docSubject", "required", "field_is_empty");
         }
-
         if (ve.hasError()) {
             throw ve;
         }
