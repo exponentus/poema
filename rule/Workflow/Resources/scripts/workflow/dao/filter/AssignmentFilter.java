@@ -19,7 +19,6 @@ public class AssignmentFilter {
 
     public AssignmentFilter(WebFormData formData) {
 
-
         if (!formData.getAnyValueSilently("status").isEmpty()) {
             ControlStatusType controlStatusType = ControlStatusType.valueOf(formData.getAnyValueSilently("status"));
             setControlStatusType(controlStatusType);
