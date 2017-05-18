@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nextbase>
+	<hostname>localhost</hostname>
+	<port>8770</port>
+	<orgname>Exponentus's projects</orgname>
+	<orglogo>/Workspace/img/logo.png</orglogo>
+	<tls mode="OFF">
+		<port></port>
+		<certfile>server.crt</certfile>
+		<certkeyfile>server.key</certkeyfile>
+	</tls>
+	<mail mode="OFF">
+		<smtphost>exponentus.com</smtphost>
+		<smtpauth>true</smtpauth>
+		<smtpport>2525</smtpport>
+		<smtpuser>test@exponentus.com</smtpuser>
+		<smtppassword>test22</smtppassword>
+		<smtpusername>poema</smtpusername>
+	</mail>
+
+	<slack mode="OFF">
+		<token></token>
+	</slack>
+
+	<translator mode="OFF">
+		<yandex>
+			<token>trnsl.1.1.20170415T110613Z.4e1ffdbe3fc650fa.8419218cba5694531e4b5063d58a8d28c03c096c</token>
+		</yandex>
+	</translator>
+
+
+</nextbase>
