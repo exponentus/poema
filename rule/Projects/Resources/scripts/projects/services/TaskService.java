@@ -71,7 +71,7 @@ public class TaskService extends RestProvider {
 
 			String[] expandedIds = getWebFormData().getListOfValuesSilently("expandedIds");
 			List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
-			int pageSize = session.pageSize;
+			int pageSize = session.getPageSize();
 			int pageNum = getWebFormData().getPage();
 
 			TaskDAO taskDAO = new TaskDAO(session);

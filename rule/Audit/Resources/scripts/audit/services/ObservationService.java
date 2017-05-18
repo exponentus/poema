@@ -60,7 +60,7 @@ public class ObservationService extends RestProvider {
 		WebFormData params = getWebFormData();
 
 		try {
-			int pageSize = params.getNumberValueSilently("limit", session.pageSize);
+			int pageSize = params.getNumberValueSilently("limit", session.getPageSize());
 			String statusName = params.getValueSilently("status");
 			String projectId = params.getValueSilently("project");
 			String contractorId = params.getValueSilently("contractor");

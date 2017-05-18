@@ -53,7 +53,7 @@ public class ProjectService extends RestProvider {
 		WebFormData params = getWebFormData();
 
 		try {
-			int pageSize = params.getNumberValueSilently("limit", session.pageSize);
+			int pageSize = params.getNumberValueSilently("limit", session.getPageSize());
 			String projectStatusName = params.getValueSilently("status");
 
 			SortParams sortParams = params.getSortParams(SortParams.asc("name"));

@@ -57,7 +57,7 @@ public class ProjectService extends RestProvider {
 
 		_Session session = getSession();
 		try {
-			int pageSize = getWebFormData().getNumberValueSilently("limit", session.pageSize);
+			int pageSize = getWebFormData().getNumberValueSilently("limit", session.getPageSize());
 			SortParams sortParams = getWebFormData().getSortParams(SortParams.asc("name"));
 			ProjectDAO projectDAO = new ProjectDAO(session);
 

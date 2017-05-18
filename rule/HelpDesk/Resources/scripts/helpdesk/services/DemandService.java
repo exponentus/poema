@@ -48,7 +48,7 @@ public class DemandService extends RestProvider {
 	public Response getViewPage() {
 		_Session session = getSession();
 		WebFormData params = getWebFormData();
-		int pageSize = session.pageSize;
+		int pageSize = session.getPageSize();
 
 		try {
 			String slug = params.getValueSilently("slug");
