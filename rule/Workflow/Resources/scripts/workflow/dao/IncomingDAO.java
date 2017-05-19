@@ -18,7 +18,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -86,9 +85,9 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                     root.get("senderRegNumber"),
                     root.get("senderAppliedRegDate"),
                     root.get("addressee").get("name"),
-                    root.get("docLanguage").get("locName").as(Map.class),
-                    root.get("docType").get("locName").as(Map.class),
-                    root.get("docSubject").get("locName").as(Map.class),
+                    root.get("docLanguage").get("locName"),
+                    root.get("docType").get("locName"),
+                    root.get("docSubject").get("locName"),
                     root.get("body"),
                     cb.count(atts)
             ))
