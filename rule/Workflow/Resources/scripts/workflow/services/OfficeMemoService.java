@@ -160,8 +160,7 @@ public class OfficeMemoService extends RestProvider {
 			entity = officeMemoDAO.findById(dto.getId());
 		}
 
-		OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
-		omd.fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
+		new OfficeMemoDomain(getSession()).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
 
 		if (dto.isNew()) {
 			RegNum rn = new RegNum();
@@ -292,29 +291,6 @@ public class OfficeMemoService extends RestProvider {
 		}
 	}
 
-	@POST
-	@Path("action/skipApprovalBlock")
-	public Response skipApprovalBlock(OfficeMemo dto) {
-		try {
-			_Session ses = getSession();
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
-
-			omd.skipApprovalBlock(om);
-
-			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
-			outcome.setTitle("skipApprovalBlock");
-			outcome.setMessage("skipApprovalBlock");
-
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
-
 	private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
 		_ActionBar actionBar = new _ActionBar(session);
 
@@ -394,4 +370,5 @@ public class OfficeMemoService extends RestProvider {
 		}
 
 	}
+
 }

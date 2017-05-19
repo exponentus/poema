@@ -19,6 +19,11 @@ public class ApprovalException extends Exception {
 		addInfo = text;
 	}
 
+	public ApprovalException(ApprovalExceptionType type, Exception e) {
+		super(e);
+		id = type;
+	}
+
 	public ApprovalExceptionType getType() {
 		return id;
 	}
