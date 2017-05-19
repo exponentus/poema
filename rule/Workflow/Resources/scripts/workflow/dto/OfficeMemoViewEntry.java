@@ -1,7 +1,6 @@
 package workflow.dto;
 
 import com.exponentus.runtimeobj.IAppEntity;
-import staff.model.Employee;
 import workflow.init.AppConst;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
@@ -19,12 +18,24 @@ public class OfficeMemoViewEntry {
     public ApprovalResultType result = ApprovalResultType.PROJECT;
     public String regNumber;
     public Date appliedRegDate;
-    public Employee appliedAuthor;
-    public Employee recipient;
+    public String appliedAuthor; // Employee
+    public String recipient; // Employee
     public String body;
     public boolean hasAttachments;
 
     public List<IAppEntity<UUID>> responses;
+
+    public OfficeMemoViewEntry(UUID id, ApprovalStatusType status, ApprovalResultType result, String regNumber, Date appliedRegDate, String appliedAuthor, String recipient, String body, Long attachmentCount) {
+        this.id = id;
+        this.status = status;
+        this.result = result;
+        this.regNumber = regNumber;
+        this.appliedRegDate = appliedRegDate;
+        this.appliedAuthor = appliedAuthor;
+        this.recipient = recipient;
+        this.body = body;
+        this.hasAttachments = attachmentCount > 0;
+    }
 
     public String getURL() {
         return AppConst.BASE_URL + "office-memos/" + id;

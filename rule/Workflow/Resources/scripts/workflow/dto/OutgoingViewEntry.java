@@ -1,16 +1,14 @@
 package workflow.dto;
 
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.runtimeobj.IAppEntity;
-import reference.model.DocumentLanguage;
-import reference.model.DocumentSubject;
-import reference.model.DocumentType;
-import staff.model.Organization;
 import workflow.init.AppConst;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class OutgoingViewEntry {
@@ -22,14 +20,31 @@ public class OutgoingViewEntry {
     public ApprovalResultType result = ApprovalResultType.PROJECT;
     public String regNumber;
     public Date appliedRegDate;
-    public Organization recipient;
-    public DocumentLanguage docLanguage;
-    public DocumentType docType;
-    public DocumentSubject docSubject;
+    public String recipient; // Organization
+    //    public DocumentLanguage docLanguage;
+//    public DocumentType docType;
+//    public DocumentSubject docSubject;
+    public Map<LanguageCode, String> docLanguage;
+    public Map<LanguageCode, String> docType;
+    public Map<LanguageCode, String> docSubject;
     public String body;
     public boolean hasAttachments;
 
     public List<IAppEntity<UUID>> responses;
+
+    public OutgoingViewEntry(UUID id, ApprovalStatusType status, ApprovalResultType result, String regNumber, Date appliedRegDate, String recipient, Map<LanguageCode, String> docLanguage, Map<LanguageCode, String> docType, Map<LanguageCode, String> docSubject, String body, Long attachmentCount) {
+        this.id = id;
+        this.status = status;
+        this.result = result;
+        this.regNumber = regNumber;
+        this.appliedRegDate = appliedRegDate;
+        this.recipient = recipient;
+        this.docLanguage = docLanguage;
+        this.docType = docType;
+        this.docSubject = docSubject;
+        this.body = body;
+        this.hasAttachments = attachmentCount > 0;
+    }
 
     public String getURL() {
         return AppConst.BASE_URL + "outgoings/" + id;
