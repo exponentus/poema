@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import com.exponentus.common.dao.DAOFactory;
-import com.exponentus.common.domain.IDomain;
+import com.exponentus.common.domain.IDTOService;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.IDAO;
 import com.exponentus.exception.SecureException;
@@ -18,15 +18,12 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.IAppEntity;
 
-import workflow.dao.OfficeMemoDAO;
 import workflow.domain.ApprovalLifecycle;
-import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
-import workflow.model.OfficeMemo;
 import workflow.model.embedded.IApproval;
 import workflow.other.Messages;
 
-public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDomain> extends RestProvider {
+public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDTOService<T>> extends RestProvider {
 	private Class<T> entityClass;
 	private Class<D> domainClass;
 
@@ -60,56 +57,6 @@ public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDom
 			return responseException(e);
 		} catch (DTOException e) {
 			return responseValidationError(e);
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
-
-	@POST
-	@Path("action/acceptApprovalBlock")
-	public Response acceptApprovalBlock(OfficeMemo dto) {
-		try {
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
-
-			omd.acceptApprovalBlock(om, getSession().getUser());
-
-			officeMemoDAO.update(om, false);
-
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
-			outcome.setTitle("acceptApprovalBlock");
-			outcome.setMessage("acceptApprovalBlock");
-
-			return Response.ok(outcome).build();
-		} catch (DAOException | SecureException | ApprovalException e) {
-			return responseException(e);
-		}
-	}
-
-	@POST
-	@Path("action/declineApprovalBlock")
-	public Response declineApprovalBlock(OfficeMemo dto) {
-		try {
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
-
-			String decisionComment = getWebFormData().getValueSilently("comment");
-			if (!decisionComment.isEmpty()) {
-				omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
-			} else {
-				return responseValidationError(new DTOException().addError("comment", "required", "field_is_empty"));
-
-			}
-			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
-			outcome.setTitle("declineApprovalBlock");
-			outcome.setMessage("declineApprovalBlock");
-
-			return Response.ok(outcome).build();
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}

@@ -1,5 +1,6 @@
 package workflow.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -16,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -42,6 +44,8 @@ import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
+import workflow.model.embedded.Approver;
+import workflow.model.embedded.Block;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
@@ -89,7 +93,7 @@ public class OfficeMemoService extends RestProvider {
 	public Response getById(@PathParam("id") String id) {
 		_Session ses = getSession();
 		OfficeMemo entity;
-		OfficeMemoDomain omd = new OfficeMemoDomain();
+		OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 		try {
 			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			boolean isNew = "new".equals(id);
@@ -132,8 +136,8 @@ public class OfficeMemoService extends RestProvider {
 
 	private Response saveRequest(OfficeMemo dto) {
 		try {
-			OfficeMemoDomain omd = new OfficeMemoDomain();
-			Outcome outcome = omd.getOutcome(save(dto));
+			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
+			Outcome outcome = omd.getOutcome(save(dto, new ValidationToSaveAsDraft()));
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -143,7 +147,8 @@ public class OfficeMemoService extends RestProvider {
 		}
 	}
 
-	private OfficeMemo save(OfficeMemo dto) throws SecureException, DAOException, DTOException {
+	private OfficeMemo save(OfficeMemo dto, IValidation<OfficeMemo> validation)
+			throws SecureException, DAOException, DTOException {
 		_Session ses = getSession();
 
 		OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
@@ -155,10 +160,8 @@ public class OfficeMemoService extends RestProvider {
 			entity = officeMemoDAO.findById(dto.getId());
 		}
 
-		OfficeMemoDomain omd = new OfficeMemoDomain();
-		omd.fillFromDto(entity, dto, ses);
-		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-		omd.calculateReadersEditors(entity);
+		OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
+		omd.fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
 
 		if (dto.isNew()) {
 			RegNum rn = new RegNum();
@@ -213,11 +216,12 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
 		try {
-			OfficeMemo entity = save(dto);
+			OfficeMemo entity = save(dto, new ValidationToStartApprove());
 			if (entity != null) {
-				OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
+				_Session ses = getSession();
+				OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
 				OfficeMemo om = officeMemoDAO.findById(entity.getId());
-				OfficeMemoDomain omd = new OfficeMemoDomain();
+				OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 
 				omd.startApproving(om);
 
@@ -244,11 +248,12 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/acceptApprovalBlock")
 	public Response acceptApprovalBlock(OfficeMemo dto) {
 		try {
+			_Session ses = getSession();
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
 			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
+			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 
-			omd.acceptApprovalBlock(om, getSession().getUser());
+			omd.acceptApprovalBlock(om, ses.getUser());
 
 			officeMemoDAO.update(om, false);
 
@@ -267,12 +272,13 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/declineApprovalBlock")
 	public Response declineApprovalBlock(OfficeMemo dto) {
 		try {
+			_Session ses = getSession();
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
 			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
+			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 
 			String decisionComment = getWebFormData().getValueSilently("comment");
-			omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
+			omd.declineApprovalBlock(om, ses.getUser(), decisionComment);
 
 			officeMemoDAO.update(om, false);
 			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
@@ -290,9 +296,10 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/skipApprovalBlock")
 	public Response skipApprovalBlock(OfficeMemo dto) {
 		try {
+			_Session ses = getSession();
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
 			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain();
+			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 
 			omd.skipApprovalBlock(om);
 
@@ -338,5 +345,53 @@ public class OfficeMemoService extends RestProvider {
 		}
 
 		return actionBar;
+	}
+
+	private class ValidationToSaveAsDraft implements IValidation<OfficeMemo> {
+
+		@Override
+		public void check(OfficeMemo om) throws DTOException {
+			DTOException e = new DTOException();
+
+			if (om.getTitle() == null || om.getTitle().isEmpty()) {
+				e.addError("title", "required", "field_is_empty");
+			}
+			if (om.getAppliedAuthor() == null) {
+				e.addError("appliedAuthor", "required", "field_is_empty");
+			}
+			if (om.getRecipient() == null) {
+				e.addError("recipient", "required", "field_is_empty");
+			}
+			if (e.hasError()) {
+				throw e;
+			}
+
+		}
+
+	}
+
+	private class ValidationToStartApprove extends ValidationToSaveAsDraft {
+
+		@Override
+		public void check(OfficeMemo om) throws DTOException {
+			super.check(om);
+			DTOException e = new DTOException();
+
+			List<Block> blocks = om.getBlocks();
+			if (blocks.size() == 0) {
+				e.addError("blocks", "required", "field_is_empty");
+			} else {
+				List<Approver> approvers = blocks.get(0).getApprovers();
+				if (approvers == null || approvers.size() == 0) {
+					e.addError("approvers", "required", "field_is_empty");
+				}
+			}
+
+			if (e.hasError()) {
+				throw e;
+			}
+
+		}
+
 	}
 }

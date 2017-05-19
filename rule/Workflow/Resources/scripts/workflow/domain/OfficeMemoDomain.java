@@ -5,14 +5,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import com.exponentus.common.domain.IDomain;
+import com.exponentus.common.domain.DTOService;
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
@@ -25,7 +24,11 @@ import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
-public class OfficeMemoDomain implements IDomain {
+public class OfficeMemoDomain extends DTOService<OfficeMemo> {
+
+	public OfficeMemoDomain(_Session ses) {
+		super(ses);
+	}
 
 	public OfficeMemo composeNew(User user, Employee appliedAuthor) throws ApprovalException {
 		OfficeMemo om = new OfficeMemo();
@@ -36,17 +39,19 @@ public class OfficeMemoDomain implements IDomain {
 		return om;
 	}
 
-	public void fillFromDto(OfficeMemo om, OfficeMemo dto, _Session ses) throws DTOException, DAOException {
-		validate(dto);
+	@Override
+	public void fillFromDto(OfficeMemo entity, OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid)
+			throws DTOException, DAOException {
+		validation.check(dto);
 		EmployeeDAO eDao = new EmployeeDAO(ses);
-		om.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
-		om.setAppliedRegDate(dto.getAppliedRegDate());
-		om.setTitle(dto.getTitle());
-		om.setBody(dto.getBody());
-		om.setRecipient(dto.getRecipient());
-		om.setAttachments(dto.getAttachments());
-		om.setBlocks(dto.getBlocks());
-		om.setSchema(dto.getSchema());
+		entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
+		entity.setAppliedRegDate(dto.getAppliedRegDate());
+		entity.setTitle(dto.getTitle());
+		entity.setBody(dto.getBody());
+		entity.setRecipient(dto.getRecipient());
+		entity.setAttachments(dto.getAttachments());
+		entity.setBlocks(dto.getBlocks());
+		entity.setSchema(dto.getSchema());
 
 		List<Observer> observers = new ArrayList<Observer>();
 		for (Observer o : dto.getObservers()) {
@@ -54,12 +59,15 @@ public class OfficeMemoDomain implements IDomain {
 			observer.setEmployee(eDao.findById(o.getEmployee().getId()));
 			observers.add(observer);
 		}
-		om.setObservers(observers);
+		entity.setObservers(observers);
 
-		if (om.isNew()) {
-			om.setVersion(1);
-			om.setAuthor(ses.getUser());
+		if (entity.isNew()) {
+			entity.setVersion(1);
+			entity.setAuthor(ses.getUser());
 		}
+
+		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
+		calculateReadersEditors(entity);
 	}
 
 	public boolean approvalCanBeStarted(OfficeMemo om) {
@@ -114,23 +122,7 @@ public class OfficeMemoDomain implements IDomain {
 		return !om.isNew() && om.isEditable();
 	}
 
-	private void validate(OfficeMemo om) throws DTOException {
-		DTOException e = new DTOException();
-
-		if (om.getTitle() == null || om.getTitle().isEmpty()) {
-			e.addError("title", "required", "field_is_empty");
-		}
-		if (om.getAppliedAuthor() == null) {
-			e.addError("appliedAuthor", "required", "field_is_empty");
-		}
-		if (om.getRecipient() == null) {
-			e.addError("recipient", "required", "field_is_empty");
-		}
-		if (e.hasError()) {
-			throw e;
-		}
-	}
-
+	@Override
 	public Outcome getOutcome(OfficeMemo om) {
 		Outcome outcome = new Outcome();
 
@@ -149,16 +141,4 @@ public class OfficeMemoDomain implements IDomain {
 		return outcome;
 	}
 
-	@Override
-	public Outcome getOutcome(IAppEntity<UUID> entity) {
-		Outcome outcome = new Outcome();
-
-		outcome.setTitle(entity.getTitle());
-		outcome.addPayload(entity.getEntityKind(), entity);
-		if (!entity.isNew()) {
-			outcome.addPayload(new ACL(entity));
-		}
-
-		return outcome;
-	}
 }
