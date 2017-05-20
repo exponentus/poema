@@ -210,6 +210,7 @@ public class ApprovalLifecycle {
 
 	public static Block getCurrentBlock(IApproval entity) throws ApprovalException {
 		if (entity.getStatus() != ApprovalStatusType.PENDING) {
+			System.out.println(entity.getId() + " " + entity.getURL());
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 

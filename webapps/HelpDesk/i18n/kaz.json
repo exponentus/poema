@@ -75,6 +75,7 @@
   "title" : null,
   "content" : "Мазмұны",
   "skipped" : "Өткізіп",
+  "approver_decision_skipped" : "approver_decision_skipped",
   "value_is_non_latin" : "Поле должно содержать только Латинские символы",
   "captcha_incorrect" : "Captcha is incorrect",
   "text_template" : null,

@@ -75,6 +75,7 @@
   "title" : "Title",
   "content" : "Content",
   "skipped" : "Skipped",
+  "approver_decision_skipped" : "The approver decision was skipped",
   "value_is_non_latin" : "The value should be consist from Latin letters",
   "captcha_incorrect" : "Captcha is incorrect",
   "text_template" : "Text template",

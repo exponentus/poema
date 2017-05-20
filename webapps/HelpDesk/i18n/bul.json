@@ -75,6 +75,7 @@
   "title" : null,
   "content" : null,
   "skipped" : "Упадък",
+  "approver_decision_skipped" : "approver_decision_skipped",
   "value_is_non_latin" : null,
   "captcha_incorrect" : "Капча е неправилен",
   "text_template" : null,

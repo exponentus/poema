@@ -75,6 +75,7 @@
   "title" : "Заголовок",
   "content" : "Содержание",
   "skipped" : "Пропущен",
+  "approver_decision_skipped" : "approver_decision_skipped",
   "value_is_non_latin" : "Поле должно содержать только Латинские символы",
   "captcha_incorrect" : "Капча не верная",
   "text_template" : "Текстовый шаблон",
