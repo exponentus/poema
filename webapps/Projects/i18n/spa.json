@@ -9,6 +9,7 @@
   "fio" : null,
   "responsible_type" : null,
   "messaging_type" : null,
+  "awaiting" : "awaiting",
   "draft" : "Boceto",
   "attach_file" : null,
   "rank" : null,

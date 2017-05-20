@@ -25,7 +25,6 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
@@ -215,27 +214,26 @@ public class OfficeMemoService extends RestProvider {
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
 		try {
-			OfficeMemo entity = save(dto, new ValidationToStartApprove());
-			if (entity != null) {
-				_Session ses = getSession();
-				OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-				OfficeMemo om = officeMemoDAO.findById(entity.getId());
-				OfficeMemoDomain omd = new OfficeMemoDomain(ses);
-
-				omd.startApproving(om);
-
-				officeMemoDAO.update(om, false);
-
-				new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-				Outcome outcome = omd.getOutcome(om);
-				outcome.setTitle("approving_started");
-				outcome.setMessage("approving_started");
-				outcome.addPayload("result", "approving_started");
-
-				return Response.ok(outcome).build();
-			} else {
-				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			if (dto.isNew()) {
+				save(dto, new ValidationToStartApprove());
 			}
+			_Session ses = getSession();
+			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
+			OfficeMemo om = officeMemoDAO.findById(dto.getId());
+			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
+
+			omd.startApproving(om);
+
+			officeMemoDAO.update(om, false);
+
+			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
+			Outcome outcome = omd.getOutcome(om);
+			outcome.setTitle("approving_started");
+			outcome.setMessage("approving_started");
+			outcome.addPayload("result", "approving_started");
+
+			return Response.ok(outcome).build();
+
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		} catch (DAOException | SecureException | ApprovalException e) {
