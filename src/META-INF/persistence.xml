@@ -278,7 +278,7 @@
         <class>workflow.model.Assignment</class>
         <class>workflow.model.Report</class>
         <class>workflow.model.embedded.Approval</class>
-        <class>workflow.model.embedded.Approver</class>
+       <!-- <class>workflow.model.embedded.Approver</class>-->
         <class>workflow.model.embedded.Block</class>
         <class>workflow.model.embedded.Control</class>
      	 <class>workflow.model.embedded.AssigneeEntry</class> 
@@ -328,7 +328,7 @@
         <class>resourcereservations.model.ApplicationForVehicle</class>
         <class>resourcereservations.model.ApplicationForMeetingRoom</class>
         <class>workflow.model.embedded.Approval</class>
-        <class>workflow.model.embedded.Approver</class>
+       <!-- <class>workflow.model.embedded.Approver</class>-->
         <class>workflow.model.embedded.Block</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
@@ -370,9 +370,9 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         
          <!-- Workflow module entities -->     
-       <!--  <class>workflow.model.embedded.Approval</class>
-        <class>workflow.model.embedded.Approver</class>
-        <class>workflow.model.embedded.Block</class>   -->
+       <class>workflow.model.embedded.Approval</class>
+       <!-- <class>workflow.model.embedded.Approver</class>-->
+        <class>workflow.model.embedded.Block</class>  
         
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>

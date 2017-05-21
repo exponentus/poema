@@ -125,6 +125,7 @@
   "locality_code" : null,
   "user_profile" : "Потребителски профил",
   "login" : null,
+  "approver_decision_yes" : " approver_decision_yes",
   "task_title" : null,
   "ui_theme" : null,
   "just_back" : null,

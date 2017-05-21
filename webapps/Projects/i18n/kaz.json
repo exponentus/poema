@@ -125,6 +125,7 @@
   "locality_code" : null,
   "user_profile" : "Ағымдағы қолданушының қасиеттерін көру",
   "login" : "Кіру",
+  "approver_decision_yes" : "Келісемін",
   "task_title" : null,
   "ui_theme" : "Тема оформления",
   "just_back" : "Жабу",

@@ -213,17 +213,18 @@ public class OfficeMemoService extends RestProvider {
 	@POST
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
+
+		OfficeMemo om = null;
+		_Session ses = getSession();
 		try {
+			UUID id = dto.getId();
 			if (dto.isNew()) {
-				save(dto, new ValidationToStartApprove());
+				id = save(dto, new ValidationToStartApprove()).getId();
 			}
-			_Session ses = getSession();
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
+			om = officeMemoDAO.findById(id);
 			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
-
 			omd.startApproving(om);
-
 			officeMemoDAO.update(om, false);
 
 			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());

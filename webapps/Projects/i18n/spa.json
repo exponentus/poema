@@ -125,6 +125,7 @@
   "locality_code" : null,
   "user_profile" : "Perfil del usuario",
   "login" : null,
+  "approver_decision_yes" : "Estoy de acuerdo",
   "task_title" : "Título de la tarea",
   "ui_theme" : "Theme",
   "just_back" : null,

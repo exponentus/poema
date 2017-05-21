@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.FetchType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -36,7 +37,7 @@ public abstract class ApprovedControlledDocument extends ControlledDocument impl
 	@Convert(converter = ApprovalResultTypeConverter.class)
 	private ApprovalResultType result = ApprovalResultType.PROJECT;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy("sort")
 	private List<Block> blocks = new ArrayList<>();
 

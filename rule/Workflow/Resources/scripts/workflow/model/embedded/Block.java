@@ -2,13 +2,15 @@ package workflow.model.embedded;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.FetchType;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.exponentus.dataengine.jpa.SimpleAppEntity;
 import com.exponentus.user.IUser;
@@ -33,7 +35,9 @@ public class Block extends SimpleAppEntity {
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "wf__block_approvers", uniqueConstraints = @UniqueConstraint(columnNames = { "block_id",
+			"sort" }))
 	@OrderBy("sort")
 	private List<Approver> approvers;
 
