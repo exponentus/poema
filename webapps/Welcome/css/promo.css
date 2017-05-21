@@ -18,8 +18,11 @@
     width: 100%;
 }
 
+.promo > .container {
+    position: relative;
+}
+
 .heading.promo__heading {
-    font-family: 'Dosis', sans-serif;
     color: #FDB22B;
     font-size: 48px;
     font-weight: 600;
@@ -31,7 +34,6 @@
 
 .heading__sub.promo-heading__sub {
     color: rgba(255, 255, 255, 0.9);
-    font-family: 'Dosis', sans-serif;
     font-size: 22px;
     margin: 10px 0;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, .35);
@@ -39,7 +41,6 @@
 
 .heading__sub.promo-heading__experience {
     color: rgba(255, 255, 255, 0.9);
-    font-family: 'Dosis', sans-serif;
     font-size: 22px;
     margin: 10px 0 40px;
     text-shadow: 2px 2px 2px rgba(0, 0, 0, .35);

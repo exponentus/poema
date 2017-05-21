@@ -15,12 +15,8 @@
     transform: translate(0, -75px);
 }
 
-/*.navbar-default {
-    padding-top: 20px;
-}*/
-
-.navbar-header {
-    float: left;
+.navbar-header .navbar-brand {
+    height: auto;
 }
 
 .dropdown-lang {
@@ -158,11 +154,10 @@
     border-color: #CCC;
 }
 
-
 .navbar-default .navbar-nav > li > a {
     color: #333;
 }
 
-.navbar-right{
-    margin-top:12px;
+.navbar-right {
+    margin-top: 12px;
 }

@@ -1,3 +1,14 @@
+body {
+    font-family: "Open Sans", "OpenSans", sans-serif;
+    font-size: 16px;
+}
+
+@media (min-width: 1200px) {
+    body .container {
+        width: 1024px;
+    }
+}
+
 header {
     margin: 0;
     padding: 0;
@@ -11,20 +22,30 @@ footer {
 }
 
 .section {
-    padding: 20px 0 40px;
+    margin: 0;
+    padding: 0;
     position: relative;
 }
 
-.section_divider {
-    background: #EEE;
-    display: block;
-    border: none;
-    height: 1px;
+.section + .section {
+    border-top: 1px solid #eee;
 }
 
-@media (min-width: 768px) {
-    .section {
-        padding: 40px 0 70px;
+.section .container {
+    padding-bottom: 80px;
+    padding-top: 80px;
+}
+
+@media (max-width: 768px) {
+    .section .container {
+        padding-bottom: 40px;
+        padding-top: 40px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .section .container {
+        width: 100%;
     }
 }
 
@@ -41,7 +62,10 @@ button:focus,
 
 a,
 button {
-    -webkit-transition: all 0.4s;
-    -o-transition: all 0.4s;
     transition: all 0.4s;
+}
+
+img {
+    max-height: 100%;
+    max-width: 100%;
 }

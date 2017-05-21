@@ -21,17 +21,17 @@
                 <title>
                     <xsl:value-of select="$w_title"/>
                 </title>
+                <link href="https://fonts.googleapis.com/css?family=Dosis|Open+Sans:300i,400&amp;subset=cyrillic,cyrillic-ext"
+                      rel="stylesheet"/>
                 <link rel="stylesheet" href="/SharedResources/vendor/font-awesome/css/font-awesome.min.css"/>
                 <link rel="stylesheet" href="/SharedResources/vendor/bootstrap/css/bootstrap.min.css"/>
-                <link rel="stylesheet" href="/SharedResources/css/animate.css"/>
 
                 <link rel="stylesheet" href="css/layout.css"/>
-                <link rel="stylesheet" href="css/faq.css"/>
                 <link rel="stylesheet" href="css/navbar.css"/>
                 <link rel="stylesheet" href="css/heading.css"/>
+                <link rel="stylesheet" href="css/features.css"/>
                 <link rel="stylesheet" href="css/promo.css"/>
                 <link rel="stylesheet" href="css/about.css"/>
-                <link rel="stylesheet" href="css/skills.css"/>
                 <link rel="stylesheet" href="css/contact.css"/>
                 <link rel="stylesheet" href="css/icons-lang.css"/>
             </head>
@@ -39,22 +39,6 @@
                 <div class="layout wrapper">
                     <xsl:call-template name="_content"/>
                 </div>
-                <!-- fonts.googleapis
-                ======================== -->
-                <script type="text/javascript">
-                    <![CDATA[
-					(function() {
-						var link_element = document.createElement("link"),
-							s = document.getElementsByTagName("script")[0];
-						if (window.location.protocol !== "http:" && window.location.protocol !== "https:") {
-							link_element.href = "http:";
-						}
-						link_element.href += "//fonts.googleapis.com/css?family=Dosis:200,300,400,500,600,700,800";
-						link_element.rel = "stylesheet";
-						link_element.type = "text/css";
-						s.parentNode.insertBefore(link_element, s);
-					})();]]>
-                </script>
                 <!-- JavaScript
                 ======================== -->
                 <script src="/SharedResources/vendor/jquery/jquery-2.1.4.min.js"></script>
@@ -72,7 +56,7 @@
                     };
                 </script>
                 <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
-                <!-- End Cookie Consent plugin -->
+                <!-- /End Cookie Consent plugin -->
                 <!-- app
                 ======================== -->
                 <script src="js/app.js"></script>
