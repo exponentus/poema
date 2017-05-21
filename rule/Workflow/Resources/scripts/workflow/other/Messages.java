@@ -54,7 +54,7 @@ public class Messages {
 		for (AssigneeEntry entry : rez.getControl().getAssigneeEntries()) {
 
 			try {
-				user = (User) entry.getAssignee().getUser();
+				user = entry.getAssignee().getUser();
 				lang = user.getDefaultLang();
 			} catch (ClassCastException e) {
 
@@ -89,7 +89,7 @@ public class Messages {
 		User user = null;
 
 		try {
-			user = (User) incoming.getAddressee().getUser();
+			user = incoming.getAddressee().getUser();
 			lang = user.getDefaultLang();
 		} catch (ClassCastException e) {
 
@@ -128,7 +128,8 @@ public class Messages {
 
 	public void notifyApprovers(IApproval approval, String title) {
 		try {
-			Block block = ApprovalLifecycle.getCurrentBlock(approval);
+			ApprovalLifecycle al = new ApprovalLifecycle(approval);
+			Block block = al.getCurrentBlock();
 			for (Approver currentApprover : ApprovalLifecycle.getCurrentApprovers(block)) {
 				try {
 					if (block.getType() == ApprovalType.SIGNING) {
@@ -193,7 +194,8 @@ public class Messages {
 
 	public void notifyRecipient(IApproval approval, String title) {
 		try {
-			Block block = ApprovalLifecycle.getCurrentBlock(approval);
+			ApprovalLifecycle al = new ApprovalLifecycle(approval);
+			Block block = al.getCurrentBlock();
 			for (Approver currentApprover : ApprovalLifecycle.getCurrentApprovers(block)) {
 				try {
 					if (block.getType() == ApprovalType.SIGNING) {
@@ -223,7 +225,7 @@ public class Messages {
 		memo.addVar("author", approval.getAuthor().getUserName());
 
 		try {
-			user = (User) currentApprover.getEmployee().getUser();
+			user = currentApprover.getEmployee().getUser();
 			lang = user.getDefaultLang();
 		} catch (ClassCastException e) {
 

@@ -83,7 +83,7 @@ public class ApprovalLifecycle {
 
 	public void accept(IUser<Long> user) throws ApprovalException {
 		try {
-			Block processBlock = getCurrentBlock(entity);
+			Block processBlock = getCurrentBlock();
 			Approver currentApprover = processBlock.getApprover(user);
 			if (currentApprover.getEmployee() == null) {
 				throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
@@ -112,7 +112,7 @@ public class ApprovalLifecycle {
 
 	public void decline(IUser<Long> user, String decisionComment) throws ApprovalException {
 		try {
-			Block processBlock = getCurrentBlock(entity);
+			Block processBlock = getCurrentBlock();
 			if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {
 				throw new ApprovalException(ApprovalExceptionType.THERE_IS_NO_COMMENT);
 			}
@@ -150,7 +150,7 @@ public class ApprovalLifecycle {
 	public void skip() throws ApprovalException {
 		try {
 			Date currentTime = new Date();
-			Block processBlock = getCurrentBlock(entity);
+			Block processBlock = getCurrentBlock();
 			List<Approver> currentApprovers = getCurrentApprovers(processBlock);
 			for (Approver approver : currentApprovers) {
 				approver.setDecisionType(DecisionType.SKIPPED);
@@ -209,7 +209,7 @@ public class ApprovalLifecycle {
 		}
 	}
 
-	public static Block getCurrentBlock(IApproval entity) throws ApprovalException {
+	public Block getCurrentBlock() throws ApprovalException {
 		if (entity.getStatus() != ApprovalStatusType.PENDING) {
 			System.out.println(entity.getId() + " " + entity.getURL());
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());

@@ -103,7 +103,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 				&& entity.getStatus() == ApprovalStatusType.FINISHED;
 	}
 
-	public void calculateReadersEditors(OfficeMemo entity) {
+	private void calculateReadersEditors(OfficeMemo entity) {
 		entity.resetReadersEditors();
 		if (entity.getStatus() == ApprovalStatusType.DRAFT) {
 			entity.addReaderEditor(entity.getAuthor());

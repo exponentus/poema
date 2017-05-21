@@ -17,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -85,6 +86,16 @@ public class Outgoing extends ApprovalSecureAppEntity {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__outgoing_tags")
 	private List<Tag> tags;
+
+	@Override
+	@PrePersist
+	protected void prePersist() {
+		regDate = new Date();
+		lastModifiedDate = new Date();
+		if (appliedRegDate == null) {
+			appliedRegDate = regDate;
+		}
+	}
 
 	public String getRegNumber() {
 		return regNumber;

@@ -17,6 +17,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -24,7 +25,6 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
@@ -34,15 +34,14 @@ import administrator.model.User;
 import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
 import workflow.dao.filter.OutgoingFilter;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.OutgoingDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.Outgoing;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Approver;
+import workflow.model.embedded.Block;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
@@ -84,7 +83,7 @@ public class OutgoingService extends RestProvider {
 	public Response getById(@PathParam("id") String id) {
 		_Session ses = getSession();
 		Outgoing entity;
-		OutgoingDomain outDomain = new OutgoingDomain();
+		OutgoingDomain outDomain = new OutgoingDomain(ses);
 		try {
 			boolean isNew = "new".equals(id);
 			if (isNew) {
@@ -126,8 +125,8 @@ public class OutgoingService extends RestProvider {
 
 	private Response saveRequest(Outgoing dto) {
 		try {
-			OutgoingDomain omd = new OutgoingDomain();
-			Outcome outcome = omd.getOutcome(save(dto));
+			OutgoingDomain domain = new OutgoingDomain(getSession());
+			Outcome outcome = domain.getOutcome(save(dto, new ValidationToSaveAsDraft()));
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -137,40 +136,30 @@ public class OutgoingService extends RestProvider {
 		}
 	}
 
-	private Outgoing save(Outgoing dto) throws SecureException, DAOException, DTOException {
+	private Outgoing save(Outgoing dto, IValidation<Outgoing> validation)
+			throws SecureException, DAOException, DTOException {
 		_Session ses = getSession();
+
+		OutgoingDAO dao = new OutgoingDAO(ses);
 		Outgoing entity;
-		OutgoingDomain outDomain = new OutgoingDomain();
-		OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
 
 		if (dto.isNew()) {
 			entity = new Outgoing();
 		} else {
-			entity = outgoingDAO.findById(dto.getId());
+			entity = dao.findById(dto.getId());
 		}
 
-		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-		outDomain.fillFromDto(entity, dto, (User) ses.getUser(), ses);
-		entity.addReaderEditor(entity.getAuthor());
-
-		List<Observer> observers = entity.getObservers();
-		if (observers != null) {
-			for (Observer observer : observers) {
-				Employee emp = observer.getEmployee();
-				entity.addReader(emp.getUserID());
-			}
-		}
+		new OutgoingDomain(getSession()).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
 
 		if (dto.isNew()) {
 			RegNum rn = new RegNum();
 			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-			entity = outgoingDAO.add(entity, rn);
+			entity = dao.add(entity, rn);
 		} else {
-			entity = outgoingDAO.update(entity);
+			entity = dao.update(entity);
 		}
-		entity = outgoingDAO.findById(entity.getId());
-		return entity;
 
+		return entity;
 	}
 
 	@DELETE
@@ -214,28 +203,28 @@ public class OutgoingService extends RestProvider {
 	@POST
 	@Path("action/startApproving")
 	public Response startApproving(Outgoing dto) {
+
+		Outgoing entity = null;
+		_Session ses = getSession();
 		try {
-
-			Outgoing entity = save(dto);
-			if (entity != null) {
-				OutgoingDAO dao = new OutgoingDAO(getSession());
-				Outgoing outgoing = dao.findById(dto.getId());
-				OutgoingDomain outgoingDomain = new OutgoingDomain();
-				outgoing.setStatus(ApprovalStatusType.DRAFT);
-				outgoing.setResult(ApprovalResultType.PROJECT);
-				outgoingDomain.startApproving(outgoing);
-
-				dao.update(outgoing, false);
-				new Messages(getAppEnv()).notifyApprovers(outgoing, outgoing.getTitle());
-				Outcome outcome = outgoingDomain.getOutcome(outgoing);
-				outcome.setTitle("approving_started");
-				outcome.setMessage("approving_started");
-				outcome.addPayload("result", "approving_started");
-
-				return Response.ok(outcome).build();
-			} else {
-				return responseValidationError(new DTOException(DTOExceptionType.NO_ENTITY));
+			UUID id = dto.getId();
+			if (dto.isNew()) {
+				id = save(dto, new ValidationToStartApprove()).getId();
 			}
+			OutgoingDAO dao = new OutgoingDAO(ses);
+			entity = dao.findById(id);
+			OutgoingDomain omd = new OutgoingDomain(ses);
+			omd.startApproving(entity);
+			dao.update(entity, false);
+
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = omd.getOutcome(entity);
+			outcome.setTitle("approving_started");
+			outcome.setMessage("approving_started");
+			outcome.addPayload("result", "approving_started");
+
+			return Response.ok(outcome).build();
+
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		} catch (DAOException | SecureException | ApprovalException e) {
@@ -247,15 +236,17 @@ public class OutgoingService extends RestProvider {
 	@Path("action/acceptApprovalBlock")
 	public Response acceptApprovalBlock(Outgoing dto) {
 		try {
-			OutgoingDAO officeMemoDAO = new OutgoingDAO(getSession());
-			Outgoing om = officeMemoDAO.findById(dto.getId());
-			OutgoingDomain omd = new OutgoingDomain();
+			_Session ses = getSession();
+			OutgoingDAO dao = new OutgoingDAO(ses);
+			Outgoing entity = dao.findById(dto.getId());
+			OutgoingDomain domain = new OutgoingDomain(ses);
 
-			omd.acceptApprovalBlock(om, getSession().getUser());
+			domain.acceptApprovalBlock(entity, ses.getUser());
 
-			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
+			dao.update(entity, false);
+
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("acceptApprovalBlock");
 			outcome.setMessage("acceptApprovalBlock");
 
@@ -269,16 +260,17 @@ public class OutgoingService extends RestProvider {
 	@Path("action/declineApprovalBlock")
 	public Response declineApprovalBlock(Outgoing dto) {
 		try {
-			OutgoingDAO officeMemoDAO = new OutgoingDAO(getSession());
-			Outgoing om = officeMemoDAO.findById(dto.getId());
-			OutgoingDomain omd = new OutgoingDomain();
+			_Session ses = getSession();
+			OutgoingDAO dao = new OutgoingDAO(ses);
+			Outgoing entity = dao.findById(dto.getId());
+			OutgoingDomain domain = new OutgoingDomain(ses);
 
 			String decisionComment = getWebFormData().getValueSilently("comment");
-			omd.declineApprovalBlock(om, getSession().getUser(), decisionComment);
+			domain.declineApprovalBlock(entity, ses.getUser(), decisionComment);
 
-			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
+			dao.update(entity, false);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
 
@@ -286,6 +278,7 @@ public class OutgoingService extends RestProvider {
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}
+
 	}
 
 	private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
@@ -314,5 +307,59 @@ public class OutgoingService extends RestProvider {
 		}
 
 		return actionBar;
+	}
+
+	private class ValidationToSaveAsDraft implements IValidation<Outgoing> {
+
+		@Override
+		public void check(Outgoing dto) throws DTOException {
+			DTOException e = new DTOException();
+
+			if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
+				e.addError("title", "required", "field_is_empty");
+			}
+			if (dto.getRecipient() == null) {
+				e.addError("recipient", "required", "field_is_empty");
+			}
+			if (dto.getDocSubject() == null) {
+				e.addError("docSubject", "required", "field_is_empty");
+			}
+			if (dto.getDocLanguage() == null) {
+				e.addError("docLanguage", "required", "field_is_empty");
+			}
+			if (dto.getDocType() == null) {
+				e.addError("docType", "required", "field_is_empty");
+			}
+			if (e.hasError()) {
+				throw e;
+			}
+
+		}
+
+	}
+
+	private class ValidationToStartApprove extends ValidationToSaveAsDraft {
+
+		@Override
+		public void check(Outgoing dto) throws DTOException {
+			super.check(dto);
+			DTOException e = new DTOException();
+
+			List<Block> blocks = dto.getBlocks();
+			if (blocks.size() == 0) {
+				e.addError("blocks", "required", "field_is_empty");
+			} else {
+				List<Approver> approvers = blocks.get(0).getApprovers();
+				if (approvers == null || approvers.size() == 0) {
+					e.addError("approvers", "required", "field_is_empty");
+				}
+			}
+
+			if (e.hasError()) {
+				throw e;
+			}
+
+		}
+
 	}
 }

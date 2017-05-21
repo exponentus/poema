@@ -247,16 +247,16 @@ public class OfficeMemoService extends RestProvider {
 	public Response acceptApprovalBlock(OfficeMemo dto) {
 		try {
 			_Session ses = getSession();
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
+			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+			OfficeMemo entity = dao.findById(dto.getId());
+			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
 
-			omd.acceptApprovalBlock(om, ses.getUser());
+			domain.acceptApprovalBlock(entity, ses.getUser());
 
-			officeMemoDAO.update(om, false);
+			dao.update(entity, false);
 
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("acceptApprovalBlock");
 			outcome.setMessage("acceptApprovalBlock");
 
@@ -271,16 +271,16 @@ public class OfficeMemoService extends RestProvider {
 	public Response declineApprovalBlock(OfficeMemo dto) {
 		try {
 			_Session ses = getSession();
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(getSession());
-			OfficeMemo om = officeMemoDAO.findById(dto.getId());
-			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
+			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+			OfficeMemo entity = dao.findById(dto.getId());
+			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
 
 			String decisionComment = getWebFormData().getValueSilently("comment");
-			omd.declineApprovalBlock(om, ses.getUser(), decisionComment);
+			domain.declineApprovalBlock(entity, ses.getUser(), decisionComment);
 
-			officeMemoDAO.update(om, false);
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
+			dao.update(entity, false);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
 

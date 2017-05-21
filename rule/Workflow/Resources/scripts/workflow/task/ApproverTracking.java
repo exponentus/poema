@@ -38,7 +38,8 @@ public class ApproverTracking extends _Do {
 			for (IApproval approval : vp.getResult()) {
 				if (approval.getStatus() == ApprovalStatusType.PENDING) {
 					try {
-						Block currentBlock = ApprovalLifecycle.getCurrentBlock(approval);
+						ApprovalLifecycle al = new ApprovalLifecycle(approval);
+						Block currentBlock = al.getCurrentBlock();
 						if (currentBlock.getTimeLimit() > 0) {
 							List<Approver> approvers = ApprovalLifecycle.getCurrentApprovers(currentBlock);
 							for (Approver currentApprover : approvers) {
@@ -48,7 +49,7 @@ public class ApproverTracking extends _Do {
 								}
 								long diff = current.getTime() - startTime.getTime();
 								if (TimeUnit.MILLISECONDS.toMinutes(diff) >= currentBlock.getTimeLimit()) {
-									new ApprovalLifecycle(approval).skip();
+									al.skip();
 									try {
 										dao.update(approval);
 									} catch (SecureException | DAOException e) {
