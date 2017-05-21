@@ -36,8 +36,9 @@ public class Block extends SimpleAppEntity {
 	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "wf__block_approvers", uniqueConstraints = @UniqueConstraint(columnNames = { "block_id",
-			"sort" }))
+	@CollectionTable(name = "wf__block_approvers", uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "block_id", "sort" }),
+			@UniqueConstraint(columnNames = { "block_id", "employee" }) })
 	@OrderBy("sort")
 	private List<Approver> approvers;
 

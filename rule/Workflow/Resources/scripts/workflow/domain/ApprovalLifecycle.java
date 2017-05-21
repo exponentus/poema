@@ -99,6 +99,7 @@ public class ApprovalLifecycle {
 			if (nextApprover != null) {
 				if (processBlock.getType() == ApprovalType.SERIAL || processBlock.getType() == ApprovalType.SIGNING) {
 					nextApprover.setCurrent(true);
+					nextApprover.setStartTime(currentTime);
 					entity.addReader(nextApprover.getEmployee().getUser());
 				}
 			} else {

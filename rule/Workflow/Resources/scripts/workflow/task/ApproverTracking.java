@@ -42,7 +42,11 @@ public class ApproverTracking extends _Do {
 						if (currentBlock.getTimeLimit() > 0) {
 							List<Approver> approvers = ApprovalLifecycle.getCurrentApprovers(currentBlock);
 							for (Approver currentApprover : approvers) {
-								long diff = current.getTime() - currentApprover.getStartTime().getTime();
+								Date startTime = currentApprover.getStartTime();
+								if (startTime == null) {
+									Server.logger.info("start time is null in " + approval.getURL());
+								}
+								long diff = current.getTime() - startTime.getTime();
 								if (TimeUnit.MILLISECONDS.toMinutes(diff) >= currentBlock.getTimeLimit()) {
 									new ApprovalLifecycle(approval).skip();
 									try {
