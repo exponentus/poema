@@ -56,6 +56,9 @@ public class ApproverTracking extends _Do {
 										Server.logger.exception(e);
 									}
 								}
+								if (approval.getStatus() == ApprovalStatusType.FINISHED) {
+									break;
+								}
 							}
 						}
 					} catch (ApprovalException e) {
@@ -71,7 +74,7 @@ public class ApproverTracking extends _Do {
 	private List<Class<?>> getApprovedEntities() {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		classes.add(workflow.model.OfficeMemo.class);
-		// classes.add(resourcereservations.model.ApplicationForVehicle.class);
+		classes.add(workflow.model.Outgoing.class);
 		return classes;
 	}
 
