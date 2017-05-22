@@ -1,6 +1,7 @@
 package workflow.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.exponentus.common.model.SecureHierarchicalEntity;
@@ -47,6 +50,10 @@ public class Assignment extends ControlledDocument {
 	@JoinColumn(name = "applied_author", nullable = false)
 	private Employee appliedAuthor;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "applied_reg_date")
+	private Date appliedRegDate;
+
 	@ManyToOne(optional = false)
 	private ControlledDocument parent;
 
@@ -70,6 +77,14 @@ public class Assignment extends ControlledDocument {
 
 	public void setAppliedAuthor(Employee appliedAuthor) {
 		this.appliedAuthor = appliedAuthor;
+	}
+
+	public Date getAppliedRegDate() {
+		return appliedRegDate;
+	}
+
+	public void setAppliedRegDate(Date appliedRegDate) {
+		this.appliedRegDate = appliedRegDate;
 	}
 
 	public String getBody() {

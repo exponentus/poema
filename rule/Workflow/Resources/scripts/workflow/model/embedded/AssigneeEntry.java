@@ -1,15 +1,23 @@
 package workflow.model.embedded;
 
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
-import com.exponentus.env.Environment;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
+
+import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
-
-import javax.persistence.*;
-import java.util.Date;
 
 @JsonRootName("assigneeEntry")
 @Entity
@@ -17,66 +25,68 @@ import java.util.Date;
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
 public class AssigneeEntry extends SimpleAppEntity {
 
-    private boolean isCoordinator;
+	private boolean isCoordinator;
 
-    private Employee assignee;
+	private Employee assignee;
 
-    @Convert("emp_conv")
-    @Basic(fetch = FetchType.LAZY, optional = true)
-    private Employee resetBy;
+	@Convert("emp_conv")
+	@Basic(fetch = FetchType.LAZY, optional = true)
+	private Employee resetBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date resetTime;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date resetTime;
 
-    private String resetterInfo;
+	@Column(name = "reset_info")
+	private String resetInfo;
 
-    private int sort;
+	private int sort;
 
-    public boolean isCoordinator() {
-        return isCoordinator;
-    }
+	public boolean isCoordinator() {
+		return isCoordinator;
+	}
 
-    public void setCoordinator(boolean isCoordinator) {
-        this.isCoordinator = isCoordinator;
-    }
+	public void setCoordinator(boolean isCoordinator) {
+		this.isCoordinator = isCoordinator;
+	}
 
-    public Employee getAssignee() {
-        return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
-    }
+	public Employee getAssignee() {
+		//return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
+		return assignee;
+	}
 
-    public void setAssignee(Employee assignee) {
-        this.assignee = assignee;
-    }
+	public void setAssignee(Employee assignee) {
+		this.assignee = assignee;
+	}
 
-    public Employee getResetBy() {
-        return resetBy;
-    }
+	public Employee getResetBy() {
+		return resetBy;
+	}
 
-    public void setResetBy(Employee resetBy) {
-        this.resetBy = resetBy;
-    }
+	public void setResetBy(Employee resetBy) {
+		this.resetBy = resetBy;
+	}
 
-    public Date getResetTime() {
-        return resetTime;
-    }
+	public Date getResetTime() {
+		return resetTime;
+	}
 
-    public void setResetTime(Date resetTime) {
-        this.resetTime = resetTime;
-    }
+	public void setResetTime(Date resetTime) {
+		this.resetTime = resetTime;
+	}
 
-    public String getResetterInfo() {
-        return resetterInfo;
-    }
+	public String getResetInfo() {
+		return resetInfo;
+	}
 
-    public void setResetterInfo(String resetterInfo) {
-        this.resetterInfo = resetterInfo;
-    }
+	public void setResetInfo(String resetInfo) {
+		this.resetInfo = resetInfo;
+	}
 
-    public int getSort() {
-        return sort;
-    }
+	public int getSort() {
+		return sort;
+	}
 
-    public void setSort(int sort) {
-        this.sort = sort;
-    }
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
 }

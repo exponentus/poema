@@ -14,6 +14,7 @@
     
     <converter class="reference.model.constants.converter.ApprovalSchemaTypeConverter"/>
     <converter class="reference.model.constants.converter.ApprovalTypeConverter"/> 
+    <converter class="reference.model.constants.converter.ControlSchemaTypeConverter"/>
       	
     <converter class="workflow.model.constants.converter.ControlStatusTypeConverter"/> 
     <converter class="workflow.model.constants.converter.ApprovalStatusTypeConverter"/>   

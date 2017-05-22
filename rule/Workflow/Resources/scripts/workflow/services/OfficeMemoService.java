@@ -43,6 +43,8 @@ import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
+import workflow.model.constants.ApprovalResultType;
+import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.other.Messages;
@@ -159,7 +161,7 @@ public class OfficeMemoService extends RestProvider {
 			entity = officeMemoDAO.findById(dto.getId());
 		}
 
-		new OfficeMemoDomain(getSession()).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
+		new OfficeMemoDomain(ses).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
 
 		if (dto.isNew()) {
 			RegNum rn = new RegNum();
@@ -255,8 +257,13 @@ public class OfficeMemoService extends RestProvider {
 
 			dao.update(entity, false);
 
-			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
+			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+				if (entity.getResult() == ApprovalResultType.ACCEPTED) {
+					new Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
+				}
+			}
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			outcome.setTitle("acceptApprovalBlock");
 			outcome.setMessage("acceptApprovalBlock");
 
@@ -281,6 +288,11 @@ public class OfficeMemoService extends RestProvider {
 			dao.update(entity, false);
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
+			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+				if (entity.getResult() == ApprovalResultType.REJECTED) {
+					new Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
+				}
+			}
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
 

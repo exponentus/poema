@@ -1,6 +1,7 @@
 package workflow.model.embedded;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,6 +35,10 @@ public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> impl
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;
 
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "status_time")
+	private Date statusTime;
+
 	@Convert(converter = ApprovalSchemaTypeConverter.class)
 	private ApprovalSchemaType schema = ApprovalSchemaType.REJECT_IF_NO;
 
@@ -47,6 +54,9 @@ public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> impl
 	@Column(name = "ver_support")
 	private boolean versionsSupport;
 
+	@Column(name = "is_invariable")
+	private boolean routeIsInvariable;
+
 	@Override
 	public ApprovalStatusType getStatus() {
 		return status;
@@ -55,6 +65,7 @@ public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> impl
 	@Override
 	public void setStatus(ApprovalStatusType status) {
 		this.status = status;
+		statusTime = new Date();
 	}
 
 	@Override
@@ -142,6 +153,14 @@ public abstract class ApprovalSecureAppEntity extends SecureAppEntity<UUID> impl
 	@Override
 	public void setVersionsSupport(boolean versionsSupport) {
 		this.versionsSupport = versionsSupport;
+	}
+
+	public boolean isRouteIsInvariable() {
+		return routeIsInvariable;
+	}
+
+	public void setRouteIsInvariable(boolean routeIsInvariable) {
+		this.routeIsInvariable = routeIsInvariable;
 	}
 
 	@Override

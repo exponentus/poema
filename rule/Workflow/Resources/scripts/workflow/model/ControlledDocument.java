@@ -1,24 +1,29 @@
 package workflow.model;
 
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.List;
+
+import com.exponentus.common.model.SecureHierarchicalEntity;
+
+import workflow.model.embedded.IControlled;
 
 @Entity
 @Table(name = "wf__controlled_documents")
-public class ControlledDocument extends SecureHierarchicalEntity {
+public class ControlledDocument extends SecureHierarchicalEntity implements IControlled {
 
-    @OneToMany
-    private List<Assignment> assignments;
+	@OneToMany
+	private List<Assignment> assignments;
 
-    public List<Assignment> getAssignments() {
-        return assignments;
-    }
+	@Override
+	public List<Assignment> getAssignments() {
+		return assignments;
+	}
 
-    public void setAssignments(List<Assignment> assignments) {
-        this.assignments = assignments;
-    }
+	@Override
+	public void setAssignments(List<Assignment> assignments) {
+		this.assignments = assignments;
+	}
 }

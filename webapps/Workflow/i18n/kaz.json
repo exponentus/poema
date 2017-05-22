@@ -383,7 +383,7 @@
   "password_incorrect" : null,
   "new_category" : null,
   "accepted" : null,
-  "finished" : null,
+  "finished" : "Дайын",
   "new_document" : "Жаңа құжат",
   "addressee" : null,
   "claim_decision_type" : "claim_decision_type",

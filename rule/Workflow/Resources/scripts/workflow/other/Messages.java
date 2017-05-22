@@ -9,6 +9,7 @@ import com.exponentus.env.Environment;
 import com.exponentus.exception.MsgException;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.log.CommonLogger;
+import com.exponentus.log.Lg;
 import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
@@ -21,6 +22,7 @@ import workflow.domain.exception.ApprovalException;
 import workflow.domain.exception.ApprovalExceptionType;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
+import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
@@ -250,6 +252,16 @@ public class Messages {
 			ma.sendMessage(recipients, appEnv.vocabulary.getWord(templateName, lang),
 					memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, templateName, lang)));
 		}
+	}
+
+	public void notifyOfAccepting(OfficeMemo entity, String title) {
+		Lg.debug("----notify simulation about accepting a document----");
+
+	}
+
+	public void notifyOfRejecting(OfficeMemo entity, String title) {
+		Lg.debug("----notify simulation about rejecting a document----");
+
 	}
 
 }

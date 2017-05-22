@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.exponentus.user.IUser;
@@ -172,6 +173,14 @@ public class ApprovalLifecycle {
 		}
 	}
 
+	public void backToRevise() throws ApprovalException {
+		entity.setVersion(entity.getVersion() + 1);
+		entity.setStatus(ApprovalStatusType.DRAFT);
+		Set<Long> editors = new HashSet<Long>();
+		editors.add(entity.getAuthor().getId());
+		entity.setEditors(editors);
+	}
+
 	private void next(Block processBlock, Date currentTime) throws ApprovalException {
 		try {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
@@ -211,12 +220,13 @@ public class ApprovalLifecycle {
 
 	public Block getCurrentBlock() throws ApprovalException {
 		if (entity.getStatus() != ApprovalStatusType.PENDING) {
-			System.out.println(entity.getId() + " " + entity.getURL());
+			;
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
 		Block processBlock = getProcessingBlock(entity);
 		if (processBlock == null) {
+			System.out.println(entity.getId() + " " + entity.getURL());
 			throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 		}
 		return processBlock;
