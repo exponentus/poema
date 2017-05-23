@@ -18,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
+import workflow.model.constants.ControlStatusType;
+import workflow.model.constants.converter.ControlStatusTypeConverter;
 
 @JsonRootName("assigneeEntry")
 @Entity
@@ -28,6 +30,9 @@ public class AssigneeEntry extends SimpleAppEntity {
 	private boolean isCoordinator;
 
 	private Employee assignee;
+
+	@javax.persistence.Convert(converter = ControlStatusTypeConverter.class)
+	private ControlStatusType status = ControlStatusType.OPEN;
 
 	@Convert("emp_conv")
 	@Basic(fetch = FetchType.LAZY, optional = true)
@@ -56,6 +61,14 @@ public class AssigneeEntry extends SimpleAppEntity {
 
 	public void setAssignee(Employee assignee) {
 		this.assignee = assignee;
+	}
+
+	public ControlStatusType getStatus() {
+		return status;
+	}
+
+	public void setStatus(ControlStatusType status) {
+		this.status = status;
 	}
 
 	public Employee getResetBy() {
