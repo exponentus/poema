@@ -41,8 +41,10 @@ import workflow.dao.filter.OfficeMemoFilter;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
+import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
+import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
@@ -275,15 +277,14 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Path("action/declineApprovalBlock")
-	public Response declineApprovalBlock(OfficeMemo dto) {
+	public Response declineApprovalBlock(DeclineApprovalBlockAction<OfficeMemo> actionDto) {
 		try {
 			_Session ses = getSession();
 			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-			OfficeMemo entity = dao.findById(dto.getId());
+			OfficeMemo entity = dao.findById(actionDto.getModel().getId());
 			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
 
-			String decisionComment = getWebFormData().getValueSilently("comment");
-			domain.declineApprovalBlock(entity, ses.getUser(), decisionComment);
+			domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
 
 			dao.update(entity, false);
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());

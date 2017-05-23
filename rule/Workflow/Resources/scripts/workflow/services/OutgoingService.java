@@ -39,6 +39,7 @@ import workflow.dao.filter.OutgoingFilter;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.OutgoingDomain;
 import workflow.domain.exception.ApprovalException;
+import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.Outgoing;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
@@ -258,15 +259,14 @@ public class OutgoingService extends RestProvider {
 
 	@POST
 	@Path("action/declineApprovalBlock")
-	public Response declineApprovalBlock(Outgoing dto) {
+	public Response declineApprovalBlock(DeclineApprovalBlockAction<Outgoing> actionDto) {
 		try {
 			_Session ses = getSession();
 			OutgoingDAO dao = new OutgoingDAO(ses);
-			Outgoing entity = dao.findById(dto.getId());
+			Outgoing entity = dao.findById(actionDto.getModel().getId());
 			OutgoingDomain domain = new OutgoingDomain(ses);
 
-			String decisionComment = getWebFormData().getValueSilently("comment");
-			domain.declineApprovalBlock(entity, ses.getUser(), decisionComment);
+			domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
 
 			dao.update(entity, false);
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
