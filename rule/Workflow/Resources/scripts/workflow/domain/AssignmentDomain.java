@@ -50,7 +50,13 @@ public class AssignmentDomain extends DTOService<Assignment> {
 			throws DTOException, DAOException {
 		validation.check(dto);
 		EmployeeDAO eDao = new EmployeeDAO(ses);
-		entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
+		Employee appliedAuthor = dto.getAppliedAuthor();
+		if (appliedAuthor != null) {
+			appliedAuthor = eDao.findById(dto.getAppliedAuthor().getId());
+		} else {
+			appliedAuthor = eDao.findByUser(ses.getUser());
+		}
+		entity.setAppliedAuthor(appliedAuthor);
 		entity.setAppliedRegDate(dto.getAppliedRegDate());
 		entity.setParent(dto.getParent());
 		entity.setTitle(dto.getTitle());

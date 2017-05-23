@@ -36,7 +36,7 @@ public class Control {
 	private Date dueDate;
 
 	@Convert(converter = ControlStatusTypeConverter.class)
-	private ControlStatusType status = ControlStatusType.UNKNOWN;
+	private ControlStatusType status = ControlStatusType.DRAFT;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "status_time")
