@@ -14,6 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -30,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
@@ -64,6 +67,10 @@ public class Assignment extends ControlledDocument {
 	@ElementCollection
 	@CollectionTable(name = "wf__assignment_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "wf__assignment_tags")
+	private List<Tag> tags;
 
 	@Embedded
 	private Control control;
@@ -101,6 +108,14 @@ public class Assignment extends ControlledDocument {
 
 	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
+	}
+
+	public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
 	}
 
 	public Control getControl() {
