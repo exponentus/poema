@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.constants.LanguageCode;
@@ -42,10 +41,9 @@ public class ExpiredTracking extends _Do {
 			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				processTask(appEnv,
-						tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)), session);
-				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)),
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)),
 						session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)), session);
 			} else {
 				logger.warning("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
 			}

@@ -4,6 +4,7 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
+import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event._Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
@@ -23,6 +24,7 @@ public class ControlTracking extends _Do {
 		try {
 			AssignmentDAO dao = new AssignmentDAO(session);
 			ViewPage<Assignment> vp = dao.findAll();
+			PeriodicalServices.logger("control_tracking is going to proccess " + vp.getCount() + " documents");
 			for (Assignment entity : vp.getResult()) {
 				if (entity.getControl().getStatus() == ControlStatusType.PROCESSING) {
 					ControlLifecycle cl = new ControlLifecycle(entity);
