@@ -14,7 +14,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
@@ -27,7 +27,7 @@ import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 
 @Command(name = "approver_tracking", trigger = Trigger.EVERY_5_MIN)
-public class ApproverTracking extends _Do {
+public class ApproverTracking extends Do {
 	private Date current = new Date();
 
 	@Override

@@ -13,7 +13,7 @@ import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
@@ -28,7 +28,7 @@ import reference.dao.TagDAO;
 import reference.model.Tag;
 
 @Command(name = "expired_tracking", trigger = Trigger.EVERY_NIGHT)
-public class ExpiredTracking extends _Do {
+public class ExpiredTracking extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();
 	private Tag tag;

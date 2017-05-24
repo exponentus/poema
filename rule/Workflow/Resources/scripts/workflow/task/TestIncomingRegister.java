@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.util.ListUtil;
 
@@ -24,7 +24,7 @@ import workflow.model.Incoming;
 import workflow.services.IncomingService;
 
 @Command(name = "test_in")
-public class TestIncomingRegister extends _Do {
+public class TestIncomingRegister extends Do {
 
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {

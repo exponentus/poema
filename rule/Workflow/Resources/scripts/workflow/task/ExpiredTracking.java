@@ -7,7 +7,7 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 
@@ -19,7 +19,7 @@ import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
 @Command(name = "expired_tracking", trigger = Trigger.EVERY_NIGHT)
-public class ExpiredTracking extends _Do {
+public class ExpiredTracking extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();
 	private Tag tag;

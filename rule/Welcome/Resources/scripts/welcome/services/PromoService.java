@@ -23,6 +23,7 @@ import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.services.Defended;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.Validator;
 
@@ -34,6 +35,7 @@ public class PromoService extends RestProvider {
 
 	@POST
 	@Path("/sendmail")
+	@Defended(false)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(@FormParam("email") String email, @FormParam("subject") String subj,
@@ -96,9 +98,9 @@ public class PromoService extends RestProvider {
 			errors.add("message_too_short");
 		}
 
-		if (isValid && !validateReCaptcha(captcha)) {
+		/*if (isValid && !validateReCaptcha(captcha)) {
 			errors.add("captcha_incorrect");
-		}
+		}*/
 		return errors;
 	}
 

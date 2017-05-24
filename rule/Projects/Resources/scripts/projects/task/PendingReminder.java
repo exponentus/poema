@@ -12,7 +12,7 @@ import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
@@ -26,7 +26,7 @@ import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 
 @Command(name = "pending_reminder", trigger = Trigger.EVERY_NIGHT)
-public class PendingReminder extends _Do {
+public class PendingReminder extends Do {
 	private TaskDAO tDao;
 
 	@Override

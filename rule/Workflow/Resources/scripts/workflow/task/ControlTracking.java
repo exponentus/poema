@@ -6,7 +6,7 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
@@ -17,7 +17,7 @@ import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
 @Command(name = "control_tracking", trigger = Trigger.EVERY_5_MIN)
-public class ControlTracking extends _Do {
+public class ControlTracking extends Do {
 
 	@Override
 	public void doTask(AppEnv appEnv, _Session session) {

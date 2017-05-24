@@ -4,7 +4,7 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 import projects.dao.ProjectDAO;
 import projects.model.Project;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Command(name = "speed_check")
-public class SpeedChecker extends _Do {
+public class SpeedChecker extends Do {
 
     @Override
     public void doTask(AppEnv appEnv, _Session session) {

@@ -13,7 +13,7 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 
 import reference.dao.ControlTypeDAO;
@@ -27,7 +27,7 @@ import workflow.model.embedded.Control;
 import workflow.services.AssignmentService;
 
 @Command(name = "test_ass")
-public class TestAssignmentOnPrimaryDocument extends _Do {
+public class TestAssignmentOnPrimaryDocument extends Do {
 
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {

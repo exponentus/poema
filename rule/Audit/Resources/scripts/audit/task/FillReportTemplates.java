@@ -9,14 +9,14 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 
 import audit.dao.ReportDAO;
 import audit.model.Report;
 
 @Command(name = "fill_report_templates")
-public class FillReportTemplates extends _Do {
+public class FillReportTemplates extends Do {
 
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {

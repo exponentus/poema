@@ -12,7 +12,7 @@ import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.event._Do;
+import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
@@ -29,7 +29,7 @@ import reference.dao.TagDAO;
 import reference.model.Tag;
 
 @Command(name = "overdue_reminder", trigger = Trigger.EVERY_NIGHT)
-public class OverdueReminder extends _Do {
+public class OverdueReminder extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Tag tag;
 	private TaskDAO tDao;
