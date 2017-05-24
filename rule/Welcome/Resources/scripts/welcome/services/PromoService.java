@@ -60,10 +60,11 @@ public class PromoService extends RestProvider {
 		MailAgent ma = new MailAgent("promo message");
 		Memo memo = new Memo();
 		memo.addVar("subj", subj);
+		memo.addVar("from", email);
 		memo.addVar("msg", msg);
 		try {
 			if (ma.sendMessage(recipients, appEnv.vocabulary.getWord("notify_about_new_message", lang),
-					memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, "contact_us", lang)))) {
+					memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, "contact_us", lang)), false)) {
 				res.addMessage("message_has_sent_succesfully", lang);
 				return Response.status(HttpServletResponse.SC_OK).entity(res).build();
 			} else {
