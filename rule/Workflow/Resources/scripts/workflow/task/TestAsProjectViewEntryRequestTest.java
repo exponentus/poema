@@ -27,7 +27,7 @@ public class TestAsProjectViewEntryRequestTest extends Do {
 			AsProjectViewEntryDAO dao = new AsProjectViewEntryDAO(appEnv, ses);
 			ViewPage<AsProjectViewEntry> vp = dao.findViewPage(0, 0);
 			for (AsProjectViewEntry entry : vp.getResult()) {
-				System.out.println(entry);
+				System.out.println(entry.getIdentifier() + " " + entry.parentForm);
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();

@@ -17,10 +17,11 @@ public class AsProjectViewEntry extends AppEntity<UUID> {
 	public ApprovalResultType result;
 	public int version = 1;
 	public boolean hasAttachments;
+	public String parentForm;
 
 	public List<IAppEntity<UUID>> responses;
 
-	public AsProjectViewEntry(UUID id, String title, String regNumber, Date appliedRegDate, int version) {
+	public AsProjectViewEntry(UUID id, String title, String regNumber, Date appliedRegDate, int version, String form) {
 		this.id = id;
 		this.title = title;
 		this.regNumber = regNumber;
@@ -28,6 +29,7 @@ public class AsProjectViewEntry extends AppEntity<UUID> {
 		this.status = status;
 		this.result = result;
 		this.version = version;
+		this.parentForm = form;
 		//this.hasAttachments = attachmentCount > 0;
 	}
 
