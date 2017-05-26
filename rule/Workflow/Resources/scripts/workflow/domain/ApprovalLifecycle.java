@@ -220,16 +220,27 @@ public class ApprovalLifecycle {
 
 	public Block getCurrentBlock() throws ApprovalException {
 		if (entity.getStatus() != ApprovalStatusType.PENDING) {
-			;
 			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
 		}
 
-		Block processBlock = getProcessingBlock(entity);
+		Block processBlock = getProcessingBlock();
 		if (processBlock == null) {
-			System.out.println(entity.getId() + " " + entity.getURL());
 			throw new ApprovalException(ApprovalExceptionType.WRONG_BLOCK_TYPE);
 		}
 		return processBlock;
+	}
+
+	public Block getProcessingBlock() {
+		if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+			return null;
+		}
+
+		if (entity.getBlocks() == null || entity.getBlocks().isEmpty()) {
+			return null;
+		}
+
+		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst()
+				.orElse(null);
 	}
 
 	public static Block getProcessingBlock(IApproval entity) {
