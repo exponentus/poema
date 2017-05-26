@@ -28,7 +28,7 @@ public class AssigneeEntry { // extends SimpleAppEntity {
 	private boolean isCoordinator;
 
 	@Convert("emp_conv")
-	@Column(name = "assignee_id")
+	@Column(name = "assignee")
 	@Basic(fetch = FetchType.LAZY, optional = false)
 	private Employee assignee;
 

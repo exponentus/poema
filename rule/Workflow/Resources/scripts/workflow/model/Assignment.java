@@ -76,7 +76,7 @@ public class Assignment extends SecureHierarchicalEntity {
 	@Transient
 	private List<IAppEntity<UUID>> responses;
 
-	@Column(name = "control_type")
+	@JoinColumn(name = "control_type")
 	private ControlType controlType;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -97,7 +97,7 @@ public class Assignment extends SecureHierarchicalEntity {
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "wf__assignee_entries", uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "assignment_id", "sort" }),
-			@UniqueConstraint(columnNames = { "assignment_id", "assignee_id" }) })
+			@UniqueConstraint(columnNames = { "assignment_id", "assignee" }) })
 
 	/*@JoinTable(name = "wf__assignments_wf__assignee_entries", joinColumns = @JoinColumn(name = "assignment_id", referencedColumnName = "id"), uniqueConstraints = {
 			@UniqueConstraint(columnNames = { "assignment_id", "sort" }),
