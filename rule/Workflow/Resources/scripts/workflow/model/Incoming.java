@@ -46,7 +46,7 @@ import workflow.init.AppConst;
 @Entity
 @Table(name = "wf__incomings")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Incoming extends ControlledDocument {
+public class Incoming extends ActionableDocument {
 
 	@FTSearchable
 	@Column(name = "reg_number", unique = true, length = 64)

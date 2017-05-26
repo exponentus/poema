@@ -16,7 +16,7 @@ public class AssigneeEntryShort {
 	public int sort;
 
 	public AssigneeEntryShort(AssigneeEntry ae) {
-		this.id = ae.getId();
+		//this.id = ae.getId();
 		this.isCoordinator = ae.isCoordinator();
 		this.assignee = ae.getAssignee().getName();
 		this.resetBy = ae.getResetBy().getName();

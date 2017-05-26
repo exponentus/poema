@@ -1,98 +1,112 @@
 package workflow.dao;
 
-import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.scripting.SortParams;
-import com.exponentus.scripting._Session;
-import workflow.dao.filter.AssignmentFilter;
-import workflow.dto.AssignmentViewEntry;
-import workflow.model.Assignment;
+import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.UUID;
 
-public class AssignmentDAO extends ControlledDocumentDAO<Assignment, UUID> {
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting._Session;
 
-    public AssignmentDAO(_Session session) throws DAOException {
-        super(Assignment.class, session);
-    }
+import staff.model.Employee;
+import workflow.dao.filter.AssignmentFilter;
+import workflow.dto.AssignmentViewEntry;
+import workflow.model.Assignment;
+import workflow.model.embedded.AssigneeEntry;
 
-    public ViewPage<AssignmentViewEntry> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum, int pageSize) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
-            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
-            Root<Assignment> root = cq.from(Assignment.class);
+public class AssignmentDAO extends ActionableDocumentDAO<Assignment, UUID> {
 
-            Predicate condition = null;
+	public AssignmentDAO(_Session session) throws DAOException {
+		super(Assignment.class, session);
+	}
 
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
-            }
+	public ViewPage<AssignmentViewEntry> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum,
+			int pageSize) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		try {
+			CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
+			CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+			Root<Assignment> root = cq.from(Assignment.class);
 
-            if (filter.getControlStatusType() != null) {
-                if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()));
-                } else {
-                    condition = cb.and(cb.equal(root.get("control").get("status"), filter.getControlStatusType()), condition);
-                }
-            }
+			Predicate condition = null;
 
-            if (filter.getControlType() != null) {
-                if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()));
-                } else {
-                    condition = cb.and(cb.equal(root.get("control").get("controlType"), filter.getControlType()), condition);
-                }
-            }
+			if (!user.isSuperUser()) {
+				condition = cb.and(root.get("readers").in(user.getId()));
+			}
 
-            if (filter.getAppliedAuthor() != null) {
-                if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));
-                } else {
-                    condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()), condition);
-                }
-            }
+			if (filter.getControlStatusType() != null) {
+				if (condition == null) {
+					condition = cb.and(cb.equal(root.get("status"), filter.getControlStatusType()));
+				} else {
+					condition = cb.and(cb.equal(root.get("status"), filter.getControlStatusType()), condition);
+				}
+			}
 
-            if (filter.getAssignee() != null) {
-                if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()));
-                } else {
-                    condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()), condition);
-                }
-            }
+			if (filter.getControlType() != null) {
+				if (condition == null) {
+					condition = cb.and(cb.equal(root.get("controlType"), filter.getControlType()));
+				} else {
+					condition = cb.and(cb.equal(root.get("controlType"), filter.getControlType()), condition);
+				}
+			}
 
-            cq.select(cb.construct(
-                    AssignmentViewEntry.class,
-                    root.get("id"),
-                    root.get("appliedAuthor").get("name"),
-                    root.get("body"),
-                    root.get("control")
-            ))
-                    .orderBy(collectSortOrder(cb, root, sortParams));
+			if (filter.getAppliedAuthor() != null) {
+				if (condition == null) {
+					condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()));
+				} else {
+					condition = cb.and(cb.equal(root.get("appliedAuthor"), filter.getAppliedAuthor()), condition);
+				}
+			}
 
-            countRootCq.select(cb.count(root));
+			if (filter.getAssignee() != null) {
 
-            if (condition != null) {
-                cq.where(condition);
-                countRootCq.where(condition);
-            }
+				Expression<Employee> assignees = root.<Collection<AssigneeEntry>>get("assigneeEntries")
+						.<Employee>get("assignee");
+				Predicate predicate = cb.equal(assignees, filter.getAssignee());
+				if (condition == null) {
+					condition = cb.and(predicate);
+					//condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()));
+				} else {
+					condition = cb.and(predicate, condition);
+					// condition = cb.and(cb.equal(root.get("control").get("assigneeEntries").get("assignee"), filter.getAssignee()), condition);
+				}
+			}
 
-            TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> countQuery = em.createQuery(countRootCq);
+			cq.select(cb.construct(AssignmentViewEntry.class, root.get("id"), root.get("appliedAuthor").get("name"),
+					root.get("body"))).orderBy(collectSortOrder(cb, root, sortParams));
 
-            long count = countQuery.getSingleResult();
-            int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+			countRootCq.select(cb.count(root));
 
-            return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
-        } finally {
-            em.close();
-        }
-    }
+			if (condition != null) {
+				cq.where(condition);
+				countRootCq.where(condition);
+			}
+
+			TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
+
+			System.out.println("--------------SQL -------------");
+			System.out.println(getSQL(em, typedQuery));
+			System.out.println("------------------------------");
+
+			TypedQuery<Long> countQuery = em.createQuery(countRootCq);
+
+			//System.out.println("count SQL=" + getSQL(em, countQuery));
+
+			long count = countQuery.getSingleResult();
+			int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+
+			return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
+		} finally {
+			em.close();
+		}
+	}
 }

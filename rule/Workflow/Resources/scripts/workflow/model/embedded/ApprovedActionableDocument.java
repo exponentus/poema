@@ -21,7 +21,7 @@ import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
 import workflow.domain.ApprovalLifecycle;
-import workflow.model.ControlledDocument;
+import workflow.model.ActionableDocument;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
@@ -29,7 +29,7 @@ import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
 
 @MappedSuperclass
-public abstract class ApprovedControlledDocument extends ControlledDocument implements IApproval {
+public abstract class ApprovedActionableDocument extends ActionableDocument implements IApproval {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;

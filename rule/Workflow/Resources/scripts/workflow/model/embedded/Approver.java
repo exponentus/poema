@@ -20,13 +20,10 @@ import workflow.model.constants.converter.DecisionTypeConverter;
  * @author Kayra created 07-04-2016
  */
 
-//@Entity
-//@Table(name = "wf__approvers")
 @Embeddable
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
-public class Approver { //extends SimpleAppEntity {
+public class Approver {
 
-	//@JoinColumn(nullable = false)
 	@org.eclipse.persistence.annotations.Convert("emp_conv")
 	@Basic(optional = false)
 	private Employee employee;

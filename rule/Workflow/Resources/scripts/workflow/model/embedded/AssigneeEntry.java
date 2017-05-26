@@ -4,31 +4,32 @@ import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
 
-@JsonRootName("assigneeEntry")
-@Entity
-@Table(name = "wf__assignee_entities")
+//@JsonRootName("assigneeEntry")
+//@Entity
+//@Table(name = "wf__assignee_entities")
+@Embeddable
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
-public class AssigneeEntry extends SimpleAppEntity {
+public class AssigneeEntry { // extends SimpleAppEntity {
 
+	@Column(name = "is_coordinator")
 	private boolean isCoordinator;
 
+	@Convert("emp_conv")
+	@Column(name = "assignee_id")
+	@Basic(fetch = FetchType.LAZY, optional = false)
 	private Employee assignee;
 
 	@javax.persistence.Convert(converter = ControlStatusTypeConverter.class)
@@ -36,9 +37,11 @@ public class AssigneeEntry extends SimpleAppEntity {
 
 	@Convert("emp_conv")
 	@Basic(fetch = FetchType.LAZY, optional = true)
+	@Column(name = "reset_by")
 	private Employee resetBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "reset_time")
 	private Date resetTime;
 
 	@Column(name = "reset_info")

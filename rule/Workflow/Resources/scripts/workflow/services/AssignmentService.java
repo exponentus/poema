@@ -37,17 +37,16 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.dao.AssignmentDAO;
-import workflow.dao.ControlledDocumentDAO;
+import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.domain.AssignmentDomain;
 import workflow.init.AppConst;
 import workflow.model.Assignment;
-import workflow.model.ControlledDocument;
+import workflow.model.ActionableDocument;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
-import workflow.model.embedded.Control;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
@@ -127,14 +126,14 @@ public class AssignmentService extends RestProvider {
 				String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
 				String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
-				ControlledDocument parent = null;
+				ActionableDocument parent = null;
 
 				if (!incomingId.isEmpty()) {
 					parent = (new IncomingDAO(ses)).findByIdentefier(incomingId);
 				} else if (!officeMemoId.isEmpty()) {
 					parent = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
 				} else if (!assignmentId.isEmpty()) {
-					parent = assignmentDAO.findByIdentefier(assignmentId);
+					//parent = assignmentDAO.findByIdentefier(assignmentId);
 				} else {
 					throw new IllegalArgumentException("No parent document");
 				}
@@ -236,12 +235,12 @@ public class AssignmentService extends RestProvider {
 			// ACL routines
 			entity.resetReadersEditors();
 
-			Control control = entity.getControl();
-			if (control.getAssigneeEntries().size() > 0) {
-				control.setStatus(ControlStatusType.PROCESSING);
+			//Control control = entity.getControl();
+			if (entity.getAssigneeEntries().size() > 0) {
+				entity.setStatus(ControlStatusType.PROCESSING);
 			}
 
-			for (AssigneeEntry ae : control.getAssigneeEntries()) {
+			for (AssigneeEntry ae : entity.getAssigneeEntries()) {
 				entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
 			}
 
@@ -252,12 +251,12 @@ public class AssignmentService extends RestProvider {
 				}
 			}
 
-			ControlledDocumentDAO<ControlledDocument, UUID> dao = new ControlledDocumentDAO<ControlledDocument, UUID>(
-					ControlledDocument.class, new _Session(new SuperUser()));
-			ControlledDocument parent = dao.findById(entity.getParent().getId());
+			ActionableDocumentDAO<ActionableDocument, UUID> dao = new ActionableDocumentDAO<ActionableDocument, UUID>(
+					ActionableDocument.class, new _Session(new SuperUser()));
+			ActionableDocument parent = dao.findById(entity.getParent().getId());
 			entity.addReaders(parent.getReaders());
 
-			if (control.getStatus() == ControlStatusType.DRAFT) {
+			if (entity.getStatus() == ControlStatusType.DRAFT) {
 				entity.addReaderEditor(entity.getAuthor());
 				if (entity.getAppliedAuthor() != null) {
 					entity.addReaderEditor(entity.getAppliedAuthor().getUser());
@@ -328,11 +327,11 @@ public class AssignmentService extends RestProvider {
 		if (entity.isNew() || entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
-		if (!entity.isNew() && entity.getControl().getStatus() != ControlStatusType.DRAFT) {
+		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
 		}
-		if (entity.getControl().assigneesContainsUser(session.getUser())) {
+		if (entity.assigneesContainsUser(session.getUser())) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
 		}
@@ -353,20 +352,20 @@ public class AssignmentService extends RestProvider {
 				ve.addError("title", "required", "field_is_empty");
 			}
 
-			Control control = assignment.getControl();
-			if (control != null) {
-				if (control.getControlType() == null) {
-					ve.addError("control.controlType", "required", "field_is_empty");
-				}
-				if (assignment.getControl().getStartDate() == null) {
-					ve.addError("control.startDate", "required", "field_is_empty");
-				}
-				if (assignment.getControl().getDueDate() == null) {
-					ve.addError("control.dueDate", "required", "field_is_empty");
-				}
-			} else {
-				ve.addError("control", "required", "field_is_empty");
+			//	Control control = assignment.getControl();
+			//	if (control != null) {
+			if (assignment.getControlType() == null) {
+				ve.addError("control.controlType", "required", "field_is_empty");
 			}
+			if (assignment.getStartDate() == null) {
+				ve.addError("control.startDate", "required", "field_is_empty");
+			}
+			if (assignment.getDueDate() == null) {
+				ve.addError("control.dueDate", "required", "field_is_empty");
+			}
+			//	} else {
+			//		ve.addError("control", "required", "field_is_empty");
+			//	}
 
 			if (ve.hasError()) {
 				throw ve;

@@ -11,8 +11,8 @@ import com.exponentus.common.model.SecureHierarchicalEntity;
 import workflow.model.embedded.IControlled;
 
 @Entity
-@Table(name = "wf__controlled_documents")
-public class ControlledDocument extends SecureHierarchicalEntity implements IControlled {
+@Table(name = "wf__actionable_documents")
+public class ActionableDocument extends SecureHierarchicalEntity implements IControlled {
 
 	@OneToMany
 	private List<Assignment> assignments;

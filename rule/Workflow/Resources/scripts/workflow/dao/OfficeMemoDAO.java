@@ -16,7 +16,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.UUID;
 
-public class OfficeMemoDAO extends ControlledDocumentDAO<OfficeMemo, UUID> {
+public class OfficeMemoDAO extends ActionableDocumentDAO<OfficeMemo, UUID> {
 
     public OfficeMemoDAO(_Session session) throws DAOException {
         super(OfficeMemo.class, session);

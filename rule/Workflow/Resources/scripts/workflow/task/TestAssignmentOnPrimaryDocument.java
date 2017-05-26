@@ -23,7 +23,6 @@ import workflow.dao.AssignmentDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.Assignment;
 import workflow.model.embedded.AssigneeEntry;
-import workflow.model.embedded.Control;
 import workflow.services.AssignmentService;
 
 @Command(name = "test_ass")
@@ -50,17 +49,17 @@ public class TestAssignmentOnPrimaryDocument extends Do {
 			Assignment assignment = (Assignment) payload.get(Assignment.class.getSimpleName().toLowerCase());
 			if (assignment != null) {
 				assignment.setTitle("test title");
-				assignment.getControl().setDueDate(new Date());
+				assignment.setDueDate(new Date());
 				List<AssigneeEntry> ae = new ArrayList<AssigneeEntry>();
 				AssigneeEntry aEntry = new AssigneeEntry();
 				EmployeeDAO eDao = new EmployeeDAO(ses);
 				Employee assignee = (Employee) eDao.getEmployee(ses.getUser().getId());
 				aEntry.setAssignee(assignee);
 				ae.add(aEntry);
-				Control control = assignment.getControl();
+				//Control control = assignment.getControl();
 				ControlTypeDAO cDao = new ControlTypeDAO(ses);
-				control.setControlType(cDao.findAll().getResult().get(0));
-				control.setAssigneeEntries(ae);
+				assignment.setControlType(cDao.findAll().getResult().get(0));
+				assignment.setAssigneeEntries(ae);
 
 				Response postResp = service.add(assignment);
 

@@ -53,7 +53,7 @@ public class Messages {
 		memo.addVar("url",
 				Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + rez.getURL() + "&lang=" + lang);
 
-		for (AssigneeEntry entry : rez.getControl().getAssigneeEntries()) {
+		for (AssigneeEntry entry : rez.getAssigneeEntries()) {
 
 			try {
 				user = entry.getAssignee().getUser();

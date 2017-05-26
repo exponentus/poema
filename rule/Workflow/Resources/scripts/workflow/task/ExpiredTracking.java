@@ -46,7 +46,7 @@ public class ExpiredTracking extends Do {
 
 	private void processTask(AppEnv env, List<Assignment> tasks, _Session session) {
 		for (Assignment task : tasks) {
-			if (current.after(task.getControl().getDueDate())) {
+			if (current.after(task.getDueDate())) {
 				if (!task.getTags().contains(tag)) {
 					List<Tag> tags = task.getTags();
 					tags.add(tag);

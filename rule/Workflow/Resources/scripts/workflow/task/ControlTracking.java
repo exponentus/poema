@@ -26,7 +26,7 @@ public class ControlTracking extends Do {
 			ViewPage<Assignment> vp = dao.findAll();
 			PeriodicalServices.logger("control_tracking is going to proccess " + vp.getCount() + " documents");
 			for (Assignment entity : vp.getResult()) {
-				if (entity.getControl().getStatus() == ControlStatusType.PROCESSING) {
+				if (entity.getStatus() == ControlStatusType.PROCESSING) {
 					ControlLifecycle cl = new ControlLifecycle(entity);
 					cl.check();
 					try {

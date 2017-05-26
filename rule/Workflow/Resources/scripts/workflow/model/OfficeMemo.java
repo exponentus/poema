@@ -33,14 +33,14 @@ import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
-import workflow.model.embedded.ApprovedControlledDocument;
+import workflow.model.embedded.ApprovedActionableDocument;
 
 @JsonRootName("officeMemo")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class OfficeMemo extends ApprovedControlledDocument {
+public class OfficeMemo extends ApprovedActionableDocument {
 
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;

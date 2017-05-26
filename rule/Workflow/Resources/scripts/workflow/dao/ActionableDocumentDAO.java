@@ -13,11 +13,11 @@ import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 
-import workflow.model.ControlledDocument;
+import workflow.model.ActionableDocument;
 
-public class ControlledDocumentDAO<T extends IAppEntity<UUID> & IHierarchicalEntity, K> extends DAO<T, K> {
+public class ActionableDocumentDAO<T extends IAppEntity<UUID> & IHierarchicalEntity, K> extends DAO<T, K> {
 
-	public ControlledDocumentDAO(Class<T> entityClass, _Session session) throws DAOException {
+	public ActionableDocumentDAO(Class<T> entityClass, _Session session) throws DAOException {
 		super(entityClass, session);
 	}
 
@@ -29,7 +29,7 @@ public class ControlledDocumentDAO<T extends IAppEntity<UUID> & IHierarchicalEnt
 			return vp;
 		}
 
-		ViewEntryDAO<ControlledDocument, UUID> veDao = new ViewEntryDAO<ControlledDocument, UUID>(getSession());
+		ViewEntryDAO<ActionableDocument, UUID> veDao = new ViewEntryDAO<ActionableDocument, UUID>(getSession());
 		for (T parent : vp.getResult()) {
 			List<ViewEntry> responses = veDao.findAllDescendants(parent.getId(), expandedIds);
 			if (responses != null && responses.size() > 0) {
