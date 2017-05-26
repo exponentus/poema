@@ -7,11 +7,14 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.exponentus.user.IUser;
@@ -42,6 +45,14 @@ public class Control {
 	@Column(name = "status_time")
 	private Date statusTime;
 
+	/*@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "wf__assignee_entries", joinColumns = @JoinColumn(name = "assignment_id", referencedColumnName = "id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "assignment_id", "sort" }),
+			@UniqueConstraint(columnNames = { "assignment_id", "assignee_id" }) })*/
+
+	@JoinTable(name = "wf__assignments_wf__assignee_entries", joinColumns = @JoinColumn(name = "assignment_id", referencedColumnName = "id"), uniqueConstraints = {
+			@UniqueConstraint(columnNames = { "assignment_id", "sort" }),
+			@UniqueConstraint(columnNames = { "assignment_id", "assignee_id" }) })
 	@OneToMany(cascade = CascadeType.ALL)
 	@OrderBy("sort")
 	private List<AssigneeEntry> assigneeEntries;
