@@ -36,15 +36,15 @@ import com.exponentus.user.SuperUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.dao.AssignmentDAO;
 import workflow.dao.ActionableDocumentDAO;
+import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.domain.AssignmentDomain;
 import workflow.init.AppConst;
-import workflow.model.Assignment;
 import workflow.model.ActionableDocument;
+import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.other.Messages;
@@ -352,20 +352,15 @@ public class AssignmentService extends RestProvider {
 				ve.addError("title", "required", "field_is_empty");
 			}
 
-			//	Control control = assignment.getControl();
-			//	if (control != null) {
 			if (assignment.getControlType() == null) {
-				ve.addError("control.controlType", "required", "field_is_empty");
+				ve.addError("controlType", "required", "field_is_empty");
 			}
 			if (assignment.getStartDate() == null) {
-				ve.addError("control.startDate", "required", "field_is_empty");
+				ve.addError("startDate", "required", "field_is_empty");
 			}
 			if (assignment.getDueDate() == null) {
-				ve.addError("control.dueDate", "required", "field_is_empty");
+				ve.addError("dueDate", "required", "field_is_empty");
 			}
-			//	} else {
-			//		ve.addError("control", "required", "field_is_empty");
-			//	}
 
 			if (ve.hasError()) {
 				throw ve;

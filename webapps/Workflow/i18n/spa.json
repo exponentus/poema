@@ -38,6 +38,7 @@
   "user_not_found_error" : "User has not been found",
   "approval_block_declined" : null,
   "message_address" : "message_address",
+  "result" : "Resultado de la aprobación",
   "promo_heading" : "promo_heading",
   "search" : "Buscar",
   "doc_language" : null,

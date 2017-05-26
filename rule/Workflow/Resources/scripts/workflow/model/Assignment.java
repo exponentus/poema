@@ -76,7 +76,7 @@ public class Assignment extends SecureHierarchicalEntity {
 	@Transient
 	private List<IAppEntity<UUID>> responses;
 
-	@JoinColumn(name = "control_type")
+	@JoinColumn(name = "control_type", nullable = false)
 	private ControlType controlType;
 
 	@Temporal(TemporalType.TIMESTAMP)

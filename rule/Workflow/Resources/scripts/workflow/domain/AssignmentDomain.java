@@ -15,8 +15,8 @@ import com.exponentus.scripting._Session;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.model.Assignment;
 import workflow.model.ActionableDocument;
+import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 
@@ -75,7 +75,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		entity.setDueDate(dto.getDueDate());
 		entity.setStatus(dto.getStatus());
 		entity.setAssigneeEntries(dto.getAssigneeEntries());
-		//	entity.setControl(dto.getControl());
+		entity.setControlType(dto.getControlType());
 		entity.setAttachments(dto.getAttachments());
 
 		if (entity.isNew()) {

@@ -38,6 +38,7 @@
   "user_not_found_error" : "User has not been found",
   "approval_block_declined" : "Approval block declined",
   "message_address" : "Email",
+  "result" : "Approval result",
   "promo_heading" : "NextBase",
   "search" : "Search",
   "doc_language" : "Language",
