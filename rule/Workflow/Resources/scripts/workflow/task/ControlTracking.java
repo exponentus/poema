@@ -4,7 +4,6 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
-import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
@@ -16,7 +15,7 @@ import workflow.domain.ControlLifecycle;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
-@Command(name = "control_tracking", trigger = Trigger.EVERY_5_MIN)
+@Command(name = "control_tracking", trigger = Trigger.EVERY_HOUR)
 public class ControlTracking extends Do {
 
 	@Override
@@ -24,7 +23,7 @@ public class ControlTracking extends Do {
 		try {
 			AssignmentDAO dao = new AssignmentDAO(session);
 			ViewPage<Assignment> vp = dao.findAll();
-			PeriodicalServices.logger("control_tracking is going to proccess " + vp.getCount() + " documents");
+			//		PeriodicalServices.logger("control_tracking is going to proccess " + vp.getCount() + " documents");
 			for (Assignment entity : vp.getResult()) {
 				if (entity.getStatus() == ControlStatusType.PROCESSING) {
 					ControlLifecycle cl = new ControlLifecycle(entity);

@@ -12,7 +12,6 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.IDAO;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.exception.SecureException;
-import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
@@ -36,7 +35,7 @@ public class ApproverTracking extends Do {
 		for (Class clazz : entities) {
 			IDAO<IApproval, UUID> dao = DAOFactory.get(session, clazz.getCanonicalName());
 			ViewPage<IApproval> vp = dao.findAll();
-			PeriodicalServices.logger("approver_tracking is going to proccess " + vp.getCount() + " documents");
+			//	PeriodicalServices.logger("approver_tracking is going to proccess " + vp.getCount() + " documents");
 			for (IApproval approval : vp.getResult()) {
 				if (approval.getStatus() == ApprovalStatusType.PENDING) {
 					try {
