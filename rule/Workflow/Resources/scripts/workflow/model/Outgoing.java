@@ -38,7 +38,6 @@ import staff.model.Employee;
 import staff.model.Organization;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
-import workflow.model.embedded.ApprovalSecureAppEntity;
 
 /**
  * @author Kayra created 07-04-2016
@@ -49,7 +48,7 @@ import workflow.model.embedded.ApprovalSecureAppEntity;
 @Entity
 @Table(name = "wf__outgoings")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Outgoing extends ApprovalSecureAppEntity {
+public class Outgoing extends ActionableDocument {
 
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;

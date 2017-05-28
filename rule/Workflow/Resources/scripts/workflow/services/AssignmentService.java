@@ -251,9 +251,8 @@ public class AssignmentService extends RestProvider {
 				}
 			}
 
-			ActionableDocumentDAO<ActionableDocument, UUID> dao = new ActionableDocumentDAO<ActionableDocument, UUID>(
-					ActionableDocument.class, new _Session(new SuperUser()));
-			ActionableDocument parent = dao.findById(entity.getParent().getId());
+			ActionableDocumentDAO dao = new ActionableDocumentDAO(ses);
+			ActionableDocument parent = dao.findById(entity.getId());
 			entity.addReaders(parent.getReaders());
 
 			if (entity.getStatus() == ControlStatusType.DRAFT) {

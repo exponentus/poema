@@ -291,6 +291,7 @@
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.ViewEntry</class>
+       <!--  <class>com.exponentus.common.model.SecureHierarchicalEntity</class> -->
         <!--  <class>com.exponentus.common.model.ViewEntry</class>-->
         <!-- Because of suppose importing data from Domino -->
         <class>administrator.model.Collation</class>
