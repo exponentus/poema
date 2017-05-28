@@ -7,8 +7,8 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 
-import workflow.dao.AsProjectViewEntryDAO;
-import workflow.dto.AsProjectViewEntry;
+import workflow.dao.ActionableDocumentDAO;
+import workflow.model.ActionableDocument;
 
 /**
  * 
@@ -24,10 +24,10 @@ public class TestAsProjectViewEntryRequestTest extends Do {
 	public void doTask(AppEnv appEnv, _Session ses) {
 		try {
 			System.out.println("start");
-			AsProjectViewEntryDAO dao = new AsProjectViewEntryDAO(appEnv, ses);
-			ViewPage<AsProjectViewEntry> vp = dao.findViewPage(0, 0);
-			for (AsProjectViewEntry entry : vp.getResult()) {
-				System.out.println(entry.getIdentifier() + " " + entry.parentForm);
+			ActionableDocumentDAO dao = new ActionableDocumentDAO(appEnv, ses);
+			ViewPage<ActionableDocument> vp = dao.findViewPage(0, 0);
+			for (ActionableDocument entry : vp.getResult()) {
+				System.out.println(entry.getIdentifier() + " " + entry.getForm());
 			}
 		} catch (DAOException e) {
 			e.printStackTrace();
