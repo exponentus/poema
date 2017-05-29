@@ -77,7 +77,7 @@
   "without_approval" : "Мақұлдауынсыз",
   "outgoing" : "Шығыс құжат",
   "add_approver" : "Бекітушіні қосу",
-  "waiting" : null,
+  "waiting" : "waiting",
   "additional" : "Қосымша",
   "roles" : "Рөлдер",
   "back" : "Артқа",
