@@ -2,7 +2,7 @@
 <nextbase>
 	<hostname>localhost</hostname>
 	<port>8770</port>
-	<orgname>Exponentus's projects</orgname>
+	<orgname>Semantyca localization</orgname>
 	<orglogo>/Workspace/img/logo.png</orglogo>
 	<tls mode="OFF">
 		<port></port>

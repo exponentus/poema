@@ -12,6 +12,8 @@
     <converter class="administrator.model.constants.converter.InterfaceTypeConvertor"/>  
     <converter class="administrator.model.constants.converter.VisibilityModeConvertor"/> 
     
+    <converter class="monitoring.model.constants.converter.ActivityTypeConverter"/>
+    
     <converter class="reference.model.constants.converter.ApprovalSchemaTypeConverter"/>
     <converter class="reference.model.constants.converter.ApprovalTypeConverter"/> 
     <converter class="reference.model.constants.converter.ControlSchemaTypeConverter"/>
