@@ -23,6 +23,8 @@
         <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <!-- Monitoring module entities (if the module activated) -->     
+        <class>monitoring.model.UserActivity</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
     </persistence-unit>
