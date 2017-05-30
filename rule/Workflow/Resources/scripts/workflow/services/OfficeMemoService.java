@@ -65,8 +65,7 @@ public class OfficeMemoService extends RestProvider {
 
 		try {
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
-			ViewPage<OfficeMemo> vp = officeMemoDAO.findViewPage(filter, sortParams, getWebFormData().getPage(),
-					pageSize);
+			ViewPage<OfficeMemo> vp = officeMemoDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
 
 			_ActionBar actionBar = new _ActionBar(session);
 			actionBar.addAction(action.newOfficeMemo);
@@ -115,6 +114,7 @@ public class OfficeMemoService extends RestProvider {
 			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
 			return Response.ok(outcome).build();
+
 		} catch (DAOException | ApprovalException e) {
 			return responseException(e);
 		}
@@ -148,8 +148,7 @@ public class OfficeMemoService extends RestProvider {
 		}
 	}
 
-	private OfficeMemo save(OfficeMemo dto, IValidation<OfficeMemo> validation)
-			throws SecureException, DAOException, DTOException {
+	private OfficeMemo save(OfficeMemo dto, IValidation<OfficeMemo> validation) throws SecureException, DAOException, DTOException {
 		OfficeMemoDomain domain = new OfficeMemoDomain(getSession());
 		OfficeMemo entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
 
