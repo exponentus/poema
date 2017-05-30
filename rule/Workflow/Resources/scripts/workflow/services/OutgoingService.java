@@ -12,6 +12,8 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
@@ -23,6 +25,7 @@ import workflow.domain.OutgoingDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.Outgoing;
+import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.other.Messages;
@@ -255,7 +258,6 @@ public class OutgoingService extends RestProvider {
         } catch (DAOException | SecureException | ApprovalException e) {
             return responseException(e);
         }
-
     }
 
     private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
@@ -281,6 +283,11 @@ public class OutgoingService extends RestProvider {
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);
+        }
+
+        //
+        if (entity.getStatus() == ApprovalStatusType.FINISHED && session.getUser().getRoles().contains("can_sign_outgoing")) {
+            actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
         }
 
         return actionBar;
@@ -310,9 +317,7 @@ public class OutgoingService extends RestProvider {
             if (e.hasError()) {
                 throw e;
             }
-
         }
-
     }
 
     private class ValidationToStartApprove extends ValidationToSaveAsDraft {
@@ -335,8 +340,6 @@ public class OutgoingService extends RestProvider {
             if (e.hasError()) {
                 throw e;
             }
-
         }
-
     }
 }

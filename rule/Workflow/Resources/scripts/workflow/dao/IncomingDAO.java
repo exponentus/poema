@@ -109,37 +109,26 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
             long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
-            return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
-        } finally {
-            em.close();
-        }
-    }
-
-    public ViewPage<Incoming> findAllWithResponses(SortParams sortParams, int pageNum, int pageSize,
-                                                   List<UUID> expandedIds) {
-        ViewPage<Incoming> vp = findViewPage(sortParams, pageNum, pageSize);
-
-        if (vp.getResult().isEmpty()) {
-            return vp;
-        }
-
-//        EntityManager em = getEntityManagerFactory().createEntityManager();
-//        try {
-//            for (Incoming incoming : vp.getResult()) {
-//                List<IAppEntity<UUID>> responses = findIncomingResponses(incoming, expandedIds, em);
+            ViewPage<IncomingViewEntry> vp = new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
+//            if (vp.getResult().isEmpty()) {
+//                return vp;
+//            }
+//
+//            for (IncomingViewEntry inve : vp.getResult()) {
+//                List<IAppEntity<UUID>> responses = findIncomingResponses(incoming, em);
 //                if (responses != null && responses.size() > 0) {
 //                    incoming.setResponsesCount((long) responses.size());
 //                    incoming.setResponses(responses);
 //                }
 //            }
-//        } finally {
-//            em.close();
-//        }
 
-        return vp;
+            return vp;
+        } finally {
+            em.close();
+        }
     }
 
-    private List<IAppEntity<UUID>> findIncomingResponses(Incoming incoming, List<UUID> expandedIds, EntityManager em) {
+    private List<IAppEntity<UUID>> findIncomingResponses(Incoming incoming, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Assignment> cq = cb.createQuery(Assignment.class);
         Root<Assignment> root = cq.from(Assignment.class);
@@ -148,7 +137,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Predicate condition = cb.equal(root.get("parent"), incoming);
         // condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
+        if (!user.isSuperUser()) {
             condition = cb.and(root.get("readers").in(user.getId()), condition);
         }
 
