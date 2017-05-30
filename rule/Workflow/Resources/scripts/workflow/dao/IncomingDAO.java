@@ -93,7 +93,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
             ))
                     .groupBy(root, root.get("sender").get("name"),
                             root.get("addressee").get("name"), root.get("docLanguage"),
-                            root.get("docType"), root.get("docSubject"))
+                            root.get("docType"), root.get("docSubject"), atts)
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
             countRootCq.select(cb.count(root));

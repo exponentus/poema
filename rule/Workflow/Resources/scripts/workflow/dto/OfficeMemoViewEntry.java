@@ -16,6 +16,7 @@ public class OfficeMemoViewEntry {
 
     public ApprovalStatusType status = ApprovalStatusType.DRAFT;
     public ApprovalResultType result = ApprovalResultType.PROJECT;
+    public String title;
     public String regNumber;
     public Date appliedRegDate;
     public String appliedAuthor; // Employee
@@ -25,10 +26,11 @@ public class OfficeMemoViewEntry {
 
     public List<IAppEntity<UUID>> responses;
 
-    public OfficeMemoViewEntry(UUID id, ApprovalStatusType status, ApprovalResultType result, String regNumber, Date appliedRegDate, String appliedAuthor, String recipient, String body, Long attachmentCount) {
+    public OfficeMemoViewEntry(UUID id, ApprovalStatusType status, ApprovalResultType result, String title, String regNumber, Date appliedRegDate, String appliedAuthor, String recipient, String body, Long attachmentCount) {
         this.id = id;
         this.status = status;
         this.result = result;
+        this.title = title;
         this.regNumber = regNumber;
         this.appliedRegDate = appliedRegDate;
         this.appliedAuthor = appliedAuthor;

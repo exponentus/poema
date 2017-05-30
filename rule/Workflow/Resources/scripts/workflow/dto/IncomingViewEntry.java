@@ -17,13 +17,10 @@ public class IncomingViewEntry {
     public String title;
     public String regNumber;
     public Date appliedRegDate;
-    public String sender;
+    public String sender; // Organization
     public String senderRegNumber;
     public Date senderAppliedRegDate;
-    public String addressee;
-    //    public DocumentLanguage docLanguage;
-//    public DocumentType docType;
-//    public DocumentSubject docSubject;
+    public String addressee; // Employee
     public Map<LanguageCode, String> docLanguage;
     public Map<LanguageCode, String> docType;
     public Map<LanguageCode, String> docSubject;

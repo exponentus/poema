@@ -1,21 +1,6 @@
 package workflow.services;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
@@ -25,12 +10,11 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-
-import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.IncomingDAO;
@@ -41,194 +25,202 @@ import workflow.model.Incoming;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Path("incomings")
 @Produces(MediaType.APPLICATION_JSON)
 public class IncomingService extends RestProvider {
 
-	private ActionFactory action = new ActionFactory();
+    private ActionFactory action = new ActionFactory();
 
-	@GET
-	public Response getView() {
-		_Session session = getSession();
-		int pageSize = session.getPageSize();
-		SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-		IncomingFilter filter = new IncomingFilter(getWebFormData());
+    @GET
+    public Response getView() {
+        _Session session = getSession();
+        WebFormData params = getWebFormData();
 
-		try {
-			IncomingDAO incomingDAO = new IncomingDAO(session);
-			ViewPage vp = incomingDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
+        int pageSize = session.getPageSize();
+        SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+        IncomingFilter filter = new IncomingFilter(params);
 
-			_ActionBar actionBar = new _ActionBar(session);
-			actionBar.addAction(action.newIncoming);
-			actionBar.addAction(action.refreshVew);
+        try {
+            IncomingDAO incomingDAO = new IncomingDAO(session);
+            ViewPage vp = incomingDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
-			Outcome outcome = new Outcome();
-			outcome.setId("incomings");
-			outcome.setTitle("incoming_documents");
-			outcome.addPayload(actionBar);
-			outcome.addPayload(vp);
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            _ActionBar actionBar = new _ActionBar(session);
+            actionBar.addAction(action.newIncoming);
+            actionBar.addAction(action.refreshVew);
 
-	@GET
-	@Path("{id}")
-	public Response getById(@PathParam("id") String id) {
-		_Session ses = getSession();
-		Incoming entity;
-		try {
-			IncomingDomain inDomain = new IncomingDomain(ses);
+            Outcome outcome = new Outcome();
+            outcome.setId("incomings");
+            outcome.setTitle("incoming_documents");
+            outcome.addPayload(actionBar);
+            outcome.addPayload(vp);
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-			boolean isNew = "new".equals(id);
-			if (isNew) {
-				entity = inDomain.composeNew(ses.getUser());
-			} else {
-				IncomingDAO incomingDAO = new IncomingDAO(ses);
-				entity = incomingDAO.findByIdentefier(id);
-			}
+    @GET
+    @Path("{id}")
+    public Response getById(@PathParam("id") String id) {
+        _Session ses = getSession();
+        Incoming entity;
+        try {
+            IncomingDomain inDomain = new IncomingDomain(ses);
 
-			EmployeeDAO empDao = new EmployeeDAO(ses);
-			Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-					.collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            boolean isNew = "new".equals(id);
+            if (isNew) {
+                entity = inDomain.composeNew(ses.getUser());
+            } else {
+                IncomingDAO incomingDAO = new IncomingDAO(ses);
+                entity = incomingDAO.findByIdentefier(id);
+            }
 
-			Outcome outcome = inDomain.getOutcome(entity);
-			outcome.addPayload("employees", emps);
-			outcome.addPayload(getActionBar(ses, entity, inDomain));
-			outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-			return Response.ok(outcome).build();
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+            Outcome outcome = inDomain.getOutcome(entity);
+            outcome.addPayload("employees", emps);
+            outcome.addPayload(getActionBar(ses, entity, inDomain));
+            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(Incoming dto) {
-		dto.setId(null);
-		return saveForm(dto);
-	}
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, Incoming dto) {
-		dto.setId(UUID.fromString(id));
-		return saveForm(dto);
-	}
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response add(Incoming dto) {
+        dto.setId(null);
+        return saveForm(dto);
+    }
 
-	private Response saveForm(Incoming dto) {
-		try {
-			IncomingDomain domain = new IncomingDomain(getSession());
-			Incoming entity = domain.fillFromDto(dto, new Validation(), getWebFormData().getFormSesId());
-			domain.save(entity);
-			new Messages(getAppEnv()).notifyAddressee(entity);
-			Outcome outcome = domain.getOutcome(entity);
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") String id, Incoming dto) {
+        dto.setId(UUID.fromString(id));
+        return saveForm(dto);
+    }
 
-			return Response.ok(outcome).build();
-		} catch (DTOException e) {
-			return responseValidationError(e);
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
+    private Response saveForm(Incoming dto) {
+        try {
+            IncomingDomain domain = new IncomingDomain(getSession());
+            Incoming entity = domain.fillFromDto(dto, new Validation(), getWebFormData().getFormSesId());
+            domain.save(entity);
+            new Messages(getAppEnv()).notifyAddressee(entity);
+            Outcome outcome = domain.getOutcome(entity);
 
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		_Session ses = getSession();
-		try {
-			IncomingDAO dao = new IncomingDAO(ses);
-			Incoming entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
+            return Response.ok(outcome).build();
+        } catch (DTOException e) {
+            return responseValidationError(e);
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+    }
 
-	@Override
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			IncomingDAO dao = new IncomingDAO(getSession());
-			Incoming entity = dao.findByIdentefier(id);
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") String id) {
+        _Session ses = getSession();
+        try {
+            IncomingDAO dao = new IncomingDAO(ses);
+            Incoming entity = dao.findByIdentefier(id);
+            if (entity != null) {
+                dao.delete(entity);
+            }
+            return Response.noContent().build();
+        } catch (DAOException | SecureException e) {
+            return responseException(e);
+        }
+    }
 
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
+    @Override
+    @GET
+    @Path("{id}/attachments/{attachId}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        try {
+            IncomingDAO dao = new IncomingDAO(getSession());
+            Incoming entity = dao.findByIdentefier(id);
 
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
-	}
+            return getAttachment(entity, attachId);
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
 
-	private _ActionBar getActionBar(_Session session, Incoming entity, IncomingDomain domain) {
-		_ActionBar actionBar = new _ActionBar(session);
+    @GET
+    @Path("{id}/attachments/{attachId}/{fileName}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
+        return getAttachment(id, attachId);
+    }
 
-		actionBar.addAction(action.close);
-		if (entity.isEditable()) {
-			actionBar.addAction(action.saveAndClose);
-		}
-		if (domain.canCreateAssignment(entity, (User) session.getUser())) {
-			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
-					.url(AppConst.BASE_URL + "assignments/new?incoming=" + entity.getIdentifier()));
-		}
-		if (!entity.isNew() && entity.isEditable()) {
-			actionBar.addAction(action.deleteDocument);
-		}
+    private _ActionBar getActionBar(_Session session, Incoming entity, IncomingDomain domain) {
+        _ActionBar actionBar = new _ActionBar(session);
 
-		return actionBar;
-	}
+        actionBar.addAction(action.close);
+        if (entity.isEditable()) {
+            actionBar.addAction(action.saveAndClose);
+        }
+        if (domain.canCreateAssignment(entity, (User) session.getUser())) {
+            actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
+                    .url(AppConst.BASE_URL + "assignments/new?incoming=" + entity.getIdentifier()));
+        }
+        if (!entity.isNew() && entity.isEditable()) {
+            actionBar.addAction(action.deleteDocument);
+        }
 
-	private class Validation implements IValidation<Incoming> {
+        return actionBar;
+    }
 
-		@Override
-		public void check(Incoming dto) throws DTOException {
-			DTOException ve = new DTOException();
+    private class Validation implements IValidation<Incoming> {
 
-			if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
-				ve.addError("title", "required", "field_is_empty");
-			}
-			if (dto.getSender() == null) {
-				ve.addError("sender", "required", "field_is_empty");
-			}
-			if (dto.getAddressee() == null) {
-				ve.addError("addressee", "required", "field_is_empty");
-			}
-			if (dto.getDocLanguage() == null) {
-				ve.addError("docLanguage", "required", "field_is_empty");
-			}
-			if (dto.getSenderRegNumber() == null || dto.getSenderRegNumber().isEmpty()) {
-				ve.addError("senderRegNumber", "required", "field_is_empty");
-			}
-			if (dto.getSenderAppliedRegDate() == null) {
-				ve.addError("senderAppliedRegDate", "required", "field_is_empty");
-			}
-			if (dto.getDocLanguage() == null) {
-				ve.addError("docLanguage", "required", "field_is_empty");
-			}
-			if (dto.getDocType() == null) {
-				ve.addError("docType", "required", "field_is_empty");
-			}
-			if (dto.getDocSubject() == null) {
-				ve.addError("docSubject", "required", "field_is_empty");
-			}
-			if (ve.hasError()) {
-				throw ve;
-			}
+        @Override
+        public void check(Incoming dto) throws DTOException {
+            DTOException ve = new DTOException();
 
-		}
-
-	}
+            if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
+                ve.addError("title", "required", "field_is_empty");
+            }
+            if (dto.getSender() == null) {
+                ve.addError("sender", "required", "field_is_empty");
+            }
+            if (dto.getAddressee() == null) {
+                ve.addError("addressee", "required", "field_is_empty");
+            }
+            if (dto.getDocLanguage() == null) {
+                ve.addError("docLanguage", "required", "field_is_empty");
+            }
+            if (dto.getSenderRegNumber() == null || dto.getSenderRegNumber().isEmpty()) {
+                ve.addError("senderRegNumber", "required", "field_is_empty");
+            }
+            if (dto.getSenderAppliedRegDate() == null) {
+                ve.addError("senderAppliedRegDate", "required", "field_is_empty");
+            }
+            if (dto.getDocLanguage() == null) {
+                ve.addError("docLanguage", "required", "field_is_empty");
+            }
+            if (dto.getDocType() == null) {
+                ve.addError("docType", "required", "field_is_empty");
+            }
+            if (dto.getDocSubject() == null) {
+                ve.addError("docSubject", "required", "field_is_empty");
+            }
+            if (ve.hasError()) {
+                throw ve;
+            }
+        }
+    }
 }
