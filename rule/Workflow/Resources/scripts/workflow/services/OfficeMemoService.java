@@ -26,6 +26,7 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
@@ -59,28 +60,24 @@ public class OfficeMemoService extends RestProvider {
 	@GET
 	public Response getView() {
 		_Session session = getSession();
-		int pageSize = session.getPageSize();
-		SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
-		OfficeMemoFilter filter = new OfficeMemoFilter(getWebFormData());
+		WebFormData params = getWebFormData();
 
 		try {
 			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(session);
-			ViewPage<OfficeMemo> vp = officeMemoDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
+			int pageSize = session.getPageSize();
+			SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+			OfficeMemoFilter filter = new OfficeMemoFilter(params);
+			ViewPage vp = officeMemoDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
 			_ActionBar actionBar = new _ActionBar(session);
 			actionBar.addAction(action.newOfficeMemo);
 			actionBar.addAction(action.refreshVew);
-
-			EmployeeDAO empDao = new EmployeeDAO(session);
-			Map<UUID, Employee> emps = empDao.findAll(false).getResult().stream()
-					.collect(Collectors.toMap(Employee::getId, Function.identity(), (e1, e2) -> e1));
 
 			Outcome outcome = new Outcome();
 			outcome.setId("office-memo");
 			outcome.setTitle("office_memo_plural");
 			outcome.addPayload(actionBar);
 			outcome.addPayload(vp);
-			outcome.addPayload("employees", emps);
 
 			return Response.ok(outcome).build();
 		} catch (DAOException e) {
@@ -122,6 +119,7 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+
 	public Response add(OfficeMemo dto) {
 		dto.setId(null);
 		return saveForm(dto);
@@ -151,9 +149,7 @@ public class OfficeMemoService extends RestProvider {
 	private OfficeMemo save(OfficeMemo dto, IValidation<OfficeMemo> validation) throws SecureException, DAOException, DTOException {
 		OfficeMemoDomain domain = new OfficeMemoDomain(getSession());
 		OfficeMemo entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
-
 		return domain.save(entity);
-
 	}
 
 	@DELETE
@@ -333,9 +329,7 @@ public class OfficeMemoService extends RestProvider {
 			if (e.hasError()) {
 				throw e;
 			}
-
 		}
-
 	}
 
 	private class ValidationToStartApprove extends ValidationToSaveAsDraft {
@@ -358,9 +352,6 @@ public class OfficeMemoService extends RestProvider {
 			if (e.hasError()) {
 				throw e;
 			}
-
 		}
-
 	}
-
 }

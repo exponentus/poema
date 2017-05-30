@@ -6,14 +6,12 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.OutgoingFilter;
+import workflow.dto.OutgoingViewEntry;
 import workflow.model.Outgoing;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,14 +21,15 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
         super(Outgoing.class, session);
     }
 
-    public ViewPage<Outgoing> findViewPage(OutgoingFilter filter, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<OutgoingViewEntry> findViewPage(OutgoingFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<Outgoing> cq = cb.createQuery(Outgoing.class);
+            CriteriaQuery<OutgoingViewEntry> cq = cb.createQuery(OutgoingViewEntry.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
             Root<Outgoing> countRoot = countRootCq.from(Outgoing.class);
             Root<Outgoing> root = cq.from(Outgoing.class);
+            Join atts = root.join("attachments", JoinType.LEFT);
 
             Predicate condition = null;
 
@@ -78,7 +77,24 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
                 }
             }
 
-            cq.select(root).distinct(true).orderBy(collectSortOrder(cb, root, sortParams));
+            cq.select(cb.construct(
+                    OutgoingViewEntry.class,
+                    root.get("id"),
+                    root.get("status"),
+                    root.get("result"),
+                    root.get("title"),
+                    root.get("regNumber"),
+                    root.get("appliedRegDate"),
+                    root.get("recipient").get("name"),
+                    root.get("docLanguage").get("locName"),
+                    root.get("docType").get("locName"),
+                    root.get("docSubject").get("locName"),
+                    root.get("body"),
+                    cb.count(atts)
+            ))
+                    .groupBy(root, root.get("recipient").get("name"), root.get("docLanguage"),
+                            root.get("docType"), root.get("docSubject"), atts)
+                    .orderBy(collectSortOrder(cb, root, sortParams));
 
             countRootCq.select(cb.count(countRoot));
 
@@ -87,12 +103,12 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
                 countRootCq.where(condition);
             }
 
-            TypedQuery<Outgoing> typedQuery = em.createQuery(cq);
+            TypedQuery<OutgoingViewEntry> typedQuery = em.createQuery(cq);
             TypedQuery<Long> query = em.createQuery(countRootCq);
 
             long count = query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
-            List<Outgoing> result = typedQuery.getResultList();
+            List<OutgoingViewEntry> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {

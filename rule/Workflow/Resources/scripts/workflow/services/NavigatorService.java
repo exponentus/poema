@@ -28,12 +28,17 @@ public class NavigatorService extends RestProvider {
         t.addEntry(new OutlineEntry("assignments_my", "", "fa fa-pencil", "assignments_my", AppConst.BASE_URL + "assignments/my"));
         t.addEntry(new OutlineEntry("assignments_inbox", "", "fa fa-inbox", "assignments_inbox", AppConst.BASE_URL + "assignments/inbox"));
 
+        Outline p = new Outline("", "wf_p");
+        p.addEntry(new OutlineEntry("projects_my", "", "fa fa-file-text-o", "projects_my", AppConst.BASE_URL + "projects/my"));
+        p.addEntry(new OutlineEntry("approvals_pending", "", "fa fa-file-text-o", "approvals_pending", AppConst.BASE_URL + "approvals/pending"));
+
         Outline odo = new Outline("", "org_documents");
         odo.addEntry(new OutlineEntry("incoming_documents", "", "fa fa-file-text-o", "incomings", AppConst.BASE_URL + "incomings"));
         odo.addEntry(new OutlineEntry("outgoing_documents", "", "fa fa-file-text-o", "outgoings", AppConst.BASE_URL + "outgoings"));
         odo.addEntry(new OutlineEntry("office_memo_plural", "", "fa fa-file-text-o", "office-memos", AppConst.BASE_URL + "office-memos"));
 
         list.add(t);
+        list.add(p);
         list.add(odo);
 
         Outcome outcome = new Outcome();
