@@ -41,8 +41,7 @@ public class ReportDomain extends DTOService<Report> {
 	}
 
 	@Override
-	public Report fillFromDto(Report dto, IValidation<Report> validation, String fsid)
-			throws DTOException, DAOException {
+	public Report fillFromDto(Report dto, IValidation<Report> validation, String fsid) throws DTOException, DAOException {
 		validation.check(dto);
 
 		Report entity;
@@ -61,6 +60,8 @@ public class ReportDomain extends DTOService<Report> {
 			entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
 			entity.setAppliedRegDate(dto.getAppliedRegDate());
 			entity.setParent(dto.getParent());
+			entity.setAuthor(ses.getUser());
+
 		}
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
