@@ -49,8 +49,8 @@ public class ApprovalLifecycle {
 				} else if (block.getType() == ApprovalType.PARALLEL) {
 					List<Approver> approvers = block.getApprovers();
 					for (Approver approver : approvers) {
-						approver.setCurrent(true);
 						approver.setStartTime(currentTime);
+						approver.setCurrent(true);
 						entity.addReader(approver.getEmployee().getUser());
 					}
 				} else if (block.getType() == ApprovalType.SIGNING) {
