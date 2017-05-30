@@ -25,7 +25,6 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
@@ -44,7 +43,6 @@ import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
-import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
@@ -96,8 +94,8 @@ public class OfficeMemoService extends RestProvider {
 	public Response getById(@PathParam("id") String id) {
 		_Session ses = getSession();
 		OfficeMemo entity;
-		OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 		try {
+			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
 			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			boolean isNew = "new".equals(id);
 			if (isNew) {
@@ -126,7 +124,7 @@ public class OfficeMemoService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response add(OfficeMemo dto) {
 		dto.setId(null);
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
 	@PUT
@@ -134,10 +132,10 @@ public class OfficeMemoService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") String id, OfficeMemo dto) {
 		dto.setId(UUID.fromString(id));
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
-	private Response saveRequest(OfficeMemo dto) {
+	private Response saveForm(OfficeMemo dto) {
 		try {
 			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
 			Outcome outcome = omd.getOutcome(save(dto, new ValidationToSaveAsDraft()));
@@ -152,28 +150,11 @@ public class OfficeMemoService extends RestProvider {
 
 	private OfficeMemo save(OfficeMemo dto, IValidation<OfficeMemo> validation)
 			throws SecureException, DAOException, DTOException {
-		_Session ses = getSession();
+		OfficeMemoDomain domain = new OfficeMemoDomain(getSession());
+		OfficeMemo entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
 
-		OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-		OfficeMemo entity;
+		return domain.save(entity);
 
-		if (dto.isNew()) {
-			entity = new OfficeMemo();
-		} else {
-			entity = officeMemoDAO.findById(dto.getId());
-		}
-
-		new OfficeMemoDomain(ses).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
-
-		if (dto.isNew()) {
-			RegNum rn = new RegNum();
-			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-			entity = officeMemoDAO.add(entity, rn);
-		} else {
-			entity = officeMemoDAO.update(entity);
-		}
-
-		return entity;
 	}
 
 	@DELETE

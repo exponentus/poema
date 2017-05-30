@@ -61,6 +61,9 @@ public class ApproverTracking extends Do {
 						}
 					} catch (ApprovalException e) {
 						Server.logger.exception(e);
+					} catch (Exception e) {
+						Server.logger.error(approval.getURL());
+						Server.logger.exception(e);
 					}
 				}
 			}

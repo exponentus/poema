@@ -15,6 +15,7 @@ import com.exponentus.scripting._Session;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.AssignmentDAO;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
@@ -26,30 +27,32 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		RESET_ASSIGNEE
 	}
 
-	public AssignmentDomain(_Session session) {
+	public AssignmentDomain(_Session session) throws DAOException {
 		super(session);
+		dao = new AssignmentDAO(ses);
 	}
 
 	public Assignment composeNew(Employee author, ActionableDocument parent) {
 		Assignment entity = new Assignment();
-
 		entity.setAuthor(author.getUser());
 		entity.setAppliedAuthor(author);
 		entity.setParent(parent);
-		// Control newControl = new Control();
-		// newControl.setStartDate(new Date());
-		//  newControl.setStatus(ControlStatusType.DRAFT);
-		// entity.setControl(newControl);
 		entity.setStartDate(new Date());
 		entity.setStatus(ControlStatusType.DRAFT);
-
 		return entity;
 	}
 
 	@Override
-	public void fillFromDto(Assignment entity, Assignment dto, IValidation<Assignment> validation, String formSesId)
+	public Assignment fillFromDto(Assignment dto, IValidation<Assignment> validation, String formSesId)
 			throws DTOException, DAOException {
 		validation.check(dto);
+		Assignment entity;
+
+		if (dto.isNew()) {
+			entity = new Assignment();
+		} else {
+			entity = dao.findById(dto.getId());
+		}
 		EmployeeDAO eDao = new EmployeeDAO(ses);
 		Employee appliedAuthor = dto.getAppliedAuthor();
 		if (appliedAuthor != null) {
@@ -76,7 +79,6 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		entity.setStatus(dto.getStatus());
 		entity.setAssigneeEntries(dto.getAssigneeEntries());
 		entity.setControlType(dto.getControlType());
-		entity.setAttachments(dto.getAttachments());
 
 		if (entity.isNew()) {
 			entity.setAuthor(ses.getUser());
@@ -84,31 +86,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
 		calculateReadersEditors(entity);
-	}
-
-	public void fillFromDto(Assignment entity, Assignment dto, _Session ses) throws DTOException, DAOException {
-		validate(dto);
-		EmployeeDAO eDao = new EmployeeDAO(ses);
-		Employee employee = eDao.findByUserId(ses.getUser().getId());
-		if (entity.isNew()) {
-			entity.setAuthor(employee.getUser());
-			entity.setParent(dto.getParent());
-		}
-
-		entity.setTitle(dto.getTitle());
-		entity.setBody(dto.getBody());
-		entity.setAppliedAuthor(dto.getAppliedAuthor());
-
-		List<Observer> observers = new ArrayList<Observer>();
-		for (Observer o : dto.getObservers()) {
-			Observer observer = new Observer();
-			observer.setEmployee(eDao.findById(o.getEmployee().getId()));
-			observers.add(observer);
-		}
-		entity.setObservers(observers);
-		//entity.setControl(dto.getControl());
-		entity.setAttachments(dto.getAttachments());
-
+		return entity;
 	}
 
 	private void calculateReadersEditors(Assignment entity) {
@@ -123,10 +101,6 @@ public class AssignmentDomain extends DTOService<Assignment> {
 	}
 
 	public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {
-		/*Control control = entity.getControl();
-		List<AssigneeEntry> assigneeEntities = control.getAssigneeEntries();
-		Control dtoControl = dto.getControl();
-		List<AssigneeEntry> dtoAssigneeEntities = dtoControl.getAssigneeEntries();*/
 		List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
 		List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
 		for (AssigneeEntry dtoEntry : dtoAssigneeEntities) {
@@ -146,37 +120,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		}
 
 		if (completedAssignee == assigneeEntities.size()) {
-			//control.setStatus(ControlStatusType.COMPLETED);
 			entity.setStatus(ControlStatusType.COMPLETED);
-		}
-	}
-
-	private void validate(Assignment assignment) throws DTOException {
-		DTOException ve = new DTOException();
-
-		if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
-			ve.addError("title", "required", "field_is_empty");
-		}
-		if (assignment.getControlType() == null) {
-			ve.addError("control.controlType", "required", "field_is_empty");
-		}
-		if (assignment.getStartDate() == null) {
-			ve.addError("control.startDate", "required", "field_is_empty");
-		}
-		if (assignment.getDueDate() == null) {
-			ve.addError("control.dueDate", "required", "field_is_empty");
-		}
-		/*if (assignment.getControl().getControlType() == null) {
-			ve.addError("control.controlType", "required", "field_is_empty");
-		}
-		if (assignment.getControl().getStartDate() == null) {
-			ve.addError("control.startDate", "required", "field_is_empty");
-		}
-		if (assignment.getControl().getDueDate() == null) {
-			ve.addError("control.dueDate", "required", "field_is_empty");
-		}*/
-		if (ve.hasError()) {
-			throw ve;
 		}
 	}
 

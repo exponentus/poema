@@ -10,8 +10,10 @@ import com.exponentus.common.domain.DTOService;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
@@ -19,6 +21,7 @@ import administrator.model.User;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.OfficeMemoDAO;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
@@ -26,8 +29,9 @@ import workflow.model.embedded.Block;
 
 public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 
-	public OfficeMemoDomain(_Session ses) {
+	public OfficeMemoDomain(_Session ses) throws DAOException {
 		super(ses);
+		dao = new OfficeMemoDAO(ses);
 	}
 
 	public OfficeMemo composeNew(User user, Employee appliedAuthor) throws ApprovalException {
@@ -40,16 +44,23 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 	}
 
 	@Override
-	public void fillFromDto(OfficeMemo entity, OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid)
+	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid)
 			throws DTOException, DAOException {
 		validation.check(dto);
+
+		OfficeMemo entity;
+
+		if (dto.isNew()) {
+			entity = new OfficeMemo();
+		} else {
+			entity = dao.findById(dto.getId());
+		}
 		EmployeeDAO eDao = new EmployeeDAO(ses);
 		entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
 		entity.setAppliedRegDate(dto.getAppliedRegDate());
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
 		entity.setRecipient(dto.getRecipient());
-		entity.setAttachments(dto.getAttachments());
 		entity.setBlocks(dto.getBlocks());
 		entity.setSchema(dto.getSchema());
 
@@ -68,6 +79,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
 		calculateReadersEditors(entity);
+		return entity;
 	}
 
 	public boolean approvalCanBeStarted(OfficeMemo om) {
@@ -120,6 +132,18 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 
 	public boolean documentCanBeDeleted(OfficeMemo om) {
 		return !om.isNew() && om.isEditable();
+	}
+
+	@Override
+	public OfficeMemo save(OfficeMemo entity) throws SecureException, DAOException, DTOException {
+		if (entity.isNew()) {
+			RegNum rn = new RegNum();
+			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+			entity = dao.add(entity, rn);
+		} else {
+			entity = dao.update(entity);
+		}
+		return entity;
 	}
 
 	@Override

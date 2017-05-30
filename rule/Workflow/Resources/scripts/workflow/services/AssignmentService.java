@@ -1,7 +1,6 @@
 package workflow.services;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -31,12 +30,9 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-import com.exponentus.user.SuperUser;
 
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import staff.model.embedded.Observer;
-import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
@@ -46,8 +42,6 @@ import workflow.init.AppConst;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
-import workflow.model.embedded.AssigneeEntry;
-import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
 @Path("assignments")
@@ -170,7 +164,7 @@ public class AssignmentService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response add(Assignment dto) {
 		dto.setId(null);
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
 	@PUT
@@ -178,10 +172,10 @@ public class AssignmentService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") String id, Assignment dto) {
 		dto.setId(UUID.fromString(id));
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
-	private Response saveRequest(Assignment dto) {
+	private Response saveForm(Assignment dto) {
 		try {
 			AssignmentDomain domain = new AssignmentDomain(getSession());
 			Outcome outcome = domain.getOutcome(save(dto, new Validation()));
@@ -196,92 +190,10 @@ public class AssignmentService extends RestProvider {
 
 	private Assignment save(Assignment dto, IValidation<Assignment> validation)
 			throws SecureException, DAOException, DTOException {
-		_Session ses = getSession();
+		AssignmentDomain domain = new AssignmentDomain(getSession());
+		Assignment entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
 
-		AssignmentDAO dao = new AssignmentDAO(ses);
-		Assignment entity;
-
-		if (dto.isNew()) {
-			entity = new Assignment();
-		} else {
-			entity = dao.findById(dto.getId());
-		}
-
-		new AssignmentDomain(ses).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
-
-		return dao.save(entity);
-	}
-
-	public Response save(Assignment dto) {
-		_Session ses = getSession();
-		Assignment entity;
-		AssignmentDomain domain = new AssignmentDomain(ses);
-
-		try {
-			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-			AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
-
-			if (dto.isNew()) {
-				entity = new Assignment();
-			} else {
-				entity = assignmentDAO.findById(dto.getId());
-			}
-
-			dto.setAppliedAuthor(employeeDAO.findById(dto.getAppliedAuthor().getId()));
-			dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-
-			domain.fillFromDto(entity, dto, ses);
-
-			// ACL routines
-			entity.resetReadersEditors();
-
-			//Control control = entity.getControl();
-			if (entity.getAssigneeEntries().size() > 0) {
-				entity.setStatus(ControlStatusType.PROCESSING);
-			}
-
-			for (AssigneeEntry ae : entity.getAssigneeEntries()) {
-				entity.addReader(employeeDAO.findById(ae.getAssignee().getId()).getUserID());
-			}
-
-			List<Observer> observers = entity.getObservers();
-			if (observers != null) {
-				for (Observer observer : observers) {
-					entity.addReader(observer.getEmployee().getUserID());
-				}
-			}
-
-			ActionableDocumentDAO dao = new ActionableDocumentDAO(ses);
-			ActionableDocument parent = dao.findById(entity.getId());
-			entity.addReaders(parent.getReaders());
-
-			if (entity.getStatus() == ControlStatusType.DRAFT) {
-				entity.addReaderEditor(entity.getAuthor());
-				if (entity.getAppliedAuthor() != null) {
-					entity.addReaderEditor(entity.getAppliedAuthor().getUser());
-				}
-				entity = assignmentDAO.save(entity);
-			} else {
-				entity.addReader(entity.getAuthor());
-				if (entity.getAppliedAuthor() != null) {
-					entity.addReader(entity.getAppliedAuthor().getUser());
-				}
-				entity = new AssignmentDAO(new _Session(new SuperUser())).save(entity);
-			}
-
-			parent.resetEditors();
-			dao.update(parent);
-
-			new Messages(getAppEnv()).notifyAssignees(entity);
-
-			return Response.ok(domain.getOutcome(entity)).build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		} catch (DTOException e) {
-			return responseValidationError(e);
-		} catch (Exception e) {
-			return responseException(e);
-		}
+		return domain.save(entity);
 	}
 
 	@DELETE

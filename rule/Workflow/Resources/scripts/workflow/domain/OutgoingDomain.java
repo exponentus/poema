@@ -10,8 +10,10 @@ import com.exponentus.common.domain.DTOService;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
@@ -20,6 +22,7 @@ import reference.model.constants.ApprovalSchemaType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.OutgoingDAO;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalStatusType;
@@ -27,8 +30,9 @@ import workflow.model.embedded.Block;
 
 public class OutgoingDomain extends DTOService<Outgoing> {
 
-	public OutgoingDomain(_Session session) {
+	public OutgoingDomain(_Session session) throws DAOException {
 		super(session);
+		dao = new OutgoingDAO(ses);
 	}
 
 	public Outgoing composeNew(User user) {
@@ -38,9 +42,16 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 	}
 
 	@Override
-	public void fillFromDto(Outgoing entity, Outgoing dto, IValidation<Outgoing> validation, String fsid)
+	public Outgoing fillFromDto(Outgoing dto, IValidation<Outgoing> validation, String fsid)
 			throws DTOException, DAOException {
 		validation.check(dto);
+
+		Outgoing entity;
+		if (dto.isNew()) {
+			entity = new Outgoing();
+		} else {
+			entity = dao.findById(dto.getId());
+		}
 		EmployeeDAO eDao = new EmployeeDAO(ses);
 		entity.setAppliedRegDate(dto.getAppliedRegDate());
 		entity.setTitle(dto.getTitle());
@@ -71,6 +82,7 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
 		calculateReadersEditors(entity);
+		return entity;
 
 	}
 
@@ -116,6 +128,18 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 	public void skipApprovalBlock(Outgoing outgoing) throws ApprovalException {
 		ApprovalLifecycle lifecycle = new ApprovalLifecycle(outgoing);
 		lifecycle.skip();
+	}
+
+	@Override
+	public Outgoing save(Outgoing entity) throws SecureException, DAOException, DTOException {
+		if (entity.isNew()) {
+			RegNum rn = new RegNum();
+			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+			entity = dao.add(entity, rn);
+		} else {
+			entity = dao.update(entity);
+		}
+		return entity;
 	}
 
 	@Override

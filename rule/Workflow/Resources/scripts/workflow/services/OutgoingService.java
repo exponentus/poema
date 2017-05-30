@@ -25,7 +25,6 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
@@ -84,8 +83,9 @@ public class OutgoingService extends RestProvider {
 	public Response getById(@PathParam("id") String id) {
 		_Session ses = getSession();
 		Outgoing entity;
-		OutgoingDomain outDomain = new OutgoingDomain(ses);
 		try {
+			OutgoingDomain outDomain = new OutgoingDomain(ses);
+
 			boolean isNew = "new".equals(id);
 			if (isNew) {
 				entity = outDomain.composeNew((User) ses.getUser());
@@ -113,7 +113,7 @@ public class OutgoingService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response add(Outgoing dto) {
 		dto.setId(null);
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
 	@PUT
@@ -121,10 +121,10 @@ public class OutgoingService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") String id, Outgoing dto) {
 		dto.setId(UUID.fromString(id));
-		return saveRequest(dto);
+		return saveForm(dto);
 	}
 
-	private Response saveRequest(Outgoing dto) {
+	private Response saveForm(Outgoing dto) {
 		try {
 			OutgoingDomain domain = new OutgoingDomain(getSession());
 			Outcome outcome = domain.getOutcome(save(dto, new ValidationToSaveAsDraft()));
@@ -139,28 +139,11 @@ public class OutgoingService extends RestProvider {
 
 	private Outgoing save(Outgoing dto, IValidation<Outgoing> validation)
 			throws SecureException, DAOException, DTOException {
-		_Session ses = getSession();
 
-		OutgoingDAO dao = new OutgoingDAO(ses);
-		Outgoing entity;
+		OutgoingDomain domain = new OutgoingDomain(getSession());
+		Outgoing entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
 
-		if (dto.isNew()) {
-			entity = new Outgoing();
-		} else {
-			entity = dao.findById(dto.getId());
-		}
-
-		new OutgoingDomain(getSession()).fillFromDto(entity, dto, validation, getWebFormData().getFormSesId());
-
-		if (dto.isNew()) {
-			RegNum rn = new RegNum();
-			entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
-			entity = dao.add(entity, rn);
-		} else {
-			entity = dao.update(entity);
-		}
-
-		return entity;
+		return domain.save(entity);
 	}
 
 	@DELETE
