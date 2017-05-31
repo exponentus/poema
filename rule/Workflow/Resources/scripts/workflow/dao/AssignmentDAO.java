@@ -85,7 +85,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                     .groupBy(root, root.get("controlType"), root.get("appliedAuthor").get("name"))
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(root));
+            countRootCq.select(cb.countDistinct(root));
 
             if (condition != null) {
                 cq.where(condition);

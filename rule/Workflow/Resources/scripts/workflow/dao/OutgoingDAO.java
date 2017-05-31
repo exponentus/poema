@@ -27,7 +27,6 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
         try {
             CriteriaQuery<OutgoingViewEntry> cq = cb.createQuery(OutgoingViewEntry.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
-            Root<Outgoing> countRoot = countRootCq.from(Outgoing.class);
             Root<Outgoing> root = cq.from(Outgoing.class);
             Join atts = root.join("attachments", JoinType.LEFT);
 
@@ -92,11 +91,12 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
                     root.get("body"),
                     cb.count(atts)
             ))
-                    .groupBy(root, root.get("recipient").get("name"), root.get("docLanguage"),
-                            root.get("docType"), root.get("docSubject"), atts)
+                    .distinct(true)
+                    .groupBy(root, root.get("recipient").get("name"), root.get("docLanguage").get("locName"),
+                            root.get("docType").get("locName"), root.get("docSubject").get("locName"), atts)
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(countRoot));
+            countRootCq.select(cb.countDistinct(root));
 
             if (condition != null) {
                 cq.where(condition);
