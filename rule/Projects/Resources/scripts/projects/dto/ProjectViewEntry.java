@@ -8,7 +8,7 @@ import projects.model.constants.ProjectStatusType;
 import java.util.Date;
 import java.util.UUID;
 
-public class ProjectViewEntryDTO {
+public class ProjectViewEntry {
 
     public UUID id;
     public String kind = "project";
@@ -28,7 +28,7 @@ public class ProjectViewEntryDTO {
     public String comment;
     public boolean hasAttachments;
 
-    public ProjectViewEntryDTO(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {
+    public ProjectViewEntry(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {
         this.id = id;
         this.name = name;
         this.status = status;

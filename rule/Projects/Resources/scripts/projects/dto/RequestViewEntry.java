@@ -9,7 +9,7 @@ import reference.model.RequestType;
 import java.util.Date;
 import java.util.UUID;
 
-public class RequestViewEntryDTO {
+public class RequestViewEntry {
 
     public UUID id;
     public String kind = "request";
@@ -21,7 +21,7 @@ public class RequestViewEntryDTO {
     public String decisionComment;
     public String comment;
 
-    public RequestViewEntryDTO(UUID id, Task task, RequestType requestType, ResolutionType resolution, Date resolutionTime, String decisionComment, String comment) {
+    public RequestViewEntry(UUID id, Task task, RequestType requestType, ResolutionType resolution, Date resolutionTime, String decisionComment, String comment) {
         this.id = id;
         this.task = task;
         this.requestType = requestType;

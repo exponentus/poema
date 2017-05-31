@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskViewEntryDTO {
+public class TaskViewEntry {
 
     public UUID id;
     public String kind = "task";
@@ -32,7 +32,7 @@ public class TaskViewEntryDTO {
     public Long responsesCount;
     public List<IAppEntity<UUID>> responses;
 
-    public TaskViewEntryDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags, Long attachmentCount) {
+    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
         this.taskType = taskType;
@@ -48,7 +48,7 @@ public class TaskViewEntryDTO {
         this.hasAttachments = attachmentCount > 0;
     }
 
-    public TaskViewEntryDTO(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, Tag tag, Long attachmentCount) {
+    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority, String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, Tag tag, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
         this.taskType = taskType;

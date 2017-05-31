@@ -5,7 +5,7 @@ import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
-import projects.dto.ProjectViewEntryDTO;
+import projects.dto.ProjectViewEntry;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
@@ -21,30 +21,37 @@ public class ProjectDAO extends DAO<Project, UUID> {
         super(Project.class, session);
     }
 
-    public ViewPage<ProjectViewEntryDTO> findViewPage1(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
+    public ViewPage<ProjectViewEntry> findViewPage(SortParams sortParams, ProjectStatusType status, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<ProjectViewEntryDTO> cq = cb.createQuery(ProjectViewEntryDTO.class);
-            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+            CriteriaQuery<ProjectViewEntry> cq = cb.createQuery(ProjectViewEntry.class);
             Root<Project> root = cq.from(Project.class);
             Join atts = root.join("attachments", JoinType.LEFT);
 
+            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+            Root<Project> countRoot = countRootCq.from(Project.class);
+
             Predicate condition = null;
-            Predicate conditionCount = null;
+            Predicate countCondition = null;
 
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
-                conditionCount = cb.and(root.get("readers").in(user.getId()));
+                countCondition = cb.and(countRoot.get("readers").in(user.getId()));
             }
 
             if (status != null) {
-                condition = cb.and(cb.equal(root.get("status"), status), condition);
-                conditionCount = cb.and(cb.equal(root.get("status"), status), conditionCount);
+                if (condition == null) {
+                    condition = cb.and(cb.equal(root.get("status"), status));
+                    countCondition = cb.and(cb.equal(countRoot.get("status"), status));
+                } else {
+                    condition = cb.and(cb.equal(root.get("status"), status), condition);
+                    countCondition = cb.and(cb.equal(countRoot.get("status"), status), countCondition);
+                }
             }
 
             cq.select(cb.construct(
-                    ProjectViewEntryDTO.class,
+                    ProjectViewEntry.class,
                     root.get("id"),
                     root.get("name"),
                     root.get("status"),
@@ -58,23 +65,24 @@ public class ProjectDAO extends DAO<Project, UUID> {
                     root.get("comment"),
                     cb.count(atts)
             ))
+                    .distinct(true)
                     .groupBy(root, root.get("customer").get("name"))
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(root));
+            countRootCq.select(cb.count(countRoot));
 
             if (condition != null) {
                 cq.where(condition);
-                countRootCq.where(conditionCount);
+                countRootCq.where(countCondition);
             }
 
-            TypedQuery<ProjectViewEntryDTO> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> query = em.createQuery(countRootCq);
+            TypedQuery<ProjectViewEntry> typedQuery = em.createQuery(cq);
+            TypedQuery<Long> countQuery = em.createQuery(countRootCq);
 
-            long count = query.getSingleResult();
+            long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
-            List<ProjectViewEntryDTO> result = typedQuery.getResultList();
+            List<ProjectViewEntry> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {
