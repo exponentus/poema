@@ -1,27 +1,27 @@
 package workflow.dto;
 
-import java.util.Date;
-
 import workflow.model.embedded.AssigneeEntry;
 
-public class AssigneeEntryShort {
+import java.util.Date;
 
-	public Long id;
+public class AssigneeEntryShort implements IDTO {
 
-	public boolean isCoordinator;
-	public String assignee;
-	public String resetBy;
-	public Date resetTime;
-	public String resetterInfo;
-	public int sort;
+    public Long id;
 
-	public AssigneeEntryShort(AssigneeEntry ae) {
-		//this.id = ae.getId();
-		this.isCoordinator = ae.isCoordinator();
-		this.assignee = ae.getAssignee().getName();
-		this.resetBy = ae.getResetBy().getName();
-		this.resetTime = ae.getResetTime();
-		this.resetterInfo = ae.getResetInfo();
-		this.sort = ae.getSort();
-	}
+    public boolean isCoordinator;
+    public String assignee;
+    public String resetBy;
+    public Date resetTime;
+    public String resetterInfo;
+    public int sort;
+
+    public AssigneeEntryShort(AssigneeEntry ae) {
+        //this.id = ae.getId();
+        this.isCoordinator = ae.isCoordinator();
+        this.assignee = ae.getAssignee().getName();
+        this.resetBy = ae.getResetBy().getName();
+        this.resetTime = ae.getResetTime();
+        this.resetterInfo = ae.getResetInfo();
+        this.sort = ae.getSort();
+    }
 }

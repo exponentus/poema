@@ -1,7 +1,6 @@
 package workflow.dto;
 
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.runtimeobj.IAppEntity;
 import workflow.init.AppConst;
 
 import java.util.Date;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class IncomingViewEntry {
+public class IncomingViewEntry implements IDTO {
 
     public UUID id;
     public String kind = "incoming";
@@ -27,7 +26,8 @@ public class IncomingViewEntry {
     public String body;
     public boolean hasAttachments;
 
-    public List<IAppEntity<UUID>> responses;
+    public long responsesCount;
+    public List<IDTO> responses;
 
     public IncomingViewEntry(UUID id, String title, String regNumber, Date appliedRegDate, String senderOrgName,
                              String senderRegNumber, Date senderAppliedRegDate, String addresseeEmpName, Map<LanguageCode, String> docLanguage,
@@ -51,7 +51,11 @@ public class IncomingViewEntry {
         return AppConst.BASE_URL + "incomings/" + id;
     }
 
-    public void setResponses(List<IAppEntity<UUID>> responses) {
+    public void setResponsesCount(long responsesCount) {
+        this.responsesCount = responsesCount;
+    }
+
+    public void setResponses(List<IDTO> responses) {
         this.responses = responses;
     }
 }

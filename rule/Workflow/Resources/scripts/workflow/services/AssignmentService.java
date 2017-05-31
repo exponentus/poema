@@ -238,10 +238,10 @@ public class AssignmentService extends RestProvider {
 		if (entity.isNew() || entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
-		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
+//		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
-		}
+//		}
 		if (entity.assigneesContainsUser(session.getUser())) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
