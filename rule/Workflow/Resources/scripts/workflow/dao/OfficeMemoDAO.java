@@ -28,7 +28,6 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
         try {
             CriteriaQuery<OfficeMemoViewEntry> cq = cb.createQuery(OfficeMemoViewEntry.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
-            Root<OfficeMemo> countRoot = countRootCq.from(OfficeMemo.class);
             Root<OfficeMemo> root = cq.from(OfficeMemo.class);
             Join atts = root.join("attachments", JoinType.LEFT);
 
@@ -70,8 +69,6 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
                 }
             }
 
-            // cq.select(root).distinct(true).orderBy(collectSortOrder(cb, root, sortParams));
-
             cq.select(cb.construct(
                     OfficeMemoViewEntry.class,
                     root.get("id"),
@@ -85,11 +82,12 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
                     root.get("body"),
                     cb.count(atts)
             ))
+                    .distinct(true)
                     .groupBy(root, root.get("appliedAuthor").get("name"),
                             root.get("recipient").get("name"), atts)
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(countRoot));
+            countRootCq.select(cb.countDistinct(root));
 
             if (condition != null) {
                 cq.where(condition);

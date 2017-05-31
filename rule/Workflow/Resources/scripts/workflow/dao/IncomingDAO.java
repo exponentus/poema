@@ -91,12 +91,13 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                     root.get("body"),
                     cb.count(atts)
             ))
+                    .distinct(true)
                     .groupBy(root, root.get("sender").get("name"),
-                            root.get("addressee").get("name"), root.get("docLanguage"),
-                            root.get("docType"), root.get("docSubject"), atts)
+                            root.get("addressee").get("name"), root.get("docLanguage").get("locName"),
+                            root.get("docType").get("locName"), root.get("docSubject").get("locName"), atts)
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
-            countRootCq.select(cb.count(root));
+            countRootCq.select(cb.countDistinct(root));
 
             if (condition != null) {
                 cq.where(condition);
