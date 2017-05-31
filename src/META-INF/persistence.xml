@@ -23,6 +23,7 @@
         <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <!-- Monitoring module entities (if the module activated) -->     
         <class>monitoring.model.UserActivity</class>
         <!-- Because of it suppose importing from Domino -->
@@ -31,6 +32,7 @@
 
     <persistence-unit name="Staff" transaction-type="RESOURCE_LOCAL">
         <class>com.exponentus.common.model.ViewEntry</class>
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <!-- Obligatory the application module entities -->
         <class>administrator.model.Language</class>
         <class>administrator.model.Application</class>
@@ -117,6 +119,7 @@
 
  	 <persistence-unit name="Monitoring" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.Language</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.User</class>
@@ -166,6 +169,7 @@
 
     <persistence-unit name="Projects" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
@@ -206,6 +210,7 @@
 
     <persistence-unit name="HelpDesk" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
@@ -246,6 +251,7 @@
 
     <persistence-unit name="Discussing" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.Language</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.User</class>
@@ -276,6 +282,7 @@
 
     <persistence-unit name="Workflow" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
@@ -333,6 +340,7 @@
 
     <persistence-unit name="ResourceReservations" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
@@ -370,6 +378,7 @@
 
   <persistence-unit name="Audit" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
