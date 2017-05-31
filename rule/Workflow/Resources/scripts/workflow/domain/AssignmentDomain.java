@@ -43,8 +43,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 	}
 
 	@Override
-	public Assignment fillFromDto(Assignment dto, IValidation<Assignment> validation, String formSesId)
-			throws DTOException, DAOException {
+	public Assignment fillFromDto(Assignment dto, IValidation<Assignment> validation, String formSesId) throws DTOException, DAOException {
 		validation.check(dto);
 		Assignment entity;
 
@@ -77,7 +76,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		entity.setStartDate(dto.getStartDate());
 		entity.setDueDate(dto.getDueDate());
 		entity.setStatus(dto.getStatus());
-		entity.setAssigneeEntries(dto.getAssigneeEntries());
+		entity.setAssigneeEntries(normalizeAssigneeEntries(dto.getAssigneeEntries()));
 		entity.setControlType(dto.getControlType());
 
 		if (entity.isNew()) {
@@ -98,6 +97,15 @@ public class AssignmentDomain extends DTOService<Assignment> {
 				entity.addReader(observer.getEmployee().getUserID());
 			}
 		}
+	}
+
+	private List<AssigneeEntry> normalizeAssigneeEntries(List<AssigneeEntry> assigneeEntries) {
+		int count = 0;
+		for (AssigneeEntry entry : assigneeEntries) {
+			entry.setSort(count);
+			count++;
+		}
+		return assigneeEntries;
 	}
 
 	public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {

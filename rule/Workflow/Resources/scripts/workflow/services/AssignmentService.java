@@ -188,8 +188,7 @@ public class AssignmentService extends RestProvider {
 		}
 	}
 
-	private Assignment save(Assignment dto, IValidation<Assignment> validation)
-			throws SecureException, DAOException, DTOException {
+	private Assignment save(Assignment dto, IValidation<Assignment> validation) throws SecureException, DAOException, DTOException {
 		AssignmentDomain domain = new AssignmentDomain(getSession());
 		Assignment entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
 
@@ -208,6 +207,25 @@ public class AssignmentService extends RestProvider {
 			}
 			return Response.noContent().build();
 		} catch (SecureException | DAOException e) {
+			return responseException(e);
+		}
+	}
+
+	@POST
+	@Path("action/startImplementation")
+	public Response startImplementation(Assignment dto) {
+		try {
+			_Session ses = getSession();
+			AssignmentDAO dao = new AssignmentDAO(ses);
+			Assignment entity = dao.findById(dto.getId());
+			AssignmentDomain domain = new AssignmentDomain(ses);
+
+			domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+
+			dao.update(entity, false);
+
+			return Response.ok(new Outcome()).build();
+		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
 	}
@@ -238,11 +256,16 @@ public class AssignmentService extends RestProvider {
 		if (entity.isNew() || entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
+		if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID() == session.getUser().getId()) {
+			actionBar.addAction(new Action(ActionType.LINK).caption("start_impl").url(AppConst.BASE_URL + "reports/startImplementation"));
+		}
+
 		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
 		}
-		if (entity.assigneesContainsUser(session.getUser())) {
+
+		if (entity.getStatus() == ControlStatusType.PROCESSING && entity.assigneesContainsUser(session.getUser())) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
 		}

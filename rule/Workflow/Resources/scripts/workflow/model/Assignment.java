@@ -28,8 +28,8 @@ import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.ControlType;
@@ -46,7 +46,8 @@ import workflow.model.embedded.AssigneeEntry;
 @Entity
 @Table(name = "wf__assignments")
 public class Assignment extends SecureHierarchicalEntity {
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonManagedReference
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
 	@OrderBy("appliedRegDate")
 	private List<Report> reports;
@@ -95,8 +96,7 @@ public class Assignment extends SecureHierarchicalEntity {
 	private Date statusTime;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "wf__assignee_entries", uniqueConstraints = {
-			@UniqueConstraint(columnNames = { "assignment_id", "sort" }),
+	@CollectionTable(name = "wf__assignee_entries", uniqueConstraints = { @UniqueConstraint(columnNames = { "assignment_id", "sort" }),
 			@UniqueConstraint(columnNames = { "assignment_id", "assignee" }) })
 	@OrderBy("sort")
 	private List<AssigneeEntry> assigneeEntries;

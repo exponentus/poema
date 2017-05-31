@@ -24,7 +24,7 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.scripting._Session;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -46,7 +46,8 @@ public class Report extends SecureHierarchicalEntity {
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 
-	@JsonIgnore
+	//@JsonIgnore
+	@JsonBackReference
 	@NotNull
 	@ManyToOne
 	private Assignment parent;
@@ -59,10 +60,10 @@ public class Report extends SecureHierarchicalEntity {
 	@CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
 
-	@JoinTable(name = "wf__report_attachments", joinColumns = {
-			@JoinColumn(name = "report_id") }, inverseJoinColumns = { @JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "report_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-							"report_id", "attachment_id" }))
+	@JoinTable(name = "wf__report_attachments", joinColumns = { @JoinColumn(name = "report_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "attachment_id") }, indexes = {
+					@Index(columnList = "report_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "report_id",
+							"attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
