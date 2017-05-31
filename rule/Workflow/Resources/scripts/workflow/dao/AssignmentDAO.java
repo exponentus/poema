@@ -77,12 +77,12 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                     root.get("id"),
                     root.get("appliedAuthor").get("name"),
                     root.get("body"),
-                    root.get("controlType"),
+                    root.get("controlType").get("locName"),
                     root.get("startDate"),
                     root.get("dueDate"),
                     root.get("status")
             ))
-                    .groupBy(root, root.get("controlType"), root.get("appliedAuthor").get("name"))
+                    .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
                     .orderBy(collectSortOrder(cb, root, sortParams));
 
             countRootCq.select(cb.countDistinct(root));

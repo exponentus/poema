@@ -269,6 +269,7 @@ public class AssignmentService extends RestProvider {
 			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
 		}
+		
 		if (!entity.isNew() && entity.isEditable()) {
 			actionBar.addAction(action.deleteDocument);
 		}

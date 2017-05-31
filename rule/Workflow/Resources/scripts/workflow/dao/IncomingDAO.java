@@ -2,25 +2,23 @@ package workflow.dao;
 
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.runtimeobj.IAppEntity;
+import workflow.dto.IDTO;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.IncomingFilter;
+import workflow.dto.AssignmentViewEntry;
 import workflow.dto.IncomingViewEntry;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
-import workflow.model.Report;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class IncomingDAO extends DAO<Incoming, UUID> {
 
@@ -116,10 +114,11 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 //            }
 //
 //            for (IncomingViewEntry inve : vp.getResult()) {
-//                List<IAppEntity<UUID>> responses = findIncomingResponses(incoming, em);
+//                Incoming incoming = em.getReference(Incoming.class, inve.id);
+//                List<IDTO> responses = findIncomingResponses(incoming, em);
 //                if (responses != null && responses.size() > 0) {
-//                    incoming.setResponsesCount((long) responses.size());
-//                    incoming.setResponses(responses);
+//                    inve.setResponsesCount((long) responses.size());
+//                    inve.setResponses(responses);
 //                }
 //            }
 
@@ -129,75 +128,87 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         }
     }
 
-    private List<IAppEntity<UUID>> findIncomingResponses(Incoming incoming, EntityManager em) {
+    private List<IDTO> findIncomingResponses(Incoming incoming, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Assignment> cq = cb.createQuery(Assignment.class);
+        CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
         Root<Assignment> root = cq.from(Assignment.class);
-        cq.select(root).distinct(true);
 
         Predicate condition = cb.equal(root.get("parent"), incoming);
-        // condition = cb.and(cb.isEmpty(root.get("parent")), condition);
 
         if (!user.isSuperUser()) {
             condition = cb.and(root.get("readers").in(user.getId()), condition);
         }
 
-        cq.where(condition);
-        cq.orderBy(cb.desc(root.get("regDate")));
+        cq.select(cb.construct(
+                AssignmentViewEntry.class,
+                root.get("id"),
+                root.get("appliedAuthor").get("name"),
+                root.get("body"),
+                root.get("controlType").get("locName"),
+                root.get("startDate"),
+                root.get("dueDate"),
+                root.get("status")
+        ))
+                .distinct(true)
+                .where(condition)
+                .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
+                .orderBy(cb.desc(root.get("regDate")));
 
-        TypedQuery<Assignment> typedQuery = em.createQuery(cq);
-        List<Assignment> assignments = typedQuery.getResultList();
+        TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
+        List<AssignmentViewEntry> assignments = typedQuery.getResultList();
+        // return new ArrayList<>(assignments);
 
-//        if (assignments.size() > 0) {
-//            for (Assignment assignment : assignments) {
-//                List<IAppEntity<UUID>> responses = findAssignmentResponses(assignment, expandedIds, em);
-//                if (responses != null && responses.size() > 0) {
-//                    assignment.setResponsesCount((long) responses.size());
-//                    assignment.setResponses(responses);
-//                }
-//            }
-//            return new ArrayList<>(assignments);
-//        }
+        if (assignments.size() > 0) {
+            for (AssignmentViewEntry ave : assignments) {
+                Assignment assignment = em.getReference(Assignment.class, ave.id);
+                List<IDTO> responses = findAssignmentResponses(assignment, em);
+                if (responses != null && responses.size() > 0) {
+                    ave.setResponsesCount((long) responses.size());
+                    ave.setResponses(responses);
+                }
+            }
+            return new ArrayList<>(assignments);
+        }
         return null;
     }
 
-    private List<IAppEntity<UUID>> findAssignmentResponses(Assignment assignment, List<UUID> expandedIds,
-                                                           EntityManager em) {
+    private List<IDTO> findAssignmentResponses(Assignment assignment, EntityManager em) {
         // --- Assignment
         CriteriaBuilder cba = em.getCriteriaBuilder();
-        CriteriaQuery<Assignment> cqa = cba.createQuery(Assignment.class);
+        CriteriaQuery<AssignmentViewEntry> cqa = cba.createQuery(AssignmentViewEntry.class);
         Root<Assignment> rootA = cqa.from(Assignment.class);
-        // cqa.select(rootA).distinct(true);
-        // UUID id, Date regDate, String title, String body, Long appliedAuthor
-        cqa.select(cba.construct(Assignment.class, rootA.get("id"), rootA.get("regDate"), rootA.get("title"),
-                rootA.get("body"), rootA.get("appliedAuthor")));
 
-        Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
+        Predicate conditionA = cba.equal(rootA.get("parent").get("id"), assignment.getId());
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Assignment.class)) {
+        if (!user.isSuperUser()) {
             conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
         }
 
-        cqa.where(conditionA);
-        cqa.orderBy(cba.desc(rootA.get("regDate")));
+        cqa.select(cba.construct(
+                AssignmentViewEntry.class,
+                rootA.get("id"),
+                rootA.get("appliedAuthor").get("name"),
+                rootA.get("body"),
+                rootA.get("controlType").get("locName"),
+                rootA.get("startDate"),
+                rootA.get("dueDate"),
+                rootA.get("status")
+        ))
+                .distinct(true)
+                .where(conditionA)
+                .groupBy(rootA, rootA.get("appliedAuthor").get("name"), rootA.get("controlType").get("locName"))
+                .orderBy(cba.desc(rootA.get("regDate")));
 
-        TypedQuery<Assignment> typedQueryA = em.createQuery(cqa);
-        List<Assignment> assignments = typedQueryA.getResultList();
+        TypedQuery<AssignmentViewEntry> typedQueryA = em.createQuery(cqa);
+        List<AssignmentViewEntry> assignmentsVE = typedQueryA.getResultList();
+
+        List<IDTO> result = new LinkedList<>(assignmentsVE);
 
         // --- Report
-        CriteriaBuilder cbr = em.getCriteriaBuilder();
+/*        CriteriaBuilder cbr = em.getCriteriaBuilder();
         CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
         Root<Report> rootR = cqr.from(Report.class);
         Join attCount = rootR.join("attachments", JoinType.LEFT);
-        // cqr.select(cba.construct(
-        // Report.class,
-        // rootR.get("id"),
-        // rootR.get("regDate"),
-        // rootR.get("title"),
-        // rootR.get("body"),
-        // rootR.get("appliedAuthor"),
-        // rootR.get("appliedRegDate"),
-        // cba.count(attCount)));
 
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
@@ -206,29 +217,30 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         }
 
         cqr.select(rootR).where(conditionR);
-        // cqr.groupBy(rootR, rootR.get("appliedAuthor"));
+
         cqr.orderBy(cbr.desc(rootR.get("regDate")));
 
         TypedQuery<Report> typedQueryR = em.createQuery(cqr);
         List<Report> reports = typedQueryR.getResultList();
 
         // --- concat & sort by reg date
-        List<IAppEntity<UUID>> result = new LinkedList<>(assignments);
+        List<IDto> result = new LinkedList<>(assignments);
         result.addAll(reports);
 
         Supplier<List<IAppEntity<UUID>>> supplier = LinkedList::new;
         result = result.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
                 .collect(Collectors.toCollection(supplier));
-
-//        if (assignments.size() > 0) {
-//            for (Assignment a : assignments) {
-//                List<IAppEntity<UUID>> responses = findAssignmentResponses(a, expandedIds, em);
-//                if (responses != null && responses.size() > 0) {
-//                    a.setResponsesCount((long) responses.size());
-//                    a.setResponses(responses);
-//                }
-//            }
-//        }
+*/
+        if (assignmentsVE.size() > 0) {
+            for (AssignmentViewEntry ave : assignmentsVE) {
+                Assignment a = em.getReference(Assignment.class, ave.id);
+                List<IDTO> responses = findAssignmentResponses(a, em);
+                if (responses != null && responses.size() > 0) {
+                    ave.setResponsesCount((long) responses.size());
+                    ave.setResponses(responses);
+                }
+            }
+        }
 
         return result;
     }
