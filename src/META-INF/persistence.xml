@@ -25,7 +25,7 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <!-- Monitoring module entities (if the module activated) -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
     </persistence-unit>
@@ -60,7 +60,7 @@
         <class>reference.model.Position</class>
         <class>reference.model.OrgCategory</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -111,7 +111,7 @@
         <!-- Specific Reference module entities for HelpDesk module-->
         <class>reference.model.DemandType</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -138,7 +138,7 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>                     
         <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
     
@@ -163,7 +163,7 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
         <!-- Monitoring module entities (if the module activated) -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -204,7 +204,7 @@
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -245,7 +245,7 @@
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -276,7 +276,7 @@
         <class>discussing.model.Topic</class>
         <class>discussing.model.Comment</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -332,7 +332,7 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <!-- Because of suppose importing data from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -372,7 +372,7 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -412,13 +412,13 @@
         <class>workflow.model.embedded.Approval</class>
         <class>workflow.model.embedded.Block</class>   
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>     
+        <class>monitoring.model.Activity</class>     
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
     
     <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.Language</class>
         <!-- Monitoring module entities -->     
-        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.Activity</class>
     </persistence-unit>
 </persistence>
