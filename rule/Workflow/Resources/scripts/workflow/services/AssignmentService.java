@@ -220,7 +220,7 @@ public class AssignmentService extends RestProvider {
 			Assignment entity = dao.findById(dto.getId());
 			AssignmentDomain domain = new AssignmentDomain(ses);
 
-			domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+			//domain.startAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
 
 			dao.update(entity, false);
 
@@ -257,7 +257,8 @@ public class AssignmentService extends RestProvider {
 			actionBar.addAction(action.saveAndClose);
 		}
 		if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID() == session.getUser().getId()) {
-			actionBar.addAction(new Action(ActionType.LINK).caption("start_impl").url(AppConst.BASE_URL + "reports/startImplementation"));
+			actionBar.addAction(
+					new Action(ActionType.API_ACTION).caption("start_impl").url(AppConst.BASE_URL + "reports/startImplementation"));
 		}
 
 		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
@@ -269,7 +270,7 @@ public class AssignmentService extends RestProvider {
 			actionBar.addAction(new Action(ActionType.LINK).caption("report")
 					.url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
 		}
-		
+
 		if (!entity.isNew() && entity.isEditable()) {
 			actionBar.addAction(action.deleteDocument);
 		}
