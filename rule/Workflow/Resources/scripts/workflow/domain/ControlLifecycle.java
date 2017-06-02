@@ -19,26 +19,43 @@ public class ControlLifecycle {
 		this.entity = approval;
 	}
 
+	public void start() {
+		if (entity.getStatus() == ControlStatusType.DRAFT) {
+			List<AssigneeEntry> assigneeEntries = entity.getAssigneeEntries();
+			for (AssigneeEntry assignee : assigneeEntries) {
+				assignee.setResetTime(null);
+				assignee.setStatus(ControlStatusType.PROCESSING);
+				assignee.setResetInfo("");
+				assignee.setResetBy(null);
+				entity.addReader(assignee.getAssignee().getUser());
+
+			}
+			entity.setStatusTime(current);
+			entity.setStatus(ControlStatusType.PROCESSING);
+		}
+	}
+
 	public void check() {
 		if (entity.getControlType().getSchema() == ControlSchemaType.ALLOW_RESET_ON_BASIS_REPORT) {
 			List<Report> reports = entity.getReports();
 			List<AssigneeEntry> assigneeEntries = entity.getAssigneeEntries();
-			int aeCount = assigneeEntries.size();
-			int aCount = 0;
 			for (AssigneeEntry assignee : assigneeEntries) {
 				for (Report report : reports) {
-					if (assignee.getAssignee().equals(report.getAppliedAuthor())
-							&& assignee.getStatus() != ControlStatusType.COMPLETED) {
+					if (assignee.getAssignee().equals(report.getAppliedAuthor()) && assignee.getStatus() != ControlStatusType.COMPLETED) {
 						assignee.setResetTime(current);
 						assignee.setStatus(ControlStatusType.COMPLETED);
 						assignee.setResetInfo(EnvConst.APP_ID);
-						aCount++;
-					} else if (assignee.getResetTime() != null) {
-						aCount++;
 					}
 				}
 			}
-			if (aeCount == aCount) {
+			boolean isDone = true;
+			for (AssigneeEntry assignee : assigneeEntries) {
+				if (assignee.getResetTime() == null) {
+					isDone = false;
+					break;
+				}
+			}
+			if (isDone) {
 				entity.setStatus(ControlStatusType.COMPLETED);
 			}
 		} else if (entity.getControlType().getSchema() == ControlSchemaType.ALLOW_RESET_ON_BASIS_COORDINATOR_REPORT) {
@@ -67,8 +84,7 @@ public class ControlLifecycle {
 			List<AssigneeEntry> assigneeEntries = entity.getAssigneeEntries();
 			for (AssigneeEntry assignee : assigneeEntries) {
 				for (Report report : reports) {
-					if (assignee.getAssignee().equals(report.getAppliedAuthor())
-							&& assignee.getStatus() != ControlStatusType.COMPLETED) {
+					if (assignee.getAssignee().equals(report.getAppliedAuthor()) && assignee.getStatus() != ControlStatusType.COMPLETED) {
 						assignee.setResetTime(current);
 						assignee.setStatus(ControlStatusType.PENDING);
 						assignee.setResetInfo(EnvConst.APP_ID);

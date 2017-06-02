@@ -182,7 +182,8 @@ public class AssignmentService extends RestProvider {
 	private Response saveForm(Assignment dto) {
 		try {
 			AssignmentDomain domain = new AssignmentDomain(getSession());
-			Outcome outcome = domain.getOutcome(save(domain, dto, new Validation()));
+			Assignment entity = domain.fillFromDto(dto, new Validation(), getWebFormData().getFormSesId());
+			Outcome outcome = domain.getOutcome(domain.save(entity));
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -190,12 +191,6 @@ public class AssignmentService extends RestProvider {
 		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
-	}
-
-	private Assignment save(AssignmentDomain domain, Assignment dto, IValidation<Assignment> validation)
-			throws SecureException, DAOException, DTOException {
-		Assignment entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
-		return domain.save(entity);
 	}
 
 	@DELETE
@@ -221,12 +216,12 @@ public class AssignmentService extends RestProvider {
 		try {
 			_Session ses = getSession();
 			AssignmentDomain domain = new AssignmentDomain(ses);
-			Assignment entity = save(domain, dto, new ValidationToStartImpl());
-			domain.startAssignee(dto);
+			Assignment entity = domain.fillFromDto(dto, new ValidationToStartImpl(), getWebFormData().getFormSesId());
+			domain.startAssignee(entity);
 			domain.save(entity);
 
 			Outcome outcome = new Outcome();
-			outcome.addMessage("my_message");
+			outcome.addMessage("assignment_was_started_to_impl");
 			return Response.ok(outcome).build();
 
 		} catch (DTOException e) {

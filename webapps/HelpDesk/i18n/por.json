@@ -367,6 +367,7 @@
   "vehicle" : null,
   "placeholder_application_title" : null,
   "notify_about_overdued_task" : "Notificar",
+  "assignment_was_started_to_impl" : "assignment_was_started_to_impl",
   "start_date" : "Data de início",
   "my_tasks" : "As minhas tarefas",
   "authorization_was_failed" : null,

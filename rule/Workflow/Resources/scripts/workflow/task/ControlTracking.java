@@ -19,7 +19,7 @@ import workflow.dto.AssignmentViewEntry;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
-@Command(name = "control_tracking", trigger = Trigger.EVERY_HOUR)
+@Command(name = "control_tracking", trigger = Trigger.EVERY_5_MIN)
 public class ControlTracking extends Do {
 
 	@Override

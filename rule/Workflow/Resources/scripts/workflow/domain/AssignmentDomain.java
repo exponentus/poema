@@ -72,7 +72,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		entity.setStartDate(dto.getStartDate());
 		entity.setDueDate(dto.getDueDate());
 		entity.setStatus(dto.getStatus());
-		entity.setAssigneeEntries(normalizeAssigneeEntries(dto.getAssigneeEntries()));
+		entity.setAssigneeEntries(normalizeAssigneeEntries(eDao, dto.getAssigneeEntries()));
 		entity.setControlType(dto.getControlType());
 
 		if (entity.isNew()) {
@@ -95,18 +95,19 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		}
 	}
 
-	private List<AssigneeEntry> normalizeAssigneeEntries(List<AssigneeEntry> assigneeEntries) {
+	private List<AssigneeEntry> normalizeAssigneeEntries(EmployeeDAO eDao, List<AssigneeEntry> assigneeEntries) {
 		int count = 0;
 		for (AssigneeEntry entry : assigneeEntries) {
 			entry.setSort(count);
+			entry.setAssignee(eDao.findById(entry.getAssignee().getId()));
 			count++;
 		}
 		return assigneeEntries;
 	}
 
-	public void startAssignee(Assignment dto) throws DAOException {
-		Assignment entity = dao.findById(dto.getId());
-
+	public void startAssignee(Assignment entity) throws DAOException {
+		ControlLifecycle cl = new ControlLifecycle(entity);
+		cl.start();
 	}
 
 	public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {

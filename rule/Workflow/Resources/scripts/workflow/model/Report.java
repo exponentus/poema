@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -46,7 +49,6 @@ public class Report extends SecureHierarchicalEntity {
 	@Column(name = "applied_reg_date")
 	private Date appliedRegDate;
 
-	//@JsonIgnore
 	@JsonBackReference
 	@NotNull
 	@ManyToOne
@@ -60,6 +62,7 @@ public class Report extends SecureHierarchicalEntity {
 	@CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
 
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinTable(name = "wf__report_attachments", joinColumns = { @JoinColumn(name = "report_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
 					@Index(columnList = "report_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "report_id",
