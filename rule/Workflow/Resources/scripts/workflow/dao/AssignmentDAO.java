@@ -9,18 +9,36 @@ import staff.model.Employee;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.dto.AssignmentViewEntry;
 import workflow.model.Assignment;
+import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class AssignmentDAO extends DAO<Assignment, UUID> {
 
     public AssignmentDAO(_Session session) throws DAOException {
         super(Assignment.class, session);
+    }
+
+    public List<Assignment> findAllAssignmentByControlStatus(ControlStatusType statusType) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Assignment> cq = cb.createQuery(Assignment.class);
+            Root<Assignment> root = cq.from(Assignment.class);
+
+            cq.select(root).where(cb.equal(root.get("status"), statusType));
+            TypedQuery<Assignment> query = em.createQuery(cq);
+
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     public ViewPage<AssignmentViewEntry> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum,
