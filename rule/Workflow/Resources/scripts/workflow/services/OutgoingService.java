@@ -214,7 +214,7 @@ public class OutgoingService extends RestProvider {
 			OutgoingDomain domain = new OutgoingDomain(ses);
 			Outgoing entity = domain.getEntity(dto);
 			domain.acceptApprovalBlock(entity, ses.getUser());
-			domain.save(entity);
+			domain.superUpdate(entity);
 
 			Outcome outcome = domain.getOutcome(entity);
 			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
@@ -242,7 +242,7 @@ public class OutgoingService extends RestProvider {
 			OutgoingDomain domain = new OutgoingDomain(ses);
 			Outgoing entity = domain.getEntity(actionDto.getModel());
 			domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
-			domain.save(entity);
+			domain.superUpdate(entity);
 
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);

@@ -28,7 +28,7 @@ public class ApprovalLifecycle {
 		this.entity = entity;
 	}
 
-	public void start() throws ApprovalException {
+	public IApproval start() throws ApprovalException {
 		try {
 			if (entity.getStatus() != ApprovalStatusType.DRAFT) {
 				throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
@@ -80,9 +80,10 @@ public class ApprovalLifecycle {
 		} catch (Exception e) {
 			throw new ApprovalException(ApprovalExceptionType.INTERNAL_ERROR, e);
 		}
+		return entity;
 	}
 
-	public void accept(IUser<Long> user) throws ApprovalException {
+	public IApproval accept(IUser<Long> user) throws ApprovalException {
 		try {
 			Block processBlock = getCurrentBlock();
 			Approver currentApprover = processBlock.getApprover(user);
@@ -109,9 +110,10 @@ public class ApprovalLifecycle {
 		} catch (Exception e) {
 			throw new ApprovalException(ApprovalExceptionType.INTERNAL_ERROR, e);
 		}
+		return entity;
 	}
 
-	public void decline(IUser<Long> user, String decisionComment) throws ApprovalException {
+	public IApproval decline(IUser<Long> user, String decisionComment) throws ApprovalException {
 		try {
 			Block processBlock = getCurrentBlock();
 			if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {
@@ -131,7 +133,7 @@ public class ApprovalLifecycle {
 			if (entity.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
 				entity.setResult(ApprovalResultType.REJECTED);
 				entity.setStatus(ApprovalStatusType.FINISHED);
-				return;
+				return entity;
 			}
 			Date currentTime = new Date();
 			Approver nextApprover = processBlock.getNextApprover();
@@ -146,9 +148,10 @@ public class ApprovalLifecycle {
 		} catch (Exception e) {
 			throw new ApprovalException(ApprovalExceptionType.INTERNAL_ERROR, e);
 		}
+		return entity;
 	}
 
-	public void skip() throws ApprovalException {
+	public IApproval skip() throws ApprovalException {
 		try {
 			Date currentTime = new Date();
 			Block processBlock = getCurrentBlock();
@@ -171,14 +174,16 @@ public class ApprovalLifecycle {
 		} catch (Exception e) {
 			throw new ApprovalException(ApprovalExceptionType.INTERNAL_ERROR, e);
 		}
+		return entity;
 	}
 
-	public void backToRevise() throws ApprovalException {
+	public IApproval backToRevise() throws ApprovalException {
 		entity.setVersion(entity.getVersion() + 1);
 		entity.setStatus(ApprovalStatusType.DRAFT);
 		Set<Long> editors = new HashSet<Long>();
 		editors.add(entity.getAuthor().getId());
 		entity.setEditors(editors);
+		return entity;
 	}
 
 	private void next(Block processBlock, Date currentTime) throws ApprovalException {
@@ -196,8 +201,8 @@ public class ApprovalLifecycle {
 					entity.addReader(_nextApprover.getEmployee().getUser());
 				} else if (nextBlock.getType() == ApprovalType.PARALLEL) {
 
-					entity.addReaders(nextBlock.getApprovers().stream()
-							.map(approver -> approver.getEmployee().getUserID()).collect(Collectors.toList()));
+					entity.addReaders(nextBlock.getApprovers().stream().map(approver -> approver.getEmployee().getUserID())
+							.collect(Collectors.toList()));
 				} else if (nextBlock.getType() == ApprovalType.SIGNING) {
 					Approver approver = nextBlock.getNextApprover();
 					approver.setCurrent(true);
@@ -239,8 +244,7 @@ public class ApprovalLifecycle {
 			return null;
 		}
 
-		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst()
-				.orElse(null);
+		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst().orElse(null);
 	}
 
 	public static Block getProcessingBlock(IApproval entity) {
@@ -252,8 +256,7 @@ public class ApprovalLifecycle {
 			return null;
 		}
 
-		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst()
-				.orElse(null);
+		return entity.getBlocks().stream().filter(block -> block.getStatus() == ApprovalStatusType.PENDING).findFirst().orElse(null);
 	}
 
 	public static List<Approver> getCurrentApprovers(Block block) {

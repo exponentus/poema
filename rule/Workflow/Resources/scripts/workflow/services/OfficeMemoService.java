@@ -2,15 +2,12 @@ package workflow.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,11 +15,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
@@ -53,7 +50,7 @@ import workflow.ui.ActionFactory;
 
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
-public class OfficeMemoService extends RestProvider {
+public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomain> {
 
 	private ActionFactory action = new ActionFactory();
 
@@ -117,23 +114,8 @@ public class OfficeMemoService extends RestProvider {
 		}
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-
-	public Response add(OfficeMemo dto) {
-		dto.setId(null);
-		return saveForm(dto);
-	}
-
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, OfficeMemo dto) {
-		dto.setId(UUID.fromString(id));
-		return saveForm(dto);
-	}
-
-	private Response saveForm(OfficeMemo dto) {
+	@Override
+	public Response saveForm(OfficeMemo dto) {
 		try {
 			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
 			OfficeMemo entity = omd.fillFromDto(dto, new ValidationToSaveAsDraft(), getWebFormData().getFormSesId());
@@ -177,13 +159,6 @@ public class OfficeMemoService extends RestProvider {
 		}
 	}
 
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
-	}
-
 	@POST
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
@@ -209,14 +184,13 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Path("action/acceptApprovalBlock")
-
 	public Response acceptApprovalBlock(OfficeMemo dto) {
 		try {
 			_Session ses = getSession();
 			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
 			OfficeMemo entity = domain.getEntity(dto);
 			domain.acceptApprovalBlock(entity, ses.getUser());
-			domain.save(entity);
+			domain.superUpdate(entity);
 
 			Outcome outcome = domain.getOutcome(entity);
 			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
@@ -238,14 +212,13 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Path("action/declineApprovalBlock")
-
 	public Response declineApprovalBlock(DeclineApprovalBlockAction<OfficeMemo> actionDto) {
 		try {
 			_Session ses = getSession();
 			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
 			OfficeMemo entity = domain.getEntity(actionDto.getModel());
 			domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
-			domain.save(entity);
+			domain.superUpdate(entity);
 
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
@@ -256,6 +229,15 @@ public class OfficeMemoService extends RestProvider {
 			}
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
+
+			if (entity.getStatus() == ApprovalStatusType.FINISHED && entity.getResult() == ApprovalResultType.REJECTED) {
+				if (entity.isVersionsSupport()) {
+					domain.generateNewVersion(entity);
+				} else {
+					entity = domain.backToRevise(entity);
+					domain.superUpdate(entity);
+				}
+			}
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {

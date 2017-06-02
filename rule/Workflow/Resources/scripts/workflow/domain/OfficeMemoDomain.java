@@ -45,19 +45,6 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 	}
 
 	@Override
-	public OfficeMemo getEntity(OfficeMemo dto) throws DAOException {
-
-		OfficeMemo entity;
-
-		if (dto.isNew()) {
-			entity = new OfficeMemo();
-		} else {
-			entity = dao.findById(dto.getId());
-		}
-		return entity;
-	}
-
-	@Override
 	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid) throws DTOException, DAOException {
 		validation.check(dto);
 
@@ -129,6 +116,17 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 	public void skipApprovalBlock(OfficeMemo om) throws ApprovalException {
 		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
 		lifecycle.skip();
+	}
+
+	public void generateNewVersion(OfficeMemo entity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public OfficeMemo backToRevise(OfficeMemo entity) throws ApprovalException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
+		return (OfficeMemo) lifecycle.backToRevise();
+
 	}
 
 	public boolean canCreateAssignment(OfficeMemo entity, User user) {
