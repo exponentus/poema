@@ -25,6 +25,7 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 
 public class OfficeMemoDomain extends DTOService<OfficeMemo> {
@@ -44,8 +45,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 	}
 
 	@Override
-	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid)
-			throws DTOException, DAOException {
+	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid) throws DTOException, DAOException {
 		validation.check(dto);
 
 		OfficeMemo entity;
@@ -61,7 +61,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
 		entity.setRecipient(dto.getRecipient());
-		entity.setBlocks(dto.getBlocks());
+		entity.setBlocks(normalizeBlocks(dto.getBlocks()));
 		entity.setSchema(dto.getSchema());
 
 		List<Observer> observers = new ArrayList<Observer>();
@@ -80,6 +80,20 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
 		calculateReadersEditors(entity);
 		return entity;
+	}
+
+	private List<Block> normalizeBlocks(List<Block> blocks) {
+		int count = 0;
+		for (Block entry : blocks) {
+			entry.setSort(count);
+			count++;
+			int nestedCount = 0;
+			for (Approver nestedEntry : entry.getApprovers()) {
+				nestedEntry.setSort(nestedCount);
+				nestedCount++;
+			}
+		}
+		return blocks;
 	}
 
 	public boolean approvalCanBeStarted(OfficeMemo om) {
