@@ -55,7 +55,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
 		entity.setRecipient(dto.getRecipient());
-		entity.setBlocks(normalizeBlocks(dto.getBlocks()));
+		entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
 		entity.setSchema(dto.getSchema());
 
 		List<Observer> observers = new ArrayList<Observer>();
@@ -76,7 +76,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		return entity;
 	}
 
-	private List<Block> normalizeBlocks(List<Block> blocks) {
+	private List<Block> normalizeBlocks(EmployeeDAO eDao, List<Block> blocks) {
 		int count = 0;
 		for (Block entry : blocks) {
 			entry.setSort(count);
@@ -84,6 +84,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 			int nestedCount = 0;
 			for (Approver nestedEntry : entry.getApprovers()) {
 				nestedEntry.setSort(nestedCount);
+				nestedEntry.setEmployee(eDao.findById(nestedEntry.getEmployee().getId()));
 				nestedCount++;
 			}
 		}

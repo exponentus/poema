@@ -72,7 +72,7 @@ public class ApprovalLifecycle {
 			block.setStatus(ApprovalStatusType.PENDING);
 
 			entity.getBlocks().forEach(b -> {
-				if (!block.getId().equals(b.getId())) {
+				if (b.getStatus() != ApprovalStatusType.PENDING) {
 					b.setStatus(ApprovalStatusType.AWAITING);
 				}
 			});

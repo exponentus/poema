@@ -117,6 +117,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
 			for (AssigneeEntry entry : assigneeEntities) {
 				if (dtoEntry.getAssignee().equals(entry.getAssignee())) {
 					entry.setResetBy(resetEmployee);
+					entry.setStatus(ControlStatusType.COMPLETED);
 					entry.setResetTime(new Date());
 				}
 			}
