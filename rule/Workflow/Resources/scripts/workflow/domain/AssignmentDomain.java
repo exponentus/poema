@@ -108,6 +108,11 @@ public class AssignmentDomain extends DTOService<Assignment> {
 		return assigneeEntries;
 	}
 
+	public void startAssignee(Assignment dto) throws DAOException {
+		Assignment entity = dao.findById(dto.getId());
+
+	}
+
 	public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {
 		List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
 		List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
@@ -150,4 +155,5 @@ public class AssignmentDomain extends DTOService<Assignment> {
 
 		return outcome;
 	}
+
 }

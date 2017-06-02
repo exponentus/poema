@@ -1,6 +1,7 @@
 package workflow.services;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
@@ -42,6 +43,7 @@ import workflow.init.AppConst;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
+import workflow.model.embedded.AssigneeEntry;
 import workflow.ui.ActionFactory;
 
 @Path("assignments")
@@ -178,7 +180,7 @@ public class AssignmentService extends RestProvider {
 	private Response saveForm(Assignment dto) {
 		try {
 			AssignmentDomain domain = new AssignmentDomain(getSession());
-			Outcome outcome = domain.getOutcome(save(dto, new Validation()));
+			Outcome outcome = domain.getOutcome(save(domain, dto, new Validation()));
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -188,10 +190,9 @@ public class AssignmentService extends RestProvider {
 		}
 	}
 
-	private Assignment save(Assignment dto, IValidation<Assignment> validation) throws SecureException, DAOException, DTOException {
-		AssignmentDomain domain = new AssignmentDomain(getSession());
+	private Assignment save(AssignmentDomain domain, Assignment dto, IValidation<Assignment> validation)
+			throws SecureException, DAOException, DTOException {
 		Assignment entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
-
 		return domain.save(entity);
 	}
 
@@ -216,15 +217,15 @@ public class AssignmentService extends RestProvider {
 	public Response startImplementation(Assignment dto) {
 		try {
 			_Session ses = getSession();
-			AssignmentDAO dao = new AssignmentDAO(ses);
-			Assignment entity = dao.findById(dto.getId());
 			AssignmentDomain domain = new AssignmentDomain(ses);
-
-			//domain.startAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
-
-			dao.update(entity, false);
+			Assignment entity = save(domain, dto, new ValidationToStartImpl());
+			domain.startAssignee(dto);
+			domain.save(entity);
 
 			return Response.ok(new Outcome()).build();
+
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
@@ -276,6 +277,25 @@ public class AssignmentService extends RestProvider {
 		}
 
 		return actionBar;
+	}
+
+	private class ValidationToStartImpl extends Validation {
+
+		@Override
+		public void check(Assignment dto) throws DTOException {
+			super.check(dto);
+			DTOException e = new DTOException();
+
+			List<AssigneeEntry> entries = dto.getAssigneeEntries();
+			if (entries.size() == 0) {
+				e.addError("assigneeEntries", "required", "field_is_empty");
+			}
+
+			if (e.hasError()) {
+				throw e;
+			}
+		}
+
 	}
 
 	private class Validation implements IValidation<Assignment> {
