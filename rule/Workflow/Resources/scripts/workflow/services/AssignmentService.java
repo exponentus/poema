@@ -51,6 +51,8 @@ import workflow.ui.ActionFactory;
 public class AssignmentService extends RestProvider {
 
 	private ActionFactory action = new ActionFactory();
+	private final static Action startImplementation = new Action(ActionType.API_ACTION).id("startImplementation").caption("start_impl")
+			.url("startImplementation");
 
 	@GET
 	@Path("my")
@@ -198,6 +200,7 @@ public class AssignmentService extends RestProvider {
 
 	@DELETE
 	@Path("{id}")
+
 	public Response delete(@PathParam("id") String id) {
 		try {
 			_Session ses = getSession();
@@ -222,7 +225,9 @@ public class AssignmentService extends RestProvider {
 			domain.startAssignee(dto);
 			domain.save(entity);
 
-			return Response.ok(new Outcome()).build();
+			Outcome outcome = new Outcome();
+			outcome.addMessage("my_message");
+			return Response.ok(outcome).build();
 
 		} catch (DTOException e) {
 			return responseValidationError(e);
@@ -257,9 +262,8 @@ public class AssignmentService extends RestProvider {
 		if (entity.isNew() || entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
-		if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID() == session.getUser().getId()) {
-			actionBar.addAction(
-					new Action(ActionType.API_ACTION).caption("start_impl").url(AppConst.BASE_URL + "reports/startImplementation"));
+		if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
+			actionBar.addAction(startImplementation);
 		}
 
 		if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
@@ -321,8 +325,6 @@ public class AssignmentService extends RestProvider {
 			if (ve.hasError()) {
 				throw ve;
 			}
-
 		}
-
 	}
 }

@@ -3,11 +3,11 @@ package workflow.dao;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.dataengine.jpa.ViewPage;
-import workflow.dto.IDTO;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import workflow.dao.filter.IncomingFilter;
 import workflow.dto.AssignmentViewEntry;
+import workflow.dto.IDTO;
 import workflow.dto.IncomingViewEntry;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
@@ -109,18 +109,18 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
             ViewPage<IncomingViewEntry> vp = new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
-//            if (vp.getResult().isEmpty()) {
-//                return vp;
-//            }
-//
-//            for (IncomingViewEntry inve : vp.getResult()) {
-//                Incoming incoming = em.getReference(Incoming.class, inve.id);
-//                List<IDTO> responses = findIncomingResponses(incoming, em);
-//                if (responses != null && responses.size() > 0) {
-//                    inve.setResponsesCount((long) responses.size());
-//                    inve.setResponses(responses);
-//                }
-//            }
+            if (vp.getResult().isEmpty()) {
+                return vp;
+            }
+
+            for (IncomingViewEntry inve : vp.getResult()) {
+                Incoming incoming = em.getReference(Incoming.class, inve.id);
+                List<IDTO> responses = findIncomingResponses(incoming, em);
+                if (responses != null && responses.size() > 0) {
+                    inve.setResponsesCount((long) responses.size());
+                    inve.setResponses(responses);
+                }
+            }
 
             return vp;
         } finally {
@@ -156,7 +156,6 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 
         TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
         List<AssignmentViewEntry> assignments = typedQuery.getResultList();
-        // return new ArrayList<>(assignments);
 
         if (assignments.size() > 0) {
             for (AssignmentViewEntry ave : assignments) {

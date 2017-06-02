@@ -23,10 +23,6 @@ import workflow.model.embedded.AssigneeEntry;
 
 public class AssignmentDomain extends DTOService<Assignment> {
 
-	enum permissions {
-		RESET_ASSIGNEE
-	}
-
 	public AssignmentDomain(_Session session) throws DAOException {
 		super(session);
 		dao = new AssignmentDAO(ses);
@@ -155,5 +151,4 @@ public class AssignmentDomain extends DTOService<Assignment> {
 
 		return outcome;
 	}
-
 }
