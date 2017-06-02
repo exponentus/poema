@@ -1,17 +1,10 @@
 package workflow.services;
 
-import java.util.UUID;
-
-import com.exponentus.common.domain.IDTOService;
-import com.exponentus.common.domain.IValidation;
-import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.exception.SecureException;
+import com.exponentus.common.domain.IDTODomain;
 import com.exponentus.rest.RestProvider;
-import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.IAppEntity;
 
-public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDTOService<T>> extends RestProvider {
+import workflow.model.embedded.IApproval;
 
-	protected abstract T save(T dto, IValidation<T> validation) throws SecureException, DAOException, DTOException;
+public abstract class ApprovalService<T extends IApproval, D extends IDTODomain<T>> extends RestProvider {
 
 }

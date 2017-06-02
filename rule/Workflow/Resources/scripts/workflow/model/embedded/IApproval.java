@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.user.IUser;
 
 import reference.model.constants.ApprovalSchemaType;
@@ -11,11 +12,7 @@ import staff.model.Employee;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 
-public interface IApproval {
-
-	UUID getId();
-
-	IUser<Long> getAuthor();
+public interface IApproval extends IAppEntity<UUID> {
 
 	String getURL();
 

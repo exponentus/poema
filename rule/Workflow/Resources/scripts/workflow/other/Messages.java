@@ -22,7 +22,6 @@ import workflow.domain.exception.ApprovalException;
 import workflow.domain.exception.ApprovalExceptionType;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
-import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
@@ -50,8 +49,7 @@ public class Messages {
 		memo.addVar("title", rez.getTitle());
 		memo.addVar("author", rez.getAuthor().getUserName());
 
-		memo.addVar("url",
-				Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + rez.getURL() + "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + rez.getURL() + "&lang=" + lang);
 
 		for (AssigneeEntry entry : rez.getAssigneeEntries()) {
 
@@ -67,8 +65,7 @@ public class Messages {
 					String slackAddr = user.getSlack();
 					if (slackAddr != null && !slackAddr.equals("")) {
 						SlackAgent sa = new SlackAgent(NOTIFY_ASSIGNEE_TEMPLATE);
-						String template = appEnv.templates.getTemplate(MessagingType.SLACK, NOTIFY_ASSIGNEE_TEMPLATE,
-								lang);
+						String template = appEnv.templates.getTemplate(MessagingType.SLACK, NOTIFY_ASSIGNEE_TEMPLATE, lang);
 						if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 							return;
 						}
@@ -77,8 +74,8 @@ public class Messages {
 					List<String> recipients = new ArrayList<>();
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent(NOTIFY_ASSIGNEE_TEMPLATE);
-					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ASSIGNEE_TEMPLATE, lang), memo.getBody(
-							appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ASSIGNEE_TEMPLATE, lang)));
+					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ASSIGNEE_TEMPLATE, lang),
+							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ASSIGNEE_TEMPLATE, lang)));
 				} catch (MsgException e) {
 					logger.exception(e);
 				}
@@ -101,16 +98,14 @@ public class Messages {
 		memo.addVar("title", incoming.getTitle());
 		memo.addVar("author", incoming.getAuthor().getUserName());
 
-		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + incoming.getURL()
-				+ "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + incoming.getURL() + "&lang=" + lang);
 
 		if (user != null) {
 			try {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent(NOTIFY_ADDRESSEE_TEMPLATE);
-					String template = appEnv.templates.getTemplate(MessagingType.SLACK, NOTIFY_ADDRESSEE_TEMPLATE,
-							lang);
+					String template = appEnv.templates.getTemplate(MessagingType.SLACK, NOTIFY_ADDRESSEE_TEMPLATE, lang);
 					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 						return;
 					}
@@ -119,8 +114,8 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(user.getEmail());
 				MailAgent ma = new MailAgent(NOTIFY_ADDRESSEE_TEMPLATE);
-				ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ADDRESSEE_TEMPLATE, lang), memo
-						.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ADDRESSEE_TEMPLATE, lang)));
+				ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ADDRESSEE_TEMPLATE, lang),
+						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ADDRESSEE_TEMPLATE, lang)));
 			} catch (MsgException e) {
 				logger.exception(e);
 			}
@@ -166,16 +161,14 @@ public class Messages {
 			memo.addVar("author", approval.getAuthor().getUserName());
 			memo.addVar("result", appEnv.vocabulary.getWord(approval.getResult().name(), lang));
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL()
-					+ "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				try {
 					String slackAddr = user.getSlack();
 					if (slackAddr != null && !slackAddr.equals("")) {
 						SlackAgent sa = new SlackAgent(NOTIFY_PROJECT_AUTHOR_TEMPLATE);
-						String template = appEnv.templates.getTemplate(MessagingType.SLACK,
-								NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang);
+						String template = appEnv.templates.getTemplate(MessagingType.SLACK, NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang);
 						if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
 							return;
 						}
@@ -185,8 +178,7 @@ public class Messages {
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent(NOTIFY_PROJECT_AUTHOR_TEMPLATE);
 					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang),
-							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL,
-									NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang)));
+							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang)));
 				} catch (MsgException e) {
 					logger.exception(e);
 				}
@@ -217,8 +209,7 @@ public class Messages {
 
 	}
 
-	private void sendToApprover(IApproval approval, Approver currentApprover, String title, String templateName)
-			throws MsgException {
+	private void sendToApprover(IApproval approval, Approver currentApprover, String title, String templateName) throws MsgException {
 		User user = null;
 
 		Memo memo = new Memo();
@@ -233,8 +224,7 @@ public class Messages {
 
 		}
 
-		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL()
-				+ "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 
 		if (user != null) {
 			String slackAddr = user.getSlack();
@@ -254,12 +244,12 @@ public class Messages {
 		}
 	}
 
-	public void notifyOfAccepting(OfficeMemo entity, String title) {
+	public void notifyOfAccepting(IApproval entity, String title) {
 		Lg.debug("----notify simulation about accepting a document----");
 
 	}
 
-	public void notifyOfRejecting(OfficeMemo entity, String title) {
+	public void notifyOfRejecting(IApproval entity, String title) {
 		Lg.debug("----notify simulation about rejecting a document----");
 
 	}
