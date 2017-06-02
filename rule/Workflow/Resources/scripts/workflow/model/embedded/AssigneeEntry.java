@@ -1,21 +1,15 @@
 package workflow.model.embedded;
 
-import java.util.Date;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
-
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.UUID;
 
 //@JsonRootName("assigneeEntry")
 //@Entity
@@ -24,85 +18,89 @@ import workflow.model.constants.converter.ControlStatusTypeConverter;
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
 public class AssigneeEntry { // extends SimpleAppEntity {
 
-	@Column(name = "is_coordinator")
-	private boolean isCoordinator;
+    @Column(name = "is_coordinator")
+    private boolean isCoordinator;
 
-	@Convert("emp_conv")
-	@Column(name = "assignee")
-	@Basic(fetch = FetchType.LAZY, optional = false)
-	private Employee assignee;
+    @Convert("emp_conv")
+    @Column(name = "assignee")
+    @Basic(fetch = FetchType.LAZY, optional = false)
+    private Employee assignee;
 
-	@javax.persistence.Convert(converter = ControlStatusTypeConverter.class)
-	private ControlStatusType status = ControlStatusType.OPEN;
+    @javax.persistence.Convert(converter = ControlStatusTypeConverter.class)
+    private ControlStatusType status = ControlStatusType.OPEN;
 
-	@Convert("emp_conv")
-	@Basic(fetch = FetchType.LAZY, optional = true)
-	@Column(name = "reset_by")
-	private Employee resetBy;
+    @Convert("emp_conv")
+    @Basic(fetch = FetchType.LAZY, optional = true)
+    @Column(name = "reset_by")
+    private Employee resetBy;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "reset_time")
-	private Date resetTime;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "reset_time")
+    private Date resetTime;
 
-	@Column(name = "reset_info")
-	private String resetInfo;
+    @Column(name = "reset_info")
+    private String resetInfo;
 
-	private int sort;
+    private int sort;
 
-	public boolean isCoordinator() {
-		return isCoordinator;
-	}
+    // для манипуляций списком
+    public UUID getId() {
+        return UUID.randomUUID();
+    }
 
-	public void setCoordinator(boolean isCoordinator) {
-		this.isCoordinator = isCoordinator;
-	}
+    public boolean isCoordinator() {
+        return isCoordinator;
+    }
 
-	public Employee getAssignee() {
-		//return (Employee) Environment.getExtUserDAO().getEmployee(assignee.getId());
-		return assignee;
-	}
+    public void setCoordinator(boolean isCoordinator) {
+        this.isCoordinator = isCoordinator;
+    }
 
-	public void setAssignee(Employee assignee) {
-		this.assignee = assignee;
-	}
+    public Employee getAssignee() {
+        return assignee;
+    }
 
-	public ControlStatusType getStatus() {
-		return status;
-	}
+    public void setAssignee(Employee assignee) {
+        this.assignee = assignee;
+    }
 
-	public void setStatus(ControlStatusType status) {
-		this.status = status;
-	}
+    public ControlStatusType getStatus() {
+        return status;
+    }
 
-	public Employee getResetBy() {
-		return resetBy;
-	}
+    public void setStatus(ControlStatusType status) {
+        this.status = status;
+    }
 
-	public void setResetBy(Employee resetBy) {
-		this.resetBy = resetBy;
-	}
+    public Employee getResetBy() {
+        return resetBy;
+    }
 
-	public Date getResetTime() {
-		return resetTime;
-	}
+    public void setResetBy(Employee resetBy) {
+        this.resetBy = resetBy;
+    }
 
-	public void setResetTime(Date resetTime) {
-		this.resetTime = resetTime;
-	}
+    public Date getResetTime() {
+        return resetTime;
+    }
 
-	public String getResetInfo() {
-		return resetInfo;
-	}
+    public void setResetTime(Date resetTime) {
+        this.resetTime = resetTime;
+    }
 
-	public void setResetInfo(String resetInfo) {
-		this.resetInfo = resetInfo;
-	}
+    public String getResetInfo() {
+        return resetInfo;
+    }
 
-	public int getSort() {
-		return sort;
-	}
+    public void setResetInfo(String resetInfo) {
+        this.resetInfo = resetInfo;
+    }
 
-	public void setSort(int sort) {
-		this.sort = sort;
-	}
+    public int getSort() {
+        return sort;
+    }
+
+    public void setSort(int sort) {
+        this.sort = sort;
+    }
 }
