@@ -138,7 +138,6 @@ public class OfficeMemoService extends RestProvider {
 			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
 			OfficeMemo entity = omd.fillFromDto(dto, new ValidationToSaveAsDraft(), getWebFormData().getFormSesId());
 			Outcome outcome = omd.getOutcome(omd.save(entity));
-
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
 			return responseValidationError(e);
@@ -194,13 +193,11 @@ public class OfficeMemoService extends RestProvider {
 			OfficeMemo entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
 			domain.startApproving(entity);
 			domain.save(entity);
-
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("approving_started");
 			outcome.setMessage("approving_started");
 			outcome.addPayload("result", "approving_started");
-
 			return Response.ok(outcome).build();
 
 		} catch (DTOException e) {
@@ -212,6 +209,7 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Path("action/acceptApprovalBlock")
+
 	public Response acceptApprovalBlock(OfficeMemo dto) {
 		try {
 			_Session ses = getSession();
@@ -228,7 +226,7 @@ public class OfficeMemoService extends RestProvider {
 			}
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			outcome.setTitle("acceptApprovalBlock");
-			outcome.setMessage("acceptApprovalBlock");
+			outcome.setMessage("approval_block_accepted");
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -240,6 +238,7 @@ public class OfficeMemoService extends RestProvider {
 
 	@POST
 	@Path("action/declineApprovalBlock")
+
 	public Response declineApprovalBlock(DeclineApprovalBlockAction<OfficeMemo> actionDto) {
 		try {
 			_Session ses = getSession();

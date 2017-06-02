@@ -201,8 +201,7 @@ public class OutgoingService extends RestProvider {
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = omd.getOutcome(entity);
             outcome.setTitle("approving_started");
-            outcome.setMessage("approving_started");
-            outcome.addPayload("result", "approving_started");
+            outcome.setMessage("approving_start_successful");
 
             return Response.ok(outcome).build();
 
@@ -229,7 +228,7 @@ public class OutgoingService extends RestProvider {
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("acceptApprovalBlock");
-            outcome.setMessage("acceptApprovalBlock");
+            outcome.setMessage("approval_block_accepted");
 
             return Response.ok(outcome).build();
         } catch (DAOException | SecureException | ApprovalException e) {
@@ -252,7 +251,7 @@ public class OutgoingService extends RestProvider {
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("declineApprovalBlock");
-            outcome.setMessage("declineApprovalBlock");
+            outcome.setMessage("approval_block_declined");
 
             return Response.ok(outcome).build();
         } catch (DAOException | SecureException | ApprovalException e) {

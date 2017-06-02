@@ -32,9 +32,7 @@ public class ExpiredTracking extends Do {
 			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new AssignmentDAO(session);
-				AssignmentFilter filter = new AssignmentFilter();
-				filter.setControlStatusType(ControlStatusType.PROCESSING);
-				//processTask(appEnv, tDao.findViewPage(filter, new SortParams(), 0, 0).getResult(), session);
+				//processTask(appEnv, tDao.findAllAssignmentByControlStatus(ControlStatusType.PROCESSING), session);
 			} else {
 				logger.warning("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
 			}
