@@ -136,7 +136,8 @@ public class OfficeMemoService extends RestProvider {
 	private Response saveForm(OfficeMemo dto) {
 		try {
 			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
-			Outcome outcome = omd.getOutcome(save(omd, dto, new ValidationToSaveAsDraft()));
+			OfficeMemo entity = omd.fillFromDto(dto, new ValidationToSaveAsDraft(), getWebFormData().getFormSesId());
+			Outcome outcome = omd.getOutcome(omd.save(entity));
 
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
@@ -144,12 +145,6 @@ public class OfficeMemoService extends RestProvider {
 		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
-	}
-
-	private OfficeMemo save(OfficeMemoDomain domain, OfficeMemo dto, IValidation<OfficeMemo> validation)
-			throws SecureException, DAOException, DTOException {
-		OfficeMemo entity = domain.fillFromDto(dto, validation, getWebFormData().getFormSesId());
-		return domain.save(entity);
 	}
 
 	@DELETE
@@ -193,24 +188,15 @@ public class OfficeMemoService extends RestProvider {
 	@POST
 	@Path("action/startApproving")
 	public Response startApproving(OfficeMemo dto) {
-
-		OfficeMemo om = null;
 		_Session ses = getSession();
 		try {
-			OfficeMemoDomain omd = new OfficeMemoDomain(ses);
+			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
+			OfficeMemo entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
+			domain.startApproving(entity);
+			domain.save(entity);
 
-			UUID id = dto.getId();
-			if (dto.isNew()) {
-				id = save(omd, dto, new ValidationToStartApprove()).getId();
-			}
-			OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-			om = officeMemoDAO.findById(id);
-
-			omd.startApproving(om);
-			officeMemoDAO.update(om, false);
-
-			new Messages(getAppEnv()).notifyApprovers(om, om.getTitle());
-			Outcome outcome = omd.getOutcome(om);
+			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
 			outcome.setTitle("approving_started");
 			outcome.setMessage("approving_started");
 			outcome.addPayload("result", "approving_started");
@@ -229,13 +215,10 @@ public class OfficeMemoService extends RestProvider {
 	public Response acceptApprovalBlock(OfficeMemo dto) {
 		try {
 			_Session ses = getSession();
-			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-			OfficeMemo entity = dao.findById(dto.getId());
 			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
-
+			OfficeMemo entity = domain.getEntity(dto);
 			domain.acceptApprovalBlock(entity, ses.getUser());
-
-			dao.update(entity, false);
+			domain.save(entity);
 
 			Outcome outcome = domain.getOutcome(entity);
 			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
@@ -248,6 +231,8 @@ public class OfficeMemoService extends RestProvider {
 			outcome.setMessage("acceptApprovalBlock");
 
 			return Response.ok(outcome).build();
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}
@@ -258,13 +243,11 @@ public class OfficeMemoService extends RestProvider {
 	public Response declineApprovalBlock(DeclineApprovalBlockAction<OfficeMemo> actionDto) {
 		try {
 			_Session ses = getSession();
-			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-			OfficeMemo entity = dao.findById(actionDto.getModel().getId());
 			OfficeMemoDomain domain = new OfficeMemoDomain(ses);
-
+			OfficeMemo entity = domain.getEntity(actionDto.getModel());
 			domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
+			domain.save(entity);
 
-			dao.update(entity, false);
 			new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
 			Outcome outcome = domain.getOutcome(entity);
 			if (entity.getStatus() == ApprovalStatusType.FINISHED) {
@@ -276,6 +259,8 @@ public class OfficeMemoService extends RestProvider {
 			outcome.setMessage("declineApprovalBlock");
 
 			return Response.ok(outcome).build();
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		} catch (DAOException | SecureException | ApprovalException e) {
 			return responseException(e);
 		}

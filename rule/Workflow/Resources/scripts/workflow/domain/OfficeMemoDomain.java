@@ -45,8 +45,7 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 	}
 
 	@Override
-	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid) throws DTOException, DAOException {
-		validation.check(dto);
+	public OfficeMemo getEntity(OfficeMemo dto) throws DAOException {
 
 		OfficeMemo entity;
 
@@ -55,6 +54,14 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		} else {
 			entity = dao.findById(dto.getId());
 		}
+		return entity;
+	}
+
+	@Override
+	public OfficeMemo fillFromDto(OfficeMemo dto, IValidation<OfficeMemo> validation, String fsid) throws DTOException, DAOException {
+		validation.check(dto);
+
+		OfficeMemo entity = getEntity(dto);
 		EmployeeDAO eDao = new EmployeeDAO(ses);
 		entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
 		entity.setAppliedRegDate(dto.getAppliedRegDate());
@@ -100,8 +107,8 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		return om.getStatus() == ApprovalStatusType.DRAFT;
 	}
 
-	public void startApproving(OfficeMemo om) throws ApprovalException, DTOException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
+	public void startApproving(OfficeMemo entity) throws ApprovalException, DTOException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
 		lifecycle.start();
 	}
 

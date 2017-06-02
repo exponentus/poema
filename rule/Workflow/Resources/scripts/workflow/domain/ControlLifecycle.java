@@ -56,6 +56,7 @@ public class ControlLifecycle {
 				}
 			}
 			if (isDone) {
+				entity.setStatusTime(current);
 				entity.setStatus(ControlStatusType.COMPLETED);
 			}
 		} else if (entity.getControlType().getSchema() == ControlSchemaType.ALLOW_RESET_ON_BASIS_COORDINATOR_REPORT) {
