@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.exponentus.common.domain.DTOService;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
@@ -15,20 +14,17 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
-import com.exponentus.user.IUser;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalSchemaType;
 import staff.dao.EmployeeDAO;
-import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
-import workflow.domain.exception.ApprovalException;
 import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
-public class OutgoingDomain extends DTOService<Outgoing> {
+public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
 	public OutgoingDomain(_Session session) throws DAOException {
 		super(session);
@@ -42,16 +38,10 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 	}
 
 	@Override
-	public Outgoing fillFromDto(Outgoing dto, IValidation<Outgoing> validation, String fsid)
-			throws DTOException, DAOException {
+	public Outgoing fillFromDto(Outgoing dto, IValidation<Outgoing> validation, String fsid) throws DTOException, DAOException {
 		validation.check(dto);
 
-		Outgoing entity;
-		if (dto.isNew()) {
-			entity = new Outgoing();
-		} else {
-			entity = dao.findById(dto.getId());
-		}
+		Outgoing entity = getEntity(dto);
 		EmployeeDAO eDao = new EmployeeDAO(ses);
 		entity.setAppliedRegDate(dto.getAppliedRegDate());
 		entity.setTitle(dto.getTitle());
@@ -61,7 +51,7 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 		entity.setRecipient(dto.getRecipient());
 		entity.setBody(dto.getBody());
 		entity.setRecipient(dto.getRecipient());
-		entity.setBlocks(dto.getBlocks());
+		entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
 		entity.setSchema(dto.getSchema());
 		if (entity.getSchema() == ApprovalSchemaType.WITHOUT_APPROVAL) {
 			entity.setStatus(ApprovalStatusType.FINISHED);
@@ -99,35 +89,6 @@ public class OutgoingDomain extends DTOService<Outgoing> {
 				entity.addReader(observer.getEmployee().getUserID());
 			}
 		}
-	}
-
-	public boolean approvalCanBeStarted(Outgoing outgoing) {
-		return outgoing.getStatus() == ApprovalStatusType.DRAFT;
-	}
-
-	public void startApproving(Outgoing outgoing) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(outgoing);
-		lifecycle.start();
-	}
-
-	public boolean employeeCanDoDecisionApproval(Outgoing outgoing, Employee employee) {
-		return outgoing.userCanDoDecision(employee);
-	}
-
-	public void acceptApprovalBlock(Outgoing outgoing, IUser<Long> user) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(outgoing);
-		lifecycle.accept(user);
-	}
-
-	public void declineApprovalBlock(Outgoing outgoing, IUser<Long> user, String decisionComment)
-			throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(outgoing);
-		lifecycle.decline(user, decisionComment);
-	}
-
-	public void skipApprovalBlock(Outgoing outgoing) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(outgoing);
-		lifecycle.skip();
 	}
 
 	@Override

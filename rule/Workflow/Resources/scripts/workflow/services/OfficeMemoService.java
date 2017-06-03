@@ -232,8 +232,6 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 
 			if (entity.getStatus() == ApprovalStatusType.FINISHED && entity.getResult() == ApprovalResultType.REJECTED) {
 				if (entity.isVersionsSupport()) {
-					domain.generateNewVersion(entity);
-				} else {
 					entity = domain.backToRevise(entity);
 					domain.superUpdate(entity);
 				}

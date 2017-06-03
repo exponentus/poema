@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.exponentus.common.domain.DTOService;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
@@ -15,7 +14,6 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
-import com.exponentus.user.IUser;
 
 import administrator.model.User;
 import staff.dao.EmployeeDAO;
@@ -25,10 +23,9 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 
-public class OfficeMemoDomain extends DTOService<OfficeMemo> {
+public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
 	public OfficeMemoDomain(_Session ses) throws DAOException {
 		super(ses);
@@ -74,54 +71,6 @@ public class OfficeMemoDomain extends DTOService<OfficeMemo> {
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
 		calculateReadersEditors(entity);
 		return entity;
-	}
-
-	private List<Block> normalizeBlocks(EmployeeDAO eDao, List<Block> blocks) {
-		int count = 0;
-		for (Block entry : blocks) {
-			entry.setSort(count);
-			count++;
-			int nestedCount = 0;
-			for (Approver nestedEntry : entry.getApprovers()) {
-				nestedEntry.setSort(nestedCount);
-				nestedEntry.setEmployee(eDao.findById(nestedEntry.getEmployee().getId()));
-				nestedCount++;
-			}
-		}
-		return blocks;
-	}
-
-	public boolean approvalCanBeStarted(OfficeMemo om) {
-		return om.getStatus() == ApprovalStatusType.DRAFT;
-	}
-
-	public void startApproving(OfficeMemo entity) throws ApprovalException, DTOException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
-		lifecycle.start();
-	}
-
-	public boolean employeeCanDoDecisionApproval(OfficeMemo om, Employee employee) {
-		return om.userCanDoDecision(employee);
-	}
-
-	public void acceptApprovalBlock(OfficeMemo om, IUser<Long> user) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-		lifecycle.accept(user);
-	}
-
-	public void declineApprovalBlock(OfficeMemo om, IUser<Long> user, String decisionComment) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-		lifecycle.decline(user, decisionComment);
-	}
-
-	public void skipApprovalBlock(OfficeMemo om) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(om);
-		lifecycle.skip();
-	}
-
-	public void generateNewVersion(OfficeMemo entity) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public OfficeMemo backToRevise(OfficeMemo entity) throws ApprovalException {

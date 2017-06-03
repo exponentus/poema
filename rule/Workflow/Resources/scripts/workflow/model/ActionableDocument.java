@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -65,6 +66,10 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 
 	@OneToMany
 	private List<Assignment> assignments;
+
+	@FTSearchable
+	@Column(columnDefinition = "TEXT")
+	private String body;
 
 	@Override
 	public List<Assignment> getAssignments() {
@@ -155,8 +160,9 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
 					return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
 				} else if (block.getType() == ApprovalType.PARALLEL) {
-					return block.getApprovers().stream().filter(it -> it.getEmployee().getId().equals(emp.getId())
-							&& it.getDecisionType() == DecisionType.UNKNOWN).count() > 0;
+					return block.getApprovers().stream()
+							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
+							.count() > 0;
 				}
 			}
 		}
@@ -180,6 +186,14 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 
 	public void setRouteIsInvariable(boolean routeIsInvariable) {
 		this.routeIsInvariable = routeIsInvariable;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
 	}
 
 	@Override

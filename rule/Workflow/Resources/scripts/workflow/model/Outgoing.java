@@ -26,7 +26,6 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -65,16 +64,11 @@ public class Outgoing extends ActionableDocument {
 
 	private DocumentSubject docSubject;
 
-	@FTSearchable
-	@Column(columnDefinition = "TEXT")
-	private String body;
-
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "wf__outgoing_attachments", joinColumns = {
-			@JoinColumn(name = "outgoing_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "attachment_id") }, indexes = {
-							@Index(columnList = "outgoing_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-									"outgoing_id", "attachment_id" }))
+	@JoinTable(name = "wf__outgoing_attachments", joinColumns = { @JoinColumn(name = "outgoing_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "attachment_id") }, indexes = {
+					@Index(columnList = "outgoing_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"outgoing_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
@@ -142,14 +136,6 @@ public class Outgoing extends ActionableDocument {
 
 	public void setDocSubject(DocumentSubject docSubject) {
 		this.docSubject = docSubject;
-	}
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
 	}
 
 	public List<Observer> getObservers() {

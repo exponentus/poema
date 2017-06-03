@@ -216,6 +216,7 @@
   "markdown_preview" : "Preview",
   "officememo" : "Officememo",
   "initiative_tasks" : "Initiative tasks",
+  "approving_started" : "Appoval has been started",
   "add_route_block" : "Add route block",
   "not_null_violation" : "the value cannot be null",
   "password" : "Password",

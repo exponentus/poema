@@ -25,7 +25,6 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -54,16 +53,11 @@ public class OfficeMemo extends ActionableDocument {
 	@JoinColumn(nullable = false)
 	private Employee recipient;
 
-	@FTSearchable
-	@Column(columnDefinition = "TEXT")
-	private String body;
-
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "wf__office_memo_attachments", joinColumns = {
-			@JoinColumn(name = "office_memo_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "attachment_id") }, indexes = {
-							@Index(columnList = "office_memo_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-									"office_memo_id", "attachment_id" }))
+	@JoinTable(name = "wf__office_memo_attachments", joinColumns = { @JoinColumn(name = "office_memo_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "attachment_id") }, indexes = {
+					@Index(columnList = "office_memo_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"office_memo_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
@@ -105,14 +99,6 @@ public class OfficeMemo extends ActionableDocument {
 
 	public void setRecipient(Employee recipient) {
 		this.recipient = recipient;
-	}
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
 	}
 
 	public List<Observer> getObservers() {
