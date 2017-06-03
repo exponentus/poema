@@ -14,6 +14,7 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalSchemaType;
@@ -21,6 +22,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
 import workflow.model.Outgoing;
+import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
@@ -52,9 +54,14 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 		entity.setBody(dto.getBody());
 		entity.setRecipient(dto.getRecipient());
 		entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
-		entity.setSchema(dto.getSchema());
-		if (entity.getSchema() == ApprovalSchemaType.WITHOUT_APPROVAL) {
-			entity.setStatus(ApprovalStatusType.FINISHED);
+		IUser<Long> user = ses.getUser();
+		if (user.getRoles().contains("chancellery")) {
+			entity.setSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
+			entity.setStatus(ApprovalStatusType.REGISTERED);
+			entity.setResult(ApprovalResultType.ACCEPTED);
+		} else {
+			entity.setSchema(dto.getSchema());
+			entity.setStatus(ApprovalStatusType.DRAFT);
 		}
 
 		List<Observer> observers = new ArrayList<Observer>();
@@ -67,7 +74,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
 		if (entity.isNew()) {
 			entity.setVersion(1);
-			entity.setAuthor(ses.getUser());
+			entity.setAuthor(user);
 		}
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));

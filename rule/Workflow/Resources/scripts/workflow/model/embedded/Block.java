@@ -36,8 +36,7 @@ public class Block extends SimpleAppEntity {
 	private ApprovalStatusType status = ApprovalStatusType.UNKNOWN;
 
 	@ElementCollection(fetch = FetchType.EAGER)
-	@CollectionTable(name = "wf__block_approvers", uniqueConstraints = {
-			@UniqueConstraint(columnNames = { "block_id", "sort" }),
+	@CollectionTable(name = "wf__block_approvers", uniqueConstraints = { @UniqueConstraint(columnNames = { "block_id", "sort" }),
 			@UniqueConstraint(columnNames = { "block_id", "employee" }) })
 	@OrderBy("sort")
 	private List<Approver> approvers;
@@ -50,6 +49,8 @@ public class Block extends SimpleAppEntity {
 
 	@Column(name = "time_limit")
 	private int timeLimit;
+
+	private int version = 1;
 
 	private int sort;
 
@@ -93,6 +94,14 @@ public class Block extends SimpleAppEntity {
 		this.timeLimit = timeLimit;
 	}
 
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public int getSort() {
 		return sort;
 	}
@@ -103,8 +112,7 @@ public class Block extends SimpleAppEntity {
 
 	@JsonIgnore
 	public Approver getCurrentApprover() {
-		return approvers.stream().sorted((a, b) -> a.getSort() > b.getSort() ? 1 : -1).filter(Approver::isCurrent)
-				.findFirst().orElse(null);
+		return approvers.stream().sorted((a, b) -> a.getSort() > b.getSort() ? 1 : -1).filter(Approver::isCurrent).findFirst().orElse(null);
 	}
 
 	@JsonIgnore
@@ -114,8 +122,7 @@ public class Block extends SimpleAppEntity {
 	}
 
 	public Approver getApprover(IUser<Long> user) throws ApprovalException {
-		Approver approver = approvers.stream().filter(a -> a.getEmployee().getUserID().equals(user.getId())).findFirst()
-				.orElse(null);
+		Approver approver = approvers.stream().filter(a -> a.getEmployee().getUserID().equals(user.getId())).findFirst().orElse(null);
 
 		if (approver == null) {
 			throw new ApprovalException(ApprovalExceptionType.APPROVER_NOT_FOUND_IN_BLOCK, user.getLogin());

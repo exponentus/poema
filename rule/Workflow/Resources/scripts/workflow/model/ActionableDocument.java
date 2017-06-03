@@ -16,8 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.common.model.util.ListOfTextConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import reference.model.constants.ApprovalSchemaType;
@@ -30,6 +30,7 @@ import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
+import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 import workflow.model.embedded.IControlled;
@@ -71,6 +72,11 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
+	@FTSearchable
+	@Convert(converter = ListOfTextConverter.class)
+	@Column(name = "obsolete_body", columnDefinition = "jsonb")
+	private List<String> obsoleteBody = new ArrayList<String>();
+
 	@Override
 	public List<Assignment> getAssignments() {
 		return assignments;
@@ -84,26 +90,6 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 	@Override
 	public List<Block> getBlocks() {
 		return blocks;
-	}
-
-	@Override
-	@JsonIgnore
-	public Block getNextBlock() {
-		if (getStatus() == ApprovalStatusType.FINISHED) {
-			return null;
-		}
-
-		if (blocks == null || blocks.isEmpty()) {
-			return null;
-		}
-
-		return blocks.stream().sorted((a, b) -> (a.getSort() > b.getSort() ? 1 : -1)).filter(block -> {
-			if (getStatus() == ApprovalStatusType.DRAFT) {
-				return block.getStatus() == ApprovalStatusType.DRAFT;
-			} else {
-				return block.getStatus() == ApprovalStatusType.AWAITING;
-			}
-		}).findFirst().orElse(null);
 	}
 
 	@Override
@@ -153,12 +139,16 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 	}
 
 	@Override
+	@Deprecated
 	public boolean userCanDoDecision(Employee emp) {
 		if (getStatus() == ApprovalStatusType.PENDING) {
 			Block block = ApprovalLifecycle.getProcessingBlock(this);
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-					return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+					Approver approver = block.getCurrentApprover();
+					if (approver != null) {
+						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+					}
 				} else if (block.getType() == ApprovalType.PARALLEL) {
 					return block.getApprovers().stream()
 							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
@@ -194,6 +184,24 @@ public class ActionableDocument extends SecureHierarchicalEntity implements IApp
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public List<String> getObsoleteBody() {
+		return obsoleteBody;
+	}
+
+	public void setObsoleteBody(List<String> obsoleteBody) {
+		this.obsoleteBody = obsoleteBody;
+	}
+
+	@Override
+	public void backupContent() {
+		obsoleteBody.add(body);
+		body = "";
+	}
+
+	public void addObsoleteBody(String obsoleteText) {
+		obsoleteBody.add(obsoleteText);
 	}
 
 	@Override

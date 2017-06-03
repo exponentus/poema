@@ -49,6 +49,13 @@ public abstract class ApprovalDomain<T extends IApproval> extends DTOService<T> 
 		lifecycle.skip();
 	}
 
+	@SuppressWarnings("unchecked")
+	public T backToRevise(T entity) throws ApprovalException {
+		ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
+		return (T) lifecycle.backToRevise();
+
+	}
+
 	protected List<Block> normalizeBlocks(EmployeeDAO eDao, List<Block> blocks) {
 		int count = 1;
 		for (Block entry : blocks) {

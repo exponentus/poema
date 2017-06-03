@@ -38,7 +38,7 @@ public class ApprovalLifecycle {
 				throw new ApprovalException(ApprovalExceptionType.APPROVER_IS_NOT_SET);
 			}
 
-			Block block = entity.getNextBlock();
+			Block block = getNextBlock();
 			Date currentTime = new Date();
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL) {
@@ -131,6 +131,7 @@ public class ApprovalLifecycle {
 			currentApprover.setCurrent(false);
 			currentApprover.setDecisionComment(decisionComment);
 			if (entity.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
+				processBlock.setStatus(ApprovalStatusType.FINISHED);
 				entity.setResult(ApprovalResultType.REJECTED);
 				entity.setStatus(ApprovalStatusType.FINISHED);
 				return entity;
@@ -183,6 +184,18 @@ public class ApprovalLifecycle {
 		Set<Long> editors = new HashSet<Long>();
 		editors.add(entity.getAuthor().getId());
 		entity.setEditors(editors);
+		entity.backupContent();
+		List<Block> newBlocks = new ArrayList<Block>();
+		List<Block> blocks = entity.getBlocks();
+		int count = blocks.size() + 1;
+		for (Block block : blocks) {
+			Block newBlock = getClone(block);
+			newBlock.setSort(count);
+			newBlocks.add(newBlock);
+			count++;
+			block.setStatus(ApprovalStatusType.REJECTED);
+		}
+		entity.getBlocks().addAll(newBlocks);
 		return entity;
 	}
 
@@ -190,7 +203,7 @@ public class ApprovalLifecycle {
 		try {
 			processBlock.setStatus(ApprovalStatusType.FINISHED);
 
-			Block nextBlock = entity.getNextBlock();
+			Block nextBlock = getNextBlock();
 			if (nextBlock != null) {
 				nextBlock.setStatus(ApprovalStatusType.PENDING);
 
@@ -267,5 +280,52 @@ public class ApprovalLifecycle {
 			}
 		}
 		return approvers;
+	}
+
+	private Block getNextBlock() {
+		if (entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REJECTED) {
+			return null;
+		}
+
+		List<Block> blocks = entity.getBlocks();
+
+		if (blocks == null || blocks.isEmpty()) {
+			return null;
+		}
+
+		return blocks.stream().sorted((a, b) -> (a.getSort() > b.getSort() ? 1 : -1)).filter(block -> {
+			if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+				return block.getStatus() == ApprovalStatusType.DRAFT;
+			} else {
+				return block.getStatus() == ApprovalStatusType.AWAITING;
+			}
+		}).findFirst().orElse(null);
+	}
+
+	private Block getClone(Block block) {
+		Block newBlock = new Block();
+		newBlock.setRequireCommentIfNo(block.isRequireCommentIfNo());
+		newBlock.setTimeLimit(block.getTimeLimit());
+		newBlock.setStatus(ApprovalStatusType.DRAFT);
+		newBlock.setType(block.getType());
+		newBlock.setSort(block.getSort());
+		List<Approver> newApprovers = new ArrayList<Approver>();
+		List<Approver> approvers = block.getApprovers();
+		int col = approvers.size() + 1;
+		for (Approver approver : approvers) {
+			Approver newApprover = new Approver();
+			newApprover.setEmployee(approver.getEmployee());
+			newApprover.setCurrent(false);
+			newApprover.setDecisionComment("");
+			newApprover.setDecisionTime(null);
+			newApprover.setDecisionType(DecisionType.UNKNOWN);
+			newApprover.setSort(col);
+			newApprover.setStartTime(null);
+			newApprovers.add(newApprover);
+			col++;
+		}
+		newBlock.setApprovers(newApprovers);
+
+		return newBlock;
 	}
 }

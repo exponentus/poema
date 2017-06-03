@@ -22,8 +22,6 @@ public interface IApproval extends IAppEntity<UUID> {
 
 	List<Block> getBlocks();
 
-	Block getNextBlock();
-
 	ApprovalResultType getResult();
 
 	ApprovalSchemaType getSchema();
@@ -50,6 +48,9 @@ public interface IApproval extends IAppEntity<UUID> {
 
 	void setVersion(int version);
 
+	void backupContent();
+
+	@Deprecated
 	boolean userCanDoDecision(Employee emp);
 
 }

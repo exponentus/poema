@@ -254,6 +254,13 @@ public class OutgoingService extends RestProvider {
 			outcome.setTitle("declineApprovalBlock");
 			outcome.setMessage("declineApprovalBlock");
 
+			if (entity.getStatus() == ApprovalStatusType.FINISHED && entity.getResult() == ApprovalResultType.REJECTED) {
+				if (entity.isVersionsSupport()) {
+					entity = domain.backToRevise(entity);
+					domain.superUpdate(entity);
+				}
+			}
+
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
 			return responseValidationError(e);
@@ -288,7 +295,8 @@ public class OutgoingService extends RestProvider {
 		}
 
 		//
-		if (entity.getStatus() == ApprovalStatusType.FINISHED && session.getUser().getRoles().contains("can_sign_outgoing")) {
+		if ((entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REGISTERED)
+				&& session.getUser().getRoles().contains("can_sign_outgoing")) {
 			actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
 		}
 

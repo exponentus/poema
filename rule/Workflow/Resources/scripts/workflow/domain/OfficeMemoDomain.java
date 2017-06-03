@@ -65,18 +65,13 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
 		if (entity.isNew()) {
 			entity.setVersion(1);
+			entity.setVersionsSupport(true);
 			entity.setAuthor(ses.getUser());
 		}
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
 		calculateReadersEditors(entity);
 		return entity;
-	}
-
-	public OfficeMemo backToRevise(OfficeMemo entity) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
-		return (OfficeMemo) lifecycle.backToRevise();
-
 	}
 
 	public boolean canCreateAssignment(OfficeMemo entity, User user) {
