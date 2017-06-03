@@ -236,25 +236,25 @@ public class ProjectService extends RestProvider {
         }
 
         if (project.getManager() <= 0) {
-            ve.addError("managerUserId", "required", "field_is_empty");
+            ve.addError("manager", "required", "field_is_empty");
         } else {
             IUser<Long> managerUser = userDAO.findById(project.getManager());
             if (managerUser == null) {
-                ve.addError("managerUserId", "required", "user_not_found");
+                ve.addError("manager", "required", "user_not_found");
             }
         }
         if (project.getProgrammer() <= 0) {
-            ve.addError("programmerUserId", "required", "field_is_empty");
+            ve.addError("programmer", "required", "field_is_empty");
         } else {
             IUser<Long> programmerUser = userDAO.findById(project.getProgrammer());
             if (programmerUser == null) {
-                ve.addError("programmerUserId", "required", "user_not_found");
+                ve.addError("programmer", "required", "user_not_found");
             }
         }
         if (project.getTester() > 0) {
             IUser<Long> testerUser = userDAO.findById(project.getTester());
             if (testerUser == null) {
-                ve.addError("testerUserId", "required", "user_not_found");
+                ve.addError("tester", "required", "user_not_found");
             }
         }
 
@@ -262,7 +262,7 @@ public class ProjectService extends RestProvider {
             for (long uid : project.getObservers()) {
                 IUser<Long> ou = userDAO.findById(uid);
                 if (ou == null) {
-                    ve.addError("observerUserIds", "required", "observer user not found");
+                    ve.addError("observers", "required", "observer user not found");
                 }
             }
         }
@@ -271,7 +271,7 @@ public class ProjectService extends RestProvider {
             for (long uid : project.getRepresentatives()) {
                 IUser<Long> ou = userDAO.findById(uid);
                 if (ou == null) {
-                    ve.addError("representativesUserIds", "required", "representative user not found");
+                    ve.addError("representatives", "required", "representative user not found");
                 }
             }
         }
