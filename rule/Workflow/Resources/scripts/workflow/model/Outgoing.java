@@ -26,6 +26,7 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -79,6 +80,10 @@ public class Outgoing extends ActionableDocument {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__outgoing_tags")
 	private List<Tag> tags;
+
+	@FTSearchable
+	@Column(columnDefinition = "TEXT")
+	private String signature;
 
 	@Override
 	@PrePersist
@@ -152,6 +157,14 @@ public class Outgoing extends ActionableDocument {
 
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 
 	@Override
