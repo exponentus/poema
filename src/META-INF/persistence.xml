@@ -26,6 +26,7 @@
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <!-- Monitoring module entities (if the module activated) -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
     </persistence-unit>
@@ -61,6 +62,7 @@
         <class>reference.model.OrgCategory</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -112,6 +114,7 @@
         <class>reference.model.DemandType</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
@@ -139,6 +142,7 @@
         <class>reference.model.OrgCategory</class>                     
         <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
     
@@ -163,7 +167,8 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
         <!-- Monitoring module entities (if the module activated) -->     
-        <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Activity</class>        
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -205,6 +210,7 @@
         <class>projects.model.Comment</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -246,6 +252,7 @@
         <class>helpdesk.model.Demand</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -277,6 +284,7 @@
         <class>discussing.model.Comment</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -333,6 +341,7 @@
         <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <!-- Because of suppose importing data from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -373,6 +382,7 @@
         <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->     
         <class>monitoring.model.Activity</class>
+        <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -412,7 +422,8 @@
         <class>workflow.model.embedded.Approval</class>
         <class>workflow.model.embedded.Block</class>   
          <!-- Monitoring module entities -->     
-        <class>monitoring.model.Activity</class>     
+        <class>monitoring.model.Activity</class> 
+        <class>monitoring.model.Statistic</class>    
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
     
