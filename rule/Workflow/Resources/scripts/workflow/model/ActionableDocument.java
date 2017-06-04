@@ -15,7 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.util.ListOfTextConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -38,7 +38,7 @@ import workflow.model.embedded.IControlled;
 @JsonRootName("actionableDocument")
 @Entity
 @Table(name = "wf__actionable_documents")
-public class ActionableDocument extends SecureHierarchicalEntity implements IApproval, IControlled {
+public class ActionableDocument extends EmbeddedSecureHierarchicalEntity implements IApproval, IControlled {
 
 	@Convert(converter = ApprovalStatusTypeConverter.class)
 	private ApprovalStatusType status = ApprovalStatusType.DRAFT;

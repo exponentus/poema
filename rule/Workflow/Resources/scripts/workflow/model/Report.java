@@ -24,9 +24,8 @@ import javax.validation.constraints.NotNull;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -40,7 +39,7 @@ import workflow.init.AppConst;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__reports")
-public class Report extends SecureHierarchicalEntity {
+public class Report extends EmbeddedSecureHierarchicalEntity {
 
 	@JoinColumn(name = "applied_author", nullable = false)
 	private Employee appliedAuthor;
@@ -126,8 +125,4 @@ public class Report extends SecureHierarchicalEntity {
 		return AppConst.BASE_URL + "reports/" + getIdentifier();
 	}
 
-	@Override
-	public SecureHierarchicalEntity getParentEntity(_Session ses) {
-		return parent;
-	}
 }

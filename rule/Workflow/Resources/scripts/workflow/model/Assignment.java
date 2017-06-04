@@ -23,10 +23,9 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
-import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -45,7 +44,7 @@ import workflow.model.embedded.AssigneeEntry;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__assignments")
-public class Assignment extends SecureHierarchicalEntity {
+public class Assignment extends EmbeddedSecureHierarchicalEntity {
 	//@JsonIgnore
 	@JsonManagedReference
 	@OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
@@ -156,11 +155,6 @@ public class Assignment extends SecureHierarchicalEntity {
 	@Override
 	public String getURL() {
 		return AppConst.BASE_URL + "assignments/" + getIdentifier();
-	}
-
-	@Override
-	public SecureHierarchicalEntity getParentEntity(_Session ses) {
-		return parent;
 	}
 
 	public List<IAppEntity<UUID>> getResponses() {

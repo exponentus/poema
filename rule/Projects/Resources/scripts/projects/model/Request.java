@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.SecureHierarchicalEntity;
+import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -37,7 +37,7 @@ import reference.model.RequestType;
 @JsonRootName("request")
 @Entity
 @Table(name = "prj__requests")
-public class Request extends SecureHierarchicalEntity {
+public class Request extends EmbeddedSecureHierarchicalEntity {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -64,11 +64,10 @@ public class Request extends SecureHierarchicalEntity {
 	private String comment;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "prj__request_attachments", joinColumns = {
-			@JoinColumn(name = "request_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "attachment_id") }, indexes = {
-							@Index(columnList = "request_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-									"request_id", "attachment_id" }))
+	@JoinTable(name = "prj__request_attachments", joinColumns = { @JoinColumn(name = "request_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "attachment_id") }, indexes = {
+					@Index(columnList = "request_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "request_id",
+							"attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 

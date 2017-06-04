@@ -24,6 +24,7 @@
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.embedded.CrossLink</class>
+        <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
         <!-- Monitoring module entities (if the module activated) -->     
         <class>monitoring.model.Activity</class>
         <class>monitoring.model.Statistic</class>
@@ -291,6 +292,7 @@
     <persistence-unit name="Workflow" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
         <class>com.exponentus.common.model.embedded.CrossLink</class>
+        <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>

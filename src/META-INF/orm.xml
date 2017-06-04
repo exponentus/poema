@@ -5,6 +5,7 @@
 	<converter class="com.exponentus.common.model.util.ListOfTextConverter"/> 
 	<converter class="com.exponentus.common.model.constants.converter.ReportTypeConverter"/>     
 <!-- 	<converter class="com.exponentus.common.model.util.ReaderConverter"/> -->
+
 	
  	<converter class="administrator.model.util.LanguageCodeConverter"/>
  	<converter class="administrator.model.util.ApplicationModeConverter"/>
