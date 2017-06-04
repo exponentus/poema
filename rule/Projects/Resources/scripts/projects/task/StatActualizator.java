@@ -1,0 +1,63 @@
+package projects.task;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.commons.lang3.time.DateUtils;
+
+import com.exponentus.appenv.AppEnv;
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.scripting._Session;
+import com.exponentus.scripting.event.Do;
+import com.exponentus.scriptprocessor.tasks.Command;
+import com.exponentus.util.TimeUtil;
+
+import administrator.dao.UserDAO;
+import administrator.model.User;
+import monitoring.dao.StatisticDAO;
+import projects.dao.TaskDAO;
+import projects.init.AppConst;
+
+@Command(name = "actualize_stat")
+public class StatActualizator extends Do {
+	private Date current = new Date();
+
+	@Override
+	public void doTask(AppEnv appEnv, _Session session) {
+		logger.info("Run statistics collector");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		try {
+			UserDAO uDao = new UserDAO();
+			List<User> users = uDao.findAll(0, 0);
+			//User u1 = (User) uDao.findByLogin("kayra");
+			//users.clear();
+			//users.add(u1);
+			Date startDate = dateFormat.parse("15-08-2016");
+			Date endDate = current;
+			while (startDate.before(endDate)) {
+				logger.info(TimeUtil.dateToStringSilently(startDate));
+				StatisticDAO statDao = new StatisticDAO();
+				TaskDAO dao = new TaskDAO(session);
+				for (User u : users) {
+					System.out.println(u);
+					long val = dao.findAllRegistered(startDate, "regDate", u, "author", 0, 0);
+					statDao.postStat(u, AppConst.CODE, "count_of_regsitered_task", val);
+				}
+
+				for (User u : users) {
+					long val = dao.getColByAssignee(startDate, u.getId(), 0, 0);
+					statDao.postStat(u, AppConst.CODE, "count_of_assigneed_task", val);
+				}
+
+				startDate = DateUtils.addDays(startDate, 1);
+			}
+			logger.info("done...");
+		} catch (DAOException | ParseException e) {
+			logger.exception(e);
+		}
+
+	}
+
+}

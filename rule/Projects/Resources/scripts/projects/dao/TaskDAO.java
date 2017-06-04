@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -289,7 +291,27 @@ public class TaskDAO extends DAO<Task, UUID> {
 		return result;
 	}
 
-	public ViewPage<Task> findAllRegistered(Date date, User user, int pageNum, int pageSize) {
+	public long getColByAssignee(Date date, Long user, int pageNum, int pageSize) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		try {
+			CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+			CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+			Root<Task> c = cq.from(Task.class);
+			countCq.select(cb.count(c));
+			ParameterExpression<Date> parameter = cb.parameter(Date.class);
+			Predicate condition = cb.equal(c.<Date>get("regDate").as(Date.class), parameter);
+			condition = cb.and(cb.equal(c.get("assignee"), user), condition);
+			countCq.where(condition);
+			Query query = em.createQuery(countCq);
+			query.setParameter(parameter, date, TemporalType.DATE);
+			return (long) query.getSingleResult();
+		} finally {
+			em.close();
+		}
+	}
+
+	public long findAllRegistered(Date date, String dateFieldName, User user, String userFieldName, int pageNum, int pageSize) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		try {
@@ -298,24 +320,14 @@ public class TaskDAO extends DAO<Task, UUID> {
 			Root<Task> c = cq.from(Task.class);
 			cq.select(c);
 			countCq.select(cb.count(c));
-			//ParameterExpression<java.util.Date> parameter = cq.parameter(java.util.Date.class);
-			Predicate condition = cb.equal(c.get("regDate"), date);
-			condition = cb.and(cb.equal(c.get("author"), user), condition);
-			if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-				condition = cb.and(c.get("readers").in(user.getId()), condition);
-			}
-
-			cq.orderBy(cb.asc(c.get("regDate")));
-			cq.where(condition);
+			ParameterExpression<Date> parameter = cb.parameter(Date.class);
+			Predicate condition = cb.equal(cb.function("date", Date.class, c.<Date>get("regDate")), parameter);
+			condition = cb.and(cb.equal(c.get(userFieldName), user), condition);
 			countCq.where(condition);
-			TypedQuery<Task> typedQuery = em.createQuery(cq);
 			Query query = em.createQuery(countCq);
-			long count = (long) query.getSingleResult();
-			int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+			query.setParameter(parameter, date, TemporalType.DATE);
+			return (long) query.getSingleResult();
 
-			List<Task> result = typedQuery.getResultList();
-			ViewPage<Task> r = new ViewPage<Task>(result, count, maxPage, pageNum);
-			return r;
 		} finally {
 			em.close();
 		}
