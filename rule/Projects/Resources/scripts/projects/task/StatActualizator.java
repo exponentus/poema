@@ -40,8 +40,9 @@ public class StatActualizator extends Do {
 				TaskDAO dao = new TaskDAO(session);
 				for (User u : users) {
 					for (TaskStatusType t : TaskStatusType.values()) {
-						statDao.postStat(u, AppConst.CODE, "author_state", startDate, dao.getColByAuthor(startDate, u, t));
-						statDao.postStat(u, AppConst.CODE, "assignee_state", startDate, dao.getColByAssignee(startDate, u.getId(), t));
+						statDao.postStat(u, AppConst.CODE, "author_state", startDate, t.name(), dao.getColByAuthor(startDate, u, t));
+						statDao.postStat(u, AppConst.CODE, "assignee_state", startDate, t.name(),
+								dao.getColByAssignee(startDate, u.getId(), t));
 					}
 				}
 				startDate = DateUtils.addDays(startDate, 1);
