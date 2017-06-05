@@ -200,10 +200,6 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 		body = "";
 	}
 
-	public void addObsoleteBody(String obsoleteText) {
-		obsoleteBody.add(obsoleteText);
-	}
-
 	@Override
 	public List<Employee> getRecipients() {
 		return null;

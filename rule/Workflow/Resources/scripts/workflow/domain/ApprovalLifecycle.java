@@ -68,6 +68,7 @@ public class ApprovalLifecycle {
 				throw new ApprovalException(ApprovalExceptionType.BLOCK_IS_NULL);
 			}
 
+			entity.setResult(ApprovalResultType.PROJECT);
 			entity.setStatus(ApprovalStatusType.PENDING);
 			block.setStatus(ApprovalStatusType.PENDING);
 

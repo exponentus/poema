@@ -74,6 +74,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
 		if (entity.isNew()) {
 			entity.setVersion(1);
+			entity.setVersionsSupport(true);
 			entity.setAuthor(user);
 		}
 
