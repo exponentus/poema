@@ -291,7 +291,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 		return result;
 	}
 
-	public long getColByAssignee(Date date, Long user, int pageNum, int pageSize) {
+	public long getColByAssignee(Date date, Long user, TaskStatusType status) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		try {
@@ -300,8 +300,9 @@ public class TaskDAO extends DAO<Task, UUID> {
 			Root<Task> c = cq.from(Task.class);
 			countCq.select(cb.count(c));
 			ParameterExpression<Date> parameter = cb.parameter(Date.class);
-			Predicate condition = cb.equal(c.<Date>get("regDate").as(Date.class), parameter);
+			Predicate condition = cb.equal(cb.function("date", Date.class, c.<Date>get("regDate")), parameter);
 			condition = cb.and(cb.equal(c.get("assignee"), user), condition);
+			condition = cb.and(cb.equal(c.get("status"), status), condition);
 			countCq.where(condition);
 			Query query = em.createQuery(countCq);
 			query.setParameter(parameter, date, TemporalType.DATE);
@@ -311,7 +312,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 		}
 	}
 
-	public long findAllRegistered(Date date, String dateFieldName, User user, String userFieldName, int pageNum, int pageSize) {
+	public long getColByAuthor(Date date, User user, TaskStatusType status) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		try {
@@ -322,7 +323,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 			countCq.select(cb.count(c));
 			ParameterExpression<Date> parameter = cb.parameter(Date.class);
 			Predicate condition = cb.equal(cb.function("date", Date.class, c.<Date>get("regDate")), parameter);
-			condition = cb.and(cb.equal(c.get(userFieldName), user), condition);
+			condition = cb.and(cb.equal(c.get("author"), user), condition);
+			condition = cb.and(cb.equal(c.get("status"), status), condition);
 			countCq.where(condition);
 			Query query = em.createQuery(countCq);
 			query.setParameter(parameter, date, TemporalType.DATE);

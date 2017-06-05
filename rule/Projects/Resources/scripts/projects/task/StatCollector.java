@@ -1,6 +1,7 @@
 package projects.task;
 
 import java.util.Date;
+import java.util.List;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
@@ -9,10 +10,12 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 
+import administrator.dao.UserDAO;
 import administrator.model.User;
 import monitoring.dao.StatisticDAO;
 import projects.dao.TaskDAO;
 import projects.init.AppConst;
+import projects.model.constants.TaskStatusType;
 
 @Command(name = "stat_collector", trigger = Trigger.EVERY_NIGHT)
 public class StatCollector extends Do {
@@ -22,10 +25,16 @@ public class StatCollector extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			logger.info("Run statistics collector");
+			UserDAO uDao = new UserDAO();
+			List<User> users = uDao.findAll(0, 0);
 			StatisticDAO statDao = new StatisticDAO();
 			TaskDAO dao = new TaskDAO(session);
-			long val = dao.findAllRegistered(current, "regDate", (User) session.getUser(), "author", 0, 0);
-			statDao.postStat((User) session.getUser(), AppConst.CODE, "count_of_regsitered_task", val);
+			for (User u : users) {
+				for (TaskStatusType t : TaskStatusType.values()) {
+					statDao.postStat((User) session.getUser(), AppConst.CODE, "author_state", current, dao.getColByAuthor(current, u, t));
+					statDao.postStat(u, AppConst.CODE, "assignee_state", current, dao.getColByAssignee(current, u.getId(), t));
+				}
+			}
 			logger.info("done...");
 		} catch (DAOException e) {
 			logger.exception(e);

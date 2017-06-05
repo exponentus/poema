@@ -19,6 +19,7 @@ import administrator.model.User;
 import monitoring.dao.StatisticDAO;
 import projects.dao.TaskDAO;
 import projects.init.AppConst;
+import projects.model.constants.TaskStatusType;
 
 @Command(name = "actualize_stat")
 public class StatActualizator extends Do {
@@ -31,9 +32,6 @@ public class StatActualizator extends Do {
 		try {
 			UserDAO uDao = new UserDAO();
 			List<User> users = uDao.findAll(0, 0);
-			//User u1 = (User) uDao.findByLogin("kayra");
-			//users.clear();
-			//users.add(u1);
 			Date startDate = dateFormat.parse("15-08-2016");
 			Date endDate = current;
 			while (startDate.before(endDate)) {
@@ -41,16 +39,11 @@ public class StatActualizator extends Do {
 				StatisticDAO statDao = new StatisticDAO();
 				TaskDAO dao = new TaskDAO(session);
 				for (User u : users) {
-					System.out.println(u);
-					long val = dao.findAllRegistered(startDate, "regDate", u, "author", 0, 0);
-					statDao.postStat(u, AppConst.CODE, "count_of_regsitered_task", val);
+					for (TaskStatusType t : TaskStatusType.values()) {
+						statDao.postStat(u, AppConst.CODE, "author_state", startDate, dao.getColByAuthor(startDate, u, t));
+						statDao.postStat(u, AppConst.CODE, "assignee_state", startDate, dao.getColByAssignee(startDate, u.getId(), t));
+					}
 				}
-
-				for (User u : users) {
-					long val = dao.getColByAssignee(startDate, u.getId(), 0, 0);
-					statDao.postStat(u, AppConst.CODE, "count_of_assigneed_task", val);
-				}
-
 				startDate = DateUtils.addDays(startDate, 1);
 			}
 			logger.info("done...");
