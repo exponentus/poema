@@ -34,7 +34,6 @@ public class ViewService extends RestProvider {
             ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(action.newIncoming);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -60,7 +59,8 @@ public class ViewService extends RestProvider {
             ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
-            actionBar.addAction(action.newIncoming);
+            actionBar.addAction(action.newOutgoing);
+            actionBar.addAction(action.newOfficeMemo);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();

@@ -295,10 +295,10 @@ public class OutgoingService extends RestProvider {
 		}
 
 		//
-		if ((entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REGISTERED)
-				&& session.getUser().getRoles().contains("can_sign_outgoing")) {
+//		if ((entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REGISTERED)
+//				&& session.getUser().getRoles().contains("can_sign_outgoing")) {
 			actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
-		}
+		//}
 
 		return actionBar;
 	}
