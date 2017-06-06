@@ -320,4 +320,5 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 			}
 		}
 	}
+
 }

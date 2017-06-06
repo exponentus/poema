@@ -80,7 +80,7 @@ public class ControlLifecycle {
 					}
 				}
 			}
-		} else if (entity.getControlType().getSchema() == ControlSchemaType.RESET_ALL_MANULALLY) {
+		} else if (entity.getControlType().getSchema() == ControlSchemaType.RESET_ALL_MANUALLY) {
 			List<Report> reports = entity.getReports();
 			List<AssigneeEntry> assigneeEntries = entity.getAssigneeEntries();
 			for (AssigneeEntry assignee : assigneeEntries) {

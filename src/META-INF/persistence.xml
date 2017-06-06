@@ -287,6 +287,7 @@
         <class>reference.model.OrgCategory</class>
         <class>reference.model.Position</class>
         <class>reference.model.DepartmentType</class>
+        <class>reference.model.Tag</class>
         <!-- Specific Discussing module entities -->
         <class>discussing.model.Topic</class>
         <class>discussing.model.Comment</class>

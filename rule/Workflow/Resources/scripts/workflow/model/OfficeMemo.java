@@ -66,7 +66,7 @@ public class OfficeMemo extends ActionableDocument {
 	private List<Observer> observers = new ArrayList<Observer>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "wf__officememo_tags")
+	@JoinTable(name = "wf__office_memo_tags")
 	private List<Tag> tags;
 
 	public String getRegNumber() {
