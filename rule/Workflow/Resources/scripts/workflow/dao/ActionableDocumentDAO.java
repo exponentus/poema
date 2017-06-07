@@ -8,6 +8,7 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import staff.model.Employee;
 import workflow.model.ActionableDocument;
+import workflow.model.constants.ApprovalResultType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -27,7 +28,43 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
         super(ActionableDocument.class, appEnv, ses);
     }
 
-    public ViewPage<ActionableDocument> findProjectsViewPageByAuthor(Employee author, SortParams sortParams, int pageNum, int pageSize) {
+    public ViewPage<ActionableDocument> findProjectsByAuthorViewPage(Employee author, SortParams sortParams, int pageNum, int pageSize) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<ActionableDocument> cq = cb.createQuery(ActionableDocument.class);
+            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+            Root<ActionableDocument> root = cq.from(ActionableDocument.class);
+
+            Predicate condition = cb.and(cb.equal(root.get("result"), ApprovalResultType.PROJECT));
+            condition = cb.and(cb.equal(root.get("author"), author.getUser()), condition);
+
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()), condition);
+            }
+
+            countRootCq.select(cb.countDistinct(root));
+
+            if (condition != null) {
+                cq.where(condition);
+                countRootCq.where(condition);
+            }
+
+            cq.orderBy(collectSortOrder(cb, root, sortParams));
+
+            TypedQuery<ActionableDocument> typedQuery = em.createQuery(cq);
+            TypedQuery<Long> countQuery = em.createQuery(countRootCq);
+
+            long count = countQuery.getSingleResult();
+            int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+
+            return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
+        } finally {
+            em.close();
+        }
+    }
+
+    public ViewPage<ActionableDocument> findApprovalPendingByCurrentEmployeeViewPage(Employee emp, SortParams sortParams, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -41,16 +78,22 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
                 condition = cb.and(root.get("readers").in(user.getId()));
             }
 
-//            cq.select(cb.construct(AssignmentViewEntry.class, root.get("id"), root.get("appliedAuthor").get("name"),
-//                    root.get("body"), root.get("controlType"), root.get("startDate"), root.get("dueDate"),
-//                    root.get("status"))).orderBy(collectSortOrder(cb, root, sortParams));
+            if (condition == null) {
+                condition = cb.and(cb.equal(root.get("blocks").get("approvers").get("employee"), emp));
+                condition = cb.and(cb.isTrue(root.get("blocks").get("approvers").get("isCurrent")), condition);
+            } else {
+                condition = cb.and(cb.equal(root.get("blocks").get("approvers").get("employee"), emp), condition);
+                condition = cb.and(cb.isTrue(root.get("blocks").get("approvers").get("isCurrent")), condition);
+            }
 
-            countRootCq.select(cb.count(root));
+            countRootCq.select(cb.countDistinct(root));
 
             if (condition != null) {
                 cq.where(condition);
                 countRootCq.where(condition);
             }
+
+            cq.orderBy(collectSortOrder(cb, root, sortParams));
 
             TypedQuery<ActionableDocument> typedQuery = em.createQuery(cq);
             TypedQuery<Long> countQuery = em.createQuery(countRootCq);

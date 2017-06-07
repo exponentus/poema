@@ -7,6 +7,8 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import workflow.dao.ActionableDocumentDAO;
 import workflow.ui.ActionFactory;
 
@@ -30,14 +32,15 @@ public class ViewService extends RestProvider {
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
 
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(session);
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
-            ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+            Employee employee = employeeDAO.findByUser(session.getUser());
+            ViewPage vp = dao.findApprovalPendingByCurrentEmployeeViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
-            outcome.setId("approvals_pending");
             outcome.setTitle("approvals_pending");
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
@@ -55,8 +58,10 @@ public class ViewService extends RestProvider {
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
 
         try {
+            EmployeeDAO employeeDAO = new EmployeeDAO(session);
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
-            ViewPage vp = dao.findViewPage(sortParams, getWebFormData().getPage(), pageSize);
+            Employee employee = employeeDAO.findByUser(session.getUser());
+            ViewPage vp = dao.findProjectsByAuthorViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOutgoing);
@@ -64,7 +69,6 @@ public class ViewService extends RestProvider {
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
-            outcome.setId("projects_my");
             outcome.setTitle("projects_my");
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
