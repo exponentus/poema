@@ -25,6 +25,7 @@ public class ControlLifecycle {
 			for (AssigneeEntry assignee : assigneeEntries) {
 				assignee.setResetTime(null);
 				assignee.setStatus(ControlStatusType.PROCESSING);
+				assignee.setStatusTime(current);
 				assignee.setResetInfo("");
 				assignee.setResetBy(null);
 				entity.addReader(assignee.getAssignee().getUser());
@@ -44,6 +45,7 @@ public class ControlLifecycle {
 					if (assignee.getAssignee().equals(report.getAppliedAuthor()) && assignee.getStatus() != ControlStatusType.COMPLETED) {
 						assignee.setResetTime(current);
 						assignee.setStatus(ControlStatusType.COMPLETED);
+						assignee.setStatusTime(current);
 						assignee.setResetInfo(EnvConst.APP_ID);
 					}
 				}
@@ -74,6 +76,7 @@ public class ControlLifecycle {
 						assigneeEntries.stream().peek((element) -> {
 							element.setResetTime(current);
 							element.setStatus(ControlStatusType.COMPLETED);
+							element.setStatusTime(current);
 							element.setResetInfo(EnvConst.APP_ID);
 						});
 						entity.setStatus(ControlStatusType.COMPLETED);
@@ -86,9 +89,8 @@ public class ControlLifecycle {
 			for (AssigneeEntry assignee : assigneeEntries) {
 				for (Report report : reports) {
 					if (assignee.getAssignee().equals(report.getAppliedAuthor()) && assignee.getStatus() != ControlStatusType.COMPLETED) {
-						assignee.setResetTime(current);
 						assignee.setStatus(ControlStatusType.PENDING);
-						assignee.setResetInfo(EnvConst.APP_ID);
+						assignee.setStatusTime(current);
 					}
 				}
 			}

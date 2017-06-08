@@ -131,30 +131,14 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") String id) {
-		_Session ses = getSession();
 		try {
-			OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-			OfficeMemo entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
+			OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
+			omd.delete(id, new ValidationToDelete());
+
 			return Response.noContent().build();
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		}
-	}
-
-	@Override
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			OfficeMemoDAO dao = new OfficeMemoDAO(getSession());
-			OfficeMemo entity = dao.findByIdentefier(id);
-
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
 			return responseException(e);
 		}
 	}
@@ -321,4 +305,18 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 		}
 	}
 
+	private class ValidationToDelete implements IValidation<OfficeMemo> {
+
+		@Override
+		public void check(OfficeMemo om) throws DTOException {
+			DTOException e = new DTOException();
+
+			if (om.getStatus() != ApprovalStatusType.DRAFT) {
+				e.addError("status", "required", "status_is_not_draft");
+			}
+			if (e.hasError()) {
+				throw e;
+			}
+		}
+	}
 }

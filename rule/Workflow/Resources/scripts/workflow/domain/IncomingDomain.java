@@ -36,8 +36,7 @@ public class IncomingDomain extends DTOService<Incoming> {
 	}
 
 	@Override
-	public Incoming fillFromDto(Incoming dto, IValidation<Incoming> validation, String fsid)
-			throws DTOException, DAOException {
+	public Incoming fillFromDto(Incoming dto, IValidation<Incoming> validation, String fsid) throws DTOException, DAOException {
 		validation.check(dto);
 
 		Incoming entity;
@@ -108,8 +107,8 @@ public class IncomingDomain extends DTOService<Incoming> {
 	}
 
 	public boolean canCreateAssignment(Incoming entity, User user) {
-		return !entity.isNew()
-				&& (entity.getAddressee() != null && entity.getAddressee().getUser().getId().equals(user.getId())
-						|| user.getRoles().contains("chancellery"));
+		return !entity.isNew() && (entity.getAddressee() != null && entity.getAddressee().getUser().getId().equals(user.getId())
+				|| user.getRoles().contains("chancellery"));
 	}
+
 }

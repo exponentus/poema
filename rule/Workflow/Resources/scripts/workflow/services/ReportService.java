@@ -1,15 +1,11 @@
 package workflow.services;
 
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -17,10 +13,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
@@ -36,9 +32,7 @@ import workflow.ui.ActionFactory;
 
 @Path("reports")
 @Produces(MediaType.APPLICATION_JSON)
-public class ReportService extends RestProvider {
-
-	private ActionFactory action = new ActionFactory();
+public class ReportService extends EntityService<Report, ReportDomain> {
 
 	@GET
 	@Path("{id}")
@@ -54,8 +48,7 @@ public class ReportService extends RestProvider {
 				AssignmentDAO aDAO = new AssignmentDAO(ses);
 				String assignmentId = getWebFormData().getValueSilently("assignment");
 
-				entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()),
-						aDAO.findByIdentefier(assignmentId));
+				entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findByIdentefier(assignmentId));
 			} else {
 				ReportDAO reportDAO = new ReportDAO(ses);
 				entity = reportDAO.findByIdentefier(id);
@@ -76,22 +69,8 @@ public class ReportService extends RestProvider {
 		}
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(Report dto) {
-		dto.setId(null);
-		return saveForm(dto);
-	}
-
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, Report dto) {
-		dto.setId(UUID.fromString(id));
-		return saveForm(dto);
-	}
-
-	private Response saveForm(Report dto) {
+	@Override
+	public Response saveForm(Report dto) {
 		try {
 			ReportDomain domain = new ReportDomain(getSession());
 			Report entity = domain.fillFromDto(dto, new Validation(), getWebFormData().getFormSesId());
@@ -136,16 +115,9 @@ public class ReportService extends RestProvider {
 		}
 	}
 
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
-	}
-
 	private _ActionBar getActionBar(_Session session, Report entity) {
 		_ActionBar actionBar = new _ActionBar(session);
-
+		ActionFactory action = new ActionFactory();
 		actionBar.addAction(action.close);
 		actionBar.addAction(action.saveAndClose);
 		if (!entity.isNew() && entity.isEditable()) {

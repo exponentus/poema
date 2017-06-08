@@ -93,6 +93,9 @@ public class AssignmentDomain extends DTOService<Assignment> {
 				entity.addReader(observer.getEmployee().getUserID());
 			}
 		}
+		for (AssigneeEntry ae : entity.getAssigneeEntries()) {
+			entity.addReader(ae.getAssignee().getUserID());
+		}
 	}
 
 	private List<AssigneeEntry> normalizeAssigneeEntries(EmployeeDAO eDao, List<AssigneeEntry> assigneeEntries) {
