@@ -111,6 +111,13 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 		return entity;
 	}
 
+	public Outgoing register(Outgoing dto, IValidation<Outgoing> validation) throws DAOException {
+		Outgoing entity = getEntity(dto);
+		entity.setStatus(ApprovalStatusType.REGISTERED);
+		return entity;
+
+	}
+
 	@Override
 	public Outcome getOutcome(Outgoing entity) {
 		Outcome outcome = new Outcome();

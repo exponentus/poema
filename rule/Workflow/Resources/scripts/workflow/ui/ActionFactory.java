@@ -15,6 +15,8 @@ public class ActionFactory extends ConventionalActionFactory {
 	public Action newOutgoing = new Action(ActionType.LINK).caption("outgoing").url(AppConst.BASE_URL + "outgoings/new");
 	public Action newOfficeMemo = new Action(ActionType.LINK).caption("office_memo").url(AppConst.BASE_URL + "office-memos/new");
 
+	public Action registerOutgoing = new Action(ActionType.API_ACTION).id("registerOutgoing").caption("register_outgoing").url("register");
+
 	public Action startApproving = new Action(ActionType.API_ACTION).id("startApproving").caption("start_approving").url("startApproving");
 	public Action signApprovalBlock = new Action(ActionType.API_ACTION).id("acceptApprovalBlock").caption("sign")
 			.url("acceptApprovalBlock");

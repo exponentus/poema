@@ -216,6 +216,28 @@ public class OutgoingService extends ApprovalService<Outgoing, Outgoing, Outgoin
 		}
 	}
 
+	@POST
+	@Path("action/register")
+	public Response register(Outgoing dto) {
+		try {
+			_Session ses = getSession();
+			OutgoingDomain domain = new OutgoingDomain(ses);
+			Outgoing entity = domain.register(dto, new DefaultValidation());
+			domain.superUpdate(entity);
+
+			//new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+			Outcome outcome = domain.getOutcome(entity);
+			outcome.setTitle("outgoingRegsitered");
+			outcome.setMessage("outgoingRegsitered");
+
+			return Response.ok(outcome).build();
+		} catch (DTOException e) {
+			return responseValidationError(e);
+		} catch (DAOException | SecureException e) {
+			return responseException(e);
+		}
+	}
+
 	private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
 		_ActionBar actionBar = new _ActionBar(session);
 		IUser<Long> user = session.getUser();
@@ -227,13 +249,16 @@ public class OutgoingService extends ApprovalService<Outgoing, Outgoing, Outgoin
 
 		actionBar.addAction(getApprovalKeySet(user, entity));
 
+		if (entity.getStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
+			actionBar.addAction(action.registerOutgoing);
+		}
+
 		if (!entity.isNew() && entity.isEditable()) {
 			actionBar.addAction(action.deleteDocument);
 		}
 
 		//
-		if ((entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REGISTERED)
-				&& session.getUser().getRoles().contains("can_sign_outgoing")) {
+		if (entity.getStatus() == ApprovalStatusType.REGISTERED && session.getUser().getRoles().contains("can_sign_outgoing")) {
 			actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
 		}
 

@@ -362,6 +362,7 @@
   "action_completed_successfully" : "Действие выполнено успешно",
   "urban_agglomeration" : "Городская агломерация",
   "regions" : "Регионы",
+  "register_outgoing" : "Зарегистрировать",
   "request_type" : "Тип запроса",
   "validation_error" : "Ошибка значения формы",
   "districts" : "Районы",

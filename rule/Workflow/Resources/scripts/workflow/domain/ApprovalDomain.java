@@ -8,9 +8,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 
 import staff.dao.EmployeeDAO;
-import staff.model.Employee;
 import workflow.domain.exception.ApprovalException;
-import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
@@ -19,14 +17,6 @@ public abstract class ApprovalDomain<T extends IApproval> extends DTOService<T> 
 
 	protected ApprovalDomain(_Session ses) {
 		super(ses);
-	}
-
-	public boolean approvalCanBeStarted(T e) {
-		return e.getStatus() == ApprovalStatusType.DRAFT;
-	}
-
-	public boolean employeeCanDoDecisionApproval(T e, Employee employee) {
-		return e.userCanDoDecision(employee);
 	}
 
 	public void startApproving(T e) throws ApprovalException, DTOException {
