@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -80,37 +79,6 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
-
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		try {
-			_Session ses = getSession();
-			ReportDAO dao = new ReportDAO(ses);
-			Report entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (SecureException | DAOException e) {
-			return responseException(e);
-		}
-	}
-
-	@Override
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			ReportDAO dao = new ReportDAO(getSession());
-			Report entity = dao.findByIdentefier(id);
-
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
 			return responseException(e);
 		}
 	}

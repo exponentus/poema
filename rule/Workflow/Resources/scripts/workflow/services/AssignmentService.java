@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -172,22 +171,6 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 		} catch (DTOException e) {
 			return responseValidationError(e);
 		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
-
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		try {
-			_Session ses = getSession();
-			AssignmentDAO dao = new AssignmentDAO(ses);
-			Assignment entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (SecureException | DAOException e) {
 			return responseException(e);
 		}
 	}

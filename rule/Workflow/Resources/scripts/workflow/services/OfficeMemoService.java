@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.service.EntityService;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -28,14 +27,13 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.user.IUser;
 
 import administrator.model.User;
-import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.OfficeMemoFilter;
-import workflow.domain.ApprovalLifecycle;
 import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
@@ -50,7 +48,7 @@ import workflow.ui.ActionFactory;
 
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
-public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomain> {
+public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, OfficeMemoDomain> {
 
 	private ActionFactory action = new ActionFactory();
 
@@ -128,6 +126,7 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 		}
 	}
 
+	@Override
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") String id) {
@@ -231,25 +230,15 @@ public class OfficeMemoService extends EntityService<OfficeMemo, OfficeMemoDomai
 
 	private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
 		_ActionBar actionBar = new _ActionBar(session);
+		IUser<Long> user = session.getUser();
 
 		actionBar.addAction(action.close);
 		if (entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
-		if (omd.approvalCanBeStarted(entity)) {
-			actionBar.addAction(action.startApproving);
-		}
 
-		EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
+		actionBar.addAction(getApprovalKeySet(user, entity));
 
-		if (omd.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-				actionBar.addAction(action.signApprovalBlock);
-			} else {
-				actionBar.addAction(action.acceptApprovalBlock);
-			}
-			actionBar.addAction(action.declineApprovalBlock);
-		}
 		if (omd.canCreateAssignment(entity, (User) session.getUser())) {
 			actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
 					.url(AppConst.BASE_URL + "assignments/new?officememo=" + entity.getIdentifier()));

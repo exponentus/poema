@@ -2,15 +2,11 @@ package workflow.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,7 +18,6 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
@@ -31,15 +26,14 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.user.IUser;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalSchemaType;
-import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OutgoingDAO;
 import workflow.dao.filter.OutgoingFilter;
-import workflow.domain.ApprovalLifecycle;
 import workflow.domain.OutgoingDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
@@ -53,7 +47,7 @@ import workflow.ui.ActionFactory;
 
 @Path("outgoings")
 @Produces(MediaType.APPLICATION_JSON)
-public class OutgoingService extends RestProvider {
+public class OutgoingService extends ApprovalService<Outgoing, Outgoing, OutgoingDomain> {
 
 	private ActionFactory action = new ActionFactory();
 
@@ -117,22 +111,8 @@ public class OutgoingService extends RestProvider {
 		}
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response add(Outgoing dto) {
-		dto.setId(null);
-		return saveForm(dto);
-	}
-
-	@PUT
-	@Path("{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") String id, Outgoing dto) {
-		dto.setId(UUID.fromString(id));
-		return saveForm(dto);
-	}
-
-	private Response saveForm(Outgoing dto) {
+	@Override
+	public Response saveForm(Outgoing dto) {
 		try {
 			OutgoingDomain domain = new OutgoingDomain(getSession());
 			Outgoing entity = domain.fillFromDto(dto, new ValidationToSaveAsDraft(), getWebFormData().getFormSesId());
@@ -144,44 +124,6 @@ public class OutgoingService extends RestProvider {
 		} catch (DAOException | SecureException e) {
 			return responseException(e);
 		}
-	}
-
-	@DELETE
-	@Path("{id}")
-	public Response delete(@PathParam("id") String id) {
-		_Session ses = getSession();
-		try {
-			OutgoingDAO dao = new OutgoingDAO(ses);
-			Outgoing entity = dao.findByIdentefier(id);
-			if (entity != null) {
-				dao.delete(entity);
-			}
-			return Response.noContent().build();
-		} catch (DAOException | SecureException e) {
-			return responseException(e);
-		}
-	}
-
-	@Override
-	@GET
-	@Path("{id}/attachments/{attachId}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		try {
-			OutgoingDAO dao = new OutgoingDAO(getSession());
-			Outgoing entity = dao.findByIdentefier(id);
-
-			return getAttachment(entity, attachId);
-		} catch (DAOException e) {
-			return responseException(e);
-		}
-	}
-
-	@GET
-	@Path("{id}/attachments/{attachId}/{fileName}")
-	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-		return getAttachment(id, attachId);
 	}
 
 	@POST
@@ -276,25 +218,15 @@ public class OutgoingService extends RestProvider {
 
 	private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
 		_ActionBar actionBar = new _ActionBar(session);
+		IUser<Long> user = session.getUser();
 
 		actionBar.addAction(action.close);
 		if (entity.isEditable()) {
 			actionBar.addAction(action.saveAndClose);
 		}
-		if (outDomain.approvalCanBeStarted(entity)) {
-			actionBar.addAction(action.startApproving);
-		}
 
-		EmployeeDAO employeeDAO = new EmployeeDAO(session);
+		actionBar.addAction(getApprovalKeySet(user, entity));
 
-		if (outDomain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
-			if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-				actionBar.addAction(action.signApprovalBlock);
-			} else {
-				actionBar.addAction(action.acceptApprovalBlock);
-			}
-			actionBar.addAction(action.declineApprovalBlock);
-		}
 		if (!entity.isNew() && entity.isEditable()) {
 			actionBar.addAction(action.deleteDocument);
 		}
