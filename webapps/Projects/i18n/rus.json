@@ -330,7 +330,7 @@
   "approver_decision_unknown" : "НЕТ РЕШЕНИЯ",
   "no_primary_org" : "Первичная организация не найдена",
   "region_code" : "Код региона",
-  "wait_while_document_save" : "Пожалуйста ждите... Идет сохранение документа",
+  "wait_while_document_save" : "Запись документа ...",
   "assignments" : "Поручения",
   "localities" : "Населенные пункты",
   "streets" : "Улицы",

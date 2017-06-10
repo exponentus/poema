@@ -7,6 +7,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.FetchType;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -54,6 +56,16 @@ public class AssigneeEntry {
 	// для манипуляций списком
 	public UUID getId() {
 		return UUID.randomUUID();
+	}
+
+	@PreUpdate
+	protected void preUpdate() {
+		System.out.println("cvcdsvsdfvds");
+	}
+
+	@PrePersist
+	protected void prePersist() {
+		System.out.println("cvcdsvsdfvds");
 	}
 
 	public boolean isCoordinator() {
