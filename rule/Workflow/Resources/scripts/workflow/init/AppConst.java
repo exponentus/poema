@@ -9,6 +9,9 @@ public class AppConst extends DefaultAppConst {
 	public static String NAME = "Workflow";
 	public static String NAME_ENG = "Workflow";
 	public static String NAME_RUS = "Документооборот";
+	public static String NAME_POR = "Fluxo de trabalho";
+	public static String NAME_SPA = "Flujo de trabajo";
+	public static String NAME_BUL = "Работния процес";
 	public static String NAME_KAZ = "Құжат айналымы";
 	public static String BASE_URL = "/" + NAME + "/";
 	public static final InterfaceType AVAILABLE_MODE[] = { InterfaceType.SPA };
