@@ -91,9 +91,9 @@ public class Incoming extends ActionableDocument {
 	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
 
-	@ElementCollection
-	@CollectionTable(name = "wf__incoming_attachment_files", joinColumns = @JoinColumn(referencedColumnName = "id"))
-	private List<AttachmentFile> attachmentFiles = new ArrayList<AttachmentFile>();
+	/*	@ElementCollection
+		@CollectionTable(name = "wf__incoming_attachment_files", joinColumns = @JoinColumn(referencedColumnName = "id"))
+		private List<AttachmentFile> attachmentFiles = new ArrayList<AttachmentFile>();*/
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__incoming_tags")
@@ -203,11 +203,12 @@ public class Incoming extends ActionableDocument {
 	}
 
 	public List<AttachmentFile> getAttachmentFiles() {
-		return attachmentFiles;
+		return null;
+		//	return attachmentFiles;
 	}
 
 	public void setAttachmentFiles(List<AttachmentFile> attachmentFiles) {
-		this.attachmentFiles = attachmentFiles;
+		//this.attachmentFiles = attachmentFiles;
 	}
 
 	public List<Tag> getTags() {
