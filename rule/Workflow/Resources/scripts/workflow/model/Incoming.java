@@ -27,6 +27,7 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
+import com.exponentus.common.model.AttachmentFile;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -79,17 +80,20 @@ public class Incoming extends ActionableDocument {
 	private String body;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "wf__incoming_attachments", joinColumns = {
-			@JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
-					@JoinColumn(name = "attachment_id") }, indexes = {
-							@Index(columnList = "incoming_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
-									"incoming_id", "attachment_id" }))
+	@JoinTable(name = "wf__incoming_attachments", joinColumns = { @JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "attachment_id") }, indexes = {
+					@Index(columnList = "incoming_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
+							"incoming_id", "attachment_id" }))
 	@CascadeOnDelete
 	private List<Attachment> attachments = new ArrayList<>();
 
 	@ElementCollection
 	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
+
+	@ElementCollection
+	@CollectionTable(name = "wf__incoming_attachment_files", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<AttachmentFile> attachmentFiles = new ArrayList<AttachmentFile>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__incoming_tags")
@@ -180,10 +184,12 @@ public class Incoming extends ActionableDocument {
 		this.docSubject = docSubject;
 	}
 
+	@Override
 	public String getBody() {
 		return body;
 	}
 
+	@Override
 	public void setBody(String body) {
 		this.body = body;
 	}
@@ -194,6 +200,14 @@ public class Incoming extends ActionableDocument {
 
 	public void setObservers(List<Observer> observers) {
 		this.observers = observers;
+	}
+
+	public List<AttachmentFile> getAttachmentFiles() {
+		return attachmentFiles;
+	}
+
+	public void setAttachmentFiles(List<AttachmentFile> attachmentFiles) {
+		this.attachmentFiles = attachmentFiles;
 	}
 
 	public List<Tag> getTags() {
