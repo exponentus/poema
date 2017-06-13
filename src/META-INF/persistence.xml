@@ -25,7 +25,7 @@
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
-         <class>com.exponentus.common.model.AttachmentFile</class>
+        <class>com.exponentus.common.model.AttachmentFile</class>
         <!-- Monitoring module entities (if the module activated) -->  
         <class>monitoring.model.UserActivity</class>   
         <class>monitoring.model.DocumentActivity</class>
@@ -303,7 +303,7 @@
         <!-- Obligatory the application module entities -->
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
-        <class>com.exponentus.common.model.AttachmentFile</class>
+        <class>com.exponentus.common.model.AttachmentFile</class>        
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>

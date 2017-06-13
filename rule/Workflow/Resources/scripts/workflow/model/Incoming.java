@@ -27,7 +27,7 @@ import javax.persistence.UniqueConstraint;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 
 import com.exponentus.common.model.Attachment;
-import com.exponentus.common.model.AttachmentFile;
+import com.exponentus.common.model.embedded.ExtendedAttachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -91,9 +91,9 @@ public class Incoming extends ActionableDocument {
 	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
 
-	/*	@ElementCollection
-		@CollectionTable(name = "wf__incoming_attachment_files", joinColumns = @JoinColumn(referencedColumnName = "id"))
-		private List<AttachmentFile> attachmentFiles = new ArrayList<AttachmentFile>();*/
+	@ElementCollection
+	@CollectionTable(name = "wf__incoming_ext_attachments", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	private List<ExtendedAttachment> extAttachments = new ArrayList<ExtendedAttachment>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "wf__incoming_tags")
@@ -202,13 +202,12 @@ public class Incoming extends ActionableDocument {
 		this.observers = observers;
 	}
 
-	public List<AttachmentFile> getAttachmentFiles() {
-		return null;
-		//	return attachmentFiles;
+	public List<ExtendedAttachment> getExtAttachments() {
+		return extAttachments;
 	}
 
-	public void setAttachmentFiles(List<AttachmentFile> attachmentFiles) {
-		//this.attachmentFiles = attachmentFiles;
+	public void setExtAttachments(List<ExtendedAttachment> extAttachments) {
+		this.extAttachments = extAttachments;
 	}
 
 	public List<Tag> getTags() {
