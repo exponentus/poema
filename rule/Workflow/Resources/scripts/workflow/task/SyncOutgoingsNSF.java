@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
+import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
@@ -43,13 +43,13 @@ public class SyncOutgoingsNSF extends ImportNSF {
 	private static final String VID_CATEGORY = "01. Входящие";
 	private static final String TMP_FIELD_NAME = "outgoing_tmp_file";
 	private static final String HAR_CATEGORY = "ЦОД";
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Outgoing> entities = new HashMap<>();
 		try {
 			OrganizationDAO oDao = new OrganizationDAO(ses);
-			
+
 			OutgoingDAO dao = new OutgoingDAO(ses);
 			DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
 			DocumentSubjectDAO dsDao = new DocumentSubjectDAO(ses);
@@ -82,7 +82,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							entity.setAuthor(dummyUser);
 						}
-						
+
 						String vid = doc.getItemValueString("Vid");
 						DocumentType docType = dtDao.findByNameAndCategory(VID_CATEGORY, vid);
 						if (docType != null) {
@@ -90,7 +90,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
-						
+
 						String har = doc.getItemValueString("Har");
 						DocumentSubject docSubj = dsDao.findByNameAndCategory(HAR_CATEGORY, har);
 						if (docSubj != null) {
@@ -98,7 +98,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} else {
 							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
-						
+
 						String corrId = doc.getItemValueString("CorrID");
 						if (!corrId.isEmpty()) {
 							Organization org = oDao.findByExtKey(corrId);
@@ -106,10 +106,10 @@ public class SyncOutgoingsNSF extends ImportNSF {
 								entity.setRecipient(org);
 							}
 						}
-						
+
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("BriefContent"), 140));
 						entity.setBody(doc.getItemValueString("BriefContent"));
-						
+
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
 						if (body != null) {
@@ -129,7 +129,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 								Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
 								attachments.add(a);
 							}
-							
+
 							entity.setAttachments(attachments);
 						}
 						normalizeACL(uDao, entity, doc);
@@ -152,5 +152,5 @@ public class SyncOutgoingsNSF extends ImportNSF {
 		}
 		logger.info("done...");
 	}
-	
+
 }

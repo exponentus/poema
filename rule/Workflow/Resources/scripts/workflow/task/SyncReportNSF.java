@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
+import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
@@ -38,7 +38,7 @@ import workflow.model.Report;
 @Command(name = "import_ki_nsf")
 public class SyncReportNSF extends ImportNSF {
 	private static final String TMP_FIELD_NAME = "report_tmp_file";
-	
+
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {
 		Map<String, Report> entities = new HashMap<>();
@@ -48,7 +48,7 @@ public class SyncReportNSF extends ImportNSF {
 			EmployeeDAO employeeDAO = new EmployeeDAO(ses);
 			UserDAO uDao = new UserDAO(ses);
 			User dummyUser = (User) uDao.findByLogin(ConvertorEnvConst.DUMMY_USER);
-			
+
 			ViewEntryCollection vec = getAllEntries("incoming.nsf");
 			ViewEntry entry = vec.getFirstEntry();
 			ViewEntry tmpEntry = null;
@@ -65,30 +65,30 @@ public class SyncReportNSF extends ImportNSF {
 					Assignment parentEntity = aDao.findByExtKey(parent);
 					if (parentEntity != null) {
 						entity.setParent(parentEntity);
-						
+
 						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							entity.setAuthor(author);
 						} else {
 							entity.setAuthor(dummyUser);
 						}
-						
+
 						try {
 							entity.setAppliedRegDate(doc.getFirstItem("DateIsp").getDateTimeValue().toJavaDate());
 						} catch (NotesException ne) {
 							logger.error(ne.text);
 						}
-						
+
 						IUser<Long> authorKi = uDao.findByExtKey(doc.getItemValueString("IntExecutNA"));
 						if (authorKi != null) {
 							entity.setAppliedAuthor(employeeDAO.findByUser(authorKi));
 						} else {
 							entity.setAppliedAuthor(employeeDAO.findByUser(dummyUser));
 						}
-						
+
 						entity.setTitle(StringUtils.abbreviate(doc.getItemValueString("ShortText"), 140));
 						entity.setBody(doc.getItemValueString("ShortText"));
-						
+
 						_FormAttachments files = new _FormAttachments(ses);
 						RichTextItem body = (RichTextItem) doc.getFirstItem("RTFContent");
 						Vector<?> atts = body.getEmbeddedObjects();
@@ -101,7 +101,7 @@ public class SyncReportNSF extends ImportNSF {
 								TempFileCleaner.addFileToDelete(path);
 							}
 						}
-						
+
 						List<Attachment> attachments = new ArrayList<>();
 						for (TempFile tmpFile : files.getFiles(TMP_FIELD_NAME)) {
 							Attachment a = (Attachment) tmpFile.convertTo(new Attachment());
@@ -112,7 +112,7 @@ public class SyncReportNSF extends ImportNSF {
 						entity = entities.put(doc.getUniversalID(), entity);
 					} else {
 						logger.warning("parent has not been found (" + parent + "), record was skipped");
-						
+
 					}
 				}
 				tmpEntry = vec.getNextEntry();
@@ -131,5 +131,5 @@ public class SyncReportNSF extends ImportNSF {
 		}
 		logger.info("done...");
 	}
-	
+
 }

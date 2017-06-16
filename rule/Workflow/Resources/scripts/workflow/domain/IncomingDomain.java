@@ -75,7 +75,8 @@ public class IncomingDomain extends DTOService<Incoming> {
 		if (entity.isNew()) {
 			entity.setAuthor(ses.getUser());
 		}
-		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
+		entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
+		entity.setExtAttachments(dto.getExtAttachments());
 		calculateReadersEditors(entity);
 		return entity;
 	}

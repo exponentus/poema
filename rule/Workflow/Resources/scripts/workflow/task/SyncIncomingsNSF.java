@@ -12,10 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.localization.constants.LanguageCode;
+import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
@@ -52,7 +52,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 		Map<String, Incoming> entities = new HashMap<>();
 		try {
 			OrganizationDAO oDao = new OrganizationDAO(ses);
-			
+
 			IncomingDAO iDao = new IncomingDAO(ses);
 			DocumentTypeDAO dtDao = new DocumentTypeDAO(ses);
 			DocumentLanguageDAO dlDao = new DocumentLanguageDAO(ses);
@@ -103,7 +103,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						} else {
 							logger.error("reference ext value has not been found \"" + vid + "\"");
 						}
-						
+
 						String docLangVal = doc.getItemValueString("langName");
 						LanguageCode intRefKey = docLangCollation.get(docLangVal);
 						if (intRefKey == null) {

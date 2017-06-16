@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
+import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;

@@ -92,6 +92,8 @@ public class Incoming extends ActionableDocument {
 	private List<Observer> observers = new ArrayList<Observer>();
 
 	@ElementCollection
+	//@MapKeyColumn(name = "real_file_name", length = 140)
+	//@Column(name = "ext_attachment")
 	@CollectionTable(name = "wf__incoming_ext_attachments", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<ExtendedAttachment> extAttachments = new ArrayList<ExtendedAttachment>();
 
@@ -202,6 +204,7 @@ public class Incoming extends ActionableDocument {
 		this.observers = observers;
 	}
 
+	@Override
 	public List<ExtendedAttachment> getExtAttachments() {
 		return extAttachments;
 	}

@@ -21,10 +21,10 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.IDBConnectionPool;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jdbc.DatabaseUtil;
-import com.exponentus.dataengine.jpa.TempFile;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.forms.Import4MS;
 import com.exponentus.localization.constants.LanguageCode;
+import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
 import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
@@ -137,8 +137,7 @@ public class SyncIncomings4MS extends Import4MS {
 					}
 
 					inc.setTitle(StringUtils.abbreviate(getStringValue(conn, docId, "briefcontent"), 140));
-					inc.setBody("#" + getStringValue(conn, docId, "corrstring") + "#"
-							+ getStringValue(conn, docId, "briefcontent"));
+					inc.setBody("#" + getStringValue(conn, docId, "corrstring") + "#" + getStringValue(conn, docId, "briefcontent"));
 
 					_FormAttachments files = new _FormAttachments(ses);
 					Map<String, String> blobs = getBlobValue(ses, conn, docId);
@@ -183,8 +182,7 @@ public class SyncIncomings4MS extends Import4MS {
 	private String getStringValue(Connection conn, int docId, String fieldName) {
 		try {
 			Statement s = conn.createStatement();
-			String sql = "SELECT value FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
-					+ fieldName + "';";
+			String sql = "SELECT value FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '" + fieldName + "';";
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				return rs.getString(1);
@@ -199,8 +197,7 @@ public class SyncIncomings4MS extends Import4MS {
 
 	private int getIntValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
-		String sql = "SELECT valueasnumber FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
-				+ fieldName + "';";
+		String sql = "SELECT valueasnumber FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '" + fieldName + "';";
 		ResultSet rs = s.executeQuery(sql);
 		if (rs.next()) {
 			return rs.getInt(1);
@@ -212,8 +209,7 @@ public class SyncIncomings4MS extends Import4MS {
 	private Date getDateValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
 		try {
-			String sql = "SELECT valueasdate FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
-					+ fieldName + "';";
+			String sql = "SELECT valueasdate FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '" + fieldName + "';";
 			ResultSet rs = s.executeQuery(sql);
 			if (rs.next()) {
 				return rs.getDate(1);
@@ -258,8 +254,7 @@ public class SyncIncomings4MS extends Import4MS {
 
 	private int getGloassaryValue(Connection conn, int docId, String fieldName) throws SQLException {
 		Statement s = conn.createStatement();
-		String sql = "SELECT valueasglossary FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '"
-				+ fieldName + "';";
+		String sql = "SELECT valueasglossary FROM custom_fields as cf WHERE cf.docid = " + docId + " AND cf.name = '" + fieldName + "';";
 		ResultSet rs = s.executeQuery(sql);
 		if (rs.next()) {
 			return rs.getInt(1);
