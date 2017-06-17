@@ -111,5 +111,4 @@ public class IncomingDomain extends DTOService<Incoming> {
 		return !entity.isNew() && (entity.getAddressee() != null && entity.getAddressee().getUser().getId().equals(user.getId())
 				|| user.getRoles().contains("chancellery"));
 	}
-
 }

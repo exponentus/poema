@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import reference.model.DemandType;
@@ -73,7 +74,11 @@ public class DemandDomain {
     public Outcome getOutcome(Demand demand) {
         Outcome outcome = new Outcome();
 
-        outcome.setTitle(demand.getTitle());
+        if (StringUtil.isEmpty(demand.getTitle())) {
+            outcome.setTitle("demand");
+        } else {
+            outcome.setTitle(demand.getTitle());
+        }
         outcome.addPayload(demand);
 
         if (!demand.isNew()) {

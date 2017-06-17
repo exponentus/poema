@@ -4,6 +4,7 @@ import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;
+import com.exponentus.util.StringUtil;
 import reference.model.constants.ApprovalType;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
@@ -123,7 +124,11 @@ public class ApplicationForVehicleDomain {
     public Outcome getOutcome(ApplicationForVehicle entity) {
         Outcome outcome = new Outcome();
 
-        outcome.setTitle(entity.getTitle());
+        if (StringUtil.isEmpty(entity.getTitle())) {
+            outcome.setTitle("application_for_vehicle");
+        } else {
+            outcome.setTitle(entity.getTitle());
+        }
         outcome.addPayload(entity.getEntityKind(), entity);
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));

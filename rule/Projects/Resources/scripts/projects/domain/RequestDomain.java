@@ -3,6 +3,7 @@ package projects.domain;
 import administrator.model.User;
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.util.StringUtil;
 import projects.exception.RequestException;
 import projects.model.Request;
 import projects.model.Task;
@@ -65,6 +66,11 @@ public class RequestDomain {
     public Outcome getOutcome(Request request) {
         Outcome outcome = new Outcome();
 
+        if (StringUtil.isEmpty(request.getTitle())) {
+            outcome.setTitle("request");
+        } else {
+            outcome.setTitle(request.getTitle());
+        }
         outcome.addPayload(request);
         outcome.addPayload(request.getTask());
 
