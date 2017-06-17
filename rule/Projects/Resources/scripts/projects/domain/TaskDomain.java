@@ -8,6 +8,7 @@ import org.joda.time.LocalDate;
 
 import com.exponentus.common.model.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.util.StringUtil;
 
 import administrator.model.User;
 import helpdesk.model.Demand;
@@ -21,8 +22,8 @@ import reference.model.TaskType;
 
 public class TaskDomain {
 
-	public Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType,
-			boolean initiative, int dueDateRange) {
+	public Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative,
+			int dueDateRange) {
 		Task task = new Task();
 
 		task.setAuthor(user);
@@ -82,7 +83,7 @@ public class TaskDomain {
 		String title = dto.getTitle();
 		if (title == null || title.isEmpty()) {
 			// TODO here it needed to vanish from markdown symbols
-			title = StringUtils.abbreviate(dto.getBody(), 140);
+			title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
 		}
 		task.setTitle(title);
 		task.setTaskType(dto.getTaskType());
@@ -184,8 +185,7 @@ public class TaskDomain {
 		}
 
 		if (task.getDueDate().after(newDueDate)) {
-			throw new TaskException(
-					"new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
+			throw new TaskException("new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
 		}
 
 		task.setDueDate(newDueDate);
@@ -210,8 +210,7 @@ public class TaskDomain {
 	}
 
 	public boolean taskCanBeDeleted(Task task) {
-		return !task.isNew() && task.isEditable()
-				&& (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.DRAFT);
+		return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.DRAFT);
 	}
 
 	public boolean userCanDoAcknowledged(Task task, User user) {
@@ -275,8 +274,7 @@ public class TaskDomain {
 
 		if (task.getRequests() != null && !task.getRequests().isEmpty()) {
 			Request unresolvedRequest = task.getRequests().stream()
-					.filter(it -> it.getResolution() != ResolutionType.ACCEPTED
-							&& it.getResolution() != ResolutionType.DECLINED)
+					.filter(it -> it.getResolution() != ResolutionType.ACCEPTED && it.getResolution() != ResolutionType.DECLINED)
 					.findFirst().orElse(null);
 			if (unresolvedRequest != null) {
 				outcome.addPayload("unresolvedRequest", unresolvedRequest);
