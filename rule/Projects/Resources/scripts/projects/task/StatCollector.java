@@ -31,7 +31,7 @@ public class StatCollector extends Do {
 			TaskDAO dao = new TaskDAO(session);
 			for (User u : users) {
 				for (TaskStatusType t : TaskStatusType.values()) {
-					statDao.postStat((User) session.getUser(), AppConst.CODE, "author_state", current, t.name(), dao.getColByAuthor(u, t));
+					statDao.postStat(u, AppConst.CODE, "author_state", current, t.name(), dao.getColByAuthor(u, t));
 					statDao.postStat(u, AppConst.CODE, "assignee_state", current, t.name(), dao.getColByAssignee(u.getId(), t));
 				}
 			}

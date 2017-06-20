@@ -29,9 +29,11 @@ import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
 
 import administrator.model.User;
 import projects.dao.filter.TaskFilter;
+import projects.dto.TaskViewEntry;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -289,6 +291,72 @@ public class TaskDAO extends DAO<Task, UUID> {
 		}
 
 		return result;
+	}
+
+	public ViewPage<TaskViewEntry> findCreatedByMe(IUser<Long> user, int pageNum, int pageSize) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		try {
+			CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
+			CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+			Root<Task> root = cq.from(Task.class);
+
+			Predicate condition = cb.equal(root.get("author"), user);
+			condition = cb.and(
+					cb.or(cb.equal(root.get("status"), TaskStatusType.PROCESSING), cb.equal(root.get("status"), TaskStatusType.OPEN)),
+					condition);
+
+			cq.select(cb.construct(TaskViewEntry.class, root.get("id"), root.get("regNumber"), root.get("taskType"), root.get("status"),
+					root.get("priority"), root.get("startDate"), root.get("dueDate"), root.get("tags")))
+					.orderBy(cb.asc(root.get("priority")));
+
+			countCq.select(cb.count(root));
+
+			cq.where(condition);
+			countCq.where(condition);
+
+			TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
+			Query query = em.createQuery(countCq);
+			long count = (long) query.getSingleResult();
+			int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+
+			List<TaskViewEntry> result = typedQuery.getResultList();
+
+			return new ViewPage<>(result, count, maxPage, pageNum);
+		} finally {
+			em.close();
+		}
+	}
+
+	public ViewPage<Task> findAssignedToMe(IUser<Long> user, int pageNum, int pageSize) {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		try {
+			CriteriaQuery<Task> cq = cb.createQuery(Task.class);
+			CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+			Root<Task> taskRoot = cq.from(Task.class);
+
+			Predicate condition = cb.equal(taskRoot.get("assignee"), user.getId());
+			condition = cb.and(cb.or(cb.equal(taskRoot.get("status"), TaskStatusType.PROCESSING),
+					cb.equal(taskRoot.get("status"), TaskStatusType.OPEN)), condition);
+
+			cq.select(taskRoot).orderBy(cb.asc(taskRoot.get("priority")));
+			countCq.select(cb.count(taskRoot));
+
+			cq.where(condition);
+			countCq.where(condition);
+
+			TypedQuery<Task> typedQuery = em.createQuery(cq);
+			Query query = em.createQuery(countCq);
+			long count = (long) query.getSingleResult();
+			int maxPage = pageable(typedQuery, count, pageNum, pageSize);
+
+			List<Task> result = typedQuery.getResultList();
+
+			return new ViewPage<>(result, count, maxPage, pageNum);
+		} finally {
+			em.close();
+		}
 	}
 
 	public long getColByAssignee(Date date, Long user, TaskStatusType status) {
