@@ -94,6 +94,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                     AssignmentViewEntry.class,
                     root.get("id"),
                     root.get("appliedAuthor").get("name"),
+                    root.get("title"),
                     root.get("body"),
                     root.get("controlType").get("locName"),
                     root.get("startDate"),
