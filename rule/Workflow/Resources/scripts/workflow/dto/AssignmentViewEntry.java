@@ -15,6 +15,7 @@ public class AssignmentViewEntry implements IDTO {
     public String kind = "assignment";
 
     public String appliedAuthor;
+    public String title;
     public String body;
     public Map<LanguageCode, String> controlType; // ControlType
     public Date startDate;
@@ -25,9 +26,10 @@ public class AssignmentViewEntry implements IDTO {
     public long responsesCount;
     public List<IDTO> responses;
 
-    public AssignmentViewEntry(UUID id, String appliedAuthor, String body, Map<LanguageCode, String> controlType, Date startDate, Date dueDate, ControlStatusType status) {
+    public AssignmentViewEntry(UUID id, String appliedAuthor, String title, String body, Map<LanguageCode, String> controlType, Date startDate, Date dueDate, ControlStatusType status) {
         this.id = id;
         this.appliedAuthor = appliedAuthor;
+        this.title = title;
         this.body = body;
         this.controlType = controlType;
         this.startDate = startDate;
