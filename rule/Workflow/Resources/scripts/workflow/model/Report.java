@@ -51,6 +51,7 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
 	@JsonBackReference
 	@NotNull
 	@ManyToOne
+	@JoinColumn(updatable = false)
 	private Assignment parent;
 
 	@FTSearchable
@@ -124,5 +125,4 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
 	public String getURL() {
 		return AppConst.BASE_URL + "reports/" + getIdentifier();
 	}
-
 }

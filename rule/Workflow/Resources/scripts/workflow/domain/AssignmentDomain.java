@@ -28,10 +28,11 @@ public class AssignmentDomain extends DTOService<Assignment> {
         dao = new AssignmentDAO(ses);
     }
 
-    public Assignment composeNew(Employee author, ActionableDocument parent) {
+    public Assignment composeNew(Employee author, ActionableDocument primary, Assignment parent) {
         Assignment entity = new Assignment();
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
+        entity.setPrimary(primary);
         entity.setParent(parent);
         entity.setStartDate(new Date());
         entity.setStatus(ControlStatusType.DRAFT);
@@ -57,7 +58,6 @@ public class AssignmentDomain extends DTOService<Assignment> {
         }
         entity.setAppliedAuthor(appliedAuthor);
         entity.setAppliedRegDate(dto.getAppliedRegDate());
-        entity.setParent(dto.getParent());
         entity.setTitle(dto.getTitle());
         entity.setBody(dto.getBody());
 
@@ -77,6 +77,8 @@ public class AssignmentDomain extends DTOService<Assignment> {
 
         if (entity.isNew()) {
             entity.setAuthor(ses.getUser());
+            entity.setPrimary(dto.getPrimary());
+            entity.setParent(dto.getParent());
         }
 
         dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
@@ -149,7 +151,7 @@ public class AssignmentDomain extends DTOService<Assignment> {
         }
         outcome.addPayload(entity);
 
-        ActionableDocument parent = entity.getParent();
+        ActionableDocument parent = entity.getPrimary();
         if (parent != null) {
             outcome.addPayload("parent", parent);
         }

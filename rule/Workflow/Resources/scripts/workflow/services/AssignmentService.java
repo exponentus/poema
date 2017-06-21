@@ -120,19 +120,21 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 				String officeMemoId = getWebFormData().getAnyValueSilently("officememo");
 				String assignmentId = getWebFormData().getAnyValueSilently("assignment");
 
-				ActionableDocument parent = null;
+				ActionableDocument primary;
+				Assignment parent = null;
 
 				if (!incomingId.isEmpty()) {
-					parent = (new IncomingDAO(ses)).findByIdentefier(incomingId);
+					primary = (new IncomingDAO(ses)).findByIdentefier(incomingId);
 				} else if (!officeMemoId.isEmpty()) {
-					parent = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
+					primary = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
 				} else if (!assignmentId.isEmpty()) {
-					//parent = assignmentDAO.findByIdentefier(assignmentId);
+					parent = assignmentDAO.findByIdentefier(assignmentId);
+					primary = parent.getPrimary();
 				} else {
 					throw new IllegalArgumentException("No parent document");
 				}
 
-				entity = ad.composeNew(currentUserEmployee, parent);
+				entity = ad.composeNew(currentUserEmployee, primary, parent);
 			} else {
 				entity = assignmentDAO.findByIdentefier(id);
 			}

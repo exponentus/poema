@@ -9,8 +9,10 @@ import workflow.dao.filter.IncomingFilter;
 import workflow.dto.AssignmentViewEntry;
 import workflow.dto.IDTO;
 import workflow.dto.IncomingViewEntry;
+import workflow.dto.ReportViewEntry;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
+import workflow.model.Report;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -133,7 +135,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
         Root<Assignment> root = cq.from(Assignment.class);
 
-        Predicate condition = cb.equal(root.get("parent"), incoming);
+        Predicate condition = cb.equal(root.get("primary"), incoming);
 
         if (!user.isSuperUser()) {
             condition = cb.and(root.get("readers").in(user.getId()), condition);
@@ -178,7 +180,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         CriteriaQuery<AssignmentViewEntry> cqa = cba.createQuery(AssignmentViewEntry.class);
         Root<Assignment> rootA = cqa.from(Assignment.class);
 
-        Predicate conditionA = cba.equal(rootA.get("parent").get("id"), assignment.getId());
+        Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
             conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
@@ -206,32 +208,43 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         List<IDTO> result = new LinkedList<>(assignmentsVE);
 
         // --- Report
-/*        CriteriaBuilder cbr = em.getCriteriaBuilder();
-        CriteriaQuery<Report> cqr = cbr.createQuery(Report.class);
+        CriteriaBuilder cbr = em.getCriteriaBuilder();
+        CriteriaQuery<ReportViewEntry> cqr = cbr.createQuery(ReportViewEntry.class);
         Root<Report> rootR = cqr.from(Report.class);
-        Join attCount = rootR.join("attachments", JoinType.LEFT);
+        Join reportAtts = rootR.join("attachments", JoinType.LEFT);
 
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
-        if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Report.class)) {
+        if (!user.isSuperUser()) {
             conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
         }
 
-        cqr.select(rootR).where(conditionR);
+        cqr.select(cbr.construct(
+                ReportViewEntry.class,
+                rootR.get("id"),
+                rootR.get("appliedAuthor").get("name"),
+                rootR.get("title"),
+                rootR.get("appliedRegDate"),
+                rootR.get("body"),
+                cbr.count(reportAtts)
+        ))
+                .distinct(true)
+                .where(conditionR)
+                .groupBy(rootR, rootR.get("appliedAuthor").get("name"), reportAtts)
+                .orderBy(cbr.desc(rootR.get("regDate")));
 
         cqr.orderBy(cbr.desc(rootR.get("regDate")));
 
-        TypedQuery<Report> typedQueryR = em.createQuery(cqr);
-        List<Report> reports = typedQueryR.getResultList();
+        TypedQuery<ReportViewEntry> typedQueryR = em.createQuery(cqr);
+        List<ReportViewEntry> reports = typedQueryR.getResultList();
 
         // --- concat & sort by reg date
-        List<IDto> result = new LinkedList<>(assignments);
         result.addAll(reports);
 
-        Supplier<List<IAppEntity<UUID>>> supplier = LinkedList::new;
-        result = result.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
-                .collect(Collectors.toCollection(supplier));
-*/
+//        Supplier<List<IAppEntity<UUID>>> supplier = LinkedList::new;
+//        result = result.stream().sorted((m1, m2) -> m1.getRegDate().after(m2.getRegDate()) ? 1 : -1)
+//                .collect(Collectors.toCollection(supplier));
+
         if (assignmentsVE.size() > 0) {
             for (AssignmentViewEntry ave : assignmentsVE) {
                 Assignment a = em.getReference(Assignment.class, ave.id);

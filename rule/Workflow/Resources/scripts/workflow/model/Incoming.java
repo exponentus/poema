@@ -101,9 +101,6 @@ public class Incoming extends ActionableDocument {
 	@JoinTable(name = "wf__incoming_tags")
 	private List<Tag> tags;
 
-	@Transient
-	private List<IAppEntity<UUID>> responses;
-
 	public String getRegNumber() {
 		return regNumber;
 	}
@@ -224,13 +221,5 @@ public class Incoming extends ActionableDocument {
 	@Override
 	public String getURL() {
 		return AppConst.BASE_URL + "incomings/" + getIdentifier();
-	}
-
-	public List<IAppEntity<UUID>> getResponses() {
-		return responses;
-	}
-
-	public void setResponses(List<IAppEntity<UUID>> responses) {
-		this.responses = responses;
 	}
 }
