@@ -38,7 +38,7 @@ import reference.model.Tag;
 public class DashboardService extends RestProvider {
 
 	@GET
-	public Response getAssignetToMe() {
+	public Response get() {
 		try {
 			_Session session = getSession();
 
@@ -51,7 +51,10 @@ public class DashboardService extends RestProvider {
 
 			StatisticDAO monitDao = new StatisticDAO(session);
 			Date current = new Date();
-			outcome.addPayload("statistic", monitDao.getUserStatistic(projects.init.AppConst.CODE, "assignee_state", session.getUser(),
+			outcome.addPayload("statistic1", monitDao.getStatusStat(projects.init.AppConst.CODE, "assignee_state", session.getUser(),
+					DateUtils.addMonths(current, -1), current, TaskStatusType.PROCESSING.name()));
+
+			outcome.addPayload("statistic2", monitDao.getStatusStat(projects.init.AppConst.CODE, "author_state", session.getUser(),
 					DateUtils.addMonths(current, -1), current, TaskStatusType.PROCESSING.name()));
 
 			TaskDAO taskDAO = new TaskDAO(session);
