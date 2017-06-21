@@ -2,7 +2,7 @@ package workflow.domain;
 
 import java.util.List;
 
-import com.exponentus.common.domain.DTOService;
+import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
@@ -13,7 +13,7 @@ import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 
-public abstract class ApprovalDomain<T extends IApproval> extends DTOService<T> {
+public abstract class ApprovalDomain<T extends IApproval> extends CommonDomain<T> {
 
 	protected ApprovalDomain(_Session ses) {
 		super(ses);

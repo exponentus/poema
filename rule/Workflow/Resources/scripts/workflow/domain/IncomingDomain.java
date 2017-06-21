@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import com.exponentus.common.domain.DTOService;
+import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
@@ -22,7 +22,7 @@ import staff.model.embedded.Observer;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
 
-public class IncomingDomain extends DTOService<Incoming> {
+public class IncomingDomain extends CommonDomain<Incoming> {
 
 	public IncomingDomain(_Session ses) throws DAOException {
 		super(ses);
