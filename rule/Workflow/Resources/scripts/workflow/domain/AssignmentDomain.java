@@ -1,6 +1,6 @@
 package workflow.domain;
 
-import com.exponentus.common.domain.DTOService;
+import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AssignmentDomain extends DTOService<Assignment> {
+public class AssignmentDomain extends CommonDomain<Assignment> {
 
     public AssignmentDomain(_Session session) throws DAOException {
         super(session);
