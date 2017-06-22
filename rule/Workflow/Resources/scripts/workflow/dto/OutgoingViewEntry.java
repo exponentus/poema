@@ -1,7 +1,6 @@
 package workflow.dto;
 
 import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.runtimeobj.IAppEntity;
 import workflow.init.AppConst;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
@@ -28,7 +27,8 @@ public class OutgoingViewEntry {
     public String body;
     public boolean hasAttachments;
 
-    public List<IAppEntity<UUID>> responses;
+    public long responsesCount;
+    public List<IDTO> responses;
 
     public OutgoingViewEntry(UUID id, ApprovalStatusType status, ApprovalResultType result, String title, String regNumber, Date appliedRegDate, String recipient, Map<LanguageCode, String> docLanguage, Map<LanguageCode, String> docType, Map<LanguageCode, String> docSubject, String body, Long attachmentCount) {
         this.id = id;
@@ -49,7 +49,11 @@ public class OutgoingViewEntry {
         return AppConst.BASE_URL + "outgoings/" + id;
     }
 
-    public void setResponses(List<IAppEntity<UUID>> responses) {
+    public void setResponsesCount(long responsesCount) {
+        this.responsesCount = responsesCount;
+    }
+
+    public void setResponses(List<IDTO> responses) {
         this.responses = responses;
     }
 }

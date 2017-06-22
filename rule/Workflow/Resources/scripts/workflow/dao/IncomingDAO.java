@@ -130,12 +130,81 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         }
     }
 
+    public ViewPage<IncomingViewEntry> findIncomingResponsesViewPage(Incoming incoming) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<IncomingViewEntry> cq = cb.createQuery(IncomingViewEntry.class);
+            CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
+            Root<Incoming> root = cq.from(Incoming.class);
+            Join atts = root.join("attachments", JoinType.LEFT);
+
+            Predicate condition = cb.equal(root, incoming);
+
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            cq.select(cb.construct(
+                    IncomingViewEntry.class,
+                    root.get("id"),
+                    root.get("title"),
+                    root.get("regNumber"),
+                    root.get("appliedRegDate"),
+                    root.get("sender").get("name"),
+                    root.get("senderRegNumber"),
+                    root.get("senderAppliedRegDate"),
+                    root.get("addressee").get("name"),
+                    root.get("docLanguage").get("locName"),
+                    root.get("docType").get("locName"),
+                    root.get("docSubject").get("locName"),
+                    root.get("body"),
+                    cb.count(atts)
+            ))
+                    .distinct(true)
+                    .groupBy(root, root.get("sender").get("name"),
+                            root.get("addressee").get("name"), root.get("docLanguage").get("locName"),
+                            root.get("docType").get("locName"), root.get("docSubject").get("locName"), atts);
+
+            countRootCq.select(cb.countDistinct(root));
+
+            if (condition != null) {
+                cq.where(condition);
+                countRootCq.where(condition);
+            }
+
+            TypedQuery<IncomingViewEntry> typedQuery = em.createQuery(cq);
+            TypedQuery<Long> countQuery = em.createQuery(countRootCq);
+
+            long count = countQuery.getSingleResult();
+
+            ViewPage<IncomingViewEntry> vp = new ViewPage<>(typedQuery.getResultList(), count, 0, 0);
+            if (vp.getResult().isEmpty()) {
+                return vp;
+            }
+
+            for (IncomingViewEntry inve : vp.getResult()) {
+                Incoming inc = em.getReference(Incoming.class, inve.id);
+                List<IDTO> responses = findIncomingResponses(inc, em);
+                if (responses != null && responses.size() > 0) {
+                    inve.setResponsesCount((long) responses.size());
+                    inve.setResponses(responses);
+                }
+            }
+
+            return vp;
+        } finally {
+            em.close();
+        }
+    }
+
     private List<IDTO> findIncomingResponses(Incoming incoming, EntityManager em) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
         Root<Assignment> root = cq.from(Assignment.class);
 
         Predicate condition = cb.equal(root.get("primary"), incoming);
+        condition = cb.and(cb.isNull(root.get("parent")), condition);
 
         if (!user.isSuperUser()) {
             condition = cb.and(root.get("readers").in(user.getId()), condition);

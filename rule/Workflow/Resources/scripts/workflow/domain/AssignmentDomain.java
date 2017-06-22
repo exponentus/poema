@@ -153,11 +153,6 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		}
 		outcome.addPayload(entity);
 
-		ActionableDocument parent = entity.getPrimary();
-		if (parent != null) {
-			outcome.addPayload("parent", parent);
-		}
-
 		if (!entity.isNew()) {
 			outcome.addPayload(new ACL(entity));
 		}

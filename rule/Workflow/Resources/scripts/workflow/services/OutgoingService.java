@@ -75,6 +75,23 @@ public class OutgoingService extends ApprovalService<Outgoing, Outgoing, Outgoin
     }
 
     @GET
+    @Path("{id}/responses")
+    public Response getIncomingResponsesViewPage(@PathParam("id") String id) {
+        _Session ses = getSession();
+        try {
+            OutgoingDAO dao = new OutgoingDAO(ses);
+            ViewPage vp = dao.findResponsesViewPage(dao.findByIdentefier(id));
+
+            Outcome outcome = new Outcome();
+            outcome.addPayload(vp);
+
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @GET
     @Path("{id}")
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();

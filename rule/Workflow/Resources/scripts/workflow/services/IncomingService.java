@@ -70,6 +70,23 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
     }
 
     @GET
+    @Path("{id}/responses")
+    public Response getIncomingResponsesViewPage(@PathParam("id") String id) {
+        _Session ses = getSession();
+        try {
+            IncomingDAO incomingDAO = new IncomingDAO(ses);
+            ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findByIdentefier(id));
+
+            Outcome outcome = new Outcome();
+            outcome.addPayload(vp);
+
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @GET
     @Path("{id}")
     public Response getById(@PathParam("id") String id) {
         _Session ses = getSession();
