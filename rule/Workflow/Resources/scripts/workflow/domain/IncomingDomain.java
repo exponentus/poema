@@ -99,7 +99,8 @@ public class IncomingDomain extends CommonDomain<Incoming> {
 		return entity;
 	}
 
-	private void calculateReadersEditors(Incoming entity) {
+	@Override
+	public void calculateReadersEditors(Incoming entity) {
 		entity.resetReadersEditors();
 		entity.addReaderEditor(entity.getAuthor());
 		entity.addReader(entity.getAddressee().getUser());
