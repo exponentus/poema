@@ -17,6 +17,7 @@ import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
 import workflow.model.Assignment;
 import workflow.model.Report;
@@ -103,5 +104,16 @@ public class ReportDomain extends CommonDomain<Report> {
 		}
 
 		return outcome;
+	}
+
+	public Assignment checkAssignment(Report entity) throws DAOException, SecureException {
+		AssignmentDAO dao = new AssignmentDAO(ses);
+		Assignment assignment = dao.findById(entity.getParent().getId());
+		ControlLifecycle cl = new ControlLifecycle(assignment);
+		cl.check();
+
+		dao.update(assignment);
+
+		return assignment;
 	}
 }

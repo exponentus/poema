@@ -75,6 +75,8 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 			Report entity = domain.fillFromDto(dto, new Validation(), getWebFormData().getFormSesId());
 			Outcome outcome = domain.getOutcome(domain.save(entity));
 
+			domain.checkAssignment(entity);
+
 			return Response.ok(outcome).build();
 		} catch (DTOException e) {
 			return responseValidationError(e);

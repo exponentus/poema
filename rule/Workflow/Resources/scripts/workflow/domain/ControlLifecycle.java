@@ -47,6 +47,7 @@ public class ControlLifecycle {
 						assignee.setStatus(ControlStatusType.COMPLETED);
 						assignee.setStatusTime(current);
 						assignee.setResetInfo(EnvConst.APP_ID);
+
 					}
 				}
 			}
