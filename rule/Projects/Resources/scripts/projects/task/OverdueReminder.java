@@ -34,6 +34,7 @@ public class OverdueReminder extends Do {
 	private Tag tag;
 	private TaskDAO tDao;
 
+	@Override
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			TagDAO tagDAO = new TagDAO(session);
@@ -42,8 +43,7 @@ public class OverdueReminder extends Do {
 			tags.add(tag);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				List<Task> tl = tDao
-						.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
+				List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
 				tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
 				processRemind(tl, session);
 			}
@@ -83,13 +83,11 @@ public class OverdueReminder extends Do {
 						memo.addVar("lang", "&lang=" + user_lang);
 						memo.addVar("user", user.getUserName());
 
-						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_overdued",
-								user_lang);
+						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_overdued", user_lang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
 						MailAgent ma = new MailAgent("task_overdued");
-						ma.sendMessage(recipients,
-								getCurrentAppEnv().vocabulary.getWord("notify_about_overdued_task", user_lang),
+						ma.sendMessage(recipients, getCurrentAppEnv().getVocabulary().getWord("notify_about_overdued_task", user_lang),
 								memo.getBody(body));
 					}
 				}

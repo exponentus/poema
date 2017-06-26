@@ -41,8 +41,7 @@ public class ExpiredTracking extends Do {
 			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)),
-						session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)), session);
 				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)), session);
 			} else {
 				logger.warning("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
@@ -75,8 +74,7 @@ public class ExpiredTracking extends Do {
 					task.setTags(tags);
 					try {
 						tDao.update(task);
-						logger.info(
-								"The task \"" + task.getRegNumber() + "\" was unmarked as \"" + tag.getName() + "\"");
+						logger.info("The task \"" + task.getRegNumber() + "\" was unmarked as \"" + tag.getName() + "\"");
 					} catch (SecureException | DAOException e) {
 						setError(e);
 					}
@@ -105,7 +103,7 @@ public class ExpiredTracking extends Do {
 			memo.addVar("title", task.getTitle());
 			memo.addVar("content", task.getBody());
 			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("status", env.vocabulary.getWord(task.getStatus().name(), lang));
+			memo.addVar("status", env.getVocabulary().getWord(task.getStatus().name(), lang));
 			memo.addVar("url", env.getURL() + "/" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
@@ -113,7 +111,7 @@ public class ExpiredTracking extends Do {
 				recipients.add(assigneeUser.getEmail());
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent("task_overdued");
-				ma.sendMessage(recipients, env.vocabulary.getWord("notify_about_overdued_task", lang),
+				ma.sendMessage(recipients, env.getVocabulary().getWord("notify_about_overdued_task", lang),
 						memo.getBody(env.templates.getTemplate(MessagingType.EMAIL, "task_overdued", lang)));
 			}
 		} catch (Exception e) {

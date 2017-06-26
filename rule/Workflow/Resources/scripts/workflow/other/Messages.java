@@ -74,7 +74,7 @@ public class Messages {
 					List<String> recipients = new ArrayList<>();
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent(NOTIFY_ASSIGNEE_TEMPLATE);
-					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ASSIGNEE_TEMPLATE, lang),
+					ma.sendMessage(recipients, appEnv.getVocabulary().getWord(NOTIFY_ASSIGNEE_TEMPLATE, lang),
 							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ASSIGNEE_TEMPLATE, lang)));
 				} catch (MsgException e) {
 					logger.exception(e);
@@ -114,7 +114,7 @@ public class Messages {
 				List<String> recipients = new ArrayList<>();
 				recipients.add(user.getEmail());
 				MailAgent ma = new MailAgent(NOTIFY_ADDRESSEE_TEMPLATE);
-				ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_ADDRESSEE_TEMPLATE, lang),
+				ma.sendMessage(recipients, appEnv.getVocabulary().getWord(NOTIFY_ADDRESSEE_TEMPLATE, lang),
 						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_ADDRESSEE_TEMPLATE, lang)));
 			} catch (MsgException e) {
 				logger.exception(e);
@@ -159,7 +159,7 @@ public class Messages {
 			Memo memo = new Memo();
 			memo.addVar("title", title);
 			memo.addVar("author", approval.getAuthor().getUserName());
-			memo.addVar("result", appEnv.vocabulary.getWord(approval.getResult().name(), lang));
+			memo.addVar("result", appEnv.getVocabulary().getWord(approval.getResult().name(), lang));
 
 			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 
@@ -177,7 +177,7 @@ public class Messages {
 					List<String> recipients = new ArrayList<>();
 					recipients.add(user.getEmail());
 					MailAgent ma = new MailAgent(NOTIFY_PROJECT_AUTHOR_TEMPLATE);
-					ma.sendMessage(recipients, appEnv.vocabulary.getWord(NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang),
+					ma.sendMessage(recipients, appEnv.getVocabulary().getWord(NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang),
 							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, NOTIFY_PROJECT_AUTHOR_TEMPLATE, lang)));
 				} catch (MsgException e) {
 					logger.exception(e);
@@ -239,7 +239,7 @@ public class Messages {
 			List<String> recipients = new ArrayList<>();
 			recipients.add(user.getEmail());
 			MailAgent ma = new MailAgent(NOTIFY_PROJECT_AUTHOR_TEMPLATE);
-			ma.sendMessage(recipients, appEnv.vocabulary.getWord(templateName, lang),
+			ma.sendMessage(recipients, appEnv.getVocabulary().getWord(templateName, lang),
 					memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, templateName, lang)));
 		}
 	}

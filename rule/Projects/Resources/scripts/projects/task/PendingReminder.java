@@ -71,16 +71,14 @@ public class PendingReminder extends Do {
 						LanguageCode userLang = u.getDefaultLang();
 						memo.addVar("lang", "&lang=" + userLang);
 						memo.addVar("user", user.getUserName());
-						memo.addVar("to_unsubscr", Environment.getFullHostName() + "/Projects" + EnvConst.REST_PREFIX
-								+ "/service/messaging/unsubcribemail/");
+						memo.addVar("to_unsubscr",
+								Environment.getFullHostName() + "/Projects" + EnvConst.REST_PREFIX + "/service/messaging/unsubcribemail/");
 
-						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_pending",
-								userLang);
+						String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_pending", userLang);
 						List<String> recipients = new ArrayList<>();
 						recipients.add(user.getEmail());
 						MailAgent ma = new MailAgent("task_pending");
-						ma.sendMessage(recipients,
-								getCurrentAppEnv().vocabulary.getWord("notify_about_pending_task", userLang),
+						ma.sendMessage(recipients, getCurrentAppEnv().getVocabulary().getWord("notify_about_pending_task", userLang),
 								memo.getBody(body));
 					}
 				}
