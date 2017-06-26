@@ -142,21 +142,21 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		}
 	}
 
-	@Override
-	public Outcome getOutcome(Assignment entity) {
-		Outcome outcome = new Outcome();
-
-		if (StringUtil.isEmpty(entity.getTitle())) {
-			outcome.setTitle("assignment");
-		} else {
-			outcome.setTitle(entity.getTitle());
-		}
-		outcome.addPayload(entity);
-
-		if (!entity.isNew()) {
-			outcome.addPayload(new ACL(entity));
-		}
-
-		return outcome;
-	}
+//	@Override
+//	public Outcome getOutcome(Assignment entity) {
+//		Outcome outcome = new Outcome();
+//
+//		if (StringUtil.isEmpty(entity.getTitle())) {
+//			outcome.setTitle("assignment");
+//		} else {
+//			outcome.setTitle(entity.getTitle());
+//		}
+//		outcome.addPayload(entity);
+//
+//		if (!entity.isNew()) {
+//			outcome.addPayload(new ACL(entity));
+//		}
+//
+//		return outcome;
+//	}
 }
