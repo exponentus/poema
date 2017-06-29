@@ -16,7 +16,9 @@ import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
+import workflow.dao.IncomingDAO;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
@@ -62,6 +64,13 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		entity.setTitle(dto.getTitle());
 		entity.setBody(dto.getBody());
 
+		Assignment parent = dto.getParent();
+		if (parent != null) {
+			entity.setParent(dao.findById(parent.getId()));
+		}
+		IncomingDAO adDao = new IncomingDAO(ses);
+		entity.setPrimary(adDao.findById(dto.getPrimary().getId()));
+
 		List<Observer> observers = new ArrayList<Observer>();
 		for (Observer o : dto.getObservers()) {
 			Observer observer = new Observer();
@@ -78,8 +87,6 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
 		if (entity.isNew()) {
 			entity.setAuthor(ses.getUser());
-			entity.setPrimary(dto.getPrimary());
-			entity.setParent(dto.getParent());
 		}
 
 		dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
