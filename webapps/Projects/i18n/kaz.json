@@ -449,6 +449,7 @@
   "addressee" : "addressee",
   "files" : "Тіркемелер",
   "claim_decision_type" : "claim_decision_type",
+  "editing_is_restricted" : "editing_is_restricted",
   "send" : "Жіберу",
   "demand_types" : null,
   "request" : null,

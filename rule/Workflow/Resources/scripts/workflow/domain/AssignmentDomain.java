@@ -96,8 +96,6 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
 	@Override
 	public void calculateReadersEditors(Assignment entity) {
-		entity.resetReadersEditors();
-		entity.addReader(entity.getAuthor());
 		List<Observer> observers = entity.getObservers();
 		if (observers != null) {
 			for (Observer observer : observers) {

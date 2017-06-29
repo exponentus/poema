@@ -449,6 +449,7 @@
   "addressee" : "Recipient",
   "files" : "Attachments",
   "claim_decision_type" : "Decisions made by criminal prosecution authority",
+  "editing_is_restricted" : "It is not enough permissions to change the data",
   "send" : "Send",
   "demand_types" : "Demand types",
   "request" : "Request",

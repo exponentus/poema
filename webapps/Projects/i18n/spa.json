@@ -449,6 +449,7 @@
   "addressee" : "addressee",
   "files" : null,
   "claim_decision_type" : "claim_decision_type",
+  "editing_is_restricted" : "editing_is_restricted",
   "send" : null,
   "demand_types" : null,
   "request" : "Solicitud",

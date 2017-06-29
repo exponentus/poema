@@ -33,6 +33,7 @@ public class ControlLifecycle {
 			}
 			entity.setStatusTime(current);
 			entity.setStatus(ControlStatusType.PROCESSING);
+			entity.resetEditors();
 		}
 	}
 
