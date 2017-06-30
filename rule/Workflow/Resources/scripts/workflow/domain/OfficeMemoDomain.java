@@ -83,7 +83,6 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
 	@Override
 	public void calculateReadersEditors(OfficeMemo entity) {
-		entity.resetReadersEditors();
 		if (entity.getStatus() == ApprovalStatusType.DRAFT) {
 			entity.addReaderEditor(entity.getAuthor());
 		} else {
@@ -97,9 +96,6 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 		}
 	}
 
-	public boolean documentCanBeDeleted(OfficeMemo om) {
-		return !om.isNew() && om.isEditable();
-	}
 
 	@Override
 	public OfficeMemo save(OfficeMemo entity) throws SecureException, DAOException, DTOException {

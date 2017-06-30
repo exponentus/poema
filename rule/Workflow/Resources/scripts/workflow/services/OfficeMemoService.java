@@ -160,7 +160,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, O
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);
             OfficeMemo entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
             domain.startApproving(entity);
-            domain.save(entity);
+            domain.superUpdate(entity);
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("approving_started");

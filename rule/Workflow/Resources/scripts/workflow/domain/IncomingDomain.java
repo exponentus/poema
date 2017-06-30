@@ -101,7 +101,6 @@ public class IncomingDomain extends CommonDomain<Incoming> {
 
 	@Override
 	public void calculateReadersEditors(Incoming entity) {
-		entity.resetReadersEditors();
 		entity.addReaderEditor(entity.getAuthor());
 		entity.addReader(entity.getAddressee().getUser());
 

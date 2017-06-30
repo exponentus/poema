@@ -122,7 +122,8 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		cl.start();
 	}
 
-	public void resetAssignee(Assignment entity, Assignment dto, Employee resetEmployee) {
+	public Assignment resetAssignee(Assignment dto, Employee resetEmployee) throws DAOException {
+		Assignment entity = getEntity(dto.getId());
 		List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
 		List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
 		for (AssigneeEntry dtoEntry : dtoAssigneeEntities) {
@@ -145,6 +146,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		if (completedAssignee == assigneeEntities.size()) {
 			entity.setStatus(ControlStatusType.COMPLETED);
 		}
+		return entity;
 	}
 
 //	@Override

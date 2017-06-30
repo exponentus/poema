@@ -185,7 +185,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 			AssignmentDomain domain = new AssignmentDomain(ses);
 			Assignment entity = domain.fillFromDto(dto, new ValidationToStartImpl(), getWebFormData().getFormSesId());
 			domain.startAssignee(entity);
-			domain.save(entity);
+			domain.superUpdate(entity);
 
 			Outcome outcome = new Outcome();
 			outcome.addMessage("assignment_was_started_to_impl");
@@ -203,17 +203,16 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 	public Response resetAssignee(Assignment dto) {
 		try {
 			_Session ses = getSession();
-			AssignmentDAO dao = new AssignmentDAO(ses);
-			Assignment entity = dao.findById(dto.getId());
 			AssignmentDomain domain = new AssignmentDomain(ses);
 
-			domain.resetAssignee(entity, dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
-
-			dao.update(entity, false);
+			Assignment entity = domain.resetAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+			domain.superUpdate(entity);
 
 			return Response.ok(new Outcome()).build();
 		} catch (DAOException | SecureException e) {
 			return responseException(e);
+		} catch (DTOException e) {
+			return responseValidationError(e);
 		}
 	}
 
