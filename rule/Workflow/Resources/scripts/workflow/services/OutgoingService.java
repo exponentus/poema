@@ -149,7 +149,7 @@ public class OutgoingService extends ApprovalService<Outgoing, Outgoing, Outgoin
                 entity.setSchema(ApprovalSchemaType.REJECT_IF_NO);
             }
             domain.startApproving(entity);
-            domain.save(entity);
+            domain.superUpdate(entity);
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("approving_started");

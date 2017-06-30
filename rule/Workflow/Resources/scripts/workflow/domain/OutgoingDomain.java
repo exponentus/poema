@@ -88,7 +88,6 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
 	@Override
 	public void calculateReadersEditors(Outgoing entity) {
-		entity.resetReadersEditors();
 		if (entity.getStatus() == ApprovalStatusType.DRAFT) {
 			entity.addReaderEditor(entity.getAuthor());
 		} else {
