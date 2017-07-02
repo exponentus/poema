@@ -20,7 +20,6 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>com.exponentus.common.model.RecycleBin</class>
-        <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
         <class>com.exponentus.common.model.embedded.CrossLink</class>
@@ -35,7 +34,6 @@
     </persistence-unit>
 
     <persistence-unit name="Staff" transaction-type="RESOURCE_LOCAL">
-        <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <!-- Obligatory the application module entities -->
         <class>administrator.model.Language</class>
@@ -192,7 +190,6 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-        <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -235,7 +232,6 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-        <class>com.exponentus.common.model.ViewEntry</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -351,7 +347,6 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-        <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->
         <class>monitoring.model.UserActivity</class>      
         <class>monitoring.model.DocumentActivity</class>
@@ -393,7 +388,6 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-        <class>com.exponentus.common.model.ViewEntry</class>
          <!-- Monitoring module entities -->
         <class>monitoring.model.UserActivity</class>       
         <class>monitoring.model.DocumentActivity</class>
@@ -430,7 +424,6 @@
         <class>audit.model.Project</class>
         <class>audit.model.Report</class>
         <!-- Common module entities -->
-        <class>com.exponentus.common.model.ViewEntry</class>
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>        
         <!-- Workflow module entities -->     

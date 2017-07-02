@@ -3,11 +3,13 @@ package workflow.domain;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
@@ -19,6 +21,7 @@ import staff.model.embedded.Observer;
 import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
+import workflow.dao.OfficeMemoDAO;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
@@ -68,9 +71,20 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 		if (parent != null) {
 			entity.setParent(dao.findById(parent.getId()));
 		}
-		IncomingDAO adDao = new IncomingDAO(ses);
-		entity.setPrimary(adDao.findById(dto.getPrimary().getId()));
 
+		UUID primaryId = dto.getPrimary().getId();
+		IncomingDAO adDao = new IncomingDAO(ses);
+		ActionableDocument actionableEntity = null;
+		try {
+			actionableEntity = adDao.findById(primaryId);
+		}catch (DAOException e){
+			if (e.getType() == DAOExceptionType.ENTITY_NOT_FOUND){
+				OfficeMemoDAO omDao = new OfficeMemoDAO(ses);
+				actionableEntity = omDao.findById(primaryId);
+			}
+		}
+
+		entity.setPrimary(actionableEntity);
 		List<Observer> observers = new ArrayList<Observer>();
 		for (Observer o : dto.getObservers()) {
 			Observer observer = new Observer();

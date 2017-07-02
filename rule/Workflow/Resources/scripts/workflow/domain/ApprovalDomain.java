@@ -34,10 +34,6 @@ public abstract class ApprovalDomain<T extends IApproval> extends CommonDomain<T
 		lifecycle.decline(user, decisionComment);
 	}
 
-	public void skipApprovalBlock(T e) throws ApprovalException {
-		ApprovalLifecycle lifecycle = new ApprovalLifecycle(e);
-		lifecycle.skip();
-	}
 
 	@SuppressWarnings("unchecked")
 	public T backToRevise(T entity) throws ApprovalException {
