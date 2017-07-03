@@ -30,6 +30,7 @@ public class TaskWatcher extends Do {
 			for (Task task : taskList) {
 				if (current.after(task.getStartDate())) {
 					task.setStatus(TaskStatusType.OPEN);
+					task.setStatusDate(new Date());
 					try {
 						tDao.update(task);
 						logger.info("The task \"" + task.getTitle() + "\" was put in processing");
