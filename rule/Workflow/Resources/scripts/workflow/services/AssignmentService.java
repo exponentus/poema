@@ -222,13 +222,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
-            String btnLabel;
-            if (entity.getParent() == null) {
-                btnLabel = "new_assignment";
-            } else {
-                btnLabel = "new_sub_assignment";
-            }
-            actionBar.addAction(new Action(ActionType.LINK).caption(btnLabel)
+            actionBar.addAction(new Action(ActionType.LINK).caption("new_sub_assignment")
                     .url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
         }
 
