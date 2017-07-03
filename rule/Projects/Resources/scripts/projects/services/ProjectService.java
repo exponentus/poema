@@ -90,7 +90,7 @@ public class ProjectService extends RestProvider {
             EmployeeDAO empDao = new EmployeeDAO(session);
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
-            ProjectDomain projectDomain = new ProjectDomain();
+            ProjectDomain projectDomain = new ProjectDomain(session);
             boolean isNew = "new".equals(id);
 
             if (isNew) {
@@ -139,7 +139,7 @@ public class ProjectService extends RestProvider {
 
             ProjectDAO dao = new ProjectDAO(session);
             Project project;
-            ProjectDomain projectDomain = new ProjectDomain();
+            ProjectDomain projectDomain = new ProjectDomain(session);
 
             if (dto.isNew()) {
                 project = new Project();

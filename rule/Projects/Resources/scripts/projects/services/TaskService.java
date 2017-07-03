@@ -121,7 +121,7 @@ public class TaskService extends RestProvider {
             TaskDAO taskDAO = new TaskDAO(session);
             IUser<Long> user = session.getUser();
             Task task;
-            TaskDomain taskDomain = new TaskDomain();
+            TaskDomain taskDomain = new TaskDomain(session);
 
             if (isNew) {
                 Project project = null;
@@ -221,7 +221,7 @@ public class TaskService extends RestProvider {
             }
             taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
 
-            TaskDomain taskDomain = new TaskDomain();
+            TaskDomain taskDomain = new TaskDomain(session);
             taskDomain.fillFromDto(task, taskDto);
             IMonitoringDAO mDao = Environment.getMonitoringDAO();
 
@@ -298,7 +298,7 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findByIdentefier(id);
 
-            TaskDomain taskDomain = new TaskDomain();
+            TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.acknowledgedTask(task, (User) getSession().getUser());
 
             dao.update(task, false);
@@ -319,7 +319,7 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findByIdentefier(id);
 
-            TaskDomain taskDomain = new TaskDomain();
+            TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.completeTask(task);
 
             dao.update(task, false);
@@ -340,7 +340,7 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findByIdentefier(id);
 
-            TaskDomain taskDomain = new TaskDomain();
+            TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.cancelTask(task, comment);
 
             dao.update(task, false);

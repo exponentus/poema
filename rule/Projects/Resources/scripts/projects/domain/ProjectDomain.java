@@ -1,85 +1,101 @@
 package projects.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.exponentus.common.model.ACL;
-import com.exponentus.env.EnvConst;
-import com.exponentus.rest.outgoingdto.Outcome;
-
 import administrator.model.User;
+import com.exponentus.common.domain.CommonDomain;
+import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.model.ACL;
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
+import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.scripting._Session;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 
-public class ProjectDomain {
+import java.util.HashSet;
+import java.util.Set;
 
-	public Project composeNew(User author) {
-		Project project = new Project();
+public class ProjectDomain extends CommonDomain<Project> {
 
-		project.setAuthor(author);
-		project.setComment("");
-		project.setStatus(ProjectStatusType.DRAFT);
+    public ProjectDomain(_Session ses) {
+        super(ses);
+    }
 
-		return project;
-	}
+    public Project composeNew(User author) {
+        Project project = new Project();
 
-	public void fillFromDto(Project project, Project dto, User author) {
-		if (project.isNew()) {
-			project.setAuthor(author);
-		}
-		project.setName(dto.getName());
-		project.setCustomer(dto.getCustomer());
-		project.setManager(dto.getManager());
-		project.setProgrammer(dto.getProgrammer());
-		project.setTester(dto.getTester());
-		project.setObservers(dto.getObservers());
-		project.setRepresentatives(dto.getRepresentatives());
-		project.setComment(dto.getComment());
-		project.setStatus(dto.getStatus());
-		project.setFinishDate(dto.getFinishDate());
-		project.setAttachments(dto.getAttachments());
-		project.setPrimaryLanguage(EnvConst.getDefaultLang());
+        project.setAuthor(author);
+        project.setComment("");
+        project.setStatus(ProjectStatusType.DRAFT);
 
-		calculateReaders(project);
-	}
+        return project;
+    }
 
-	public void calculateReaders(Project project) {
-		Set<Long> readers = new HashSet<>();
-		try {
-			readers.add(project.getAuthor().getId());
-		} catch (Exception e) {
+    @Override
+    public Project fillFromDto(Project dto, IValidation<Project> validation, String formSesId) throws DTOException, DAOException {
+        return null;
+    }
 
-		}
-		readers.add(project.getManager());
-		readers.add(project.getProgrammer());
-		if (project.getTester() > 0) {
-			readers.add(project.getTester());
-		}
-		if (project.getObservers() != null) {
-			readers.addAll(project.getObservers());
-		}
+    public void fillFromDto(Project project, Project dto, User author) {
+        if (project.isNew()) {
+            project.setAuthor(author);
+        }
+        project.setName(dto.getName());
+        project.setCustomer(dto.getCustomer());
+        project.setManager(dto.getManager());
+        project.setProgrammer(dto.getProgrammer());
+        project.setTester(dto.getTester());
+        project.setObservers(dto.getObservers());
+        project.setRepresentatives(dto.getRepresentatives());
+        project.setComment(dto.getComment());
+        project.setStatus(dto.getStatus());
+        project.setFinishDate(dto.getFinishDate());
+        project.setAttachments(dto.getAttachments());
+        project.setPrimaryLanguage(EnvConst.getDefaultLang());
 
-		project.setReaders(readers);
-	}
+        calculateReaders(project);
+    }
 
-	public boolean projectCanBeDeleted(Project project) {
-		return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
-	}
+    public void calculateReaders(Project project) {
+        Set<Long> readers = new HashSet<>();
+        try {
+            readers.add(project.getAuthor().getId());
+        } catch (Exception e) {
 
-	public Outcome getOutcome(Project project) {
-		Outcome outcome = new Outcome();
+        }
+        readers.add(project.getManager());
+        readers.add(project.getProgrammer());
+        if (project.getTester() > 0) {
+            readers.add(project.getTester());
+        }
+        if (project.getObservers() != null) {
+            readers.addAll(project.getObservers());
+        }
 
-		if (project.isNew()) {
-			outcome.setTitle("new_project");
-		} else {
-			outcome.setTitle("project");
-		}
+        project.setReaders(readers);
+    }
 
-		outcome.addPayload(project);
-		if (!project.isNew()) {
-			outcome.addPayload(new ACL(project));
-		}
+    public boolean projectCanBeDeleted(Project project) {
+        return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
+    }
 
-		return outcome;
-	}
+    public Outcome getOutcome(Project project) {
+        Outcome outcome = new Outcome();
+
+        if (project.isNew()) {
+            outcome.setTitle(Environment.vocabulary.getWord("new_project", ses.getLang()));
+            outcome.addPayload("contentTitle", "new_project");
+        } else {
+            outcome.setTitle(Environment.vocabulary.getWord("project", ses.getLang()) + " " + project.getTitle());
+            outcome.addPayload("contentTitle", "project");
+        }
+
+        outcome.addPayload(project);
+        if (!project.isNew()) {
+            outcome.addPayload(new ACL(project));
+        }
+
+        return outcome;
+    }
 }

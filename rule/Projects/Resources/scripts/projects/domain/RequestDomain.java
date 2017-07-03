@@ -1,8 +1,14 @@
 package projects.domain;
 
 import administrator.model.User;
+import com.exponentus.common.domain.CommonDomain;
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
 import projects.exception.RequestException;
 import projects.model.Request;
@@ -14,7 +20,11 @@ import java.util.Date;
 import static projects.model.constants.ResolutionType.ACCEPTED;
 import static projects.model.constants.ResolutionType.DECLINED;
 
-public class RequestDomain {
+public class RequestDomain extends CommonDomain<Request> {
+
+    public RequestDomain(_Session ses) {
+        super(ses);
+    }
 
     public Request composeNew(User author, Task task) {
         Request request = new Request();
@@ -23,6 +33,11 @@ public class RequestDomain {
         request.setTask(task);
 
         return request;
+    }
+
+    @Override
+    public Request fillFromDto(Request dto, IValidation<Request> validation, String formSesId) throws DTOException, DAOException {
+        return null;
     }
 
     public void fillFromDto(Request request, Request dto) {
@@ -67,12 +82,13 @@ public class RequestDomain {
         Outcome outcome = new Outcome();
 
         if (StringUtil.isEmpty(request.getTitle())) {
-            outcome.setTitle("request");
+            outcome.setTitle(Environment.vocabulary.getWord("task_request", ses.getLang()) + " " + request.getTitle());
         } else {
             outcome.setTitle(request.getTitle());
         }
         outcome.addPayload(request);
         outcome.addPayload(request.getTask());
+        outcome.addPayload("contentTitle", "task_request");
 
         if (!request.isNew()) {
             outcome.addPayload(new ACL(request));

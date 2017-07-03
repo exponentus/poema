@@ -1,9 +1,14 @@
 package helpdesk.domain;
 
 import administrator.model.User;
+import com.exponentus.common.domain.CommonDomain;
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
@@ -11,7 +16,11 @@ import reference.model.DemandType;
 
 import java.util.Date;
 
-public class DemandDomain {
+public class DemandDomain extends CommonDomain<Demand> {
+
+    public DemandDomain(_Session ses) {
+        super(ses);
+    }
 
     public Demand composeNew(User user, DemandType demandType) {
         Demand demand = new Demand();
@@ -23,6 +32,11 @@ public class DemandDomain {
         demand.setDemandType(demandType);
 
         return demand;
+    }
+
+    @Override
+    public Demand fillFromDto(Demand dto, IValidation<Demand> validation, String formSesId) throws DTOException, DAOException {
+        return null;
     }
 
     public void fillFromDto(Demand demand, Demand dto, User user) throws DTOException {
@@ -75,11 +89,12 @@ public class DemandDomain {
         Outcome outcome = new Outcome();
 
         if (StringUtil.isEmpty(demand.getTitle())) {
-            outcome.setTitle("demand");
+            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()));
         } else {
-            outcome.setTitle(demand.getTitle());
+            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + demand.getTitle());
         }
         outcome.addPayload(demand);
+        outcome.addPayload("contentTitle", "demand");
 
         if (!demand.isNew()) {
             outcome.addPayload(new ACL(demand));
