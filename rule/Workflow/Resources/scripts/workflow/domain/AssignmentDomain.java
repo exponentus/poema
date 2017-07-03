@@ -7,18 +7,14 @@ import java.util.UUID;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
-import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.util.StringUtil;
 
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
@@ -110,6 +106,11 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
 	@Override
 	public void calculateReadersEditors(Assignment entity) {
+		if (entity.getStatus() == ControlStatusType.DRAFT) {
+			entity.addReaderEditor(entity.getAuthor());
+		} else {
+			entity.withdrawEditor(entity.getAuthor());
+		}
 		List<Observer> observers = entity.getObservers();
 		if (observers != null) {
 			for (Observer observer : observers) {

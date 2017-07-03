@@ -86,7 +86,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         if (entity.getStatus() == ApprovalStatusType.DRAFT) {
             entity.addReaderEditor(entity.getAuthor());
         } else {
-            entity.addReader(entity.getAuthor());
+            entity.withdrawEditor(entity.getAuthor());
         }
         List<Observer> observers = entity.getObservers();
         if (observers != null) {
