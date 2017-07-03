@@ -18,12 +18,14 @@ import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.IApproval;
 import workflow.ui.ActionFactory;
 
-public abstract class ApprovalService<A extends IApproval, T extends IAppEntity<UUID>, D extends IDTODomain<T>>
+public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDTODomain<T>>
 		extends EntityService<T, D> {
 
-	protected List<Action> getApprovalKeySet(IUser<Long> user, A entity) throws DAOException {
+	protected List<Action> getApprovalButtonSet(IUser<Long> user, T e) throws DAOException {
 		ActionFactory actionFactory = new ActionFactory();
 		List<Action> keySet = new ArrayList<Action>();
+
+		IApproval entity = (IApproval) e;
 
 		if (entity.getStatus() == ApprovalStatusType.DRAFT && user.equals(entity.getAuthor())) {
 			keySet.add(actionFactory.startApproving);

@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
-public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, OfficeMemoDomain> {
+public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDomain> {
 
     private ActionFactory action = new ActionFactory();
 
@@ -136,21 +136,6 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, O
         }
     }
 
-    @Override
-    @DELETE
-    @Path("{id}")
-    public Response delete(@PathParam("id") String id) {
-        try {
-            OfficeMemoDomain omd = new OfficeMemoDomain(getSession());
-            omd.delete(id, new ValidationToDelete());
-
-            return Response.noContent().build();
-        } catch (DTOException e) {
-            return responseValidationError(e);
-        } catch (SecureException | DAOException e) {
-            return responseException(e);
-        }
-    }
 
     @POST
     @Path("action/startApproving")
@@ -247,7 +232,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, O
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalKeySet(user, entity));
+        actionBar.addAction(getApprovalButtonSet(user, entity));
 
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")

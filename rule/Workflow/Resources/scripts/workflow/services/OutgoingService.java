@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 @Path("outgoings")
 @Produces(MediaType.APPLICATION_JSON)
-public class OutgoingService extends ApprovalService<Outgoing, Outgoing, OutgoingDomain> {
+public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> {
 
     private ActionFactory action = new ActionFactory();
 
@@ -258,7 +258,7 @@ public class OutgoingService extends ApprovalService<Outgoing, Outgoing, Outgoin
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalKeySet(user, entity));
+        actionBar.addAction(getApprovalButtonSet(user, entity));
 
         if (entity.getStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
             actionBar.addAction(action.registerOutgoing);
