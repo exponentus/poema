@@ -250,7 +250,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemo, O
         actionBar.addAction(getApprovalKeySet(user, entity));
 
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
+            actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")
                     .url(AppConst.BASE_URL + "assignments/new?officememo=" + entity.getIdentifier()));
         }
         if (omd.documentCanBeDeleted(entity)) {

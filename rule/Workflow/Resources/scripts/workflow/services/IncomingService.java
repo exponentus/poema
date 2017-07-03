@@ -142,7 +142,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             actionBar.addAction(action.saveAndClose);
         }
         if (domain.canCreateAssignment(entity, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.LINK).caption("assignment")
+            actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")
                     .url(AppConst.BASE_URL + "assignments/new?incoming=" + entity.getIdentifier()));
         }
         if (!entity.isNew() && entity.isEditable()) {
