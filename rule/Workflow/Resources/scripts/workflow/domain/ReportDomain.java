@@ -60,17 +60,23 @@ public class ReportDomain extends CommonDomain<Report> {
             entity = dao.findById(dto.getId());
         }
 
+
         EmployeeDAO eDao = new EmployeeDAO(ses);
         if (entity.isNew()) {
-            if (dto.getParent() == null) {
-                throw new DTOException("assignment", "required", "field_is_empty");
-            }
             entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
             entity.setAppliedRegDate(dto.getAppliedRegDate());
-            entity.setParent(dto.getParent());
             entity.setAuthor(ses.getUser());
-
         }
+
+        Assignment parent = dto.getParent();
+        if (parent != null) {
+            AssignmentDAO aDao = new AssignmentDAO(ses);
+            entity.setParent(aDao.findById(parent.getId()));
+        }else{
+            throw new DTOException("assignment", "required", "field_is_empty");
+        }
+
+
         entity.setTitle(dto.getTitle());
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());

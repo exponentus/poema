@@ -128,13 +128,17 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
             entity.addReader(ae.getAssignee().getUserID());
         }
 
-        entity.addReaders(entity.getParent().getReaders());
+        Assignment parent = entity.getParent();
+        if (parent != null) {
+            entity.addReaders(entity.getParent().getReaders());
+        }
         entity.addReaders(entity.getPrimary().getReaders());
     }
 
     public void addReadersUp(Assignment entity) throws SecureException, DAOException {
         Assignment parent = entity.getParent();
         if (parent != null){
+            parent.resetEditors();
             parent.addReaders(entity.getReaders());
             dao.update(parent, false);
             addReadersUp(parent);
@@ -145,6 +149,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         ActionableDocument primary = entity.getPrimary();
         if (primary != null){
             primary.addReaders(entity.getReaders());
+            primary.resetEditors();
             ActionableDocumentDAO adDao = new ActionableDocumentDAO(ses);
             adDao.update(primary, false);
         }
