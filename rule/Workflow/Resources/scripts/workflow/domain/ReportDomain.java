@@ -13,8 +13,10 @@ import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
+import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.Report;
 
@@ -83,10 +85,6 @@ public class ReportDomain extends CommonDomain<Report> {
         return entity;
     }
 
-    @Override
-    public Report save(Report entity) throws SecureException, DAOException, DTOException {
-        return dao.save(entity);
-    }
 
     @Override
     public Outcome getOutcome(Report entity) {
@@ -113,7 +111,7 @@ public class ReportDomain extends CommonDomain<Report> {
         Assignment assignment = dao.findById(entity.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
         cl.check();
-
+        assignment.addReaders(entity.getReaders());
         dao.update(assignment, false);
 
         return assignment;
