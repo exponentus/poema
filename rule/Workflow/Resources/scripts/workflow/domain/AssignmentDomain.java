@@ -6,6 +6,7 @@ import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.env.Environment;
+import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
@@ -13,6 +14,7 @@ import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
+import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
@@ -72,6 +74,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         }
 
         UUID primaryId = dto.getPrimary().getId();
+        //TODO it should be rewritten
         IncomingDAO adDao = new IncomingDAO(ses);
         ActionableDocument actionableEntity = null;
         try {
@@ -104,6 +107,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
         dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
         calculateReadersEditors(entity);
+
         return entity;
     }
 
@@ -122,6 +126,24 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         }
         for (AssigneeEntry ae : entity.getAssigneeEntries()) {
             entity.addReader(ae.getAssignee().getUserID());
+        }
+    }
+
+    public void addReadersUp(Assignment entity) throws SecureException, DAOException {
+        Assignment parent = entity.getParent();
+        if (parent != null){
+            parent.addReaders(entity.getReaders());
+            dao.update(parent, false);
+            addReadersUp(parent);
+        }
+    }
+
+    public void addReadersToPrimary(Assignment entity) throws SecureException, DAOException {
+        ActionableDocument primary = entity.getPrimary();
+        if (primary != null){
+            primary.addReaders(entity.getReaders());
+            ActionableDocumentDAO adDao = new ActionableDocumentDAO(ses);
+            adDao.update(primary, false);
         }
     }
 

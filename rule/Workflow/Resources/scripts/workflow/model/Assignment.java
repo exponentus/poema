@@ -205,8 +205,11 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity {
         }
 
         for (AssigneeEntry ae : this.getAssigneeEntries()) {
-            if (ae.getAssignee().getUser().getId().equals(user.getId())) {
-                return true;
+            Employee assignee = ae.getAssignee();
+            if (assignee != null) {
+                if (assignee.getUser().getId().equals(user.getId())) {
+                    return true;
+                }
             }
         }
 

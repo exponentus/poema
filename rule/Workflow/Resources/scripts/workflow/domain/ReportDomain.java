@@ -114,7 +114,7 @@ public class ReportDomain extends CommonDomain<Report> {
         ControlLifecycle cl = new ControlLifecycle(assignment);
         cl.check();
 
-        dao.update(assignment);
+        dao.update(assignment, false);
 
         return assignment;
     }
