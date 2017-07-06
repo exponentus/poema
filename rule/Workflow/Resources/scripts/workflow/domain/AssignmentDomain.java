@@ -127,6 +127,9 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         for (AssigneeEntry ae : entity.getAssigneeEntries()) {
             entity.addReader(ae.getAssignee().getUserID());
         }
+
+        entity.addReaders(entity.getParent().getReaders());
+        entity.addReaders(entity.getPrimary().getReaders());
     }
 
     public void addReadersUp(Assignment entity) throws SecureException, DAOException {

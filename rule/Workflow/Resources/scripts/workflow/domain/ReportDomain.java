@@ -4,6 +4,7 @@ import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -23,6 +24,8 @@ import workflow.model.Report;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ReportDomain extends CommonDomain<Report> {
 
@@ -85,6 +88,11 @@ public class ReportDomain extends CommonDomain<Report> {
         return entity;
     }
 
+    public void calculateReadersEditors(Report entity) {
+        entity.addReaderEditor(entity.getAuthor());
+        Assignment parent = entity.getParent();
+        entity.addReaders(parent.getReaders());
+    }
 
     @Override
     public Outcome getOutcome(Report entity) {
