@@ -20,9 +20,11 @@ import workflow.dao.IncomingDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.domain.AssignmentDomain;
+import workflow.domain.ReportDomain;
 import workflow.init.AppConst;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
+import workflow.model.Report;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.ui.ActionFactory;
@@ -201,6 +203,13 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
             Assignment entity = domain.resetAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
             domain.superUpdate(entity);
+
+            if (entity.getStatus() == ControlStatusType.COMPLETED) {
+                ReportDomain reportDomain = new ReportDomain(ses);
+                for (Report r : entity.getReports()) {
+                    reportDomain.resetEditors(r);
+                }
+            }
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException | SecureException e) {

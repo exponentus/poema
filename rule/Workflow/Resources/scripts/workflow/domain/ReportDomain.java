@@ -20,6 +20,7 @@ import workflow.dao.ReportDAO;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.Report;
+import workflow.model.constants.ControlStatusType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,14 +121,36 @@ public class ReportDomain extends CommonDomain<Report> {
         return outcome;
     }
 
+    @Override
+    public boolean delete(String id, IValidation<Report> validation) throws DTOException, DAOException, SecureException {
+        Report entity = getEntity(id);
+        if (entity != null) {
+            validation.check(entity);
+            UUID reportUserId = entity.getAppliedAuthor().getId();
+            dao.delete(entity);
+            AssignmentDAO aDao = new AssignmentDAO(ses);
+            Assignment assignment = aDao.findById(entity.getParent().getId());
+            ControlLifecycle cl = new ControlLifecycle(assignment);
+            cl.unCheck(reportUserId);
+            aDao.update(assignment, false);
+            return true;
+        }
+        return false;
+    }
+
     public Assignment checkAssignment(Report entity) throws DAOException, SecureException {
-        AssignmentDAO dao = new AssignmentDAO(ses);
-        Assignment assignment = dao.findById(entity.getParent().getId());
+        AssignmentDAO aDao = new AssignmentDAO(ses);
+        Assignment assignment = aDao.findById(entity.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
         cl.check();
         assignment.addReaders(entity.getReaders());
-        dao.update(assignment, false);
+        aDao.update(assignment, false);
 
+        if (assignment.getStatus() == ControlStatusType.COMPLETED){
+            resetEditors(entity);
+        }
         return assignment;
     }
+
+
 }

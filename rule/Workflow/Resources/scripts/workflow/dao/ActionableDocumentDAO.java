@@ -78,6 +78,7 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
                         setParameter("s", ApprovalStatusType.PENDING).
                         setParameter("ic", true).
                         setParameter("e",emp);
+
                 long count = (long)countQ.getSingleResult();
                 int maxPage = 1;
                 int firstRec = 0;
