@@ -1,5 +1,6 @@
 package workflow.dao;
 
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.*;
@@ -69,41 +70,38 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
     }
 
     public ViewPage<ActionableDocument> findApprovalPendingByCurrentEmployeeViewPage(Employee emp, SortParams sortParams, int pageNum, int pageSize) {
+        ApprovalStatusType status = ApprovalStatusType.PENDING;
+        boolean isCurrent = true;
         EntityManager em = getEntityManagerFactory().createEntityManager();
         try {
-            try {
-                Query countQ = em.createQuery(
-                        "SELECT count(ad.id) FROM ActionableDocument ad JOIN ad.blocks b JOIN b.approvers a " +
-                                "WHERE b.status =:s AND a.isCurrent =:ic AND a.employee=:e").
-                        setParameter("s", ApprovalStatusType.PENDING).
-                        setParameter("ic", true).
-                        setParameter("e",emp);
-
-                long count = (long)countQ.getSingleResult();
-                int maxPage = 1;
-                int firstRec = 0;
-                if (pageNum != 0 || pageSize != 0) {
-                    maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-                    if (pageNum < 0) {
-                        pageNum = 1;
-                    }
-                    firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
+            Query countQ = em.createQuery(
+                    "SELECT count(ad.id) FROM ActionableDocument ad JOIN ad.blocks b JOIN b.approvers a " +
+                            "WHERE b.status =:s AND a.isCurrent =:ic AND a.employee=:e").
+                    setParameter("s", status).
+                    setParameter("ic", isCurrent).
+                    setParameter("e", emp);
+            Set params = countQ.getParameters();
+            long count = (long) countQ.getSingleResult();
+            int maxPage = 1;
+            int firstRec = 0;
+            if (pageNum != 0 || pageSize != 0) {
+                maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
+                if (pageNum < 0) {
+                    pageNum = 1;
                 }
-                Query q = em.createQuery(
-                        "SELECT ad FROM ActionableDocument ad JOIN ad.blocks b JOIN b.approvers a " +
-                                "WHERE b.status =:s AND a.isCurrent =:ic AND a.employee=:e").
-                        setParameter("s", ApprovalStatusType.PENDING).
-                        setParameter("ic", true).
-                        setParameter("e",emp).
-                        setMaxResults(pageSize).setFirstResult(firstRec);
-
-
-                return new ViewPage<>(q.getResultList(), count, maxPage, pageNum);
-            } catch (NonUniqueResultException e) {
-                e.printStackTrace();
-            } catch (NoResultException e) {
-
+                firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
             }
+            Query q = em.createQuery(
+                    "SELECT ad FROM ActionableDocument ad JOIN ad.blocks b JOIN b.approvers a " +
+                            "WHERE b.status =:s AND a.isCurrent =:ic AND a.employee=:e").
+                    setParameter("s", status).
+                    setParameter("ic", isCurrent).
+                    setParameter("e", emp).
+                    setMaxResults(pageSize).setFirstResult(firstRec);
+
+
+            return new ViewPage<>(q.getResultList(), count, maxPage, pageNum);
+
         } catch (Exception e) {
             Lg.exception(e);
         } finally {
@@ -113,8 +111,8 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
 
     }
 
-   public ViewPage<ActionableDocument> findApprovalPendingByCurrentEmployeeViewPage1(Employee emp, SortParams sortParams, int pageNum,
-                                                                                     int pageSize) {
+    public ViewPage<ActionableDocument> findApprovalPendingByCurrentEmployeeViewPage1(Employee emp, SortParams sortParams, int pageNum,
+                                                                                      int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {

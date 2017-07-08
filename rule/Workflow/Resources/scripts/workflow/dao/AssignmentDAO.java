@@ -112,14 +112,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
             }
 
             TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
-
-            //System.out.println("--------------SQL -------------");
-            //System.out.println(getSQL(em, typedQuery));
-            //System.out.println("------------------------------");
-
             TypedQuery<Long> countQuery = em.createQuery(countRootCq);
-
-            //System.out.println("count SQL=" + getSQL(em, countQuery));
 
             long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
