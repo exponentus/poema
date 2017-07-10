@@ -8,7 +8,7 @@ import java.util.UUID;
 public class ReportViewEntry implements IDTO {
 
     public UUID id;
-    public String kind = "assignment";
+    public String kind = "report";
 
     private String appliedAuthor;
     public String title;
