@@ -43,8 +43,9 @@ import java.util.stream.Collectors;
 public class AssignmentService extends EntityService<Assignment, AssignmentDomain> {
 
     private ActionFactory action = new ActionFactory();
-    private final static Action startImplementation = new Action(ActionType.API_ACTION).id("startImplementation").caption("start_impl")
+    private final Action startImplementation = new Action(ActionType.API_ACTION).id("startImplementation").caption("start_impl")
             .url("startImplementation");
+    private final Action completeAction = new Action(ActionType.API_ACTION).id("completeAssignee").caption("complete").url("completeAssignee");
 
     @GET
     @Path("my")
@@ -219,6 +220,22 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
     }
 
+    @POST
+    @Path("action/completeAssignee")
+    public Response completeAssignee(Assignment dto) {
+        try {
+            _Session ses = getSession();
+            AssignmentDomain domain = new AssignmentDomain(ses);
+
+//            Assignment entity = domain.completeAssignee(dto);
+//            domain.superUpdate(entity);
+
+            return Response.ok(new Outcome()).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
     private _ActionBar getActionBar(_Session session, Assignment entity) {
         _ActionBar actionBar = new _ActionBar(session);
 
@@ -239,6 +256,8 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             actionBar.addAction(new Action(ActionType.LINK).caption("report")
                     .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
         }
+
+        actionBar.addAction(completeAction); // TODO ?
 
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);

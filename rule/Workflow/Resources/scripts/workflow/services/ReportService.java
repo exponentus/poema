@@ -8,6 +8,8 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import com.exponentus.scripting.actions.Action;
+import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -17,10 +19,7 @@ import workflow.domain.ReportDomain;
 import workflow.model.Report;
 import workflow.ui.ActionFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Map;
@@ -30,6 +29,9 @@ import java.util.stream.Collectors;
 @Path("reports")
 @Produces(MediaType.APPLICATION_JSON)
 public class ReportService extends EntityService<Report, ReportDomain> {
+
+    private final Action acceptReport = new Action(ActionType.API_ACTION).id("acceptReport").caption("accept").url("acceptReport");
+    private final Action declineReport = new Action(ActionType.API_ACTION).id("declineReport").caption("decline").url("declineReport");
 
     @GET
     @Path("{id}")
@@ -83,6 +85,34 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
     }
 
+    @POST
+    @Path("action/acceptReport")
+    public Response acceptReport(Report dto) {
+        try {
+            _Session ses = getSession();
+            ReportDomain domain = new ReportDomain(ses);
+            // domain.acceptReport(dto);
+
+            return Response.ok(new Outcome()).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("action/declineReport")
+    public Response declineReport(Report dto) {
+        try {
+            _Session ses = getSession();
+            ReportDomain domain = new ReportDomain(ses);
+            // domain.declineReport(dto);
+
+            return Response.ok(new Outcome()).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
     private _ActionBar getActionBar(_Session session, Report entity) {
         _ActionBar actionBar = new _ActionBar(session);
         ActionFactory action = new ActionFactory();
@@ -91,6 +121,9 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);
         }
+
+        actionBar.addAction(acceptReport);
+        actionBar.addAction(declineReport);
 
         return actionBar;
     }
@@ -108,7 +141,6 @@ public class ReportService extends EntityService<Report, ReportDomain> {
             if (ve.hasError()) {
                 throw ve;
             }
-
         }
     }
 }
