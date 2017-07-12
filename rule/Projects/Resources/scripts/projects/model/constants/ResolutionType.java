@@ -4,6 +4,7 @@ package projects.model.constants;
  * 
  * @author Kayra created 07-06-2016
  */
+@Deprecated
 public enum ResolutionType {
 	UNKNOWN(0), ACCEPTED(18), DECLINED(19);
 

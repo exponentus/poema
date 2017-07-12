@@ -2,7 +2,7 @@ package workflow.domain;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.model.ACL;
+import com.exponentus.common.dto.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.env.Environment;

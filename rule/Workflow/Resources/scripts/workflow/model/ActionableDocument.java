@@ -72,7 +72,6 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	@Column(columnDefinition = "TEXT")
 	private String body;
 
-	@FTSearchable
 	@Convert(converter = ListOfTextConverter.class)
 	@Column(name = "obsolete_body", columnDefinition = "jsonb")
 	private List<String> obsoleteBody = new ArrayList<String>();

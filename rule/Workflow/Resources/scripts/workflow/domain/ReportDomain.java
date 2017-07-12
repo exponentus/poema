@@ -2,7 +2,8 @@ package workflow.domain;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.model.ACL;
+import com.exponentus.common.dto.ACL;
+import com.exponentus.common.model.constants.SolutionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
@@ -41,7 +42,6 @@ public class ReportDomain extends CommonDomain<Report> {
         entity.setAppliedAuthor(author);
         entity.setAppliedRegDate(new Date());
         entity.setParent(parent);
-
         return entity;
     }
 
@@ -63,6 +63,10 @@ public class ReportDomain extends CommonDomain<Report> {
             entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
             entity.setAppliedRegDate(dto.getAppliedRegDate());
             entity.setAuthor(ses.getUser());
+            entity.setSolution(SolutionType.UNKNOWN);
+        }else{
+            entity.setSolution(dto.getSolution());
+            entity.setSolutionComment(dto.getSolutionComment());
         }
 
         Assignment parent = dto.getParent();
@@ -77,6 +81,7 @@ public class ReportDomain extends CommonDomain<Report> {
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());
         entity.setAppliedRegDate(dto.getAppliedRegDate());
+
 
         List<Observer> observers = new ArrayList<Observer>();
         for (Observer o : dto.getObservers()) {
@@ -145,5 +150,11 @@ public class ReportDomain extends CommonDomain<Report> {
             resetEditors(entity);
         }
         return assignment;
+    }
+
+    public void acceptReport(Report dto) {
+    }
+
+    public void declineReport(Report dto) {
     }
 }

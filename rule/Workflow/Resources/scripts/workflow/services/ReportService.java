@@ -16,6 +16,7 @@ import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
 import workflow.domain.ReportDomain;
+import workflow.model.Assignment;
 import workflow.model.Report;
 import workflow.ui.ActionFactory;
 
@@ -91,7 +92,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
-            // domain.acceptReport(dto);
+            domain.acceptReport(dto);
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException e) {
@@ -105,7 +106,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
-            // domain.declineReport(dto);
+            domain.declineReport(dto);
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException e) {
@@ -113,7 +114,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Report entity) {
+    private _ActionBar getActionBar(_Session session, Report entity){
         _ActionBar actionBar = new _ActionBar(session);
         ActionFactory action = new ActionFactory();
         actionBar.addAction(action.close);
@@ -122,10 +123,14 @@ public class ReportService extends EntityService<Report, ReportDomain> {
             actionBar.addAction(action.deleteDocument);
         }
 
-        actionBar.addAction(acceptReport);
-        actionBar.addAction(declineReport);
+        Assignment assignment = entity.getParent();
+        if(assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser())) {
+            actionBar.addAction(acceptReport);
+            actionBar.addAction(declineReport);
+        }
 
         return actionBar;
+
     }
 
     private class Validation implements IValidation<Report> {

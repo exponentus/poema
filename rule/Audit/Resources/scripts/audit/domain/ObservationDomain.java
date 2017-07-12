@@ -4,7 +4,7 @@ import administrator.model.User;
 import audit.model.Observation;
 import audit.model.Project;
 import audit.model.constants.ObservationStatusType;
-import com.exponentus.common.model.ACL;
+import com.exponentus.common.dto.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.ISimpleAppEntity;

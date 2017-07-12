@@ -16,4 +16,5 @@ public class AppConst extends DefaultAppConst {
 	public static String BASE_URL = "/" + NAME + "/";
 	public static final InterfaceType AVAILABLE_MODE[] = { InterfaceType.SPA };
 	public static final String[] ROLES = { "can_sign_outgoing", "chancellery" };
+	public static boolean FORCE_DEPLOYING = true;
 }

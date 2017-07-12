@@ -2,6 +2,8 @@ package workflow.model;
 
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.common.model.constants.SolutionType;
+import com.exponentus.common.model.constants.converter.SolutionTypeConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,6 +42,14 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
     @FTSearchable
     @Column(columnDefinition = "TEXT")
     private String body;
+
+
+    @Convert(converter = SolutionTypeConverter.class)
+    private SolutionType solution;
+
+
+    @Column(length = 2048, name="solution_comment")
+    private String solutionComment;
 
     @ElementCollection
     @CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
@@ -84,6 +94,23 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public SolutionType getSolution() {
+        return solution;
+    }
+
+    public void setSolution(SolutionType solution) {
+        this.solution = solution;
+    }
+
+
+    public String getSolutionComment() {
+        return solutionComment;
+    }
+
+    public void setSolutionComment(String solutionComment) {
+        this.solutionComment = solutionComment;
     }
 
     public List<Observer> getObservers() {
