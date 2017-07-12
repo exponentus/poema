@@ -68,25 +68,28 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         entity.setTitle(dto.getTitle());
         entity.setBody(dto.getBody());
 
-        Assignment parent = dto.getParent();
-        if (parent != null) {
-            entity.setParent(dao.findById(parent.getId()));
-        }
-
-        UUID primaryId = dto.getPrimary().getId();
-        //TODO it should be rewritten
-        IncomingDAO adDao = new IncomingDAO(ses);
-        ActionableDocument actionableEntity = null;
-        try {
-            actionableEntity = adDao.findById(primaryId);
-        } catch (DAOException e) {
-            if (e.getType() == DAOExceptionType.ENTITY_NOT_FOUND) {
-                OfficeMemoDAO omDao = new OfficeMemoDAO(ses);
-                actionableEntity = omDao.findById(primaryId);
+        if (entity.isNew()) {
+            Assignment parent = dto.getParent();
+            if (parent != null) {
+                parent = dao.findById(parent.getId());
+                entity.setParent(parent);
+                entity.setPrimary(parent.getPrimary());
+            } else {
+                UUID primaryId = dto.getPrimary().getId();
+                IncomingDAO adDao = new IncomingDAO(ses);
+                ActionableDocument actionableEntity = null;
+                try {
+                    actionableEntity = adDao.findById(primaryId);
+                } catch (DAOException e) {
+                    if (e.getType() == DAOExceptionType.ENTITY_NOT_FOUND) {
+                        OfficeMemoDAO omDao = new OfficeMemoDAO(ses);
+                        actionableEntity = omDao.findById(primaryId);
+                    }
+                }
+                entity.setPrimary(actionableEntity);
             }
         }
 
-        entity.setPrimary(actionableEntity);
         List<Observer> observers = new ArrayList<Observer>();
         for (Observer o : dto.getObservers()) {
             Observer observer = new Observer();
@@ -203,11 +206,11 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
         for (AssigneeEntry dtoEntry : dtoAssigneeEntities) {
             for (AssigneeEntry entry : assigneeEntities) {
-                if (entry.getStatus() != ControlStatusType.COMPLETED){
+                if (entry.getStatus() != ControlStatusType.COMPLETED) {
                     entry.setResetBy(resetEmployee);
-                     entry.setStatus(ControlStatusType.COMPLETED);
+                    entry.setStatus(ControlStatusType.COMPLETED);
                     entry.setResetTime(new Date());
-                  }
+                }
             }
         }
         entity.setStatus(ControlStatusType.COMPLETED);
@@ -234,6 +237,4 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
         return outcome;
     }
-
-
 }

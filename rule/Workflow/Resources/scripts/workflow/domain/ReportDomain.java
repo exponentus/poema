@@ -4,7 +4,6 @@ import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.ACL;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -14,10 +13,8 @@ import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.dao.ActionableDocumentDAO;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
-import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.Report;
 import workflow.model.constants.ControlStatusType;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ReportDomain extends CommonDomain<Report> {
 
@@ -73,10 +69,9 @@ public class ReportDomain extends CommonDomain<Report> {
         if (parent != null) {
             AssignmentDAO aDao = new AssignmentDAO(ses);
             entity.setParent(aDao.findById(parent.getId()));
-        }else{
+        } else {
             throw new DTOException("assignment", "required", "field_is_empty");
         }
-
 
         entity.setTitle(dto.getTitle());
         entity.setBody(dto.getBody());
@@ -146,11 +141,9 @@ public class ReportDomain extends CommonDomain<Report> {
         assignment.addReaders(entity.getReaders());
         aDao.update(assignment, false);
 
-        if (assignment.getStatus() == ControlStatusType.COMPLETED){
+        if (assignment.getStatus() == ControlStatusType.COMPLETED) {
             resetEditors(entity);
         }
         return assignment;
     }
-
-
 }

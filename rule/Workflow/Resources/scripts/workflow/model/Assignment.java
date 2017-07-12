@@ -39,7 +39,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity {
     private Date appliedRegDate;
 
     @ManyToOne(optional = false)
-    @JoinColumn(updatable = false)
+    @JoinColumn(updatable = false, nullable = false)
     private ActionableDocument primary;
 
     @ManyToOne(optional = false)
