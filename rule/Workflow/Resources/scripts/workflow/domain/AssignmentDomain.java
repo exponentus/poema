@@ -137,7 +137,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
     public void addReadersUp(Assignment entity) throws SecureException, DAOException {
         Assignment parent = entity.getParent();
-        if (parent != null){
+        if (parent != null) {
             parent.resetEditors();
             parent.addReaders(entity.getReaders());
             dao.update(parent, false);
@@ -147,7 +147,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
     public void addReadersToPrimary(Assignment entity) throws SecureException, DAOException {
         ActionableDocument primary = entity.getPrimary();
-        if (primary != null){
+        if (primary != null) {
             primary.addReaders(entity.getReaders());
             primary.resetEditors();
             ActionableDocumentDAO adDao = new ActionableDocumentDAO(ses);
@@ -197,6 +197,23 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         return entity;
     }
 
+    public Assignment completeAssignee(Assignment dto, Employee resetEmployee) throws DAOException {
+        Assignment entity = getEntity(dto.getId());
+        List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
+        List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
+        for (AssigneeEntry dtoEntry : dtoAssigneeEntities) {
+            for (AssigneeEntry entry : assigneeEntities) {
+                if (entry.getStatus() != ControlStatusType.COMPLETED){
+                    entry.setResetBy(resetEmployee);
+                     entry.setStatus(ControlStatusType.COMPLETED);
+                    entry.setResetTime(new Date());
+                  }
+            }
+        }
+        entity.setStatus(ControlStatusType.COMPLETED);
+        return entity;
+    }
+
     @Override
     public Outcome getOutcome(Assignment entity) {
         Outcome outcome = new Outcome();
@@ -217,4 +234,6 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
         return outcome;
     }
+
+
 }

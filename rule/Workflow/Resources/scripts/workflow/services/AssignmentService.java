@@ -227,11 +227,13 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
 
-//            Assignment entity = domain.completeAssignee(dto);
-//            domain.superUpdate(entity);
+            Assignment entity = domain.completeAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+            domain.superUpdate(entity);
 
             return Response.ok(new Outcome()).build();
-        } catch (DAOException e) {
+        } catch (DTOException e) {
+            return responseValidationError(e);
+        } catch (DAOException  | SecureException e) {
             return responseException(e);
         }
     }
@@ -257,7 +259,9 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                     .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
         }
 
-        actionBar.addAction(completeAction); // TODO ?
+        if (entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
+            actionBar.addAction(completeAction);
+        }
 
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);
