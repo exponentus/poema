@@ -173,7 +173,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         cl.start();
     }
 
-    public Assignment resetAssignee(Assignment dto, Employee resetEmployee) throws DAOException {
+    public Assignment completeAssignee(Assignment dto, Employee resetEmployee) throws DAOException {
         Assignment entity = getEntity(dto.getId());
         List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
         List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();
@@ -200,7 +200,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         return entity;
     }
 
-    public Assignment completeAssignee(Assignment dto, Employee resetEmployee) throws DAOException {
+    public Assignment completeEntireAssignment(Assignment dto, Employee resetEmployee) throws DAOException {
         Assignment entity = getEntity(dto.getId());
         List<AssigneeEntry> assigneeEntities = entity.getAssigneeEntries();
         List<AssigneeEntry> dtoAssigneeEntities = dto.getAssigneeEntries();

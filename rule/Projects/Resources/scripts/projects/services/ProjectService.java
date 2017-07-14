@@ -66,6 +66,7 @@ public class ProjectService extends RestProvider {
                     new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
             actionBar.addAction(action.refreshVew);
 
+
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));

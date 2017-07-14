@@ -63,11 +63,15 @@ public class ReportDomain extends CommonDomain<Report> {
             entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
             entity.setAppliedRegDate(dto.getAppliedRegDate());
             entity.setAuthor(ses.getUser());
-            entity.setSolution(SolutionType.UNKNOWN);
-        }else{
-            entity.setSolution(dto.getSolution());
-            entity.setSolutionComment(dto.getSolutionComment());
         }
+
+        SolutionType solutionType = dto.getSolution();
+        if (solutionType == null){
+            entity.setSolution(SolutionType.ACCEPTED);
+        }else {
+            entity.setSolution(solutionType);
+        }
+        entity.setSolutionComment(dto.getSolutionComment());
 
         Assignment parent = dto.getParent();
         if (parent != null) {
@@ -131,30 +135,45 @@ public class ReportDomain extends CommonDomain<Report> {
             AssignmentDAO aDao = new AssignmentDAO(ses);
             Assignment assignment = aDao.findById(entity.getParent().getId());
             ControlLifecycle cl = new ControlLifecycle(assignment);
-            cl.unCheck(reportUserId);
+            cl.unCompleteAssignee(reportUserId);
             aDao.update(assignment, false);
             return true;
         }
         return false;
     }
 
+    //TODO it needed transaction tracking
     public Assignment checkAssignment(Report entity) throws DAOException, SecureException {
         AssignmentDAO aDao = new AssignmentDAO(ses);
         Assignment assignment = aDao.findById(entity.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
-        cl.check();
-        assignment.addReaders(entity.getReaders());
-        aDao.update(assignment, false);
-
+       if (cl.check()) {
+           assignment.addReaders(entity.getReaders());
+           aDao.update(assignment, false);
+       }
         if (assignment.getStatus() == ControlStatusType.COMPLETED) {
             resetEditors(entity);
         }
         return assignment;
     }
 
-    public void acceptReport(Report dto) {
+    public Assignment acceptReport(Report dto) throws DAOException, SecureException {
+        AssignmentDAO aDao = new AssignmentDAO(ses);
+        Assignment assignment = aDao.findById(dto.getParent().getId());
+        ControlLifecycle cl = new ControlLifecycle(assignment);
+        if (cl.completeAssignee(dto.getAppliedAuthor().getId(),new EmployeeDAO(ses).findByUserId(ses.getUser().getId()))){
+            aDao.update(assignment, false);
+        }
+        return assignment;
     }
 
-    public void declineReport(Report dto) {
+    public Assignment declineReport(Report dto) throws DAOException, SecureException {
+        AssignmentDAO aDao = new AssignmentDAO(ses);
+        Assignment assignment = aDao.findById(dto.getParent().getId());
+        ControlLifecycle cl = new ControlLifecycle(assignment);
+        if (cl.unCompleteAssignee(dto.getAppliedAuthor().getId())){
+            aDao.update(assignment, false);
+        }
+        return assignment;
     }
 }

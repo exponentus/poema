@@ -45,7 +45,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     private ActionFactory action = new ActionFactory();
     private final Action startImplementation = new Action(ActionType.API_ACTION).id("startImplementation").caption("start_impl")
             .url("startImplementation");
-    private final Action completeAction = new Action(ActionType.API_ACTION).id("completeAssignee").caption("complete").url("completeAssignee");
+    private final Action completeAction = new Action(ActionType.API_ACTION).id("completeEntireAssignment").caption("complete").url("completeEntireAssignment");
 
     @GET
     @Path("my")
@@ -196,13 +196,13 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     }
 
     @POST
-    @Path("action/resetAssignee")
+    @Path("action/completeAssignee")
     public Response resetAssignee(Assignment dto) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
 
-            Assignment entity = domain.resetAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+            Assignment entity = domain.completeAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
             domain.superUpdate(entity);
 
             if (entity.getStatus() == ControlStatusType.COMPLETED) {
@@ -221,13 +221,13 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     }
 
     @POST
-    @Path("action/completeAssignee")
+    @Path("action/completeEntireAssignment")
     public Response completeAssignee(Assignment dto) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
 
-            Assignment entity = domain.completeAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+            Assignment entity = domain.completeEntireAssignment(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
             domain.superUpdate(entity);
 
             return Response.ok(new Outcome()).build();

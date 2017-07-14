@@ -2,6 +2,9 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.LifeCycle;
+import com.exponentus.common.dto.embedded.Connector;
+import com.exponentus.common.dto.embedded.Item;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
@@ -15,6 +18,7 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.user.IUser;
+
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
@@ -23,6 +27,7 @@ import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
+import workflow.model.Assignment;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
@@ -114,6 +119,17 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity, omd));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+
+            LifeCycle lc = new LifeCycle();
+            Item item = new Item();
+            item.title = entity.getTitle();
+            for (Assignment a: entity.getAssignments()){
+                Item child = new Item();
+                child.title = a.getTitle();
+                lc.below.add(new Connector());
+                lc.below.add(child);
+            }
+            outcome.addPayload(lc);
 
             return Response.ok(outcome).build();
 

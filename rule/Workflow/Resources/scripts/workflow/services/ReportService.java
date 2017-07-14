@@ -18,6 +18,7 @@ import workflow.dao.ReportDAO;
 import workflow.domain.ReportDomain;
 import workflow.model.Assignment;
 import workflow.model.Report;
+import workflow.model.constants.ControlStatusType;
 import workflow.ui.ActionFactory;
 
 import javax.ws.rs.*;
@@ -92,10 +93,12 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
-            domain.acceptReport(dto);
-
+            Assignment assignment = domain.acceptReport(dto);
+            if (assignment.getStatus() == ControlStatusType.COMPLETED) {
+                domain.resetEditors(domain.getEntity(dto.getId()));
+            }
             return Response.ok(new Outcome()).build();
-        } catch (DAOException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }
@@ -109,7 +112,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
             domain.declineReport(dto);
 
             return Response.ok(new Outcome()).build();
-        } catch (DAOException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }
