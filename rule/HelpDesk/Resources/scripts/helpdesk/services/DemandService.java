@@ -2,8 +2,8 @@ package helpdesk.services;
 
 import administrator.model.User;
 import com.exponentus.common.ui.ConventionalActionFactory;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;

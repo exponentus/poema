@@ -1,7 +1,7 @@
 package projects.task;
 
 import com.exponentus.appenv.AppEnv;
-import com.exponentus.dataengine.jpa.ViewPage;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;

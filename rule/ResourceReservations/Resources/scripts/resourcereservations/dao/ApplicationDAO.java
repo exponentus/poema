@@ -1,7 +1,7 @@
 package resourcereservations.dao;
 
+import com.exponentus.common.dao.DAO;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.scripting._Session;
 import resourcereservations.model.Reservation;
 

@@ -22,10 +22,10 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.exponentus.common.dao.DAO;
+import com.exponentus.common.model.SecureAppEntity;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;

@@ -2,10 +2,10 @@ package audit.dao;
 
 import audit.dao.filter.ObservationFilter;
 import audit.model.Observation;
+import com.exponentus.common.dao.DAO;
+import com.exponentus.common.model.SecureAppEntity;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.SecureAppEntity;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 

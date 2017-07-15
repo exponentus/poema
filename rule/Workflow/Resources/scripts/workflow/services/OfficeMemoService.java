@@ -5,8 +5,8 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.dto.embedded.Connector;
 import com.exponentus.common.dto.embedded.Item;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -18,7 +18,6 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.user.IUser;
-
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;

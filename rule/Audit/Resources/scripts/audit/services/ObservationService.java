@@ -1,26 +1,16 @@
 package audit.services;
 
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.eclipse.persistence.exceptions.DatabaseException;
-
+import administrator.model.User;
+import audit.dao.ObservationDAO;
+import audit.dao.ProjectDAO;
+import audit.dao.filter.ObservationFilter;
+import audit.domain.ObservationDomain;
+import audit.init.AppConst;
+import audit.model.Observation;
+import audit.model.Project;
+import audit.model.constants.ObservationStatusType;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
@@ -33,21 +23,21 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
-
-import administrator.model.User;
-import audit.dao.ObservationDAO;
-import audit.dao.ProjectDAO;
-import audit.dao.filter.ObservationFilter;
-import audit.domain.ObservationDomain;
-import audit.init.AppConst;
-import audit.model.Observation;
-import audit.model.Project;
-import audit.model.constants.ObservationStatusType;
+import org.eclipse.persistence.exceptions.DatabaseException;
 import reference.dao.WorkTypeDAO;
 import reference.model.WorkType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.Organization;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Path("observations")
 @Produces(MediaType.APPLICATION_JSON)

@@ -1,26 +1,26 @@
 package workflow.dao;
 
-import java.util.Set;
-import java.util.UUID;
+import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.dao.DAO;
+import com.exponentus.common.ui.ViewPage;
+import com.exponentus.dataengine.RuntimeObjUtil;
+import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.log.Lg;
+import com.exponentus.scripting.SortParams;
+import com.exponentus.scripting._Session;
+import staff.model.Employee;
+import workflow.model.ActionableDocument;
+import workflow.model.constants.ApprovalStatusType;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
-import com.exponentus.appenv.AppEnv;
-import com.exponentus.dataengine.RuntimeObjUtil;
-import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.DAO;
-import com.exponentus.dataengine.jpa.ViewPage;
-import com.exponentus.log.Lg;
-import com.exponentus.scripting.SortParams;
-import com.exponentus.scripting._Session;
-
-import staff.model.Employee;
-import workflow.model.ActionableDocument;
-import workflow.model.constants.ApprovalStatusType;
+import java.util.Set;
+import java.util.UUID;
 
 public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
 

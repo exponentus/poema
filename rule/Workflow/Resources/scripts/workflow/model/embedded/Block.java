@@ -1,21 +1,8 @@
 package workflow.model.embedded;
 
-import java.util.List;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import com.exponentus.dataengine.jpa.SimpleAppEntity;
+import com.exponentus.common.model.SimpleAppEntity;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalTypeConverter;
 import workflow.domain.exception.ApprovalException;
@@ -23,6 +10,9 @@ import workflow.domain.exception.ApprovalExceptionType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalStatusTypeConverter;
+
+import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Kayra created 07-04-2016

@@ -1,25 +1,9 @@
 package workflow.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
-import com.exponentus.common.model.util.ListOfTextConverter;
+import com.exponentus.common.model.converter.ListOfTextConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalSchemaTypeConverter;
@@ -34,6 +18,11 @@ import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 import workflow.model.embedded.IControlled;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @JsonRootName("actionableDocument")
 @Entity

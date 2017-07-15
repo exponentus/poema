@@ -3,8 +3,8 @@ package audit.dao;
 import audit.dto.StatInspectorDTO;
 import audit.dto.StatObsStatusDTO;
 import audit.model.Observation;
+import com.exponentus.common.dao.DAO;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.DAO;
 import com.exponentus.scripting._Session;
 
 import javax.persistence.EntityManager;

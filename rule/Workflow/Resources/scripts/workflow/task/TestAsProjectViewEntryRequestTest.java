@@ -1,14 +1,14 @@
 package workflow.task;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
-
 import workflow.dao.ActionableDocumentDAO;
 import workflow.model.ActionableDocument;
+
 
 /**
  * 

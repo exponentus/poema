@@ -2,8 +2,8 @@ package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.dataengine.jpa.ViewPage;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
