@@ -2,6 +2,7 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -68,6 +69,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
 
+
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);
@@ -98,10 +100,10 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         Outgoing entity;
         try {
             OutgoingDomain outDomain = new OutgoingDomain(ses);
-
+            IUser<Long> user = ses.getUser();
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = outDomain.composeNew((User) ses.getUser());
+                entity = outDomain.composeNew((User) user);
             } else {
                 OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
                 entity = outgoingDAO.findByIdentefier(id);
@@ -115,6 +117,10 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
             outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity, outDomain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+
+            if (!isNew){
+                outcome.addPayload(new LifeCycle(user, entity));
+            }
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {

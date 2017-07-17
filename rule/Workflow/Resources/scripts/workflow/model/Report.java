@@ -1,10 +1,14 @@
 package workflow.model;
 
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.constants.SolutionType;
 import com.exponentus.common.model.constants.converter.SolutionTypeConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,12 +23,13 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @JsonRootName("report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__reports")
-public class Report extends EmbeddedSecureHierarchicalEntity {
+public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
 
     @JoinColumn(name = "applied_author", nullable = false)
     private Employee appliedAuthor;
@@ -33,7 +38,7 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-    @JsonBackReference
+    @JsonBackReference(value = "assignment-report")
     @NotNull
     @ManyToOne
     @JoinColumn(updatable = false)
@@ -134,5 +139,26 @@ public class Report extends EmbeddedSecureHierarchicalEntity {
     @Override
     public String getURL() {
         return AppConst.BASE_URL + "reports/" + getIdentifier();
+    }
+
+    @Override
+    public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+        return getNode(user, id);
+    }
+
+    @Override
+    public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+        LifeCycleNode lc = new LifeCycleNode();
+        lc.setType(LifeCycleNodeType.REPORT);
+        if (user.isSuperUser() || getReaders().contains(user.getId())){
+            lc.setAvailable(true);
+            lc.setTitle(getTitle());
+            lc.setStatus(solution.name());
+            lc.setUrl(getURL());
+        }
+        if (id.equals(this.id)){
+            lc.setCurrent(true);
+        }
+        return lc;
     }
 }

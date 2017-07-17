@@ -1,35 +1,14 @@
 package workflow.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
@@ -38,6 +17,12 @@ import staff.model.Employee;
 import staff.model.Organization;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Kayra created 07-04-2016
@@ -48,7 +33,7 @@ import workflow.init.AppConst;
 @Entity
 @Table(name = "wf__outgoings")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Outgoing extends ActionableDocument {
+public class Outgoing extends ActionableDocument implements ILifeCycle {
 
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
@@ -187,5 +172,29 @@ public class Outgoing extends ActionableDocument {
 		List<Employee> recipients = new ArrayList<Employee>();
 		// recipients.add(recipient);
 		return recipients;
+	}
+
+	@Override
+	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = getNode(user, id);
+
+		return lc;
+	}
+
+	@Override
+	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = new LifeCycleNode();
+		lc.setType(LifeCycleNodeType.DISCUSSED);
+		if (id.equals(this.id)){
+			lc.setCurrent(true);
+		}
+
+		if (user.isSuperUser() || getReaders().contains(user.getId())){
+			lc.setAvailable(true);
+			lc.setTitle(getTitle());
+			lc.setStatus(getStatus().name());
+		}
+		lc.setUrl(getURL());
+		return lc;
 	}
 }

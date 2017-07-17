@@ -2,7 +2,6 @@ package workflow.domain;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.env.Environment;
@@ -73,7 +72,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
             if (parent != null) {
                 parent = dao.findById(parent.getId());
                 entity.setParent(parent);
-                entity.setPrimary(parent.getPrimary());
+                //entity.setPrimary(parent.getPrimary());
             } else {
                 UUID primaryId = dto.getPrimary().getId();
                 IncomingDAO adDao = new IncomingDAO(ses);
@@ -135,7 +134,10 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         if (parent != null) {
             entity.addReaders(entity.getParent().getReaders());
         }
-        entity.addReaders(entity.getPrimary().getReaders());
+        ActionableDocument primary =  entity.getPrimary();
+        if(primary != null) {
+            entity.addReaders(entity.getPrimary().getReaders());
+        }
     }
 
     public void addReadersUp(Assignment entity) throws SecureException, DAOException {
@@ -219,7 +221,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
 
     @Override
     public Outcome getOutcome(Assignment entity) {
-        Outcome outcome = new Outcome();
+        Outcome outcome = new Outcome(entity);
 
         String entityKind = Environment.vocabulary.getWord("assignment", ses.getLang());
         if (StringUtil.isEmpty(entity.getTitle())) {
@@ -229,11 +231,9 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         }
 
         outcome.addPayload(entity);
+        outcome.addPayload("primary", entity.getPrimary());
         outcome.addPayload("contentTitle", "assignment");
 
-        if (!entity.isNew()) {
-            outcome.addPayload(new ACL(entity));
-        }
 
         return outcome;
     }

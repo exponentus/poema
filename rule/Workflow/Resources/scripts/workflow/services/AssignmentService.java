@@ -1,6 +1,7 @@
 package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -13,6 +14,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
@@ -106,7 +108,8 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         try {
             _Session ses = getSession();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-            Employee currentUserEmployee = employeeDAO.findByUserId(ses.getUser().getId());
+            IUser<Long> user = ses.getUser();
+            Employee currentUserEmployee = employeeDAO.findByUserId(user.getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             Assignment entity;
             AssignmentDomain ad = new AssignmentDomain(ses);
@@ -152,6 +155,10 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             outcome.addPayload("permissions", permissions);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            if (!isNew){
+                outcome.addPayload(new LifeCycle(user, entity));
+            }
+
 
             return Response.ok(outcome).build();
         } catch (Exception e) {

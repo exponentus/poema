@@ -1,27 +1,6 @@
 package projects.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
+import administrator.model.User;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.ui.ViewPage;
@@ -30,14 +9,23 @@ import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
-
-import administrator.model.User;
+import org.eclipse.persistence.config.HintValues;
+import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
 import projects.dto.TaskViewEntry;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
 
@@ -161,6 +149,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 			cq.select(taskRoot).distinct(true).orderBy(collectSortOrder(cb, taskRoot, sortParams));
 			countCq.select(cb.countDistinct(taskRoot));
 
+
+
 			if (condition != null) {
 				cq.where(condition);
 				countCq.where(condition);
@@ -168,6 +158,11 @@ public class TaskDAO extends DAO<Task, UUID> {
 
 			TypedQuery<Task> typedQuery = em.createQuery(cq);
 			Query query = em.createQuery(countCq);
+
+			//TODO to test
+			typedQuery.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
+			query.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
+
 			long count = (long) query.getSingleResult();
 			int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 

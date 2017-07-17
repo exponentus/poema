@@ -3,6 +3,7 @@ package workflow.model;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.converter.ListOfTextConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
@@ -54,7 +55,8 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	@Column(name = "is_invariable")
 	private boolean routeIsInvariable;
 
-	@OneToMany
+	@JsonManagedReference(value = "primary-assignment")
+	@OneToMany(mappedBy="primary")
 	private List<Assignment> assignments;
 
 	@FTSearchable

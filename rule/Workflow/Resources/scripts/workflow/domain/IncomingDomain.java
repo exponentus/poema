@@ -3,7 +3,6 @@ package workflow.domain;
 import administrator.model.User;
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
@@ -14,6 +13,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
+import reference.dao.DocumentTypeDAO;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -32,11 +32,12 @@ public class IncomingDomain extends CommonDomain<Incoming> {
         dao = new IncomingDAO(ses);
     }
 
-    public Incoming composeNew(IUser<Long> user) {
+    public Incoming composeNew(IUser<Long> user) throws DAOException {
         Incoming entity = new Incoming();
         entity.setAuthor(user);
         entity.setAppliedRegDate(new Date());
-
+        DocumentTypeDAO dao = new DocumentTypeDAO(ses);
+        entity.setDocType(dao.findByName("letter"));
         return entity;
     }
 
@@ -123,7 +124,7 @@ public class IncomingDomain extends CommonDomain<Incoming> {
 
     @Override
     public Outcome getOutcome(Incoming entity) {
-        Outcome outcome = new Outcome();
+        Outcome outcome = new Outcome(entity);
 
         String entityKind = Environment.vocabulary.getWord("incoming", ses.getLang());
         if (StringUtil.isEmpty(entity.getTitle())) {
@@ -133,9 +134,7 @@ public class IncomingDomain extends CommonDomain<Incoming> {
         }
         outcome.addPayload(entity.getEntityKind(), entity);
         outcome.addPayload("contentTitle", "incoming");
-        if (!entity.isNew()) {
-            outcome.addPayload(new ACL(entity));
-        }
+
 
         return outcome;
     }

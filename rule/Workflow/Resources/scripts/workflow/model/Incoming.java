@@ -1,38 +1,15 @@
 package workflow.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.embedded.ExtendedAttachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
@@ -42,12 +19,18 @@ import staff.model.Organization;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__incomings")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Incoming extends ActionableDocument {
+public class Incoming extends ActionableDocument implements ILifeCycle {
 
 	@FTSearchable
 	@Column(name = "reg_number", unique = true, length = 64)
@@ -221,5 +204,35 @@ public class Incoming extends ActionableDocument {
 	@Override
 	public String getURL() {
 		return AppConst.BASE_URL + "incomings/" + getIdentifier();
+	}
+
+	@Override
+	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = getNode(user, id);
+		List<Assignment> assignments = getAssignments();
+
+		if (assignments != null) {
+			for (Assignment a : assignments) {
+				lc.addResponse(a.getNode(user, id));
+			}
+		}
+		return lc;
+	}
+
+	@Override
+	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = new LifeCycleNode();
+		lc.setType(LifeCycleNodeType.ACTIONABLE);
+		if (id.equals(this.id)){
+			lc.setCurrent(true);
+		}
+
+		if (user.isSuperUser() || getReaders().contains(user.getId())){
+			lc.setAvailable(true);
+			lc.setTitle(getTitle());
+			lc.setStatus(getStatus().name());
+		}
+		lc.setUrl(getURL());
+		return lc;
 	}
 }

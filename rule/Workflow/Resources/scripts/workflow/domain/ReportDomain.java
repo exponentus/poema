@@ -2,7 +2,6 @@ package workflow.domain;
 
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.ACL;
 import com.exponentus.common.model.constants.SolutionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
@@ -107,7 +106,7 @@ public class ReportDomain extends CommonDomain<Report> {
 
     @Override
     public Outcome getOutcome(Report entity) {
-        Outcome outcome = new Outcome();
+        Outcome outcome = new Outcome(entity);
 
         String entityKind = Environment.vocabulary.getWord("report", ses.getLang());
         if (StringUtil.isEmpty(entity.getTitle())) {
@@ -118,9 +117,6 @@ public class ReportDomain extends CommonDomain<Report> {
         outcome.addPayload(entity);
         outcome.addPayload("assignment", entity.getParent());
         outcome.addPayload("contentTitle", "report");
-        if (!entity.isNew()) {
-            outcome.addPayload(new ACL(entity));
-        }
 
         return outcome;
     }

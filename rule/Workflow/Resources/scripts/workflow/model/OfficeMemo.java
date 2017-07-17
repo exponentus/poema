@@ -1,44 +1,30 @@
 package workflow.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @JsonRootName("officeMemo")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class OfficeMemo extends ActionableDocument {
+public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 
 	@Column(name = "reg_number", unique = true, length = 64)
 	private String regNumber;
@@ -137,5 +123,36 @@ public class OfficeMemo extends ActionableDocument {
 	@Override
 	public String getURL() {
 		return AppConst.BASE_URL + "office-memos/" + getIdentifier();
+	}
+
+	@Override
+	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = getNode(user, this.id);
+		List<Assignment> assignments = getAssignments();
+
+		if (assignments != null) {
+			for (Assignment a : assignments) {
+				lc.addResponse(a.getNode(user, id));
+			}
+		}
+		return lc;
+	}
+
+	@Override
+	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+		LifeCycleNode lc = new LifeCycleNode();
+		lc.setType(LifeCycleNodeType.DISCUSSED_AND_ACTIONABLE);
+
+		if (user.isSuperUser() || getReaders().contains(user.getId())){
+			lc.setAvailable(true);
+			lc.setTitle(getTitle());
+			lc.setStatus(getStatus().name());
+		}
+
+		if (id.equals(this.id)){
+			lc.setCurrent(true);
+		}
+		lc.setUrl(getURL());
+		return lc;
 	}
 }

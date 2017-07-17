@@ -2,7 +2,6 @@ package workflow.domain;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
@@ -106,7 +105,7 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
     @Override
     public Outcome getOutcome(OfficeMemo entity) {
-        Outcome outcome = new Outcome();
+        Outcome outcome = new Outcome(entity);
 
         String entityKind = Environment.vocabulary.getWord("office_memo", ses.getLang());
         if (StringUtil.isEmpty(entity.getTitle())) {
@@ -117,7 +116,6 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
         outcome.addPayload(entity.getEntityKind(), entity);
         outcome.addPayload("contentTitle", "office_memo");
         if (!entity.isNew()) {
-            outcome.addPayload(new ACL(entity));
             Block block = ApprovalLifecycle.getProcessingBlock(entity);
             if (block != null) {
                 Map<String, Boolean> flags = new HashMap<>();

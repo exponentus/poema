@@ -2,6 +2,7 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -15,6 +16,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
+import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.IncomingDAO;
@@ -93,10 +95,10 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         Incoming entity;
         try {
             IncomingDomain inDomain = new IncomingDomain(ses);
-
+            IUser<Long> user = ses.getUser();
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = inDomain.composeNew(ses.getUser());
+                entity = inDomain.composeNew(user);
             } else {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
                 entity = incomingDAO.findByIdentefier(id);
@@ -110,6 +112,10 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             outcome.addPayload("employees", emps);
             outcome.addPayload(getActionBar(ses, entity, inDomain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+
+            if (!isNew){
+                outcome.addPayload(new LifeCycle(user, entity));
+            }
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {

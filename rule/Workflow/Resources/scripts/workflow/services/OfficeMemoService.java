@@ -3,8 +3,6 @@ package workflow.services;
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.dto.LifeCycle;
-import com.exponentus.common.dto.embedded.Connector;
-import com.exponentus.common.dto.embedded.Item;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -26,7 +24,6 @@ import workflow.domain.OfficeMemoDomain;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
-import workflow.model.Assignment;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
@@ -101,10 +98,11 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
         OfficeMemo entity;
         try {
             OfficeMemoDomain omd = new OfficeMemoDomain(ses);
+            IUser<Long> user = ses.getUser();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             boolean isNew = "new".equals(id);
             if (isNew) {
-                entity = omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(ses.getUser()));
+                entity = omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(user));
             } else {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
                 entity = officeMemoDAO.findByIdentefier(id);
@@ -119,16 +117,9 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             outcome.addPayload(getActionBar(ses, entity, omd));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-            LifeCycle lc = new LifeCycle();
-            Item item = new Item();
-            item.title = entity.getTitle();
-            for (Assignment a: entity.getAssignments()){
-                Item child = new Item();
-                child.title = a.getTitle();
-                lc.below.add(new Connector());
-                lc.below.add(child);
+            if (!isNew){
+                outcome.addPayload(new LifeCycle(user, entity));
             }
-            outcome.addPayload(lc);
 
             return Response.ok(outcome).build();
 

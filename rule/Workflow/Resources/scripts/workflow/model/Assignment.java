@@ -1,8 +1,12 @@
 package workflow.model;
 
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -19,14 +23,15 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__assignments")
-public class Assignment extends EmbeddedSecureHierarchicalEntity {
+public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
     //@JsonIgnore
-    @JsonManagedReference
+    @JsonManagedReference(value = "assignment-report")
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @OrderBy("appliedRegDate")
     private List<Report> reports;
@@ -38,13 +43,19 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity {
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
+    @JsonBackReference(value = "primary-assignment")
     @ManyToOne(optional = false)
-    @JoinColumn(updatable = false, nullable = false)
+    @JoinColumn(nullable = false)
     private ActionableDocument primary;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(updatable = false)
+    @JsonBackReference(value = "assignment-assignment")
+    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "actionable_document_id")
     private Assignment parent;
+
+    @JsonManagedReference(value = "assignment-assignment")
+    @OneToMany(mappedBy="parent")
+    private List<Assignment> assignments;
 
     @FTSearchable
     @Column(columnDefinition = "TEXT")
@@ -112,6 +123,14 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity {
 
     public void setParent(Assignment parent) {
         this.parent = parent;
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 
     public String getBody() {
@@ -214,5 +233,56 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity {
         }
 
         return false;
+    }
+
+    @Override
+    public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+        return (((ILifeCycle)getPrimary(this)).getLifeCycle(user, id ));
+    }
+
+    private ActionableDocument getPrimary(Assignment entity){
+        ActionableDocument primary = entity.getPrimary();
+        if (primary != null){
+            return primary;
+        }else{
+            Assignment assignment = entity.getParent();
+            return getPrimary(assignment);
+        }
+    }
+
+    @Override
+    public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+        LifeCycleNode lc = new LifeCycleNode();
+        lc.setType(LifeCycleNodeType.ASSIGNMENT);
+
+        if (user.isSuperUser() || getReaders().contains(user.getId())){
+            lc.setAvailable(true);
+            lc.setTitle(getTitle());
+            lc.setStatus(status.name());
+        }
+
+        List<Assignment> assignments = getAssignments();
+
+        if (assignments != null) {
+            for (Assignment a : assignments) {
+                lc.addResponse(a.getNode(user, id));
+            }
+        }
+
+        List<Report> reports = getReports();
+
+        if (reports != null) {
+            for (Report a : reports) {
+                lc.addResponse(a.getNode(user, id));
+            }
+        }
+
+        if (id.equals(this.id)){
+            lc.setCurrent(true);
+        }
+
+        lc.setUrl(getURL());
+
+        return lc;
     }
 }
