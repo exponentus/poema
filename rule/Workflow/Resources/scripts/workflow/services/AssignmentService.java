@@ -315,6 +315,10 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                 ve.addError("dueDate", "required", "field_is_empty");
             }
 
+            if (assignment.getParent() == null && assignment.getPrimary() == null) {
+                ve.addError("parent", "required", "it_should_pointed_either_assignment_or_primary");
+            }
+
             if (ve.hasError()) {
                 throw ve;
             }
