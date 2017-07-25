@@ -27,8 +27,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "wf__assignments")
 public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
-    //@JsonIgnore
-    @JsonManagedReference(value = "assignment-report")
+    @JsonIgnore
+    //@JsonManagedReference(value = "assignment-report")
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @OrderBy("appliedRegDate")
     private List<Report> reports;

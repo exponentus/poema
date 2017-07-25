@@ -9,7 +9,6 @@ import com.exponentus.common.model.constants.SolutionType;
 import com.exponentus.common.model.constants.converter.SolutionTypeConverter;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -38,7 +37,7 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-    @JsonBackReference(value = "assignment-report")
+   // @JsonBackReference(value = "assignment-report")
     @NotNull
     @ManyToOne
     @JoinColumn(updatable = false)

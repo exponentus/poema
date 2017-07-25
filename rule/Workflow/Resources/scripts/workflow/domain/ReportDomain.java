@@ -4,12 +4,9 @@ import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.model.constants.SolutionType;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -102,23 +99,6 @@ public class ReportDomain extends CommonDomain<Report> {
         entity.addReaderEditor(entity.getAuthor());
         Assignment parent = entity.getParent();
         entity.addReaders(parent.getReaders());
-    }
-
-    @Override
-    public Outcome getOutcome(Report entity) {
-        Outcome outcome = new Outcome(entity);
-
-        String entityKind = Environment.vocabulary.getWord("report", ses.getLang());
-        if (StringUtil.isEmpty(entity.getTitle())) {
-            outcome.setTitle(entityKind);
-        } else {
-            outcome.setTitle(entityKind + " " + entity.getTitle());
-        }
-        outcome.addPayload(entity);
-        outcome.addPayload("assignment", entity.getParent());
-        outcome.addPayload("contentTitle", "report");
-
-        return outcome;
     }
 
     @Override

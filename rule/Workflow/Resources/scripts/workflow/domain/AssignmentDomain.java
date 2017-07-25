@@ -39,8 +39,8 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         Assignment entity = new Assignment();
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
-           entity.setPrimary(ReflectionUtil.getSimpleInstance(primary));
-                  entity.setParent(ReflectionUtil.getSimpleInstance(parent));
+           entity.setPrimary(ReflectionUtil.extractSimpleInstance(primary));
+                  entity.setParent(ReflectionUtil.extractSimpleInstance(parent));
                entity.setStartDate(new Date());
         entity.setStatus(ControlStatusType.DRAFT);
         return entity;

@@ -127,7 +127,8 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
 
         Assignment assignment = entity.getParent();
-        if(assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser())) {
+        if(entity.getId() != null  && entity.getSolution() != null &&
+                (assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser()))) {
             actionBar.addAction(acceptReport);
             actionBar.addAction(declineReport);
         }
