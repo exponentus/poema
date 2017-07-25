@@ -6,10 +6,7 @@ import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.*;
 import reference.model.ControlType;
 import reference.model.Tag;
 import staff.model.Employee;
@@ -43,17 +40,18 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-    @JsonBackReference(value = "primary-assignment")
+   // @JsonBackReference(value = "primary-assignment")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ActionableDocument primary;
 
-    @JsonBackReference(value = "assignment-assignment")
-    @ManyToOne(optional = false, cascade = CascadeType.DETACH)
+   // @JsonBackReference(value = "assignment-assignment")
+    @ManyToOne
     @JoinColumn(name = "actionable_document_id")
     private Assignment parent;
 
-    @JsonManagedReference(value = "assignment-assignment")
+  //  @JsonManagedReference(value = "assignment-assignment")
+    @JsonIgnore
     @OneToMany(mappedBy="parent")
     private List<Assignment> assignments;
 
@@ -261,13 +259,13 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
             lc.setStatus(status.name());
         }
 
-        List<Assignment> assignments = getAssignments();
+      /*  List<Assignment> assignments = getAssignments();
 
         if (assignments != null) {
             for (Assignment a : assignments) {
                 lc.addResponse(a.getNode(user, id));
             }
-        }
+        }*/
 
         List<Report> reports = getReports();
 

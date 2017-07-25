@@ -9,6 +9,7 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import com.exponentus.util.ReflectionUtil;
 import com.exponentus.util.StringUtil;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -38,8 +39,12 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         Assignment entity = new Assignment();
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
-        entity.setPrimary(primary);
-        entity.setParent(parent);
+        if (primary != null) {
+            entity.setPrimary(ReflectionUtil.getSimpleInstance(primary));
+        }else {
+            entity.setParent(ReflectionUtil.getSimpleInstance(parent));
+            entity.setPrimary(ReflectionUtil.getSimpleInstance(parent.getPrimary()));
+        }
         entity.setStartDate(new Date());
         entity.setStatus(ControlStatusType.DRAFT);
         return entity;
@@ -72,7 +77,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
             if (parent != null) {
                 parent = dao.findById(parent.getId());
                 entity.setParent(parent);
-                //entity.setPrimary(parent.getPrimary());
+                entity.setPrimary(parent.getPrimary());
             } else {
                 UUID primaryId = dto.getPrimary().getId();
                 IncomingDAO adDao = new IncomingDAO(ses);
@@ -231,7 +236,7 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         }
 
         outcome.addPayload(entity);
-        outcome.addPayload("primary", entity.getPrimary());
+      //  outcome.addPayload("primary", entity.getPrimary());
         outcome.addPayload("contentTitle", "assignment");
 
 

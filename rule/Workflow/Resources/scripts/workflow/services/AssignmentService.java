@@ -128,6 +128,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                 } else if (!officeMemoId.isEmpty()) {
                     primary = new OfficeMemoDAO(ses).findByIdentefier(officeMemoId);
                 } else if (!assignmentId.isEmpty()) {
+
                     parent = assignmentDAO.findByIdentefier(assignmentId);
                    // primary = parent.getPrimary();
                 } else {
@@ -266,7 +267,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                     .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
         }
 
-        if (entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
+        if (!entity.isNew() && entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
             actionBar.addAction(completeAction);
         }
 
