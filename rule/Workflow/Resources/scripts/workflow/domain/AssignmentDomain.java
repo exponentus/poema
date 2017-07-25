@@ -39,13 +39,9 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         Assignment entity = new Assignment();
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
-        if (primary != null) {
-            entity.setPrimary(ReflectionUtil.getSimpleInstance(primary));
-        }else {
-            entity.setParent(ReflectionUtil.getSimpleInstance(parent));
-            entity.setPrimary(ReflectionUtil.getSimpleInstance(parent.getPrimary()));
-        }
-        entity.setStartDate(new Date());
+           entity.setPrimary(ReflectionUtil.getSimpleInstance(primary));
+                  entity.setParent(ReflectionUtil.getSimpleInstance(parent));
+               entity.setStartDate(new Date());
         entity.setStatus(ControlStatusType.DRAFT);
         return entity;
     }
@@ -77,7 +73,6 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
             if (parent != null) {
                 parent = dao.findById(parent.getId());
                 entity.setParent(parent);
-                entity.setPrimary(parent.getPrimary());
             } else {
                 UUID primaryId = dto.getPrimary().getId();
                 IncomingDAO adDao = new IncomingDAO(ses);
