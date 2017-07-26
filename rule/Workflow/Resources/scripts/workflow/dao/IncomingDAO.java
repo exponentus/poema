@@ -224,7 +224,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                 .distinct(true)
                 .where(condition)
                 .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
-                .orderBy(cb.desc(root.get("regDate")));
+                .orderBy(cb.asc(root.get("regDate")));
 
         TypedQuery<AssignmentViewEntry> typedQuery = em.createQuery(cq);
         List<AssignmentViewEntry> assignments = typedQuery.getResultList();
@@ -300,9 +300,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
                 .distinct(true)
                 .where(conditionR)
                 .groupBy(rootR, rootR.get("appliedAuthor").get("name"), reportAtts)
-                .orderBy(cbr.desc(rootR.get("regDate")));
-
-        cqr.orderBy(cbr.desc(rootR.get("regDate")));
+                .orderBy(cbr.asc(rootR.get("regDate")));
 
         TypedQuery<ReportViewEntry> typedQueryR = em.createQuery(cqr);
         List<ReportViewEntry> reports = typedQueryR.getResultList();
