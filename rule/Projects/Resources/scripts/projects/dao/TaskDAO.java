@@ -13,6 +13,8 @@ import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
 import projects.dto.TaskViewEntry;
+import projects.dto.stat.TaskPriorityStat;
+import projects.dto.stat.TaskStatusStat;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -430,6 +432,105 @@ public class TaskDAO extends DAO<Task, UUID> {
             Query query = em.createQuery(countCq);
             return (long) query.getSingleResult();
 
+        } finally {
+            em.close();
+        }
+    }
+
+    public ViewPage<TaskViewEntry> findAllTaskByDueDateToday() {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
+            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+            Root<Task> root = cq.from(Task.class);
+
+            Expression<java.sql.Date> currentDateExp = cb.currentDate();
+            TaskStatusType[] inWorkSt = {TaskStatusType.OPEN, TaskStatusType.PROCESSING};
+
+            // Predicate condition = cb.equal(root.get("assignee"), user.getId());
+            Predicate condition = cb.and(root.get("status").in(Arrays.asList(inWorkSt)));
+            condition = cb.and(cb.equal(root.get("dueDate"), currentDateExp), condition);
+
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            cq.select(cb.construct(
+                    TaskViewEntry.class,
+                    root.get("id"),
+                    root.get("title"),
+                    root.get("regNumber"),
+                    root.get("status"),
+                    root.get("priority"),
+                    root.get("startDate"),
+                    root.get("dueDate")))
+                    .orderBy(cb.asc(root.get("priority")));
+
+            countCq.select(cb.count(root));
+
+            cq.where(condition);
+            countCq.where(condition);
+
+            TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
+            TypedQuery<Long> countQuery = em.createQuery(countCq);
+            List<TaskViewEntry> result = typedQuery.getResultList();
+
+            return new ViewPage<>(result, countQuery.getSingleResult(), 0, 0);
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<TaskPriorityStat> getStatTaskPriority() {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<TaskPriorityStat> cq = cb.createQuery(TaskPriorityStat.class);
+            Root<Task> root = cq.from(Task.class);
+
+            Predicate condition = null;
+
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            cq.select(cb.construct(TaskPriorityStat.class, root.get("priority"), cb.count(root.get("priority"))))
+                    .groupBy(root.get("priority"));
+
+            if (condition != null) {
+                cq.where(condition);
+            }
+
+            TypedQuery<TaskPriorityStat> typedQuery = em.createQuery(cq);
+            return typedQuery.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    public List<TaskStatusStat> getStatTaskStatus() {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<TaskStatusStat> cq = cb.createQuery(TaskStatusStat.class);
+            Root<Task> root = cq.from(Task.class);
+
+            Predicate condition = null;
+
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            cq.select(cb.construct(TaskStatusStat.class, root.get("status"), cb.count(root.get("status"))))
+                    .groupBy(root.get("status"));
+
+            if (condition != null) {
+                cq.where(condition);
+            }
+
+            TypedQuery<TaskStatusStat> typedQuery = em.createQuery(cq);
+            return typedQuery.getResultList();
         } finally {
             em.close();
         }

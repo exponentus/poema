@@ -1,5 +1,6 @@
 package projects.services;
 
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -7,6 +8,8 @@ import com.exponentus.scripting._Session;
 import monitoring.dao.StatisticDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
+import projects.dto.stat.TaskPriorityStat;
+import projects.dto.stat.TaskStatusStat;
 import projects.model.constants.TaskStatusType;
 
 import javax.ws.rs.GET;
@@ -15,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 @Path("dashboard")
 @Produces(MediaType.APPLICATION_JSON)
@@ -43,6 +47,14 @@ public class DashboardService extends RestProvider {
             TaskDAO taskDAO = new TaskDAO(session);
             outcome.addPayload("created_by_me", taskDAO.findCreatedByUser(session.getUser(), pageNum, pageSize));
             outcome.addPayload("assigned_to_me", taskDAO.findAssignedToUser(session.getUser(), pageNum, pageSize));
+
+            List<TaskPriorityStat> taskPriorityStatList = taskDAO.getStatTaskPriority();
+            List<TaskStatusStat> taskStatusStatList = taskDAO.getStatTaskStatus();
+            ViewPage allTaskByDueDateToday = taskDAO.findAllTaskByDueDateToday();
+
+            outcome.addPayload("taskPriorityStatList", taskPriorityStatList);
+            outcome.addPayload("taskStatusStatList", taskStatusStatList);
+            outcome.addPayload("allTaskByDueDateToday", allTaskByDueDateToday);
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
