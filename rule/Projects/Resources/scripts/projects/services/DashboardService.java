@@ -8,8 +8,7 @@ import com.exponentus.scripting._Session;
 import monitoring.dao.StatisticDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
-import projects.dto.stat.TaskPriorityStat;
-import projects.dto.stat.TaskStatusStat;
+import projects.dto.stat.CountStat;
 import projects.model.constants.TaskStatusType;
 
 import javax.ws.rs.GET;
@@ -48,13 +47,17 @@ public class DashboardService extends RestProvider {
             outcome.addPayload("created_by_me", taskDAO.findCreatedByUser(session.getUser(), pageNum, pageSize));
             outcome.addPayload("assigned_to_me", taskDAO.findAssignedToUser(session.getUser(), pageNum, pageSize));
 
-            List<TaskPriorityStat> taskPriorityStatList = taskDAO.getStatTaskPriority();
-            List<TaskStatusStat> taskStatusStatList = taskDAO.getStatTaskStatus();
-            ViewPage allTaskByDueDateToday = taskDAO.findAllTaskByDueDateToday();
+            List<CountStat> taskPriorityStatList = taskDAO.getStatTaskPriority();
+            List<CountStat> taskStatusStatList = taskDAO.getStatTaskStatus();
+            ViewPage tasksDueToday = taskDAO.findAllTaskDueToday();
+            ViewPage tasksIn7Day = taskDAO.findAllTaskIn7Day();
+            ViewPage tasksExpired = taskDAO.findAllTaskExpired();
 
-            outcome.addPayload("taskPriorityStatList", taskPriorityStatList);
-            outcome.addPayload("taskStatusStatList", taskStatusStatList);
-            outcome.addPayload("allTaskByDueDateToday", allTaskByDueDateToday);
+            outcome.addPayload("taskPriorityStat", taskPriorityStatList);
+            outcome.addPayload("taskStatusStat", taskStatusStatList);
+            outcome.addPayload("tasksDueToday", tasksDueToday);
+            outcome.addPayload("tasksIn7Day", tasksIn7Day);
+            outcome.addPayload("tasksExpired", tasksExpired);
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
