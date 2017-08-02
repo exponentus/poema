@@ -368,7 +368,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             condition = cb.and(cb.equal(c.get("status"), status), condition);
             countCq.where(condition);
             Query query = em.createQuery(countCq);
-            query.setParameter(parameter, date, TemporalType.DATE);
+            //query.setParameter(parameter, date, TemporalType.DATE);
             return (long) query.getSingleResult();
         } finally {
             em.close();
@@ -390,7 +390,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             condition = cb.and(cb.equal(c.get("status"), status), condition);
             countCq.where(condition);
             Query query = em.createQuery(countCq);
-            query.setParameter(parameter, date, TemporalType.DATE);
+            //query.setParameter(parameter, date, TemporalType.DATE);
             return (long) query.getSingleResult();
 
         } finally {
