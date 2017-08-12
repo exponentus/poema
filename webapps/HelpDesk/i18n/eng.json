@@ -388,6 +388,7 @@
   "logout" : "Logout",
   "markdown_write" : "Writer",
   "request_error" : "Error while executing the query",
+  "tasks_expired" : "Overdued tasks",
   "limit_view" : "Number of items to list",
   "dashboard" : "Dashboard",
   "identifier" : "Identifier",
