@@ -21,7 +21,6 @@ import projects.model.constants.TaskStatusType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.*;
@@ -451,7 +450,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             condition = cb.and(cb.equal(root.get("dueDate"), currentDateExp), condition);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                condition = cb.and(root.get("readers").in(user.getId()), condition);
             }
 
             cq.select(cb.construct(
@@ -501,7 +500,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             condition = cb.and(cb.greaterThan(root.get("dueDate"), currentDateExp), condition);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                condition = cb.and(root.get("readers").in(user.getId()), condition);
             }
 
             cq.select(cb.construct(
@@ -545,7 +544,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             condition = cb.and(cb.lessThan(root.get("dueDate"), currentDateExp), condition);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                condition = cb.and(root.get("readers").in(user.getId()), condition);
             }
 
             cq.select(cb.construct(
