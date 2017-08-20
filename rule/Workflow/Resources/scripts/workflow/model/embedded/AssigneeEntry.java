@@ -1,24 +1,15 @@
 package workflow.model.embedded;
 
-import java.util.Date;
-import java.util.UUID;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
-
 import staff.model.Employee;
 import staff.model.util.EmployeeConverter;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.UUID;
 
 @Embeddable
 @Converter(name = "emp_conv", converterClass = EmployeeConverter.class)
@@ -130,5 +121,9 @@ public class AssigneeEntry {
 
 	public void setSort(int sort) {
 		this.sort = sort;
+	}
+
+	public String toString(){
+		return getId() + " " + status + " " + assignee.toString();
 	}
 }

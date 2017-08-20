@@ -75,10 +75,12 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         try {
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
             Employee currentUserEmp = employeeDAO.findByUser(session.getUser());
+            boolean showAssigneeList = false;
 
             switch (slug) {
                 case "_my":
                     filter.setAppliedAuthor(currentUserEmp);
+                    showAssigneeList= true;
                     break;
                 case "_inbox":
                     filter.setAssignee(currentUserEmp);
@@ -86,7 +88,8 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             }
 
             AssignmentDAO assignmentDAO = new AssignmentDAO(session);
-            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize);
+            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize, showAssigneeList
+            );
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);

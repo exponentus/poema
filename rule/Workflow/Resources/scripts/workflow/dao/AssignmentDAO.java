@@ -42,11 +42,11 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
     }
 
     public ViewPage<AssignmentViewEntry> findViewPage(AssignmentFilter filter, SortParams sortParams, int pageNum,
-                                                      int pageSize) {
+                                                      int pageSize, boolean showAssigneeList) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<AssignmentViewEntry> cq = cb.createQuery(AssignmentViewEntry.class);
+            CriteriaQuery cq = cb.createQuery(AssignmentViewEntry.class);
             CriteriaQuery<Long> countRootCq = cb.createQuery(Long.class);
             Root<Assignment> root = cq.from(Assignment.class);
 
@@ -90,19 +90,28 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                 }
             }
 
-            cq.select(cb.construct(
-                    AssignmentViewEntry.class,
-                    root.get("id"),
-                    root.get("appliedAuthor").get("name"),
-                    root.get("title"),
-                    root.get("body"),
-                    root.get("controlType").get("locName"),
-                    root.get("startDate"),
-                    root.get("dueDate"),
-                    root.get("status")
-            ))
-                    .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
-                    .orderBy(collectSortOrder(cb, root, sortParams));
+            if (showAssigneeList){
+                //TODO it is temporary solution
+                cq = cb.createQuery(Assignment.class);
+                cq.select(root)
+                       // .groupBy(root,root.get("controlType").get("locName"))
+                        .orderBy(collectSortOrder(cb, root, sortParams));
+            }else{
+                cq.select(cb.construct(
+                        AssignmentViewEntry.class,
+                        root.get("id"),
+                        root.get("appliedAuthor").get("name"),
+                        root.get("title"),
+                        root.get("body"),
+                        root.get("controlType").get("locName"),
+                        root.get("startDate"),
+                        root.get("dueDate"),
+                        root.get("status")
+                ))
+                      //  .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
+                        .orderBy(collectSortOrder(cb, root, sortParams));
+            }
+
 
             countRootCq.select(cb.countDistinct(root));
 
@@ -116,7 +125,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
 
             long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
-
+            String sql = getSQL(em,typedQuery);
             return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
         } finally {
             em.close();

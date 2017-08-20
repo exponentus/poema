@@ -1,8 +1,10 @@
 package workflow.dto;
 
+import staff.model.Employee;
 import workflow.model.embedded.AssigneeEntry;
 
 import java.util.Date;
+import java.util.List;
 
 public class AssigneeEntryShort implements IDTO {
 
@@ -15,13 +17,21 @@ public class AssigneeEntryShort implements IDTO {
     public String resetterInfo;
     public int sort;
 
-    public AssigneeEntryShort(AssigneeEntry ae) {
+    public AssigneeEntryShort(List<AssigneeEntry> entry) {
         //this.id = ae.getId();
-        this.isCoordinator = ae.isCoordinator();
+        System.out.println(entry.getClass().getSimpleName() + " " + entry.toString());
+        /*this.isCoordinator = ae.isCoordinator();
         this.assignee = ae.getAssignee().getName();
         this.resetBy = ae.getResetBy().getName();
         this.resetTime = ae.getResetTime();
         this.resetterInfo = ae.getResetInfo();
-        this.sort = ae.getSort();
+        this.sort = ae.getSort();*/
     }
+
+    public AssigneeEntryShort(Employee entry) {
+        System.out.println(entry.getClass().getSimpleName() + " " + entry.getTitle());
+
+    }
+
+
 }

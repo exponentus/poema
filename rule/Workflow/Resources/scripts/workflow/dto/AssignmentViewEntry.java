@@ -3,11 +3,9 @@ package workflow.dto;
 import com.exponentus.localization.constants.LanguageCode;
 import workflow.init.AppConst;
 import workflow.model.constants.ControlStatusType;
+import workflow.model.embedded.AssigneeEntry;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class AssignmentViewEntry implements IDTO {
 
@@ -21,12 +19,14 @@ public class AssignmentViewEntry implements IDTO {
     public Date startDate;
     public Date dueDate;
     public ControlStatusType status = ControlStatusType.UNKNOWN;
-    public List<AssigneeEntryShort> assigneeEntries;
-
+    public List<AssigneeEntryShort> assigneeEntriesShort;
+    public Collection<AssigneeEntry> assigneeEntries;
+    public String assigneeEntriesText;
     public long responsesCount;
     public List<IDTO> responses;
 
-    public AssignmentViewEntry(UUID id, String appliedAuthor, String title, String body, Map<LanguageCode, String> controlType, Date startDate, Date dueDate, ControlStatusType status) {
+    public AssignmentViewEntry(UUID id, String appliedAuthor, String title, String body, Map<LanguageCode, String> controlType,
+                               Date startDate, Date dueDate, ControlStatusType status) {
         this.id = id;
         this.appliedAuthor = appliedAuthor;
         this.title = title;
@@ -36,6 +36,39 @@ public class AssignmentViewEntry implements IDTO {
         this.dueDate = dueDate;
         this.status = status;
     }
+
+    public AssignmentViewEntry(UUID id,  String title, String body, Map<LanguageCode, String> controlType,
+                               Date startDate, Date dueDate, ControlStatusType status, Object ae) {
+        this.id = id;
+        this.appliedAuthor = appliedAuthor;
+        this.title = title;
+        this.body = body;
+        this.controlType = controlType;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
+        this.status = status;
+
+        if (ae != null) {
+            System.out.println(id + " " + ae.toString());
+          //  this.assigneeEntriesText = ae;
+           // assigneeEntries = ae;
+        }
+    }
+
+    public AssignmentViewEntry(UUID id,  String title, String body, Map<LanguageCode, String> controlType,
+                               Date startDate, Date dueDate, ControlStatusType status) {
+        this.id = id;
+        this.appliedAuthor = appliedAuthor;
+        this.title = title;
+        this.body = body;
+        this.controlType = controlType;
+        this.startDate = startDate;
+        this.dueDate = dueDate;
+        this.status = status;
+
+
+    }
+
 
     public void setResponsesCount(long responsesCount) {
         this.responsesCount = responsesCount;
