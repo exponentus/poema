@@ -15,7 +15,7 @@ run task fill_org_categories
 run task fill_document_types
 run task fill_document_subjs
 run task fill_vehicles
-stini staff.init.FillDefaultLabels
+run task fill_organization_labels
 stini staff.init.FillDefaultRoles
 run task fill_individual_labels
 run task fill_tags
