@@ -2,11 +2,11 @@ package projects.services;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting.SortParams;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 @Path("projects")
 @Produces(MediaType.APPLICATION_JSON)
-public class ProjectService extends RestProvider {
+public class ProjectService extends EntityService<Project, ProjectDomain> {
 
     private Outcome outcome = new Outcome();
     private ActionFactory action = new ActionFactory();
@@ -187,6 +187,11 @@ public class ProjectService extends RestProvider {
         } catch (SecureException | DAOException e) {
             return responseException(e);
         }
+    }
+
+    @Override
+    public Response saveForm(Project dto) {
+        return null;
     }
 
     @GET
