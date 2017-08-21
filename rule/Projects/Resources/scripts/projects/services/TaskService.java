@@ -169,7 +169,7 @@ public class TaskService extends RestProvider {
                 }
 
                 task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
-                //task.setBlocks(getModeratorBlock(empDao));
+                task.setBlocks(getModeratorBlock(empDao));
             } else {
                 task = taskDAO.findByIdentefier(id);
                 if (task == null) {
@@ -190,8 +190,8 @@ public class TaskService extends RestProvider {
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);
-       /* } catch (RestServiceException e) {
-            return responseException(e);*/
+        } catch (RestServiceException e) {
+            return responseException(e);
         }
     }
 

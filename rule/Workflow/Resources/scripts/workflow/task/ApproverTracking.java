@@ -70,7 +70,7 @@ public class ApproverTracking extends Do {
 
 	}
 
-	// TODO it should be got by Refletions
+	// TODO it should be got by Reflections
 	private List<Class<?>> getApprovedEntities() {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		classes.add(workflow.model.OfficeMemo.class);
