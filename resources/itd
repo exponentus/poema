@@ -1,5 +1,5 @@
 echo ***********************************************************
-echo *                 Generate test data                      *
+echo *          Generate test data for Semantyca               *
 echo ***********************************************************
 run task gen_test_users
 run task fill_region_types
@@ -17,6 +17,7 @@ run task fill_document_subjs
 run task fill_vehicles
 stini staff.init.FillDefaultLabels
 stini staff.init.FillDefaultRoles
+run task fill_individual_labels
 run task fill_tags
 run task fill_positions
 stini projects.init.FillTaskTypesSofwareDev

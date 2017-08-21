@@ -102,7 +102,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -143,7 +143,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -183,7 +183,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 			memo.addVar("requestType", request.getRequestType().getLocName(lang));
 
 			if (user != null) {
@@ -228,7 +228,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + request.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + request.getURL() + "&lang=" + lang);
 			memo.addVar("requestResolution", v.getWord(request.getResolution().name(), lang));
 
 			if (user != null) {
@@ -276,7 +276,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -321,7 +321,7 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				String slackAddr = user.getSlack();
@@ -366,7 +366,7 @@ public class Messages {
 
 				}
 
-				memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+				memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 				if (user != null) {
 					String slackAddr = user.getSlack();

@@ -66,7 +66,7 @@ public class PendingReminder extends Do {
 					}
 					if (tasksCount > 0) {
 						memo.addVar("tasks", tasksFtu);
-						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#");
+						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
 						IUser<Long> u = userDAO.findById(user.getId());
 						LanguageCode userLang = u.getDefaultLang();
 						memo.addVar("lang", "&lang=" + userLang);

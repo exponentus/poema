@@ -49,7 +49,7 @@ public class Messages {
 		memo.addVar("title", rez.getTitle());
 		memo.addVar("author", rez.getAuthor().getUserName());
 
-		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + rez.getURL() + "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + rez.getURL() + "&lang=" + lang);
 
 		for (AssigneeEntry entry : rez.getAssigneeEntries()) {
 
@@ -98,7 +98,7 @@ public class Messages {
 		memo.addVar("title", incoming.getTitle());
 		memo.addVar("author", incoming.getAuthor().getUserName());
 
-		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + incoming.getURL() + "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + incoming.getURL() + "&lang=" + lang);
 
 		if (user != null) {
 			try {
@@ -161,7 +161,7 @@ public class Messages {
 			memo.addVar("author", approval.getAuthor().getUserName());
 			memo.addVar("result", appEnv.getVocabulary().getWord(approval.getApprovalResult().name(), lang));
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 
 			if (user != null) {
 				try {
@@ -224,7 +224,7 @@ public class Messages {
 
 		}
 
-		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
+		memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 
 		if (user != null) {
 			String slackAddr = user.getSlack();
