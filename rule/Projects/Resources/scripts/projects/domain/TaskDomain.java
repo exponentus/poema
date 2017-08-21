@@ -19,6 +19,7 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
+import staff.dao.EmployeeDAO;
 import workflow.domain.ApprovalDomain;
 
 import java.util.ArrayList;
@@ -78,11 +79,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
 		return task;
 	}
 
-	public void fillFromDto(Task task, Task dto) {
+	public void fillFromDto(Task task, Task dto) throws DAOException {
 		if (task.isNew()) {
 			task.setAuthor(dto.getAuthor());
 			changeStatus(task, TaskStatusType.OPEN);
 			task.setInitiative(dto.isInitiative());
+			EmployeeDAO eDao = new EmployeeDAO(ses);
+			task.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
 
 			if (dto.getParent() != null) {
 				task.setParent(dto.getParent());
