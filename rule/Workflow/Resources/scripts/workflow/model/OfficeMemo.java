@@ -104,7 +104,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 	}
 
 	@Override
-	public List<Employee> getRecipients() {
+	public List<Employee> getRecipientsAfterApproval() {
 		List<Employee> recipients = new ArrayList<Employee>();
 		recipients.add(recipient);
 		return recipients;
@@ -146,7 +146,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 		if (user.isSuperUser() || getReaders().contains(user.getId())){
 			lc.setAvailable(true);
 			lc.setTitle(getTitle());
-			lc.setStatus(getStatus().name());
+			lc.setStatus(getApprovalStatus().name());
 		}
 
 		if (id.equals(this.id)){

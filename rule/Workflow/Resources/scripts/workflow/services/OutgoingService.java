@@ -150,9 +150,9 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         try {
             OutgoingDomain domain = new OutgoingDomain(ses);
             Outgoing entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
-            if (entity.getStatus() == ApprovalStatusType.REGISTERED) {
-                entity.setStatus(ApprovalStatusType.DRAFT);
-                entity.setSchema(ApprovalSchemaType.REJECT_IF_NO);
+            if (entity.getApprovalStatus() == ApprovalStatusType.REGISTERED) {
+                entity.setApprovalStatus(ApprovalStatusType.DRAFT);
+                entity.setApprovalSchema(ApprovalSchemaType.REJECT_IF_NO);
             }
             domain.startApproving(entity);
             domain.superUpdate(entity);
@@ -181,8 +181,8 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
             domain.superUpdate(entity);
 
             Outcome outcome = domain.getOutcome(entity);
-            if (entity.getStatus() == ApprovalStatusType.FINISHED) {
-                if (entity.getResult() == ApprovalResultType.ACCEPTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
+                if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     new Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
                 }
             }
@@ -210,15 +210,15 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
 
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
-            if (entity.getStatus() == ApprovalStatusType.FINISHED) {
-                if (entity.getResult() == ApprovalResultType.REJECTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
+                if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
                 }
             }
             outcome.setTitle("declineApprovalBlock");
             outcome.setMessage("declineApprovalBlock");
 
-            if (entity.getStatus() == ApprovalStatusType.FINISHED && entity.getResult() == ApprovalResultType.REJECTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                 if (entity.isVersionsSupport()) {
                     entity = domain.backToRevise(entity);
                     domain.superUpdate(entity);
@@ -266,7 +266,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
 
         actionBar.addAction(getApprovalButtonSet(user, entity));
 
-        if (entity.getStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
+        if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
             actionBar.addAction(action.registerOutgoing);
         }
 
@@ -275,7 +275,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         }
 
         //
-        if (entity.getStatus() == ApprovalStatusType.REGISTERED && session.getUser().getRoles().contains("can_sign_outgoing")) {
+        if (entity.getApprovalStatus() == ApprovalStatusType.REGISTERED && session.getUser().getRoles().contains("can_sign_outgoing")) {
             actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
         }
 

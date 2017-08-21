@@ -1,9 +1,10 @@
 package workflow.model.constants.converter;
 
+import com.exponentus.log.Lg;
+import workflow.model.constants.ApprovalResultType;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import workflow.model.constants.ApprovalResultType;
 
 @Converter(autoApply = true)
 public class ApprovalResultTypeConverter implements AttributeConverter<ApprovalResultType, Integer> {
@@ -15,6 +16,11 @@ public class ApprovalResultTypeConverter implements AttributeConverter<ApprovalR
 
 	@Override
 	public ApprovalResultType convertToEntityAttribute(Integer v) {
+		try{
 		return ApprovalResultType.getType(v);
+	}catch (Exception e){
+		Lg.error(this.getClass().getSimpleName(), e.toString());
+		return ApprovalResultType.UNKNOWN;
+	}
 	}
 }

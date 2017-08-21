@@ -148,7 +148,7 @@ public class Messages {
 
 	public void notifyAuthor(IApproval approval, String title) {
 		User user = null;
-		if (approval.getStatus() == ApprovalStatusType.FINISHED) {
+		if (approval.getApprovalStatus() == ApprovalStatusType.FINISHED) {
 			try {
 				user = (User) approval.getAuthor();
 				lang = user.getDefaultLang();
@@ -159,7 +159,7 @@ public class Messages {
 			Memo memo = new Memo();
 			memo.addVar("title", title);
 			memo.addVar("author", approval.getAuthor().getUserName());
-			memo.addVar("result", appEnv.getVocabulary().getWord(approval.getResult().name(), lang));
+			memo.addVar("result", appEnv.getVocabulary().getWord(approval.getApprovalResult().name(), lang));
 
 			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_NAME + "/#" + approval.getURL() + "&lang=" + lang);
 

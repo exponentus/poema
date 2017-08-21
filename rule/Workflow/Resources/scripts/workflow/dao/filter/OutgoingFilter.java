@@ -21,11 +21,11 @@ public class OutgoingFilter extends Outgoing {
     }
 
     public OutgoingFilter(WebFormData formData) {
-        setStatus(null);
+        setApprovalStatus(null);
         setResult(null);
 
         if (formData.containsField("status")) {
-            setStatus(ApprovalStatusType.valueOf(formData.getValueSilently("status")));
+            setApprovalStatus(ApprovalStatusType.valueOf(formData.getValueSilently("status")));
         }
 
         if (formData.containsField("result")) {

@@ -36,7 +36,7 @@ public class ApproverTracking extends Do {
 			ViewPage<IApproval> vp = dao.findAll();
 			//	PeriodicalServices.logger("approver_tracking is going to proccess " + vp.getCount() + " documents");
 			for (IApproval approval : vp.getResult()) {
-				if (approval.getStatus() == ApprovalStatusType.PENDING) {
+				if (approval.getApprovalStatus() == ApprovalStatusType.PENDING) {
 					try {
 						ApprovalLifecycle al = new ApprovalLifecycle(approval);
 						Block currentBlock = al.getCurrentBlock();
@@ -53,7 +53,7 @@ public class ApproverTracking extends Do {
 										Server.logger.exception(e);
 									}
 								}
-								if (approval.getStatus() == ApprovalStatusType.FINISHED) {
+								if (approval.getApprovalStatus() == ApprovalStatusType.FINISHED) {
 									break;
 								}
 							}

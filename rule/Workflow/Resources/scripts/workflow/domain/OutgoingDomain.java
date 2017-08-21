@@ -53,12 +53,12 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
         IUser<Long> user = ses.getUser();
         if (user.getRoles().contains("chancellery")) {
-            entity.setSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
-            entity.setStatus(ApprovalStatusType.REGISTERED);
+            entity.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
+            entity.setApprovalStatus(ApprovalStatusType.REGISTERED);
             entity.setResult(ApprovalResultType.ACCEPTED);
         } else {
-            entity.setSchema(dto.getSchema());
-            entity.setStatus(ApprovalStatusType.DRAFT);
+            entity.setApprovalSchema(dto.getApprovalSchema());
+            entity.setApprovalStatus(ApprovalStatusType.DRAFT);
         }
 
         List<Observer> observers = new ArrayList<Observer>();
@@ -83,7 +83,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
     @Override
     public void calculateReadersEditors(Outgoing entity) {
-        if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+        if (entity.getApprovalStatus() == ApprovalStatusType.DRAFT) {
             entity.addReaderEditor(entity.getAuthor());
         } else {
             entity.withdrawEditor(entity.getAuthor());
@@ -110,7 +110,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
     public Outgoing register(Outgoing dto, IValidation<Outgoing> validation) throws DAOException {
         Outgoing entity = getEntity(dto);
-        entity.setStatus(ApprovalStatusType.REGISTERED);
+        entity.setApprovalStatus(ApprovalStatusType.REGISTERED);
         return entity;
 
     }

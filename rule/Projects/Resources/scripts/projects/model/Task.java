@@ -1,54 +1,49 @@
 package projects.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.env.Environment;
+import com.exponentus.extconnect.IOfficeFrameDataProvider;
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.scripting._Session;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import helpdesk.model.Demand;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
+import reference.model.constants.ApprovalSchemaType;
+import reference.model.constants.ApprovalType;
+import reference.model.constants.converter.ApprovalSchemaTypeConverter;
+import staff.model.Employee;
+import workflow.domain.ApprovalLifecycle;
+import workflow.model.constants.ApprovalResultType;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.constants.DecisionType;
+import workflow.model.constants.converter.ApprovalResultTypeConverter;
+import workflow.model.constants.converter.ApprovalStatusTypeConverter;
+import workflow.model.embedded.Approver;
+import workflow.model.embedded.Block;
+import workflow.model.embedded.IApproval;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "prj__tasks")
-public class Task extends EmbeddedSecureHierarchicalEntity {
+public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -133,6 +128,21 @@ public class Task extends EmbeddedSecureHierarchicalEntity {
 
 	@Transient
 	private List<IAppEntity<UUID>> responses;
+
+
+	@Convert(converter = ApprovalStatusTypeConverter.class)
+	private ApprovalStatusType approvalStatus = ApprovalStatusType.DRAFT;
+
+	@Convert(converter = ApprovalSchemaTypeConverter.class)
+	private ApprovalSchemaType schema = ApprovalSchemaType.REJECT_IF_NO;
+
+	@Convert(converter = ApprovalResultTypeConverter.class)
+	private ApprovalResultType result = ApprovalResultType.PROJECT;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("sort")
+	private List<Block> blocks = new ArrayList<>();
+
 
 	public Project getProject() {
 		return project;
@@ -312,6 +322,106 @@ public class Task extends EmbeddedSecureHierarchicalEntity {
 	@Transient
 	public String getURL() {
 		return AppConst.BASE_URL + "tasks/" + getIdentifier();
+	}
+
+	@Override
+	public List<Block> getBlocks() {
+		return blocks;
+	}
+
+	@Override
+	public ApprovalResultType getApprovalResult() {
+		return result;
+	}
+
+	@Override
+	public ApprovalSchemaType getApprovalSchema() {
+		return schema;
+	}
+
+	@Override
+	public ApprovalStatusType getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	@Override
+	@JsonIgnore
+	public List<Employee> getRecipientsAfterApproval() {
+		IOfficeFrameDataProvider dao = Environment.getExtUserDAO();
+		List<Employee> recipients = new ArrayList<Employee>();
+		recipients.add((Employee)dao.getEmployee(assignee));
+		for(Long userId:getObservers()){
+			recipients.add((Employee)dao.getEmployee(userId));
+		}
+		return recipients;
+	}
+
+	@Override
+	public boolean isVersionsSupport() {
+		return false;
+	}
+
+	@Override
+	public void setVersionsSupport(boolean vs) {
+
+	}
+
+	@Override
+	public int getVersion() {
+		return 0;
+	}
+
+	@Override
+	public void setBlocks(List<Block> blocks) {
+		this.blocks = blocks;
+	}
+
+	@Override
+	public void setResult(ApprovalResultType accepted) {
+		this.result = result;
+	}
+
+	@Override
+	public void setApprovalSchema(ApprovalSchemaType schema) {
+		this.schema = schema;
+	}
+
+	@Override
+	public void setApprovalStatus(ApprovalStatusType as) {
+		approvalStatus = as;
+	}
+
+	@Override
+	public void setVersion(int version) {
+
+	}
+
+	@Override
+	public void backupContent() {
+
+	}
+
+
+	@Override
+	@Deprecated
+	public boolean userCanDoDecision(Employee emp) {
+		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
+			Block block = ApprovalLifecycle.getProcessingBlock(this);
+			if (block != null) {
+				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+					Approver approver = block.getCurrentApprover();
+					if (approver != null) {
+						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+					}
+				} else if (block.getType() == ApprovalType.PARALLEL) {
+					return block.getApprovers().stream()
+							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
+							.count() > 0;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	@Override

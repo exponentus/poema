@@ -1,14 +1,6 @@
 package workflow.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import com.exponentus.user.IUser;
-
 import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import staff.model.Employee;
@@ -21,6 +13,9 @@ import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class ApprovalLifecycle {
 	private IApproval entity;
 
@@ -30,8 +25,8 @@ public class ApprovalLifecycle {
 
 	public IApproval start() throws ApprovalException {
 		try {
-			if (entity.getStatus() != ApprovalStatusType.DRAFT) {
-				throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
+			if (entity.getApprovalStatus() != ApprovalStatusType.DRAFT) {
+				throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getApprovalStatus().name());
 			} else if (entity.getBlocks() == null || entity.getBlocks().isEmpty()) {
 				throw new ApprovalException(ApprovalExceptionType.BLOCK_NOT_FOUND);
 			} else if (entity.getBlocks().get(0).getApprovers().size() == 0) {
@@ -69,7 +64,7 @@ public class ApprovalLifecycle {
 			}
 
 			entity.setResult(ApprovalResultType.PROJECT);
-			entity.setStatus(ApprovalStatusType.PENDING);
+			entity.setApprovalStatus(ApprovalStatusType.PENDING);
 			block.setStatus(ApprovalStatusType.PENDING);
 
 			entity.getBlocks().forEach(b -> {
@@ -131,10 +126,10 @@ public class ApprovalLifecycle {
 			currentApprover.setDecisionTime(new Date());
 			currentApprover.setCurrent(false);
 			currentApprover.setDecisionComment(decisionComment);
-			if (entity.getSchema() == ApprovalSchemaType.REJECT_IF_NO) {
+			if (entity.getApprovalSchema() == ApprovalSchemaType.REJECT_IF_NO) {
 				processBlock.setStatus(ApprovalStatusType.FINISHED);
 				entity.setResult(ApprovalResultType.REJECTED);
-				entity.setStatus(ApprovalStatusType.FINISHED);
+				entity.setApprovalStatus(ApprovalStatusType.FINISHED);
 				return entity;
 			}
 			Date currentTime = new Date();
@@ -181,7 +176,7 @@ public class ApprovalLifecycle {
 
 	public IApproval backToRevise() throws ApprovalException {
 		entity.setVersion(entity.getVersion() + 1);
-		entity.setStatus(ApprovalStatusType.DRAFT);
+		entity.setApprovalStatus(ApprovalStatusType.DRAFT);
 		Set<Long> editors = new HashSet<Long>();
 		editors.add(entity.getAuthor().getId());
 		entity.setEditors(editors);
@@ -227,8 +222,8 @@ public class ApprovalLifecycle {
 				}
 			} else {
 				entity.setResult(ApprovalResultType.ACCEPTED);
-				entity.setStatus(ApprovalStatusType.FINISHED);
-				for (Employee em : entity.getRecipients()) {
+				entity.setApprovalStatus(ApprovalStatusType.FINISHED);
+				for (Employee em : entity.getRecipientsAfterApproval()) {
 					entity.addReader(em.getUser());
 				}
 			}
@@ -238,8 +233,8 @@ public class ApprovalLifecycle {
 	}
 
 	public Block getCurrentBlock() throws ApprovalException {
-		if (entity.getStatus() != ApprovalStatusType.PENDING) {
-			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getStatus().name());
+		if (entity.getApprovalStatus() != ApprovalStatusType.PENDING) {
+			throw new ApprovalException(ApprovalExceptionType.WRONG_STATUS, entity.getApprovalStatus().name());
 		}
 
 		Block processBlock = getProcessingBlock();
@@ -250,7 +245,7 @@ public class ApprovalLifecycle {
 	}
 
 	public Block getProcessingBlock() {
-		if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+		if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
 			return null;
 		}
 
@@ -262,7 +257,7 @@ public class ApprovalLifecycle {
 	}
 
 	public static Block getProcessingBlock(IApproval entity) {
-		if (entity.getStatus() == ApprovalStatusType.FINISHED) {
+		if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
 			return null;
 		}
 
@@ -284,7 +279,7 @@ public class ApprovalLifecycle {
 	}
 
 	private Block getNextBlock() {
-		if (entity.getStatus() == ApprovalStatusType.FINISHED || entity.getStatus() == ApprovalStatusType.REJECTED) {
+		if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED || entity.getApprovalStatus() == ApprovalStatusType.REJECTED) {
 			return null;
 		}
 
@@ -295,7 +290,7 @@ public class ApprovalLifecycle {
 		}
 
 		return blocks.stream().sorted((a, b) -> (a.getSort() > b.getSort() ? 1 : -1)).filter(block -> {
-			if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+			if (entity.getApprovalStatus() == ApprovalStatusType.DRAFT) {
 				return block.getStatus() == ApprovalStatusType.DRAFT;
 			} else {
 				return block.getStatus() == ApprovalStatusType.AWAITING;

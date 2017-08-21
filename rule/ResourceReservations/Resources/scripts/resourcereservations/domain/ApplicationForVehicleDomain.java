@@ -65,7 +65,7 @@ public class ApplicationForVehicleDomain {
         entity.setTags(dto.getTags());
         entity.setAttachments(dto.getAttachments());
         entity.setBlocks(dto.getBlocks());
-        entity.setSchema(dto.getSchema());
+        entity.setApprovalSchema(dto.getApprovalSchema());
         entity.setObservers(dto.getObservers());
 
         if (entity.isNew()) {
@@ -74,7 +74,7 @@ public class ApplicationForVehicleDomain {
     }
 
     public boolean approvalCanBeStarted(ApplicationForVehicle entity) {
-        return entity.getStatus() == ApprovalStatusType.DRAFT;
+        return entity.getApprovalStatus() == ApprovalStatusType.DRAFT;
     }
 
     public void startApproving(ApplicationForVehicle om) throws ApprovalException {

@@ -230,7 +230,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 		if (user.isSuperUser() || getReaders().contains(user.getId())){
 			lc.setAvailable(true);
 			lc.setTitle(getTitle());
-			lc.setStatus(getStatus().name());
+			lc.setStatus(getApprovalStatus().name());
 		}
 		lc.setUrl(getURL());
 		return lc;

@@ -84,17 +84,17 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	}
 
 	@Override
-	public ApprovalResultType getResult() {
+	public ApprovalResultType getApprovalResult() {
 		return result;
 	}
 
 	@Override
-	public ApprovalSchemaType getSchema() {
+	public ApprovalSchemaType getApprovalSchema() {
 		return schema;
 	}
 
 	@Override
-	public ApprovalStatusType getStatus() {
+	public ApprovalStatusType getApprovalStatus() {
 		return status;
 	}
 
@@ -114,12 +114,12 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	}
 
 	@Override
-	public void setSchema(ApprovalSchemaType schema) {
+	public void setApprovalSchema(ApprovalSchemaType schema) {
 		this.schema = schema;
 	}
 
 	@Override
-	public void setStatus(ApprovalStatusType status) {
+	public void setApprovalStatus(ApprovalStatusType status) {
 		this.status = status;
 		statusTime = new Date();
 	}
@@ -132,7 +132,7 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	@Override
 	@Deprecated
 	public boolean userCanDoDecision(Employee emp) {
-		if (getStatus() == ApprovalStatusType.PENDING) {
+		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
 			Block block = ApprovalLifecycle.getProcessingBlock(this);
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
@@ -192,7 +192,7 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	}
 
 	@Override
-	public List<Employee> getRecipients() {
+	public List<Employee> getRecipientsAfterApproval() {
 		return null;
 
 	}

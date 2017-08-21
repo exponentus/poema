@@ -177,8 +177,8 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             domain.superUpdate(entity);
 
             Outcome outcome = domain.getOutcome(entity);
-            if (entity.getStatus() == ApprovalStatusType.FINISHED) {
-                if (entity.getResult() == ApprovalResultType.ACCEPTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
+                if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     new Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
                 }
             }
@@ -206,15 +206,15 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
 
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
-            if (entity.getStatus() == ApprovalStatusType.FINISHED) {
-                if (entity.getResult() == ApprovalResultType.REJECTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
+                if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
                 }
             }
             outcome.setTitle("declineApprovalBlock");
             outcome.setMessage("declineApprovalBlock");
 
-            if (entity.getStatus() == ApprovalStatusType.FINISHED && entity.getResult() == ApprovalResultType.REJECTED) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                 if (entity.isVersionsSupport()) {
                     entity = domain.backToRevise(entity);
                     domain.superUpdate(entity);
@@ -301,7 +301,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
         public void check(OfficeMemo om) throws DTOException {
             DTOException e = new DTOException();
 
-            if (om.getStatus() != ApprovalStatusType.DRAFT) {
+            if (om.getApprovalStatus() != ApprovalStatusType.DRAFT) {
                 e.addError("status", "required", "status_is_not_draft");
             }
             if (e.hasError()) {

@@ -49,7 +49,7 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
         entity.setBody(dto.getBody());
         entity.setRecipient(dto.getRecipient());
         entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
-        entity.setSchema(dto.getSchema());
+        entity.setApprovalSchema(dto.getApprovalSchema());
 
         List<Observer> observers = new ArrayList<Observer>();
         for (Observer o : dto.getObservers()) {
@@ -72,12 +72,12 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
     public boolean canCreateAssignment(OfficeMemo entity, User user) {
         return !entity.isNew() && entity.getRecipient().getUserID().equals(user.getId())
-                && entity.getStatus() == ApprovalStatusType.FINISHED;
+                && entity.getApprovalStatus() == ApprovalStatusType.FINISHED;
     }
 
     @Override
     public void calculateReadersEditors(OfficeMemo entity) {
-        if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+        if (entity.getApprovalStatus() == ApprovalStatusType.DRAFT) {
             entity.addReaderEditor(entity.getAuthor());
         } else {
             entity.withdrawEditor(entity.getAuthor());

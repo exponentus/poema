@@ -1,7 +1,6 @@
 package projects.domain;
 
 import administrator.model.User;
-import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.dto.ACL;
 import com.exponentus.dataengine.exception.DAOException;
@@ -20,11 +19,12 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
+import workflow.domain.ApprovalDomain;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class TaskDomain extends CommonDomain<Task> {
+public class TaskDomain extends ApprovalDomain<Task> {
 
 	public TaskDomain(_Session ses) {
 		super(ses);
@@ -163,11 +163,12 @@ public class TaskDomain extends CommonDomain<Task> {
 	public void calculateReaders(Task task) {
 		if (task.getStatus() != TaskStatusType.DRAFT) {
 
-			User assigneeUser = new User();
-			assigneeUser.setId(task.getAssignee());
+		//	User assigneeUser = new User();
+		//	assigneeUser.setId(task.getAssignee());
 
-			task.addReader(assigneeUser);
-			task.addReaders(task.getObservers());
+		//	task.addReader(assigneeUser);
+		//	task.addReaders(task.getObservers());
+
 		}
 
 		if (task.getParent() != null) {

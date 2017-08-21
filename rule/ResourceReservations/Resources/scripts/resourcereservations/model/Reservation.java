@@ -133,7 +133,7 @@ public class Reservation extends ActionableDocument {
 	}
 
 	@Override
-	public List<Employee> getRecipients() {
+	public List<Employee> getRecipientsAfterApproval() {
 		List<Employee> recipients = new ArrayList<Employee>();
 		recipients.add(recipient);
 		return recipients;

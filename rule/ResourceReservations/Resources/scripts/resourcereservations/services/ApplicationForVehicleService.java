@@ -167,7 +167,7 @@ public class ApplicationForVehicleService extends RestProvider {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(ses);
             ApplicationForVehicle entity = dao.findByIdentefier(id);
-            if (entity.getStatus() == ApprovalStatusType.DRAFT) {
+            if (entity.getApprovalStatus() == ApprovalStatusType.DRAFT) {
                 if (entity != null) {
                     dao.delete(entity);
                 }

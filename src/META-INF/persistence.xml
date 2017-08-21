@@ -212,6 +212,8 @@
         <class>projects.model.Task</class>
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
+        <!-- Workflow module entities -->
+        <class>workflow.model.embedded.Block</class>
          <!-- Monitoring module entities --> 
          <class>monitoring.model.UserActivity</class>     
         <class>monitoring.model.DocumentActivity</class>
@@ -254,6 +256,8 @@
         <class>projects.model.Comment</class>
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
+        <!-- Workflow module entities -->
+        <class>workflow.model.embedded.Block</class>
          <!-- Monitoring module entities -->
          <class>monitoring.model.UserActivity</class>      
         <class>monitoring.model.DocumentActivity</class>

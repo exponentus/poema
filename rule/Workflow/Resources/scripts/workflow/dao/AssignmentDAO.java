@@ -91,7 +91,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
             }
 
             if (showAssigneeList){
-                //TODO it is temporary solution
+                //TODO this is temporary solution
                 cq = cb.createQuery(Assignment.class);
                 cq.select(root)
                        // .groupBy(root,root.get("controlType").get("locName"))

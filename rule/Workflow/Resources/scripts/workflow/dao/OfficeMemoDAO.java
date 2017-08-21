@@ -44,19 +44,19 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
                 condition = cb.and(root.get("readers").in(user.getId()));
             }
 
-            if (filter.getStatus() != null) {
+            if (filter.getApprovalStatus() != null) {
                 if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()));
+                    condition = cb.and(cb.equal(root.get("status"), filter.getApprovalStatus()));
                 } else {
-                    condition = cb.and(cb.equal(root.get("status"), filter.getStatus()), condition);
+                    condition = cb.and(cb.equal(root.get("status"), filter.getApprovalStatus()), condition);
                 }
             }
 
-            if (filter.getResult() != null) {
+            if (filter.getApprovalResult() != null) {
                 if (condition == null) {
-                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()));
+                    condition = cb.and(cb.equal(root.get("result"), filter.getApprovalResult()));
                 } else {
-                    condition = cb.and(cb.equal(root.get("result"), filter.getResult()), condition);
+                    condition = cb.and(cb.equal(root.get("result"), filter.getApprovalResult()), condition);
                 }
             }
 

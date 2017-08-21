@@ -89,7 +89,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 						logger.error("wrong reference ext value \"" + coordStatus + "\" (coordination)");
 						status = ApprovalStatusType.UNKNOWN;
 					}
-					sz.setStatus(status);
+					sz.setApprovalStatus(status);
 
 					String recipient = getStringValue(conn, docId, "recipient");
 					IUser<Long> r = uDao.findByLogin(recipient);

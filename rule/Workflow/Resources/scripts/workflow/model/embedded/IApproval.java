@@ -1,16 +1,15 @@
 package workflow.model.embedded;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import com.exponentus.runtimeobj.IAppEntity;
 import com.exponentus.user.IUser;
-
 import reference.model.constants.ApprovalSchemaType;
 import staff.model.Employee;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public interface IApproval extends IAppEntity<UUID> {
 
@@ -20,33 +19,35 @@ public interface IApproval extends IAppEntity<UUID> {
 
 	void addReaders(List<Long> readers);
 
-	List<Block> getBlocks();
+	ApprovalResultType getApprovalResult();
 
-	ApprovalResultType getResult();
+	void setApprovalSchema(ApprovalSchemaType schema);
 
-	ApprovalSchemaType getSchema();
+	ApprovalSchemaType getApprovalSchema();
 
-	ApprovalStatusType getStatus();
+	void setApprovalStatus(ApprovalStatusType processing);
 
-	List<Employee> getRecipients();
+	ApprovalStatusType getApprovalStatus();
+
+	List<Employee> getRecipientsAfterApproval();
 
 	boolean isVersionsSupport();
 
 	void setVersionsSupport(boolean vs);
 
+	void setVersion(int version);
+
 	int getVersion();
 
 	void setBlocks(List<Block> blocks);
+
+	List<Block> getBlocks();
 
 	void setEditors(Set<Long> set);
 
 	void setResult(ApprovalResultType accepted);
 
-	void setSchema(ApprovalSchemaType schema);
 
-	void setStatus(ApprovalStatusType processing);
-
-	void setVersion(int version);
 
 	void backupContent();
 

@@ -64,7 +64,7 @@ public class ApplicationForMeetingRoomDomain {
         entity.setTags(dto.getTags());
         entity.setAttachments(dto.getAttachments());
         entity.setBlocks(dto.getBlocks());
-        entity.setSchema(dto.getSchema());
+        entity.setApprovalSchema(dto.getApprovalSchema());
         entity.setObservers(dto.getObservers());
 
         if (entity.isNew()) {
@@ -73,7 +73,7 @@ public class ApplicationForMeetingRoomDomain {
     }
 
     public boolean approvalCanBeStarted(ApplicationForMeetingRoom entity) {
-        return entity.getStatus() == ApprovalStatusType.DRAFT;
+        return entity.getApprovalStatus() == ApprovalStatusType.DRAFT;
     }
 
     public void startApproving(ApplicationForMeetingRoom entity) throws ApprovalException {
