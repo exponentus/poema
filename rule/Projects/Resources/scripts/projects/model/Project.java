@@ -1,27 +1,5 @@
 package projects.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
@@ -30,10 +8,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
 import projects.model.constants.ProjectStatusType;
 import staff.model.Organization;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -41,170 +24,175 @@ import staff.model.Organization;
 @Table(name = "prj__projects")
 public class Project extends EmbeddedSecureHierarchicalEntity {
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
-	private List<Task> tasks;
+    @JsonIgnore
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    private List<Task> tasks;
 
-	@FTSearchable
-	@Column(length = 140)
-	private String name;
+    @FTSearchable
+    @Column(length = 140)
+    private String name;
 
-	@Enumerated(EnumType.STRING)
-	@Column(length = 10)
-	private ProjectStatusType status = ProjectStatusType.UNKNOWN;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private ProjectStatusType status = ProjectStatusType.UNKNOWN;
 
-	@Column(name = "primary_lang")
-	private LanguageCode primaryLanguage;
+    @Column(name = "primary_lang")
+    private LanguageCode primaryLanguage;
 
-	private Organization customer;
+    private Organization customer;
 
-	@JsonProperty("managerUserId")
-	private long manager;
+    @JsonProperty("managerUserId")
+    private long manager;
 
-	@JsonProperty("programmerUserId")
-	private long programmer;
+    @JsonProperty("programmerUserId")
+    private long programmer;
 
-	@JsonProperty("testerUserId")
-	private long tester;
+    @JsonProperty("testerUserId")
+    private long tester;
 
-	@JsonProperty("representativesUserIds")
-	private List<Long> representatives;
+    @JsonProperty("representativesUserIds")
+    private List<Long> representatives;
 
-	@JsonProperty("observerUserIds")
-	@ElementCollection
-	private List<Long> observers;
+    @JsonProperty("observerUserIds")
+    @ElementCollection
+    private List<Long> observers;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date finishDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date finishDate;
 
-	@FTSearchable
-	@Column(length = 2048)
-	private String comment;
+    @FTSearchable
+    @Column(length = 2048)
+    private String comment;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "prj__project_attachments", joinColumns = { @JoinColumn(name = "project_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "project_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "project_id",
-							"attachment_id" }))
-	@CascadeOnDelete
-	private List<Attachment> attachments = new ArrayList<>();
+    public List<Task> getTasks() {
+        return tasks;
+    }
 
-	public String getName() {
-		return name;
-	}
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "prj__project_attachments",
+            joinColumns = {@JoinColumn(name = "project_id")},
+            inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
+            indexes = {@Index(columnList = "project_id, attachment_id")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "attachment_id"}))
+    @CascadeOnDelete
+    private List<Attachment> attachments = new ArrayList<>();
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public ProjectStatusType getStatus() {
-		return status;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setStatus(ProjectStatusType status) {
-		this.status = status;
-	}
+    public ProjectStatusType getStatus() {
+        return status;
+    }
 
-	public LanguageCode getPrimaryLanguage() {
-		return primaryLanguage;
-	}
+    public void setStatus(ProjectStatusType status) {
+        this.status = status;
+    }
 
-	public void setPrimaryLanguage(LanguageCode primaryLanguage) {
-		this.primaryLanguage = primaryLanguage;
-	}
+    public LanguageCode getPrimaryLanguage() {
+        return primaryLanguage;
+    }
 
-	public Organization getCustomer() {
-		return customer;
-	}
+    public void setPrimaryLanguage(LanguageCode primaryLanguage) {
+        this.primaryLanguage = primaryLanguage;
+    }
 
-	public void setCustomer(Organization customer) {
-		this.customer = customer;
-	}
+    public Organization getCustomer() {
+        return customer;
+    }
 
-	public long getManager() {
-		return manager;
-	}
+    public void setCustomer(Organization customer) {
+        this.customer = customer;
+    }
 
-	public void setManager(long manager) {
-		this.manager = manager;
-	}
+    public long getManager() {
+        return manager;
+    }
 
-	public long getProgrammer() {
-		return programmer;
-	}
+    public void setManager(long manager) {
+        this.manager = manager;
+    }
 
-	public void setProgrammer(long programmer) {
-		this.programmer = programmer;
-	}
+    public long getProgrammer() {
+        return programmer;
+    }
 
-	public long getTester() {
-		return tester;
-	}
+    public void setProgrammer(long programmer) {
+        this.programmer = programmer;
+    }
 
-	public void setTester(long tester) {
-		this.tester = tester;
-	}
+    public long getTester() {
+        return tester;
+    }
 
-	public List<Long> getRepresentatives() {
-		return representatives;
-	}
+    public void setTester(long tester) {
+        this.tester = tester;
+    }
 
-	public void setRepresentatives(List<Long> representatives) {
-		this.representatives = representatives;
-	}
+    public List<Long> getRepresentatives() {
+        return representatives;
+    }
 
-	public List<Long> getObservers() {
-		return observers;
-	}
+    public void setRepresentatives(List<Long> representatives) {
+        this.representatives = representatives;
+    }
 
-	public void setObservers(List<Long> observers) {
-		this.observers = observers;
-	}
+    public List<Long> getObservers() {
+        return observers;
+    }
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    public void setObservers(List<Long> observers) {
+        this.observers = observers;
+    }
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public Date getFinishDate() {
-		return finishDate;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setFinishDate(Date finishDate) {
-		this.finishDate = finishDate;
-	}
+    public Date getFinishDate() {
+        return finishDate;
+    }
 
-	public String getComment() {
-		return comment;
-	}
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
 
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
+    public String getComment() {
+        return comment;
+    }
 
-	@Override
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
-	@Override
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
+    @Override
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
 
-	@Override
-	public String getURL() {
-		return AppConst.BASE_URL + "projects/" + getIdentifier();
-	}
+    @Override
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 
-	@Override
-	public String getTitle() {
-		return name;
-	}
+    @Override
+    public String getURL() {
+        return AppConst.BASE_URL + "projects/" + getIdentifier();
+    }
+
+    @Override
+    public String getTitle() {
+        return name;
+    }
 }

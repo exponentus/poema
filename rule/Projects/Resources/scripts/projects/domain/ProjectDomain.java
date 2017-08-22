@@ -77,7 +77,7 @@ public class ProjectDomain extends CommonDomain<Project> {
     }
 
     public boolean projectCanBeDeleted(Project project) {
-        return !project.isNew() && project.isEditable() && project.getStatus() == ProjectStatusType.DRAFT;
+        return !project.isNew() && project.isEditable() && (project.getTasks() == null || project.getTasks().size() == 0);
     }
 
     public Outcome getOutcome(Project project) {
