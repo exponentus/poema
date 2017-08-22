@@ -45,391 +45,385 @@ import java.util.UUID;
 @Table(name = "prj__tasks")
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval {
 
-	@NotNull
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Project project;
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Project project;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	private Demand demand;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private Demand demand;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-	private Task parent;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    private Task parent;
 
-	@FTSearchable(ignoreLang = true, regEx = "[^0-9]*")
-	@Column(name = "reg_number", unique = true, length = 64)
-	private String regNumber;
+    @FTSearchable(ignoreLang = true, regEx = "[^0-9]*")
+    @Column(name = "reg_number", unique = true, length = 64)
+    private String regNumber;
 
-	@NotNull
-	@ManyToOne(optional = false)
-	private TaskType taskType;
+    @NotNull
+    @ManyToOne(optional = false)
+    private TaskType taskType;
 
-	@Enumerated(EnumType.STRING)
-	@Column(length = 16)
-	private TaskStatusType status = TaskStatusType.UNKNOWN;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 16)
+    private TaskStatusType status = TaskStatusType.UNKNOWN;
 
-	private Date statusDate;
+    private Date statusDate;
 
-	@Enumerated(EnumType.STRING)
-	@Column(length = 10)
-	private TaskPriorityType priority = TaskPriorityType.NORMAL;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private TaskPriorityType priority = TaskPriorityType.NORMAL;
 
-	@FTSearchable
-	@Column(length = 1024, name = "cancel_comment")
-	private String cancellationComment;
+    @FTSearchable
+    @Column(length = 1024, name = "cancel_comment")
+    private String cancellationComment;
 
-	@FTSearchable
-	@Column(columnDefinition = "TEXT")
-	private String body;
+    @FTSearchable
+    @Column(columnDefinition = "TEXT")
+    private String body;
 
-	private Long assignee;
+    private Long assignee;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dueDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dueDate;
 
-	private boolean initiative;
+    private boolean initiative;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "prj__task_tags")
-	private List<Tag> tags;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "prj__task_tags")
+    private List<Tag> tags;
 
-	@Column(name = "customer_observation")
-	private boolean customerObservation;
+    @Column(name = "customer_observation")
+    private boolean customerObservation;
 
-	@JsonProperty("observerUserIds")
-	@ElementCollection
-	private List<Long> observers;
+    @JsonProperty("observerUserIds")
+    @ElementCollection
+    private List<Long> observers;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "parent")
-	private List<Task> subtasks;
+    @JsonIgnore
+    @OneToMany(mappedBy = "parent")
+    private List<Task> subtasks;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "task_id")
-	@CascadeOnDelete
-	private List<Comment> comments;
+    @JsonIgnore
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "task_id")
+    @CascadeOnDelete
+    private List<Comment> comments;
 
-	@JsonIgnore
-	@OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "task_id")
-	@CascadeOnDelete
-	private List<Request> requests;
+    @JsonIgnore
+    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "task_id")
+    @CascadeOnDelete
+    private List<Request> requests;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "prj__task_attachments", joinColumns = { @JoinColumn(name = "task_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "attachment_id") }, indexes = {
-					@Index(columnList = "task_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = { "task_id",
-							"attachment_id" }))
-	@CascadeOnDelete
-	private List<Attachment> attachments = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "prj__task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
+            @JoinColumn(name = "attachment_id")}, indexes = {
+            @Index(columnList = "task_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {"task_id",
+            "attachment_id"}))
+    @CascadeOnDelete
+    private List<Attachment> attachments = new ArrayList<>();
 
-	@Transient
-	private List<IAppEntity<UUID>> responses;
+    @Transient
+    private List<IAppEntity<UUID>> responses;
 
+    @Convert(converter = ApprovalStatusTypeConverter.class)
+    private ApprovalStatusType approvalStatus = ApprovalStatusType.DRAFT;
 
-	@Convert(converter = ApprovalStatusTypeConverter.class)
-	private ApprovalStatusType approvalStatus = ApprovalStatusType.DRAFT;
+    @Convert(converter = ApprovalSchemaTypeConverter.class)
+    private ApprovalSchemaType schema = ApprovalSchemaType.REJECT_IF_NO;
 
-	@Convert(converter = ApprovalSchemaTypeConverter.class)
-	private ApprovalSchemaType schema = ApprovalSchemaType.REJECT_IF_NO;
+    @Convert(converter = ApprovalResultTypeConverter.class)
+    private ApprovalResultType result = ApprovalResultType.PROJECT;
 
-	@Convert(converter = ApprovalResultTypeConverter.class)
-	private ApprovalResultType result = ApprovalResultType.PROJECT;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OrderBy("sort")
+    private List<Block> blocks = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderBy("sort")
-	private List<Block> blocks = new ArrayList<>();
+    public Project getProject() {
+        return project;
+    }
 
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
-	public Project getProject() {
-		return project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	@JsonIgnore
-	public Task getParent() {
-		return parent;
-	}
-
-	@JsonProperty
-	public void setParent(Task parent) {
-		this.parent = parent;
-	}
-
-	public Demand getDemand() {
-		return demand;
-	}
-
-	public void setDemand(Demand demand) {
-		this.demand = demand;
-	}
-
-	public String getRegNumber() {
-		return regNumber;
-	}
-
-	public void setRegNumber(String regNumber) {
-		this.regNumber = regNumber;
-	}
-
-	public TaskType getTaskType() {
-		return taskType;
-	}
-
-	public void setTaskType(TaskType taskType) {
-		this.taskType = taskType;
-	}
-
-	public TaskStatusType getStatus() {
-		return status;
-	}
-
-	public void setStatus(TaskStatusType status) {
-		this.status = status;
-	}
-
-	public Date getStatusDate() {
-		return statusDate;
-	}
-
-	public void setStatusDate(Date date) {
-		statusDate = date;
-	}
-
-	public TaskPriorityType getPriority() {
-		return priority;
-	}
-
-	public void setPriority(TaskPriorityType priority) {
-		this.priority = priority;
-	}
-
-	public String getCancellationComment() {
-		return cancellationComment;
-	}
-
-	public void setCancellationComment(String cancellationComment) {
-		this.cancellationComment = cancellationComment;
-	}
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
-	@JsonProperty("assigneeUserId")
-	public Long getAssignee() {
-		return assignee;
-	}
-
-	public void setAssignee(Long assignee) {
-		this.assignee = assignee;
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getDueDate() {
-		return dueDate;
-	}
-
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
-	}
-
-	public boolean isInitiative() {
-		return initiative;
-	}
-
-	public void setInitiative(boolean initiative) {
-		this.initiative = initiative;
-	}
-
-	public List<Tag> getTags() {
-		return tags;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
-	}
-
-	public boolean isCustomerObservation() {
-		return customerObservation;
-	}
-
-	public void setCustomerObservation(boolean customerObservation) {
-		this.customerObservation = customerObservation;
-	}
-
-	public List<Long> getObservers() {
-		return observers;
-	}
-
-	public void setObservers(List<Long> observers) {
-		this.observers = observers;
-	}
-
-	public List<Task> getSubtasks() {
-		return subtasks;
-	}
-
-	public void setSubtasks(List<Task> subtasks) {
-		this.subtasks = subtasks;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public List<Request> getRequests() {
-		return requests;
-	}
-
-	@Override
-	public List<Attachment> getAttachments() {
-		return attachments;
-	}
-
-	@Override
-	public void setAttachments(List<Attachment> attachments) {
-		this.attachments = attachments;
-	}
-
-	//
-	public List<IAppEntity<UUID>> getResponses() {
-		return responses;
-	}
-
-	public void setResponses(List<IAppEntity<UUID>> responses) {
-		this.responses = responses;
-	}
-
-	@Override
-	@Transient
-	public String getURL() {
-		return AppConst.BASE_URL + "tasks/" + getIdentifier();
-	}
-
-	@Override
-	public List<Block> getBlocks() {
-		return blocks;
-	}
-
-	@Override
-	public ApprovalResultType getApprovalResult() {
-		return result;
-	}
-
-	@Override
-	public ApprovalSchemaType getApprovalSchema() {
-		return schema;
-	}
-
-	@Override
-	public ApprovalStatusType getApprovalStatus() {
-		return approvalStatus;
-	}
-
-	@Override
-	@JsonIgnore
-	public List<Employee> getRecipientsAfterApproval() {
-		IOfficeFrameDataProvider dao = Environment.getExtUserDAO();
-		List<Employee> recipients = new ArrayList<Employee>();
-		recipients.add((Employee)dao.getEmployee(assignee));
-		for(Long userId:getObservers()){
-			recipients.add((Employee)dao.getEmployee(userId));
-		}
-		return recipients;
-	}
-
-	@Override
-	public boolean isVersionsSupport() {
-		return false;
-	}
-
-	@Override
-	public void setVersionsSupport(boolean vs) {
-
-	}
-
-	@Override
-	public int getVersion() {
-		return 0;
-	}
-
-	@Override
-	public void setBlocks(List<Block> blocks) {
-		this.blocks = blocks;
-	}
-
-	@Override
-	public void setResult(ApprovalResultType accepted) {
-		this.result = result;
-	}
-
-	@Override
-	public void setApprovalSchema(ApprovalSchemaType schema) {
-		this.schema = schema;
-	}
-
-	@Override
-	public void setApprovalStatus(ApprovalStatusType as) {
-		approvalStatus = as;
-	}
-
-	@Override
-	public void setVersion(int version) {
-
-	}
-
-	@Override
-	public void backupContent() {
-
-	}
-
-
-	@Override
-	@Deprecated
-	public boolean userCanDoDecision(Employee emp) {
-		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
-			Block block = ApprovalLifecycle.getProcessingBlock(this);
-			if (block != null) {
-				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-					Approver approver = block.getCurrentApprover();
-					if (approver != null) {
-						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
-					}
-				} else if (block.getType() == ApprovalType.PARALLEL) {
-					return block.getApprovers().stream()
-							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
-							.count() > 0;
-				}
-			}
-		}
-
-		return false;
-	}
-
-	@Override
-	public EmbeddedSecureHierarchicalEntity getParentEntity(_Session ses) {
-		if (parent != null) {
-			return parent;
-		} else {
-			return project;
-		}
-	}
+    @JsonIgnore
+    public Task getParent() {
+        return parent;
+    }
+
+    @JsonProperty
+    public void setParent(Task parent) {
+        this.parent = parent;
+    }
+
+    public Demand getDemand() {
+        return demand;
+    }
+
+    public void setDemand(Demand demand) {
+        this.demand = demand;
+    }
+
+    public String getRegNumber() {
+        return regNumber;
+    }
+
+    public void setRegNumber(String regNumber) {
+        this.regNumber = regNumber;
+    }
+
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
+    }
+
+    public TaskStatusType getStatus() {
+        return status;
+    }
+
+    public void setStatus(TaskStatusType status) {
+        this.status = status;
+    }
+
+    public Date getStatusDate() {
+        return statusDate;
+    }
+
+    public void setStatusDate(Date date) {
+        statusDate = date;
+    }
+
+    public TaskPriorityType getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TaskPriorityType priority) {
+        this.priority = priority;
+    }
+
+    public String getCancellationComment() {
+        return cancellationComment;
+    }
+
+    public void setCancellationComment(String cancellationComment) {
+        this.cancellationComment = cancellationComment;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    @JsonProperty("assigneeUserId")
+    public Long getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(Long assignee) {
+        this.assignee = assignee;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isInitiative() {
+        return initiative;
+    }
+
+    public void setInitiative(boolean initiative) {
+        this.initiative = initiative;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public boolean isCustomerObservation() {
+        return customerObservation;
+    }
+
+    public void setCustomerObservation(boolean customerObservation) {
+        this.customerObservation = customerObservation;
+    }
+
+    public List<Long> getObservers() {
+        return observers;
+    }
+
+    public void setObservers(List<Long> observers) {
+        this.observers = observers;
+    }
+
+    public List<Task> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<Task> subtasks) {
+        this.subtasks = subtasks;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public List<Request> getRequests() {
+        return requests;
+    }
+
+    @Override
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    @Override
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    //
+    public List<IAppEntity<UUID>> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<IAppEntity<UUID>> responses) {
+        this.responses = responses;
+    }
+
+    @Override
+    @Transient
+    public String getURL() {
+        return AppConst.BASE_URL + "tasks/" + getIdentifier();
+    }
+
+    @Override
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    @Override
+    public ApprovalResultType getApprovalResult() {
+        return result;
+    }
+
+    @Override
+    public ApprovalSchemaType getApprovalSchema() {
+        return schema;
+    }
+
+    @Override
+    public ApprovalStatusType getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    @Override
+    @JsonIgnore
+    public List<Employee> getRecipientsAfterApproval() {
+        IOfficeFrameDataProvider dao = Environment.getExtUserDAO();
+        List<Employee> recipients = new ArrayList<Employee>();
+        recipients.add((Employee) dao.getEmployee(assignee));
+        for (Long userId : getObservers()) {
+            recipients.add((Employee) dao.getEmployee(userId));
+        }
+        return recipients;
+    }
+
+    @Override
+    public boolean isVersionsSupport() {
+        return false;
+    }
+
+    @Override
+    public void setVersionsSupport(boolean vs) {
+    }
+
+    @Override
+    public int getVersion() {
+        return 0;
+    }
+
+    @Override
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
+    }
+
+    @Override
+    public void setResult(ApprovalResultType accepted) {
+        this.result = result;
+    }
+
+    @Override
+    public void setApprovalSchema(ApprovalSchemaType schema) {
+        this.schema = schema;
+    }
+
+    @Override
+    public void setApprovalStatus(ApprovalStatusType as) {
+        approvalStatus = as;
+    }
+
+    @Override
+    public void setVersion(int version) {
+    }
+
+    @Override
+    public void backupContent() {
+    }
+
+    @Override
+    @Deprecated
+    public boolean userCanDoDecision(Employee emp) {
+        if (getApprovalStatus() == ApprovalStatusType.PENDING) {
+            Block block = ApprovalLifecycle.getProcessingBlock(this);
+            if (block != null) {
+                if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+                    Approver approver = block.getCurrentApprover();
+                    if (approver != null) {
+                        return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+                    }
+                } else if (block.getType() == ApprovalType.PARALLEL) {
+                    return block.getApprovers().stream()
+                            .filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
+                            .count() > 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public EmbeddedSecureHierarchicalEntity getParentEntity(_Session ses) {
+        if (parent != null) {
+            return parent;
+        } else {
+            return project;
+        }
+    }
 }

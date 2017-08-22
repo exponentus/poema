@@ -29,7 +29,6 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
 import projects.exception.TaskException;
-import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -39,18 +38,14 @@ import projects.ui.ActionFactory;
 import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
-import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
-import staff.dao.RoleDAO;
 import staff.model.Employee;
-import staff.model.Role;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -62,7 +57,6 @@ import java.util.stream.Collectors;
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends RestProvider {
-    private static final String MODERATOR_ROLE_NAME = AppConst.ROLES[0];
 
     @GET
     public Response getViewPage() {
@@ -169,14 +163,12 @@ public class TaskService extends RestProvider {
                 }
 
                 task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
-                task.setBlocks(getModeratorBlock(empDao));
             } else {
                 task = taskDAO.findByIdentefier(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
             }
-
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
@@ -188,9 +180,7 @@ public class TaskService extends RestProvider {
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
             return Response.ok(outcome).build();
-        } catch (DAOException e) {
-            return responseException(e);
-        } catch (RestServiceException e) {
+        } catch (DAOException | RestServiceException e) {
             return responseException(e);
         }
     }
@@ -247,9 +237,9 @@ public class TaskService extends RestProvider {
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
                 task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
-                task = taskDAO.add(task, rn);
                 ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
                 lifecycle.start();
+                task = taskDAO.add(task, rn);
                 //	mDao.postEvent(user, task, "task_was_registered");
             } else {
                 task = taskDAO.update(task);
@@ -384,10 +374,10 @@ public class TaskService extends RestProvider {
             Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                   // new workflow.other.Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
+                    // new workflow.other.Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
                 }
             }
-           // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+            // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             outcome.setTitle("acceptApprovalBlock");
             outcome.setMessage("approval_block_accepted");
 
@@ -433,6 +423,7 @@ public class TaskService extends RestProvider {
             return responseException(e);
         }
     }
+
     //
     private _ActionBar getActionBar(_Session session, TaskDomain taskDomain, Task task) {
         _ActionBar actionBar = new _ActionBar(session);
@@ -443,20 +434,29 @@ public class TaskService extends RestProvider {
         if (taskDomain.taskIsEditable(task)) {
             actionBar.addAction(action.saveAndClose);
         }
-        if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_request").caption("new_request"));
-        }
-        if (taskDomain.userCanDoAcknowledged(task, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_acknowledged").caption("acknowledged_task"));
-        }
-
-        if (taskDomain.userCanDoResolution(task, (User) session.getUser())) {
-            actionBar.addAction(
-                    new Action(ActionType.CUSTOM_ACTION).id("task_complete").caption("complete_task").icon("fa fa-check-square-o"));
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
-        }
-        if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));
+        if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {
+            ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
+            Approver approver = lifecycle.getProcessingBlock().getCurrentApprover();
+            if (approver != null && approver.getEmployee().getUserID().equals(session.getUser().getId())) {
+                actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
+                actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
+                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+            }
+        } else {
+            if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
+                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_request").caption("new_request"));
+            }
+            if (taskDomain.userCanDoAcknowledged(task, (User) session.getUser())) {
+                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_acknowledged").caption("acknowledged_task"));
+            }
+            if (taskDomain.userCanDoResolution(task, (User) session.getUser())) {
+                actionBar.addAction(
+                        new Action(ActionType.CUSTOM_ACTION).id("task_complete").caption("complete_task").icon("fa fa-check-square-o"));
+                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+            }
+            if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
+                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));
+            }
         }
         if (taskDomain.taskCanBeDeleted(task)) {
             actionBar.addAction(action.deleteDocument);
@@ -567,32 +567,5 @@ public class TaskService extends RestProvider {
         filter.setTreeMode(formData.getBoolSilently("isTreeMode"));
 
         return filter;
-    }
-
-    private List<Block> getModeratorBlock(EmployeeDAO empDao) throws DAOException, RestServiceException{
-        ArrayList<Block> blocks = new ArrayList<Block>();
-        RoleDAO roleDAO = new RoleDAO(empDao.getSession());
-        Role role = roleDAO.findByName(MODERATOR_ROLE_NAME);
-        if (role != null) {
-            ViewPage<Employee> moderators = empDao.findByRole(role);
-            if (moderators.getCount() > 0) {
-                Block block = new Block();
-                block.setType(ApprovalType.SERIAL);
-                block.setSort(1);
-                block.setStatus(ApprovalStatusType.DRAFT);
-                block.setRequireCommentIfNo(true);
-                Approver approver = new Approver();
-                approver.setEmployee(moderators.getFirstEntity());
-                List<Approver> approvers = new ArrayList<Approver>();
-                approvers.add(approver);
-                block.setApprovers(approvers);
-                blocks.add(block);
-            }else {
-                throw new RestServiceException("moderator has not been found");
-            }
-        }else {
-            throw new RestServiceException("role \"" + MODERATOR_ROLE_NAME + "\" has not been found");
-        }
-        return blocks;
     }
 }
