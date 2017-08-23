@@ -14,6 +14,7 @@ import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
+import projects.dao.TaskDAO;
 import projects.exception.TaskException;
 import projects.init.AppConst;
 import projects.model.Project;
@@ -41,8 +42,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     private static final String MODERATOR_ROLE_NAME = AppConst.ROLES[0];
 
-    public TaskDomain(_Session ses) {
+    public TaskDomain(_Session ses) throws DAOException {
         super(ses);
+        dao = new TaskDAO(ses);
     }
 
     @Override

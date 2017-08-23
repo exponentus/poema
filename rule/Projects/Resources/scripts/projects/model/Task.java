@@ -374,7 +374,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
     }
 
     @Override
-    public void setResult(ApprovalResultType accepted) {
+    public void setResult(ApprovalResultType result) {
         this.result = result;
     }
 
