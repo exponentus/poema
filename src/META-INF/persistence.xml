@@ -151,8 +151,37 @@
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
-    
-    
+
+    <persistence-unit name="Integration" transaction-type="RESOURCE_LOCAL">
+        <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
+        <class>administrator.model.Language</class>
+        <class>administrator.model.Application</class>
+        <class>administrator.model.User</class>
+        <class>administrator.model.Sentence</class>
+        <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
+
+        <shared-cache-mode>NONE</shared-cache-mode>
+    </persistence-unit>
+
+    <persistence-unit name="DataExport" transaction-type="RESOURCE_LOCAL">
+        <!-- Obligatory the application module entities -->
+        <class>com.exponentus.common.model.embedded.CrossLink</class>
+        <class>administrator.model.Language</class>
+        <class>administrator.model.Application</class>
+        <class>administrator.model.User</class>
+        <class>administrator.model.Sentence</class>
+        <class>administrator.model.embedded.UserApplication</class>
+        <class>administrator.model.Subscription</class>
+        <class>administrator.model.embedded.UserSubscription</class>
+
+        <class>dataexport.model.ExportProfile</class>
+
+        <shared-cache-mode>NONE</shared-cache-mode>
+    </persistence-unit>
+
     <persistence-unit name="Workspace" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
         <class>administrator.model.User</class>
@@ -401,46 +430,7 @@
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
-  <persistence-unit name="Audit" transaction-type="RESOURCE_LOCAL">
-        <!-- Obligatory the application module entities -->
-        <class>com.exponentus.common.model.embedded.CrossLink</class>
-        <class>administrator.model.User</class>
-        <class>administrator.model.Application</class>
-        <class>administrator.model.Language</class>
-        <class>administrator.model.embedded.UserApplication</class>
-        <class>administrator.model.Subscription</class>
-        <class>administrator.model.embedded.UserSubscription</class>
-        <!-- Common Staff module entities -->
-        <class>staff.model.Organization</class>
-        <class>staff.model.Department</class>
-        <class>staff.model.Employee</class>
-        <class>staff.model.Role</class>
-        <class>staff.model.OrganizationLabel</class>
-        <!-- Common Reference module entities -->
-        <class>reference.model.Position</class>
-        <class>reference.model.DepartmentType</class>
-        <class>reference.model.OrgCategory</class>
-        <class>reference.model.DocumentLanguage</class>
-        <class>reference.model.DocumentType</class>
-        <class>reference.model.Tag</class>
-        <class>reference.model.WorkType</class>
-        <!-- The application module entities -->
-        <class>audit.model.Observation</class>
-        <class>audit.model.PlaceOfOrigin</class>
-        <class>audit.model.Project</class>
-        <class>audit.model.Report</class>
-        <!-- Common module entities -->
-        <class>com.exponentus.common.model.Attachment</class>
-        <class>com.exponentus.common.model.AttachmentThumbnail</class>        
-        <!-- Workflow module entities -->     
-        <class>workflow.model.embedded.Approval</class>
-        <class>workflow.model.embedded.Block</class>   
-         <!-- Monitoring module entities --> 
-         <class>monitoring.model.UserActivity</class>     
-        <class>monitoring.model.DocumentActivity</class> 
-        <class>monitoring.model.Statistic</class>    
-        <shared-cache-mode>NONE</shared-cache-mode>
-    </persistence-unit>
+
     
     <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.Language</class>
