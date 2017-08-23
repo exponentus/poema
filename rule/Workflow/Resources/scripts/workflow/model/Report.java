@@ -141,12 +141,12 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     }
 
     @Override
-    public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+    public LifeCycleNode getLifeCycle(IUser user, UUID id) {
         return getNode(user, id);
     }
 
     @Override
-    public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+    public LifeCycleNode getNode(IUser user, UUID id) {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.REPORT);
         if (user.isSuperUser() || getReaders().contains(user.getId())){

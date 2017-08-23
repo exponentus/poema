@@ -85,12 +85,12 @@ public class ApplicationForMeetingRoomDomain {
         return entity.userCanDoDecision(employee);
     }
 
-    public void acceptApprovalBlock(ApplicationForMeetingRoom entity, IUser<Long> user) throws ApprovalException {
+    public void acceptApprovalBlock(ApplicationForMeetingRoom entity, IUser user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.accept(user);
     }
 
-    public void declineApprovalBlock(ApplicationForMeetingRoom entity, IUser<Long> user, String decisionComment)
+    public void declineApprovalBlock(ApplicationForMeetingRoom entity, IUser user, String decisionComment)
             throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.decline(user, decisionComment);

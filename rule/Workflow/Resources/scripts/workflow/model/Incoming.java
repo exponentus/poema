@@ -207,7 +207,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 	}
 
 	@Override
-	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+	public LifeCycleNode getLifeCycle(IUser user, UUID id) {
 		LifeCycleNode lc = getNode(user, id);
 		List<Assignment> assignments = getAssignments();
 
@@ -220,7 +220,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 	}
 
 	@Override
-	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+	public LifeCycleNode getNode(IUser user, UUID id) {
 		LifeCycleNode lc = new LifeCycleNode();
 		lc.setType(LifeCycleNodeType.ACTIONABLE);
 		if (id.equals(this.id)){

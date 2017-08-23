@@ -287,7 +287,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         return result;
     }
 
-    public ViewPage<TaskViewEntry> findCreatedByUser(IUser<Long> user, int pageNum, int pageSize) {
+    public ViewPage<TaskViewEntry> findCreatedByUser(IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -322,7 +322,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAssignedToUser(IUser<Long> user, int pageNum, int pageSize) {
+    public ViewPage<Task> findAssignedToUser(IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {

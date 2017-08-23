@@ -1,23 +1,7 @@
 package workflow.task;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.IDBConnectionPool;
@@ -36,15 +20,25 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Command(name = "import_sz_4ms")
 public class SyncOfficeMemo4MS extends Import4MS {
@@ -76,7 +70,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					}
 					sz.setRegNumber(getStringValue(conn, docId, "vn"));
 					sz.setAppliedRegDate(getDateValue(conn, docId, "dvn"));
-					IUser<Long> author = uDao.findByLogin(getStringValue(conn, docId, "author"));
+					IUser author = uDao.findByLogin(getStringValue(conn, docId, "author"));
 					if (author != null) {
 						sz.setAuthor(author);
 					} else {
@@ -92,7 +86,7 @@ public class SyncOfficeMemo4MS extends Import4MS {
 					sz.setApprovalStatus(status);
 
 					String recipient = getStringValue(conn, docId, "recipient");
-					IUser<Long> r = uDao.findByLogin(recipient);
+					IUser r = uDao.findByLogin(recipient);
 					if (r != null) {
 						Employee e = eDao.findByUserId(r.getId());
 						if (e != null) {

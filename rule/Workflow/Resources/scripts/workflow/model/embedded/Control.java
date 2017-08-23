@@ -1,24 +1,13 @@
 package workflow.model.embedded;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.OrderBy;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-
 import com.exponentus.user.IUser;
-
 import reference.model.ControlType;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Embeddable
 public class Control {
@@ -87,7 +76,7 @@ public class Control {
 		this.assigneeEntries = assigneeEntries;
 	}
 
-	public boolean assigneesContainsUser(IUser<Long> user) {
+	public boolean assigneesContainsUser(IUser user) {
 		if (this.getAssigneeEntries() == null) {
 			return false;
 		}

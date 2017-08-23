@@ -216,7 +216,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
         this.reports = reports;
     }
 
-    public boolean assigneesContainsUser(IUser<Long> user) {
+    public boolean assigneesContainsUser(IUser user) {
         if (this.getAssigneeEntries() == null) {
             return false;
         }
@@ -234,7 +234,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
     }
 
     @Override
-    public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+    public LifeCycleNode getLifeCycle(IUser user, UUID id) {
         return (((ILifeCycle)getPrimary(this)).getLifeCycle(user, id ));
     }
 
@@ -249,7 +249,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
     }
 
     @Override
-    public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+    public LifeCycleNode getNode(IUser user, UUID id) {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.ASSIGNMENT);
 

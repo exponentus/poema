@@ -1,15 +1,7 @@
 package workflow.task;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-
-import org.apache.commons.lang3.StringUtils;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.legacy.ConvertorEnvConst;
@@ -21,15 +13,8 @@ import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
-import lotus.domino.Document;
-import lotus.domino.EmbeddedObject;
-import lotus.domino.NotesException;
-import lotus.domino.RichTextItem;
-import lotus.domino.ViewEntry;
-import lotus.domino.ViewEntryCollection;
+import lotus.domino.*;
+import org.apache.commons.lang3.StringUtils;
 import reference.dao.DocumentLanguageDAO;
 import reference.dao.DocumentSubjectDAO;
 import reference.dao.DocumentTypeDAO;
@@ -40,6 +25,10 @@ import staff.dao.OrganizationDAO;
 import staff.model.Organization;
 import workflow.dao.IncomingDAO;
 import workflow.model.Incoming;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Command(name = "import_in_nsf")
 public class SyncIncomingsNSF extends ImportNSF {
@@ -81,7 +70,7 @@ public class SyncIncomingsNSF extends ImportNSF {
 						} catch (NotesException ne) {
 							logger.error(ne.text);
 						}
-						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
+						IUser author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							inc.setAuthor(author);
 						} else {

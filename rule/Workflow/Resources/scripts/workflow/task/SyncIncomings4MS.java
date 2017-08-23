@@ -80,7 +80,7 @@ public class SyncIncomings4MS extends Import4MS {
 					}
 					inc.setRegNumber(getStringValue(conn, docId, "vn"));
 					inc.setAppliedRegDate(getDateValue(conn, docId, "dvn"));
-					IUser<Long> author = uDao.findByLogin(getStringValue(conn, docId, "author"));
+					IUser author = uDao.findByLogin(getStringValue(conn, docId, "author"));
 					if (author != null) {
 						inc.setAuthor(author);
 					} else {
@@ -124,7 +124,7 @@ public class SyncIncomings4MS extends Import4MS {
 					}
 
 					String recipient = getStringValue(conn, docId, "recipients");
-					IUser<Long> r = uDao.findByLogin(recipient);
+					IUser r = uDao.findByLogin(recipient);
 					if (r != null) {
 						Employee e = eDao.findByUserId(r.getId());
 						if (e != null) {

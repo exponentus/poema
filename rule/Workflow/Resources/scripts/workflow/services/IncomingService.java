@@ -95,7 +95,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         Incoming entity;
         try {
             IncomingDomain inDomain = new IncomingDomain(ses);
-            IUser<Long> user = ses.getUser();
+            IUser user = ses.getUser();
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = inDomain.composeNew(user);

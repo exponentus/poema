@@ -244,7 +244,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
         if (project.getManager() <= 0) {
             ve.addError("manager", "required", "field_is_empty");
         } else {
-            IUser<Long> managerUser = userDAO.findById(project.getManager());
+            IUser managerUser = userDAO.findById(project.getManager());
             if (managerUser == null) {
                 ve.addError("manager", "required", "user_not_found");
             }
@@ -252,13 +252,13 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
         if (project.getProgrammer() <= 0) {
             ve.addError("programmer", "required", "field_is_empty");
         } else {
-            IUser<Long> programmerUser = userDAO.findById(project.getProgrammer());
+            IUser programmerUser = userDAO.findById(project.getProgrammer());
             if (programmerUser == null) {
                 ve.addError("programmer", "required", "user_not_found");
             }
         }
         if (project.getTester() > 0) {
-            IUser<Long> testerUser = userDAO.findById(project.getTester());
+            IUser testerUser = userDAO.findById(project.getTester());
             if (testerUser == null) {
                 ve.addError("tester", "required", "user_not_found");
             }
@@ -266,7 +266,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
         if (project.getObservers() != null && project.getObservers().size() > 0) {
             for (long uid : project.getObservers()) {
-                IUser<Long> ou = userDAO.findById(uid);
+                IUser ou = userDAO.findById(uid);
                 if (ou == null) {
                     ve.addError("observers", "required", "observer user not found");
                 }
@@ -275,7 +275,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
         if (project.getRepresentatives() != null && project.getRepresentatives().size() > 0) {
             for (long uid : project.getRepresentatives()) {
-                IUser<Long> ou = userDAO.findById(uid);
+                IUser ou = userDAO.findById(uid);
                 if (ou == null) {
                     ve.addError("representatives", "required", "representative user not found");
                 }

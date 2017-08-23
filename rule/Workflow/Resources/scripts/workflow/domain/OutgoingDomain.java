@@ -51,7 +51,7 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         entity.setBody(dto.getBody());
         entity.setRecipient(dto.getRecipient());
         entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
-        IUser<Long> user = ses.getUser();
+        IUser user = ses.getUser();
         if (user.getRoles().contains("chancellery")) {
             entity.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
             entity.setApprovalStatus(ApprovalStatusType.REGISTERED);

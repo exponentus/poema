@@ -66,7 +66,7 @@ public class SyncReportNSF extends ImportNSF {
 					if (parentEntity != null) {
 						entity.setParent(parentEntity);
 
-						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
+						IUser author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							entity.setAuthor(author);
 						} else {
@@ -79,7 +79,7 @@ public class SyncReportNSF extends ImportNSF {
 							logger.error(ne.text);
 						}
 
-						IUser<Long> authorKi = uDao.findByExtKey(doc.getItemValueString("IntExecutNA"));
+						IUser authorKi = uDao.findByExtKey(doc.getItemValueString("IntExecutNA"));
 						if (authorKi != null) {
 							entity.setAppliedAuthor(employeeDAO.findByUser(authorKi));
 						} else {

@@ -32,7 +32,7 @@ public class IncomingDomain extends CommonDomain<Incoming> {
         dao = new IncomingDAO(ses);
     }
 
-    public Incoming composeNew(IUser<Long> user) throws DAOException {
+    public Incoming composeNew(IUser user) throws DAOException {
         Incoming entity = new Incoming();
         entity.setAuthor(user);
         entity.setAppliedRegDate(new Date());

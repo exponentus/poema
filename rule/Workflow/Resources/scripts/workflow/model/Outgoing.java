@@ -175,14 +175,14 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
 	}
 
 	@Override
-	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+	public LifeCycleNode getLifeCycle(IUser user, UUID id) {
 		LifeCycleNode lc = getNode(user, id);
 
 		return lc;
 	}
 
 	@Override
-	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+	public LifeCycleNode getNode(IUser user, UUID id) {
 		LifeCycleNode lc = new LifeCycleNode();
 		lc.setType(LifeCycleNodeType.DISCUSSED);
 		if (id.equals(this.id)){

@@ -15,7 +15,7 @@ public interface IApproval extends IAppEntity<UUID> {
 
 	String getURL();
 
-	void addReader(IUser<Long> user);
+	void addReader(IUser user);
 
 	void addReaders(List<Long> readers);
 

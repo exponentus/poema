@@ -86,12 +86,12 @@ public class ApplicationForVehicleDomain {
         return entity.userCanDoDecision(employee);
     }
 
-    public void acceptApprovalBlock(ApplicationForVehicle entity, IUser<Long> user) throws ApprovalException {
+    public void acceptApprovalBlock(ApplicationForVehicle entity, IUser user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.accept(user);
     }
 
-    public void declineApprovalBlock(ApplicationForVehicle entity, IUser<Long> user, String decisionComment)
+    public void declineApprovalBlock(ApplicationForVehicle entity, IUser user, String decisionComment)
             throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(entity);
         lifecycle.decline(user, decisionComment);

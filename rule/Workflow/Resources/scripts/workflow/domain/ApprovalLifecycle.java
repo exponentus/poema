@@ -79,7 +79,7 @@ public class ApprovalLifecycle {
 		return entity;
 	}
 
-	public IApproval accept(IUser<Long> user) throws ApprovalException {
+	public IApproval accept(IUser user) throws ApprovalException {
 		try {
 			Block processBlock = getCurrentBlock();
 			Approver currentApprover = processBlock.getApprover(user);
@@ -109,7 +109,7 @@ public class ApprovalLifecycle {
 		return entity;
 	}
 
-	public IApproval decline(IUser<Long> user, String decisionComment) throws ApprovalException {
+	public IApproval decline(IUser user, String decisionComment) throws ApprovalException {
 		try {
 			Block processBlock = getCurrentBlock();
 			if (processBlock.isRequireCommentIfNo() && (decisionComment == null || decisionComment.isEmpty())) {

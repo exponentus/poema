@@ -111,7 +111,7 @@ public class Block extends SimpleAppEntity {
 				.filter(approver -> approver.getDecisionType() == DecisionType.UNKNOWN).findFirst().orElse(null);
 	}
 
-	public Approver getApprover(IUser<Long> user) throws ApprovalException {
+	public Approver getApprover(IUser user) throws ApprovalException {
 		Approver approver = approvers.stream().filter(a -> a.getEmployee().getUserID().equals(user.getId())).findFirst().orElse(null);
 
 		if (approver == null) {

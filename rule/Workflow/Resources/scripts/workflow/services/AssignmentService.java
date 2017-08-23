@@ -111,7 +111,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         try {
             _Session ses = getSession();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-            IUser<Long> user = ses.getUser();
+            IUser user = ses.getUser();
             Employee currentUserEmployee = employeeDAO.findByUserId(user.getId());
             AssignmentDAO assignmentDAO = new AssignmentDAO(ses);
             Assignment entity;

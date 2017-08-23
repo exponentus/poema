@@ -53,7 +53,7 @@ public class ProjectDomain {
     }
 
     public void calculateReaders(Project project) {
-        Set<IUser<Long>> readers = new HashSet<>();
+        Set<IUser> readers = new HashSet<>();
         readers.add(project.getAuthor());
         if (project.getManager() != null) {
             readers.add(project.getManager());

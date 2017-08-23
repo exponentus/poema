@@ -76,7 +76,7 @@ public class SyncOutgoingsNSF extends ImportNSF {
 						} catch (NotesException ne) {
 							logger.error(ne.text);
 						}
-						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
+						IUser author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							entity.setAuthor(author);
 						} else {

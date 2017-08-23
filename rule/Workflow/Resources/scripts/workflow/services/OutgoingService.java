@@ -100,7 +100,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         Outgoing entity;
         try {
             OutgoingDomain outDomain = new OutgoingDomain(ses);
-            IUser<Long> user = ses.getUser();
+            IUser user = ses.getUser();
             boolean isNew = "new".equals(id);
             if (isNew) {
                 entity = outDomain.composeNew((User) user);
@@ -257,7 +257,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
 
     private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
-        IUser<Long> user = session.getUser();
+        IUser user = session.getUser();
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

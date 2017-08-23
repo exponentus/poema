@@ -18,7 +18,7 @@ import java.util.UUID;
 public abstract class ApprovalService<T extends IAppEntity<UUID>, D extends IDTODomain<T>>
 		extends EntityService<T, D> {
 
-	protected List<Action> getApprovalButtonSet(IUser<Long> user, T e) throws DAOException {
+	protected List<Action> getApprovalButtonSet(IUser user, T e) throws DAOException {
 		ActionFactory actionFactory = new ActionFactory();
 		List<Action> keySet = new ArrayList<Action>();
 

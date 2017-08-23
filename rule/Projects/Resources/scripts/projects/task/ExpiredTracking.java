@@ -86,7 +86,7 @@ public class ExpiredTracking extends Do {
 	private void sendNotify(AppEnv env, _Session session, Task task) {
 		try {
 			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			User user = null;
 
 			LanguageCode lang = EnvConst.getDefaultLang();

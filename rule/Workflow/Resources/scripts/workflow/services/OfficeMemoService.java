@@ -98,7 +98,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
         OfficeMemo entity;
         try {
             OfficeMemoDomain omd = new OfficeMemoDomain(ses);
-            IUser<Long> user = ses.getUser();
+            IUser user = ses.getUser();
             EmployeeDAO employeeDAO = new EmployeeDAO(ses);
             boolean isNew = "new".equals(id);
             if (isNew) {
@@ -231,7 +231,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
 
     private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
         _ActionBar actionBar = new _ActionBar(session);
-        IUser<Long> user = session.getUser();
+        IUser user = session.getUser();
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

@@ -126,7 +126,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 	}
 
 	@Override
-	public LifeCycleNode getLifeCycle(IUser<Long> user, UUID id) {
+	public LifeCycleNode getLifeCycle(IUser user, UUID id) {
 		LifeCycleNode lc = getNode(user, this.id);
 		List<Assignment> assignments = getAssignments();
 
@@ -139,7 +139,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 	}
 
 	@Override
-	public LifeCycleNode getNode(IUser<Long> user, UUID id) {
+	public LifeCycleNode getNode(IUser user, UUID id) {
 		LifeCycleNode lc = new LifeCycleNode();
 		lc.setType(LifeCycleNodeType.DISCUSSED_AND_ACTIONABLE);
 

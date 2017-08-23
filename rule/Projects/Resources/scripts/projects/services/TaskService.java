@@ -127,7 +127,7 @@ public class TaskService extends RestProvider {
         try {
             EmployeeDAO empDao = new EmployeeDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
-            IUser<Long> user = session.getUser();
+            IUser user = session.getUser();
             Task task;
             TaskDomain taskDomain = new TaskDomain(session);
 
@@ -202,7 +202,7 @@ public class TaskService extends RestProvider {
 
     public Response save(Task taskDto) {
         _Session session = getSession();
-        IUser<Long> user = session.getUser();
+        IUser user = session.getUser();
 
         try {
             validate(taskDto);
@@ -501,7 +501,7 @@ public class TaskService extends RestProvider {
 
         if (task.getObservers() != null && task.getObservers().size() > 0) {
             for (long uid : task.getObservers()) {
-                IUser<Long> ou = userDAO.findById(uid);
+                IUser ou = userDAO.findById(uid);
                 if (ou == null) {
                     ve.addError("observers", "required", "observer user not found: id=" + uid);
                 }

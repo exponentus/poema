@@ -1,8 +1,7 @@
 package projects.task;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -17,9 +16,6 @@ import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.model.Project;
@@ -27,6 +23,9 @@ import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
 import reference.model.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Command(name = "overdue_reminder", trigger = Trigger.EVERY_NIGHT)
 public class OverdueReminder extends Do {
@@ -78,7 +77,7 @@ public class OverdueReminder extends Do {
 					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
 						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
-						IUser<Long> i_user = userDAO.findById(user.getId());
+						IUser i_user = userDAO.findById(user.getId());
 						LanguageCode user_lang = i_user.getDefaultLang();
 						memo.addVar("lang", "&lang=" + user_lang);
 						memo.addVar("user", user.getUserName());
@@ -108,7 +107,7 @@ public class OverdueReminder extends Do {
 
 		public TaskString(Task task, _Session session) {
 			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			this.title = task.getTitle();
 			this.regNumber = task.getRegNumber();
 			this.url = task.getURL();

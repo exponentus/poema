@@ -1,29 +1,15 @@
 package workflow.task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-
-import org.apache.commons.lang3.StringUtils;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.scripting._Session;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
-import lotus.domino.Database;
-import lotus.domino.Document;
-import lotus.domino.NotesException;
-import lotus.domino.View;
-import lotus.domino.ViewEntry;
-import lotus.domino.ViewEntryCollection;
+import lotus.domino.*;
+import org.apache.commons.lang3.StringUtils;
 import reference.dao.ControlTypeDAO;
 import reference.model.ControlType;
 import staff.dao.EmployeeDAO;
@@ -34,6 +20,9 @@ import workflow.model.Incoming;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Control;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 @Command(name = "import_kr_nsf")
 public class SyncAssignmentNSF extends ImportNSF {
@@ -101,14 +90,14 @@ public class SyncAssignmentNSF extends ImportNSF {
 			if (entity == null) {
 				entity = new Assignment();
 			}
-			IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
+			IUser author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 			if (author != null) {
 				entity.setAuthor(author);
 			} else {
 				entity.setAuthor(dummyUser);
 			}
 
-			IUser<Long> authorRez = uDao.findByExtKey(doc.getItemValueString("AuthorRezNA"));
+			IUser authorRez = uDao.findByExtKey(doc.getItemValueString("AuthorRezNA"));
 			if (authorRez != null) {
 				entity.setAppliedAuthor(employeeDAO.findByUser(authorRez));
 			} else {
@@ -130,7 +119,7 @@ public class SyncAssignmentNSF extends ImportNSF {
 			String otvExec = doc.getItemValueString("OtvExecNA");
 			Vector<String> intExecs = doc.getItemValue("IntExecNA");
 			for (String exec : intExecs) {
-				IUser<Long> e = uDao.findByExtKey(exec);
+				IUser e = uDao.findByExtKey(exec);
 				if (e != null) {
 					AssigneeEntry assigneeEntry = new AssigneeEntry();
 					assigneeEntry.setAssignee(employeeDAO.findByUser(e));

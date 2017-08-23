@@ -49,7 +49,7 @@ public class ObservationDomain {
     }
 
     public void calculateReaders(Observation entity) {
-        Set<IUser<Long>> readers = new HashSet<>();
+        Set<IUser> readers = new HashSet<>();
         readers.add(entity.getAuthor());
 
         if (entity.getObservers() != null) {

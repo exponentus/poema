@@ -1,25 +1,23 @@
 package projects.task;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang3.time.DateUtils;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.util.TimeUtil;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import monitoring.dao.StatisticDAO;
+import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
 import projects.init.AppConst;
 import projects.model.constants.TaskStatusType;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Command(name = "actualize_stat")
 public class StatActualizator extends Do {
@@ -31,7 +29,7 @@ public class StatActualizator extends Do {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		try {
 			UserDAO uDao = new UserDAO();
-			List<User> users = uDao.findAll(0, 0);
+			List<User> users = uDao.findAll(0, 0).getResult();
 			Date startDate = dateFormat.parse("15-08-2016");
 			Date endDate = current;
 			while (startDate.before(endDate)) {

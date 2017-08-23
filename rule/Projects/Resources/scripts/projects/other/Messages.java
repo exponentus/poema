@@ -1,10 +1,7 @@
 package projects.other;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -16,12 +13,14 @@ import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.messaging.slack.SlackAgent;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Messages {
 	protected static CommonLogger logger = new CommonLogger("Messaging");
@@ -38,19 +37,19 @@ public class Messages {
 	public void sendOfNewProject(Project project) {
 		try {
 			UserDAO userDAO = new UserDAO();
-			Set<IUser<Long>> recipients = new HashSet<>();
+			Set<IUser> recipients = new HashSet<>();
 			String msgTemplate = "new_project";
 
 			Memo memo = new Memo();
-			IUser<Long> manager = userDAO.findById(project.getManager());
+			IUser manager = userDAO.findById(project.getManager());
 			recipients.add(manager);
 			memo.addVar("manager", manager.getUserName());
-			IUser<Long> programmer = userDAO.findById(project.getProgrammer());
+			IUser programmer = userDAO.findById(project.getProgrammer());
 			recipients.add(programmer);
 			memo.addVar("programmer", programmer.getUserName());
 			String testerName = "";
 			if (project.getTester() > 0) {
-				IUser<Long> tester = userDAO.findById(project.getTester());
+				IUser tester = userDAO.findById(project.getTester());
 				recipients.add(tester);
 				testerName = tester.getUserName();
 			}
@@ -59,7 +58,7 @@ public class Messages {
 			memo.addVar("author", userDAO.findById(project.getAuthor().getId()).getUserName());
 
 			List<String> mailRecipients = new ArrayList<>();
-			for (IUser<Long> u : recipients) {
+			for (IUser u : recipients) {
 				try {
 					mailRecipients.add(((User) u).getEmail());
 				} catch (ClassCastException e) {
@@ -84,7 +83,7 @@ public class Messages {
 	public void sendToAssignee(Task task) {
 		try {
 			UserDAO userDAO = new UserDAO();
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			String msgTemplate = "new_task";
 			User user = null;
 
@@ -129,7 +128,7 @@ public class Messages {
 	public void sendReminderToAssignee(Task task, String subject, String body) {
 		try {
 			UserDAO userDAO = new UserDAO();
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			String msgTemplate = "reminder_to_assignee";
 			User user = null;
 
@@ -212,7 +211,7 @@ public class Messages {
 		try {
 			String msgTemplate = "request_resolution";
 			UserDAO userDAO = new UserDAO();
-			IUser<Long> assigneeUser = userDAO.findById(request.getTask().getAssignee());
+			IUser assigneeUser = userDAO.findById(request.getTask().getAssignee());
 			User user = null;
 
 			Memo memo = new Memo();
@@ -263,7 +262,7 @@ public class Messages {
 			Memo memo = new Memo();
 			memo.addVar("regNumber", task.getRegNumber());
 			memo.addVar("title", task.getTitle());
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("author", task.getAuthor().getUserName());
 
@@ -308,7 +307,7 @@ public class Messages {
 			Memo memo = new Memo();
 			memo.addVar("regNumber", task.getRegNumber());
 			memo.addVar("title", task.getTitle());
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			memo.addVar("author", task.getAuthor().getUserName());
 
@@ -353,7 +352,7 @@ public class Messages {
 				Memo memo = new Memo();
 				memo.addVar("regNumber", task.getRegNumber());
 				memo.addVar("title", task.getTitle());
-				IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+				IUser assigneeUser = userDAO.findById(task.getAssignee());
 				memo.addVar("assignee", assigneeUser.getUserName());
 				memo.addVar("author", task.getAuthor().getUserName());
 

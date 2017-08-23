@@ -67,7 +67,7 @@ public class PendingReminder extends Do {
 					if (tasksCount > 0) {
 						memo.addVar("tasks", tasksFtu);
 						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
-						IUser<Long> u = userDAO.findById(user.getId());
+						IUser u = userDAO.findById(user.getId());
 						LanguageCode userLang = u.getDefaultLang();
 						memo.addVar("lang", "&lang=" + userLang);
 						memo.addVar("user", user.getUserName());
@@ -99,7 +99,7 @@ public class PendingReminder extends Do {
 
 		public TaskString(Task task, _Session session) {
 			UserDAO userDAO = new UserDAO(session);
-			IUser<Long> assigneeUser = userDAO.findById(task.getAssignee());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			this.title = task.getTitle();
 			this.regNumber = task.getRegNumber();
 			this.url = task.getURL();

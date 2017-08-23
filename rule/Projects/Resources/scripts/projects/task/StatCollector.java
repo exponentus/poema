@@ -1,21 +1,20 @@
 package projects.task;
 
-import java.util.Date;
-import java.util.List;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import monitoring.dao.StatisticDAO;
 import projects.dao.TaskDAO;
 import projects.init.AppConst;
 import projects.model.constants.TaskStatusType;
+
+import java.util.Date;
+import java.util.List;
 
 @Command(name = "stat_collector", trigger = Trigger.EVERY_NIGHT)
 public class StatCollector extends Do {
@@ -26,7 +25,7 @@ public class StatCollector extends Do {
 		try {
 			logger.info("Run statistics collector");
 			UserDAO uDao = new UserDAO();
-			List<User> users = uDao.findAll(0, 0);
+			List<User> users = uDao.findAll(0, 0).getResult();
 			StatisticDAO statDao = new StatisticDAO();
 			TaskDAO dao = new TaskDAO(session);
 			for (User u : users) {

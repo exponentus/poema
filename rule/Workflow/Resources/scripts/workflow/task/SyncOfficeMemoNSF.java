@@ -1,15 +1,7 @@
 package workflow.task;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Vector;
-
-import org.apache.commons.lang3.StringUtils;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.legacy.ConvertorEnvConst;
@@ -20,18 +12,8 @@ import com.exponentus.scripting._FormAttachments;
 import com.exponentus.scripting._Session;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
-import lotus.domino.Database;
-import lotus.domino.Document;
-import lotus.domino.DocumentCollection;
-import lotus.domino.EmbeddedObject;
-import lotus.domino.NotesException;
-import lotus.domino.RichTextItem;
-import lotus.domino.View;
-import lotus.domino.ViewEntry;
-import lotus.domino.ViewEntryCollection;
+import lotus.domino.*;
+import org.apache.commons.lang3.StringUtils;
 import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
@@ -39,6 +21,10 @@ import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 @Command(name = "import_sz_nsf")
 public class SyncOfficeMemoNSF extends ImportNSF {
@@ -76,21 +62,21 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 							logger.error(ne.text);
 						}
 
-						IUser<Long> author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
+						IUser author = uDao.findByExtKey(doc.getItemValueString("AuthorNA"));
 						if (author != null) {
 							entity.setAuthor(author);
 						} else {
 							entity.setAuthor(dummyUser);
 						}
 
-						IUser<Long> sender = uDao.findByExtKey(doc.getItemValueString("WorkDocSenderNA"));
+						IUser sender = uDao.findByExtKey(doc.getItemValueString("WorkDocSenderNA"));
 						if (sender != null) {
 							entity.setAppliedAuthor(employeeDAO.findByUser(sender));
 						} else {
 							entity.setAppliedAuthor(employeeDAO.findByUser(dummyUser));
 						}
 
-						IUser<Long> signer = uDao.findByExtKey(doc.getItemValueString("WorkDocSignerNA"));
+						IUser signer = uDao.findByExtKey(doc.getItemValueString("WorkDocSignerNA"));
 						Approver approver = new Approver();
 						if (signer != null) {
 							approver.setEmployee(employeeDAO.findByUser(signer));
@@ -107,7 +93,7 @@ public class SyncOfficeMemoNSF extends ImportNSF {
 						blocks.add(block);
 						entity.setBlocks(blocks);
 
-						IUser<Long> recipient = uDao.findByExtKey(doc.getItemValueString("RecipientOnlyNA"));
+						IUser recipient = uDao.findByExtKey(doc.getItemValueString("RecipientOnlyNA"));
 						if (recipient != null) {
 							entity.setRecipient(employeeDAO.findByUser(recipient));
 						} else {
