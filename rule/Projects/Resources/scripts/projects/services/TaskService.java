@@ -250,7 +250,7 @@ public class TaskService extends RestProvider {
             }
 
             if (taskDto.isNew() && task.getStatus() == TaskStatusType.OPEN) {
-                new Messages(getAppEnv()).sendToAssignee(task);
+               // new Messages(getAppEnv()).sendToAssignee(task);
             }
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
@@ -378,6 +378,9 @@ public class TaskService extends RestProvider {
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     // new workflow.other.Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
+                    if (dto.isNew() && entity.getStatus() == TaskStatusType.OPEN) {
+                        new Messages(getAppEnv()).sendToAssignee(entity);
+                    }
                 }
             }
             // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
