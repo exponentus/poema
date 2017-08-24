@@ -18,6 +18,8 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
+import workflow.model.constants.ApprovalStatusType;
+import workflow.model.embedded.Block;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -108,6 +110,16 @@ public class TaskDAO extends DAO<Task, UUID> {
                     condition = cb.and(taskRoot.get("tags").in(filter.getTags()));
                 } else {
                     condition = cb.and(taskRoot.get("tags").in(filter.getTags()), condition);
+                }
+            }
+
+            if (filter.isModerate()) {
+                Expression<ApprovalStatusType> status = taskRoot.<Collection<Block>>get("blocks").<ApprovalStatusType>get("status");
+                Predicate predicate = cb.equal(status, ApprovalStatusType.PENDING);
+                if (condition == null) {
+                    condition = cb.and(predicate);
+                } else {
+                    condition = cb.and(predicate, condition);
                 }
             }
 

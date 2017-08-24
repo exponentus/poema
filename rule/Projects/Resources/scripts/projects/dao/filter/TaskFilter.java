@@ -32,6 +32,7 @@ public class TaskFilter extends Filter {
     private boolean isParentOnly;
     private Boolean isInitiative = null;
     private boolean treeMode = false;
+    private boolean isModerate;
 
     public Project getProject() {
         return project;
@@ -188,5 +189,13 @@ public class TaskFilter extends Filter {
     public TaskFilter setTreeMode(boolean treeMode) {
         this.treeMode = treeMode;
         return this;
+    }
+
+    public boolean isModerate() {
+        return isModerate;
+    }
+
+    public void setModerate(boolean moderate) {
+        isModerate = moderate;
     }
 }

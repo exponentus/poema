@@ -94,6 +94,9 @@ public class TaskService extends RestProvider {
                 case "my":
                     title = "my_tasks";
                     break;
+                case "moderate":
+                    title = slug;
+                    break;
                 default:
                     title = "tasks";
                     break;
@@ -513,7 +516,7 @@ public class TaskService extends RestProvider {
         }
     }
 
-    public static TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {
+    public TaskFilter setUpTaskFilter(_Session session, WebFormData formData, TaskFilter filter) {
 
         filter.setProject(formData.getValueSilently("project"));
         filter.setParentTask(formData.getValueSilently("parentTaskId"));
@@ -547,6 +550,9 @@ public class TaskService extends RestProvider {
                 break;
             case "initiative":
                 filter.setInitiative(true);
+                break;
+            case "moderate":
+                filter.setModerate(true);
                 break;
             default:
                 break;
