@@ -431,9 +431,6 @@ public class TaskService extends RestProvider {
 
         actionBar.addAction(action.close);
 
-        if (taskDomain.taskIsEditable(task)) {
-            actionBar.addAction(action.saveAndClose);
-        }
         if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
             Approver approver = lifecycle.getProcessingBlock().getCurrentApprover();
@@ -443,6 +440,9 @@ public class TaskService extends RestProvider {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
             }
         } else {
+            if (taskDomain.taskIsEditable(task)) {
+                actionBar.addAction(action.saveAndClose);
+            }
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_request").caption("new_request"));
             }
