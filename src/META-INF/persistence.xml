@@ -29,6 +29,8 @@
         <class>monitoring.model.UserActivity</class>   
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
+        <!-- DataExport module entities -->
+        <class>dataexport.model.ExportProfile</class>
         <!-- Because of it suppose importing from Domino -->
         <!-- <class>administrator.model.Collation</class> -->
     </persistence-unit>

@@ -9,7 +9,9 @@ import com.exponentus.env.Environment;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,8 @@ import staff.dao.RoleDAO;
 import staff.model.Employee;
 import staff.model.Role;
 import workflow.domain.ApprovalDomain;
+import workflow.domain.ApprovalLifecycle;
+import workflow.domain.exception.ApprovalException;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
@@ -218,6 +222,12 @@ public class TaskDomain extends ApprovalDomain<Task> {
         changeStatus(task, TaskStatusType.COMPLETED);
     }
 
+    public void declineApprovalBlock(Task task, IUser user, String decisionComment) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
+        lifecycle.decline(user, decisionComment);
+        changeStatus(task, TaskStatusType.CANCELLED);
+    }
+
     public void prolongTask(Task task, Date newDueDate) throws TaskException {
         if (newDueDate == null) {
             throw new TaskException("newDueDate is null");
@@ -231,9 +241,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
-    public void cancelTask(Task task, String comment) throws TaskException {
+    public void cancelTask(Task task, String comment) throws DTOException {
         if (task.getStatus() == TaskStatusType.CANCELLED) {
-            throw new TaskException("task already cancelled");
+            throw new DTOException(DTOExceptionType.NO_ENTITY.IMPROPER_CONDITION, "task already cancelled");
         }
 
         changeStatus(task, TaskStatusType.CANCELLED);

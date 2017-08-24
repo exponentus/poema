@@ -1,5 +1,6 @@
 package projects.exception;
 
+@Deprecated
 public class TaskException extends Exception {
     public TaskException() {
         super();

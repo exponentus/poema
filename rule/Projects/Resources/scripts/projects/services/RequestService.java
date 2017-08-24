@@ -203,7 +203,7 @@ public class RequestService extends RestProvider {
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
             return Response.ok(new Outcome()).build();
-        } catch (SecureException | DAOException | TaskException | RequestException e) {
+        } catch (SecureException | DAOException | TaskException | RequestException | DTOException e) {
             return responseException(e);
         }
     }

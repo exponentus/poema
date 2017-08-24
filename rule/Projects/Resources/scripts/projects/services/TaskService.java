@@ -356,7 +356,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfTaskCancelled(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException | TaskException e) {
+        } catch (SecureException | DAOException | DTOException e) {
             return responseException(e);
         }
     }
