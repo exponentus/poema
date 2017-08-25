@@ -90,8 +90,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
 
-
-
     private boolean initiative;
 
     @ManyToMany(fetch = FetchType.EAGER)

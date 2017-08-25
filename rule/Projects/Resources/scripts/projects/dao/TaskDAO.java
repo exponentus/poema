@@ -261,7 +261,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         // TODO does not worked if choose hierarchy view
         /*
          * cqr.select(cbr.construct(Request.class, requestRoot.get("regDate"),
-		 * requestRoot.get("author"),cbr.construct(RequestType.class,
+		 * requestRoot.get("author"),cbr.construct(ReportQueryType.class,
 		 * requestRoot.get("requestType").get("name"),
 		 * requestRoot.get("requestType").get("locName")),
 		 * requestRoot.get("resolution"), requestRoot.get("resolutionTime"),
