@@ -16,6 +16,8 @@ import com.exponentus.user.IUser;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
+import staff.model.Employee;
+import workflow.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -291,6 +293,100 @@ public class Messages {
 				recipients.add(task.getAuthor().getEmail());
 				MailAgent ma = new MailAgent(msgTemplate);
 				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_acknowledged", lang),
+						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
+			}
+		} catch (Exception e) {
+			logger.exception(e);
+		}
+
+	}
+
+	public void sendToModerate(Task task) {
+		try {
+			String msgTemplate = "task_to_moderate";
+			UserDAO userDAO = new UserDAO();
+
+			Memo memo = new Memo();
+			memo.addVar("regNumber", task.getRegNumber());
+			memo.addVar("title", task.getTitle());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
+			memo.addVar("assignee", assigneeUser.getUserName());
+			Block block = task.getBlocks().get(0);
+			Employee employee = block.getCurrentApprover().getEmployee();
+			memo.addVar("moderator",employee.getName());
+
+			User user = null;
+
+			try {
+				user = (User) task.getAuthor();
+				lang = user.getDefaultLang();
+			} catch (ClassCastException e) {
+
+			}
+
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+
+			if (user != null) {
+				String slackAddr = user.getSlack();
+				if (slackAddr != null && !slackAddr.equals("")) {
+					SlackAgent sa = new SlackAgent(msgTemplate);
+					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+						return;
+					}
+				}
+
+				List<String> recipients = new ArrayList<>();
+				recipients.add(task.getAuthor().getEmail());
+				MailAgent ma = new MailAgent(msgTemplate);
+				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_to_moderate", lang),
+						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
+			}
+		} catch (Exception e) {
+			logger.exception(e);
+		}
+
+	}
+
+	public void sendModeratorRejection(Task task) {
+		try {
+			String msgTemplate = "task_rejected_by_moderator";
+			UserDAO userDAO = new UserDAO();
+
+			Memo memo = new Memo();
+			memo.addVar("regNumber", task.getRegNumber());
+			memo.addVar("title", task.getTitle());
+			IUser assigneeUser = userDAO.findById(task.getAssignee());
+			memo.addVar("author", task.getAuthor().getUserName());
+			Block block = task.getBlocks().get(0);
+			Employee employee = block.getApprovers().get(0).getEmployee();
+			memo.addVar("moderator",employee.getName());
+
+			User user = null;
+
+			try {
+				user = (User) task.getAuthor();
+				lang = user.getDefaultLang();
+			} catch (ClassCastException e) {
+
+			}
+
+			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+
+			if (user != null) {
+				String slackAddr = user.getSlack();
+				if (slackAddr != null && !slackAddr.equals("")) {
+					SlackAgent sa = new SlackAgent(msgTemplate);
+					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
+					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+						return;
+					}
+				}
+
+				List<String> recipients = new ArrayList<>();
+				recipients.add(task.getAuthor().getEmail());
+				MailAgent ma = new MailAgent(msgTemplate);
+				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_rejected_by_moderator", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
 			}
 		} catch (Exception e) {

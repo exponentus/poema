@@ -250,7 +250,7 @@ public class TaskService extends RestProvider {
             }
 
             if (taskDto.isNew() && task.getStatus() == TaskStatusType.OPEN) {
-               // new Messages(getAppEnv()).sendToAssignee(task);
+                new Messages(getAppEnv()).sendToModerate(task);
             }
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
@@ -377,8 +377,7 @@ public class TaskService extends RestProvider {
             Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                    // new workflow.other.Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
-                    if (dto.isNew() && entity.getStatus() == TaskStatusType.OPEN) {
+                    if (entity.getStatus() == TaskStatusType.OPEN) {
                         new Messages(getAppEnv()).sendToAssignee(entity);
                     }
                 }
@@ -409,7 +408,7 @@ public class TaskService extends RestProvider {
             Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
-                    //new workflow.other.Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
+                    new Messages(getAppEnv()).sendModeratorRejection(entity);
                 }
             }
             outcome.setTitle("declineApprovalBlock");

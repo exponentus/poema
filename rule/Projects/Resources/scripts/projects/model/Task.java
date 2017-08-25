@@ -83,11 +83,14 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
 
     private Long assignee;
 
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
+
+
 
     private boolean initiative;
 
