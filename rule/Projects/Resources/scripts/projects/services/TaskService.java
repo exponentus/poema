@@ -240,8 +240,6 @@ public class TaskService extends RestProvider {
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
                 task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
-                ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
-                lifecycle.start();
                 task = taskDAO.add(task, rn);
                 //	mDao.postEvent(user, task, "task_was_registered");
             } else {
@@ -249,7 +247,10 @@ public class TaskService extends RestProvider {
                 //	mDao.postEvent(user, task, "task_was_updated");
             }
 
-            if (taskDto.isNew() && task.getStatus() == TaskStatusType.OPEN) {
+            if (task.getStatus() == TaskStatusType.OPEN) {
+                ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
+                lifecycle.start();
+                taskDomain.superUpdate(task);
                 new Messages(getAppEnv()).sendToModerate(task);
             }
 
@@ -377,6 +378,7 @@ public class TaskService extends RestProvider {
             Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
+                    entity.setStatus(TaskStatusType.OPEN);
                     if (entity.getStatus() == TaskStatusType.OPEN) {
                         new Messages(getAppEnv()).sendToAssignee(entity);
                     }

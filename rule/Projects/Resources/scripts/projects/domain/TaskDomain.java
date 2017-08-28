@@ -63,7 +63,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setAuthor(user);
         task.setInitiative(initiative);
         task.setTaskType(taskType);
-        task.setStatus(TaskStatusType.OPEN);
+        task.setStatus(TaskStatusType.DRAFT);
         task.setStatusDate(new Date());
         task.setProject(project);
         if (demand != null) {
@@ -104,13 +104,8 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public void fillFromDto(Task task, Task dto) throws DAOException, RestServiceException {
         if (task.isNew()) {
             task.setAuthor(dto.getAuthor());
-            changeStatus(task, TaskStatusType.OPEN);
+            changeStatus(task, TaskStatusType.DRAFT);
             task.setInitiative(dto.isInitiative());
-            // EmployeeDAO eDao = new EmployeeDAO(ses);
-            // task.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));
-            task.setBlocks(getModeratorBlock(new EmployeeDAO(ses)));
-            task.setApprovalStatus(ApprovalStatusType.DRAFT);
-            task.setResult(ApprovalResultType.UNKNOWN);
 
             if (dto.getParent() != null) {
                 task.setParent(dto.getParent());
@@ -165,7 +160,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setStatusDate(new Date());
     }
 
-    public void calculateStatus(Task task) {
+    public void calculateStatus(Task task) throws DAOException, RestServiceException {
         if (task.getStartDate() == null) {
             changeStatus(task, TaskStatusType.DRAFT);
         } else {
@@ -174,6 +169,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 if (new Date().before(task.getStartDate())) {
                     changeStatus(task, TaskStatusType.WAITING);
                 } else {
+                    task.setBlocks(getModeratorBlock(new EmployeeDAO(ses)));
+                    task.setApprovalStatus(ApprovalStatusType.DRAFT);
+                    task.setResult(ApprovalResultType.UNKNOWN);
                     changeStatus(task, TaskStatusType.OPEN);
                 }
             }
@@ -222,10 +220,17 @@ public class TaskDomain extends ApprovalDomain<Task> {
         changeStatus(task, TaskStatusType.COMPLETED);
     }
 
+    public void acceptApprovalBlock(Task task, IUser user) throws ApprovalException {
+        ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
+        lifecycle.accept(user);
+        changeStatus(task, TaskStatusType.OPEN);
+    }
+
+
     public void declineApprovalBlock(Task task, IUser user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.decline(user, decisionComment);
-        changeStatus(task, TaskStatusType.CANCELLED);
+        changeStatus(task, TaskStatusType.DRAFT);
     }
 
     public void prolongTask(Task task, Date newDueDate) throws TaskException {
