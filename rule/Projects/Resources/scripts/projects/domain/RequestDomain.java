@@ -8,9 +8,9 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
-import projects.exception.RequestException;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
@@ -66,11 +66,9 @@ public class RequestDomain extends CommonDomain<Request> {
         return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
     }
 
-    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws RequestException {
+    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws DTOException {
         if (!userCanDoResolution(request, user)) {
-            throw new RequestException(
-                    "User " + user.getLogin() + " can not do resolution or request already resolved. "
-                            + "Current resolution: " + request.getResolution());
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + user.getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
         }
 
         request.setResolution(resolutionType);

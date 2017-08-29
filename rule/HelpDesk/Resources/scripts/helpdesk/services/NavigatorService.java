@@ -66,11 +66,11 @@ public class NavigatorService extends RestProvider {
             e.printStackTrace();
         }
 
-        Outline to = new Outline("", "tasks");
-        to.addEntry(new OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", AppConst.BASE_URL + "tasks/s/initiative"));
+        // Outline to = new Outline("", "tasks");
+        // to.addEntry(new OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", AppConst.BASE_URL + "tasks/s/initiative"));
 
         list.add(co);
-        list.add(to);
+        // list.add(to);
 
         Outcome outcome = new Outcome();
         outcome.addPayload("nav", list);

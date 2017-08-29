@@ -28,7 +28,6 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
-import projects.exception.TaskException;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -318,7 +317,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfNewAcknowledging(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException | TaskException e) {
+        } catch (SecureException | DAOException | DTOException e) {
             return responseException(e);
         }
     }
@@ -339,7 +338,7 @@ public class TaskService extends RestProvider {
             new Messages(getAppEnv()).sendOfTaskCompleted(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
-        } catch (SecureException | DAOException | DatabaseException | TaskException e) {
+        } catch (SecureException | DAOException | DatabaseException | DTOException e) {
             return responseException(e);
         }
     }

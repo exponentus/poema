@@ -17,7 +17,6 @@ import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.dao.TaskDAO;
-import projects.exception.TaskException;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Request;
@@ -202,19 +201,19 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
     }
 
-    public void acknowledgedTask(Task task, User user) throws TaskException {
+    public void acknowledgedTask(Task task, User user) throws DTOException {
         if (!task.getAssignee().equals(user.getId())) {
-            throw new TaskException("not_assignee_user");
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "not_assignee_user");
         } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
-            throw new TaskException("task_status_is_not_open");
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "task_status_is_not_open");
         }
 
         changeStatus(task, TaskStatusType.PROCESSING);
     }
 
-    public void completeTask(Task task) throws TaskException {
+    public void completeTask(Task task) throws DTOException {
         if (task.getStatus() == TaskStatusType.COMPLETED) {
-            throw new TaskException("task already completed");
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "task already completed");
         }
 
         changeStatus(task, TaskStatusType.COMPLETED);
@@ -233,13 +232,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
         changeStatus(task, TaskStatusType.DRAFT);
     }
 
-    public void prolongTask(Task task, Date newDueDate) throws TaskException {
+    public void prolongTask(Task task, Date newDueDate) throws DTOException {
         if (newDueDate == null) {
-            throw new TaskException("newDueDate is null");
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "newDueDate is null");
         }
 
         if (task.getDueDate().after(newDueDate)) {
-            throw new TaskException("new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "new due date '" + newDueDate + "' must be after current due date '" + task.getDueDate() + "'");
         }
 
         task.setDueDate(newDueDate);
