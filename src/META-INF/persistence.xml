@@ -177,7 +177,7 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
-
+        <class>reference.model.Tag</class>
         <class>dataexport.model.ReportProfile</class>
 
         <shared-cache-mode>NONE</shared-cache-mode>
