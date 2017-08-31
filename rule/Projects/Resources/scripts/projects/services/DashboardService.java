@@ -37,10 +37,12 @@ public class DashboardService extends RestProvider {
 
             StatisticDAO monitDao = new StatisticDAO(session);
             Date current = new Date();
-            outcome.addPayload("statistic1", monitDao.getStatusStat(projects.init.AppConst.CODE, "assignee_state", session.getUser(),
+            outcome.addPayload("statistic1", monitDao.getStatusStat(projects.init.AppConst.CODE, "assignee_state",
+                    session.getUser(),
                     DateUtils.addMonths(current, -1), current, TaskStatusType.PROCESSING.name()));
 
-            outcome.addPayload("statistic2", monitDao.getStatusStat(projects.init.AppConst.CODE, "author_state", session.getUser(),
+            outcome.addPayload("statistic2", monitDao.getStatusStat(projects.init.AppConst.CODE, "author_state",
+                    session.getUser(),
                     DateUtils.addMonths(current, -1), current, TaskStatusType.PROCESSING.name()));
 
             TaskDAO taskDAO = new TaskDAO(session);
@@ -55,9 +57,9 @@ public class DashboardService extends RestProvider {
 
             outcome.addPayload("taskPriorityStat", taskPriorityStatList);
             outcome.addPayload("taskStatusStat", taskStatusStatList);
-            outcome.addPayload("tasksDueToday", tasksDueToday);
-            outcome.addPayload("tasksIn7Day", tasksIn7Day);
-            outcome.addPayload("tasksExpired", tasksExpired);
+         //   outcome.addPayload("tasksDueToday", tasksDueToday);
+         //   outcome.addPayload("tasksIn7Day", tasksIn7Day);
+         //   outcome.addPayload("tasksExpired", tasksExpired);
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
