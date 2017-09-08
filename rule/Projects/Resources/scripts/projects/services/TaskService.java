@@ -45,6 +45,7 @@ import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.constants.ApprovalResultType;
 import workflow.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
+import workflow.model.embedded.Block;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -439,11 +440,14 @@ public class TaskService extends RestProvider {
 
         if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
-            Approver approver = lifecycle.getProcessingBlock().getCurrentApprover();
-            if (approver != null && approver.getEmployee().getUserID().equals(session.getUser().getId())) {
-                actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
-                actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
-                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+            Block processingBlock = lifecycle.getProcessingBlock();
+            if (processingBlock != null) {
+                Approver approver = processingBlock.getCurrentApprover();
+                if (approver != null && approver.getEmployee().getUserID().equals(session.getUser().getId())) {
+                    actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
+                    actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
+                    actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+                }
             }
         } else {
             if (taskDomain.taskIsEditable(task)) {
