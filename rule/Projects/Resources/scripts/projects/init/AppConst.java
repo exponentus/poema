@@ -12,6 +12,6 @@ public class AppConst extends DefaultAppConst {
     public static String NAME_POR = "Projetos";
     public static String NAME_SPA = "Proyectos";
     public static String BASE_URL = "/" + NAME + "/";
-    public static final String[] ROLES = {CODE + "_task_moderator", CODE + "_reporter"};
+    public static String[] ROLES = {CODE + "_task_moderator", CODE + "_reporter",CODE + "_supervisor"};
     public static final InterfaceType AVAILABLE_MODE[] = {InterfaceType.SPA};
 }
