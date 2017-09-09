@@ -3,7 +3,7 @@ package workflow.services;
 import com.exponentus.common.domain.IDTODomain;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;

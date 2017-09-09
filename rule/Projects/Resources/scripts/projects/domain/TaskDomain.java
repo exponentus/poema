@@ -5,6 +5,7 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.dto.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -185,20 +186,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
         // }
     }
 
-    public void calculateReaders(Task task) {
-        if (task.getStatus() != TaskStatusType.DRAFT) {
+    public void calculateReaders(Task task) throws DAOException {
+       EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+       ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + EnvConst.SUPERVISOR_ROLE_NAME);
+       for(Employee sv:supervisors.getResult()){
+           task.addReader(sv.getUserID());
+       }
 
-            //	User assigneeUser = new User();
-            //	assigneeUser.setId(task.getAssignee());
-
-            //	task.addReader(assigneeUser);
-            //	task.addReaders(task.getObservers());
-
-        }
-
-        if (task.getParent() != null) {
-            //task.getParent().addReaders(task.getReaders());
-        }
     }
 
     public void acknowledgedTask(Task task, User user) throws DTOException {

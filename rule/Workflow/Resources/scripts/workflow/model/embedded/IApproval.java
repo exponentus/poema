@@ -1,6 +1,6 @@
 package workflow.model.embedded;
 
-import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.user.IUser;
 import reference.model.constants.ApprovalSchemaType;
 import staff.model.Employee;

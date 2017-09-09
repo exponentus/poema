@@ -4,14 +4,18 @@ import administrator.model.User;
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.dto.ACL;
+import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +41,7 @@ public class ProjectDomain extends CommonDomain<Project> {
         return null;
     }
 
-    public void fillFromDto(Project project, Project dto, User author) {
+    public void fillFromDto(Project project, Project dto, User author) throws DAOException {
         if (project.isNew()) {
             project.setAuthor(author);
         }
@@ -57,7 +61,7 @@ public class ProjectDomain extends CommonDomain<Project> {
         calculateReaders(project);
     }
 
-    public void calculateReaders(Project project) {
+    public void calculateReaders(Project project) throws DAOException {
         Set<Long> readers = new HashSet<>();
         try {
             readers.add(project.getAuthor().getId());
@@ -71,6 +75,12 @@ public class ProjectDomain extends CommonDomain<Project> {
         }
         if (project.getObservers() != null) {
             readers.addAll(project.getObservers());
+        }
+
+        EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + EnvConst.SUPERVISOR_ROLE_NAME);
+        for(Employee sv:supervisors.getResult()){
+            readers.add(sv.getUserID());
         }
 
         project.setReaders(readers);

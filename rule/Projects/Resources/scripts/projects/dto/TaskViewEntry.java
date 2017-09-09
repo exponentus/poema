@@ -1,6 +1,6 @@
 package projects.dto;
 
-import com.exponentus.runtimeobj.IAppEntity;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import projects.init.AppConst;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;

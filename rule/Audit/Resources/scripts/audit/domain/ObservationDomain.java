@@ -7,7 +7,7 @@ import audit.model.constants.ObservationStatusType;
 import com.exponentus.common.dto.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.ISimpleAppEntity;
+import com.exponentus.dataengine.jpa.ISimpleAppEntity;
 import com.exponentus.user.IUser;
 import reference.model.WorkType;
 

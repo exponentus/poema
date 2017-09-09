@@ -5,9 +5,7 @@ import administrator.model.User;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
-import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
-import com.exponentus.extconnect.IMonitoringDAO;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -233,10 +231,10 @@ public class TaskService extends RestProvider {
 
             TaskDomain taskDomain = new TaskDomain(session);
             taskDomain.fillFromDto(task, taskDto);
-            IMonitoringDAO mDao = Environment.getMonitoringDAO();
+           // IMonitoringDAO mDao = Environment.getMonitoringDAO();
 
             if (taskDto.isNew()) {
-                RegNum rn = new com.exponentus.runtimeobj.RegNum();
+                RegNum rn = new RegNum();
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
                 task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
