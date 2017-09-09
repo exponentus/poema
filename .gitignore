@@ -12,11 +12,14 @@ cfg.xml
 /resources/backup/**
 #tmp folder
 /tmp/
-/rule/*/Resources/report/templates/*.jasper
-/rule/*/Resources/report/.metadata/**
-/rule/*/Resources/report/templates/.settings/**
-/rule/*/Resources/report/templates/.classpath
-/rule/*/Resources/report/templates/.project
+# Jasper reports resources #
+##################
+/rule/*/Resources/report/templates/prj/*.jasper
+/rule/*/Resources/report/templates/.metadata/**
+/rule/*/Resources/report/templates/prj/.settings/**
+/rule/*/Resources/report/templates/prj/.classpath
+/rule/*/Resources/report/templates/prj/.project
+/rule/*/Resources/report/templates/prj/bin
 # Idea resources #
 ##################
 .idea
@@ -34,5 +37,4 @@ cfg.xml
 #
 node_modules/
 .vscode/
-/webserver/
 /webapps/Workspace/manifest.appcache
