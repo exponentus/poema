@@ -12,14 +12,6 @@ cfg.xml
 /resources/backup/**
 #tmp folder
 /tmp/
-# Jasper reports resources #
-##################
-/rule/*/Resources/report/templates/prj/*.jasper
-/rule/*/Resources/report/templates/.metadata/**
-/rule/*/Resources/report/templates/prj/.settings/**
-/rule/*/Resources/report/templates/prj/.classpath
-/rule/*/Resources/report/templates/prj/.project
-/rule/*/Resources/report/templates/prj/bin
 # Idea resources #
 ##################
 .idea
