@@ -1,5 +1,5 @@
 $orgname$ 
-Dear *$moderator$*,
+Dear **$moderator$**,
 there is task for moderation
 `$regNumber$` $title$
 _Click >_ $url$

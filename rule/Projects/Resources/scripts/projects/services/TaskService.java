@@ -444,7 +444,7 @@ public class TaskService extends RestProvider {
                 if (approver != null && approver.getEmployee().getUserID().equals(session.getUser().getId())) {
                     actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
                     actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
-                    actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+                    //actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
                 }
             }
         } else {
@@ -460,7 +460,9 @@ public class TaskService extends RestProvider {
             if (taskDomain.userCanDoResolution(task, (User) session.getUser())) {
                 actionBar.addAction(
                         new Action(ActionType.CUSTOM_ACTION).id("task_complete").caption("complete_task").icon("fa fa-check-square-o"));
-                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+                if (task.getApprovalStatus() != ApprovalStatusType.PENDING) {
+                    actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+                }
             }
             if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));

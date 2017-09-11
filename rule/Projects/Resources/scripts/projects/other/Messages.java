@@ -312,8 +312,8 @@ public class Messages {
 			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			Block block = task.getBlocks().get(0);
-			Employee employee = block.getCurrentApprover().getEmployee();
-			memo.addVar("moderator",employee.getName());
+			Employee moderator = block.getCurrentApprover().getEmployee();
+			memo.addVar("moderator",moderator.getName());
 
 			User user = null;
 
@@ -327,7 +327,7 @@ public class Messages {
 			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
 
 			if (user != null) {
-				String slackAddr = user.getSlack();
+				String slackAddr = moderator.getUser().getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
 					SlackAgent sa = new SlackAgent(msgTemplate);
 					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
@@ -337,7 +337,7 @@ public class Messages {
 				}
 
 				List<String> recipients = new ArrayList<>();
-				recipients.add(task.getAuthor().getEmail());
+				recipients.add(moderator.getUser().getEmail());
 				MailAgent ma = new MailAgent(msgTemplate);
 				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_to_moderate", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
