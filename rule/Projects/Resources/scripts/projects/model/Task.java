@@ -107,11 +107,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
     @OneToMany(mappedBy = "parent")
     private List<Task> subtasks;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "task_id")
-    @CascadeOnDelete
-    private List<Comment> comments;
 
     @JsonIgnore
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -288,10 +283,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
 
     public void setSubtasks(List<Task> subtasks) {
         this.subtasks = subtasks;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
     }
 
     public List<Request> getRequests() {
