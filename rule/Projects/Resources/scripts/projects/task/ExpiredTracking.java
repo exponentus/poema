@@ -18,6 +18,7 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
+import projects.init.AppConst;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Command(name = "expired_tracking", trigger = Trigger.EVERY_NIGHT)
+@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();

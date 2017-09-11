@@ -5,7 +5,7 @@ import com.exponentus.common.init.DefaultAppConst;
 import com.exponentus.env.EnvConst;
 
 public class AppConst extends DefaultAppConst {
-    public static String CODE = "prj";
+    public static final String CODE = "prj";
     public static String NAME = "Projects";
     public static String NAME_ENG = "Projects";
     public static String NAME_RUS = "Проекты";

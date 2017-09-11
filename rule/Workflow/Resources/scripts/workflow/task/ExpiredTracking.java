@@ -1,8 +1,5 @@
 package workflow.task;
 
-import java.util.Date;
-import java.util.List;
-
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
@@ -10,15 +7,16 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
-
 import reference.dao.TagDAO;
 import reference.model.Tag;
 import workflow.dao.AssignmentDAO;
-import workflow.dao.filter.AssignmentFilter;
+import workflow.init.AppConst;
 import workflow.model.Assignment;
-import workflow.model.constants.ControlStatusType;
 
-@Command(name = "expired_tracking", trigger = Trigger.EVERY_NIGHT)
+import java.util.Date;
+import java.util.List;
+
+@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();
