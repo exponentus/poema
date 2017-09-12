@@ -38,36 +38,36 @@ public class Report500Profile extends AbstractProfileProfile {
             for(Employee employee:employeeDAO.findAll().getResult()){
                 ViewPage<TaskViewEntry> res = dao.findCreatedByUser(employee.getUser(),0,0);
                 if (res.getCount() > 0){
-                    Report500POJO report500POJO = new Report500POJO();
-                    report500POJO.user = employee.getName();
+                    Report500POJO report = new Report500POJO();
+                    report.user = employee.getName();
                     for (TaskViewEntry entry:res.getResult()){
                         switch(entry.status){
                             case DRAFT:
-                                report500POJO.draft ++;
+                                report.draft ++;
                                 break;
                             case PROCESSING:
-                                report500POJO.processing ++;
+                                report.processing ++;
                                 break;
                             case COMPLETED:
-                                report500POJO.completed ++;
+                                report.completed ++;
                                 break;
                             case CANCELLED:
-                                report500POJO.cancelled ++;
+                                report.cancelled ++;
                                 break;
                             case OPEN:
-                                report500POJO.open ++;
+                                report.open ++;
                                 break;
                             case PENDING:
-                                report500POJO.pending ++;
+                                report.pending ++;
                                 break;
                             case POSTPONED:
-                                report500POJO.postponed ++;
+                                report.postponed ++;
                                 break;
 
                         }
-                        report500POJO.total ++;
+                        report.total ++;
                     }
-                    result.add(report500POJO);
+                    result.add(report);
                 }
             }
 
