@@ -6,6 +6,7 @@ package workflow.model.constants;
  */
 public enum ApprovalStatusType {
 	UNKNOWN(0), DRAFT(80), PENDING(81), FINISHED(82), AWAITING(83), REJECTED(84), REGISTERED(85);
+	/***/
 
 	private int code;
 
