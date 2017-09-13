@@ -1,12 +1,17 @@
 package projects.model;
 
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
+import com.exponentus.common.dto.embedded.TimeLine;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.common.model.converter.TimeLineConverter;
+import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
 import com.exponentus.extconnect.IOfficeFrameDataProvider;
-import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,7 +48,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "prj__tasks")
-public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval {
+public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
@@ -83,6 +88,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
 
     private Long assignee;
 
+    @Convert(converter = TimeLineConverter.class)
+    @Column(name="time_line", columnDefinition = "jsonb")
+    private TimeLine timeLine;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date startDate;
@@ -186,6 +194,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
 
     public void setStatus(TaskStatusType status) {
         this.status = status;
+        Date current = new Date();
+        statusDate = current;
+        getTimeLine().addStage(current, TaskStatusType.OPEN.name());
     }
 
     public Date getStatusDate() {
@@ -224,6 +235,18 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
     public Long getAssignee() {
         return assignee;
     }
+
+    public TimeLine getTimeLine() {
+        if (timeLine == null){
+            timeLine = new TimeLine();
+        }
+        return timeLine;
+    }
+
+    public void setTimeLine(TimeLine timeLine) {
+        this.timeLine = timeLine;
+    }
+
 
     public void setAssignee(Long assignee) {
         this.assignee = assignee;
@@ -377,7 +400,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
 
     @Override
     public void setApprovalStatus(ApprovalStatusType as) {
+        Date current = new Date();
         approvalStatus = as;
+        getTimeLine().addApprovalStage(current, as);
     }
 
     @Override
@@ -418,4 +443,16 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval 
             return project;
         }
     }
+
+    @Override
+    public LifeCycleNode getLifeCycle(IUser user, UUID id) {
+        return null;
+    }
+
+    @Override
+    public LifeCycleNode getNode(IUser user, UUID id) {
+        return null;
+    }
+
+
 }

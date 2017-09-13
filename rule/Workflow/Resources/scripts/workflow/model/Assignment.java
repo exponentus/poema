@@ -3,10 +3,13 @@ package workflow.model;
 import com.exponentus.common.dto.ILifeCycle;
 import com.exponentus.common.dto.constants.LifeCycleNodeType;
 import com.exponentus.common.dto.embedded.LifeCycleNode;
+import com.exponentus.common.dto.embedded.TimeLine;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.ControlType;
 import reference.model.Tag;
 import staff.model.Employee;
@@ -282,5 +285,10 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
         lc.setUrl(getURL());
 
         return lc;
+    }
+
+    @Override
+    public TimeLine getTimeLine() {
+        return null;
     }
 }

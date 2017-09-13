@@ -5,6 +5,7 @@
 	<converter class="com.exponentus.common.model.converter.ListOfTextConverter"/>
 	<converter class="com.exponentus.common.model.constants.converter.ReportTypeConverter"/>
     <converter class="com.exponentus.common.model.constants.converter.SolutionTypeConverter"/>
+    <converter class="com.exponentus.common.model.converter.TimeLineConverter"/>
 <!-- 	<converter class="com.exponentus.common.model.util.ReaderConverter"/> -->
 
 	

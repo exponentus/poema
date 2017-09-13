@@ -64,7 +64,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setInitiative(initiative);
         task.setTaskType(taskType);
         task.setStatus(TaskStatusType.DRAFT);
-        task.setStatusDate(new Date());
         task.setProject(project);
         if (demand != null) {
             task.setDemand(demand);
@@ -145,19 +144,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public void changeStatus(Task task, TaskStatusType status) {
         task.setStatus(status);
-        /*
-         * Если задача становится draft, то перестает быть видной для
-		 * исполнителей и обсерверов. Т.е. Ситуация автор вдруг понял, что
-		 * задание ещё не достаточно четко сформулировано или что-то изменилось
-		 * в требованиях и т.д.
-		 */
+
         if (status == TaskStatusType.DRAFT) {
             task.resetReadersEditors();
             task.addReaderEditor(task.getAuthor());
         } else {
             task.addReaderEditor(task.getAuthor());
         }
-        task.setStatusDate(new Date());
     }
 
     public void calculateStatus(Task task) throws DAOException, RestServiceException {

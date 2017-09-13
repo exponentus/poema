@@ -3,6 +3,7 @@ package workflow.model;
 import com.exponentus.common.dto.ILifeCycle;
 import com.exponentus.common.dto.constants.LifeCycleNodeType;
 import com.exponentus.common.dto.embedded.LifeCycleNode;
+import com.exponentus.common.dto.embedded.TimeLine;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
@@ -196,5 +197,10 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
 		}
 		lc.setUrl(getURL());
 		return lc;
+	}
+
+	@Override
+	public TimeLine getTimeLine() {
+		return null;
 	}
 }
