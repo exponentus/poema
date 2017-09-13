@@ -26,7 +26,7 @@ import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.other.Messages;

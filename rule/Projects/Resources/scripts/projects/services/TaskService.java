@@ -41,7 +41,7 @@ import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 

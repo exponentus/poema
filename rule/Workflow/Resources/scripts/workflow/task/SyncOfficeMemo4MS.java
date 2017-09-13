@@ -26,7 +26,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
 import java.io.File;

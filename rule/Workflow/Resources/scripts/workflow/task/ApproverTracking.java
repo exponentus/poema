@@ -13,7 +13,7 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;

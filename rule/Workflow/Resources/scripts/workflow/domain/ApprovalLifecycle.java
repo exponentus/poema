@@ -7,7 +7,7 @@ import staff.model.Employee;
 import workflow.domain.exception.ApprovalException;
 import workflow.domain.exception.ApprovalExceptionType;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;

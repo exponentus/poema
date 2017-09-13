@@ -7,7 +7,7 @@ import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.scripting.actions.Action;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.IApproval;
 import workflow.ui.ActionFactory;
 

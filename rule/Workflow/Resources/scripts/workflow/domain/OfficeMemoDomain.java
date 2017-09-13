@@ -16,7 +16,7 @@ import staff.model.embedded.Observer;
 import workflow.dao.OfficeMemoDAO;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
 import java.util.*;

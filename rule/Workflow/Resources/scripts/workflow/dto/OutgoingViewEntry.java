@@ -3,7 +3,7 @@ package workflow.dto;
 import com.exponentus.localization.constants.LanguageCode;
 import workflow.init.AppConst;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import java.util.Date;
 import java.util.List;

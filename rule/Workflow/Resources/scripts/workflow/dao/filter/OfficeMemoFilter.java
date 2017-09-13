@@ -4,7 +4,7 @@ import com.exponentus.scripting.WebFormData;
 import staff.model.Employee;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import java.util.UUID;
 

@@ -10,7 +10,7 @@ import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
 import java.util.ArrayList;

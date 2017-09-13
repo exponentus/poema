@@ -22,7 +22,7 @@ import workflow.domain.exception.ApprovalException;
 import workflow.domain.exception.ApprovalExceptionType;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.model.embedded.Block;

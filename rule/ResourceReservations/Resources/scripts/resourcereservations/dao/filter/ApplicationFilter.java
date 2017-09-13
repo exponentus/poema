@@ -5,7 +5,7 @@ import reference.model.MeetingRoom;
 import reference.model.Tag;
 import reference.model.Vehicle;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -7,9 +7,9 @@ import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalTypeConverter;
 import workflow.domain.exception.ApprovalException;
 import workflow.domain.exception.ApprovalExceptionType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
-import workflow.model.constants.converter.ApprovalStatusTypeConverter;
+import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 
 import javax.persistence.*;
 import java.util.List;

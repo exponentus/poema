@@ -6,7 +6,7 @@ import reference.model.DocumentType;
 import staff.model.Organization;
 import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import java.util.UUID;
 

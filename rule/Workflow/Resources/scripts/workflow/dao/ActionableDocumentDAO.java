@@ -10,7 +10,7 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
 import staff.model.Employee;
 import workflow.model.ActionableDocument;
-import workflow.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
