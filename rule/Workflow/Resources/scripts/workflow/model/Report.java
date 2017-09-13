@@ -3,7 +3,7 @@ package workflow.model;
 import com.exponentus.common.dto.ILifeCycle;
 import com.exponentus.common.dto.constants.LifeCycleNodeType;
 import com.exponentus.common.dto.embedded.LifeCycleNode;
-import com.exponentus.common.dto.embedded.TimeLine;
+import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.constants.SolutionType;
