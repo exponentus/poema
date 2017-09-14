@@ -1,43 +1,32 @@
 package projects.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.apache.commons.lang3.StringUtils;
-import org.eclipse.persistence.annotations.CascadeOnDelete;
-
+import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
+import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.common.model.embedded.TimeLine;
+import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
 import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
 @JsonRootName("request")
 @Entity
 @Table(name = "prj__requests")
-public class Request extends EmbeddedSecureHierarchicalEntity {
+public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
 
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -139,5 +128,33 @@ public class Request extends EmbeddedSecureHierarchicalEntity {
 	@Override
 	public String getTitle() {
 		return StringUtils.abbreviate(comment, 140);
+	}
+
+	@Override
+	public LifeCycleNode getLifeCycle(IUser user, UUID id) {
+		return null;
+	}
+
+	@Override
+	public LifeCycleNode getNode(IUser user, UUID id) {
+		LifeCycleNode lc = new LifeCycleNode();
+
+		lc.setType(LifeCycleNodeType.REPORT);
+		if (id.equals(this.id)){
+			lc.setCurrent(true);
+		}
+
+		if (user.isSuperUser() || getReaders().contains(user.getId())){
+			lc.setAvailable(true);
+			lc.setTitle(getTitle());
+			lc.setStatus(resolution.name());
+		}
+		lc.setUrl(getURL());
+		return lc;
+	}
+
+	@Override
+	public TimeLine getTimeLine() {
+		return null;
 	}
 }

@@ -1,11 +1,14 @@
 package projects.model;
 
 import com.exponentus.common.dto.ILifeCycle;
+import com.exponentus.common.dto.constants.LifeCycleNodeType;
 import com.exponentus.common.dto.embedded.LifeCycleNode;
-import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
+import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
@@ -29,10 +32,8 @@ import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
 import workflow.domain.ApprovalLifecycle;
 import workflow.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.constants.DecisionType;
 import workflow.model.constants.converter.ApprovalResultTypeConverter;
-import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.model.embedded.IApproval;
@@ -196,7 +197,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.status = status;
         Date current = new Date();
         statusDate = current;
-        getTimeLine().addStage(current, TaskStatusType.OPEN.name());
+        getTimeLine().addStage(current, status.name());
     }
 
     public Date getStatusDate() {
@@ -446,12 +447,40 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Override
     public LifeCycleNode getLifeCycle(IUser user, UUID id) {
-        return null;
+        LifeCycleNode lc = getNode(user, id);
+
+
+
+        if (subtasks != null) {
+            for (Task a : subtasks) {
+                lc.addResponse(a.getNode(user, id));
+            }
+        }
+
+        if (requests != null) {
+            for (Request a : requests) {
+                lc.addResponse(a.getNode(user, id));
+            }
+        }
+
+        return lc;
     }
 
     @Override
     public LifeCycleNode getNode(IUser user, UUID id) {
-        return null;
+        LifeCycleNode lc = new LifeCycleNode();
+        lc.setType(LifeCycleNodeType.ASSIGNMENT);
+        if (id.equals(this.id)){
+            lc.setCurrent(true);
+        }
+
+        if (user.isSuperUser() || getReaders().contains(user.getId())){
+            lc.setAvailable(true);
+            lc.setTitle(getTitle());
+            lc.setStatus(getApprovalStatus().name());
+        }
+        lc.setUrl(getURL());
+        return lc;
     }
 
 
