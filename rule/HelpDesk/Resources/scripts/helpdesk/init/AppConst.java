@@ -5,7 +5,7 @@ import com.exponentus.common.init.DefaultAppConst;
 import administrator.model.constants.InterfaceType;
 
 public class AppConst extends DefaultAppConst {
-	public static String CODE = "hd";
+	public static final String CODE = "hd";
 	public static String NAME = "HelpDesk";
 	public static String NAME_ENG = "HelpDesk";
 	public static String NAME_RUS = "Служба поддержки";
@@ -16,4 +16,5 @@ public class AppConst extends DefaultAppConst {
 	public static String BASE_URL = "/" + NAME + "/";
 	public static final InterfaceType AVAILABLE_MODE[] = { InterfaceType.SPA };
 	public static String DEFAULT_PAGE = "index";
+	public static boolean FORCE_DEPLOYING = true;
 }

@@ -75,6 +75,7 @@ public class ApproverTracking extends Do {
 		List<Class<?>> classes = new ArrayList<Class<?>>();
 		classes.add(workflow.model.OfficeMemo.class);
 		classes.add(workflow.model.Outgoing.class);
+		classes.add(projects.model.Task.class);
 		return classes;
 	}
 

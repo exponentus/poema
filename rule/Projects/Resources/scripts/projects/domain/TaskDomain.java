@@ -44,7 +44,7 @@ import java.util.List;
 
 public class TaskDomain extends ApprovalDomain<Task> {
 
-    private static final String MODERATOR_ROLE_NAME = AppConst.ROLES[0];
+    private static String MODERATOR_ROLE_NAME = AppConst.ROLES[0];
 
     public TaskDomain(_Session ses) throws DAOException {
         super(ses);
@@ -310,7 +310,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 block.setApprovers(approvers);
                 blocks.add(block);
             } else {
-                throw new RestServiceException("moderator has not been found");
+                throw new RestServiceException("There is no user assigned as moderator");
             }
         } else {
             throw new RestServiceException("role \"" + MODERATOR_ROLE_NAME + "\" has not been found");

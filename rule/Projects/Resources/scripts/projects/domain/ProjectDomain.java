@@ -17,8 +17,13 @@ import projects.model.constants.ProjectStatusType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public class ProjectDomain extends CommonDomain<Project> {
 
@@ -32,7 +37,8 @@ public class ProjectDomain extends CommonDomain<Project> {
         project.setAuthor(author);
         project.setComment("");
         project.setStatus(ProjectStatusType.DRAFT);
-
+        LocalDate lastDay = LocalDate.now().with(lastDayOfYear());
+        project.setFinishDate(Date.from(lastDay.atStartOfDay(ZoneId.systemDefault()).toInstant()));
         return project;
     }
 

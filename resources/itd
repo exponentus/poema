@@ -16,7 +16,7 @@ run task fill_document_types
 run task fill_document_subjs
 run task fill_vehicles
 run task fill_organization_labels
-stini staff.init.FillDefaultRoles
+run task staff_fill_roles
 run task fill_individual_labels
 run task fill_tags
 run task fill_positions
@@ -26,6 +26,8 @@ run task fill_demand_types
 run task fill_control_types
 run task gen_test_orgs_xls
 run task gen_test_emps
+run task gen_default_reports
+run task prj_fill_roles
 echo ***********************************************************
 echo *                     Finished                            *
 echo ***********************************************************

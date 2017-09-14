@@ -7,7 +7,7 @@
     <property name="vendor" value="exponentus.com" />
 
 	<!-- Application path -->
-	<property name="application.dir" value="run" />
+	<property name="application.dir" value="/home/aida/tmp/testsemantyca" />
 	<!-- Temporary folder path -->
 	<property name="tmp.dir" value="tmp" />
 	<!-- Directory for backup  -->
@@ -264,9 +264,7 @@
 		<copy overwrite="true" file="${nb_prj.dir}/start.sh" tofile="${application.dir}/start.sh" />
 		<copy overwrite="true" file="${nb_prj.dir}/tcnative-1.dll" tofile="${application.dir}/tcnative-1.dll" />
 		<copy overwrite="true" file="${nb_prj.dir}/ip-to-country.bin" tofile="${application.dir}/ip-to-country.bin" />
-		<echo>Copying main dictionary</echo>
-		<copy overwrite="true" file="${nb_prj.dir}/resources/vocabulary.xml" tofile="${application.dir}/resources/vocabulary.xml" />
-		
+
 
 	</target>
 </project>
