@@ -51,6 +51,12 @@ public class Report500Profile extends AbstractProfileProfile {
                             case COMPLETED:
                                 report.completed ++;
                                 break;
+                            case FINISHED:
+                                report.completed ++;
+                                break;
+                            case PROCESSED:
+                                report.completed ++;
+                                break;
                             case CANCELLED:
                                 report.cancelled ++;
                                 break;
