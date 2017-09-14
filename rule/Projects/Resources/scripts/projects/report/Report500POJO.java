@@ -12,6 +12,7 @@ public class Report500POJO {
     public int processing;
     public int completed;
     public int pending;
+    public int postponed;
 
     public int getDraft() {
         return draft;
@@ -53,7 +54,6 @@ public class Report500POJO {
         this.postponed = postponed;
     }
 
-    public int postponed;
 
     public String getUser() {
         return user;

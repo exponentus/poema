@@ -309,9 +309,9 @@ public class TaskDAO extends DAO<Task, UUID> {
             Root<Task> root = cq.from(Task.class);
 
             Predicate condition = cb.equal(root.get("author"), user);
-            condition = cb.and(
+          /*  condition = cb.and(
                     cb.or(cb.equal(root.get("status"), TaskStatusType.PROCESSING), cb.equal(root.get("status"), TaskStatusType.OPEN)),
-                    condition);
+                    condition);*/
 
             cq.select(cb.construct(TaskViewEntry.class, root.get("id"), root.get("regNumber"), root.get("taskType"), root.get("status"),
                     root.get("priority"), root.get("startDate"), root.get("dueDate"), root.get("tags")))
