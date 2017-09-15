@@ -177,9 +177,10 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
+        <!-- Reference module entities -->
         <class>reference.model.Tag</class>
+        <!-- DataExport module entities-->
         <class>dataexport.model.ReportProfile</class>
-
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -192,17 +193,17 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
-        <!-- Common Staff module entities -->
+        <!-- Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
         <class>staff.model.Employee</class>
         <class>staff.model.Role</class>
         <class>staff.model.OrganizationLabel</class>
-        <!-- Common Reference module entities -->
+        <!-- Reference module entities -->
         <class>reference.model.Position</class>
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
-        <!-- Monitoring module entities (if the module activated) -->
+        <!-- Monitoring module entities -->
         <class>monitoring.model.UserActivity</class>      
         <class>monitoring.model.DocumentActivity</class>        
         <class>monitoring.model.Statistic</class>
