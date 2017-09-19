@@ -310,7 +310,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 block.setApprovers(approvers);
                 blocks.add(block);
             } else {
-                throw new RestServiceException("There is no user assigned as moderator");
+                throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
             }
         } else {
             throw new RestServiceException("role \"" + MODERATOR_ROLE_NAME + "\" has not been found");
