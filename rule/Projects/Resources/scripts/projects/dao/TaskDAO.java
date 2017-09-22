@@ -3,6 +3,7 @@ package projects.dao;
 import administrator.model.User;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
+import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
@@ -19,7 +20,6 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Block;
 
 import javax.persistence.EntityManager;
@@ -591,37 +591,6 @@ public class TaskDAO extends DAO<Task, UUID> {
             List<TaskViewEntry> result = typedQuery.getResultList();
 
             return new ViewPage<>(result, countQuery.getSingleResult(), 0, 0);
-        } finally {
-            em.close();
-        }
-    }
-
-    public List<CountStat> getStatTaskPriority() {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<CountStat> cq = cb.createQuery(CountStat.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Predicate condition = null;
-
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
-            }
-
-            cq.select(cb.construct(
-                    CountStat.class,
-                    root.get("priority"),
-                    cb.count(root.get("priority")))
-            )
-                    .groupBy(root.get("priority"));
-
-            if (condition != null) {
-                cq.where(condition);
-            }
-
-            TypedQuery<CountStat> typedQuery = em.createQuery(cq);
-            return typedQuery.getResultList();
         } finally {
             em.close();
         }
