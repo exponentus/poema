@@ -4,6 +4,7 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
+import dataexport.model.constants.ExportFormatType;
 import monitoring.dao.StatisticDAO;
 import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
@@ -62,6 +63,8 @@ public class DashboardService extends RestProvider {
 
 //            outcome.addPayload("taskPriorityStat", taskPriorityStatList);
             outcome.addPayload("taskStatusStat", taskStatusStatList);
+            outcome.addPayload("exportFormatType", ExportFormatType.values());
+
             //   outcome.addPayload("tasksDueToday", tasksDueToday);
             //   outcome.addPayload("tasksIn7Day", tasksIn7Day);
             //   outcome.addPayload("tasksExpired", tasksExpired);
