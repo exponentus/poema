@@ -2,7 +2,8 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.LifeCycle;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -26,7 +27,6 @@ import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
 import workflow.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.other.Messages;
@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+
 
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)

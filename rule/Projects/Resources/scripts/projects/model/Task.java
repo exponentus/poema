@@ -1,14 +1,14 @@
 package projects.model;
 
-import com.exponentus.common.dto.ILifeCycle;
-import com.exponentus.common.dto.constants.LifeCycleNodeType;
-import com.exponentus.common.dto.embedded.LifeCycleNode;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
 import com.exponentus.common.model.embedded.TimeLine;
+import com.exponentus.common.ui.ILifeCycle;
+import com.exponentus.common.ui.constants.LifeCycleNodeType;
+import com.exponentus.common.ui.embedded.LifeCycleNode;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;

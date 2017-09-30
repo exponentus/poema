@@ -4,10 +4,10 @@ import administrator.model.User;
 import audit.model.Observation;
 import audit.model.Project;
 import audit.model.constants.ObservationStatusType;
-import com.exponentus.common.dto.ACL;
+import com.exponentus.common.ui.ACL;
+import com.exponentus.dataengine.jpa.ISimpleAppEntity;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.dataengine.jpa.ISimpleAppEntity;
 import com.exponentus.user.IUser;
 import reference.model.WorkType;
 

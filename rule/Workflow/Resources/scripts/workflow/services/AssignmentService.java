@@ -1,8 +1,8 @@
 package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;

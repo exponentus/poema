@@ -1,6 +1,6 @@
 package resourcereservations.domain;
 
-import com.exponentus.common.dto.ACL;
+import com.exponentus.common.ui.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;

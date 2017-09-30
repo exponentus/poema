@@ -2,8 +2,8 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.LifeCycle;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -36,6 +36,7 @@ import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 
 @Path("incomings")
 @Produces(MediaType.APPLICATION_JSON)

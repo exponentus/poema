@@ -2,7 +2,8 @@ package projects.domain;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.ACL;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -34,7 +35,6 @@ import workflow.domain.ApprovalDomain;
 import workflow.domain.ApprovalLifecycle;
 import workflow.domain.exception.ApprovalException;
 import workflow.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 

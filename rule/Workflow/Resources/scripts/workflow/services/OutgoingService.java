@@ -2,7 +2,8 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.dto.LifeCycle;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -26,7 +27,6 @@ import workflow.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.Outgoing;
 import workflow.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.model.embedded.Approver;
 import workflow.model.embedded.Block;
 import workflow.other.Messages;
