@@ -403,7 +403,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public void setApprovalStatus(ApprovalStatusType as) {
         Date current = new Date();
         approvalStatus = as;
-        getTimeLine().addApprovalStage(current, as);
+        //getTimeLine().addApprovalStage(current, as);
     }
 
     @Override
