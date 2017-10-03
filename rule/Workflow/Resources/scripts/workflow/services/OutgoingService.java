@@ -47,7 +47,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
     private ActionFactory action = new ActionFactory();
 
     @GET
-    public Response getView() {
+    public Response getViewPage() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
 

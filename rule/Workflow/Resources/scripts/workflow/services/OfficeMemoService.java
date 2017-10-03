@@ -49,7 +49,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
     private ActionFactory action = new ActionFactory();
 
     @GET
-    public Response getView() {
+    public Response getViewPage() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
 

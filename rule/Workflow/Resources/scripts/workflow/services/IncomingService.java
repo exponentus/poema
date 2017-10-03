@@ -45,7 +45,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
     private ActionFactory action = new ActionFactory();
 
     @GET
-    public Response getView() {
+    public Response getViewPage() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
 

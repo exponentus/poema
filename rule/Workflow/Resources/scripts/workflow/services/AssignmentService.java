@@ -52,21 +52,21 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     @GET
     @Path("my")
     public Response getMyAssignments() {
-        return getView("_my");
+        return getViewPage("_my");
     }
 
     @GET
     @Path("inbox")
     public Response getAssignmentsInbox() {
-        return getView("_inbox");
+        return getViewPage("_inbox");
     }
 
     @GET
-    public Response getAll() {
-        return getView("_all");
+    public Response getViewPage() {
+        return getViewPage("_all");
     }
 
-    public Response getView(String slug) {
+    public Response getViewPage(String slug) {
         _Session session = getSession();
         int pageSize = session.getPageSize();
         SortParams sortParams = getWebFormData().getSortParams(SortParams.desc("regDate"));
