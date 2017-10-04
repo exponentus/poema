@@ -361,7 +361,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     @JsonIgnore
     public List<Employee> getRecipientsAfterApproval() {
-        IOfficeFrameDataProvider dao = Environment.getExtUserDAO();
+        IOfficeFrameDataProvider dao = Environment.getOfficeFrameProvider();
         List<Employee> recipients = new ArrayList<Employee>();
         recipients.add((Employee) dao.getEmployee(assignee));
         for (Long userId : getObservers()) {
