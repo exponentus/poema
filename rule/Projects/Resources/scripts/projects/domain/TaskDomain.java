@@ -1,8 +1,14 @@
 package projects.domain;
 
 import administrator.model.User;
+import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -26,17 +32,11 @@ import projects.model.Task;
 import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
-import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import staff.dao.RoleDAO;
 import staff.model.Employee;
 import staff.model.Role;
 import workflow.domain.ApprovalDomain;
-import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.domain.exception.ApprovalException;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;

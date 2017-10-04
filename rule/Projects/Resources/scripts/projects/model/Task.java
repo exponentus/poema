@@ -1,10 +1,16 @@
 package projects.model;
 
+import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
-import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.*;
+import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
+import com.exponentus.common.model.constants.converter.ApprovalSchemaTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.common.ui.ILifeCycle;
 import com.exponentus.common.ui.constants.LifeCycleNodeType;
@@ -12,6 +18,7 @@ import com.exponentus.common.ui.embedded.LifeCycleNode;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
+import com.exponentus.extconnect.IExtUser;
 import com.exponentus.extconnect.IOfficeFrameDataProvider;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
@@ -26,17 +33,7 @@ import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
-import reference.model.constants.ApprovalSchemaType;
-import reference.model.constants.ApprovalType;
-import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
-import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.DecisionType;
-import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
-import com.exponentus.common.model.embedded.IApproval;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -360,9 +357,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Override
     @JsonIgnore
-    public List<Employee> getRecipientsAfterApproval() {
+    public List<IExtUser> getRecipientsAfterApproval() {
         IOfficeFrameDataProvider dao = Environment.getOfficeFrameProvider();
-        List<Employee> recipients = new ArrayList<Employee>();
+        List<IExtUser> recipients = new ArrayList<IExtUser>();
         recipients.add((Employee) dao.getEmployee(assignee));
         for (Long userId : getObservers()) {
             recipients.add((Employee) dao.getEmployee(userId));
@@ -414,7 +411,28 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public void backupContent() {
     }
 
+    @Deprecated
     @Override
+    public boolean userCanDoDecision(IExtUser emp) {
+        if (getApprovalStatus() == ApprovalStatusType.PENDING) {
+            Block block = ApprovalLifecycle.getProcessingBlock(this);
+            if (block != null) {
+                if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+                    Approver approver = block.getCurrentApprover();
+                    if (approver != null) {
+                        return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+                    }
+                } else if (block.getType() == ApprovalType.PARALLEL) {
+                    return block.getApprovers().stream()
+                            .filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
+                            .count() > 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Deprecated
     public boolean userCanDoDecision(Employee emp) {
         if (getApprovalStatus() == ApprovalStatusType.PENDING) {

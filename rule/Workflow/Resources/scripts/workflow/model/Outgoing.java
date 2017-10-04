@@ -7,6 +7,7 @@ import com.exponentus.common.ui.ILifeCycle;
 import com.exponentus.common.ui.constants.LifeCycleNodeType;
 import com.exponentus.common.ui.embedded.LifeCycleNode;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.extconnect.IExtUser;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -15,7 +16,6 @@ import reference.model.DocumentLanguage;
 import reference.model.DocumentSubject;
 import reference.model.DocumentType;
 import reference.model.Tag;
-import staff.model.Employee;
 import staff.model.Organization;
 import staff.model.embedded.Observer;
 import workflow.init.AppConst;
@@ -170,8 +170,8 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
 	}
 
 	@Override
-	public List<Employee> getRecipientsAfterApproval() {
-		List<Employee> recipients = new ArrayList<Employee>();
+	public List<IExtUser> getRecipientsAfterApproval() {
+		List<IExtUser> recipients = new ArrayList<IExtUser>();
 		// recipients.add(recipient);
 		return recipients;
 	}

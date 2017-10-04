@@ -1,5 +1,9 @@
 package resourcereservations.services;
 
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalType;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -13,7 +17,6 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
-import reference.model.constants.ApprovalType;
 import resourcereservations.constants.ActionFactory;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
@@ -21,9 +24,6 @@ import resourcereservations.domain.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.domain.exception.ApprovalException;
-import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.other.Messages;
 
 import javax.ws.rs.*;
@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+
 
 @Path("applications_for_vehicle")
 @Produces(MediaType.APPLICATION_JSON)

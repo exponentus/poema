@@ -1,27 +1,16 @@
 package resourcereservations.model;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-
+import com.exponentus.extconnect.IExtUser;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.model.ActionableDocument;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "rr__reservations")
@@ -133,8 +122,8 @@ public class Reservation extends ActionableDocument {
 	}
 
 	@Override
-	public List<Employee> getRecipientsAfterApproval() {
-		List<Employee> recipients = new ArrayList<Employee>();
+	public List<IExtUser> getRecipientsAfterApproval() {
+		List<IExtUser> recipients = new ArrayList<IExtUser>();
 		recipients.add(recipient);
 		return recipients;
 	}

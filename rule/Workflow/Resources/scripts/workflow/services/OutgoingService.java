@@ -2,7 +2,12 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalSchemaType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -17,18 +22,13 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.scripting.actions.ActionType;
 import com.exponentus.scripting.actions._ActionBar;
 import com.exponentus.user.IUser;
-import reference.model.constants.ApprovalSchemaType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.OutgoingDAO;
 import workflow.dao.filter.OutgoingFilter;
 import workflow.domain.OutgoingDomain;
-import com.exponentus.common.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.Outgoing;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 
@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 
 @Path("outgoings")
 @Produces(MediaType.APPLICATION_JSON)

@@ -3,8 +3,10 @@ package projects.other;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
+import com.exponentus.extconnect.IExtUser;
 import com.exponentus.localization.Vocabulary;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.log.CommonLogger;
@@ -16,8 +18,6 @@ import com.exponentus.user.IUser;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
-import staff.model.Employee;
-import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -312,7 +312,7 @@ public class Messages {
 			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
 			Block block = task.getBlocks().get(0);
-			Employee moderator = block.getCurrentApprover().getEmployee();
+			IExtUser moderator = block.getCurrentApprover().getEmployee();
 			memo.addVar("moderator",moderator.getName());
 
 			User user = null;
@@ -359,7 +359,7 @@ public class Messages {
 			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("author", task.getAuthor().getUserName());
 			Block block = task.getBlocks().get(0);
-			Employee employee = block.getApprovers().get(0).getEmployee();
+			IExtUser employee = block.getApprovers().get(0).getEmployee();
 			memo.addVar("moderator",employee.getName());
 
 			User user = null;

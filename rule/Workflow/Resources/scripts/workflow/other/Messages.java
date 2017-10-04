@@ -1,9 +1,15 @@
 package workflow.other;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.domain.exception.ApprovalExceptionType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.MsgException;
@@ -14,19 +20,13 @@ import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
 import com.exponentus.messaging.slack.SlackAgent;
-
-import administrator.model.User;
-import reference.model.constants.ApprovalType;
-import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.domain.exception.ApprovalException;
-import com.exponentus.common.domain.exception.ApprovalExceptionType;
+import com.exponentus.user.IUser;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
-import com.exponentus.common.model.embedded.Block;
-import com.exponentus.common.model.embedded.IApproval;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Messages {
 	protected static CommonLogger logger = new CommonLogger("Messaging");
@@ -43,7 +43,7 @@ public class Messages {
 	}
 
 	public void notifyAssignees(Assignment rez) {
-		User user = null;
+		IUser user = null;
 
 		Memo memo = new Memo();
 		memo.addVar("title", rez.getTitle());
@@ -85,7 +85,7 @@ public class Messages {
 	}
 
 	public void notifyAddressee(Incoming incoming) {
-		User user = null;
+		IUser user = null;
 
 		try {
 			user = incoming.getAddressee().getUser();
@@ -210,7 +210,7 @@ public class Messages {
 	}
 
 	private void sendToApprover(IApproval approval, Approver currentApprover, String title, String templateName) throws MsgException {
-		User user = null;
+		IUser user = null;
 
 		Memo memo = new Memo();
 		memo.addVar("approver", currentApprover.getEmployee().getName());

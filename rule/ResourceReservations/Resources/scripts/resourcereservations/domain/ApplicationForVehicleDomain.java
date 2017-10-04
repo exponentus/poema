@@ -1,22 +1,23 @@
 package resourcereservations.domain;
 
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
-import reference.model.constants.ApprovalType;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
-import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.domain.exception.ApprovalException;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class ApplicationForVehicleDomain {
 

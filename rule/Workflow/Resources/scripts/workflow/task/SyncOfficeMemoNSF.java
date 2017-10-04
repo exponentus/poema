@@ -4,6 +4,10 @@ import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.Attachment;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.legacy.ConvertorEnvConst;
 import com.exponentus.legacy.smartdoc.ImportNSF;
 import com.exponentus.rest.stream.TempFile;
@@ -14,17 +18,15 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
 import lotus.domino.*;
 import org.apache.commons.lang3.StringUtils;
-import reference.model.constants.ApprovalType;
 import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
 
 import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
+
+
 
 @Command(name = "import_sz_nsf")
 public class SyncOfficeMemoNSF extends ImportNSF {

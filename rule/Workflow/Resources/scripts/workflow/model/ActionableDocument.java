@@ -1,23 +1,20 @@
 package workflow.model;
 
-import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
-import com.exponentus.common.model.converter.ListOfTextConverter;
-import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import reference.model.constants.ApprovalSchemaType;
-import reference.model.constants.ApprovalType;
-import reference.model.constants.converter.ApprovalSchemaTypeConverter;
-import staff.model.Employee;
 import com.exponentus.common.domain.ApprovalLifecycle;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.constants.DecisionType;
+import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.common.model.constants.*;
 import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
+import com.exponentus.common.model.constants.converter.ApprovalSchemaTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
+import com.exponentus.common.model.converter.ListOfTextConverter;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.model.embedded.IApproval;
+import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.extconnect.IExtUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import staff.model.Employee;
 import workflow.model.embedded.IControlled;
 
 import javax.persistence.*;
@@ -129,7 +126,30 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 		this.version = version;
 	}
 
+
+
+	@Deprecated
 	@Override
+	public boolean userCanDoDecision(IExtUser emp) {
+		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
+			Block block = ApprovalLifecycle.getProcessingBlock(this);
+			if (block != null) {
+				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
+					Approver approver = block.getCurrentApprover();
+					if (approver != null) {
+						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+					}
+				} else if (block.getType() == ApprovalType.PARALLEL) {
+					return block.getApprovers().stream()
+							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
+							.count() > 0;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	@Deprecated
 	public boolean userCanDoDecision(Employee emp) {
 		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
@@ -192,7 +212,7 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 	}
 
 	@Override
-	public List<Employee> getRecipientsAfterApproval() {
+	public List<IExtUser> getRecipientsAfterApproval() {
 		return null;
 
 	}

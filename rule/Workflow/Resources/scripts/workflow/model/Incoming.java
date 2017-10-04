@@ -208,6 +208,8 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 		return AppConst.BASE_URL + "incomings/" + getIdentifier();
 	}
 
+
+
 	@Override
 	public LifeCycleNode getLifeCycle(IUser user, UUID id) {
 		LifeCycleNode lc = getNode(user, id);

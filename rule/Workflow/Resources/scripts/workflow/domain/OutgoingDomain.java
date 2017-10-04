@@ -3,6 +3,10 @@ package workflow.domain;
 import administrator.model.User;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalSchemaType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
@@ -13,14 +17,10 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
-import reference.model.constants.ApprovalSchemaType;
 import staff.dao.EmployeeDAO;
 import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
 import workflow.model.Outgoing;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.embedded.Block;
 
 import java.util.*;
 

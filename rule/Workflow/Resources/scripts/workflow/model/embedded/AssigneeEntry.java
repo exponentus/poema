@@ -1,9 +1,9 @@
 package workflow.model.embedded;
 
+import com.exponentus.common.model.util.EmployeeConverter;
 import org.eclipse.persistence.annotations.Convert;
 import org.eclipse.persistence.annotations.Converter;
 import staff.model.Employee;
-import staff.model.util.EmployeeConverter;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
 
