@@ -250,7 +250,12 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public boolean taskCanBeDeleted(Task task) {
-        return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.DRAFT);
+        if(ses.getUser().isSuperUser()){
+            return true;
+        }else {
+            return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN ||
+                    task.getStatus() == TaskStatusType.DRAFT);
+        }
     }
 
     public boolean userCanDoAcknowledged(Task task, User user) {
