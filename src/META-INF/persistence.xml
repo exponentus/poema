@@ -246,7 +246,7 @@
         <class>projects.model.Request</class>
         <class>projects.model.Comment</class>
         <!-- Workflow module entities -->
-        <class>workflow.model.embedded.Block</class>
+        <class>com.exponentus.common.model.embedded.Block</class>
          <!-- Monitoring module entities --> 
          <class>monitoring.model.UserActivity</class>     
         <class>monitoring.model.DocumentActivity</class>
@@ -290,7 +290,7 @@
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
         <!-- Workflow module entities -->
-        <class>workflow.model.embedded.Block</class>
+        <class>com.exponentus.common.model.embedded.Block</class>
          <!-- Monitoring module entities -->
          <class>monitoring.model.UserActivity</class>      
         <class>monitoring.model.DocumentActivity</class>
@@ -373,7 +373,7 @@
         <class>workflow.model.Outgoing</class>
         <class>workflow.model.Assignment</class>
         <class>workflow.model.Report</class>
-        <class>workflow.model.embedded.Block</class>
+        <class>com.exponentus.common.model.embedded.Block</class>
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
         <!-- Projects module entities -->
@@ -421,7 +421,7 @@
         <class>resourcereservations.model.Reservation</class>
         <class>resourcereservations.model.ApplicationForVehicle</class>
         <class>resourcereservations.model.ApplicationForMeetingRoom</class>
-        <class>workflow.model.embedded.Block</class>
+        <class>com.exponentus.common.model.embedded.Block</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>

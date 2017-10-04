@@ -11,12 +11,12 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
-import workflow.model.embedded.IApproval;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -8,7 +8,7 @@ import com.exponentus.scripting.actions.Action;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.IApproval;
+import com.exponentus.common.model.embedded.IApproval;
 import workflow.ui.ActionFactory;
 
 import java.util.ArrayList;

@@ -8,10 +8,10 @@ import com.exponentus.util.StringUtil;
 import reference.model.constants.ApprovalType;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.model.Employee;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;

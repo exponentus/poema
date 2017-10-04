@@ -19,8 +19,8 @@ import staff.dao.EmployeeDAO;
 import workflow.dao.OfficeMemoDAO;
 import workflow.model.OfficeMemo;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 
 import java.io.File;
 import java.util.*;

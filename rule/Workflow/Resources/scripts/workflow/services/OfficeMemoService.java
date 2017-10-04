@@ -22,13 +22,13 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.OfficeMemoFilter;
 import workflow.domain.OfficeMemoDomain;
-import workflow.domain.exception.ApprovalException;
+import com.exponentus.common.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
 

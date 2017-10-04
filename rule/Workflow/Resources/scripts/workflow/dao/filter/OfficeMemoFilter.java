@@ -3,7 +3,7 @@ package workflow.dao.filter;
 import com.exponentus.scripting.WebFormData;
 import staff.model.Employee;
 import workflow.model.OfficeMemo;
-import workflow.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import java.util.UUID;

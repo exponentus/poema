@@ -1,14 +1,15 @@
 package workflow.domain;
 
+import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import staff.dao.EmployeeDAO;
-import workflow.domain.exception.ApprovalException;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
-import workflow.model.embedded.IApproval;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 
 import java.util.List;
 

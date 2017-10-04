@@ -30,13 +30,13 @@ import reference.model.constants.ApprovalSchemaType;
 import reference.model.constants.ApprovalType;
 import reference.model.constants.converter.ApprovalSchemaTypeConverter;
 import staff.model.Employee;
-import workflow.domain.ApprovalLifecycle;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.constants.DecisionType;
-import workflow.model.constants.converter.ApprovalResultTypeConverter;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
-import workflow.model.embedded.IApproval;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.DecisionType;
+import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -48,7 +48,7 @@ import java.util.UUID;
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "prj__tasks")
+@Table(name = AppConst.CODE + "__tasks")
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
     @NotNull
@@ -102,7 +102,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     private boolean initiative;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "prj__task_tags")
+    @JoinTable(name = AppConst.CODE + "__task_tags")
     private List<Tag> tags;
 
     @Column(name = "customer_observation")
@@ -124,7 +124,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     private List<Request> requests;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "prj__task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
+    @JoinTable(name = AppConst.CODE + "__task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attachment_id")}, indexes = {
             @Index(columnList = "task_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {"task_id",
             "attachment_id"}))

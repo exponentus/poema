@@ -17,16 +17,16 @@ import com.exponentus.messaging.slack.SlackAgent;
 
 import administrator.model.User;
 import reference.model.constants.ApprovalType;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
-import workflow.domain.exception.ApprovalExceptionType;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.domain.exception.ApprovalExceptionType;
 import workflow.model.Assignment;
 import workflow.model.Incoming;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Approver;
 import workflow.model.embedded.AssigneeEntry;
-import workflow.model.embedded.Block;
-import workflow.model.embedded.IApproval;
+import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.IApproval;
 
 public class Messages {
 	protected static CommonLogger logger = new CommonLogger("Messaging");

@@ -1,6 +1,7 @@
 package workflow.domain;
 
 import administrator.model.User;
+import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.dataengine.exception.DAOException;
@@ -17,9 +18,9 @@ import staff.dao.EmployeeDAO;
 import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
 import workflow.model.Outgoing;
-import workflow.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Block;
 
 import java.util.*;
 

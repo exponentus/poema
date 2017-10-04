@@ -25,8 +25,8 @@
       	
     <converter class="workflow.model.constants.converter.ControlStatusTypeConverter"/> 
     <converter class="com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter"/>
-    <converter class="workflow.model.constants.converter.DecisionTypeConverter"/>  
-    <converter class="workflow.model.constants.converter.ApprovalResultTypeConverter"/>
+    <converter class="com.exponentus.common.model.constants.converter.DecisionTypeConverter"/>
+    <converter class="com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter"/>
     
     <converter class="helpdesk.model.constants.converter.DemandStatusConverter"/> 
     

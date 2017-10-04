@@ -17,7 +17,7 @@ import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
 import staff.model.Employee;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -21,8 +21,8 @@ import resourcereservations.domain.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import workflow.other.Messages;
 

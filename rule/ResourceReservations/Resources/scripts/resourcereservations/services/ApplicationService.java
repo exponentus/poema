@@ -13,7 +13,7 @@ import reference.model.Vehicle;
 import resourcereservations.constants.ActionFactory;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
-import workflow.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 
 import javax.ws.rs.GET;

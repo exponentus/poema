@@ -37,13 +37,13 @@ import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
-import workflow.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

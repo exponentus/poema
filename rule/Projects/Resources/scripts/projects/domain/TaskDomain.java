@@ -32,11 +32,11 @@ import staff.dao.RoleDAO;
 import staff.model.Employee;
 import staff.model.Role;
 import workflow.domain.ApprovalDomain;
-import workflow.domain.ApprovalLifecycle;
-import workflow.domain.exception.ApprovalException;
-import workflow.model.constants.ApprovalResultType;
-import workflow.model.embedded.Approver;
-import workflow.model.embedded.Block;
+import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -20,7 +20,7 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
-import workflow.model.embedded.Block;
+import com.exponentus.common.model.embedded.Block;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
