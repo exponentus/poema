@@ -269,6 +269,7 @@ public class TaskService extends RestProvider {
             TaskDAO dao = new TaskDAO(getSession());
             Task entity = dao.findByIdentefier(id);
             if (entity != null) {
+                entity.setBlocks(null);
                 entity.setAttachments(null); // if no on delete cascade
                 dao.delete(entity);
             }

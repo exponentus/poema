@@ -140,8 +140,10 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Convert(converter = ApprovalResultTypeConverter.class)
     private ApprovalResultType result = ApprovalResultType.PROJECT;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     @OrderBy("sort")
+    @CascadeOnDelete
     private List<Block> blocks = new ArrayList<>();
 
     public Project getProject() {
