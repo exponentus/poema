@@ -1,7 +1,5 @@
 package workflow.task;
 
-import java.util.List;
-
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
@@ -11,13 +9,15 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
-
 import workflow.dao.AssignmentDAO;
 import workflow.domain.ControlLifecycle;
+import workflow.init.AppConst;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
-@Command(name = "control_tracking", trigger = Trigger.EVERY_HOUR)
+import java.util.List;
+
+@Command(name = AppConst.CODE + "_control_tracking", trigger = Trigger.EVERY_HOUR)
 public class ControlTracking extends Do {
 
 	@Override
