@@ -2,6 +2,7 @@ package projects.services;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
+import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -178,6 +179,7 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
+            outcome.addPayload("milestones", new Milestones(session, task.getTimeLine()));
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
             return Response.ok(outcome).build();
