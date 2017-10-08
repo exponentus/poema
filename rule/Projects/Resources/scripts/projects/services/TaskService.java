@@ -163,7 +163,7 @@ public class TaskService extends RestProvider {
                     Server.logger.exception(e);
                 }
 
-                task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 10);
+                task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 5);
             } else {
                 task = taskDAO.findByIdentefier(id);
                 if (task == null) {
