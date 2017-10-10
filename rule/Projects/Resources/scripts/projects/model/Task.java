@@ -86,8 +86,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     private Long assignee;
 
+    @JsonIgnore
     @Convert(converter = TimeLineConverter.class)
-    @Column(name="time_line", columnDefinition = "jsonb")
+    @Column(name = "time_line", columnDefinition = "jsonb")
     private TimeLine timeLine;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -112,7 +113,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @JsonIgnore
     @OneToMany(mappedBy = "parent")
     private List<Task> subtasks;
-
 
     @JsonIgnore
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -140,8 +140,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Convert(converter = ApprovalResultTypeConverter.class)
     private ApprovalResultType result = ApprovalResultType.PROJECT;
 
-
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @OrderBy("sort")
     @CascadeOnDelete
     private List<Block> blocks = new ArrayList<>();
@@ -237,7 +236,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     public TimeLine getTimeLine() {
-        if (timeLine == null){
+        if (timeLine == null) {
             timeLine = new TimeLine();
         }
         return timeLine;
@@ -246,7 +245,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public void setTimeLine(TimeLine timeLine) {
         this.timeLine = timeLine;
     }
-
 
     public void setAssignee(Long assignee) {
         this.assignee = assignee;
@@ -470,7 +468,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         LifeCycleNode lc = getNode(user, id);
 
 
-
         if (subtasks != null) {
             for (Task a : subtasks) {
                 lc.addResponse(a.getNode(user, id));
@@ -490,11 +487,11 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public LifeCycleNode getNode(IUser user, UUID id) {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.ASSIGNMENT);
-        if (id.equals(this.id)){
+        if (id.equals(this.id)) {
             lc.setCurrent(true);
         }
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())){
+        if (user.isSuperUser() || getReaders().contains(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(getApprovalStatus().name());
@@ -502,6 +499,4 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         lc.setUrl(getURL());
         return lc;
     }
-
-
 }
