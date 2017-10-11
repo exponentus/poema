@@ -27,7 +27,7 @@ import reference.model.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(name = "overdue_reminder", trigger = Trigger.EVERY_NIGHT)
+@Command(name = "overdue_reminder", trigger = Trigger.DISABLE)
 public class OverdueReminder extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Tag tag;

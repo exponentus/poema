@@ -1,0 +1,33 @@
+<div style="border: 1px solid #f1f1f1; margin: 0; max-width: 900px; padding: 8px; width: 100%;">
+    <h2 style="background-color: #f8f8f8; padding: 8px; margin: 0;">$orgname$</h2>
+    <p>Dear $user$ the following tasks assigned for you:</p>
+    <table style='border-collapse:collapse; margin:1px 0; width:100%' cellpadding = 10px>
+        <tr style="text-align: center">
+            <td style = 'border:1px solid #cdcdcd; width:60px;'><b>Number</b></td>
+            <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Author</b></td>
+            <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Assignee</b></td>
+            <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Project</b></td>
+            <td style = 'border:1px solid #cdcdcd; width:180px;'><b>Title</b></td>
+        </tr>
+        $tasks:{ task |
+        <tr style="text-align: center">
+            <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+                $task.regNumber$
+            </td>
+            <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+                $task.author$
+            </td>
+            <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+                $task.assignee$
+            </td>
+            <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+                <a href="$url$$task.project.URL$$lang$">$task.project.title$</a>
+            </td>
+            <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
+                <a href="$url$$task.url$$lang$">$task.title$</a>
+            </td>
+        </tr>
+        }$
+    </table>
+</div>
+

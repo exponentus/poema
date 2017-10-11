@@ -173,10 +173,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public void changeAssignee(Task task, User newAssignee) {
         task.setAssignee(newAssignee.getId());
-
-        // if (oldAssignee.longValue() != newAssignee.longValue()) {
-        // // TODO notify about changes ?
-        // }
     }
 
     public void calculateReaders(Task task) throws DAOException {

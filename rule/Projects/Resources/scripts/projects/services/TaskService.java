@@ -250,6 +250,7 @@ public class TaskService extends RestProvider {
             if (task.getStatus() == TaskStatusType.OPEN) {
                 ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
                 lifecycle.start();
+                task.addReaderEditor(task.getAuthorId()); //dev1292
                 taskDomain.superUpdate(task);
                 new Messages(getAppEnv()).sendToModerate(task);
             }
