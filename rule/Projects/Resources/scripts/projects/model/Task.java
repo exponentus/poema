@@ -97,6 +97,10 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "alt_due_date")
+    private Date alternateDueDate;
+
     private boolean initiative;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -264,6 +268,14 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Date getAlternateDueDate() {
+        return alternateDueDate;
+    }
+
+    public void setAlternateDueDate(Date alternateDueDate) {
+        this.alternateDueDate = alternateDueDate;
     }
 
     public boolean isInitiative() {
