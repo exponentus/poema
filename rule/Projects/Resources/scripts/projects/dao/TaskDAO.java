@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
@@ -20,10 +21,10 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
-import com.exponentus.common.model.embedded.Block;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.*;
@@ -376,21 +377,24 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public long getColByAssignee(Date date, Long user, TaskStatusType status) {
+    public long getColByAssignee(Date startDate, Date endDate, IUser user, TaskStatusType status) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
             CriteriaQuery<Task> cq = cb.createQuery(Task.class);
             CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> c = cq.from(Task.class);
-            countCq.select(cb.count(c));
-            ParameterExpression<Date> parameter = cb.parameter(Date.class);
-            //Predicate condition = cb.equal(cb.function("date", Date.class, c.<Date>get("regDate")), parameter);
-            Predicate condition = cb.and(cb.equal(c.get("assignee"), user));
-            condition = cb.and(cb.equal(c.get("status"), status), condition);
+            Root<Task> root = cq.from(Task.class);
+            countCq.select(cb.count(root));
+
+            Predicate condition = cb.equal(root.get("assignee"), user.getId());
+            ParameterExpression<Date> from = cb.parameter(Date.class);
+            ParameterExpression<Date> to = cb.parameter(Date.class);
+            condition = cb.between(root.<Date>get("regDate"), from, to);
+            condition = cb.and(cb.equal(root.get("status"), status), condition);
             countCq.where(condition);
             Query query = em.createQuery(countCq);
-            //query.setParameter(parameter, date, TemporalType.DATE);
+            query.setParameter(from, startDate, TemporalType.DATE);
+            query.setParameter(to, endDate, TemporalType.DATE);
             return (long) query.getSingleResult();
         } finally {
             em.close();

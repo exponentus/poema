@@ -453,9 +453,6 @@ public class TaskService extends RestProvider {
                 }
             }
         } else {
-            if (taskDomain.taskIsEditable(task)) {
-                actionBar.addAction(action.saveAndClose);
-            }
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_request").caption("new_request"));
             }
@@ -472,6 +469,9 @@ public class TaskService extends RestProvider {
             if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));
             }
+        }
+        if (taskDomain.taskIsEditable(task)) {
+            actionBar.addAction(action.saveAndClose);
         }
         if (taskDomain.taskCanBeDeleted(task)) {
             actionBar.addAction(action.deleteDocument);

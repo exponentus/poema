@@ -3,7 +3,7 @@ package projects.report;
 /**
  * Created by kaira on 9/9/17.
  */
-public class Report500POJO {
+public class ConsolidatedReportPOJO {
     public String user;
     public int total;
     public int cancelled;

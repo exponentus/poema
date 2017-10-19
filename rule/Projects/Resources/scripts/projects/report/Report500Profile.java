@@ -38,7 +38,7 @@ public class Report500Profile extends AbstractReportProfile {
             for(Employee employee:employeeDAO.findAll().getResult()){
                 ViewPage<TaskViewEntry> res = dao.findCreatedByUser(employee.getUser(),0,0);
                 if (res.getCount() > 0){
-                    Report500POJO report = new Report500POJO();
+                    ConsolidatedReportPOJO report = new ConsolidatedReportPOJO();
                     report.user = employee.getName();
                     for (TaskViewEntry entry:res.getResult()){
                         switch(entry.status){
