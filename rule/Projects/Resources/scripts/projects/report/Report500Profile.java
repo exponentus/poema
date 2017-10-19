@@ -3,7 +3,7 @@ package projects.report;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.log.Lg;
-import dataexport.other.AbstractProfileProfile;
+import com.exponentus.common.other.AbstractReportProfile;
 import projects.dao.TaskDAO;
 import projects.dto.TaskViewEntry;
 import projects.init.AppConst;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Created by kaira on 9/9/17.
  */
-public class Report500Profile extends AbstractProfileProfile {
+public class Report500Profile extends AbstractReportProfile {
 
     @Override
     public String getTemplateName() {
