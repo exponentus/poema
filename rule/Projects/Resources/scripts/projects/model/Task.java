@@ -7,6 +7,7 @@ import com.exponentus.common.model.constants.*;
 import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalSchemaTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
+import com.exponentus.common.model.converter.ListOfTextConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
@@ -83,6 +84,10 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @FTSearchable
     @Column(columnDefinition = "TEXT")
     private String body;
+
+    @Convert(converter = ListOfTextConverter.class)
+    @Column(name = "obsolete_body", columnDefinition = "jsonb")
+    private List<String> obsoleteBody = new ArrayList<String>();
 
     private Long assignee;
 
@@ -232,6 +237,20 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public List<String> getObsoleteBody() {
+        return obsoleteBody;
+    }
+
+    public void setObsoleteBody(List<String> obsoleteBody) {
+        this.obsoleteBody = obsoleteBody;
+    }
+
+    @Override
+    public void backupContent() {
+        obsoleteBody.add(body);
+        body = "";
     }
 
     @JsonProperty("assigneeUserId")
@@ -417,10 +436,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Override
     public void setVersion(int version) {
-    }
-
-    @Override
-    public void backupContent() {
     }
 
     @Deprecated
