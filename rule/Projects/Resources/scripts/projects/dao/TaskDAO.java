@@ -386,11 +386,15 @@ public class TaskDAO extends DAO<Task, UUID> {
             Root<Task> root = cq.from(Task.class);
             countCq.select(cb.count(root));
 
-            Predicate condition = cb.equal(root.get("assignee"), user.getId());
             ParameterExpression<Date> from = cb.parameter(Date.class);
             ParameterExpression<Date> to = cb.parameter(Date.class);
-            condition = cb.between(root.<Date>get("regDate"), from, to);
+            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from );
+            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"),to);
+            Predicate finalCondition = cb.and(startPredicate, endPredicate);
+
+            Predicate condition = cb.equal(root.get("assignee"), user.getId());
             condition = cb.and(cb.equal(root.get("status"), status), condition);
+            condition = cb.and(condition, finalCondition);
             countCq.where(condition);
             Query query = em.createQuery(countCq);
             query.setParameter(from, startDate, TemporalType.DATE);
