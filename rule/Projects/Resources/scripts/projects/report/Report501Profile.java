@@ -22,11 +22,6 @@ public class Report501Profile extends AbstractReportProfile {
     }
 
     @Override
-    public String getTitle() {
-        return "report_501";
-    }
-
-    @Override
     public String getAppCode() {
         return AppConst.CODE;
     }
