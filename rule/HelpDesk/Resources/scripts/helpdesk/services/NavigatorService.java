@@ -30,7 +30,6 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         Outline co = new Outline("", "common");
-
         co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", AppConst.BASE_URL + "demands/s/my"));
 
         try {
@@ -66,11 +65,7 @@ public class NavigatorService extends RestProvider {
             e.printStackTrace();
         }
 
-        // Outline to = new Outline("", "tasks");
-        // to.addEntry(new OutlineEntry("initiative_tasks", "", "fa fa-list", "tasks/s/initiative", AppConst.BASE_URL + "tasks/s/initiative"));
-
         list.add(co);
-        // list.add(to);
 
         Outcome outcome = new Outcome();
         outcome.addPayload("nav", list);
