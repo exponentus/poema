@@ -39,11 +39,10 @@ public class Report501Profile extends AbstractReportProfile {
                 ConsolidatedReportPOJO report = new ConsolidatedReportPOJO();
                 report.user = employee.getName();
                 ViewPage<Task> res = dao.findAssignedToUser(from, until, employee.getUser(), 0, 0);
-                System.out.println(employee + " " + res.getCount());
+       //         System.out.println(employee + " " + res.getCount());
                 for (Task task : res.getResult()) {
                     TimeLine timeLine = task.getTimeLine();
                     String status = timeLine.getStageName(from);
-                    System.out.println(status);
                     if (status != null) {
                         TaskStatusType statusType = TaskStatusType.valueOf(status);
                         switch (statusType) {
