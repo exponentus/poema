@@ -42,7 +42,7 @@ public class Report501Profile extends AbstractReportProfile {
        //         System.out.println(employee + " " + res.getCount());
                 for (Task task : res.getResult()) {
                     TimeLine timeLine = task.getTimeLine();
-                    String status = timeLine.getStageName(from);
+                    String status = timeLine.getStageName(until);
                     if (status != null) {
                         TaskStatusType statusType = TaskStatusType.valueOf(status);
                         switch (statusType) {
