@@ -14,6 +14,8 @@ public class ConsolidatedReportPOJO {
     public int pending;
     public int postponed;
 
+    public int moderation;
+
     public int getDraft() {
         return draft;
     }
@@ -54,7 +56,6 @@ public class ConsolidatedReportPOJO {
         this.postponed = postponed;
     }
 
-
     public String getUser() {
         return user;
     }
@@ -87,6 +88,12 @@ public class ConsolidatedReportPOJO {
         this.open = open;
     }
 
+    public int getModeration() {
+        return moderation;
+    }
 
+    public void setModeration(int moderation) {
+        this.moderation = moderation;
+    }
 
 }

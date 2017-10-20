@@ -16,7 +16,7 @@ import projects.model.constants.TaskStatusType;
 import java.util.Date;
 import java.util.List;
 
-@Command(name = "stat_collector", trigger = Trigger.EVERY_NIGHT)
+@Command(name = "stat_collector", trigger = Trigger.DISABLE)
 public class StatCollector extends Do {
 	private Date current = new Date();
 

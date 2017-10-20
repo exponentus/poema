@@ -346,26 +346,35 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<Task> findAssignedToUser(IUser user, int pageNum, int pageSize) {
+    public ViewPage<Task> findAssignedToUser(Date startDate, Date endDate, IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
             CriteriaQuery<Task> cq = cb.createQuery(Task.class);
             CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> taskRoot = cq.from(Task.class);
+            Root<Task> root = cq.from(Task.class);
 
-            Predicate condition = cb.equal(taskRoot.get("assignee"), user.getId());
-            condition = cb.and(cb.or(cb.equal(taskRoot.get("status"), TaskStatusType.PROCESSING),
-                    cb.equal(taskRoot.get("status"), TaskStatusType.OPEN)), condition);
+            ParameterExpression<Date> from = cb.parameter(Date.class);
+            ParameterExpression<Date> to = cb.parameter(Date.class);
+            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from );
+            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"),to);
+            Predicate periodCondition = cb.and(startPredicate, endPredicate);
 
-            cq.select(taskRoot).orderBy(cb.asc(taskRoot.get("priority")));
-            countCq.select(cb.count(taskRoot));
+            Predicate condition = cb.equal(root.get("assignee"), user.getId());
+            condition = cb.and(condition, periodCondition);
+
+            cq.select(root).orderBy(cb.asc(root.get("priority")));
+            countCq.select(cb.count(root));
 
             cq.where(condition);
             countCq.where(condition);
 
             TypedQuery<Task> typedQuery = em.createQuery(cq);
             Query query = em.createQuery(countCq);
+            typedQuery.setParameter(from, startDate, TemporalType.DATE);
+            typedQuery.setParameter(to, endDate, TemporalType.DATE);
+            query.setParameter(from, startDate, TemporalType.DATE);
+            query.setParameter(to, endDate, TemporalType.DATE);
             long count = (long) query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
@@ -390,39 +399,16 @@ public class TaskDAO extends DAO<Task, UUID> {
             ParameterExpression<Date> to = cb.parameter(Date.class);
             Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from );
             Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"),to);
-            Predicate finalCondition = cb.and(startPredicate, endPredicate);
+            Predicate periodCondition = cb.and(startPredicate, endPredicate);
 
             Predicate condition = cb.equal(root.get("assignee"), user.getId());
             condition = cb.and(cb.equal(root.get("status"), status), condition);
-            condition = cb.and(condition, finalCondition);
+            condition = cb.and(condition, periodCondition);
             countCq.where(condition);
             Query query = em.createQuery(countCq);
             query.setParameter(from, startDate, TemporalType.DATE);
             query.setParameter(to, endDate, TemporalType.DATE);
             return (long) query.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }
-
-    public long getColByAuthor(Date date, User user, TaskStatusType status) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<Task> cq = cb.createQuery(Task.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> c = cq.from(Task.class);
-            cq.select(c);
-            countCq.select(cb.count(c));
-            ParameterExpression<Date> parameter = cb.parameter(Date.class);
-            //Predicate condition = cb.equal(cb.function("date", Date.class, c.<Date>get("regDate")), parameter);
-            Predicate condition = cb.and(cb.equal(c.get("author"), user));
-            condition = cb.and(cb.equal(c.get("status"), status), condition);
-            countCq.where(condition);
-            Query query = em.createQuery(countCq);
-            //query.setParameter(parameter, date, TemporalType.DATE);
-            return (long) query.getSingleResult();
-
         } finally {
             em.close();
         }
@@ -466,143 +452,6 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public ViewPage<TaskViewEntry> findAllTaskDueToday() {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Expression<java.sql.Date> currentDateExp = cb.currentDate();
-            TaskStatusType[] inWorkSt = {TaskStatusType.OPEN, TaskStatusType.PROCESSING};
-
-            Predicate condition = cb.and(root.get("status").in(Arrays.asList(inWorkSt)));
-            condition = cb.and(cb.equal(root.get("dueDate"), currentDateExp), condition);
-
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()), condition);
-            }
-
-            cq.select(cb.construct(
-                    TaskViewEntry.class,
-                    root.get("id"),
-                    root.get("title"),
-                    root.get("regNumber"),
-                    root.get("status"),
-                    root.get("priority"),
-                    root.get("startDate"),
-                    root.get("dueDate")))
-                    .orderBy(cb.asc(root.get("priority")));
-
-            countCq.select(cb.count(root));
-
-            cq.where(condition);
-            countCq.where(condition);
-
-            TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> countQuery = em.createQuery(countCq);
-            List<TaskViewEntry> result = typedQuery.getResultList();
-
-            return new ViewPage<>(result, countQuery.getSingleResult(), 0, 0);
-        } finally {
-            em.close();
-        }
-    }
-
-    public ViewPage<TaskViewEntry> findAllTaskIn7Day() {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Calendar todayPlus7DayC = Calendar.getInstance();
-            todayPlus7DayC.add(Calendar.DATE, 7);
-            Date todayPlus7Day = todayPlus7DayC.getTime();
-
-            Expression<java.sql.Date> currentDateExp = cb.currentDate();
-            Expression<Date> dueDateExp = root.get("dueDate");
-            TaskStatusType[] inWorkSt = {TaskStatusType.OPEN, TaskStatusType.PROCESSING};
-
-            Predicate condition = cb.and(root.get("status").in(Arrays.asList(inWorkSt)));
-            condition = cb.and(cb.lessThanOrEqualTo(dueDateExp, todayPlus7Day), condition);
-            condition = cb.and(cb.greaterThan(root.get("dueDate"), currentDateExp), condition);
-
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()), condition);
-            }
-
-            cq.select(cb.construct(
-                    TaskViewEntry.class,
-                    root.get("id"),
-                    root.get("title"),
-                    root.get("regNumber"),
-                    root.get("status"),
-                    root.get("priority"),
-                    root.get("startDate"),
-                    root.get("dueDate")))
-                    .orderBy(cb.asc(root.get("priority")));
-
-            countCq.select(cb.count(root));
-
-            cq.where(condition);
-            countCq.where(condition);
-
-            TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> countQuery = em.createQuery(countCq);
-            List<TaskViewEntry> result = typedQuery.getResultList();
-
-            return new ViewPage<>(result, countQuery.getSingleResult(), 0, 0);
-        } finally {
-            em.close();
-        }
-    }
-
-    public ViewPage<TaskViewEntry> findAllTaskExpired() {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Expression<java.sql.Date> currentDateExp = cb.currentDate();
-            TaskStatusType[] inWorkSt = {TaskStatusType.OPEN, TaskStatusType.PROCESSING};
-
-            Predicate condition = cb.and(root.get("status").in(Arrays.asList(inWorkSt)));
-            condition = cb.and(cb.lessThan(root.get("dueDate"), currentDateExp), condition);
-
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()), condition);
-            }
-
-            cq.select(cb.construct(
-                    TaskViewEntry.class,
-                    root.get("id"),
-                    root.get("title"),
-                    root.get("regNumber"),
-                    root.get("status"),
-                    root.get("priority"),
-                    root.get("startDate"),
-                    root.get("dueDate")))
-                    .orderBy(cb.asc(root.get("priority")));
-
-            countCq.select(cb.count(root));
-
-            cq.where(condition);
-            countCq.where(condition);
-
-            TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
-            TypedQuery<Long> countQuery = em.createQuery(countCq);
-            List<TaskViewEntry> result = typedQuery.getResultList();
-
-            return new ViewPage<>(result, countQuery.getSingleResult(), 0, 0);
-        } finally {
-            em.close();
-        }
-    }
 
     public List<CountStat> getStatTaskStatus() {
         EntityManager em = getEntityManagerFactory().createEntityManager();
