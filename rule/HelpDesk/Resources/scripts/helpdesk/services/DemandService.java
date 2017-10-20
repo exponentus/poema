@@ -23,6 +23,7 @@ import helpdesk.domain.DemandDomain;
 import helpdesk.init.AppConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
+import helpdesk.ui.ViewOptions;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -69,6 +70,7 @@ public class DemandService extends RestProvider {
 
             DemandDAO dao = new DemandDAO(session);
             ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getDemandOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
