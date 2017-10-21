@@ -22,6 +22,7 @@ import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.domain.ApplicationForVehicleDomain;
 import resourcereservations.model.ApplicationForVehicle;
+import resourcereservations.ui.ViewOptions;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.other.Messages;
@@ -34,9 +35,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-
-@Path("applications_for_vehicle")
+@Path("applications-for-vehicle")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApplicationForVehicleService extends RestProvider {
 
@@ -53,6 +52,7 @@ public class ApplicationForVehicleService extends RestProvider {
         try {
             ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getApplicationForVehicleOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newApplicationForVehicle);
