@@ -11,6 +11,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.ActionableDocumentDAO;
 import workflow.ui.ActionFactory;
+import workflow.ui.ViewOptions;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,6 +37,7 @@ public class ViewService extends RestProvider {
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
             Employee employee = employeeDAO.findByUser(session.getUser());
             ViewPage vp = dao.findApprovalPendingByCurrentEmployeeViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getActionableDocumentViewOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);
@@ -62,6 +64,7 @@ public class ViewService extends RestProvider {
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
             Employee employee = employeeDAO.findByUser(session.getUser());
             ViewPage vp = dao.findProjectsByAuthorViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getActionableDocumentViewOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOutgoing);

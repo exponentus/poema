@@ -2,7 +2,11 @@ package workflow.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Approver;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -22,15 +26,12 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.OfficeMemoFilter;
 import workflow.domain.OfficeMemoDomain;
-import com.exponentus.common.domain.exception.ApprovalException;
 import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.AppConst;
 import workflow.model.OfficeMemo;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
+import workflow.ui.ViewOptions;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -40,11 +41,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
-public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDomain> {
+public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDomain> {
 
     private ActionFactory action = new ActionFactory();
 
@@ -59,6 +58,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             OfficeMemoFilter filter = new OfficeMemoFilter(params);
             ViewPage vp = officeMemoDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOfficeMemo.caption("new"));
@@ -83,6 +83,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
         try {
             OfficeMemoDAO dao = new OfficeMemoDAO(ses);
             ViewPage vp = dao.findResponsesViewPage(dao.findByIdentefier(id));
+            vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
 
             Outcome outcome = new Outcome();
             outcome.addPayload(vp);
@@ -119,7 +120,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             outcome.addPayload(getActionBar(ses, entity, omd));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-            if (!isNew){
+            if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }
 
@@ -143,7 +144,6 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo,  OfficeMemoDo
             return responseException(e);
         }
     }
-
 
     @POST
     @Path("action/startApproving")
