@@ -22,6 +22,7 @@ import projects.init.AppConst;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
+import reference.init.DataConst;
 import reference.model.Tag;
 
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import java.util.List;
 
 @Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.DISABLE)
 public class ExpiredTracking extends Do {
-	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();
 	private Tag tag;
 	private TaskDAO tDao;
@@ -40,13 +40,13 @@ public class ExpiredTracking extends Do {
 		PeriodicalServices.logger("expired_tracking is going to check documents");
 		try {
 			TagDAO tagDAO = new TagDAO(session);
-			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
+			tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
 				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)), session);
 				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)), session);
 			} else {
-				logger.warning("The tag \"" + EXPIRED_TAG_NAME + "\" did not find in Reference");
+				logger.warning("The tag \"" + DataConst.EXPIRED_TAG_NAME + "\" did not find in Reference");
 			}
 		} catch (DAOException e) {
 			logger.exception(e);

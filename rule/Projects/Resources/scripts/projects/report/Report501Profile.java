@@ -9,6 +9,9 @@ import projects.dao.TaskDAO;
 import projects.init.AppConst;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
+import reference.dao.TagDAO;
+import reference.init.DataConst;
+import reference.model.Tag;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
@@ -32,7 +35,10 @@ public class Report501Profile extends AbstractReportProfile {
     @Override
     public List getReportData(Date from, Date until, String customParameter) {
         List result = new ArrayList();
+
         try {
+            TagDAO tagDAO = new TagDAO(session);
+            Tag tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
             TaskDAO dao = new TaskDAO(session);
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
             for (Employee employee : employeeDAO.findAll().getResult()) {
@@ -71,6 +77,12 @@ public class Report501Profile extends AbstractReportProfile {
                                 report.postponed++;
                                 break;
                         }
+                        if (task.getTags().contains(tag)){
+                            report.expired ++;
+                        }
+
+                        report.hours += timeLine.getHoursBetweenStages(TaskStatusType.PROCESSING.name(), TaskStatusType.COMPLETED.name());
+
                         report.total++;
                     }
                 }

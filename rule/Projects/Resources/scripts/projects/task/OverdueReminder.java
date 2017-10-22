@@ -22,6 +22,7 @@ import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
+import reference.init.DataConst;
 import reference.model.Tag;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ import java.util.List;
 
 @Command(name = "overdue_reminder", trigger = Trigger.DISABLE)
 public class OverdueReminder extends Do {
-	private static final String EXPIRED_TAG_NAME = "expired";
 	private Tag tag;
 	private TaskDAO tDao;
 
@@ -37,7 +37,7 @@ public class OverdueReminder extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			TagDAO tagDAO = new TagDAO(session);
-			tag = tagDAO.findByName(EXPIRED_TAG_NAME);
+			tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
 			List<Tag> tags = new ArrayList<>();
 			tags.add(tag);
 			if (tag != null) {

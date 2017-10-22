@@ -13,6 +13,8 @@ public class ConsolidatedReportPOJO {
     public int completed;
     public int pending;
     public int postponed;
+    public int expired;
+    public int hours;
 
     public int moderation;
 
@@ -95,5 +97,22 @@ public class ConsolidatedReportPOJO {
     public void setModeration(int moderation) {
         this.moderation = moderation;
     }
+
+    public int getExpired() {
+        return expired;
+    }
+
+    public void setExpired(int expired) {
+        this.expired = expired;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
 
 }
