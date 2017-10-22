@@ -7,7 +7,7 @@ import com.exponentus.common.model.constants.*;
 import com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalSchemaTypeConverter;
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
-import com.exponentus.common.model.converter.ListOfTextConverter;
+import com.exponentus.common.model.converter.ListOfStringConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
@@ -85,7 +85,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    @Convert(converter = ListOfTextConverter.class)
+    @Convert(converter = ListOfStringConverter.class)
     @Column(name = "obsolete_body", columnDefinition = "jsonb")
     private List<String> obsoleteBody = new ArrayList<String>();
 

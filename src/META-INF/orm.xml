@@ -2,7 +2,8 @@
 <entity-mappings xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm" version="2.1">
 	<converter class="com.exponentus.common.model.converter.PostgresUuidConverter"/>
 	<converter class="com.exponentus.common.model.converter.LocalizedValConverter"/>
-	<converter class="com.exponentus.common.model.converter.ListOfTextConverter"/>
+    <converter class="com.exponentus.common.model.converter.ListOfStringConverter"/>
+    <converter class="com.exponentus.common.model.converter.ListOfStringArrayConverter"/>
 	<converter class="com.exponentus.common.model.constants.converter.ReportTypeConverter"/>
     <converter class="com.exponentus.common.model.constants.converter.SolutionTypeConverter"/>
     <converter class="com.exponentus.common.model.converter.TimeLineConverter"/>
