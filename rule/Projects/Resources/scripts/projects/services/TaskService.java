@@ -39,6 +39,7 @@ import projects.model.constants.TaskPriorityType;
 import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
+import projects.ui.ViewOptions;
 import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
@@ -79,6 +80,7 @@ public class TaskService extends RestProvider {
             } else {
                 vp = taskDAO.findAllWithResponses(taskFilter, sortParams, pageNum, pageSize, expandedIdList);
             }
+            vp.setViewPageOptions(new ViewOptions().getTaskViewOptions());
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
@@ -250,7 +252,7 @@ public class TaskService extends RestProvider {
             if (task.getStatus() == TaskStatusType.OPEN) {
                 ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
                 lifecycle.start();
-                task.getTimeLine().addStage(new Date(),TaskStatusType.MODERATION.name());
+                task.getTimeLine().addStage(new Date(), TaskStatusType.MODERATION.name());
                 task.addReaderEditor(task.getAuthorId()); //dev1292
                 taskDomain.superUpdate(task);
                 new Messages(getAppEnv()).sendToModerate(task);

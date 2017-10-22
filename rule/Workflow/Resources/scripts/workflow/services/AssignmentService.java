@@ -30,6 +30,7 @@ import workflow.model.Report;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.ui.ActionFactory;
+import workflow.ui.ViewOptions;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -80,7 +81,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             switch (slug) {
                 case "_my":
                     filter.setAppliedAuthor(currentUserEmp);
-                    showAssigneeList= true;
+                    showAssigneeList = true;
                     break;
                 case "_inbox":
                     filter.setAssignee(currentUserEmp);
@@ -88,8 +89,8 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             }
 
             AssignmentDAO assignmentDAO = new AssignmentDAO(session);
-            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize, showAssigneeList
-            );
+            ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize, showAssigneeList);
+            vp.setViewPageOptions(new ViewOptions().getAssignmentViewOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);
@@ -133,7 +134,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                 } else if (!assignmentId.isEmpty()) {
 
                     parent = assignmentDAO.findByIdentefier(assignmentId);
-                   // primary = parent.getPrimary();
+                    // primary = parent.getPrimary();
                 } else {
                     throw new IllegalArgumentException("No parent document");
                 }
@@ -159,7 +160,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             outcome.addPayload("permissions", permissions);
             outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            if (!isNew){
+            if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }
 
@@ -244,7 +245,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             return Response.ok(new Outcome()).build();
         } catch (DTOException e) {
             return responseValidationError(e);
-        } catch (DAOException  | SecureException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }

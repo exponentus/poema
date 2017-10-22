@@ -26,6 +26,7 @@ import workflow.init.AppConst;
 import workflow.model.Incoming;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
+import workflow.ui.ViewOptions;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,7 +37,6 @@ import javax.ws.rs.core.Response;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
 
 @Path("incomings")
 @Produces(MediaType.APPLICATION_JSON)
@@ -56,6 +56,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         try {
             IncomingDAO incomingDAO = new IncomingDAO(session);
             ViewPage vp = incomingDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newIncoming.caption("new"));
@@ -79,6 +80,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         try {
             IncomingDAO incomingDAO = new IncomingDAO(ses);
             ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findByIdentefier(id));
+            vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
 
             Outcome outcome = new Outcome();
             outcome.addPayload(vp);
@@ -114,7 +116,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             outcome.addPayload(getActionBar(ses, entity, inDomain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-            if (!isNew){
+            if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }
 

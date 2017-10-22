@@ -21,6 +21,7 @@ import resourcereservations.dao.ApplicationForMeetingRoomDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.domain.ApplicationForMeetingRoomDomain;
 import resourcereservations.model.ApplicationForMeetingRoom;
+import resourcereservations.ui.ViewOptions;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.other.Messages;
@@ -33,7 +34,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Path("applications_for_meeting_room")
+@Path("applications-for-meeting-room")
 @Produces(MediaType.APPLICATION_JSON)
 public class ApplicationForMeetingRoomService extends RestProvider {
 
@@ -50,14 +51,15 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         try {
             ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(session);
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getApplicationForMeetingRoomOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newApplicationForMeetingRoom);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
-            outcome.setId("applications_for_vehicle");
-            outcome.setTitle("applications_for_vehicle");
+            outcome.setId("applications_for_meeting_room");
+            outcome.setTitle("applications_for_meeting_room");
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
             return Response.ok(outcome).build();

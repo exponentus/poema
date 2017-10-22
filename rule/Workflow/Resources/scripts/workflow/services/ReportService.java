@@ -117,7 +117,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Report entity){
+    private _ActionBar getActionBar(_Session session, Report entity) {
         _ActionBar actionBar = new _ActionBar(session);
         ActionFactory action = new ActionFactory();
         actionBar.addAction(action.close);
@@ -127,7 +127,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
 
         Assignment assignment = entity.getParent();
-        if(entity.getId() != null  && entity.getSolution() != null &&
+        if (entity.getId() != null && entity.getSolution() != null &&
                 (assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser()))) {
             actionBar.addAction(acceptReport);
             actionBar.addAction(declineReport);

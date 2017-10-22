@@ -25,6 +25,7 @@ import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
+import projects.ui.ViewOptions;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
@@ -60,12 +61,12 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
             ViewPage<ProjectViewEntry> vp = projectDAO.findViewPage(sortParams, status, params.getPage(),
                     pageSize);
+            vp.setViewPageOptions(new ViewOptions().getProjectOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(
                     new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
             actionBar.addAction(action.refreshVew);
-
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

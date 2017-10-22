@@ -31,6 +31,7 @@ import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.model.Outgoing;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
+import workflow.ui.ViewOptions;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -40,10 +41,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 @Path("outgoings")
 @Produces(MediaType.APPLICATION_JSON)
-public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> {
+public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     private ActionFactory action = new ActionFactory();
 
@@ -59,6 +59,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         try {
             OutgoingDAO dao = new OutgoingDAO(session);
             ViewPage vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setViewPageOptions(new ViewOptions().getOutgoingOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOutgoing.caption("new"));
@@ -84,6 +85,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
         try {
             OutgoingDAO dao = new OutgoingDAO(ses);
             ViewPage vp = dao.findResponsesViewPage(dao.findByIdentefier(id));
+            vp.setViewPageOptions(new ViewOptions().getOutgoingOptions());
 
             Outcome outcome = new Outcome();
             outcome.addPayload(vp);
@@ -119,7 +121,7 @@ public class OutgoingService extends ApprovalService<Outgoing,  OutgoingDomain> 
             outcome.addPayload(getActionBar(ses, entity, outDomain));
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
 
-            if (!isNew){
+            if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }
 
