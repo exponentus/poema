@@ -1,8 +1,7 @@
 package projects.task;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import administrator.dao.UserDAO;
+import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -16,16 +15,17 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
-
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
+import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 
-@Command(name = "pending_reminder", trigger = Trigger.EVERY_NIGHT)
+import java.util.ArrayList;
+import java.util.List;
+
+@Command(name = AppConst.CODE + "_pending_reminder", trigger = Trigger.EVERY_NIGHT)
 public class PendingReminder extends Do {
 	private TaskDAO tDao;
 

@@ -29,7 +29,7 @@ run task fill_control_types
 
 run task gen_test_orgs_xls
 run task gen_test_emps
-run task gen_default_reports
+run task de_gen_default_reports
 run task prj_fill_roles
 echo ***********************************************************
 echo *                     Finished                            *
