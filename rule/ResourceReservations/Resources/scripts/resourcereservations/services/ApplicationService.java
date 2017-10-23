@@ -12,9 +12,9 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.actions._ActionBar;
 import reference.model.Tag;
 import reference.model.Vehicle;
-import resourcereservations.constants.ActionFactory;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
+import resourcereservations.ui.ActionFactory;
 import resourcereservations.ui.ViewOptions;
 
 import javax.ws.rs.GET;
