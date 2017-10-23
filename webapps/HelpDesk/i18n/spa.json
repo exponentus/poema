@@ -204,7 +204,7 @@
   "user_profile" : "Perfil del usuario",
   "login" : null,
   "entity_has_not_been_found" : "entity_has_not_been_found",
-  "user_activities" : "user_activities",
+  "user_activities" : "Actividades del usuario",
   "objects_registry" : "objects_registry",
   "approver_decision_yes" : "Estoy de acuerdo",
   "ui_theme" : "Theme",
