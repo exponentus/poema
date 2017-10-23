@@ -1,7 +1,7 @@
 package projects.report;
 
 import com.exponentus.common.model.embedded.TimeLine;
-import com.exponentus.common.other.AbstractReportProfile;
+import com.exponentus.common.other.AbstractDataObtainer;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.log.Lg;
@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class Report501Profile extends AbstractReportProfile {
+public class Report501 extends AbstractDataObtainer {
 
     @Override
     public String getTemplateName() {
