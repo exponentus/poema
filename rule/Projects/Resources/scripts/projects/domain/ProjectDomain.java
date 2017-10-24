@@ -3,6 +3,7 @@ package projects.domain;
 import administrator.model.User;
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.init.DefaultDataConst;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -84,7 +85,7 @@ public class ProjectDomain extends CommonDomain<Project> {
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + EnvConst.SUPERVISOR_ROLE_NAME);
+        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
         for(Employee sv:supervisors.getResult()){
             readers.add(sv.getUserID());
         }

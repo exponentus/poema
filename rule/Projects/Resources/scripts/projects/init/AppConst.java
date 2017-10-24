@@ -2,7 +2,7 @@ package projects.init;
 
 import administrator.model.constants.InterfaceType;
 import com.exponentus.common.init.DefaultAppConst;
-import com.exponentus.env.EnvConst;
+import com.exponentus.common.init.DefaultDataConst;
 
 public class AppConst extends DefaultAppConst {
     public static final String CODE = "prj";
@@ -13,7 +13,7 @@ public class AppConst extends DefaultAppConst {
     public static String NAME_POR = "Projetos";
     public static String NAME_SPA = "Proyectos";
     public static String BASE_URL = "/" + NAME + "/";
-    public static String[] ROLES = {CODE + "_task_moderator", CODE + "_reporter",CODE + EnvConst.SUPERVISOR_ROLE_NAME};
+    public static String[] ROLES = {CODE + "_task_moderator", CODE + "_reporter",CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME};
     public static final InterfaceType AVAILABLE_MODE[] = {InterfaceType.SPA};
     public static boolean FORCE_DEPLOYING = true;
 }

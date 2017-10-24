@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.init.DefaultDataConst;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.ApprovalType;
@@ -12,7 +13,6 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -177,7 +177,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public void calculateReaders(Task task) throws DAOException {
        EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-       ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + EnvConst.SUPERVISOR_ROLE_NAME);
+       ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
        for(Employee sv:supervisors.getResult()){
            task.addReader(sv.getUserID());
        }
