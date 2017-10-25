@@ -1,5 +1,8 @@
 package projects.ui;
 
+import com.exponentus.common.ui.filter.FilterForm;
+import com.exponentus.common.ui.filter.FilterGroup;
+import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
@@ -163,5 +166,19 @@ public class ViewOptions {
         result.setRoot(task);
         result.addOption("request", request);
         return result;
+    }
+
+    public FilterForm getTaskFilter() {
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        // filterGroup.addItem(new FilterItem("status"));
+        filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types"));
+        filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Reference/api/employees"));
+        filterGroup.addItem(new FilterItem("project").url("/Reference/api/projects"));
+        filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_task").style("return {color:it.color}"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
     }
 }
