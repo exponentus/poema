@@ -51,7 +51,8 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
         try {
             WebFormData params = getWebFormData();
             int pageSize = params.getNumberValueSilently("limit", session.getPageSize());
-            SortParams sortParams = params.getSortParams(SortParams.asc("name"));
+            SortParams sortParams = SortParams.asc("status");
+            sortParams.addAsc("name");
             ProjectDAO projectDAO = new ProjectDAO(session);
 
             ProjectStatusType status = null;
