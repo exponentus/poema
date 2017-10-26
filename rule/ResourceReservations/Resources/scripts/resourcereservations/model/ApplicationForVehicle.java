@@ -38,6 +38,6 @@ public class ApplicationForVehicle extends Reservation {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "applications_for_vehicle/" + getIdentifier();
+        return AppConst.BASE_URL + "applications-for-vehicle/" + getIdentifier();
     }
 }

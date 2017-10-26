@@ -26,6 +26,6 @@ public class ApplicationForMeetingRoom extends Reservation {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "applications_for_meeting_room/" + getIdentifier();
+        return AppConst.BASE_URL + "applications-for-meeting-room/" + getIdentifier();
     }
 }
