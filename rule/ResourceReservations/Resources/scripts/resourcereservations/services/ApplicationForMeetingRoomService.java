@@ -51,7 +51,9 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         try {
             ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(session);
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getApplicationForMeetingRoomOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getApplicationForMeetingRoomOptions());
+            vp.setFilter(viewOptions.getApplicationForMeetingRoomFilter());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newApplicationForMeetingRoom);

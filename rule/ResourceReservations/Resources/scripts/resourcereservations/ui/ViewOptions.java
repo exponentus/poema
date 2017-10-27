@@ -1,5 +1,8 @@
 package resourcereservations.ui;
 
+import com.exponentus.common.ui.filter.FilterForm;
+import com.exponentus.common.ui.filter.FilterGroup;
+import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
@@ -11,33 +14,6 @@ import java.util.List;
 public class ViewOptions {
 
     public ViewPageOptions getApplicationOptions() {
-        /*
-        application: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-40', valueAsClass: 'status-' },
-                { name: 'recipient', value: 'recipient.name' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'use_from', value: 'useFrom', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' },
-                { name: 'use_to', value: 'useTo', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' }
-            ]
-        }, {
-            className: 'vw-10',
-            columns: [
-                { name: 'tags', value: 'tags', type: 'localizedName', className: 'vw-tags', style: (it: any) => { return { color: it.color }; } }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -71,36 +47,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getApplicationForVehicleOptions() {
-        /*
-        applicationForVehicle: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-40', valueAsClass: 'status-' },
-                { name: 'recipient', value: 'recipient.name' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [{ name: 'vehicle', value: 'vehicle', type: 'localizedName' }]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'use_from', value: 'useFrom', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' },
-                { name: 'use_to', value: 'useTo', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' }
-            ]
-        }, {
-            className: 'vw-10',
-            columns: [
-                { name: 'tags', value: 'tags', type: 'localizedName', className: 'vw-tags', style: (it: any) => { return { color: it.color }; } }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -139,36 +85,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getApplicationForMeetingRoomOptions() {
-        /*
-        applicationForMeetingRoom: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-40', valueAsClass: 'status-' },
-                { name: 'recipient', value: 'recipient.name' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [{ name: 'room', value: 'room', type: 'localizedName' }]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'use_from', value: 'useFrom', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' },
-                { name: 'use_to', value: 'useTo', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' }
-            ]
-        }, {
-            className: 'vw-10',
-            columns: [
-                { name: 'tags', value: 'tags', type: 'localizedName', className: 'vw-tags', style: (it: any) => { return { color: it.color }; } }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -204,5 +120,30 @@ public class ViewOptions {
 
         result.setRoot(list);
         return result;
+    }
+
+    public FilterForm getApplicationFilter() {
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("tag", "tags").multiple().url("/Reference/api/tags?hidden=true").style("return { color: it.color }"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
+    }
+
+    public FilterForm getApplicationForMeetingRoomFilter() {
+        return getApplicationFilter();
+    }
+
+    public FilterForm getApplicationForVehicleFilter() {
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("vehicle").url("/Reference/api/vehicles"));
+        filterGroup.addItem(new FilterItem("tag", "tags").multiple().url("/Reference/api/tags?hidden=true").style("return { color: it.color }"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
     }
 }

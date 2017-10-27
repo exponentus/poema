@@ -52,7 +52,9 @@ public class ApplicationForVehicleService extends RestProvider {
         try {
             ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);
             ViewPage vp = avDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getApplicationForVehicleOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getApplicationForVehicleOptions());
+            vp.setFilter(viewOptions.getApplicationForVehicleFilter());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newApplicationForVehicle);
