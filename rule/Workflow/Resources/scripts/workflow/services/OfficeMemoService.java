@@ -58,7 +58,9 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             OfficeMemoFilter filter = new OfficeMemoFilter(params);
             ViewPage vp = officeMemoDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getOfficeMemoOptions());
+            vp.setFilter(viewOptions.getInternalFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOfficeMemo.caption("new"));

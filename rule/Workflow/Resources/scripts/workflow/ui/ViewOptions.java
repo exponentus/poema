@@ -1,42 +1,25 @@
 package workflow.ui;
 
+import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.ui.filter.FilterForm;
+import com.exponentus.common.ui.filter.FilterGroup;
+import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
 import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.env.Environment;
+import com.exponentus.scripting._Session;
+import workflow.model.constants.ControlStatusType;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewOptions {
 
     public ViewPageOptions getIncomingOptions() {
-        /*
-        incoming: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-30',
-            columns: [
-                { name: 'sender', value: 'sender', type: 'text', sort: 'both', className: 'vw-70' },
-                { name: 'sender_applied_reg_date', value: 'senderAppliedRegDate', type: 'date', format: 'DD.MM.YYYY', sort: 'both', className: 'vw-30' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'doc_type', value: 'docType', type: 'localizedName' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'addressee', value: 'addressee' }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -71,33 +54,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getOutgoingOptions() {
-        /*
-        outgoing: [{
-            className: 'vw-35',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-15',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-50', valueAsClass: 'status-' },
-                { name: 'result', value: 'result', type: 'translate', className: 'vw-50', valueAsClass: 'result-' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'recipient', value: 'recipient', type: 'localizedName', sort: 'both' }
-            ]
-        }, {
-            className: 'vw-30',
-            columns: [
-                { name: 'doc_subject', value: 'docSubject', type: 'localizedName', sort: 'both', className: 'vw-50' },
-                { name: 'doc_type', value: 'docType', type: 'localizedName', sort: 'both', className: 'vw-50' }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -133,33 +89,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getOfficeMemoOptions() {
-        /*
-        officeMemo: [{
-            className: 'vw-35',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'both', className: 'vw-35' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-15',
-            columns: [
-                // { name: 'status', value: 'status', type: 'translate', monogram: 'result', valueAsClass: 'status-' }
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-50', valueAsClass: 'status-' },
-                { name: 'result', value: 'result', type: 'translate', className: 'vw-50', valueAsClass: 'result-' }
-            ]
-        }, {
-            className: 'vw-25',
-            columns: [
-                { name: 'recipient', value: 'recipient' }
-            ]
-        }, {
-            className: 'vw-25',
-            columns: [
-                { name: 'applied_author', value: 'appliedAuthor' }
-            ]
-        }*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -194,31 +123,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getAssignmentViewOptions() {
-        /*
-        assignmentView: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'title', value: 'title' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'applied_author', value: 'appliedAuthor' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'control_type', value: 'controlType', type: 'localizedName', className: 'vw-50' },
-                { name: 'status', value: 'status', type: 'translate', valueAsClass: 'status-', className: 'vw-50' }
-            ]
-        }, {
-            className: 'vw-30',
-            columns: [
-                { name: 'start_date', value: 'startDate', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' },
-                { name: 'due_date', value: 'dueDate', type: 'date', format: 'DD.MM.YYYY', className: 'vw-50' }
-            ]
-        }*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -250,26 +154,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getActionableDocumentViewOptions() {
-        /*
-        actionableDocument: [{
-            className: 'vw-20',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text' }
-            ]
-        }, {
-            className: 'vw-60',
-            columns: [
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', valueAsClass: 'status-' },
-                // { name: 'result', value: 'result', type: 'translate', valueAsClass: 'result-' }
-            ]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -297,14 +181,6 @@ public class ViewOptions {
     }
 
     public List<ViewColumnGroup> getAssignmentColGroup() {
-        /*
-        assignment: [{
-            className: 'vp__list_it-inline',
-            columns: [
-                { value: 'title', className: 'inline' }
-            ]
-        }]*/
-
         ViewColumnGroup cg = new ViewColumnGroup();
         cg.setClassName("vp__list_it-inline");
         cg.add(new ViewColumn("title").className("inline"));
@@ -315,15 +191,6 @@ public class ViewOptions {
     }
 
     public List<ViewColumnGroup> getReportColGroup() {
-        /*
-        report: [{
-            className: 'vp__list_it-inline',
-            columns: [
-                { value: 'title', className: 'inline' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }]*/
-
         ViewColumnGroup cg = new ViewColumnGroup();
         cg.setClassName("vp__list_it-inline");
         cg.add(new ViewColumn("title").className("inline"));
@@ -332,5 +199,294 @@ public class ViewOptions {
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg);
         return list;
+    }
+
+    public FilterForm getIncomingFilter(_Session session) {
+        /*
+        incoming: {
+                fieldsets: [{
+                    fields: [{
+                        type: 'select',
+                        name: 'sender',
+                        placeHolder: 'sender',
+                        values: {
+                            url: STAFF_URL.API_ORGANIZATIONS,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'addressee',
+                        placeHolder: 'addressee',
+                        values: {
+                            url: STAFF_URL.API_EMPLOYEES,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'docType',
+                        placeHolder: 'doc_type',
+                        values: {
+                            url: REFERENCE_URL.API_DOCUMENT_TYPES,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'docSubject',
+                        placeHolder: 'doc_subject',
+                        values: {
+                            url: REFERENCE_URL.API_DOCUMENT_SUBJECTS,
+                            searchable: true
+                        }
+                    }]
+                }]
+            }
+         */
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("sender").searchable(true).url("/Staff/api/organizations"));
+        filterGroup.addItem(new FilterItem("addressee").searchable(true).url("/Staff/api/employees"));
+        filterGroup.addItem(new FilterItem("docType", "doc_type").searchable(true).url("/Reference/api/document-types"));
+        filterGroup.addItem(new FilterItem("docSubject", "doc_subject").searchable(true).url("/Reference/api/document-subjects"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
+    }
+
+    public FilterForm getOutgoingFilter(_Session session) {
+        /*
+        outgoing: {
+                fieldsets: [{
+                    fields: [{
+                        type: 'select',
+                        name: 'status',
+                        placeHolder: 'status',
+                        values: {
+                            items: this.APPROVAL_STATUS_TYPES
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'result',
+                        placeHolder: 'approval_result',
+                        values: {
+                            items: this.APPROVAL_RESULT_TYPES
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'recipient',
+                        placeHolder: 'recipient',
+                        values: {
+                            url: STAFF_URL.API_ORGANIZATIONS,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'docType',
+                        placeHolder: 'doc_type',
+                        values: {
+                            url: REFERENCE_URL.API_DOCUMENT_TYPES,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'docSubject',
+                        placeHolder: 'doc_subject',
+                        values: {
+                            url: REFERENCE_URL.API_DOCUMENT_SUBJECTS,
+                            searchable: true
+                        }
+                    }]
+                }]
+            }
+         */
+        List<FilterItem.Item> approvalStatusItems = new ArrayList<>();
+        for (ApprovalStatusType type : ApprovalStatusType.values()) {
+            if (type == ApprovalStatusType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ApprovalStatusType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            approvalStatusItems.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
+        List<FilterItem.Item> approvalResultItems = new ArrayList<>();
+        for (ApprovalResultType type : ApprovalResultType.values()) {
+            if (type == ApprovalResultType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ApprovalResultType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            approvalResultItems.add(new FilterItem.Item(type.name(), name, null));
+        }
+
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("status").items(approvalStatusItems));
+        filterGroup.addItem(new FilterItem("result", "approval_result").items(approvalResultItems));
+        filterGroup.addItem(new FilterItem("recipient").searchable(true).url("/Staff/api/organizations"));
+        filterGroup.addItem(new FilterItem("docType", "doc_type").searchable(true).url("/Reference/api/document-types"));
+        filterGroup.addItem(new FilterItem("docSubject", "doc_subject").searchable(true).url("/Reference/api/document-subjects"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
+    }
+
+    public FilterForm getInternalFilter(_Session session) {
+        /*
+        officeMemo: {
+                fieldsets: [{
+                    fields: [{
+                        type: 'select',
+                        name: 'status',
+                        placeHolder: 'status',
+                        values: {
+                            items: this.APPROVAL_STATUS_TYPES
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'result',
+                        placeHolder: 'approval_result',
+                        values: {
+                            items: this.APPROVAL_RESULT_TYPES
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'appliedAuthor',
+                        placeHolder: 'applied_author',
+                        values: {
+                            url: STAFF_URL.API_EMPLOYEES,
+                            searchable: true
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'recipient',
+                        placeHolder: 'recipient',
+                        values: {
+                            url: STAFF_URL.API_EMPLOYEES,
+                            searchable: true
+                        }
+                    }]
+                }]
+            }
+         */
+        List<FilterItem.Item> approvalStatusItems = new ArrayList<>();
+        for (ApprovalStatusType type : ApprovalStatusType.values()) {
+            if (type == ApprovalStatusType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ApprovalStatusType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            approvalStatusItems.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
+        List<FilterItem.Item> approvalResultItems = new ArrayList<>();
+        for (ApprovalResultType type : ApprovalResultType.values()) {
+            if (type == ApprovalResultType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ApprovalResultType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            approvalResultItems.add(new FilterItem.Item(type.name(), name, null));
+        }
+
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("status").items(approvalStatusItems));
+        filterGroup.addItem(new FilterItem("result", "approval_result").items(approvalResultItems));
+        filterGroup.addItem(new FilterItem("appliedAuthor", "applied_author").searchable(true).url("/Staff/api/employees"));
+        filterGroup.addItem(new FilterItem("recipient").searchable(true).url("/Staff/api/employees"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
+    }
+
+    public FilterForm getAssignmentFilter(_Session session) {
+        /*
+        assignment: {
+                fieldsets: [{
+                    fields: [{
+                        type: 'select',
+                        name: 'status',
+                        placeHolder: 'status',
+                        values: {
+                            items: this.CONTROL_STATUS_TYPES
+                        }
+                    }, {
+                        type: 'select',
+                        name: 'controlType',
+                        placeHolder: 'control_type',
+                        values: {
+                            url: REFERENCE_URL.API_CONTROL_TYPES,
+                            searchable: true
+                        }
+                    }]
+                }]
+            }
+         */
+        List<FilterItem.Item> controlStatusItems = new ArrayList<>();
+        for (ControlStatusType type : ControlStatusType.values()) {
+            if (type == ControlStatusType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ControlStatusType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            controlStatusItems.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("status").items(controlStatusItems));
+        filterGroup.addItem(new FilterItem("controlType", "control_type").searchable(true).url("/Reference/api/control-types"));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
     }
 }

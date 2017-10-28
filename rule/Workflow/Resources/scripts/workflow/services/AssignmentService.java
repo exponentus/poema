@@ -90,7 +90,9 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
             AssignmentDAO assignmentDAO = new AssignmentDAO(session);
             ViewPage vp = assignmentDAO.findViewPage(filter, sortParams, getWebFormData().getPage(), pageSize, showAssigneeList);
-            vp.setViewPageOptions(new ViewOptions().getAssignmentViewOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getAssignmentViewOptions());
+            vp.setFilter(viewOptions.getAssignmentFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);

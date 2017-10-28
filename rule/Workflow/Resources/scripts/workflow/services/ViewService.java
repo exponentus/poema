@@ -37,7 +37,8 @@ public class ViewService extends RestProvider {
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
             Employee employee = employeeDAO.findByUser(session.getUser());
             ViewPage vp = dao.findApprovalPendingByCurrentEmployeeViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getActionableDocumentViewOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.refreshVew);
@@ -64,7 +65,8 @@ public class ViewService extends RestProvider {
             ActionableDocumentDAO dao = new ActionableDocumentDAO(session);
             Employee employee = employeeDAO.findByUser(session.getUser());
             ViewPage vp = dao.findProjectsByAuthorViewPage(employee, sortParams, getWebFormData().getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getActionableDocumentViewOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOutgoing);

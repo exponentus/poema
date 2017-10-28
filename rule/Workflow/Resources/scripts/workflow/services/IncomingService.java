@@ -56,7 +56,9 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         try {
             IncomingDAO incomingDAO = new IncomingDAO(session);
             ViewPage vp = incomingDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getIncomingOptions());
+            vp.setFilter(viewOptions.getIncomingFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newIncoming.caption("new"));

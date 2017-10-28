@@ -59,7 +59,9 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
         try {
             OutgoingDAO dao = new OutgoingDAO(session);
             ViewPage vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getOutgoingOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getOutgoingOptions());
+            vp.setFilter(viewOptions.getOutgoingFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(action.newOutgoing.caption("new"));
