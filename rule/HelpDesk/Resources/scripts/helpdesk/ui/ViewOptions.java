@@ -1,9 +1,15 @@
 package helpdesk.ui;
 
+import com.exponentus.common.ui.filter.FilterForm;
+import com.exponentus.common.ui.filter.FilterGroup;
+import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
 import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.env.Environment;
+import com.exponentus.scripting._Session;
+import helpdesk.model.constants.DemandStatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,28 +17,6 @@ import java.util.List;
 public class ViewOptions {
 
     public ViewPageOptions getDemandOptions() {
-        /*
-        demand: [{
-            className: 'vw-40',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', sort: 'desc', className: 'vw-40' },
-                { name: 'title', value: 'title', type: 'text', sort: 'both' },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-25',
-            columns: [
-                { name: 'demand_type', value: 'demandType', type: 'localizedName', className: 'vw-60' },
-                { name: 'status', value: 'status', type: 'translate', className: 'vw-40', valueAsClass: 'status-' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [{ name: 'customer', value: 'customer', type: 'localizedName' }]
-        }, {
-            className: 'vw-15',
-            columns: [{ name: 'tags', value: 'tags', type: 'localizedName', className: 'vw-tags', style: (it: Tag) => { return { color: it.color }; } }]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -52,7 +36,7 @@ public class ViewOptions {
 
         ViewColumnGroup cg4 = new ViewColumnGroup();
         cg4.setClassName("vw-15");
-        cg4.add(new ViewColumn("tags").type(ViewColumnType.localizedName).className("vw-tags").style("return { color:it.color }"));
+        cg4.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color:it.color }"));
 
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg1);
@@ -60,7 +44,25 @@ public class ViewOptions {
         list.add(cg3);
         list.add(cg4);
 
-        result.addOption("root", list);
+        result.setRoot(list);
         return result;
+    }
+
+    public FilterForm getDemandFilter(_Session session) {
+        List<FilterItem.Item> items = new ArrayList<>();
+        for (DemandStatusType type : DemandStatusType.values()) {
+            if (type != DemandStatusType.UNKNOWN) {
+                String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+                items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+            }
+        }
+
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("status").items(items));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
     }
 }

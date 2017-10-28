@@ -82,7 +82,7 @@ public class TaskService extends RestProvider {
             }
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getTaskViewOptions());
-            vp.setFilter(viewOptions.getTaskFilter());
+            vp.setFilter(viewOptions.getTaskFilter(session));
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

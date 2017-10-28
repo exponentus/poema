@@ -34,7 +34,7 @@ public class ViewOptions {
 
         ViewColumnGroup cg4 = new ViewColumnGroup();
         cg4.setClassName("vw-15");
-        cg4.add(new ViewColumn("tags").type(ViewColumnType.localizedName).className("vw-tags").style("return { color: it.color }"));
+        cg4.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
 
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg1);
@@ -71,7 +71,7 @@ public class ViewOptions {
 
         ViewColumnGroup cg5 = new ViewColumnGroup();
         cg5.setClassName("vw-10");
-        cg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).className("vw-tags").style("return { color: it.color }"));
+        cg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
 
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg1);
@@ -109,7 +109,7 @@ public class ViewOptions {
 
         ViewColumnGroup cg5 = new ViewColumnGroup();
         cg5.setClassName("vw-10");
-        cg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).className("vw-tags").style("return { color: it.color }"));
+        cg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
 
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg1);

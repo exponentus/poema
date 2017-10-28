@@ -70,7 +70,9 @@ public class DemandService extends RestProvider {
 
             DemandDAO dao = new DemandDAO(session);
             ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setViewPageOptions(new ViewOptions().getDemandOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getDemandOptions());
+            vp.setFilter(viewOptions.getDemandFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             Action newDocAction = new Action(ActionType.LINK).caption("add_demand")

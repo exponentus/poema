@@ -61,7 +61,9 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
             ViewPage<ProjectViewEntry> vp = projectDAO.findViewPage(sortParams, status, params.getPage(),
                     pageSize);
-            vp.setViewPageOptions(new ViewOptions().getProjectOptions());
+            ViewOptions viewOptions = new ViewOptions();
+            vp.setViewPageOptions(viewOptions.getProjectOptions());
+            vp.setFilter(viewOptions.getProjectFilter(session));
 
             _ActionBar actionBar = new _ActionBar(session);
             actionBar.addAction(

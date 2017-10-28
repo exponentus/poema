@@ -7,36 +7,18 @@ import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
 import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.env.Environment;
+import com.exponentus.scripting._Session;
+import projects.model.constants.ProjectStatusType;
+import projects.model.constants.TaskStatusType;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewOptions {
 
     public ViewPageOptions getProjectOptions() {
-        /*
-        project: [{
-            className: 'vw-30',
-            columns: [
-                { name: 'name', value: 'name', type: 'text', sort: 'desc' },
-                { value: 'hasAttachment', type: 'attachment' },
-                { name: 'status', value: 'status', type: 'translate', sort: 'both', className: 'vw-55', valueAsClass: 'status-' }
-            ]
-        }, {
-            className: 'vw-20',
-            columns: [{ name: 'customer', value: 'customer', sort: 'both' }]
-        }, {
-            className: 'vw-40',
-            columns: [
-                { name: 'manager', value: ['employees', 'managerUserId', 'name'], type: 'normalizedData', className: 'vw-35' },
-                { name: 'programmer', value: ['employees', 'programmerUserId', 'name'], type: 'normalizedData', className: 'vw-35' },
-                { name: 'tester', value: ['employees', 'testerUserId', 'name'], type: 'normalizedData', className: 'vw-30' }
-            ]
-        }, {
-            className: 'vw-10',
-            columns: [{ name: 'finish_date', value: 'finishDate', type: 'date', format: 'DD.MM.YYYY' }]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
@@ -70,41 +52,6 @@ public class ViewOptions {
     }
 
     public ViewPageOptions getTaskViewOptions() {
-        /*
-        task: [{
-            className: 'vw-35',
-            columns: [
-                { name: 'reg_number', value: 'regNumber', type: 'text', className: 'vw-45' },
-                { value: 'status', type: 'translate', className: 'vp__list_it_col-if-tree-view status-col-mobile', valueAsClass: 'status-bg-' },
-                {
-                    name: 'task_title', value: 'title', type: 'text', sort: 'both', style: (it: Task) => {
-                        if (it.approvalStatus === 'PENDING') {
-                            return { color: '#9C27B0', 'font-weight': 'bold' };
-                        }
-                    }
-                },
-                { value: 'hasAttachment', type: 'attachment' }
-            ]
-        }, {
-            className: 'vw-15',
-            columns: [
-                { name: 'status', value: 'status', type: 'translate', sort: 'both', className: 'vw-50', valueAsClass: 'status-' },
-                { name: 'priority', value: 'priority', type: 'translate', sort: 'both', className: 'vw-50', valueAsClass: 'priority-' }
-            ]
-        }, {
-            className: 'vw-15',
-            columns: [{ name: 'assignee_user', value: ['employees', 'assigneeUserId', 'name'], type: 'normalizedData' }]
-        }, {
-            className: 'vw-20',
-            columns: [
-                { name: 'start_date', value: 'startDate', type: 'date', format: 'DD.MM.YYYY', sort: 'both', className: 'vw-50' },
-                { name: 'due_date', value: 'dueDate', type: 'date', format: 'DD.MM.YYYY', sort: 'both', className: 'vw-50' }
-            ]
-        }, {
-            className: 'vw-15',
-            columns: [{ name: 'tags', value: 'tags', type: 'localizedName', className: 'vw-tags', style: (it: Tag) => { return { color: it.color }; } }]
-        }]*/
-
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup tcg1 = new ViewColumnGroup();
@@ -130,7 +77,7 @@ public class ViewOptions {
 
         ViewColumnGroup tcg5 = new ViewColumnGroup();
         tcg5.setClassName("vw-15");
-        tcg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).className("vw-tags").style("return { color: it.color }"));
+        tcg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
 
         List<ViewColumnGroup> task = new ArrayList<>();
         task.add(tcg1);
@@ -139,18 +86,7 @@ public class ViewOptions {
         task.add(tcg4);
         task.add(tcg5);
 
-        /*
-        request: [{
-            className: 'vp__list_it-inline',
-            columns: [
-                { value: 'requestType', type: 'localizedName', className: 'request__type' },
-                { value: 'regDate', type: 'date', className: 'request__time hidden-md' },
-                { value: 'comment', type: 'text', className: 'request__comment hidden-md' },
-                { value: 'hasAttachment', type: 'attachment' },
-                { value: 'resolution', type: 'translate', className: 'request-list__item', valueAsClass: 'request-status-' },
-                { value: 'resolutionTime', type: 'date', className: 'request__resolution_time hidden-md' }
-            ]
-        }]*/
+        // Request
         ViewColumnGroup rcg1 = new ViewColumnGroup();
         rcg1.setClassName("vp__list_it-inline");
         rcg1.add(new ViewColumn("requestType").type(ViewColumnType.localizedName).className("request__type"));
@@ -164,16 +100,64 @@ public class ViewOptions {
         request.add(rcg1);
 
         result.setRoot(task);
-        result.addOption("request", request);
+        result.add("request", request);
         return result;
     }
 
-    public FilterForm getTaskFilter() {
+    public FilterForm getProjectFilter(_Session session) {
+        List<FilterItem.Item> items = new ArrayList<>();
+        for (ProjectStatusType type : ProjectStatusType.values()) {
+            if (type == ProjectStatusType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = ProjectStatusType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
         FilterForm filterForm = new FilterForm();
         FilterGroup filterGroup = new FilterGroup();
-        // filterGroup.addItem(new FilterItem("status"));
+        filterGroup.addItem(new FilterItem("status").items(items));
+
+        filterForm.addGroup(filterGroup);
+
+        return filterForm;
+    }
+
+    public FilterForm getTaskFilter(_Session session) {
+        List<FilterItem.Item> items = new ArrayList<>();
+        for (TaskStatusType type : TaskStatusType.values()) {
+            if (type == TaskStatusType.UNKNOWN) {
+                continue;
+            }
+
+            try {
+                Field field = TaskStatusType.class.getField(type.name());
+                if (field.isAnnotationPresent(Deprecated.class)) {
+                    continue;
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+
+            String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
+            items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
+        FilterForm filterForm = new FilterForm();
+        FilterGroup filterGroup = new FilterGroup();
+        filterGroup.addItem(new FilterItem("status").items(items));
         filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types"));
-        filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Reference/api/employees"));
+        filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
         filterGroup.addItem(new FilterItem("project").url("/Reference/api/projects"));
         filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_task").style("return {color:it.color}"));
 
