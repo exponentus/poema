@@ -2,15 +2,15 @@ package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionType;
+import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.scripting.actions.Action;
-import com.exponentus.scripting.actions.ActionType;
-import com.exponentus.scripting.actions._ActionBar;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.AssignmentDAO;

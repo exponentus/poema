@@ -1,9 +1,10 @@
 package workflow.ui;
 
 import com.exponentus.common.ui.ConventionalActionFactory;
-import com.exponentus.scripting.actions.Action;
-import com.exponentus.scripting.actions.ActionType;
+import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionType;
 import workflow.init.AppConst;
+
 
 /**
  * Created by medin on 4/21/17.
