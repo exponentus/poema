@@ -20,7 +20,7 @@ import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
 import com.exponentus.extconnect.IExtUser;
-import com.exponentus.extconnect.IOfficeFrameDataProvider;
+import com.exponentus.extconnect.IOfficeFrame;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -389,7 +389,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     @JsonIgnore
     public List<IExtUser> getRecipientsAfterApproval() {
-        IOfficeFrameDataProvider dao = Environment.getOfficeFrameProvider();
+        IOfficeFrame dao = Environment.getOfficeFrame();
         List<IExtUser> recipients = new ArrayList<IExtUser>();
         recipients.add((Employee) dao.getEmployee(assignee));
         for (Long userId : getObservers()) {
