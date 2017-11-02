@@ -118,7 +118,7 @@ public class DemandService extends RestProvider {
                 entity = demandDomain.composeNew((User) session.getUser(), demandType);
             } else {
                 DemandDAO dao = new DemandDAO(session);
-                entity = dao.findByIdentefier(id);
+                entity = dao.findByIdentifier(id);
             }
 
             Outcome outcome = demandDomain.getOutcome(entity);
@@ -191,7 +191,7 @@ public class DemandService extends RestProvider {
         _Session ses = getSession();
         try {
             DemandDAO dao = new DemandDAO(ses);
-            Demand entity = dao.findByIdentefier(id);
+            Demand entity = dao.findByIdentifier(id);
             if (entity != null) {
                 dao.delete(entity);
             }
@@ -207,7 +207,7 @@ public class DemandService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             DemandDAO demandDAO = new DemandDAO(getSession());
-            Demand demand = demandDAO.findByIdentefier(id);
+            Demand demand = demandDAO.findByIdentifier(id);
 
             return getAttachment(demand, attachId);
         } catch (DAOException e) {

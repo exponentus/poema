@@ -129,7 +129,7 @@ public class ObservationService extends RestProvider {
 
 				entity = domain.composeNew((User) session.getUser(), project, workType);
 			} else {
-				entity = dao.findByIdentefier(id);
+				entity = dao.findByIdentifier(id);
 				if (entity == null) {
 					return Response.status(Response.Status.NOT_FOUND).build();
 				}
@@ -218,7 +218,7 @@ public class ObservationService extends RestProvider {
 	public Response delete(@PathParam("id") String id) {
 		try {
 			ObservationDAO dao = new ObservationDAO(getSession());
-			Observation entity = dao.findByIdentefier(id);
+			Observation entity = dao.findByIdentifier(id);
 			if (entity != null) {
 				dao.delete(entity);
 			}
@@ -234,7 +234,7 @@ public class ObservationService extends RestProvider {
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
 		try {
 			ObservationDAO dao = new ObservationDAO(getSession());
-			Observation entity = dao.findByIdentefier(id);
+			Observation entity = dao.findByIdentifier(id);
 
 			return getAttachment(entity, attachId);
 		} catch (Exception e) {

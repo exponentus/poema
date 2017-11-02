@@ -54,9 +54,9 @@ public class RequestService extends RestProvider {
                 String taskId = getWebFormData().getValueSilently("task");
                 TaskDAO taskDAO = new TaskDAO(session);
 
-                request = requestDomain.composeNew((User) session.getUser(), taskDAO.findByIdentefier(taskId));
+                request = requestDomain.composeNew((User) session.getUser(), taskDAO.findByIdentifier(taskId));
             } else {
-                request = requestDAO.findByIdentefier(id);
+                request = requestDAO.findByIdentifier(id);
                 if (request == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
@@ -155,7 +155,7 @@ public class RequestService extends RestProvider {
     private Response doResolution(String requestId, ResolutionType resolutionType, Request requestDto) {
         try {
             RequestDAO requestDAO = new RequestDAO(getSession());
-            Request request = requestDAO.findByIdentefier(requestId);
+            Request request = requestDAO.findByIdentifier(requestId);
 
             if (request == null || resolutionType == ResolutionType.UNKNOWN) {
                 if (request == null) {
@@ -211,7 +211,7 @@ public class RequestService extends RestProvider {
     public Response delete(@PathParam("id") String id) {
         try {
             RequestDAO dao = new RequestDAO(getSession());
-            Request entity = dao.findByIdentefier(id);
+            Request entity = dao.findByIdentifier(id);
             if (entity != null) {
                 entity.setAttachments(null); // if no on delete cascade
                 dao.delete(entity);
@@ -228,7 +228,7 @@ public class RequestService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             RequestDAO dao = new RequestDAO(getSession());
-            Request entity = dao.findByIdentefier(id);
+            Request entity = dao.findByIdentifier(id);
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {

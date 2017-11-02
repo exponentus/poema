@@ -81,7 +81,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         _Session ses = getSession();
         try {
             IncomingDAO incomingDAO = new IncomingDAO(ses);
-            ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findByIdentefier(id));
+            ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findByIdentifier(id));
             vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
 
             Outcome outcome = new Outcome();
@@ -106,7 +106,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
                 entity = inDomain.composeNew(user);
             } else {
                 IncomingDAO incomingDAO = new IncomingDAO(ses);
-                entity = incomingDAO.findByIdentefier(id);
+                entity = incomingDAO.findByIdentifier(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);

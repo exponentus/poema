@@ -90,7 +90,7 @@ public class ProjectService extends RestProvider {
 			if (isNew) {
 				project = projectDomain.composeNew((User) session.getUser());
 			} else {
-				project = dao.findByIdentefier(id);
+				project = dao.findByIdentifier(id);
 				if (project == null) {
 					return Response.status(Response.Status.NOT_FOUND).build();
 				}
@@ -170,7 +170,7 @@ public class ProjectService extends RestProvider {
 	public Response delete(@PathParam("id") String id) {
 		try {
 			ProjectDAO dao = new ProjectDAO(getSession());
-			Project entity = dao.findByIdentefier(id);
+			Project entity = dao.findByIdentifier(id);
 			if (entity != null) {
 				entity.setAttachments(null); // if no on delete cascade
 				dao.delete(entity);
@@ -187,7 +187,7 @@ public class ProjectService extends RestProvider {
 	public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
 		try {
 			ProjectDAO dao = new ProjectDAO(getSession());
-			Project entity = dao.findByIdentefier(id);
+			Project entity = dao.findByIdentifier(id);
 
 			return getAttachment(entity, attachId);
 		} catch (Exception e) {

@@ -143,19 +143,19 @@ public class TaskService extends RestProvider {
                 Task parentTask = null;
 
                 if (!parentTaskId.isEmpty()) {
-                    parentTask = taskDAO.findByIdentefier(parentTaskId);
+                    parentTask = taskDAO.findByIdentifier(parentTaskId);
                 }
 
                 if (!projectId.isEmpty()) {
                     ProjectDAO projectDAO = new ProjectDAO(session);
-                    project = projectDAO.findByIdentefier(projectId);
+                    project = projectDAO.findByIdentifier(projectId);
                 } else if (parentTask != null) {
                     project = parentTask.getProject();
                 }
 
                 if (!demandId.isEmpty()) {
                     DemandDAO demandDAO = new DemandDAO(session);
-                    demand = demandDAO.findByIdentefier(demandId);
+                    demand = demandDAO.findByIdentifier(demandId);
                 } else if (parentTask != null) {
                     demand = parentTask.getDemand();
                 }
@@ -170,7 +170,7 @@ public class TaskService extends RestProvider {
 
                 task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 5);
             } else {
-                task = taskDAO.findByIdentefier(id);
+                task = taskDAO.findByIdentifier(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
@@ -275,7 +275,7 @@ public class TaskService extends RestProvider {
     public Response delete(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task entity = dao.findByIdentefier(id);
+            Task entity = dao.findByIdentifier(id);
             if (entity != null) {
                 entity.setBlocks(null);
                 entity.setAttachments(null); // if no on delete cascade
@@ -294,7 +294,7 @@ public class TaskService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task entity = dao.findByIdentefier(id);
+            Task entity = dao.findByIdentifier(id);
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {
@@ -315,7 +315,7 @@ public class TaskService extends RestProvider {
     public Response doTaskAcknowledged(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentefier(id);
+            Task task = dao.findByIdentifier(id);
 
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.acknowledgedTask(task, (User) getSession().getUser());
@@ -336,7 +336,7 @@ public class TaskService extends RestProvider {
     public Response doTaskComplete(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentefier(id);
+            Task task = dao.findByIdentifier(id);
 
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.completeTask(task);
@@ -357,7 +357,7 @@ public class TaskService extends RestProvider {
     public Response doTaskCancel(@PathParam("id") String id, @QueryParam("comment") String comment) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentefier(id);
+            Task task = dao.findByIdentifier(id);
 
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.cancelTask(task, comment);

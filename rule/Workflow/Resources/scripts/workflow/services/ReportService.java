@@ -49,10 +49,10 @@ public class ReportService extends EntityService<Report, ReportDomain> {
                 AssignmentDAO aDAO = new AssignmentDAO(ses);
                 String assignmentId = getWebFormData().getValueSilently("assignment");
 
-                entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findByIdentefier(assignmentId));
+                entity = reportDomain.composeNew(employeeDAO.findByUser(ses.getUser()), aDAO.findByIdentifier(assignmentId));
             } else {
                 ReportDAO reportDAO = new ReportDAO(ses);
-                entity = reportDAO.findByIdentefier(id);
+                entity = reportDAO.findByIdentifier(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
