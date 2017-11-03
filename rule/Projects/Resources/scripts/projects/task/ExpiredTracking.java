@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.DISABLE)
+@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private Date current = new Date();
 	private Tag tag;
