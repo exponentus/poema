@@ -11,8 +11,8 @@ import audit.model.Project;
 import audit.model.constants.ObservationStatusType;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -81,7 +81,7 @@ public class ObservationService extends RestProvider {
 			ObservationDAO dao = new ObservationDAO(session);
 			ViewPage<Observation> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
-			_ActionBar actionBar = new _ActionBar(session);
+			ActionBar actionBar = new ActionBar(session);
 			actionBar.addAction(
 					new Action(ActionType.LINK).caption("new_observation").url(AppConst.BASE_URL + "observations/new"));
 			actionBar.addAction(new Action(ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
@@ -249,8 +249,8 @@ public class ObservationService extends RestProvider {
 		return getAttachment(id, attachId);
 	}
 
-	private _ActionBar getActionBar(_Session session, Observation entity, ObservationDomain domain) {
-		_ActionBar actionBar = new _ActionBar(session);
+	private ActionBar getActionBar(_Session session, Observation entity, ObservationDomain domain) {
+		ActionBar actionBar = new ActionBar(session);
 		actionBar.addAction(new Action(ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
 		if (entity.isEditable()) {
 			actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));

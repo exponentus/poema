@@ -4,8 +4,8 @@ import administrator.model.User;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -74,7 +74,7 @@ public class DemandService extends RestProvider {
             vp.setViewPageOptions(viewOptions.getDemandOptions());
             vp.setFilter(viewOptions.getDemandFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
                     .url(AppConst.BASE_URL + "demands/new?type=" + slug);
             actionBar.addAction(newDocAction);
@@ -222,8 +222,8 @@ public class DemandService extends RestProvider {
         return getAttachment(id, attachId);
     }
 
-    private _ActionBar getActionBar(_Session session, Demand entity) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Demand entity) {
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(new ConventionalActionFactory().close);
         if (entity.isNew() || entity.isEditable()) {

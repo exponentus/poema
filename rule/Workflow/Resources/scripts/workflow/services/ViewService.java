@@ -1,12 +1,13 @@
 package workflow.services;
 
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions._ActionBar;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.SortParams;
-import com.exponentus.scripting._Session;import staff.dao.EmployeeDAO;
+import com.exponentus.scripting._Session;
+import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.dao.ActionableDocumentDAO;
 import workflow.ui.ActionFactory;
@@ -39,7 +40,7 @@ public class ViewService extends RestProvider {
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -67,7 +68,7 @@ public class ViewService extends RestProvider {
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newOutgoing);
             actionBar.addAction(action.newOfficeMemo);
             actionBar.addAction(action.refreshVew);

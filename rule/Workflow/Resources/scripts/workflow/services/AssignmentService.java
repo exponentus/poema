@@ -5,8 +5,8 @@ import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -94,7 +94,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             vp.setViewPageOptions(viewOptions.getAssignmentViewOptions());
             vp.setFilter(viewOptions.getAssignmentFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -252,8 +252,8 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Assignment entity) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Assignment entity) {
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(action.close);
         if (entity.isNew() || entity.isEditable()) {

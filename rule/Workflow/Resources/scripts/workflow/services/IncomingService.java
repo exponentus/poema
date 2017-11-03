@@ -3,11 +3,12 @@ package workflow.services;
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -60,14 +61,14 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             vp.setViewPageOptions(viewOptions.getIncomingOptions());
             vp.setFilter(viewOptions.getIncomingFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newIncoming.caption("new"));
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
             outcome.setId("incomings");
             outcome.setTitle("incoming_documents");
-            outcome.addPayload(actionBar);
+            outcome.addPayload(new ConventionalActionFactory().getViewActionBar(session));
             outcome.addPayload(vp);
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -145,8 +146,8 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Incoming entity, IncomingDomain domain) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Incoming entity, IncomingDomain domain) {
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

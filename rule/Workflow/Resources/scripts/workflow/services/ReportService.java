@@ -3,8 +3,8 @@ package workflow.services;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -117,8 +117,8 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Report entity) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Report entity) {
+        ActionBar actionBar = new ActionBar(session);
         ActionFactory action = new ActionFactory();
         actionBar.addAction(action.close);
         actionBar.addAction(action.saveAndClose);

@@ -4,7 +4,7 @@ import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalType;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions._ActionBar;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -55,7 +55,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
             vp.setViewPageOptions(viewOptions.getApplicationForMeetingRoomOptions());
             vp.setFilter(viewOptions.getApplicationForMeetingRoomFilter());
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newApplicationForMeetingRoom);
             actionBar.addAction(action.refreshVew);
 
@@ -273,9 +273,9 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, ApplicationForMeetingRoom entity,
-                                    ApplicationForMeetingRoomDomain domain) throws DAOException {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, ApplicationForMeetingRoom entity,
+                                   ApplicationForMeetingRoomDomain domain) throws DAOException {
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

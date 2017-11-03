@@ -2,8 +2,8 @@ package projects.services;
 
 import administrator.model.User;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -243,8 +243,8 @@ public class RequestService extends RestProvider {
         return getAttachment(id, attachId);
     }
 
-    private _ActionBar getActionBar(_Session session, Request request, RequestDomain requestDomain) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Request request, RequestDomain requestDomain) {
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(new ActionFactory().close);
 

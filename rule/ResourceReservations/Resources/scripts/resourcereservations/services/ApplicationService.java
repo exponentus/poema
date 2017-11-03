@@ -3,13 +3,14 @@ package resourcereservations.services;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions._ActionBar;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
-import com.exponentus.scripting._Session;import reference.model.Tag;
+import com.exponentus.scripting._Session;
+import reference.model.Tag;
 import reference.model.Vehicle;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
@@ -92,7 +93,7 @@ public class ApplicationService extends RestProvider {
             vp.setViewPageOptions(viewOptions.getApplicationOptions());
             vp.setFilter(viewOptions.getApplicationFilter());
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             // actionBar.addAction(new _Action("add_new", "",
             // "new_application_for_vehicle"));
             actionBar.addAction(action.refreshVew);

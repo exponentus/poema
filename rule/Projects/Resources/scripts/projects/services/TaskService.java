@@ -11,8 +11,8 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -439,8 +439,8 @@ public class TaskService extends RestProvider {
     }
 
     //
-    private _ActionBar getActionBar(_Session session, TaskDomain taskDomain, Task task) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, TaskDomain taskDomain, Task task) {
+        ActionBar actionBar = new ActionBar(session);
         ActionFactory action = new ActionFactory();
 
         actionBar.addAction(action.close);

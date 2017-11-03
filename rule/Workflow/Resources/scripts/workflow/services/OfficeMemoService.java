@@ -10,8 +10,8 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -62,7 +62,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             vp.setViewPageOptions(viewOptions.getOfficeMemoOptions());
             vp.setFilter(viewOptions.getInternalFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newOfficeMemo.caption("new"));
             actionBar.addAction(action.refreshVew);
 
@@ -233,8 +233,8 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
         }
     }
 
-    private _ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
+        ActionBar actionBar = new ActionBar(session);
         IUser user = session.getUser();
 
         actionBar.addAction(action.close);

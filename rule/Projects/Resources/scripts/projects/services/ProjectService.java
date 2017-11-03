@@ -5,8 +5,8 @@ import administrator.model.User;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -65,7 +65,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             vp.setViewPageOptions(viewOptions.getProjectOptions());
             vp.setFilter(viewOptions.getProjectFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(
                     new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
             actionBar.addAction(action.refreshVew);
@@ -218,8 +218,8 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
         return getAttachment(id, attachId);
     }
 
-    private _ActionBar getActionBar(_Session session, Project project, ProjectDomain projectDomain) {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Project project, ProjectDomain projectDomain) {
+        ActionBar actionBar = new ActionBar(session);
         actionBar.addAction(action.close);
         if (project.isEditable()) {
             actionBar.addAction(action.saveAndClose);

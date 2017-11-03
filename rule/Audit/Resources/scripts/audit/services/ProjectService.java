@@ -10,7 +10,7 @@ import audit.model.constants.ProjectStatusType;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -56,7 +56,7 @@ public class ProjectService extends RestProvider {
 			ProjectDAO projectDAO = new ProjectDAO(session);
 			ViewPage<Project> vp = projectDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
 
-			_ActionBar actionBar = new _ActionBar(session);
+			ActionBar actionBar = new ActionBar(session);
 			actionBar.addAction(
 					new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
 			actionBar.addAction(new Action(ActionType.RELOAD).id("refresh").icon("fa fa-refresh"));
@@ -202,8 +202,8 @@ public class ProjectService extends RestProvider {
 		return getAttachment(id, attachId);
 	}
 
-	private _ActionBar getActionBar(_Session session, Project project, ProjectDomain domain) {
-		_ActionBar actionBar = new _ActionBar(session);
+	private ActionBar getActionBar(_Session session, Project project, ProjectDomain domain) {
+		ActionBar actionBar = new ActionBar(session);
 		actionBar.addAction(new Action(ActionType.CLOSE).caption("close").icon("fa fa-chevron-left").cls("btn-back"));
 		if (project.isEditable()) {
 			actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption("save_close").cls("btn-primary"));

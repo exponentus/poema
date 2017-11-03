@@ -11,8 +11,8 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.ActionType;
-import com.exponentus.common.ui.actions._ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -63,7 +63,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             vp.setViewPageOptions(viewOptions.getOutgoingOptions());
             vp.setFilter(viewOptions.getOutgoingFilter(session));
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newOutgoing.caption("new"));
             actionBar.addAction(action.refreshVew);
 
@@ -260,8 +260,8 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
-        _ActionBar actionBar = new _ActionBar(session);
+    private ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
+        ActionBar actionBar = new ActionBar(session);
         IUser user = session.getUser();
 
         actionBar.addAction(action.close);

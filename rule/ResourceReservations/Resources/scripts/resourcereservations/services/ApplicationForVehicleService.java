@@ -5,7 +5,7 @@ import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.ApprovalType;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions._ActionBar;
+import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -56,7 +56,7 @@ public class ApplicationForVehicleService extends RestProvider {
             vp.setViewPageOptions(viewOptions.getApplicationForVehicleOptions());
             vp.setFilter(viewOptions.getApplicationForVehicleFilter());
 
-            _ActionBar actionBar = new _ActionBar(session);
+            ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.newApplicationForVehicle);
             actionBar.addAction(action.refreshVew);
 
@@ -287,9 +287,9 @@ public class ApplicationForVehicleService extends RestProvider {
         }
     }
 
-    private _ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain)
+    private ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain)
             throws DAOException {
-        _ActionBar actionBar = new _ActionBar(session);
+        ActionBar actionBar = new ActionBar(session);
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {
