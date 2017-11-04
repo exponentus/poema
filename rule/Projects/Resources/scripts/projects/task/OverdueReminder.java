@@ -45,7 +45,9 @@ public class OverdueReminder extends Do {
 				tDao = new TaskDAO(session);
 				List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
 				tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
-				processRemind(tl, session);
+				if (tl.size() > 0) {
+					processRemind(tl, session);
+				}
 			}
 		} catch (DAOException e) {
 			Server.logger.exception(e);

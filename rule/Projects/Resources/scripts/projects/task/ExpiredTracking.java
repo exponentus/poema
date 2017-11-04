@@ -1,21 +1,13 @@
 package projects.task;
 
-import administrator.dao.UserDAO;
-import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
-import com.exponentus.localization.constants.LanguageCode;
-import com.exponentus.messaging.MessagingType;
-import com.exponentus.messaging.email.MailAgent;
-import com.exponentus.messaging.email.Memo;
 import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
-import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
@@ -25,7 +17,6 @@ import reference.dao.TagDAO;
 import reference.init.DataConst;
 import reference.model.Tag;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,7 +55,6 @@ public class ExpiredTracking extends Do {
 					try {
 						tDao.update(task);
 						logger.info("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
-						sendNotify(env, session, task);
 					} catch (SecureException | DAOException e) {
 						setError(e);
 					}
@@ -84,42 +74,4 @@ public class ExpiredTracking extends Do {
 			}
 		}
 	}
-
-	private void sendNotify(AppEnv env, _Session session, Task task) {
-		try {
-			UserDAO userDAO = new UserDAO(session);
-			IUser assigneeUser = userDAO.findById(task.getAssignee());
-			User user = null;
-
-			LanguageCode lang = EnvConst.getDefaultLang();
-			try {
-				user = (User) assigneeUser;
-				lang = user.getDefaultLang();
-			} catch (ClassCastException e) {
-
-			}
-
-			Memo memo = new Memo();
-			memo.addVar("assignee", assigneeUser.getUserName());
-			memo.addVar("regNumber", task.getRegNumber());
-			memo.addVar("title", task.getTitle());
-			memo.addVar("content", task.getBody());
-			memo.addVar("author", task.getAuthor().getUserName());
-			memo.addVar("status", env.getVocabulary().getWord(task.getStatus().name(), lang));
-			memo.addVar("url", env.getURL() + "/" + task.getURL() + "&lang=" + lang);
-
-			if (user != null) {
-				List<String> recipients = new ArrayList<>();
-				recipients.add(assigneeUser.getEmail());
-				recipients.add(task.getAuthor().getEmail());
-				MailAgent ma = new MailAgent("task_overdued");
-				ma.sendMessage(recipients, env.getVocabulary().getWord("notify_about_overdued_task", lang),
-						memo.getBody(env.templates.getTemplate(MessagingType.EMAIL, "task_overdued", lang)));
-			}
-		} catch (Exception e) {
-			logger.exception(e);
-		}
-
-	}
-
 }

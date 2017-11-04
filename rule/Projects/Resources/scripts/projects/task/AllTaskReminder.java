@@ -22,14 +22,12 @@ import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
-import reference.model.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Command(name = AppConst.CODE + "_all_tasks_reminder", trigger = Trigger.EVERY_NIGHT)
 public class AllTaskReminder extends Do {
-    private Tag tag;
     private TaskDAO tDao;
 
     @Override
@@ -38,8 +36,9 @@ public class AllTaskReminder extends Do {
             tDao = new TaskDAO(session);
             List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING));
             tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)));
-            processRemind(tl, session);
-
+            if (tl.size() > 0) {
+                processRemind(tl, session);
+            }
         } catch (DAOException e) {
             Server.logger.exception(e);
         }
