@@ -39,6 +39,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
 @Path("incomings")
 @Produces(MediaType.APPLICATION_JSON)
 public class IncomingService extends EntityService<Incoming, IncomingDomain> {

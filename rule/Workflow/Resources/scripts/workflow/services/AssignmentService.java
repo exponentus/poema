@@ -41,6 +41,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
 @Path("assignments")
 @Produces(MediaType.APPLICATION_JSON)
 public class AssignmentService extends EntityService<Assignment, AssignmentDomain> {

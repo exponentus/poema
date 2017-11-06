@@ -41,6 +41,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
+
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
 public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDomain> {
