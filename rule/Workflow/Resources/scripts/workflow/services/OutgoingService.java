@@ -12,7 +12,7 @@ import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.ActionType;
+import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;

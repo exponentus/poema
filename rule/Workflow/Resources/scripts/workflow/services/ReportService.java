@@ -4,7 +4,7 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.ActionType;
+import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;

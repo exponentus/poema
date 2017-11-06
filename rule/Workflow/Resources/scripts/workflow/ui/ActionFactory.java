@@ -2,7 +2,7 @@ package workflow.ui;
 
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.actions.Action;
-import com.exponentus.common.ui.actions.ActionType;
+import com.exponentus.common.ui.actions.constants.ActionType;
 import workflow.init.AppConst;
 
 
