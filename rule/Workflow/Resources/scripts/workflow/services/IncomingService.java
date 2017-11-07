@@ -3,7 +3,6 @@ package workflow.services;
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.service.EntityService;
-import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
@@ -69,7 +68,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             Outcome outcome = new Outcome();
             outcome.setId("incomings");
             outcome.setTitle("incoming_documents");
-            outcome.addPayload(new ConventionalActionFactory().getViewActionBar(session));
+            outcome.addPayload(getDefaultViewActionBar());
             outcome.addPayload(vp);
             return Response.ok(outcome).build();
         } catch (DAOException e) {

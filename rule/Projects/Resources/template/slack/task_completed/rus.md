@@ -1,9 +1,7 @@
 $orgname$ 
-Dear $assignee$, 
-the task `$regNumber$` was completed
-Title: $title$
-Author: $author$
-_Click >_ $url$
+Уважаемый $assignee$,
+Задача `$regNumber$` была завершена
+Задача: $title$
+Автор: $author$
+_Подробнее >_ $url$
 
-Thank you.Kind regards,
-*$author$*
