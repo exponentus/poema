@@ -188,7 +188,7 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "projects/" + getIdentifier();
+        return AppConst.BASE_URL + "projects/" + getId();
     }
 
     @Override
