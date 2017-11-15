@@ -8,6 +8,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
+import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
@@ -47,7 +48,7 @@ public class ExpiredTracking extends Do {
 
 	private void processTask(AppEnv env, List<Task> tasks, _Session session) {
 		for (Task task : tasks) {
-			if (current.after(task.getDueDate())) {
+			if (current.after(DateUtils.addDays(task.getDueDate(), 1))) {
 				if (!task.getTags().contains(tag)) {
 					List<Tag> tags = task.getTags();
 					tags.add(tag);
