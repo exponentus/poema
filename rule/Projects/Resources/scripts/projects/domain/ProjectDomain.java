@@ -20,6 +20,7 @@ import staff.model.Employee;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,14 +58,13 @@ public class ProjectDomain extends CommonDomain<Project> {
         project.setManager(dto.getManager());
         project.setProgrammer(dto.getProgrammer());
         project.setTester(dto.getTester());
-        project.setObservers(dto.getObservers());
         project.setRepresentatives(dto.getRepresentatives());
         project.setComment(dto.getComment());
         project.setStatus(dto.getStatus());
         project.setFinishDate(dto.getFinishDate());
         project.setAttachments(dto.getAttachments());
         project.setPrimaryLanguage(EnvConst.getDefaultLang());
-
+        project.setObservers(dto.getObservers() != null ? dto.getObservers() : new ArrayList<>());
         calculateReaders(project);
     }
 
