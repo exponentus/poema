@@ -84,6 +84,7 @@ public class ProjectDomain extends CommonDomain<Project> {
             readers.addAll(project.getObservers());
         }
 
+
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
         ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
         for(Employee sv:supervisors.getResult()){
