@@ -11,6 +11,8 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
+        <class>administrator.model.IntegrationHubService</class>
+        <class>administrator.model.IntegrationHubCollation</class>
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
         <class>staff.model.Employee</class>
