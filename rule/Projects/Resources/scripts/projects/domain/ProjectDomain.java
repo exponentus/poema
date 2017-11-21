@@ -54,6 +54,7 @@ public class ProjectDomain extends CommonDomain<Project> {
             project.setAuthor(author);
         }
         project.setName(dto.getName());
+        project.setTitle(dto.getName());
         project.setCustomer(dto.getCustomer());
         project.setManager(dto.getManager());
         project.setProgrammer(dto.getProgrammer());
@@ -87,7 +88,7 @@ public class ProjectDomain extends CommonDomain<Project> {
 
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
         ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
-        for(Employee sv:supervisors.getResult()){
+        for (Employee sv : supervisors.getResult()) {
             readers.add(sv.getUserID());
         }
 
