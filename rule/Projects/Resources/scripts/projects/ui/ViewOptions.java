@@ -133,7 +133,7 @@ public class ViewOptions {
         return filterForm;
     }
 
-    public FilterForm getTaskFilter(_Session session) {
+    public FilterForm getTaskFilter(_Session session, String slug) {
         List<FilterItem.Item> items = new ArrayList<>();
         for (TaskStatusType type : TaskStatusType.values()) {
             if (type == TaskStatusType.UNKNOWN) {
@@ -157,8 +157,10 @@ public class ViewOptions {
         FilterGroup filterGroup = new FilterGroup();
         filterGroup.addItem(new FilterItem("status").items(items));
         filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types"));
-        filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
-        filterGroup.addItem(new FilterItem("project").url("/Reference/api/projects"));
+        if (!"inbox".equals(slug)) {
+            filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
+        }
+        filterGroup.addItem(new FilterItem("project").url("/Projects/api/projects"));
         filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_task").style("return {color:it.color}"));
 
         filterForm.addGroup(filterGroup);

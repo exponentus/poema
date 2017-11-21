@@ -33,6 +33,7 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
+import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.model.constants.TaskPriorityType;
@@ -68,6 +69,7 @@ public class TaskService extends RestProvider {
             List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
             int pageSize = session.getPageSize();
             int pageNum = params.getPage();
+            String slug = params.getValueSilently("slug");
 
             TaskDAO taskDAO = new TaskDAO(session);
             TaskFilter taskFilter = setUpTaskFilter(session, params, new TaskFilter());
@@ -82,14 +84,18 @@ public class TaskService extends RestProvider {
             }
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getTaskViewOptions());
-            vp.setFilter(viewOptions.getTaskFilter(session));
+            vp.setFilter(viewOptions.getTaskFilter(session, slug));
+
+            ActionFactory action = new ActionFactory();
+            ActionBar actionBar = new ActionBar(session);
+            actionBar.addAction(new Action(ActionType.LINK).caption("new_task").url(AppConst.BASE_URL + "tasks/new"));
+            actionBar.addAction(action.refreshVew);
 
             EmployeeDAO empDao = new EmployeeDAO(session);
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             String title;
-            String slug = params.getValueSilently("slug");
             switch (slug) {
                 case "inbox":
                     title = "tasks_assigned_to_me";
@@ -109,6 +115,7 @@ public class TaskService extends RestProvider {
             outcome.setId(title);
             outcome.setTitle(title);
             outcome.addPayload(vp);
+            outcome.addPayload(actionBar);
             outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
@@ -536,22 +543,22 @@ public class TaskService extends RestProvider {
 
         filter.setProject(formData.getValueSilently("project"));
         filter.setParentTask(formData.getValueSilently("parentTaskId"));
-        filter.setTaskType(formData.getValueSilently("taskTypeId"));
+        filter.setTaskType(formData.getValueSilently("taskType"));
         filter.setSearch(formData.getValueSilently("keyWord").toLowerCase());
         filter.setStartDate(formData.getDateSilently("startDate"));
         filter.setDueDate(formData.getDateSilently("dueDate"));
 
-        String taskStatus = formData.getValueSilently("taskStatus");
+        String taskStatus = formData.getValueSilently("status");
         if (!taskStatus.isEmpty()) {
             filter.setStatus(TaskStatusType.valueOf(taskStatus));
         }
 
-        String taskPriority = formData.getValueSilently("taskPriority");
+        String taskPriority = formData.getValueSilently("priority");
         if (!taskPriority.isEmpty()) {
             filter.setPriority(TaskPriorityType.valueOf(taskPriority));
         }
 
-        long assigneeUserId = (long) formData.getNumberDoubleValueSilently("assigneeUserId", 0);
+        long assigneeUserId = (long) formData.getNumberDoubleValueSilently("assigneeUser", 0);
         if (assigneeUserId > 0) {
             filter.setAssigneeUserId(assigneeUserId);
         }
@@ -574,9 +581,9 @@ public class TaskService extends RestProvider {
                 break;
         }
 
-        if (formData.containsField("tagIds")) {
+        if (formData.containsField("tags")) {
             List<Tag> tags = new ArrayList<>();
-            String[] tagIds = formData.getListOfValuesSilently("tagIds");
+            String[] tagIds = formData.getListOfValuesSilently("tags");
             for (String tid : tagIds) {
                 Tag tag = new Tag();
                 tag.setId(UUID.fromString(tid));
