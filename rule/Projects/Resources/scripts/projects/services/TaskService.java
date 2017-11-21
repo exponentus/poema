@@ -73,7 +73,7 @@ public class TaskService extends RestProvider {
 
             TaskDAO taskDAO = new TaskDAO(session);
             TaskFilter taskFilter = setUpTaskFilter(session, params, new TaskFilter());
-            SortParams sortParams = SortParams.valueOf(params.getStringValueSilently("sort", "regDate"));
+            SortParams sortParams = SortParams.valueOf(params.getStringValueSilently("sort", "-regDate"));
             ViewPage<Task> vp;
 
             if (params.getBoolSilently("execution")) {
