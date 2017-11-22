@@ -14,6 +14,7 @@ public class ProjectViewEntry {
     public String kind = "project";
 
     public String name;
+    public String title;
     public ProjectStatusType status = ProjectStatusType.UNKNOWN;
     public LanguageCode primaryLanguage;
     public String customer;
@@ -31,6 +32,7 @@ public class ProjectViewEntry {
     public ProjectViewEntry(UUID id, String name, ProjectStatusType status, LanguageCode primaryLanguage, String customer, long manager, long programmer, long tester, Date startDate, Date finishDate, String comment, Long attachmentCount) {
         this.id = id;
         this.name = name;
+        this.title = name;
         this.status = status;
         this.primaryLanguage = primaryLanguage;
         this.customer = customer;
