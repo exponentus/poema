@@ -134,21 +134,16 @@ public class ViewOptions {
     }
 
     public FilterForm getTaskFilter(_Session session, String slug) {
+        TaskStatusType[] types = {
+                TaskStatusType.OPEN,
+                TaskStatusType.PROCESSING,
+                TaskStatusType.WAITING,
+                TaskStatusType.COMPLETED,
+                TaskStatusType.CANCELLED,
+                TaskStatusType.DRAFT
+        };
         List<FilterItem.Item> items = new ArrayList<>();
-        for (TaskStatusType type : TaskStatusType.values()) {
-            if (type == TaskStatusType.UNKNOWN) {
-                continue;
-            }
-
-            try {
-                Field field = TaskStatusType.class.getField(type.name());
-                if (field.isAnnotationPresent(Deprecated.class)) {
-                    continue;
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-
+        for (TaskStatusType type : types) {
             String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
             items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
         }
