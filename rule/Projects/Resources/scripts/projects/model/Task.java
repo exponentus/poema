@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
@@ -75,7 +75,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
-    private TaskPriorityType priority = TaskPriorityType.NORMAL;
+    private PriorityType priority = PriorityType.NORMAL;
 
     @FTSearchable
     @Column(length = 1024, name = "cancel_comment")
@@ -215,11 +215,11 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         statusDate = date;
     }
 
-    public TaskPriorityType getPriority() {
+    public PriorityType getPriority() {
         return priority;
     }
 
-    public void setPriority(TaskPriorityType priority) {
+    public void setPriority(PriorityType priority) {
         this.priority = priority;
     }
 

@@ -2,7 +2,7 @@ package projects.dto;
 
 import com.exponentus.dataengine.jpa.IAppEntity;
 import projects.init.AppConst;
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
@@ -22,7 +22,7 @@ public class TaskViewEntry {
     public TaskType taskType;
     public TaskStatusType status = TaskStatusType.UNKNOWN;
     public Date statusDate;
-    public TaskPriorityType priority = TaskPriorityType.NORMAL;
+    public PriorityType priority = PriorityType.NORMAL;
     public String cancellationComment;
     public String body;
     public Long assignee;
@@ -33,7 +33,7 @@ public class TaskViewEntry {
     public Long responsesCount;
     public List<IAppEntity<UUID>> responses;
 
-    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority,
+    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, PriorityType priority,
                          String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, List<Tag> tags, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
@@ -50,7 +50,7 @@ public class TaskViewEntry {
         this.hasAttachments = attachmentCount > 0;
     }
 
-    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, TaskPriorityType priority,
+    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, Date statusDate, PriorityType priority,
                          String cancellationComment, String body, Long assignee, Date startDate, Date dueDate, Tag tag, Long attachmentCount) {
         this.id = id;
         this.regNumber = regNumber;
@@ -68,7 +68,7 @@ public class TaskViewEntry {
         this.hasAttachments = attachmentCount > 0;
     }
 
-    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, TaskPriorityType priority, Date startDate,
+    public TaskViewEntry(UUID id, String regNumber, TaskType taskType, TaskStatusType status, PriorityType priority, Date startDate,
                          Date dueDate, Tag tag) {
         this.id = id;
         this.regNumber = regNumber;
@@ -81,7 +81,7 @@ public class TaskViewEntry {
         this.tags.add(tag);
     }
 
-    public TaskViewEntry(UUID id, String title, String regNumber, TaskStatusType status, TaskPriorityType priority, Date startDate, Date dueDate) {
+    public TaskViewEntry(UUID id, String title, String regNumber, TaskStatusType status, PriorityType priority, Date startDate, Date dueDate) {
         this.id = id;
         this.title = title;
         this.regNumber = regNumber;

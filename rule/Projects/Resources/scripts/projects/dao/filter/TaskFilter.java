@@ -4,7 +4,7 @@ import administrator.model.User;
 import com.exponentus.runtimeobj.Filter;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
@@ -22,7 +22,7 @@ public class TaskFilter extends Filter {
     private Task parentTask;
     private TaskType taskType;
     private TaskStatusType status = TaskStatusType.UNKNOWN;
-    private TaskPriorityType priority = TaskPriorityType.UNKNOWN;
+    private PriorityType priority = PriorityType.UNKNOWN;
     private String search;
     private User author;
     private Long assigneeUserId;
@@ -97,11 +97,11 @@ public class TaskFilter extends Filter {
         return this;
     }
 
-    public TaskPriorityType getPriority() {
+    public PriorityType getPriority() {
         return priority;
     }
 
-    public TaskFilter setPriority(TaskPriorityType priority) {
+    public TaskFilter setPriority(PriorityType priority) {
         this.priority = priority;
         return this;
     }

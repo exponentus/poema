@@ -17,7 +17,9 @@
     <converter class="administrator.model.util.MessagingTypeConverter"/>   
     <converter class="administrator.model.constants.converter.InterfaceTypeConvertor"/>  
     <converter class="administrator.model.constants.converter.VisibilityModeConvertor"/> 
-    
+
+    <converter class="calendar.model.constants.converter.ReminderTypeConverter"/>
+
  	<converter class="monitoring.model.constants.converter.ActivityTypeConverter"/> 
  	<converter class="monitoring.model.util.EventConverter"/>
     

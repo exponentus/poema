@@ -3,18 +3,18 @@ package projects.model.util;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 
 @Converter(autoApply = true)
-public class TaskPriorityTypeConverter implements AttributeConverter<TaskPriorityType, Integer> {
+public class TaskPriorityTypeConverter implements AttributeConverter<PriorityType, Integer> {
 
 	@Override
-	public Integer convertToDatabaseColumn(TaskPriorityType type) {
+	public Integer convertToDatabaseColumn(PriorityType type) {
 		return type.getCode();
 	}
 
 	@Override
-	public TaskPriorityType convertToEntityAttribute(Integer val) {
-		return TaskPriorityType.getType(val);
+	public PriorityType convertToEntityAttribute(Integer val) {
+		return PriorityType.getType(val);
 	}
 }

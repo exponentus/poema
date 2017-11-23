@@ -36,7 +36,7 @@ import projects.domain.TaskDomain;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
@@ -555,7 +555,7 @@ public class TaskService extends RestProvider {
 
         String taskPriority = formData.getValueSilently("priority");
         if (!taskPriority.isEmpty()) {
-            filter.setPriority(TaskPriorityType.valueOf(taskPriority));
+            filter.setPriority(PriorityType.valueOf(taskPriority));
         }
 
         long assigneeUserId = (long) formData.getNumberDoubleValueSilently("assigneeUser", 0);

@@ -19,7 +19,7 @@ import projects.dto.TaskViewEntry;
 import projects.dto.stat.CountStat;
 import projects.model.Request;
 import projects.model.Task;
-import projects.model.constants.TaskPriorityType;
+import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 
 import javax.persistence.EntityManager;
@@ -75,7 +75,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (filter.getPriority() != TaskPriorityType.UNKNOWN) {
+            if (filter.getPriority() != PriorityType.UNKNOWN) {
                 if (condition == null) {
                     condition = cb.equal(taskRoot.get("priority"), filter.getPriority());
                 } else {

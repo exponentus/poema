@@ -182,6 +182,11 @@ public class TaskDomain extends ApprovalDomain<Task> {
            task.addReader(sv.getUserID());
        }
 
+            for (Long observer : task.getObservers()) {
+                task.addReader(observer);
+            }
+
+
     }
 
     public void acknowledgedTask(Task task, User user) throws DTOException {
