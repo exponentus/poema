@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
@@ -19,7 +20,6 @@ import projects.dto.TaskViewEntry;
 import projects.dto.stat.CountStat;
 import projects.model.Request;
 import projects.model.Task;
-import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 
 import javax.persistence.EntityManager;
@@ -79,7 +79,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 if (condition == null) {
                     condition = cb.equal(taskRoot.get("priority"), filter.getPriority());
                 } else {
-                    condition = cb.and(cb.equal(taskRoot.get("priority"), filter.getStatus()), condition);
+                    condition = cb.and(cb.equal(taskRoot.get("priority"), filter.getPriority()), condition);
                 }
             }
 
@@ -356,8 +356,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             ParameterExpression<Date> from = cb.parameter(Date.class);
             ParameterExpression<Date> to = cb.parameter(Date.class);
-            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from );
-            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"),to);
+            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from);
+            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"), to);
             Predicate periodCondition = cb.and(startPredicate, endPredicate);
 
             Predicate condition = cb.equal(root.get("assignee"), user.getId());
@@ -397,8 +397,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             ParameterExpression<Date> from = cb.parameter(Date.class);
             ParameterExpression<Date> to = cb.parameter(Date.class);
-            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from );
-            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"),to);
+            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from);
+            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"), to);
             Predicate periodCondition = cb.and(startPredicate, endPredicate);
 
             Predicate condition = cb.equal(root.get("assignee"), user.getId());

@@ -1,5 +1,6 @@
 package projects.ui;
 
+import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.ui.filter.FilterForm;
 import com.exponentus.common.ui.filter.FilterGroup;
 import com.exponentus.common.ui.filter.FilterItem;
@@ -134,7 +135,7 @@ public class ViewOptions {
     }
 
     public FilterForm getTaskFilter(_Session session, String slug) {
-        TaskStatusType[] types = {
+        TaskStatusType[] statusTypes = {
                 TaskStatusType.OPEN,
                 TaskStatusType.PROCESSING,
                 TaskStatusType.WAITING,
@@ -142,15 +143,25 @@ public class ViewOptions {
                 TaskStatusType.CANCELLED,
                 TaskStatusType.DRAFT
         };
-        List<FilterItem.Item> items = new ArrayList<>();
-        for (TaskStatusType type : types) {
+        List<FilterItem.Item> statusTypeItems = new ArrayList<>();
+        for (TaskStatusType type : statusTypes) {
             String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
-            items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+            statusTypeItems.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
+        }
+
+        List<FilterItem.Item> priorityTypeItems = new ArrayList<>();
+        for (PriorityType priorityType : PriorityType.values()) {
+            if (priorityType == PriorityType.UNKNOWN) {
+                continue;
+            }
+            String name = Environment.vocabulary.getWord(priorityType.name().toLowerCase(), session.getLang());
+            priorityTypeItems.add(new FilterItem.Item(priorityType.name(), name, "priority-" + priorityType.name().toLowerCase()));
         }
 
         FilterForm filterForm = new FilterForm();
         FilterGroup filterGroup = new FilterGroup();
-        filterGroup.addItem(new FilterItem("status").items(items));
+        filterGroup.addItem(new FilterItem("status").items(statusTypeItems));
+        filterGroup.addItem(new FilterItem("priority").items(priorityTypeItems));
         filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types"));
         if (!"inbox".equals(slug)) {
             filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
