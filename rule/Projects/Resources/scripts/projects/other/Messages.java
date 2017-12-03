@@ -332,7 +332,7 @@ public class Messages {
 					SlackAgent sa = new SlackAgent(msgTemplate);
 					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
-						return;
+						//return;
 					}
 				}
 
