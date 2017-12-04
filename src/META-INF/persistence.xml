@@ -259,6 +259,9 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <!-- Calendar module entities-->
+        <class>calendar.model.Event</class>
+        <class>calendar.model.Reminder</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -303,6 +306,9 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <!-- Calendar module entities-->
+        <class>calendar.model.Event</class>
+        <class>calendar.model.Reminder</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -346,7 +352,10 @@
         <class>administrator.model.embedded.UserSubscription</class>
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
-        <class>com.exponentus.common.model.AttachmentThumbnail</class>        
+        <class>com.exponentus.common.model.AttachmentThumbnail</class>
+        <!-- Calendar module entities-->
+        <class>calendar.model.Event</class>
+        <class>calendar.model.Reminder</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -380,6 +389,9 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
+        <!-- Calendar module entities-->
+        <class>calendar.model.Event</class>
+        <class>calendar.model.Reminder</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
@@ -439,6 +451,9 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
+        <!-- Calendar module entities-->
+        <class>calendar.model.Event</class>
+        <class>calendar.model.Reminder</class>
         <!-- Common Staff module entities -->
         <class>staff.model.Organization</class>
         <class>staff.model.Department</class>
