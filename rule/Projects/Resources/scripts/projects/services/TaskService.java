@@ -6,6 +6,7 @@ import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.Milestones;
@@ -19,6 +20,7 @@ import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
+import com.exponentus.rest.services.Defended;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
@@ -36,7 +38,6 @@ import projects.domain.TaskDomain;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
@@ -596,5 +597,28 @@ public class TaskService extends RestProvider {
         filter.setTreeMode(formData.getBoolSilently("isTreeMode"));
 
         return filter;
+    }
+
+
+    @POST
+    @Path("action/im/slack/{command}")
+    @Defended(false)
+    @Produces({"application/json"})
+    public Response processSlackCommandService(@PathParam("command") String command) {
+        _Session ses = getSession();
+        Outcome outcome = new Outcome();
+        outcome.setId(command);
+
+        String result = "{\n" +
+                "    \"text\": \"It's semantyca test now.\",\n" +
+                "    \"attachments\": [\n" +
+                "        {\n" +
+                "            \"text\":\"SEmantyca\"\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+
+        return Response.status(200).entity(result).build();
+
     }
 }
