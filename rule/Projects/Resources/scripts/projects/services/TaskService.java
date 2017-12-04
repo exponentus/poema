@@ -629,7 +629,7 @@ public class TaskService extends RestProvider {
                 "    \"text\": \"Semantyca\",\n" +
                 "    \"attachments\": [\n" +
                 "        {\n" +
-                "            \"text\":" + tasksAsText + "\n" +
+                "            \"text\":" + EnvConst.FRAMEWORK_NAME + " ver." + EnvConst.SERVER_VERSION + "(" + Server.compilationTime + ")" + "\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";
