@@ -627,7 +627,7 @@ public class TaskService extends RestProvider {
 
         String val = EnvConst.FRAMEWORK_NAME + " ver." + EnvConst.SERVER_VERSION + "(" + Server.compilationTime + ")";
 
-        String result = "{\"text\": \"Semantyca\"," +
+        String result = "{\"text\": \"Projects\"," +
                 "\"attachments\": [{\"text\":\"" + val + "\"}]" +
                         "}";
 
