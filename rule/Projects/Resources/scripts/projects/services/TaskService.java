@@ -625,14 +625,11 @@ public class TaskService extends RestProvider {
             tasksAsText.add(t.getTitle());
         }
 
-        String result = "{\n" +
-                "    \"text\": \"Semantyca\",\n" +
-                "    \"attachments\": [\n" +
-                "        {\n" +
-                "            \"text\":" + EnvConst.FRAMEWORK_NAME + " ver." + EnvConst.SERVER_VERSION + "(" + Server.compilationTime + ")" + "\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
+        String val = EnvConst.FRAMEWORK_NAME + " ver." + EnvConst.SERVER_VERSION + "(" + Server.compilationTime + ")";
+
+        String result = "{\"text\": \"Semantyca\"," +
+                "\"attachments\": [{\"text\":\"" + val + "\"}]" +
+                        "}";
 
         return Response.status(200).entity(result).build();
 
