@@ -17,6 +17,7 @@ import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
+import com.exponentus.log.Lg;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -608,12 +609,27 @@ public class TaskService extends RestProvider {
         _Session ses = getSession();
         Outcome outcome = new Outcome();
         outcome.setId(command);
+        List<Task> tasks = new ArrayList<>();
+
+        try {
+             TaskDAO dao = new TaskDAO(ses);
+             tasks.addAll(dao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)));
+             tasks.addAll(dao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)));
+
+        } catch (DAOException e) {
+            Lg.exception(e);
+        }
+
+        StringJoiner tasksAsText = new StringJoiner("\n");
+        for(Task t:tasks){
+            tasksAsText.add(t.getTitle());
+        }
 
         String result = "{\n" +
-                "    \"text\": \"It's semantyca test now.\",\n" +
+                "    \"text\": \"Semantyca\",\n" +
                 "    \"attachments\": [\n" +
                 "        {\n" +
-                "            \"text\":\"SEmantyca\"\n" +
+                "            \"text\":" + tasksAsText + "\n" +
                 "        }\n" +
                 "    ]\n" +
                 "}";
