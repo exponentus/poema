@@ -111,6 +111,7 @@ public class Messages {
 					SlackAgent sa = new SlackAgent(msgTemplate);
 					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
+						Environment.getActivityRecorder().postSlackMsgSending(task,slackAddr, msgTemplate);
 						return;
 					}
 				}
@@ -120,6 +121,7 @@ public class Messages {
 				MailAgent ma = new MailAgent(msgTemplate);
 				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_new_task_short", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
+				Environment.getActivityRecorder().postEmailSending(task,recipients, msgTemplate);
 			}
 		} catch (Exception e) {
 			logger.exception(e);
@@ -332,7 +334,8 @@ public class Messages {
 					SlackAgent sa = new SlackAgent(msgTemplate);
 					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
 					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
-						//return;
+                        Environment.getActivityRecorder().postSlackMsgSending(task,slackAddr,msgTemplate);
+						return;
 					}
 				}
 
@@ -341,6 +344,7 @@ public class Messages {
 				MailAgent ma = new MailAgent(msgTemplate);
 				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_to_moderate", lang),
 						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
+                Environment.getActivityRecorder().postEmailSending(task,recipients, msgTemplate);
 			}
 		} catch (Exception e) {
 			logger.exception(e);

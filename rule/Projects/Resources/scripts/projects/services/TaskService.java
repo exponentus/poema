@@ -246,7 +246,7 @@ public class TaskService extends RestProvider {
 
             TaskDomain taskDomain = new TaskDomain(session);
             taskDomain.fillFromDto(task, taskDto);
-            // IMonitoringDAO mDao = Environment.getMonitoringDAO();
+            // IMonitoringDAO mDao = Environment.getActivityRecorder();
 
             if (taskDto.isNew()) {
                 RegNum rn = new RegNum();
@@ -254,10 +254,10 @@ public class TaskService extends RestProvider {
                 taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
                 task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
                 task = taskDAO.add(task, rn);
-                //	mDao.postEvent(user, task, "task_was_registered");
+                //	mDao.postEmailSending(user, task, "task_was_registered");
             } else {
                 task = taskDAO.update(task);
-                //	mDao.postEvent(user, task, "task_was_updated");
+                //	mDao.postEmailSending(user, task, "task_was_updated");
             }
 
             if (task.getStatus() == TaskStatusType.OPEN) {
