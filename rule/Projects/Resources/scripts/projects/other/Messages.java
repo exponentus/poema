@@ -118,11 +118,14 @@ public class Messages {
 				}
 
 				List<String> recipients = new ArrayList<>();
-				recipients.add(assigneeUser.getEmail());
-				MailAgent ma = new MailAgent(msgTemplate);
-				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_new_task_short", lang),
-						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
-				Environment.getActivityRecorder().postEmailSending(task,recipients, msgTemplate);
+				String email = assigneeUser.getEmail();
+				if (email != null) {
+					recipients.add(assigneeUser.getEmail());
+					MailAgent ma = new MailAgent(msgTemplate);
+					ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_new_task_short", lang),
+							memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
+					Environment.getActivityRecorder().postEmailSending(task, recipients, msgTemplate);
+				}
 			}
 		} catch (Exception e) {
 			logger.exception(e);
