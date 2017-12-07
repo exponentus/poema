@@ -194,7 +194,7 @@ public class TaskService extends RestProvider {
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
             outcome.addPayload( new Milestones(session, task.getTimeLine()));
-            outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityId(task.getId()).getDetails());
+            outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
             return Response.ok(outcome).build();
