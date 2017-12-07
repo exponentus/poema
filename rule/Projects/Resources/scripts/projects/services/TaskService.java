@@ -152,19 +152,19 @@ public class TaskService extends RestProvider {
                 Task parentTask = null;
 
                 if (!parentTaskId.isEmpty()) {
-                    parentTask = taskDAO.findByIdentifier(parentTaskId);
+                    parentTask = taskDAO.findById(parentTaskId);
                 }
 
                 if (!projectId.isEmpty()) {
                     ProjectDAO projectDAO = new ProjectDAO(session);
-                    project = projectDAO.findByIdentifier(projectId);
+                    project = projectDAO.findById(projectId);
                 } else if (parentTask != null) {
                     project = parentTask.getProject();
                 }
 
                 if (!demandId.isEmpty()) {
                     DemandDAO demandDAO = new DemandDAO(session);
-                    demand = demandDAO.findByIdentifier(demandId);
+                    demand = demandDAO.findById(demandId);
                 } else if (parentTask != null) {
                     demand = parentTask.getDemand();
                 }
@@ -458,8 +458,8 @@ public class TaskService extends RestProvider {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
             Block processingBlock = lifecycle.getProcessingBlock();
             if (processingBlock != null) {
-                Approver approver = processingBlock.getCurrentApprover();
-                if (approver != null && approver.getEmployee().getUserID().equals(session.getUser().getId())) {
+                List<Approver> approvers = processingBlock.getCurrentApprovers();
+                if (approvers.size() > 0 && approvers.contains(session.getUser())) {
                     actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
                     actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
                     //actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));

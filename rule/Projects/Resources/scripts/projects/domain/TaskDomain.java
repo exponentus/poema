@@ -305,14 +305,18 @@ public class TaskDomain extends ApprovalDomain<Task> {
             ViewPage<Employee> moderators = empDao.findByRole(role);
             if (moderators.getCount() > 0) {
                 Block block = new Block();
-                block.setType(ApprovalType.SERIAL);
+                block.setType(ApprovalType.PARALLEL);
                 block.setSort(1);
                 block.setStatus(ApprovalStatusType.DRAFT);
                 block.setRequireCommentIfNo(true);
-                Approver approver = new Approver();
-                approver.setEmployee(moderators.getFirstEntity());
                 List<Approver> approvers = new ArrayList<Approver>();
-                approvers.add(approver);
+                for (Employee moder : moderators.getResult()) {
+                    Approver approver = new Approver();
+                    approver.setEmployee(moder);
+                    approvers.add(approver);
+                    approver.setSort(approvers.size());
+
+                }
                 block.setApprovers(approvers);
                 blocks.add(block);
             } else {
