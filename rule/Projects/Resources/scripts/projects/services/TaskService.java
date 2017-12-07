@@ -31,6 +31,7 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
+import monitoring.dao.DocumentActivityDAO;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
@@ -192,7 +193,8 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            outcome.addPayload("milestones", new Milestones(session, task.getTimeLine()));
+            outcome.addPayload( new Milestones(session, task.getTimeLine()));
+            outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityId(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
             return Response.ok(outcome).build();

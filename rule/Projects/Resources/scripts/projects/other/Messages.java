@@ -235,6 +235,7 @@ public class Messages {
 			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + request.getURL() + "&lang=" + lang);
 			memo.addVar("requestResolution", v.getWord(request.getResolution().name(), lang));
 
+
 			if (user != null) {
 				String slackAddr = user.getSlack();
 				if (slackAddr != null && !slackAddr.equals("")) {
