@@ -363,7 +363,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     @Transient
     public String getURL() {
-        return AppConst.BASE_URL + "tasks/" + getIdentifier();
+        return AppConst.BASE_URL + "tasks/" + getId();
     }
 
     @Override

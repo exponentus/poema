@@ -263,10 +263,15 @@ public class TaskService extends RestProvider {
             if (task.getStatus() == TaskStatusType.OPEN) {
                 ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
                 lifecycle.start();
-                task.getTimeLine().addStage(new Date(), TaskStatusType.MODERATION.name());
-                task.addReaderEditor(task.getAuthorId()); //dev1292
-                taskDomain.superUpdate(task);
-                new Messages(getAppEnv()).sendToModerate(task);
+                if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
+                    task.getTimeLine().addStage(new Date(), TaskStatusType.MODERATION.name());
+                    task.addReaderEditor(task.getAuthorId()); //dev1292
+                    taskDomain.superUpdate(task);
+                    new Messages(getAppEnv()).sendToModerate(task);
+                }else {
+                    taskDomain.superUpdate(task);
+
+                }
             }
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();

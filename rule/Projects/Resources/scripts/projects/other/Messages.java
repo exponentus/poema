@@ -10,6 +10,7 @@ import com.exponentus.extconnect.IExtUser;
 import com.exponentus.localization.Vocabulary;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.log.CommonLogger;
+import com.exponentus.messaging.MessagingHelper;
 import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
@@ -279,24 +280,8 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			MessagingHelper.sendInAnyWay(appEnv, user, memo, msgTemplate, task,  "notify_about_task_acknowledged");
 
-			if (user != null) {
-				String slackAddr = user.getSlack();
-				if (slackAddr != null && !slackAddr.equals("")) {
-					SlackAgent sa = new SlackAgent(msgTemplate);
-					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
-						return;
-					}
-				}
-
-				List<String> recipients = new ArrayList<>();
-				recipients.add(task.getAuthor().getEmail());
-				MailAgent ma = new MailAgent(msgTemplate);
-				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_acknowledged", lang),
-						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
-			}
 		} catch (Exception e) {
 			logger.exception(e);
 		}
@@ -326,26 +311,8 @@ public class Messages {
 
 			}
 
-			memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#" + task.getURL() + "&lang=" + lang);
+			MessagingHelper.sendInAnyWay(appEnv, user, memo, msgTemplate, task,  "notify_about_task_to_moderate");
 
-			if (user != null) {
-				String slackAddr = moderator.getUser().getSlack();
-				if (slackAddr != null && !slackAddr.equals("")) {
-					SlackAgent sa = new SlackAgent(msgTemplate);
-					String template = appEnv.templates.getTemplate(MessagingType.SLACK, msgTemplate, lang);
-					if (template != null && sa.sendMessage(slackAddr, memo.getPlainBody(template))) {
-                        Environment.getActivityRecorder().postSlackMsgSending(task,slackAddr,msgTemplate);
-						return;
-					}
-				}
-
-				List<String> recipients = new ArrayList<>();
-				recipients.add(moderator.getUser().getEmail());
-				MailAgent ma = new MailAgent(msgTemplate);
-				ma.sendMessage(recipients, appEnv.getVocabulary().getWord("notify_about_task_to_moderate", lang),
-						memo.getBody(appEnv.templates.getTemplate(MessagingType.EMAIL, msgTemplate, lang)));
-                Environment.getActivityRecorder().postEmailSending(task,recipients, msgTemplate);
-			}
 		} catch (Exception e) {
 			logger.exception(e);
 		}

@@ -6,6 +6,7 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.init.DefaultDataConst;
 import com.exponentus.common.model.constants.ApprovalResultType;
+import com.exponentus.common.model.constants.ApprovalSchemaType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.ApprovalType;
 import com.exponentus.common.model.embedded.Approver;
@@ -33,9 +34,7 @@ import projects.model.constants.ResolutionType;
 import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
-import staff.dao.RoleDAO;
 import staff.model.Employee;
-import staff.model.Role;
 import workflow.domain.ApprovalDomain;
 
 import java.util.ArrayList;
@@ -95,7 +94,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
             }
         }
 
-        task.setBlocks(getModeratorBlock(new EmployeeDAO(ses)));
+        EmployeeDAO empDao = new EmployeeDAO(ses);
+        ViewPage<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME);
+        if (moderators.getCount() > 0) {
+            task.setBlocks(getModeratorBlock(moderators.getResult()));
+        }else {
+            throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
+        }
 
         return task;
     }
@@ -162,29 +167,43 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 if (new Date().before(task.getStartDate())) {
                     changeStatus(task, TaskStatusType.WAITING);
                 } else {
-                    task.setBlocks(getModeratorBlock(new EmployeeDAO(ses)));
-                    task.setApprovalStatus(ApprovalStatusType.DRAFT);
-                    task.setResult(ApprovalResultType.UNKNOWN);
-                    changeStatus(task, TaskStatusType.OPEN);
+                    EmployeeDAO empDao = new EmployeeDAO(ses);
+                    List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
+                    if (moderators.size() > 0) {
+                        List<Block> block = getModeratorBlock(moderators);
+                        task.setBlocks(block);
+                        if (moderators.contains(task.getAuthor())){
+                            task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
+                        }else {
+                            task.setApprovalSchema(ApprovalSchemaType.IN_ANY_CASE_DECIDE_PARALLEL_APPROVER);
+                        }
+                        task.setApprovalStatus(ApprovalStatusType.DRAFT);
+                        task.setResult(ApprovalResultType.UNKNOWN);
+                    } else {
+                        throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
+                    }
                 }
+                changeStatus(task, TaskStatusType.OPEN);
             }
         }
     }
+
+
 
     public void changeAssignee(Task task, User newAssignee) {
         task.setAssignee(newAssignee.getId());
     }
 
     public void calculateReaders(Task task) throws DAOException {
-       EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-       ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
-       for(Employee sv:supervisors.getResult()){
-           task.addReader(sv.getUserID());
-       }
+        EmployeeDAO employeeDAO = new EmployeeDAO(ses);
+        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
+        for (Employee sv : supervisors.getResult()) {
+            task.addReader(sv.getUserID());
+        }
 
-            for (Long observer : task.getObservers()) {
-                task.addReader(observer);
-            }
+        for (Long observer : task.getObservers()) {
+            task.addReader(observer);
+        }
 
 
     }
@@ -251,9 +270,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public boolean taskCanBeDeleted(Task task) {
-        if(ses.getUser().isSuperUser()){
+        if (ses.getUser().isSuperUser()) {
             return true;
-        }else {
+        } else {
             return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN ||
                     task.getStatus() == TaskStatusType.DRAFT);
         }
@@ -297,34 +316,22 @@ public class TaskDomain extends ApprovalDomain<Task> {
         return false;
     }
 
-    private List<Block> getModeratorBlock(EmployeeDAO empDao) throws DAOException, RestServiceException {
+    private List<Block> getModeratorBlock(List<Employee> moderators) throws DAOException, RestServiceException {
         ArrayList<Block> blocks = new ArrayList<Block>();
-        RoleDAO roleDAO = new RoleDAO(empDao.getSession());
-        Role role = roleDAO.findByName(MODERATOR_ROLE_NAME);
-        if (role != null) {
-            ViewPage<Employee> moderators = empDao.findByRole(role);
-            if (moderators.getCount() > 0) {
-                Block block = new Block();
-                block.setType(ApprovalType.PARALLEL);
-                block.setSort(1);
-                block.setStatus(ApprovalStatusType.DRAFT);
-                block.setRequireCommentIfNo(true);
-                List<Approver> approvers = new ArrayList<Approver>();
-                for (Employee moder : moderators.getResult()) {
-                    Approver approver = new Approver();
-                    approver.setEmployee(moder);
-                    approvers.add(approver);
-                    approver.setSort(approvers.size());
-
-                }
-                block.setApprovers(approvers);
-                blocks.add(block);
-            } else {
-                throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
-            }
-        } else {
-            throw new RestServiceException("role \"" + MODERATOR_ROLE_NAME + "\" has not been found");
+        Block block = new Block();
+        block.setType(ApprovalType.PARALLEL);
+        block.setSort(1);
+        block.setStatus(ApprovalStatusType.DRAFT);
+        block.setRequireCommentIfNo(true);
+        List<Approver> approvers = new ArrayList<Approver>();
+        for (Employee moder : moderators) {
+            Approver approver = new Approver();
+            approver.setEmployee(moder);
+            approvers.add(approver);
+            approver.setSort(approvers.size());
         }
+        block.setApprovers(approvers);
+        blocks.add(block);
         return blocks;
     }
 
