@@ -23,13 +23,13 @@ public class ViewOptions {
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
-        cg1.setClassName("vw-30");
+        cg1.setClassName("vw-30 vw-md-50");
         cg1.add(new ViewColumn("name").sortBoth());
         cg1.add(new ViewColumn().type(ViewColumnType.attachment));
         cg1.add(new ViewColumn("status").type(ViewColumnType.translate).sortBoth().className("vw-55").valueAsClass("status-"));
 
         ViewColumnGroup cg2 = new ViewColumnGroup();
-        cg2.setClassName("vw-20");
+        cg2.setClassName("vw-20 vw-md-50");
         cg2.add(new ViewColumn("customer").sortBoth());
 
         ViewColumnGroup cg3 = new ViewColumnGroup();
@@ -56,36 +56,40 @@ public class ViewOptions {
         ViewPageOptions result = new ViewPageOptions();
 
         ViewColumnGroup tcg1 = new ViewColumnGroup();
-        tcg1.setClassName("vw-35");
+        tcg1.setClassName("vw-35 vw-md-70");
         tcg1.add(new ViewColumn("regNumber").name("reg_number").className("vw-45"));
         tcg1.add(new ViewColumn("status").type(ViewColumnType.translate).sortBoth().className("vp__list_it_col-if-tree-view status-col-mobile").valueAsClass("status-bg-"));
         tcg1.add(new ViewColumn("title").name("task_title").sortBoth().style(" if(it.approvalStatus === 'PENDING') { return { color:'#9C27B0', 'font-weight':'bold' } }"));
         tcg1.add(new ViewColumn().type(ViewColumnType.attachment));
 
         ViewColumnGroup tcg2 = new ViewColumnGroup();
-        tcg2.setClassName("vw-15");
+        tcg2.setClassName("vw-15 vw-md-30");
         tcg2.add(new ViewColumn("status").type(ViewColumnType.translate).sortBoth().className("vw-50").valueAsClass("status-"));
         tcg2.add(new ViewColumn("priority").type(ViewColumnType.translate).sortBoth().className("vw-50").valueAsClass("priority-"));
 
         ViewColumnGroup tcg3 = new ViewColumnGroup();
-        tcg3.setClassName("vw-15");
+        tcg3.setClassName("vw-10");
         tcg3.add(new ViewColumn("employees.assigneeUserId.name").name("assignee_user").type(ViewColumnType.normalizedData));
 
         ViewColumnGroup tcg4 = new ViewColumnGroup();
-        tcg4.setClassName("vw-20");
-        tcg4.add(new ViewColumn("startDate").name("start_date").type(ViewColumnType.date).format("DD.MM.YYYY").sortBoth().className("vw-50"));
-        tcg4.add(new ViewColumn("dueDate").name("due_date").type(ViewColumnType.date).format("DD.MM.YYYY").sortBoth().className("vw-50"));
+        tcg4.setClassName("vw-15");
+        tcg4.add(new ViewColumn("project.name").name("project"));
 
         ViewColumnGroup tcg5 = new ViewColumnGroup();
         tcg5.setClassName("vw-15");
-        tcg5.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
+        tcg5.add(new ViewColumn("dueDate").name("due_date").type(ViewColumnType.date).format("DD.MM.YYYY").sortBoth().className("vw-50"));
 
-        List<ViewColumnGroup> task = new ArrayList<>();
-        task.add(tcg1);
-        task.add(tcg2);
-        task.add(tcg3);
-        task.add(tcg4);
-        task.add(tcg5);
+        ViewColumnGroup tcg6 = new ViewColumnGroup();
+        tcg6.setClassName("vw-10");
+        tcg6.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color: it.color }"));
+
+        List<ViewColumnGroup> taskCols = new ArrayList<>();
+        taskCols.add(tcg1);
+        taskCols.add(tcg2);
+        taskCols.add(tcg3);
+        taskCols.add(tcg4);
+        taskCols.add(tcg5);
+        taskCols.add(tcg6);
 
         // Request
         ViewColumnGroup rcg1 = new ViewColumnGroup();
@@ -100,7 +104,7 @@ public class ViewOptions {
         List<ViewColumnGroup> request = new ArrayList<>();
         request.add(rcg1);
 
-        result.setRoot(task);
+        result.setRoot(taskCols);
         result.add("request", request);
         return result;
     }
