@@ -29,6 +29,7 @@ import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
+import com.exponentus.user.SuperUser;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import monitoring.dao.DocumentActivityDAO;
@@ -614,15 +615,18 @@ public class TaskService extends RestProvider {
     @Defended(false)
     @Produces({"application/json"})
     public Response processSlackCommandService(@PathParam("command") String command) {
-        _Session ses = getSession();
+        _Session ses = new _Session(new SuperUser());
+        UserDAO userDAO = new UserDAO(ses);
         Outcome outcome = new Outcome();
         outcome.setId(command);
         List<Task> tasks = new ArrayList<>();
 
         try {
              TaskDAO dao = new TaskDAO(ses);
-             tasks.addAll(dao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)));
-             tasks.addAll(dao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)));
+             TaskFilter filter = new TaskFilter();
+             filter.setAssigneeUserId(userDAO.findByLogin("test9").getId());
+             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(TaskStatusType.PROCESSING)));
+             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(TaskStatusType.OPEN)));
 
         } catch (DAOException e) {
             Lg.exception(e);
@@ -636,6 +640,7 @@ public class TaskService extends RestProvider {
         String val = EnvConst.FRAMEWORK_NAME + " ver." + EnvConst.SERVER_VERSION + "(" + Server.compilationTime + ")";
 
         String result = "{\"text\": \"Projects\"," +
+                "\"mrkdwn\":true," +
                 "\"attachments\": [{\"text\":\"" + val + "\"}]" +
                         "}";
 
