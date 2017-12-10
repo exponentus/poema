@@ -1,6 +1,6 @@
 package projects.dao;
 
-import administrator.model.User;
+import administrator.dao.CollationDAO;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
@@ -9,10 +9,15 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.dataengine.jpa.IAppEntity;
+import com.exponentus.env.Environment;
+import com.exponentus.exception.SecureException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
+import com.exponentus.user.SuperUser;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
@@ -22,10 +27,7 @@ import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.TaskStatusType;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.util.*;
 import java.util.function.Supplier;
@@ -263,13 +265,13 @@ public class TaskDAO extends DAO<Task, UUID> {
         // TODO does not worked if choose hierarchy view
         /*
          * cqr.select(cbr.construct(Request.class, requestRoot.get("regDate"),
-		 * requestRoot.get("author"),cbr.construct(ReportQueryType.class,
-		 * requestRoot.get("requestType").get("name"),
-		 * requestRoot.get("requestType").get("locName")),
-		 * requestRoot.get("resolution"), requestRoot.get("resolutionTime"),
-		 * requestRoot.get("decisionComment"), requestRoot.get("comment"),
-		 * cbr.count(attCount)));
-		 */
+         * requestRoot.get("author"),cbr.construct(ReportQueryType.class,
+         * requestRoot.get("requestType").get("name"),
+         * requestRoot.get("requestType").get("locName")),
+         * requestRoot.get("resolution"), requestRoot.get("resolutionTime"),
+         * requestRoot.get("decisionComment"), requestRoot.get("comment"),
+         * cbr.count(attCount)));
+         */
 
         Predicate conditionR = cbr.equal(requestRoot.get("task"), task);
 
@@ -386,7 +388,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public long getColByAssignee(Date startDate, Date endDate, IUser user, TaskStatusType status) {
+    /*public long getColByAssignee(Date startDate, Date endDate, IUser user, TaskStatusType status) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -412,9 +414,9 @@ public class TaskDAO extends DAO<Task, UUID> {
         } finally {
             em.close();
         }
-    }
+    }*/
 
-    public long getColByAssignee(Long user, TaskStatusType status) {
+    /*public long getColByAssignee(Long user, TaskStatusType status) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -430,9 +432,9 @@ public class TaskDAO extends DAO<Task, UUID> {
         } finally {
             em.close();
         }
-    }
+    }*/
 
-    public long getColByAuthor(User user, TaskStatusType status) {
+   /* public long getColByAuthor(User user, TaskStatusType status) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -450,7 +452,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         } finally {
             em.close();
         }
-    }
+    }*/
 
 
     public List<CountStat> getStatTaskStatus() {
@@ -479,6 +481,61 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             TypedQuery<CountStat> typedQuery = em.createQuery(cq);
             return typedQuery.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void delete(Task entity) throws SecureException, DAOException {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        try {
+            if (!user.isSuperUser()) {
+                boolean isEditor = false;
+                if (SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
+                    SecureAppEntity<UUID> se = (SecureAppEntity<UUID>) entity;
+                    Iterator<Long> it = se.getEditors().iterator();
+                    while (it.hasNext()) {
+                        if (it.next().longValue() == user.getId().longValue()) {
+                            isEditor = true;
+                            break;
+                        }
+                    }
+                }
+                if (!isEditor) {
+                    throw new SecureException(Environment.getAppEnvByAlias(Task.class.getCanonicalName()).appName,
+                            "deleting_is_restricted", ses.getLang());
+                }
+            } else {
+                Server.logger.warning("it is going to delete behalf " + SuperUser.USER_NAME + " " + entity.toString());
+
+            }
+
+
+            EntityTransaction t = em.getTransaction();
+            try {
+                t.begin();
+                entity = em.merge(entity);
+                em.remove(entity);
+                if (Environment.integrationEnable) {
+                    CollationDAO collationDAO = new CollationDAO(ses);
+                    try {
+                        collationDAO.delete(entity.getId());
+                    } catch (DAOException e) {
+                        if (e.getType() != DAOExceptionType.ENTITY_NOT_FOUND) {
+                            throw e;
+                        }
+                    }
+                }
+                t.commit();
+            } catch (PersistenceException e) {
+                throw new DAOException(e);
+            } finally {
+                if (t.isActive()) {
+                    t.rollback();
+                }
+            }
         } finally {
             em.close();
         }
