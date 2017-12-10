@@ -509,7 +509,13 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             } else {
                 Server.logger.warning("it is going to delete behalf " + SuperUser.USER_NAME + " " + entity.toString());
-
+             /*   Query q = em.createNativeQuery("SELECT a.firstname, a.lastname FROM Author a");
+                int authors = q.executeUpdate();
+                DELETE FROM prj__task_readers WHERE task_id IN (SELECT id FROM prj__tasks where reg_number = 'doc17');
+                DELETE FROM prj__task_tags WHERE task_id IN (SELECT id FROM prj__tasks where reg_number = 'doc17');
+                DELETE FROM prj__tasks__blocks WHERE task_id IN (SELECT id FROM prj__tasks where reg_number = 'doc17');
+                DELETE FROM prj__tasks_wf__blocks WHERE task_id IN (SELECT id FROM prj__tasks where reg_number = 'doc17');
+                DELETE FROM prj__tasks where reg_number = 'doc17'*/
             }
 
 
