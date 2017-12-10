@@ -3,5 +3,4 @@ $orgname$
 ваша задача была принята к исполнению 
 `$regNumber$` $title$
 _Click >_ $url$
-С уважением,
-*$assignee$*
+С уважением, *$assignee$*

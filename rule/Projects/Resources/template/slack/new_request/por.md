@@ -4,7 +4,5 @@ Hello, there is request for your task:
 Request type: $requestType$ 
 Comment: $comment$
 From: $author$
-
 _Click >_ $url$
-Yours respectfully
-*$author$*
+Yours respectfully: *$author$*
