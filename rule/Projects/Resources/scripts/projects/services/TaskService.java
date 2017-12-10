@@ -462,6 +462,10 @@ public class TaskService extends RestProvider {
         ActionFactory action = new ActionFactory();
 
         actionBar.addAction(action.close);
+        if (taskDomain.taskIsEditable(task)) {
+            actionBar.addAction(action.saveAndClose);
+        }
+
 
         if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
@@ -492,9 +496,7 @@ public class TaskService extends RestProvider {
                 actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));
             }
         }
-        if (taskDomain.taskIsEditable(task)) {
-            actionBar.addAction(action.saveAndClose);
-        }
+
         if (taskDomain.taskCanBeDeleted(task)) {
             actionBar.addAction(action.deleteDocument);
         }
