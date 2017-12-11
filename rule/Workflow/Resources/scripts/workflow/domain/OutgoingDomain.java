@@ -120,14 +120,14 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
     public Outcome getOutcome(Outgoing entity) {
         Outcome outcome = new Outcome();
 
-        String entityKind = Environment.vocabulary.getWord("outgoing", ses.getLang());
+        String entityKind = Environment.vocabulary.getWord("outgoing_document", ses.getLang());
         if (StringUtil.isEmpty(entity.getTitle())) {
             outcome.setTitle(entityKind);
         } else {
             outcome.setTitle(entityKind + " " + entity.getTitle());
         }
         outcome.addPayload(entity);
-        outcome.addPayload("contentTitle", "outgoing");
+        outcome.addPayload("contentTitle", "outgoing_document");
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));
             Block block = ApprovalLifecycle.getProcessingBlock(entity);
