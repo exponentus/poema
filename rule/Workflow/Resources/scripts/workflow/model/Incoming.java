@@ -30,7 +30,7 @@ import java.util.UUID;
 @JsonRootName("incoming")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf__incomings")
+@Table(name = AppConst.CODE + "__incomings")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Incoming extends ActionableDocument implements ILifeCycle {
 
@@ -65,7 +65,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 	private String body;
 
 	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "wf__incoming_attachments", joinColumns = { @JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
+	@JoinTable(name = AppConst.CODE +  "__incoming_attachments", joinColumns = { @JoinColumn(name = "incoming_id") }, inverseJoinColumns = {
 			@JoinColumn(name = "attachment_id") }, indexes = {
 					@Index(columnList = "incoming_id, attachment_id") }, uniqueConstraints = @UniqueConstraint(columnNames = {
 							"incoming_id", "attachment_id" }))
@@ -73,17 +73,17 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 	private List<Attachment> attachments = new ArrayList<>();
 
 	@ElementCollection
-	@CollectionTable(name = "wf__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	@CollectionTable(name = AppConst.CODE + "__incoming_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<Observer> observers = new ArrayList<Observer>();
 
 	@ElementCollection
 	//@MapKeyColumn(name = "real_file_name", length = 140)
 	//@Column(name = "ext_attachment")
-	@CollectionTable(name = "wf__incoming_ext_attachments", joinColumns = @JoinColumn(referencedColumnName = "id"))
+	@CollectionTable(name = AppConst.CODE + "__incoming_ext_attachments", joinColumns = @JoinColumn(referencedColumnName = "id"))
 	private List<ExtendedAttachment> extAttachments = new ArrayList<ExtendedAttachment>();
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "wf__incoming_tags")
+	@JoinTable(name = AppConst.CODE + "__incoming_tags")
 	private List<Tag> tags;
 
 	public String getRegNumber() {
@@ -205,7 +205,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 
 	@Override
 	public String getURL() {
-		return AppConst.BASE_URL + "incomings/" + getIdentifier();
+		return AppConst.BASE_URL + "incomings/" + getId();
 	}
 
 

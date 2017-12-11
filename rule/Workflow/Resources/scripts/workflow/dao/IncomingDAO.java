@@ -109,7 +109,7 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
 
             long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
-
+            //Lg.debug(getSQL(em,typedQuery));
             ViewPage<IncomingViewEntry> vp = new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
             if (vp.getResult().isEmpty()) {
                 return vp;

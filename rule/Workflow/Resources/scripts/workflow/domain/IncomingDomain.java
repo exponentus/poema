@@ -82,7 +82,7 @@ public class IncomingDomain extends CommonDomain<Incoming> {
             entity.setAuthor(ses.getUser());
         }
         entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
-        entity.setExtAttachments(dto.getExtAttachments());
+     //   entity.setExtAttachments(dto.getExtAttachments());
         calculateReadersEditors(entity);
         return entity;
     }
