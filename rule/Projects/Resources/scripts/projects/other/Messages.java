@@ -229,7 +229,6 @@ public class Messages {
 
 			try {
 				User user = (User) task.getAuthor();
-				lang = user.getDefaultLang();
 				MessagingHelper.sendInAnyWay(appEnv, user, memo, msgTemplate, task, "notify_about_task_rejected_by_moderator");
 			} catch (ClassCastException e) {
 
