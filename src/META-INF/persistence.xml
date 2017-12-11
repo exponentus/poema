@@ -119,6 +119,7 @@
         <class>reference.model.DocumentType</class>
         <class>reference.model.ControlType</class>
         <class>reference.model.Tag</class>
+        <class>reference.model.UnitType</class>
         <class>reference.model.OrgCategory</class>
         <class>reference.model.DocumentSubject</class>
         <class>reference.model.TextTemplate</class>

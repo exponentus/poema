@@ -21,6 +21,7 @@ run task staff_fill_roles
 run task fill_individual_labels
 run task fill_tags
 run task fill_positions
+run task ref_fill_unit_types
 
 stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
