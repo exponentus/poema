@@ -168,16 +168,6 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
 		this.docSubject = docSubject;
 	}
 
-	@Override
-	public String getBody() {
-		return body;
-	}
-
-	@Override
-	public void setBody(String body) {
-		this.body = body;
-	}
-
 	public List<Observer> getObservers() {
 		return observers;
 	}

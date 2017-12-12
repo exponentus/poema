@@ -124,7 +124,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 
 	@Override
 	public String getURL() {
-		return AppConst.BASE_URL + "office-memos/" + getIdentifier();
+		return AppConst.BASE_URL + "office-memos/" + getId();
 	}
 
 	@Override

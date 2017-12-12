@@ -3,5 +3,5 @@ $orgname$
 для вас документ на модерацию
 `$regNumber$` $title$
 _Click >_ $url$
-С уважением,
-*$assignee$*
+С уважением, *$author$*
+

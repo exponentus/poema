@@ -128,27 +128,6 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 
 
 
-	@Deprecated
-	@Override
-	public boolean userCanDoDecision(IExtUser emp) {
-		if (getApprovalStatus() == ApprovalStatusType.PENDING) {
-			Block block = ApprovalLifecycle.getProcessingBlock(this);
-			if (block != null) {
-				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-					Approver approver = block.getCurrentApprover();
-					if (approver != null) {
-						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
-					}
-				} else if (block.getType() == ApprovalType.PARALLEL) {
-					return block.getApprovers().stream()
-							.filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
-							.count() > 0;
-				}
-			}
-		}
-
-		return false;
-	}
 
 	@Deprecated
 	public boolean userCanDoDecision(Employee emp) {
@@ -156,9 +135,9 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
 			Block block = ApprovalLifecycle.getProcessingBlock(this);
 			if (block != null) {
 				if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-					Approver approver = block.getCurrentApprover();
+					Approver approver = block.getCurrentFirstApprover();
 					if (approver != null) {
-						return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+						return block.getCurrentFirstApprover().getEmployee().getId().equals(emp.getId());
 					}
 				} else if (block.getType() == ApprovalType.PARALLEL) {
 					return block.getApprovers().stream()

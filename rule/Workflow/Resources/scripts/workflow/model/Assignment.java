@@ -30,8 +30,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "wf__assignments")
 public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
+
     @JsonIgnore
-    //@JsonManagedReference(value = "assignment-report")
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     @OrderBy("appliedRegDate")
     private List<Report> reports;
@@ -43,17 +43,14 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-   // @JsonBackReference(value = "primary-assignment")
     @ManyToOne(optional = false)
     @JoinColumn(nullable = false)
     private ActionableDocument primary;
 
-   // @JsonBackReference(value = "assignment-assignment")
     @ManyToOne
     @JoinColumn(name = "actionable_document_id")
     private Assignment parent;
 
-  //  @JsonManagedReference(value = "assignment-assignment")
     @JsonIgnore
     @OneToMany(mappedBy="parent")
     private List<Assignment> assignments;
@@ -164,7 +161,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "assignments/" + getIdentifier();
+        return AppConst.BASE_URL + "assignments/" + getId();
     }
 
     public ControlType getControlType() {

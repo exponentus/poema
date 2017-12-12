@@ -191,6 +191,7 @@ public class Messages {
 			memo.addVar("title", task.getTitle());
 			IUser assigneeUser = userDAO.findById(task.getAssignee());
 			memo.addVar("assignee", assigneeUser.getUserName());
+			memo.addVar("author", task.getAuthor().getUserName());
 			Block block = task.getBlocks().get(0);
 			List<Approver> moderators = block.getCurrentApprovers();
 

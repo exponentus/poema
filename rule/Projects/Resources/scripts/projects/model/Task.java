@@ -30,7 +30,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
-import com.exponentus.common.model.constants.PriorityType;
 import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
@@ -439,15 +438,14 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     @Deprecated
-    @Override
     public boolean userCanDoDecision(IExtUser emp) {
         if (getApprovalStatus() == ApprovalStatusType.PENDING) {
             Block block = ApprovalLifecycle.getProcessingBlock(this);
             if (block != null) {
                 if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-                    Approver approver = block.getCurrentApprover();
+                    Approver approver = block.getCurrentFirstApprover();
                     if (approver != null) {
-                        return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
+                        return block.getCurrentFirstApprover().getEmployee().getId().equals(emp.getId());
                     }
                 } else if (block.getType() == ApprovalType.PARALLEL) {
                     return block.getApprovers().stream()
@@ -460,26 +458,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return false;
     }
 
-    @Deprecated
-    public boolean userCanDoDecision(Employee emp) {
-        if (getApprovalStatus() == ApprovalStatusType.PENDING) {
-            Block block = ApprovalLifecycle.getProcessingBlock(this);
-            if (block != null) {
-                if (block.getType() == ApprovalType.SERIAL || block.getType() == ApprovalType.SIGNING) {
-                    Approver approver = block.getCurrentApprover();
-                    if (approver != null) {
-                        return block.getCurrentApprover().getEmployee().getId().equals(emp.getId());
-                    }
-                } else if (block.getType() == ApprovalType.PARALLEL) {
-                    return block.getApprovers().stream()
-                            .filter(it -> it.getEmployee().getId().equals(emp.getId()) && it.getDecisionType() == DecisionType.UNKNOWN)
-                            .count() > 0;
-                }
-            }
-        }
 
-        return false;
-    }
 
     @Override
     public EmbeddedSecureHierarchicalEntity getParentEntity(_Session ses) {
