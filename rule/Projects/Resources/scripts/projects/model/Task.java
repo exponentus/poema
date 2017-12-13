@@ -9,10 +9,7 @@ import com.exponentus.common.model.constants.converter.ApprovalSchemaTypeConvert
 import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConverter;
 import com.exponentus.common.model.converter.ListOfStringConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
-import com.exponentus.common.model.embedded.Approver;
-import com.exponentus.common.model.embedded.Block;
-import com.exponentus.common.model.embedded.IApproval;
-import com.exponentus.common.model.embedded.TimeLine;
+import com.exponentus.common.model.embedded.*;
 import com.exponentus.common.ui.ILifeCycle;
 import com.exponentus.common.ui.constants.LifeCycleNodeType;
 import com.exponentus.common.ui.embedded.LifeCycleNode;
@@ -135,7 +132,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
-
     @Transient
     private List<IAppEntity<UUID>> responses;
 
@@ -152,6 +148,10 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @OrderBy("sort")
     @CascadeOnDelete
     private List<Block> blocks = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = AppConst.CODE + "__task_stages", joinColumns = @JoinColumn(referencedColumnName = "id"))
+    private List<Stage> stages = new ArrayList<Stage>();
 
     public Project getProject() {
         return project;
@@ -204,6 +204,12 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         Date current = new Date();
         statusDate = current;
         getTimeLine().addStage(current, status.name());
+        if (stages.size() == 0 || stages.get(stages.size() - 1).getStatus() != status.getCode()) {
+            Stage stage = new Stage();
+            stage.setStageTime(current);
+            stage.setStatus(status.getCode());
+            stages.add(stage);
+        }
     }
 
     public Date getStatusDate() {
@@ -350,7 +356,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.attachments = attachments;
     }
 
-    //
     public List<IAppEntity<UUID>> getResponses() {
         return responses;
     }

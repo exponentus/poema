@@ -388,72 +388,36 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    /*public long getColByAssignee(Date startDate, Date endDate, IUser user, TaskStatusType status) {
+    public List<CountStat> getStatTaskStatus1() {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
-            CriteriaQuery<Task> cq = cb.createQuery(Task.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+            CriteriaQuery<CountStat> cq = cb.createQuery(CountStat.class);
             Root<Task> root = cq.from(Task.class);
-            countCq.select(cb.count(root));
 
-            ParameterExpression<Date> from = cb.parameter(Date.class);
-            ParameterExpression<Date> to = cb.parameter(Date.class);
-            Predicate startPredicate = cb.greaterThanOrEqualTo(root.<Date>get("regDate"), from);
-            Predicate endPredicate = cb.lessThanOrEqualTo(root.<Date>get("regDate"), to);
-            Predicate periodCondition = cb.and(startPredicate, endPredicate);
+            Predicate condition = null;
 
-            Predicate condition = cb.equal(root.get("assignee"), user.getId());
-            condition = cb.and(cb.equal(root.get("status"), status), condition);
-            condition = cb.and(condition, periodCondition);
-            countCq.where(condition);
-            Query query = em.createQuery(countCq);
-            query.setParameter(from, startDate, TemporalType.DATE);
-            query.setParameter(to, endDate, TemporalType.DATE);
-            return (long) query.getSingleResult();
+            if (!user.isSuperUser()) {
+                condition = cb.and(root.get("readers").in(user.getId()));
+            }
+
+            cq.select(cb.construct(
+                    CountStat.class,
+                    root.get("status"),
+                    cb.count(root.get("status")))
+            )
+                    .groupBy(root.get("status"));
+
+            if (condition != null) {
+                cq.where(condition);
+            }
+
+            TypedQuery<CountStat> typedQuery = em.createQuery(cq);
+            return typedQuery.getResultList();
         } finally {
             em.close();
         }
-    }*/
-
-    /*public long getColByAssignee(Long user, TaskStatusType status) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<Task> cq = cb.createQuery(Task.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> c = cq.from(Task.class);
-            countCq.select(cb.count(c));
-            Predicate condition = cb.and(cb.equal(c.get("assignee"), user));
-            condition = cb.and(cb.equal(c.get("status"), status), condition);
-            countCq.where(condition);
-            Query query = em.createQuery(countCq);
-            return (long) query.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }*/
-
-   /* public long getColByAuthor(User user, TaskStatusType status) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<Task> cq = cb.createQuery(Task.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> c = cq.from(Task.class);
-            cq.select(c);
-            countCq.select(cb.count(c));
-            Predicate condition = cb.and(cb.equal(c.get("author"), user));
-            condition = cb.and(cb.equal(c.get("status"), status), condition);
-            countCq.where(condition);
-            Query query = em.createQuery(countCq);
-            return (long) query.getSingleResult();
-
-        } finally {
-            em.close();
-        }
-    }*/
-
+    }
 
     public List<CountStat> getStatTaskStatus() {
         EntityManager em = getEntityManagerFactory().createEntityManager();
