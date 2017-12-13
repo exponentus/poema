@@ -56,17 +56,29 @@ public class DashboardService extends RestProvider {
                 vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
             }
 
+            String statusesAsText = Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(","));
             chart.setValues(vals);
             if (total > 0) {
                 long average = total / vals.size();
-                chart.setTitle(average + Voc.get("task", lang) + "/" + Voc.get(periodType, lang));
+                chart.setTitle(average + " " + Voc.get("task", lang) + "/" + Voc.get(periodType, lang) + " " + statusesAsText);
             }
             chart.setStart(TimeUtil.dateToStringSilently(fromDate));
             chart.setEnd(TimeUtil.dateTimeToStringSilently(current));
-            chart.setStatus(Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(",")));
+            chart.setStatus(statusesAsText);
             outcome.addPayload("statAssigneeStateProcessing", chart);
 
-            outcome.addPayload("statAssigneeStateCompleted", new TimeChart());
+            TimeChart chart1 = new TimeChart();
+            StatusType[] stats1 = {StatusType.PENDING,StatusType.COMPLETED};
+            List<Object[]> result1 = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats1);
+            long total1 = 0;
+            Map vals1 = new  LinkedHashMap();
+            for (Object[] r : result1) {
+                total1 += (long)r[1];
+                vals1.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
+            }
+
+            chart.setValues(vals1);
+            outcome.addPayload("statAssigneeStateCompleted", chart1);
 
             // author_state
             outcome.addPayload("statAuthorStateProcessing", new TimeChart());
