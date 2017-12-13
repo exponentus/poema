@@ -43,8 +43,8 @@ public class DashboardService extends RestProvider {
             List<IUser> allUsers = new ArrayList<>();
 
             UserDAO userDAO = new UserDAO();
-            allUsers.addAll(userDAO.findAll());
-            //allUsers.add(session.getUser());
+            //allUsers.addAll(userDAO.findAll());
+            allUsers.add(session.getUser());
             Date fromDate = TimeUtil.convertTextToDate("01.01.2017");
             StatusType[] stats = {StatusType.PROCESSING,StatusType.OPEN};
             String periodType = "day"; //could be "week", "year" as well
