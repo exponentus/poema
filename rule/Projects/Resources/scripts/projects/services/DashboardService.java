@@ -77,7 +77,7 @@ public class DashboardService extends RestProvider {
                 vals1.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
             }
 
-            chart.setStatus(Arrays.stream(stats1).map(s -> s.name()).collect(Collectors.joining(",")));
+            chart1.setStatus(Arrays.stream(stats1).map(s -> s.name()).collect(Collectors.joining(",")));
             chart1.setValues(vals1);
             outcome.addPayload("statAssigneeStateCompleted", chart1);
 
