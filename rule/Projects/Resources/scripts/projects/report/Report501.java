@@ -1,5 +1,6 @@
 package projects.report;
 
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.common.other.AbstractDataObtainer;
 import com.exponentus.common.ui.ViewPage;
@@ -8,7 +9,6 @@ import com.exponentus.log.Lg;
 import projects.dao.TaskDAO;
 import projects.init.AppConst;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
 import reference.init.DataConst;
 import reference.model.Tag;
@@ -50,7 +50,7 @@ public class Report501 extends AbstractDataObtainer {
                     TimeLine timeLine = task.getTimeLine();
                     String status = timeLine.getStageName(until);
                     if (status != null) {
-                        TaskStatusType statusType = TaskStatusType.valueOf(status);
+                        StatusType statusType = StatusType.valueOf(status);
                         switch (statusType) {
                             case DRAFT:
                                 report.draft++;
@@ -81,7 +81,7 @@ public class Report501 extends AbstractDataObtainer {
                             report.expired ++;
                         }
 
-                        report.hours += timeLine.getHoursBetweenStages(TaskStatusType.PROCESSING.name(), TaskStatusType.COMPLETED.name());
+                        report.hours += timeLine.getHoursBetweenStages(StatusType.PROCESSING.name(), StatusType.COMPLETED.name());
 
                         report.total++;
                     }

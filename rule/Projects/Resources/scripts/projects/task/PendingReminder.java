@@ -3,6 +3,7 @@ package projects.task;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -20,7 +21,6 @@ import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class PendingReminder extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			tDao = new TaskDAO(session);
-			List<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PENDING));
+			List<Task> vp = tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.PENDING));
 			processRemind(vp, session);
 		} catch (DAOException e) {
 			logError(e);

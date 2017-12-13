@@ -5,10 +5,7 @@ import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.init.DefaultDataConst;
-import com.exponentus.common.model.constants.ApprovalResultType;
-import com.exponentus.common.model.constants.ApprovalSchemaType;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.model.constants.*;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ACL;
@@ -31,7 +28,6 @@ import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
-import projects.model.constants.TaskStatusType;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -62,7 +58,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setAuthor(user);
         task.setInitiative(initiative);
         task.setTaskType(taskType);
-        task.setStatus(TaskStatusType.DRAFT);
+        task.setStatus(StatusType.DRAFT);
         task.setProject(project);
         if (demand != null) {
             task.setDemand(demand);
@@ -108,7 +104,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public void fillFromDto(Task task, Task dto) throws DAOException, RestServiceException {
         if (task.isNew()) {
             task.setAuthor(dto.getAuthor());
-            changeStatus(task, TaskStatusType.DRAFT);
+            changeStatus(task, StatusType.DRAFT);
             task.setInitiative(dto.isInitiative());
 
             if (dto.getParent() != null) {
@@ -147,10 +143,10 @@ public class TaskDomain extends ApprovalDomain<Task> {
         calculateReaders(task);
     }
 
-    public void changeStatus(Task task, TaskStatusType status) {
+    public void changeStatus(Task task, StatusType status) {
         task.setStatus(status);
 
-        if (status == TaskStatusType.DRAFT) {
+        if (status == StatusType.DRAFT) {
             task.resetReadersEditors();
             task.addReaderEditor(task.getAuthor());
         } else {
@@ -160,12 +156,12 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public void calculateStatus(Task task) throws DAOException, RestServiceException {
         if (task.getStartDate() == null) {
-            changeStatus(task, TaskStatusType.DRAFT);
+            changeStatus(task, StatusType.DRAFT);
         } else {
-            if (task.getStatus() == TaskStatusType.DRAFT || task.getStatus() == TaskStatusType.OPEN
-                    || task.getStatus() == TaskStatusType.WAITING) {
+            if (task.getStatus() == StatusType.DRAFT || task.getStatus() == StatusType.OPEN
+                    || task.getStatus() == StatusType.WAITING) {
                 if (new Date().before(task.getStartDate())) {
-                    changeStatus(task, TaskStatusType.WAITING);
+                    changeStatus(task, StatusType.WAITING);
                 } else {
                     EmployeeDAO empDao = new EmployeeDAO(ses);
                     List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
@@ -183,7 +179,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
                         throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
                     }
                 }
-                changeStatus(task, TaskStatusType.OPEN);
+                changeStatus(task, StatusType.OPEN);
             }
         }
     }
@@ -211,32 +207,32 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public void acknowledgedTask(Task task, User user) throws DTOException {
         if (!task.getAssignee().equals(user.getId())) {
             throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "not_assignee_user");
-        } else if (task.getStatus() != TaskStatusType.OPEN && task.getStatus() != TaskStatusType.WAITING) {
+        } else if (task.getStatus() != StatusType.OPEN && task.getStatus() != StatusType.WAITING) {
             throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "task_status_is_not_open");
         }
 
-        changeStatus(task, TaskStatusType.PROCESSING);
+        changeStatus(task, StatusType.PROCESSING);
     }
 
     public void completeTask(Task task) throws DTOException {
-        if (task.getStatus() == TaskStatusType.COMPLETED) {
+        if (task.getStatus() == StatusType.COMPLETED) {
             throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "task already completed");
         }
 
-        changeStatus(task, TaskStatusType.COMPLETED);
+        changeStatus(task, StatusType.COMPLETED);
     }
 
     public void acceptApprovalBlock(Task task, IUser user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.accept(user);
-        changeStatus(task, TaskStatusType.OPEN);
+        changeStatus(task, StatusType.OPEN);
     }
 
 
     public void declineApprovalBlock(Task task, IUser user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.decline(user, decisionComment);
-        changeStatus(task, TaskStatusType.DRAFT);
+        changeStatus(task, StatusType.DRAFT);
     }
 
     public void prolongTask(Task task, Date newDueDate) throws DTOException {
@@ -249,20 +245,20 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
 
         task.setDueDate(newDueDate);
-        changeStatus(task, TaskStatusType.PROCESSING);
+        changeStatus(task, StatusType.PROCESSING);
     }
 
     public void cancelTask(Task task, String comment) throws DTOException {
-        if (task.getStatus() == TaskStatusType.CANCELLED) {
+        if (task.getStatus() == StatusType.CANCELLED) {
             throw new DTOException(DTOExceptionType.NO_ENTITY.IMPROPER_CONDITION, "task already cancelled");
         }
 
-        changeStatus(task, TaskStatusType.CANCELLED);
+        changeStatus(task, StatusType.CANCELLED);
         task.setCancellationComment(comment);
     }
 
     public void returnToProcessing(Task task) {
-        changeStatus(task, TaskStatusType.PROCESSING);
+        changeStatus(task, StatusType.PROCESSING);
     }
 
     public boolean taskIsEditable(Task task) {
@@ -273,14 +269,14 @@ public class TaskDomain extends ApprovalDomain<Task> {
         if (ses.getUser().isSuperUser()) {
             return true;
         } else {
-            return !task.isNew() && task.isEditable() && (task.getStatus() == TaskStatusType.OPEN ||
-                    task.getStatus() == TaskStatusType.DRAFT);
+            return !task.isNew() && task.isEditable() && (task.getStatus() == StatusType.OPEN ||
+                    task.getStatus() == StatusType.DRAFT);
         }
     }
 
     public boolean userCanDoAcknowledged(Task task, User user) {
         if (!task.isNew() && task.getAssignee().equals(user.getId())) {
-            if (task.getStatus() == TaskStatusType.OPEN || task.getStatus() == TaskStatusType.WAITING) {
+            if (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.WAITING) {
                 return true;
             }
         }
@@ -289,7 +285,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public boolean userCanDoRequest(Task task, User user) {
         if (!task.isNew() && task.getAssignee().equals(user.getId())) {
-            if (task.getStatus() == TaskStatusType.PROCESSING) {
+            if (task.getStatus() == StatusType.PROCESSING) {
                 return true;
             }
         }
@@ -299,7 +295,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public boolean userCanDoResolution(Task task, User user) {
         if (!task.isNew()) {
             if (task.getAuthor().getId().equals(user.getId()) || user.isSuperUser()) {
-                if (task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
+                if (task.getStatus() != StatusType.COMPLETED && task.getStatus() != StatusType.CANCELLED) {
                     return true;
                 }
             }
@@ -309,7 +305,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public boolean userCanAddSubTask(Task task, User user) {
         if (!task.isNew()) {
-            if (task.getStatus() != TaskStatusType.COMPLETED && task.getStatus() != TaskStatusType.CANCELLED) {
+            if (task.getStatus() != StatusType.COMPLETED && task.getStatus() != StatusType.CANCELLED) {
                 return true;
             }
         }

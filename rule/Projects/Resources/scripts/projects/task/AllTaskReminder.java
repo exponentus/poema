@@ -3,6 +3,7 @@ package projects.task;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -21,7 +22,6 @@ import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +34,8 @@ public class AllTaskReminder extends Do {
     public void doTask(AppEnv appEnv, _Session session) {
         try {
             tDao = new TaskDAO(session);
-            List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING));
-            tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)));
+            List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.PROCESSING));
+            tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.OPEN)));
             if (tl.size() > 0) {
                 processRemind(tl, session);
             }

@@ -1,11 +1,11 @@
 package projects.dao.filter;
 
 import administrator.model.User;
+import com.exponentus.common.model.constants.PriorityType;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.runtimeobj.Filter;
 import projects.model.Project;
 import projects.model.Task;
-import com.exponentus.common.model.constants.PriorityType;
-import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
 
@@ -21,7 +21,7 @@ public class TaskFilter extends Filter {
     private Project project;
     private Task parentTask;
     private TaskType taskType;
-    private TaskStatusType status = TaskStatusType.UNKNOWN;
+    private StatusType status = StatusType.UNKNOWN;
     private PriorityType priority = PriorityType.UNKNOWN;
     private String search;
     private User author;
@@ -87,12 +87,12 @@ public class TaskFilter extends Filter {
         return this;
     }
 
-    public TaskStatusType getStatus() {
+    public StatusType getStatus() {
         return status;
 
     }
 
-    public TaskFilter setStatus(TaskStatusType status) {
+    public TaskFilter setStatus(StatusType status) {
         this.status = status;
         return this;
     }

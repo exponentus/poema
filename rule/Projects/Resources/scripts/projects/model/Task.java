@@ -27,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.AppConst;
-import projects.model.constants.TaskStatusType;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.model.Employee;
@@ -65,7 +64,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Enumerated(EnumType.STRING)
     @Column(length = 16)
-    private TaskStatusType status = TaskStatusType.UNKNOWN;
+    private StatusType status = StatusType.UNKNOWN;
 
     private Date statusDate;
 
@@ -195,15 +194,19 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.taskType = taskType;
     }
 
-    public TaskStatusType getStatus() {
+    public StatusType getStatus() {
         return status;
     }
 
-    public void setStatus(TaskStatusType status) {
+    public void setStatus(StatusType status) {
         this.status = status;
         Date current = new Date();
         statusDate = current;
         getTimeLine().addStage(current, status.name());
+        addStage(current, status);
+    }
+
+    public void addStage(Date current, StatusType status) {
         if (stages.size() == 0 || stages.get(stages.size() - 1).getStatus() != status.getCode()) {
             Stage stage = new Stage();
             stage.setStageTime(current);
@@ -375,6 +378,11 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return blocks;
     }
 
+    @JsonIgnore
+    public List<Stage> getStages() {
+        return stages;
+    }
+
     @Override
     public ApprovalResultType getApprovalResult() {
         return result;
@@ -510,4 +518,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         lc.setUrl(getURL());
         return lc;
     }
+
+
+
 }

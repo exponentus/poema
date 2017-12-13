@@ -7,6 +7,7 @@ import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.PriorityType;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.Milestones;
@@ -41,7 +42,6 @@ import projects.domain.TaskDomain;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
 import projects.ui.ViewOptions;
@@ -194,7 +194,8 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            outcome.addPayload( new Milestones(session, task.getTimeLine()));
+            //outcome.addPayload( new Milestones(session, task.getTimeLine()));
+            outcome.addPayload( new Milestones(session, task.getStages()));
             outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
@@ -263,11 +264,11 @@ public class TaskService extends RestProvider {
                 //	mDao.postEmailSending(user, task, "task_was_updated");
             }
 
-            if (task.getStatus() == TaskStatusType.OPEN) {
+            if (task.getStatus() == StatusType.OPEN) {
                 ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
                 lifecycle.start();
                 if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
-                    task.getTimeLine().addStage(new Date(), TaskStatusType.MODERATION.name());
+                    task.getTimeLine().addStage(new Date(), StatusType.MODERATION.name());
                     task.addReaderEditor(task.getAuthorId()); //dev1292
                     taskDomain.superUpdate(task);
                     new Messages(getAppEnv()).sendToModerate(task);
@@ -403,8 +404,8 @@ public class TaskService extends RestProvider {
             Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                    entity.setStatus(TaskStatusType.OPEN);
-                    if (entity.getStatus() == TaskStatusType.OPEN) {
+                    entity.setStatus(StatusType.OPEN);
+                    if (entity.getStatus() == StatusType.OPEN) {
                         new Messages(getAppEnv()).sendToAssignee(entity);
                     }
                 }
@@ -563,7 +564,7 @@ public class TaskService extends RestProvider {
 
         String taskStatus = formData.getValueSilently("status");
         if (!taskStatus.isEmpty()) {
-            filter.setStatus(TaskStatusType.valueOf(taskStatus));
+            filter.setStatus(StatusType.valueOf(taskStatus));
         }
 
         String taskPriority = formData.getValueSilently("priority");
@@ -627,8 +628,8 @@ public class TaskService extends RestProvider {
              TaskDAO dao = new TaskDAO(ses);
              TaskFilter filter = new TaskFilter();
              filter.setAssigneeUserId(userDAO.findByLogin("test9").getId());
-             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(TaskStatusType.PROCESSING)));
-             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(TaskStatusType.OPEN)));
+             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.PROCESSING)));
+             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.OPEN)));
 
         } catch (DAOException e) {
             Lg.exception(e);

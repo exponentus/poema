@@ -1,6 +1,7 @@
 package projects.ui;
 
 import com.exponentus.common.model.constants.PriorityType;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.ui.filter.FilterForm;
 import com.exponentus.common.ui.filter.FilterGroup;
 import com.exponentus.common.ui.filter.FilterItem;
@@ -11,7 +12,6 @@ import com.exponentus.common.ui.view.ViewPageOptions;
 import com.exponentus.env.Environment;
 import com.exponentus.scripting._Session;
 import projects.model.constants.ProjectStatusType;
-import projects.model.constants.TaskStatusType;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -140,17 +140,17 @@ public class ViewOptions {
 
     public FilterForm getTaskFilter(_Session session, String slug) {
 
-        TaskStatusType[] statusTypes = {
-                TaskStatusType.OPEN,
-                TaskStatusType.PROCESSING,
-                TaskStatusType.PENDING,
-                TaskStatusType.WAITING,
-                TaskStatusType.COMPLETED,
-                TaskStatusType.CANCELLED,
-                TaskStatusType.DRAFT
+        StatusType[] statusTypes = {
+                StatusType.OPEN,
+                StatusType.PROCESSING,
+                StatusType.PENDING,
+                StatusType.WAITING,
+                StatusType.COMPLETED,
+                StatusType.CANCELLED,
+                StatusType.DRAFT
         };
         List<FilterItem.Item> statusTypeItems = new ArrayList<>();
-        for (TaskStatusType type : statusTypes) {
+        for (StatusType type : statusTypes) {
             String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
             statusTypeItems.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
         }

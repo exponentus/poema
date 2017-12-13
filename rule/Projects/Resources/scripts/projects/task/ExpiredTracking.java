@@ -1,6 +1,7 @@
 package projects.task;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scheduler.PeriodicalServices;
@@ -13,7 +14,6 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
 import reference.init.DataConst;
 import reference.model.Tag;
@@ -35,8 +35,8 @@ public class ExpiredTracking extends Do {
 			tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING)), session);
-				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN)), session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.PROCESSING)), session);
+				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.OPEN)), session);
 			} else {
 				logger.warning("The tag \"" + DataConst.EXPIRED_TAG_NAME + "\" did not find in Reference");
 			}

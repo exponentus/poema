@@ -5,6 +5,7 @@ import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.PriorityType;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
@@ -25,7 +26,6 @@ import projects.dto.TaskViewEntry;
 import projects.dto.stat.CountStat;
 import projects.model.Request;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
@@ -69,7 +69,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 }
             }
 
-            if (filter.getStatus() != TaskStatusType.UNKNOWN) {
+            if (filter.getStatus() != StatusType.UNKNOWN) {
                 if (condition == null) {
                     condition = cb.equal(taskRoot.get("status"), filter.getStatus());
                 } else {
@@ -313,7 +313,7 @@ public class TaskDAO extends DAO<Task, UUID> {
 
             Predicate condition = cb.equal(root.get("author"), user);
           /*  condition = cb.and(
-                    cb.or(cb.equal(root.get("status"), TaskStatusType.PROCESSING), cb.equal(root.get("status"), TaskStatusType.OPEN)),
+                    cb.or(cb.equal(root.get("status"), StatusType.PROCESSING), cb.equal(root.get("status"), StatusType.OPEN)),
                     condition);*/
 
             cq.select(cb.construct(TaskViewEntry.class, root.get("id"), root.get("regNumber"), root.get("taskType"), root.get("status"),

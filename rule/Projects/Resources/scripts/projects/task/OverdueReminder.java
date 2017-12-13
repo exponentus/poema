@@ -3,6 +3,7 @@ package projects.task;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -21,7 +22,6 @@ import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 import reference.dao.TagDAO;
 import reference.init.DataConst;
 import reference.model.Tag;
@@ -43,8 +43,8 @@ public class OverdueReminder extends Do {
 			tags.add(tag);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
-				List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.PROCESSING).setTags(tags));
-				tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(TaskStatusType.OPEN).setTags(tags)));
+				List<Task> tl = tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.PROCESSING).setTags(tags));
+				tl.addAll(tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.OPEN).setTags(tags)));
 				if (tl.size() > 0) {
 					processRemind(tl, session);
 				}

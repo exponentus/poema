@@ -1,20 +1,20 @@
 package projects.model.util;
 
+import com.exponentus.common.model.constants.StatusType;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import projects.model.constants.TaskStatusType;
-
 @Converter(autoApply = true)
-public class TaskStatusConverter implements AttributeConverter<TaskStatusType, Integer> {
+public class TaskStatusConverter implements AttributeConverter<StatusType, Integer> {
 
 	@Override
-	public Integer convertToDatabaseColumn(TaskStatusType type) {
+	public Integer convertToDatabaseColumn(StatusType type) {
 		return type.getCode();
 	}
 
 	@Override
-	public TaskStatusType convertToEntityAttribute(Integer val) {
-		return TaskStatusType.getType(val);
+	public StatusType convertToEntityAttribute(Integer val) {
+		return StatusType.getType(val);
 	}
 }

@@ -1,6 +1,7 @@
 package projects.services;
 
 import administrator.model.User;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
@@ -19,7 +20,6 @@ import projects.domain.TaskDomain;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
-import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
 import reference.dao.RequestTypeDAO;
@@ -109,7 +109,7 @@ public class RequestService extends RestProvider {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
 
-            if (task.getStatus() != TaskStatusType.PROCESSING) {
+            if (task.getStatus() != StatusType.PROCESSING) {
                 throw new IllegalStateException("task status is not PROCESSING");
             }
 
@@ -124,7 +124,7 @@ public class RequestService extends RestProvider {
             RequestDomain requestDomain = new RequestDomain(session);
 
             requestDomain.fillFromDto(request, requestDto);
-            taskDomain.changeStatus(task, TaskStatusType.PENDING);
+            taskDomain.changeStatus(task, StatusType.PENDING);
 
             task.getRequests().add(request);
 

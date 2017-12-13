@@ -1,6 +1,7 @@
 package projects.task;
 
 import com.exponentus.appenv.AppEnv;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting._Session;
@@ -11,7 +12,6 @@ import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.AppConst;
 import projects.model.Task;
-import projects.model.constants.TaskStatusType;
 import projects.other.Messages;
 
 import java.util.Date;
@@ -25,11 +25,11 @@ public class TaskWatcher extends Do {
 		try {
 			TaskDAO tDao = new TaskDAO(ses);
 			TaskFilter filter = new TaskFilter();
-			filter.setStatus(TaskStatusType.WAITING);
+			filter.setStatus(StatusType.WAITING);
 			List<Task> taskList = tDao.findAllByTaskFilter(filter);
 			for (Task task : taskList) {
 				if (current.after(task.getStartDate())) {
-					task.setStatus(TaskStatusType.OPEN);
+					task.setStatus(StatusType.OPEN);
 					try {
 						tDao.update(task);
 						logger.info("The task \"" + task.getTitle() + "\" was put in processing");
