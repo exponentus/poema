@@ -50,7 +50,7 @@ public class DashboardService extends RestProvider {
             String periodType = "day"; //could be "week", "year" as well
             List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats);
             long total = 0;
-            Map vals = new TreeMap();
+            Map vals = new  LinkedHashMap();
             for (Object[] r : result) {
                 total += (long)r[1];
                 vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
