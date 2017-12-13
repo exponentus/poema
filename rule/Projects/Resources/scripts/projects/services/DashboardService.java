@@ -50,14 +50,17 @@ public class DashboardService extends RestProvider {
             String periodType = "day"; //could be "week", "year" as well
             List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats);
             long total = 0;
-            Map vals = new HashMap();
+            Map vals = new TreeMap();
             for (Object[] r : result) {
                 total += (long)r[1];
                 vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
             }
-            long average = total/vals.size();
+
             chart.setValues(vals);
-            chart.setTitle(average + Voc.get("task",lang) + "/" + Voc.get(periodType,lang));
+            if (total > 0) {
+                long average = total / vals.size();
+                chart.setTitle(average + Voc.get("task", lang) + "/" + Voc.get(periodType, lang));
+            }
             chart.setStart(TimeUtil.dateToStringSilently(fromDate));
             chart.setEnd(TimeUtil.dateTimeToStringSilently(current));
             chart.setStatus(Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(",")));
