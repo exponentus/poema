@@ -406,8 +406,8 @@ public class TaskDAO extends DAO<Task, UUID> {
             String sql = new StringBuilder()
                     .append("SELECT date_trunc('" + periodType + "', stage_time) AS \""+ periodType +"\" , count(*) AS \"count\" ")
                     .append("FROM prj__task_stages s WHERE (").append(statusChunk.toString()).append(") ")
-                    .append("AND s.stage_time > '"+ TimeUtil.dateToPGString(from) +"' ")
-                    .append("AND s.stage_time < '" + TimeUtil.dateToPGString(to) + "' ")
+                    .append("AND s.stage_time >= '"+ TimeUtil.dateToPGString(from) +"' ")
+                    .append("AND s.stage_time <= '" + TimeUtil.dateToPGString(to) + "' ")
                     .append("AND s.task_id IN (SELECT t.id FROM prj__tasks t, prj__task_readers r WHERE t.id = r.task_id AND (")
                     .append(userChunk.toString())
                     .append(")) GROUP BY 1 ORDER BY 1;").toString();
