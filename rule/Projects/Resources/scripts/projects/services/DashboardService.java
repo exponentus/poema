@@ -1,9 +1,15 @@
 package projects.services;
 
+import administrator.dao.UserDAO;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.Voc;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
+import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import dataexport.model.constants.ExportFormatType;
 import monitoring.dto.TimeChart;
 import projects.dao.TaskDAO;
@@ -14,8 +20,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
-import java.util.List;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Path("dashboard")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,14 +33,35 @@ public class DashboardService extends RestProvider {
     public Response get() {
         try {
             _Session session = getSession();
-
+            LanguageCode lang = session.getLang();
             Outcome outcome = new Outcome();
             outcome.setId("dashboard");
             outcome.setTitle("dashboard");
 
             Date current = new Date();
-            // assignee_state
-           outcome.addPayload("statAssigneeStateProcessing", new TimeChart());
+            TimeChart chart = new TimeChart();
+            List<IUser> allUsers = new ArrayList<>();
+
+            UserDAO userDAO = new UserDAO();
+            //allUsers.addAll(userDAO.findAll());
+            allUsers.add(session.getUser());
+            Date fromDate = TimeUtil.convertTextToDate("01.02.2017");
+            StatusType[] stats = {StatusType.PROCESSING,StatusType.OPEN};
+            String periodType = "day"; //could be "week", "year" as well
+            List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats);
+            long total = 0;
+            Map vals = new HashMap();
+            for (Object[] r : result) {
+                total += (long)r[1];
+                vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
+            }
+            long average = total/vals.size();
+            chart.setValues(vals);
+            chart.setTitle(average + Voc.get("task",lang) + "/" + Voc.get(periodType,lang));
+            chart.setStart(TimeUtil.dateToStringSilently(fromDate));
+            chart.setEnd(TimeUtil.dateTimeToStringSilently(current));
+            chart.setStatus(Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(",")));
+            outcome.addPayload("statAssigneeStateProcessing", chart);
 
             outcome.addPayload("statAssigneeStateCompleted", new TimeChart());
 

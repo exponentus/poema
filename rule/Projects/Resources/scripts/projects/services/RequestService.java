@@ -174,7 +174,7 @@ public class RequestService extends RestProvider {
                         break;
                     case "prolong":
                         // prolong new due date
-                        Date newDueDate = TimeUtil.stringToDate(getWebFormData().getValueSilently("dueDate"));
+                        Date newDueDate = TimeUtil.stringToDateTime(getWebFormData().getValueSilently("dueDate"));
                         if (newDueDate == null) {
                             DTOException ve = new DTOException();
                             ve.addError("dueDate", "date", "field_is_empty");

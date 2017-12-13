@@ -19,6 +19,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import com.exponentus.user.SuperUser;
+import com.exponentus.util.TimeUtil;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
@@ -34,6 +35,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
+
 
     public TaskDAO(_Session session) throws DAOException {
         super(Task.class, session);
@@ -388,32 +390,29 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<CountStat> getStatTaskStatus1() {
+    public List<Object[]> getCountByStatus(Date from, Date to, String periodType , List<IUser> users, StatusType...statusTypes) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
+        StringJoiner userChunk = new StringJoiner(" OR ");
+        for (IUser u : users) {
+            userChunk.add("t.assignee=" + u.getId());
+        }
+
+        StringJoiner statusChunk = new StringJoiner(" OR ");
+        for (StatusType s : statusTypes) {
+            statusChunk.add("s.status=" + s.getCode());
+        }
+
         try {
-            CriteriaQuery<CountStat> cq = cb.createQuery(CountStat.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Predicate condition = null;
-
-            if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
-            }
-
-            cq.select(cb.construct(
-                    CountStat.class,
-                    root.get("status"),
-                    cb.count(root.get("status")))
-            )
-                    .groupBy(root.get("status"));
-
-            if (condition != null) {
-                cq.where(condition);
-            }
-
-            TypedQuery<CountStat> typedQuery = em.createQuery(cq);
-            return typedQuery.getResultList();
+            String sql = new StringBuilder()
+                    .append("SELECT date_trunc('" + periodType + "', stage_time) AS \""+ periodType +"\" , count(*) AS \"count\" ")
+                    .append("FROM prj__task_stages s WHERE (").append(statusChunk.toString()).append(") ")
+                    .append("AND s.stage_time > '"+ TimeUtil.dateToPGString(from) +"' ")
+                    .append("AND s.stage_time < '" + TimeUtil.dateToPGString(to) + "' ")
+                    .append("AND s.task_id IN (SELECT t.id FROM prj__tasks t, prj__task_readers r WHERE t.id = r.task_id AND (")
+                    .append(userChunk.toString())
+                    .append(")) GROUP BY 1 ORDER BY 1;").toString();
+            Query q = em.createNativeQuery(sql);
+            return q.getResultList();
         } finally {
             em.close();
         }
