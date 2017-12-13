@@ -47,7 +47,7 @@ public class DashboardService extends RestProvider {
             allUsers.add(session.getUser());
             Date fromDate = TimeUtil.convertTextToDate("01.01.2017");
             StatusType[] stats = {StatusType.PROCESSING,StatusType.OPEN};
-            String periodType = "day"; //could be "week", "year" as well
+            String periodType = "week"; //could be "day","week", "year" as well
             List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats);
             long total = 0;
             Map vals = new  LinkedHashMap();
