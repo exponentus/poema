@@ -48,7 +48,7 @@ public class DashboardService extends RestProvider {
             Date fromDate = TimeUtil.convertTextToDate("01.01.2017");
             StatusType[] stats = {StatusType.PROCESSING,StatusType.OPEN};
             String periodType = "week"; //could be "day","week", "year" as well
-            List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats);
+            List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,current, periodType, "assignee" ,allUsers,stats);
             long total = 0;
             Map vals = new  LinkedHashMap();
             for (Object[] r : result) {
@@ -69,7 +69,7 @@ public class DashboardService extends RestProvider {
 
             TimeChart chart1 = new TimeChart();
             StatusType[] stats1 = {StatusType.PENDING,StatusType.COMPLETED};
-            List<Object[]> result1 = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,allUsers,stats1);
+            List<Object[]> result1 = new TaskDAO(session).getCountByStatus(fromDate,current,periodType,"assignee",allUsers,stats1);
             long total1 = 0;
             Map vals1 = new  LinkedHashMap();
             for (Object[] r : result1) {

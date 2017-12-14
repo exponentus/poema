@@ -390,11 +390,11 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Object[]> getCountByStatus(Date from, Date to, String periodType , List<IUser> users, StatusType...statusTypes) {
+    public List<Object[]> getCountByStatus(Date from, Date to, String periodType, String userType,  List<IUser> users, StatusType...statusTypes) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         StringJoiner userChunk = new StringJoiner(" OR ");
         for (IUser u : users) {
-            userChunk.add("t.assignee=" + u.getId());
+            userChunk.add("t." + userType + "=" + u.getId());
         }
 
         StringJoiner statusChunk = new StringJoiner(" OR ");
