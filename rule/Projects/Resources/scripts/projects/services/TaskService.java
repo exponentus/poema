@@ -49,6 +49,7 @@ import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
+import staff.dto.converter.EmployeeConverter;
 import staff.model.Employee;
 import workflow.dto.action.DeclineApprovalBlockAction;
 
@@ -95,9 +96,10 @@ public class TaskService extends RestProvider {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_task").url(AppConst.BASE_URL + "tasks/new"));
             actionBar.addAction(action.refreshVew);
 
+            EmployeeConverter converter = new EmployeeConverter();
             EmployeeDAO empDao = new EmployeeDAO(session);
-            Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
-                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            List<Employee> empsResult = converter.convert(empDao.findAll(false).getResult());
+            Map<Long, Employee> emps = empsResult.stream().collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             String title;
             switch (slug) {
@@ -194,8 +196,8 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            //outcome.addPayload( new Milestones(session, task.getTimeLine()));
-            outcome.addPayload( new Milestones(session, task.getStages()));
+            // outcome.addPayload( new Milestones(session, task.getTimeLine()));
+            outcome.addPayload(new Milestones(session, task.getStages()));
             outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));
 
@@ -272,7 +274,7 @@ public class TaskService extends RestProvider {
                     task.addReaderEditor(task.getAuthorId()); //dev1292
                     taskDomain.superUpdate(task);
                     new Messages(getAppEnv()).sendToModerate(task);
-                }else {
+                } else {
                     taskDomain.superUpdate(task);
                     new Messages(getAppEnv()).sendToAssignee(task);
 
@@ -625,18 +627,18 @@ public class TaskService extends RestProvider {
         List<Task> tasks = new ArrayList<>();
 
         try {
-             TaskDAO dao = new TaskDAO(ses);
-             TaskFilter filter = new TaskFilter();
-             filter.setAssigneeUserId(userDAO.findByLogin("test9").getId());
-             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.PROCESSING)));
-             tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.OPEN)));
+            TaskDAO dao = new TaskDAO(ses);
+            TaskFilter filter = new TaskFilter();
+            filter.setAssigneeUserId(userDAO.findByLogin("test9").getId());
+            tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.PROCESSING)));
+            tasks.addAll(dao.findAllByTaskFilter(filter.setStatus(StatusType.OPEN)));
 
         } catch (DAOException e) {
             Lg.exception(e);
         }
 
         StringJoiner tasksAsText = new StringJoiner("\n");
-        for(Task t:tasks){
+        for (Task t : tasks) {
             tasksAsText.add(t.getTitle());
         }
 
@@ -645,9 +647,8 @@ public class TaskService extends RestProvider {
         String result = "{\"text\": \"Projects\"," +
                 "\"mrkdwn\":true," +
                 "\"attachments\": [{\"text\":\"" + val + "\"}]" +
-                        "}";
+                "}";
 
         return Response.status(200).entity(result).build();
-
     }
 }
