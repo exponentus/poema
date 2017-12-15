@@ -30,7 +30,7 @@ public class ViewOptions {
 
         ViewColumnGroup cg2 = new ViewColumnGroup();
         cg2.setClassName("vw-20 vw-md-50");
-        cg2.add(new ViewColumn("customer").sortBoth());
+        cg2.add(new ViewColumn("customer.name").name("customer").sortBoth());
 
         ViewColumnGroup cg3 = new ViewColumnGroup();
         cg3.setClassName("vw-40");

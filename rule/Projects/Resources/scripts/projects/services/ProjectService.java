@@ -18,8 +18,9 @@ import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import org.eclipse.persistence.exceptions.DatabaseException;
 import projects.dao.ProjectDAO;
+import projects.dao.filter.ProjectFilter;
 import projects.domain.ProjectDomain;
-import projects.dto.ProjectViewEntry;
+import projects.dto.converter.ProjectDtoConverter;
 import projects.init.AppConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
@@ -56,13 +57,14 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             SortParams sortParams = SortParams.valueOf(params.getStringValueSilently("sort", "status,name"));
             ProjectDAO projectDAO = new ProjectDAO(session);
 
-            ProjectStatusType status = null;
+            ProjectFilter filter = new ProjectFilter();
             if (!params.getValueSilently("status").isEmpty()) {
-                status = ProjectStatusType.valueOf(params.getValueSilently("status"));
+                filter.setStatus(ProjectStatusType.valueOf(params.getValueSilently("status")));
             }
 
-            ViewPage<ProjectViewEntry> vp = projectDAO.findViewPage(sortParams, status, params.getPage(),
-                    pageSize);
+            ViewPage<Project> vp = projectDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setResult(new ProjectDtoConverter().convert(vp.getResult()));
+
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getProjectOptions());
             vp.setFilter(viewOptions.getProjectFilter(session));
