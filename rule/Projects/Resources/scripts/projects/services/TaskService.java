@@ -49,7 +49,7 @@ import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
-import staff.dto.converter.EmployeeConverter;
+import staff.dto.converter.EmployeeDtoConverter;
 import staff.model.Employee;
 import workflow.dto.action.DeclineApprovalBlockAction;
 
@@ -96,7 +96,7 @@ public class TaskService extends RestProvider {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_task").url(AppConst.BASE_URL + "tasks/new"));
             actionBar.addAction(action.refreshVew);
 
-            EmployeeConverter converter = new EmployeeConverter();
+            EmployeeDtoConverter converter = new EmployeeDtoConverter();
             EmployeeDAO empDao = new EmployeeDAO(session);
             List<Employee> empsResult = converter.convert(empDao.findAll(false).getResult());
             Map<Long, Employee> emps = empsResult.stream().collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));

@@ -27,7 +27,7 @@ import projects.other.Messages;
 import projects.ui.ActionFactory;
 import projects.ui.ViewOptions;
 import staff.dao.EmployeeDAO;
-import staff.dto.converter.EmployeeConverter;
+import staff.dto.converter.EmployeeDtoConverter;
 import staff.model.Employee;
 
 import javax.ws.rs.*;
@@ -72,7 +72,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
                     new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
             actionBar.addAction(action.refreshVew);
 
-            EmployeeConverter converter = new EmployeeConverter();
+            EmployeeDtoConverter converter = new EmployeeDtoConverter();
             EmployeeDAO empDao = new EmployeeDAO(session);
             List<Employee> empsResult = converter.convert(empDao.findAll(false).getResult());
             Map<Long, Employee> emps = empsResult.stream().collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
