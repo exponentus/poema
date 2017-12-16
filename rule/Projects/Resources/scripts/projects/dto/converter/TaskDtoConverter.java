@@ -14,6 +14,7 @@ public class TaskDtoConverter implements GenericConverter<Task, Task> {
         result.setId(task.getId());
         result.setTitle(task.getTitle());
         result.setRegNumber(task.getRegNumber());
+        result.setRegDate(task.getRegDate());
         result.setResult(task.getApprovalResult());
         result.setApprovalStatus(task.getApprovalStatus());
         result.setStatus(task.getStatus());
