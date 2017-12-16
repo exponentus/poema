@@ -3,20 +3,20 @@ package projects.dao.filter;
 import administrator.model.User;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.runtimeobj.Filter;
+import com.exponentus.runtimeobj.IFilter;
 import projects.model.Project;
 import projects.model.Task;
 import reference.model.Tag;
 import reference.model.TaskType;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by MK on 02.06.2016.
- */
-public class TaskFilter extends Filter {
+public class TaskFilter implements IFilter<Task> {
 
     private Project project;
     private Task parentTask;
@@ -197,5 +197,10 @@ public class TaskFilter extends Filter {
 
     public void setModerate(boolean moderate) {
         isModerate = moderate;
+    }
+
+    @Override
+    public Predicate collectPredicate(Root<Task> root, CriteriaBuilder cb, Predicate condition) {
+        return condition;
     }
 }

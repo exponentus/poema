@@ -60,6 +60,9 @@ public class ViewOptions {
         FilterForm filterForm = new FilterForm();
         FilterGroup filterGroup = new FilterGroup();
         filterGroup.addItem(new FilterItem("status").items(items));
+        filterGroup.addItem(new FilterItem("customer").url("/Staff/api/organizations"));
+        filterGroup.addItem(new FilterItem("project").url("/Projects/api/projects"));
+        filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_demand").style("return {color:it.color}"));
 
         filterForm.addGroup(filterGroup);
 

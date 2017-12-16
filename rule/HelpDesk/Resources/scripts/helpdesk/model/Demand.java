@@ -54,9 +54,7 @@ public class Demand extends SecureAppEntity<UUID> {
     private String body;
 
     @ManyToMany(fetch = FetchType.EAGER)
-
     @JoinTable(name = "hd__tags")
-
     private List<Tag> tags;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -152,6 +150,6 @@ public class Demand extends SecureAppEntity<UUID> {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "demands/" + getIdentifier();
+        return AppConst.BASE_URL + "demands/" + getId();
     }
 }

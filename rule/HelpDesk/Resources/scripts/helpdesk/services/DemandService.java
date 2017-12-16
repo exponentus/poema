@@ -20,16 +20,22 @@ import com.exponentus.server.Server;
 import helpdesk.dao.DemandDAO;
 import helpdesk.dao.filter.DemandFilter;
 import helpdesk.domain.DemandDomain;
+import helpdesk.dto.converter.DemandDtoConverter;
 import helpdesk.init.AppConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.ui.ViewOptions;
+import projects.model.Project;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
+import reference.model.Tag;
+import staff.model.Organization;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Path("demands")
@@ -46,6 +52,8 @@ public class DemandService extends RestProvider {
             String slug = params.getValueSilently("slug");
             String statusName = params.getValueSilently("status");
             String demandTypeId = params.getValueSilently("demandType");
+            String projectId = params.getValueSilently("project");
+            String customerId = params.getValueSilently("customer");
 
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             DemandFilter filter = new DemandFilter();
@@ -67,9 +75,31 @@ public class DemandService extends RestProvider {
                     Server.logger.exception(e);
                 }
             }
+            if (!projectId.isEmpty()) {
+                Project project = new Project();
+                project.setId(UUID.fromString(projectId));
+                filter.setProject(project);
+            }
+            if (!customerId.isEmpty()) {
+                Organization org = new Organization();
+                org.setId(UUID.fromString(customerId));
+                filter.setCustomer(org);
+            }
+            if (params.containsField("tags")) {
+                List<Tag> tags = new ArrayList<>();
+                String[] tagIds = params.getListOfValuesSilently("tags");
+                for (String tid : tagIds) {
+                    Tag tag = new Tag();
+                    tag.setId(UUID.fromString(tid));
+                    tags.add(tag);
+                }
+                filter.setTags(tags);
+            }
 
             DemandDAO dao = new DemandDAO(session);
             ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
+            vp.setResult(new DemandDtoConverter().convert(vp.getResult()));
+
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getDemandOptions());
             vp.setFilter(viewOptions.getDemandFilter(session));
@@ -78,6 +108,7 @@ public class DemandService extends RestProvider {
             Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
                     .url(AppConst.BASE_URL + "demands/new?type=" + slug);
             actionBar.addAction(newDocAction);
+            actionBar.addAction(new ConventionalActionFactory().refreshVew);
 
             Outcome outcome = new Outcome();
             outcome.setId("demands");
