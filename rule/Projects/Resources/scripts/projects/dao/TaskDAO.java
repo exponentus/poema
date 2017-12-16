@@ -8,7 +8,6 @@ import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.dataengine.jpa.IAppEntity;
@@ -23,7 +22,7 @@ import com.exponentus.util.TimeUtil;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
-import projects.dto.TaskViewEntry;
+import projects.dto.converter.TaskDtoConverter;
 import projects.dto.stat.CountStat;
 import projects.model.Request;
 import projects.model.Task;
@@ -36,6 +35,7 @@ import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
 
+    private TaskDtoConverter dtoConverter = new TaskDtoConverter();
 
     public TaskDAO(_Session session) throws DAOException {
         super(Task.class, session);
@@ -183,7 +183,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             long count = (long) query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
-            List<Task> result = typedQuery.getResultList();
+            List<Task> result = dtoConverter.convert(typedQuery.getResultList());
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {
@@ -256,7 +256,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
 
         TypedQuery<Task> typedQueryT = em.createQuery(cqt);
-        tasks = typedQueryT.getResultList();
+        tasks = dtoConverter.convert(typedQueryT.getResultList());
 
         // Request
         CriteriaBuilder cbr = em.getCriteriaBuilder();
@@ -305,7 +305,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         return result;
     }
 
-    public ViewPage<TaskViewEntry> findCreatedByUser(IUser user, int pageNum, int pageSize) {
+    /*public ViewPage<TaskViewEntry> findCreatedByUser(IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -314,9 +314,9 @@ public class TaskDAO extends DAO<Task, UUID> {
             Root<Task> root = cq.from(Task.class);
 
             Predicate condition = cb.equal(root.get("author"), user);
-          /*  condition = cb.and(
-                    cb.or(cb.equal(root.get("status"), StatusType.PROCESSING), cb.equal(root.get("status"), StatusType.OPEN)),
-                    condition);*/
+//            condition = cb.and(
+//                    cb.or(cb.equal(root.get("status"), StatusType.PROCESSING), cb.equal(root.get("status"), StatusType.OPEN)),
+//                    condition);
 
             cq.select(cb.construct(TaskViewEntry.class, root.get("id"), root.get("regNumber"), root.get("taskType"), root.get("status"),
                     root.get("priority"), root.get("startDate"), root.get("dueDate"), root.get("tags")))
@@ -348,7 +348,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         } finally {
             em.close();
         }
-    }
+    }*/
 
     public ViewPage<Task> findAssignedToUser(Date startDate, Date endDate, IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
@@ -390,7 +390,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Object[]> getCountByStatus(Date from, Date to, String periodType, String userType,  List<IUser> users, StatusType...statusTypes) {
+    public List<Object[]> getCountByStatus(Date from, Date to, String periodType, String userType, List<IUser> users, StatusType... statusTypes) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         StringJoiner userChunk = new StringJoiner(" OR ");
         for (IUser u : users) {
@@ -404,9 +404,9 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         try {
             String sql = new StringBuilder()
-                    .append("SELECT date_trunc('" + periodType + "', stage_time) AS \""+ periodType +"\" , count(*) AS \"count\" ")
+                    .append("SELECT date_trunc('" + periodType + "', stage_time) AS \"" + periodType + "\" , count(*) AS \"count\" ")
                     .append("FROM prj__task_stages s WHERE (").append(statusChunk.toString()).append(") ")
-                    .append("AND s.stage_time >= '"+ TimeUtil.dateToPGString(from) +"' ")
+                    .append("AND s.stage_time >= '" + TimeUtil.dateToPGString(from) + "' ")
                     .append("AND s.stage_time <= '" + TimeUtil.dateToPGString(to) + "' ")
                     .append("AND s.task_id IN (SELECT t.id FROM prj__tasks t, prj__task_readers r WHERE t.id = r.task_id AND (")
                     .append(userChunk.toString())
