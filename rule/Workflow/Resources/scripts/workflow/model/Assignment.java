@@ -14,7 +14,7 @@ import reference.model.ControlType;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.constants.converter.ControlStatusTypeConverter;
 import workflow.model.embedded.AssigneeEntry;
@@ -161,7 +161,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "assignments/" + getId();
+        return ModuleConst.BASE_URL + "assignments/" + getId();
     }
 
     public ControlType getControlType() {

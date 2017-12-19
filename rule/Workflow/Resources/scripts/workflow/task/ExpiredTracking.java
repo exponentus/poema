@@ -10,13 +10,13 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import reference.dao.TagDAO;
 import reference.model.Tag;
 import workflow.dao.AssignmentDAO;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.Assignment;
 
 import java.util.Date;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
+@Command(name = ModuleConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private static final String EXPIRED_TAG_NAME = "expired";
 	private Date current = new Date();

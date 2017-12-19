@@ -18,7 +18,7 @@ import reference.model.DocumentType;
 import reference.model.Tag;
 import staff.model.Organization;
 import staff.model.embedded.Observer;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -166,7 +166,7 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
 
 	@Override
 	public String getURL() {
-		return AppConst.BASE_URL + "outgoings/" + getIdentifier();
+		return ModuleConst.BASE_URL + "outgoings/" + getIdentifier();
 	}
 
 	@Override

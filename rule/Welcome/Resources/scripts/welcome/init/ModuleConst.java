@@ -1,12 +1,11 @@
 package welcome.init;
 
+import administrator.model.constants.VisibiltyMode;
 import com.exponentus.common.init.DefaultAppConst;
 
-import administrator.model.constants.VisibiltyMode;
-
-public class AppConst extends DefaultAppConst {
-	public static String CODE = "welc";
-	public static String NAME = "Welcome";
+public class ModuleConst extends DefaultAppConst {
+	public static final String CODE = "welc";
+	public static final String NAME = "Welcome";
 	public static VisibiltyMode VISIBILITY = VisibiltyMode.HIDDEN;
 	public static String NAME_ENG = "Welcome";
 	public static String NAME_RUS = "Добро пожаловать";

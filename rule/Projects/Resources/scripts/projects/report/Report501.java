@@ -7,7 +7,7 @@ import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.log.Lg;
 import projects.dao.TaskDAO;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Task;
 import reference.dao.TagDAO;
 import reference.init.DataConst;
@@ -29,7 +29,7 @@ public class Report501 extends AbstractDataObtainer {
 
     @Override
     public String getAppCode() {
-        return AppConst.CODE;
+        return ModuleConst.CODE;
     }
 
     @Override

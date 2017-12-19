@@ -10,14 +10,14 @@ import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Task;
 import projects.other.Messages;
 
 import java.util.Date;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_check_tasks_status", trigger = Trigger.EVERY_HOUR)
+@Command(name = ModuleConst.CODE + "_check_tasks_status", trigger = Trigger.EVERY_HOUR)
 public class TaskWatcher extends Do {
 	@Override
 	public void doTask(AppEnv appEnv, _Session ses) {

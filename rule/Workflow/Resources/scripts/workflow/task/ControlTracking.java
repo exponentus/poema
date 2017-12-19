@@ -11,13 +11,13 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 import workflow.dao.AssignmentDAO;
 import workflow.domain.ControlLifecycle;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.Assignment;
 import workflow.model.constants.ControlStatusType;
 
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_control_tracking", trigger = Trigger.EVERY_HOUR)
+@Command(name = ModuleConst.CODE + "_control_tracking", trigger = Trigger.EVERY_HOUR)
 public class ControlTracking extends Do {
 
 	@Override

@@ -3,7 +3,7 @@ package resourcereservations.model;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.Vehicle;
-import resourcereservations.init.AppConst;
+import resourcereservations.init.ModuleConst;
 
 import javax.persistence.*;
 
@@ -38,6 +38,6 @@ public class ApplicationForVehicle extends Reservation {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "applications-for-vehicle/" + getIdentifier();
+        return ModuleConst.BASE_URL + "applications-for-vehicle/" + getIdentifier();
     }
 }

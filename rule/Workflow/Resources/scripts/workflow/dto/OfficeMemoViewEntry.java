@@ -1,8 +1,8 @@
 package workflow.dto;
 
-import workflow.init.AppConst;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import workflow.init.ModuleConst;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +40,7 @@ public class OfficeMemoViewEntry {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "office-memos/" + id;
+        return ModuleConst.BASE_URL + "office-memos/" + id;
     }
 
     public void setResponsesCount(long responsesCount) {

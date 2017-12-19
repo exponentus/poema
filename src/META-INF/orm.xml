@@ -32,7 +32,5 @@
     <converter class="com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter"/>
     
     <converter class="helpdesk.model.constants.converter.DemandStatusConverter"/> 
-    
-    <converter class="audit.model.constants.convertor.ObservationStatusConverter"/> 
-    <converter class="audit.model.constants.convertor.ProjectStatusTypeConverter"/>  
+
 </entity-mappings>

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.constants.ProjectStatusType;
 import staff.model.Organization;
 
@@ -188,7 +188,7 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "projects/" + getId();
+        return ModuleConst.BASE_URL + "projects/" + getId();
     }
 
     @Override

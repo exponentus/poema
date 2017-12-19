@@ -18,14 +18,14 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_pending_reminder", trigger = Trigger.EVERY_NIGHT)
+@Command(name = ModuleConst.CODE + "_pending_reminder", trigger = Trigger.EVERY_NIGHT)
 public class PendingReminder extends Do {
 	private TaskDAO tDao;
 

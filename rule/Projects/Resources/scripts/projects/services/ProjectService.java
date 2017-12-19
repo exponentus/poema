@@ -21,7 +21,7 @@ import projects.dao.ProjectDAO;
 import projects.dao.filter.ProjectFilter;
 import projects.domain.ProjectDomain;
 import projects.dto.converter.ProjectDtoConverter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
@@ -71,7 +71,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
             ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(
-                    new Action(ActionType.LINK).caption("new_project").url(AppConst.BASE_URL + "projects/new"));
+                    new Action(ActionType.LINK).caption("new_project").url(ModuleConst.BASE_URL + "projects/new"));
             actionBar.addAction(action.refreshVew);
 
             EmployeeDtoConverter converter = new EmployeeDtoConverter();

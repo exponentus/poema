@@ -1,12 +1,11 @@
 package helpdesk.init;
 
+import administrator.model.constants.InterfaceType;
 import com.exponentus.common.init.DefaultAppConst;
 
-import administrator.model.constants.InterfaceType;
-
-public class AppConst extends DefaultAppConst {
+public class ModuleConst extends DefaultAppConst {
 	public static final String CODE = "hd";
-	public static String NAME = "HelpDesk";
+	public static final String NAME = "HelpDesk";
 	public static String NAME_ENG = "HelpDesk";
 	public static String NAME_RUS = "Служба поддержки";
 	public static String NAME_KAZ = "Қолдау қызметі";

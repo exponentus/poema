@@ -12,7 +12,7 @@ import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import staff.dao.EmployeeDAO;
@@ -87,7 +87,7 @@ public class ProjectDomain extends CommonDomain<Project> {
 
 
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
+        ViewPage<Employee> supervisors = employeeDAO.findByRole(ModuleConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
         for (Employee sv : supervisors.getResult()) {
             readers.add(sv.getUserID());
         }

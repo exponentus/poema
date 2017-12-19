@@ -21,7 +21,7 @@ import helpdesk.dao.DemandDAO;
 import helpdesk.dao.filter.DemandFilter;
 import helpdesk.domain.DemandDomain;
 import helpdesk.dto.converter.DemandDtoConverter;
-import helpdesk.init.AppConst;
+import helpdesk.init.ModuleConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.ui.ViewOptions;
@@ -106,7 +106,7 @@ public class DemandService extends RestProvider {
 
             ActionBar actionBar = new ActionBar(session);
             Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
-                    .url(AppConst.BASE_URL + "demands/new?type=" + slug);
+                    .url(ModuleConst.BASE_URL + "demands/new?type=" + slug);
             actionBar.addAction(newDocAction);
             actionBar.addAction(new ConventionalActionFactory().refreshVew);
 

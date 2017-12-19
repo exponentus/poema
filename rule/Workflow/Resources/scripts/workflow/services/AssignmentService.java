@@ -23,7 +23,7 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.domain.AssignmentDomain;
 import workflow.domain.ReportDomain;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
 import workflow.model.Report;
@@ -266,12 +266,12 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_sub_assignment")
-                    .url(AppConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
+                    .url(ModuleConst.BASE_URL + "assignments/new?assignment=" + entity.getIdentifier()));
         }
 
         if (entity.getStatus() == ControlStatusType.PROCESSING && entity.assigneesContainsUser(session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("report")
-                    .url(AppConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
+                    .url(ModuleConst.BASE_URL + "reports/new?assignment=" + entity.getIdentifier()));
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {

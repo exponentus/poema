@@ -1,9 +1,9 @@
 package workflow.dto;
 
-import com.exponentus.localization.constants.LanguageCode;
-import workflow.init.AppConst;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.localization.constants.LanguageCode;
+import workflow.init.ModuleConst;
 
 import java.util.Date;
 import java.util.List;
@@ -46,7 +46,7 @@ public class OutgoingViewEntry {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "outgoings/" + id;
+        return ModuleConst.BASE_URL + "outgoings/" + id;
     }
 
     public void setResponsesCount(long responsesCount) {

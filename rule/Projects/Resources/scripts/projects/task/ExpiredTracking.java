@@ -12,7 +12,7 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Task;
 import reference.dao.TagDAO;
 import reference.init.DataConst;
@@ -21,7 +21,7 @@ import reference.model.Tag;
 import java.util.Date;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
+@Command(name = ModuleConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private Date current = new Date();
 	private Tag tag;

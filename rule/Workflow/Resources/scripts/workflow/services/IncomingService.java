@@ -22,7 +22,7 @@ import staff.model.Employee;
 import workflow.dao.IncomingDAO;
 import workflow.dao.filter.IncomingFilter;
 import workflow.domain.IncomingDomain;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.Incoming;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
@@ -155,7 +155,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         }
         if (domain.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")
-                    .url(AppConst.BASE_URL + "assignments/new?incoming=" + entity.getIdentifier()));
+                    .url(ModuleConst.BASE_URL + "assignments/new?incoming=" + entity.getIdentifier()));
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.model.Employee;
@@ -41,7 +41,7 @@ import java.util.UUID;
 @JsonRootName("task")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = AppConst.CODE + "__tasks")
+@Table(name = ModuleConst.CODE + "__tasks")
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
     @NotNull
@@ -104,7 +104,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     private boolean initiative;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = AppConst.CODE + "__task_tags")
+    @JoinTable(name = ModuleConst.CODE + "__task_tags")
     private List<Tag> tags;
 
     @Column(name = "customer_observation")
@@ -125,7 +125,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     private List<Request> requests;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = AppConst.CODE + "__task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
+    @JoinTable(name = ModuleConst.CODE + "__task_attachments", joinColumns = {@JoinColumn(name = "task_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attachment_id")}, indexes = {
             @Index(columnList = "task_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {"task_id",
             "attachment_id"}))
@@ -149,7 +149,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     private List<Block> blocks = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = AppConst.CODE + "__task_stages", joinColumns = @JoinColumn(referencedColumnName = "id"))
+    @CollectionTable(name = ModuleConst.CODE + "__task_stages", joinColumns = @JoinColumn(referencedColumnName = "id"))
     private List<Stage> stages = new ArrayList<Stage>();
 
     public Project getProject() {
@@ -370,7 +370,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     @Transient
     public String getURL() {
-        return AppConst.BASE_URL + "tasks/" + getId();
+        return ModuleConst.BASE_URL + "tasks/" + getId();
     }
 
     @Override

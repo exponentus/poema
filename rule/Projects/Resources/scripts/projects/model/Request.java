@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.constants.ResolutionType;
 import reference.model.RequestType;
 
@@ -125,7 +125,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "requests/" + getIdentifier();
+        return ModuleConst.BASE_URL + "requests/" + getIdentifier();
     }
 
     @Override

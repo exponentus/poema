@@ -6,7 +6,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -26,19 +26,19 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         Outline dbo = new Outline("", "dashboard");
-        dbo.addEntry(new OutlineEntry("dashboard", "", "fa fa-dashboard", "dashboard", AppConst.BASE_URL + "dashboard"));
+        dbo.addEntry(new OutlineEntry("dashboard", "", "fa fa-dashboard", "dashboard", ModuleConst.BASE_URL + "dashboard"));
 
         Outline to = new Outline("", "tasks");
-        to.addEntry(new OutlineEntry("tasks_all", "", "fa fa-tasks", "tasks_all", AppConst.BASE_URL + "tasks"));
-        to.addEntry(new OutlineEntry("my_tasks", "", "fa fa-pencil", "tasks/s/my", AppConst.BASE_URL + "tasks/s/my"));
-        to.addEntry(new OutlineEntry("tasks_assigned_to_me", "", "fa fa-inbox", "tasks/s/inbox", AppConst.BASE_URL + "tasks/s/inbox"));
+        to.addEntry(new OutlineEntry("tasks_all", "", "fa fa-tasks", "tasks_all", ModuleConst.BASE_URL + "tasks"));
+        to.addEntry(new OutlineEntry("my_tasks", "", "fa fa-pencil", "tasks/s/my", ModuleConst.BASE_URL + "tasks/s/my"));
+        to.addEntry(new OutlineEntry("tasks_assigned_to_me", "", "fa fa-inbox", "tasks/s/inbox", ModuleConst.BASE_URL + "tasks/s/inbox"));
 
-        if (ses.getUser().getRoles().contains(AppConst.ROLES[0])) {
-            to.addEntry(new OutlineEntry("tasks_moderate", "", "fa fa-legal", "tasks/s/moderate", AppConst.BASE_URL + "tasks/s/moderate"));
+        if (ses.getUser().getRoles().contains(ModuleConst.ROLES[0])) {
+            to.addEntry(new OutlineEntry("tasks_moderate", "", "fa fa-legal", "tasks/s/moderate", ModuleConst.BASE_URL + "tasks/s/moderate"));
         }
 
         Outline po = new Outline("", "projects");
-        po.addEntry(new OutlineEntry("projects", "", "fa fa-puzzle-piece", "projects", AppConst.BASE_URL + "projects"));
+        po.addEntry(new OutlineEntry("projects", "", "fa fa-puzzle-piece", "projects", ModuleConst.BASE_URL + "projects"));
 
         list.add(dbo);
         list.add(to);

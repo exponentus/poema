@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -139,7 +139,7 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "reports/" + getIdentifier();
+        return ModuleConst.BASE_URL + "reports/" + getIdentifier();
     }
 
     @Override

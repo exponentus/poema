@@ -19,7 +19,7 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 import reference.dao.TagDAO;
@@ -29,7 +29,7 @@ import reference.model.Tag;
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_overdue_reminder", trigger = Trigger.DISABLE)
+@Command(name = ModuleConst.CODE + "_overdue_reminder", trigger = Trigger.DISABLE)
 public class OverdueReminder extends Do {
 	private Tag tag;
 	private TaskDAO tDao;

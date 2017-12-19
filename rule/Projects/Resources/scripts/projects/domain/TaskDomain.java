@@ -23,7 +23,7 @@ import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.dao.TaskDAO;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class TaskDomain extends ApprovalDomain<Task> {
 
-    private static String MODERATOR_ROLE_NAME = AppConst.ROLES[0];
+    private static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
 
     public TaskDomain(_Session ses) throws DAOException {
         super(ses);
@@ -192,7 +192,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
 
     public void calculateReaders(Task task) throws DAOException {
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
-        ViewPage<Employee> supervisors = employeeDAO.findByRole(AppConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
+        ViewPage<Employee> supervisors = employeeDAO.findByRole(ModuleConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
         for (Employee sv : supervisors.getResult()) {
             task.addReader(sv.getUserID());
         }

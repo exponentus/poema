@@ -1,10 +1,9 @@
 package resourcereservations.init;
 
+import administrator.model.constants.InterfaceType;
 import com.exponentus.common.init.DefaultAppConst;
 
-import administrator.model.constants.InterfaceType;
-
-public class AppConst extends DefaultAppConst {
+public class ModuleConst extends DefaultAppConst {
 	public static String CODE = "rr";
 	public static String NAME = "ResourceReservations";
 	public static String NAME_ENG = "Resource reservations";

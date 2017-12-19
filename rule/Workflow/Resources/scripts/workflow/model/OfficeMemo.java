@@ -13,7 +13,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class OfficeMemo extends ActionableDocument  implements ILifeCycle {
 
 	@Override
 	public String getURL() {
-		return AppConst.BASE_URL + "office-memos/" + getId();
+		return ModuleConst.BASE_URL + "office-memos/" + getId();
 	}
 
 	@Override

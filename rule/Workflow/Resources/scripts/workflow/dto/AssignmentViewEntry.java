@@ -1,7 +1,7 @@
 package workflow.dto;
 
 import com.exponentus.localization.constants.LanguageCode;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 
@@ -79,6 +79,6 @@ public class AssignmentViewEntry implements IDTO {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "assignments/" + id;
+        return ModuleConst.BASE_URL + "assignments/" + id;
     }
 }

@@ -3,15 +3,15 @@ package resourcereservations.ui;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.constants.ActionType;
-import resourcereservations.init.AppConst;
+import resourcereservations.init.ModuleConst;
 
 /**
  * Created by medin on 4/21/17.
  */
 public class ActionFactory extends ConventionalActionFactory {
 
-    public Action newApplicationForVehicle = new Action(ActionType.LINK).caption("btn_label_add_application").url(AppConst.BASE_URL + "applications-for-vehicle/new");
-    public Action newApplicationForMeetingRoom = new Action(ActionType.LINK).caption("btn_label_add_application").url(AppConst.BASE_URL + "applications-for-meeting-room/new");
+    public Action newApplicationForVehicle = new Action(ActionType.LINK).caption("btn_label_add_application").url(ModuleConst.BASE_URL + "applications-for-vehicle/new");
+    public Action newApplicationForMeetingRoom = new Action(ActionType.LINK).caption("btn_label_add_application").url(ModuleConst.BASE_URL + "applications-for-meeting-room/new");
 
     public Action startApproving = new Action(ActionType.API_ACTION).id("startApproving").caption("start_approving").url("startApproving");
     public Action signApprovalBlock = new Action(ActionType.API_ACTION).id("signApprovalBlock").caption("sign").url("acceptApprovalBlock");

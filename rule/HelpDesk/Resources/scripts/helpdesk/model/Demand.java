@@ -5,7 +5,7 @@ import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRootName;
-import helpdesk.init.AppConst;
+import helpdesk.init.ModuleConst;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.constants.converter.DemandStatusConverter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -150,6 +150,6 @@ public class Demand extends SecureAppEntity<UUID> {
 
     @Override
     public String getURL() {
-        return AppConst.BASE_URL + "demands/" + getId();
+        return ModuleConst.BASE_URL + "demands/" + getId();
     }
 }

@@ -28,7 +28,7 @@ import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.OfficeMemoFilter;
 import workflow.domain.OfficeMemoDomain;
 import workflow.dto.action.DeclineApprovalBlockAction;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 import workflow.model.OfficeMemo;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
@@ -249,7 +249,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")
-                    .url(AppConst.BASE_URL + "assignments/new?officememo=" + entity.getIdentifier()));
+                    .url(ModuleConst.BASE_URL + "assignments/new?officememo=" + entity.getIdentifier()));
         }
         if (omd.documentCanBeDeleted(entity)) {
             actionBar.addAction(action.deleteDocument);

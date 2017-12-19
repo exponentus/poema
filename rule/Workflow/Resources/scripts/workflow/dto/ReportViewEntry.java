@@ -1,6 +1,6 @@
 package workflow.dto;
 
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 
 import java.util.Date;
 import java.util.UUID;
@@ -26,6 +26,6 @@ public class ReportViewEntry implements IDTO {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "reports/" + id;
+        return ModuleConst.BASE_URL + "reports/" + id;
     }
 }

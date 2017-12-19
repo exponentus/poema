@@ -19,14 +19,14 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Command(name = AppConst.CODE + "_all_tasks_reminder", trigger = Trigger.EVERY_NIGHT)
+@Command(name = ModuleConst.CODE + "_all_tasks_reminder", trigger = Trigger.EVERY_NIGHT)
 public class AllTaskReminder extends Do {
     private TaskDAO tDao;
 

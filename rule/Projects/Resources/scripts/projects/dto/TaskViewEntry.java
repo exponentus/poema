@@ -3,7 +3,7 @@ package projects.dto;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.jpa.IAppEntity;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import reference.model.Tag;
 import reference.model.TaskType;
 
@@ -92,7 +92,7 @@ public class TaskViewEntry {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "tasks/" + id;
+        return ModuleConst.BASE_URL + "tasks/" + id;
     }
 
     public void setResponsesCount(Long count) {

@@ -8,7 +8,7 @@ import com.exponentus.scripting._Session;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
 import com.exponentus.scriptprocessor.page.IOutcomeObject;
-import helpdesk.init.AppConst;
+import helpdesk.init.ModuleConst;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -30,7 +30,7 @@ public class NavigatorService extends RestProvider {
         Collection<IOutcomeObject> list = new LinkedList<>();
 
         Outline co = new Outline("", "common");
-        co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", AppConst.BASE_URL + "demands/s/my"));
+        co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", ModuleConst.BASE_URL + "demands/s/my"));
 
         try {
             _Session session = getSession();
@@ -59,7 +59,7 @@ public class NavigatorService extends RestProvider {
                         icon = "";
                         break;
                 }
-                co.addEntry(new OutlineEntry(dt.getLocName(lang), "", icon, "demands/s/" + dt.getName(), AppConst.BASE_URL + "demands/s/" + dt.getName()));
+                co.addEntry(new OutlineEntry(dt.getLocName(lang), "", icon, "demands/s/" + dt.getName(), ModuleConst.BASE_URL + "demands/s/" + dt.getName()));
             }
         } catch (DAOException e) {
             e.printStackTrace();

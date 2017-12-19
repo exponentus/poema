@@ -1,20 +1,5 @@
 package welcome.services;
 
-import java.util.ArrayList;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.exception.MsgException;
 import com.exponentus.localization.constants.LanguageCode;
@@ -26,9 +11,18 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.services.Defended;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.Validator;
-
-import welcome.init.AppConst;
+import welcome.init.ModuleConst;
 import welcome.model.ReCaptchaResponse;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 @Path("service")
 public class PromoService extends RestProvider {
@@ -40,7 +34,7 @@ public class PromoService extends RestProvider {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response create(@FormParam("email") String email, @FormParam("subject") String subj, @FormParam("message") String msg,
 			@FormParam("g-recaptcha-response") String grecaptcha) {
-		return processSimpleMessage(getAppEnv(), getSession(), AppConst.RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
+		return processSimpleMessage(getAppEnv(), getSession(), ModuleConst.RECEPIENT_EMAIL, email, subj, msg, grecaptcha);
 	}
 
 	public static Response processSimpleMessage(AppEnv appEnv, _Session session, String recipient, String email, String subj, String msg,
@@ -104,7 +98,7 @@ public class PromoService extends RestProvider {
 	}
 
 	private static boolean validateReCaptcha(String captcha) {
-		String secret = AppConst.CAPTCHA_CODE;
+		String secret = ModuleConst.CAPTCHA_CODE;
 		return validate(secret, captcha).isSuccess();
 	}
 

@@ -1,7 +1,7 @@
 package workflow.dto;
 
 import com.exponentus.localization.constants.LanguageCode;
-import workflow.init.AppConst;
+import workflow.init.ModuleConst;
 
 import java.util.Date;
 import java.util.List;
@@ -48,7 +48,7 @@ public class IncomingViewEntry implements IDTO {
     }
 
     public String getURL() {
-        return AppConst.BASE_URL + "incomings/" + id;
+        return ModuleConst.BASE_URL + "incomings/" + id;
     }
 
     public void setResponsesCount(long responsesCount) {

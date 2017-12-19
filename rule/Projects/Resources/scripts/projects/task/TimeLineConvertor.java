@@ -10,14 +10,14 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 import projects.dao.TaskDAO;
-import projects.init.AppConst;
+import projects.init.ModuleConst;
 import projects.model.Task;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Command(name = AppConst.CODE + "_convert_timeline")
+@Command(name = ModuleConst.CODE + "_convert_timeline")
 public class TimeLineConvertor extends Do {
     private TaskDAO tDao;
 
