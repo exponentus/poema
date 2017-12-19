@@ -1,6 +1,6 @@
 package helpdesk.dao.filter;
 
-import com.exponentus.runtimeobj.IFilter;
+import com.exponentus.dataengine.IFilter;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import projects.model.Project;

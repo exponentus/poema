@@ -1,6 +1,6 @@
 package projects.dao.filter;
 
-import com.exponentus.runtimeobj.IFilter;
+import com.exponentus.dataengine.IFilter;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 

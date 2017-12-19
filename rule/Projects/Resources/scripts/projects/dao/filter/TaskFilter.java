@@ -3,7 +3,7 @@ package projects.dao.filter;
 import administrator.model.User;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.runtimeobj.IFilter;
+import com.exponentus.dataengine.IFilter;
 import projects.model.Project;
 import projects.model.Task;
 import reference.model.Tag;
