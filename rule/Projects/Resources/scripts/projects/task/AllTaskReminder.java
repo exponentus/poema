@@ -98,7 +98,7 @@ public class AllTaskReminder extends Do {
         private Project project;
         private String assignee;
 
-        public TaskString(Task task, _Session session) {
+        public TaskString(Task task, _Session session) throws DAOException {
             UserDAO userDAO = new UserDAO(session);
             IUser assigneeUser = userDAO.findById(task.getAssignee());
             this.title = task.getTitle();
