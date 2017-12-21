@@ -10,6 +10,7 @@ import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
@@ -39,7 +40,6 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
-import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.other.Messages;
@@ -49,7 +49,7 @@ import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
-import staff.dto.converter.EmployeeDtoConverter;
+import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 import staff.model.Employee;
 import workflow.dto.action.DeclineApprovalBlockAction;
 
@@ -93,13 +93,13 @@ public class TaskService extends RestProvider {
 
             ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(new Action(ActionType.LINK).caption("new_task").url(ModuleConst.BASE_URL + "tasks/new"));
+            actionBar.addAction(action.newTask);
             actionBar.addAction(action.refreshVew);
 
-            EmployeeDtoConverter converter = new EmployeeDtoConverter();
+            EmployeeToBaseRefUserDtoConverter converter = new EmployeeToBaseRefUserDtoConverter();
             EmployeeDAO empDao = new EmployeeDAO(session);
-            List<Employee> empsResult = converter.convert(empDao.findAll(false).getResult());
-            Map<Long, Employee> emps = empsResult.stream().collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            List<BaseReferenceModel<Long>> empsResult = converter.convert(empDao.findAll(false).getResult());
+            Map<Long, BaseReferenceModel> emps = empsResult.stream().collect(Collectors.toMap(BaseReferenceModel::getId, Function.identity(), (e1, e2) -> e1));
 
             String title;
             switch (slug) {

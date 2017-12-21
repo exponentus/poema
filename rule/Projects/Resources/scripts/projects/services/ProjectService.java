@@ -3,10 +3,9 @@ package projects.services;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -21,14 +20,13 @@ import projects.dao.ProjectDAO;
 import projects.dao.filter.ProjectFilter;
 import projects.domain.ProjectDomain;
 import projects.dto.converter.ProjectDtoConverter;
-import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
 import projects.ui.ViewOptions;
 import staff.dao.EmployeeDAO;
-import staff.dto.converter.EmployeeDtoConverter;
+import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 import staff.model.Employee;
 
 import javax.ws.rs.*;
@@ -62,22 +60,20 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
                 filter.setStatus(ProjectStatusType.valueOf(params.getValueSilently("status")));
             }
 
-            ViewPage<Project> vp = projectDAO.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setResult(new ProjectDtoConverter().convert(vp.getResult()));
+            ViewPage<Project> vp = projectDAO.findViewPage(filter, new ProjectDtoConverter(), sortParams, params.getPage(), pageSize);
 
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getProjectOptions());
             vp.setFilter(viewOptions.getProjectFilter(session));
 
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(
-                    new Action(ActionType.LINK).caption("new_project").url(ModuleConst.BASE_URL + "projects/new"));
+            actionBar.addAction(action.newProject);
             actionBar.addAction(action.refreshVew);
 
-            EmployeeDtoConverter converter = new EmployeeDtoConverter();
+            EmployeeToBaseRefUserDtoConverter converter = new EmployeeToBaseRefUserDtoConverter();
             EmployeeDAO empDao = new EmployeeDAO(session);
-            List<Employee> empsResult = converter.convert(empDao.findAll(false).getResult());
-            Map<Long, Employee> emps = empsResult.stream().collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            List<BaseReferenceModel<Long>> empsResult = converter.convert(empDao.findAll(false).getResult());
+            Map<Long, BaseReferenceModel> emps = empsResult.stream().collect(Collectors.toMap(BaseReferenceModel::getId, Function.identity(), (e1, e2) -> e1));
 
             outcome.setId("projects");
             outcome.setTitle("projects");

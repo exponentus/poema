@@ -97,8 +97,7 @@ public class DemandService extends RestProvider {
             }
 
             DemandDAO dao = new DemandDAO(session);
-            ViewPage<Demand> vp = dao.findViewPage(filter, sortParams, params.getPage(), pageSize);
-            vp.setResult(new DemandDtoConverter().convert(vp.getResult()));
+            ViewPage<Demand> vp = dao.findViewPage(filter, new DemandDtoConverter(), sortParams, params.getPage(), pageSize);
 
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getDemandOptions());
