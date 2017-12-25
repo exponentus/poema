@@ -131,7 +131,7 @@ public class DemandService extends RestProvider {
             boolean isNew = "new".equals(id);
 
             if (isNew) {
-                String demandTypeName = getWebFormData().getValueSilently("demandType");
+                String demandTypeName = getWebFormData().getValueSilently("type");
                 DemandType demandType = null;
 
                 try {
