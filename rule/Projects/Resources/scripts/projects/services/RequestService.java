@@ -200,7 +200,10 @@ public class RequestService extends RestProvider {
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
-            return Response.ok(new Outcome()).build();
+            Outcome outcome = new Outcome();
+            outcome.addMessage("request_send_success");
+
+            return Response.ok(outcome).build();
         } catch (SecureException | DAOException | DTOException e) {
             return responseException(e);
         }
