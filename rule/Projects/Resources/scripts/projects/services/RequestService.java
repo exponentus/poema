@@ -1,10 +1,10 @@
 package projects.services;
 
 import administrator.model.User;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.common.ui.actions.Action;
+import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -12,19 +12,17 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.util.TimeUtil;
 import projects.dao.RequestDAO;
 import projects.dao.TaskDAO;
 import projects.domain.RequestDomain;
 import projects.domain.TaskDomain;
 import projects.model.Request;
 import projects.model.Task;
-import projects.model.constants.ResolutionType;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
 import reference.dao.RequestTypeDAO;
 import staff.dao.EmployeeDAO;
-import staff.model.Employee;
+import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -54,16 +52,16 @@ public class RequestService extends RestProvider {
                 String taskId = getWebFormData().getValueSilently("task");
                 TaskDAO taskDAO = new TaskDAO(session);
 
-                request = requestDomain.composeNew((User) session.getUser(), taskDAO.findByIdentifier(taskId));
+                request = requestDomain.composeNew((User) session.getUser(), taskDAO.findById(taskId));
             } else {
-                request = requestDAO.findByIdentifier(id);
+                request = requestDAO.findById(id);
                 if (request == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
             }
 
-            Map<Long, Employee> emps = new HashMap<>();
-            emps.put(request.getAuthor().getId(), empDao.findByUser(request.getAuthor()));
+            Map<Long, BaseReferenceModel> emps = new HashMap<>();
+            emps.put(request.getAuthor().getId(), new EmployeeToBaseRefUserDtoConverter().convert(empDao.findByUser(request.getAuthor())));
 
             Outcome outcome = requestDomain.getOutcome(request);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
@@ -138,77 +136,143 @@ public class RequestService extends RestProvider {
         }
     }
 
+    //
     @POST
-    @Path("{id}/action/accept")
+    @Path("action/accept")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doRequestAccept(@PathParam("id") String id, Request requestDTO) {
-        return doResolution(id, ResolutionType.ACCEPTED, requestDTO);
-    }
-
-    @POST
-    @Path("{id}/action/decline")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response doRequestDecline(@PathParam("id") String id, Request requestDto) {
-        return doResolution(id, ResolutionType.DECLINED, requestDto);
-    }
-
-    private Response doResolution(String requestId, ResolutionType resolutionType, Request requestDto) {
+    public Response doAcceptRequest(ActionPayload<Request, Date> action) {
         try {
             RequestDAO requestDAO = new RequestDAO(getSession());
-            Request request = requestDAO.findByIdentifier(requestId);
-
-            if (request == null || resolutionType == ResolutionType.UNKNOWN) {
-                if (request == null) {
-                    return Response.status(Response.Status.NOT_FOUND).build();
-                }
-                return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
-            }
-
+            Request request = requestDAO.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             RequestDomain requestDomain = new RequestDomain(getSession());
 
-            if (resolutionType == ResolutionType.ACCEPTED) {
-                switch (request.getRequestType().getName()) {
-                    case "implement":
-                        taskDomain.completeTask(request.getTask());
-                        break;
-                    case "prolong":
-                        // prolong new due date
-                        Date newDueDate = TimeUtil.stringToDateTime(getWebFormData().getValueSilently("dueDate"));
-                        if (newDueDate == null) {
-                            DTOException ve = new DTOException();
-                            ve.addError("dueDate", "date", "field_is_empty");
-                            return responseValidationError(ve);
-                        }
-                        taskDomain.prolongTask(request.getTask(), newDueDate);
-                        break;
-                    case "cancel":
-                        taskDomain.cancelTask(request.getTask(), "");
-                        break;
-                    default:
-                        throw new IllegalArgumentException(
-                                "I don't know what you want. Unknown request type: " + request.getRequestType().getName());
-                }
-            } else {
-                taskDomain.returnToProcessing(request.getTask());
+            switch (request.getRequestType().getName()) {
+                case "implement":
+                    taskDomain.completeTask(request.getTask());
+                    break;
+                case "prolong":
+                    // prolong new due date
+                    Date newDueDate = action.getPayload();
+                    if (newDueDate == null) {
+                        DTOException ve = new DTOException();
+                        ve.addError("dueDate", "date", "field_is_empty");
+                        return responseValidationError(ve);
+                    }
+                    taskDomain.prolongTask(request.getTask(), newDueDate);
+                    break;
+                case "cancel":
+                    taskDomain.cancelTask(request.getTask(), "");
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            "I don't know what you want. Unknown request type: " + request.getRequestType().getName());
             }
 
-            requestDomain.doResolution(request, (User) getSession().getUser(), resolutionType,
-                    getWebFormData().getValueSilently("comment"));
+            requestDomain.doAcceptRequest(request);
 
             requestDAO.update(request, false);
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
 
-            Outcome outcome = new Outcome();
-            outcome.addMessage("request_send_success");
-
-            return Response.ok(outcome).build();
+            return Response.ok(new Outcome()).build();
         } catch (SecureException | DAOException | DTOException e) {
             return responseException(e);
         }
     }
 
+    @POST
+    @Path("action/decline")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response doDeclineRequest(ActionPayload<Request, String> action) {
+        try {
+            RequestDAO requestDAO = new RequestDAO(getSession());
+            Request request = requestDAO.findById(action.getTarget().getId());
+            TaskDomain taskDomain = new TaskDomain(getSession());
+            RequestDomain requestDomain = new RequestDomain(getSession());
+
+            taskDomain.returnToProcessing(request.getTask());
+            requestDomain.doDeclineRequest(request, action.getPayload());
+
+            requestDAO.update(request, false);
+
+            new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
+
+            return Response.ok(new Outcome()).build();
+        } catch (SecureException | DAOException | DTOException e) {
+            return responseException(e);
+        }
+    }
+
+    /*
+        @POST
+        @Path("{id}/action/accept")
+        @Consumes(MediaType.APPLICATION_JSON)
+        public Response doRequestAccept(@PathParam("id") String id, Request requestDTO) {
+            return doResolution(id, ResolutionType.ACCEPTED, requestDTO);
+        }
+
+        @POST
+        @Path("{id}/action/decline")
+        @Consumes(MediaType.APPLICATION_JSON)
+        public Response doRequestDecline(@PathParam("id") String id, Request requestDto) {
+            return doResolution(id, ResolutionType.DECLINED, requestDto);
+        }
+
+        private Response doResolution(String requestId, ResolutionType resolutionType, Request requestDto) {
+            try {
+                RequestDAO requestDAO = new RequestDAO(getSession());
+                Request request = requestDAO.findByIdentifier(requestId);
+
+                if (request == null || resolutionType == ResolutionType.UNKNOWN) {
+                    if (request == null) {
+                        return Response.status(Response.Status.NOT_FOUND).build();
+                    }
+                    return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
+                }
+
+                TaskDomain taskDomain = new TaskDomain(getSession());
+                RequestDomain requestDomain = new RequestDomain(getSession());
+
+                if (resolutionType == ResolutionType.ACCEPTED) {
+                    switch (request.getRequestType().getName()) {
+                        case "implement":
+                            taskDomain.completeTask(request.getTask());
+                            break;
+                        case "prolong":
+                            // prolong new due date
+                            Date newDueDate = TimeUtil.stringToDateTime(getWebFormData().getValueSilently("dueDate"));
+                            if (newDueDate == null) {
+                                DTOException ve = new DTOException();
+                                ve.addError("dueDate", "date", "field_is_empty");
+                                return responseValidationError(ve);
+                            }
+                            taskDomain.prolongTask(request.getTask(), newDueDate);
+                            break;
+                        case "cancel":
+                            taskDomain.cancelTask(request.getTask(), "");
+                            break;
+                        default:
+                            throw new IllegalArgumentException(
+                                    "I don't know what you want. Unknown request type: " + request.getRequestType().getName());
+                    }
+                } else {
+                    taskDomain.returnToProcessing(request.getTask());
+                }
+
+                requestDomain.doResolution(request, (User) getSession().getUser(), resolutionType,
+                        getWebFormData().getValueSilently("comment"));
+
+                requestDAO.update(request, false);
+
+                new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
+
+                return Response.ok(new Outcome()).build();
+            } catch (SecureException | DAOException | DTOException e) {
+                return responseException(e);
+            }
+        }
+    */
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") String id) {
@@ -248,16 +312,16 @@ public class RequestService extends RestProvider {
 
     private ActionBar getActionBar(_Session session, Request request, RequestDomain requestDomain) {
         ActionBar actionBar = new ActionBar(session);
+        ActionFactory action = new ActionFactory();
 
-        actionBar.addAction(new ActionFactory().close);
-
+        actionBar.addAction(action.close);
         if (request.isNew()) {
-            actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption("send_request").cls("btn-primary"));
+            actionBar.addAction(action.saveAndClose.caption("send_request").cls("btn-primary"));
         }
 
         if (requestDomain.userCanDoResolution(request, (User) session.getUser())) {
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("accept").caption("accept").cls("btn-primary"));
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("decline").caption("decline"));
+            actionBar.addAction(action.acceptRequest.cls("btn-primary"));
+            actionBar.addAction(action.declineRequest);
         }
 
         return actionBar;

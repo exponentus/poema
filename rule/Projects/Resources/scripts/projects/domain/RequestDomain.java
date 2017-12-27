@@ -66,12 +66,31 @@ public class RequestDomain extends CommonDomain<Request> {
         return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
     }
 
-    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws DTOException {
-        if (!userCanDoResolution(request, user)) {
-            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + user.getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
+//    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws DTOException {
+//        if (!userCanDoResolution(request, user)) {
+//            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + user.getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
+//        }
+//
+//        request.setResolution(resolutionType);
+//        request.setResolutionTime(new Date());
+//        request.setDecisionComment(decisionComment);
+//    }
+
+    public void doAcceptRequest(Request request) throws DTOException {
+        if (!userCanDoResolution(request, (User) ses.getUser())) {
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + ses.getUser().getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
         }
 
-        request.setResolution(resolutionType);
+        request.setResolution(ResolutionType.ACCEPTED);
+        request.setResolutionTime(new Date());
+    }
+
+    public void doDeclineRequest(Request request, String decisionComment) throws DTOException {
+        if (!userCanDoResolution(request, (User) ses.getUser())) {
+            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + ses.getUser().getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
+        }
+
+        request.setResolution(ResolutionType.DECLINED);
         request.setResolutionTime(new Date());
         request.setDecisionComment(decisionComment);
     }

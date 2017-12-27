@@ -469,7 +469,6 @@ public class TaskService extends RestProvider {
             actionBar.addAction(action.saveAndClose);
         }
 
-
         if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
             Block processingBlock = lifecycle.getProcessingBlock();
@@ -613,7 +612,6 @@ public class TaskService extends RestProvider {
 
         return filter;
     }
-
 
     @POST
     @Path("action/im/slack/{command}")
