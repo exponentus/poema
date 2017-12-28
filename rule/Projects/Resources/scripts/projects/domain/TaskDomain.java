@@ -94,7 +94,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         ViewPage<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME);
         if (moderators.getCount() > 0) {
             task.setBlocks(getModeratorBlock(moderators.getResult()));
-        }else {
+        } else {
             throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
         }
 
@@ -168,9 +168,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
                     if (moderators.size() > 0) {
                         List<Block> block = getModeratorBlock(moderators);
                         task.setBlocks(block);
-                        if (moderators.contains(task.getAuthor())){
+                        if (moderators.contains(task.getAuthor())) {
                             task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
-                        }else {
+                        } else {
                             task.setApprovalSchema(ApprovalSchemaType.IN_ANY_CASE_DECIDE_PARALLEL_APPROVER);
                         }
                         task.setApprovalStatus(ApprovalStatusType.DRAFT);
@@ -183,7 +183,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
             }
         }
     }
-
 
 
     public void changeAssignee(Task task, User newAssignee) {
@@ -266,6 +265,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public boolean taskCanBeDeleted(Task task) {
+        if (task.isNew()) {
+            return false;
+        }
         if (ses.getUser().isSuperUser()) {
             return true;
         } else {
