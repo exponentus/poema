@@ -320,8 +320,8 @@ public class RequestService extends RestProvider {
         }
 
         if (requestDomain.userCanDoResolution(request, (User) session.getUser())) {
-            actionBar.addAction(action.acceptRequest.cls("btn-primary"));
-            actionBar.addAction(action.declineRequest);
+            actionBar.addAction(action.acceptRequest().cls("btn-primary"));
+            actionBar.addAction(action.declineRequest());
         }
 
         return actionBar;

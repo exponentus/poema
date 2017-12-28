@@ -4,6 +4,7 @@ import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.PriorityType;
@@ -13,9 +14,7 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
-import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -51,7 +50,6 @@ import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
 import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 import staff.model.Employee;
-import workflow.dto.action.DeclineApprovalBlockAction;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -296,7 +294,7 @@ public class TaskService extends RestProvider {
     public Response delete(@PathParam("id") String id) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task entity = dao.findByIdentifier(id);
+            Task entity = dao.findById(id);
             if (entity != null) {
                 entity.setBlocks(null);
                 entity.setAttachments(null); // if no on delete cascade
@@ -315,7 +313,7 @@ public class TaskService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task entity = dao.findByIdentifier(id);
+            Task entity = dao.findById(id);
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {
@@ -331,13 +329,12 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/acknowledged")
+    @Path("action/acknowledged")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskAcknowledged(@PathParam("id") String id) {
+    public Response doTaskAcknowledged(ActionPayload<Task, ?> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentifier(id);
-
+            Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.acknowledgedTask(task, (User) getSession().getUser());
 
@@ -352,13 +349,12 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/complete")
+    @Path("action/complete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskComplete(@PathParam("id") String id) {
+    public Response doTaskComplete(ActionPayload<Task, ?> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentifier(id);
-
+            Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.completeTask(task);
 
@@ -373,15 +369,14 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("{id}/action/cancel")
+    @Path("action/cancel")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskCancel(@PathParam("id") String id, @QueryParam("comment") String comment) {
+    public Response doTaskCancel(ActionPayload<Task, String> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
-            Task task = dao.findByIdentifier(id);
-
+            Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
-            taskDomain.cancelTask(task, comment);
+            taskDomain.cancelTask(task, action.getPayload());
 
             dao.update(task, false);
 
@@ -395,15 +390,14 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(Task dto) {
+    public Response acceptApprovalBlock(ActionPayload<Task, ?> action) {
         try {
             _Session ses = getSession();
             TaskDomain domain = new TaskDomain(ses);
-            Task entity = domain.getEntity(dto);
+            Task entity = domain.getEntity(action.getTarget().getId());
             domain.acceptApprovalBlock(entity, ses.getUser());
             domain.superUpdate(entity);
 
-            Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     entity.setStatus(StatusType.OPEN);
@@ -413,7 +407,8 @@ public class TaskService extends RestProvider {
                 }
             }
             // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            outcome.setTitle("acceptApprovalBlock");
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("approval_block_accepted");
             outcome.setMessage("approval_block_accepted");
 
             return Response.ok(outcome).build();
@@ -426,23 +421,20 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("action/declineApprovalBlock")
-    public Response declineApprovalBlock(DeclineApprovalBlockAction<Task> actionDto) {
+    public Response declineApprovalBlock(ActionPayload<Task, String> action) {
         try {
             _Session ses = getSession();
             TaskDomain domain = new TaskDomain(ses);
-            Task entity = domain.getEntity(actionDto.getModel());
-            domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
+            Task entity = domain.getEntity(action.getTarget());
+            domain.declineApprovalBlock(entity, ses.getUser(), action.getPayload());
             domain.superUpdate(entity);
 
             //new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).sendModeratorRejection(entity);
                 }
             }
-            outcome.setTitle("declineApprovalBlock");
-            outcome.setMessage("declineApprovalBlock");
 
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                 if (entity.isVersionsSupport()) {
@@ -450,6 +442,10 @@ public class TaskService extends RestProvider {
                     domain.superUpdate(entity);
                 }
             }
+
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("approval_block_declined");
+            outcome.setMessage("approval_block_declined");
 
             return Response.ok(outcome).build();
         } catch (DTOException e) {
@@ -475,27 +471,26 @@ public class TaskService extends RestProvider {
             if (processingBlock != null) {
                 List<Approver> approvers = processingBlock.getCurrentApprovers();
                 if (approvers.size() > 0 && approvers.contains(session.getUser())) {
-                    actionBar.addAction(new Action(ActionType.API_ACTION).id("acceptApprovalBlock").url("acceptApprovalBlock").caption("accept"));
-                    actionBar.addAction(new Action(ActionType.API_ACTION).id("declineApprovalBlock").url("declineApprovalBlock").caption("decline"));
+                    actionBar.addAction(action.acceptApprovalBlock());
+                    actionBar.addAction(action.declineApprovalBlock());
                     //actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
                 }
             }
         } else {
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
-                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_request").caption("new_request"));
+                actionBar.addAction(action.newRequest(task));
             }
             if (taskDomain.userCanDoAcknowledged(task, (User) session.getUser())) {
-                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_acknowledged").caption("acknowledged_task"));
+                actionBar.addAction(action.acknowledgedTask());
             }
             if (taskDomain.userCanDoResolution(task, (User) session.getUser())) {
-                actionBar.addAction(
-                        new Action(ActionType.CUSTOM_ACTION).id("task_complete").caption("complete_task").icon("fa fa-check-square-o"));
+                actionBar.addAction(action.completeTask());
                 if (task.getApprovalStatus() != ApprovalStatusType.PENDING) {
-                    actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
+                    actionBar.addAction(action.cancelTask());
                 }
             }
             if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
-                actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("add_subtask").caption("add_subtask"));
+                actionBar.addAction(action.newSubTask(task));
             }
         }
 
