@@ -2,8 +2,10 @@ package resourcereservations.services;
 
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.ApprovalType;
+import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
@@ -20,6 +22,7 @@ import com.exponentus.scripting._Session;
 import resourcereservations.dao.ApplicationForVehicleDAO;
 import resourcereservations.dao.filter.ApplicationFilter;
 import resourcereservations.domain.ApplicationForVehicleDomain;
+import resourcereservations.init.ModuleConst;
 import resourcereservations.model.ApplicationForVehicle;
 import resourcereservations.ui.ActionFactory;
 import resourcereservations.ui.ViewOptions;
@@ -39,8 +42,6 @@ import java.util.stream.Collectors;
 @Produces(MediaType.APPLICATION_JSON)
 public class ApplicationForVehicleService extends RestProvider {
 
-    private ActionFactory action = new ActionFactory();
-
     @GET
     public Response getView() {
         _Session session = getSession();
@@ -56,8 +57,9 @@ public class ApplicationForVehicleService extends RestProvider {
             vp.setViewPageOptions(viewOptions.getApplicationForVehicleOptions());
             vp.setFilter(viewOptions.getApplicationForVehicleFilter());
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newApplicationForVehicle);
+            actionBar.addAction(action.newApplicationForVehicle());
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -207,9 +209,9 @@ public class ApplicationForVehicleService extends RestProvider {
 
     @POST
     @Path("action/startApproving")
-    public Response startApproving(ApplicationForVehicle dto) {
+    public Response startApproving(ActionPayload<ApplicationForVehicle, ?> action) {
         try {
-            ApplicationForVehicle entity = save(dto);
+            ApplicationForVehicle entity = save(action.getTarget());
             if (entity != null) {
                 ApplicationForVehicleDAO afvDAO = new ApplicationForVehicleDAO(getSession());
                 ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
@@ -235,10 +237,10 @@ public class ApplicationForVehicleService extends RestProvider {
 
     @POST
     @Path("action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(ApplicationForVehicle dto) {
+    public Response acceptApprovalBlock(ActionPayload<ApplicationForVehicle, ?> action) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-            ApplicationForVehicle entity = dao.findById(dto.getId());
+            ApplicationForVehicle entity = dao.findById(action.getTarget().getId());
             if (entity != null) {
                 ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
@@ -261,16 +263,14 @@ public class ApplicationForVehicleService extends RestProvider {
 
     @POST
     @Path("action/declineApprovalBlock")
-    public Response declineApprovalBlock(ApplicationForVehicle dto) {
+    public Response declineApprovalBlock(ActionPayload<ApplicationForVehicle, String> action) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-            ApplicationForVehicle entity = dao.findById(dto.getId());
+            ApplicationForVehicle entity = dao.findById(action.getTarget().getId());
             if (entity != null) {
                 ApplicationForVehicleDomain domain = new ApplicationForVehicleDomain();
 
-                String decisionComment = getWebFormData().getValueSilently("comment");
-
-                domain.declineApprovalBlock(entity, getSession().getUser(), decisionComment);
+                domain.declineApprovalBlock(entity, getSession().getUser(), action.getPayload());
 
                 dao.update(entity, false);
                 new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
@@ -289,24 +289,26 @@ public class ApplicationForVehicleService extends RestProvider {
 
     private ActionBar getActionBar(_Session session, ApplicationForVehicle entity, ApplicationForVehicleDomain domain)
             throws DAOException {
+        ActionFactory action = new ActionFactory();
         ActionBar actionBar = new ActionBar(session);
+        String actionUri = ModuleConst.BASE_URL + "api/applications-for-vehicle/action/";
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {
             actionBar.addAction(action.saveAndClose);
         }
         if (domain.approvalCanBeStarted(entity)) {
-            actionBar.addAction(action.startApproving);
+            actionBar.addAction(ConventionalActionFactory.Approving.startApproving(actionUri));
         }
 
         EmployeeDAO employeeDAO = new EmployeeDAO(getSession());
         if (domain.employeeCanDoDecisionApproval(entity, employeeDAO.findByUser(session.getUser()))) {
             if (ApprovalLifecycle.getProcessingBlock(entity).getType() == ApprovalType.SIGNING) {
-                actionBar.addAction(action.signApprovalBlock);
+                actionBar.addAction(ConventionalActionFactory.Approving.signApprovalBlock(actionUri));
             } else {
-                actionBar.addAction(action.acceptApprovalBlock);
+                actionBar.addAction(ConventionalActionFactory.Approving.acceptApprovalBlock(actionUri));
             }
-            actionBar.addAction(action.declineApprovalBlock);
+            actionBar.addAction(ConventionalActionFactory.Approving.declineApprovalBlock(actionUri));
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(action.deleteDocument);
