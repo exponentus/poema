@@ -1,6 +1,7 @@
 package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
@@ -26,7 +27,6 @@ import workflow.domain.ReportDomain;
 import workflow.init.ModuleConst;
 import workflow.model.ActionableDocument;
 import workflow.model.Assignment;
-import workflow.model.Report;
 import workflow.model.constants.ControlStatusType;
 import workflow.model.embedded.AssigneeEntry;
 import workflow.ui.ActionFactory;
@@ -41,15 +41,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 @Path("assignments")
 @Produces(MediaType.APPLICATION_JSON)
 public class AssignmentService extends EntityService<Assignment, AssignmentDomain> {
-
-    private ActionFactory action = new ActionFactory();
-    private final Action startImplementation = new Action(ActionType.API_ACTION).id("startImplementation").caption("start_impl")
-            .url("startImplementation");
-    private final Action completeAction = new Action(ActionType.API_ACTION).id("completeEntireAssignment").caption("complete").url("completeEntireAssignment");
 
     @GET
     @Path("my")
@@ -95,6 +89,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             vp.setViewPageOptions(viewOptions.getAssignmentViewOptions());
             vp.setFilter(viewOptions.getAssignmentFilter(session));
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.refreshVew);
 
@@ -103,6 +98,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             outcome.setTitle("assignments" + slug);
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
+
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);
@@ -135,7 +131,6 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                 } else if (!officeMemoId.isEmpty()) {
                     primary = new OfficeMemoDAO(ses).findByIdentifier(officeMemoId);
                 } else if (!assignmentId.isEmpty()) {
-
                     parent = assignmentDAO.findByIdentifier(assignmentId);
                     // primary = parent.getPrimary();
                 } else {
@@ -151,14 +146,13 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = ad.getOutcome(entity);
-
             // permissions
             Map<String, Boolean> permissions = new HashMap<>();
             if (!entity.isNew() && entity.getAppliedAuthor().getId().equals(currentUserEmployee.getId())) {
                 permissions.put("RESET_ASSIGNEE", true);
             }
 
+            Outcome outcome = ad.getOutcome(entity);
             outcome.addPayload("employees", emps);
             outcome.addPayload("permissions", permissions);
             outcome.addPayload(getActionBar(ses, entity));
@@ -166,7 +160,6 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }
-
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
@@ -190,19 +183,20 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("action/startImplementation")
-    public Response startImplementation(Assignment dto) {
+    public Response startImplementation(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
-            Assignment entity = domain.fillFromDto(dto, new ValidationToStartImpl(), getWebFormData().getFormSesId());
+            Assignment entity = domain.fillFromDto(action.getTarget(), new ValidationToStartImpl(), getWebFormData().getFormSesId());
             domain.startAssignee(entity);
             domain.superUpdate(entity);
             domain.addReadersUp(entity);
             domain.addReadersToPrimary(entity);
+
             Outcome outcome = new Outcome();
             outcome.addMessage("assignment_was_started_to_impl");
-            return Response.ok(outcome).build();
 
+            return Response.ok(outcome).build();
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException e) {
@@ -212,19 +206,17 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("action/completeAssignee")
-    public Response resetAssignee(Assignment dto) {
+    public Response resetAssignee(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
 
-            Assignment entity = domain.completeAssignee(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+            Assignment entity = domain.completeAssignee(action.getTarget(), new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
             domain.superUpdate(entity);
 
             if (entity.getStatus() == ControlStatusType.COMPLETED) {
                 ReportDomain reportDomain = new ReportDomain(ses);
-                for (Report r : entity.getReports()) {
-                    reportDomain.resetEditors(r);
-                }
+                reportDomain.resetEditors(entity.getReports());
             }
 
             return Response.ok(new Outcome()).build();
@@ -237,12 +229,12 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("action/completeEntireAssignment")
-    public Response completeAssignee(Assignment dto) {
+    public Response completeAssignee(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
 
-            Assignment entity = domain.completeEntireAssignment(dto, new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
+            Assignment entity = domain.completeEntireAssignment(action.getTarget(), new EmployeeDAO(ses).findByUserId(ses.getUser().getId()));
             domain.superUpdate(entity);
 
             return Response.ok(new Outcome()).build();
@@ -255,13 +247,14 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     private ActionBar getActionBar(_Session session, Assignment entity) {
         ActionBar actionBar = new ActionBar(session);
+        ActionFactory action = new ActionFactory();
 
         actionBar.addAction(action.close);
         if (entity.isNew() || entity.isEditable()) {
             actionBar.addAction(action.saveAndClose);
         }
         if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
-            actionBar.addAction(startImplementation);
+            actionBar.addAction(new Action().id("startImplementation").caption("start_impl").url(ModuleConst.BASE_URL + "api/assignments/action/startImplementation"));
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
@@ -275,7 +268,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
-            actionBar.addAction(completeAction);
+            actionBar.addAction(new Action().caption("complete").withConfirm().url(ModuleConst.BASE_URL + "api/assignments/action/completeEntireAssignment"));
         }
 
         if (!entity.isNew() && entity.isEditable()) {
@@ -312,7 +305,6 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
                 ve.addError("title", "required", "field_is_empty");
             }
-
             if (assignment.getControlType() == null) {
                 ve.addError("controlType", "required", "field_is_empty");
             }
@@ -322,7 +314,6 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             if (assignment.getDueDate() == null) {
                 ve.addError("dueDate", "required", "field_is_empty");
             }
-
             if (assignment.getParent() == null && assignment.getPrimary() == null) {
                 ve.addError("parent", "required", "it_should_pointed_either_assignment_or_primary");
             }

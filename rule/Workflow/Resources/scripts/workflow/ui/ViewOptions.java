@@ -202,45 +202,6 @@ public class ViewOptions {
     }
 
     public FilterForm getIncomingFilter(_Session session) {
-        /*
-        incoming: {
-                fieldsets: [{
-                    fields: [{
-                        type: 'select',
-                        name: 'sender',
-                        placeHolder: 'sender',
-                        values: {
-                            url: STAFF_URL.API_ORGANIZATIONS,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'addressee',
-                        placeHolder: 'addressee',
-                        values: {
-                            url: STAFF_URL.API_EMPLOYEES,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'docType',
-                        placeHolder: 'doc_type',
-                        values: {
-                            url: REFERENCE_URL.API_DOCUMENT_TYPES,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'docSubject',
-                        placeHolder: 'doc_subject',
-                        values: {
-                            url: REFERENCE_URL.API_DOCUMENT_SUBJECTS,
-                            searchable: true
-                        }
-                    }]
-                }]
-            }
-         */
         FilterForm filterForm = new FilterForm();
         FilterGroup filterGroup = new FilterGroup();
         filterGroup.addItem(new FilterItem("sender").searchable(true).url("/Staff/api/organizations"));
@@ -254,51 +215,6 @@ public class ViewOptions {
     }
 
     public FilterForm getOutgoingFilter(_Session session) {
-        /*
-        outgoing: {
-                fieldsets: [{
-                    fields: [{
-                        type: 'select',
-                        name: 'status',
-                        placeHolder: 'status',
-                        values: {
-                            items: this.APPROVAL_STATUS_TYPES
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'result',
-                        placeHolder: 'approval_result',
-                        values: {
-                            items: this.APPROVAL_RESULT_TYPES
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'recipient',
-                        placeHolder: 'recipient',
-                        values: {
-                            url: STAFF_URL.API_ORGANIZATIONS,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'docType',
-                        placeHolder: 'doc_type',
-                        values: {
-                            url: REFERENCE_URL.API_DOCUMENT_TYPES,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'docSubject',
-                        placeHolder: 'doc_subject',
-                        values: {
-                            url: REFERENCE_URL.API_DOCUMENT_SUBJECTS,
-                            searchable: true
-                        }
-                    }]
-                }]
-            }
-         */
         List<FilterItem.Item> approvalStatusItems = new ArrayList<>();
         for (ApprovalStatusType type : ApprovalStatusType.values()) {
             if (type == ApprovalStatusType.UNKNOWN) {
@@ -351,43 +267,6 @@ public class ViewOptions {
     }
 
     public FilterForm getInternalFilter(_Session session) {
-        /*
-        officeMemo: {
-                fieldsets: [{
-                    fields: [{
-                        type: 'select',
-                        name: 'status',
-                        placeHolder: 'status',
-                        values: {
-                            items: this.APPROVAL_STATUS_TYPES
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'result',
-                        placeHolder: 'approval_result',
-                        values: {
-                            items: this.APPROVAL_RESULT_TYPES
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'appliedAuthor',
-                        placeHolder: 'applied_author',
-                        values: {
-                            url: STAFF_URL.API_EMPLOYEES,
-                            searchable: true
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'recipient',
-                        placeHolder: 'recipient',
-                        values: {
-                            url: STAFF_URL.API_EMPLOYEES,
-                            searchable: true
-                        }
-                    }]
-                }]
-            }
-         */
         List<FilterItem.Item> approvalStatusItems = new ArrayList<>();
         for (ApprovalStatusType type : ApprovalStatusType.values()) {
             if (type == ApprovalStatusType.UNKNOWN) {
@@ -439,28 +318,6 @@ public class ViewOptions {
     }
 
     public FilterForm getAssignmentFilter(_Session session) {
-        /*
-        assignment: {
-                fieldsets: [{
-                    fields: [{
-                        type: 'select',
-                        name: 'status',
-                        placeHolder: 'status',
-                        values: {
-                            items: this.CONTROL_STATUS_TYPES
-                        }
-                    }, {
-                        type: 'select',
-                        name: 'controlType',
-                        placeHolder: 'control_type',
-                        values: {
-                            url: REFERENCE_URL.API_CONTROL_TYPES,
-                            searchable: true
-                        }
-                    }]
-                }]
-            }
-         */
         List<FilterItem.Item> controlStatusItems = new ArrayList<>();
         for (ControlStatusType type : ControlStatusType.values()) {
             if (type == ControlStatusType.UNKNOWN) {

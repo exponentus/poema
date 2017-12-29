@@ -42,9 +42,6 @@ import java.util.stream.Collectors;
 @Produces(MediaType.APPLICATION_JSON)
 public class ProjectService extends EntityService<Project, ProjectDomain> {
 
-    private Outcome outcome = new Outcome();
-    private ActionFactory action = new ActionFactory();
-
     @GET
     public Response getViewPage() {
 
@@ -66,8 +63,9 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             vp.setViewPageOptions(viewOptions.getProjectOptions());
             vp.setFilter(viewOptions.getProjectFilter(session));
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newProject);
+            actionBar.addAction(action.newProject());
             actionBar.addAction(action.refreshVew);
 
             EmployeeToBaseRefUserDtoConverter converter = new EmployeeToBaseRefUserDtoConverter();
@@ -75,6 +73,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             List<BaseReferenceModel<Long>> empsResult = converter.convert(empDao.findAll(false).getResult());
             Map<Long, BaseReferenceModel> emps = empsResult.stream().collect(Collectors.toMap(BaseReferenceModel::getId, Function.identity(), (e1, e2) -> e1));
 
+            Outcome outcome = new Outcome();
             outcome.setId("projects");
             outcome.setTitle("projects");
             outcome.addPayload(actionBar);
@@ -220,6 +219,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
     }
 
     private ActionBar getActionBar(_Session session, Project project, ProjectDomain projectDomain) {
+        ActionFactory action = new ActionFactory();
         ActionBar actionBar = new ActionBar(session);
         actionBar.addAction(action.close);
         if (project.isEditable()) {

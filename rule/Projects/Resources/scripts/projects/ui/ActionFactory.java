@@ -7,8 +7,13 @@ import projects.init.ModuleConst;
 import projects.model.Task;
 
 public class ActionFactory extends ConventionalActionFactory {
-    public Action newProject = new Action(ActionType.LINK).caption("new_project").url(ModuleConst.BASE_URL + "projects/new");
-    public Action newTask = new Action(ActionType.LINK).caption("new_task").url(ModuleConst.BASE_URL + "tasks/new");
+    public Action newProject() {
+        return new Action(ActionType.LINK).caption("new_project").url(ModuleConst.BASE_URL + "projects/new");
+    }
+
+    public Action newTask() {
+        return new Action(ActionType.LINK).caption("new_task").url(ModuleConst.BASE_URL + "tasks/new");
+    }
 
     public Action newSubTask(Task task) {
         return new Action(ActionType.LINK).caption("add_subtask").url(ModuleConst.BASE_URL + "tasks/new?parentTaskId=" + task.getId());

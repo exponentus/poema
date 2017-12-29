@@ -23,8 +23,6 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class ViewService extends RestProvider {
 
-    private ActionFactory action = new ActionFactory();
-
     @GET
     @Path("approvals/pending")
     public Response getApprovalsPendingMeView() {
@@ -40,6 +38,7 @@ public class ViewService extends RestProvider {
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
             actionBar.addAction(action.refreshVew);
 
@@ -68,9 +67,10 @@ public class ViewService extends RestProvider {
             ViewOptions viewOptions = new ViewOptions();
             vp.setViewPageOptions(viewOptions.getActionableDocumentViewOptions());
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newOutgoing);
-            actionBar.addAction(action.newOfficeMemo);
+            actionBar.addAction(action.newOutgoing());
+            actionBar.addAction(action.newOfficeMemo());
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();

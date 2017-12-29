@@ -254,17 +254,18 @@ public class DemandService extends RestProvider {
 
     private ActionBar getActionBar(_Session session, Demand entity) {
         ActionBar actionBar = new ActionBar(session);
+        ConventionalActionFactory actionFactory = new ConventionalActionFactory();
 
-        actionBar.addAction(new ConventionalActionFactory().close);
+        actionBar.addAction(actionFactory.close);
         if (entity.isNew() || entity.isEditable()) {
             String actLabel = entity.isNew() ? "send" : "save_close";
-            actionBar.addAction(new Action(ActionType.SAVE_AND_CLOSE).caption(actLabel).cls("btn-primary"));
+            actionBar.addAction(actionFactory.saveAndClose.caption(actLabel).cls("btn-primary"));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("create_task").caption("create_task"));
+            actionBar.addAction(new Action(ActionType.LINK).caption("create_task").url(""));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new ConventionalActionFactory().deleteDocument);
+            actionBar.addAction(actionFactory.deleteDocument);
         }
 
         return actionBar;

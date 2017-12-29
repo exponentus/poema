@@ -1,10 +1,10 @@
 package workflow.services;
 
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -16,6 +16,7 @@ import staff.model.Employee;
 import workflow.dao.AssignmentDAO;
 import workflow.dao.ReportDAO;
 import workflow.domain.ReportDomain;
+import workflow.init.ModuleConst;
 import workflow.model.Assignment;
 import workflow.model.Report;
 import workflow.model.constants.ControlStatusType;
@@ -31,9 +32,6 @@ import java.util.stream.Collectors;
 @Path("reports")
 @Produces(MediaType.APPLICATION_JSON)
 public class ReportService extends EntityService<Report, ReportDomain> {
-
-    private final Action acceptReport = new Action(ActionType.API_ACTION).id("acceptReport").caption("accept").url("acceptReport");
-    private final Action declineReport = new Action(ActionType.API_ACTION).id("declineReport").caption("decline").url("declineReport");
 
     @GET
     @Path("{id}")
@@ -89,13 +87,14 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 
     @POST
     @Path("action/acceptReport")
-    public Response acceptReport(Report dto) {
+    public Response acceptReport(ActionPayload<Report, ?> action) {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
-            Assignment assignment = domain.acceptReport(dto);
+            Report report = domain.getEntity(action.getTarget());
+            Assignment assignment = domain.acceptReport(report);
             if (assignment.getStatus() == ControlStatusType.COMPLETED) {
-                domain.resetEditors(domain.getEntity(dto.getId()));
+                domain.resetEditors(report);
             }
             return Response.ok(new Outcome()).build();
         } catch (DAOException | SecureException e) {
@@ -105,11 +104,11 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 
     @POST
     @Path("action/declineReport")
-    public Response declineReport(Report dto) {
+    public Response declineReport(ActionPayload<Report, ?> action) {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
-            domain.declineReport(dto);
+            domain.declineReport(domain.getEntity(action.getTarget()));
 
             return Response.ok(new Outcome()).build();
         } catch (DAOException | SecureException e) {
@@ -129,12 +128,11 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         Assignment assignment = entity.getParent();
         if (entity.getId() != null && entity.getSolution() != null &&
                 (assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser()))) {
-            actionBar.addAction(acceptReport);
-            actionBar.addAction(declineReport);
+            actionBar.addAction(new Action().caption("accept").url(ModuleConst.BASE_URL + "api/reports/action/acceptReport"));
+            actionBar.addAction(new Action().caption("decline").url(ModuleConst.BASE_URL + "api/reports/action/declineReport"));
         }
 
         return actionBar;
-
     }
 
     private class Validation implements IValidation<Report> {

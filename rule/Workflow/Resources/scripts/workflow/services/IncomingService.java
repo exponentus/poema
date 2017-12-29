@@ -38,12 +38,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
 @Path("incomings")
 @Produces(MediaType.APPLICATION_JSON)
 public class IncomingService extends EntityService<Incoming, IncomingDomain> {
-
-    private ActionFactory action = new ActionFactory();
 
     @GET
     public Response getViewPage() {
@@ -61,8 +58,9 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
             vp.setViewPageOptions(viewOptions.getIncomingOptions());
             vp.setFilter(viewOptions.getIncomingFilter(session));
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newIncoming.caption("new"));
+            actionBar.addAction(action.newIncoming().caption("new"));
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -148,6 +146,7 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
 
     private ActionBar getActionBar(_Session session, Incoming entity, IncomingDomain domain) {
         ActionBar actionBar = new ActionBar(session);
+        ActionFactory action = new ActionFactory();
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

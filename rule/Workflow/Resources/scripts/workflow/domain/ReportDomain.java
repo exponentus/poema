@@ -53,7 +53,6 @@ public class ReportDomain extends CommonDomain<Report> {
             entity = dao.findById(dto.getId());
         }
 
-
         EmployeeDAO eDao = new EmployeeDAO(ses);
         if (entity.isNew()) {
             entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
@@ -62,9 +61,9 @@ public class ReportDomain extends CommonDomain<Report> {
         }
 
         SolutionType solutionType = dto.getSolution();
-        if (solutionType == null){
+        if (solutionType == null) {
             entity.setSolution(SolutionType.ACCEPTED);
-        }else {
+        } else {
             entity.setSolution(solutionType);
         }
         entity.setSolutionComment(dto.getSolutionComment());
@@ -81,7 +80,6 @@ public class ReportDomain extends CommonDomain<Report> {
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());
         entity.setAppliedRegDate(dto.getAppliedRegDate());
-
 
         List<Observer> observers = new ArrayList<Observer>();
         for (Observer o : dto.getObservers()) {
@@ -123,10 +121,10 @@ public class ReportDomain extends CommonDomain<Report> {
         AssignmentDAO aDao = new AssignmentDAO(ses);
         Assignment assignment = aDao.findById(entity.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
-       if (cl.check()) {
-           assignment.addReaders(entity.getReaders());
-           aDao.update(assignment, false);
-       }
+        if (cl.check()) {
+            assignment.addReaders(entity.getReaders());
+            aDao.update(assignment, false);
+        }
         if (assignment.getStatus() == ControlStatusType.COMPLETED) {
             resetEditors(entity);
         }
@@ -137,7 +135,7 @@ public class ReportDomain extends CommonDomain<Report> {
         AssignmentDAO aDao = new AssignmentDAO(ses);
         Assignment assignment = aDao.findById(dto.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
-        if (cl.completeAssignee(dto.getAppliedAuthor().getId(),new EmployeeDAO(ses).findByUserId(ses.getUser().getId()))){
+        if (cl.completeAssignee(dto.getAppliedAuthor().getId(), new EmployeeDAO(ses).findByUserId(ses.getUser().getId()))) {
             aDao.update(assignment, false);
         }
         return assignment;
@@ -147,7 +145,7 @@ public class ReportDomain extends CommonDomain<Report> {
         AssignmentDAO aDao = new AssignmentDAO(ses);
         Assignment assignment = aDao.findById(dto.getParent().getId());
         ControlLifecycle cl = new ControlLifecycle(assignment);
-        if (cl.unCompleteAssignee(dto.getAppliedAuthor().getId())){
+        if (cl.unCompleteAssignee(dto.getAppliedAuthor().getId())) {
             aDao.update(assignment, false);
         }
         return assignment;

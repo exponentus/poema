@@ -3,6 +3,7 @@ package workflow.services;
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalSchemaType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
@@ -13,7 +14,6 @@ import com.exponentus.common.ui.LifeCycle;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
-import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -28,7 +28,7 @@ import staff.model.Employee;
 import workflow.dao.OutgoingDAO;
 import workflow.dao.filter.OutgoingFilter;
 import workflow.domain.OutgoingDomain;
-import workflow.dto.action.DeclineApprovalBlockAction;
+import workflow.init.ModuleConst;
 import workflow.model.Outgoing;
 import workflow.other.Messages;
 import workflow.ui.ActionFactory;
@@ -46,8 +46,6 @@ import java.util.stream.Collectors;
 @Produces(MediaType.APPLICATION_JSON)
 public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
-    private ActionFactory action = new ActionFactory();
-
     @GET
     public Response getViewPage() {
         _Session session = getSession();
@@ -64,8 +62,9 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             vp.setViewPageOptions(viewOptions.getOutgoingOptions());
             vp.setFilter(viewOptions.getOutgoingFilter(session));
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newOutgoing.caption("new"));
+            actionBar.addAction(action.newOutgoing());
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -73,7 +72,6 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             outcome.setTitle("outgoing_documents");
             outcome.addPayload(actionBar);
             outcome.addPayload(vp);
-
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -151,11 +149,11 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("action/startApproving")
-    public Response startApproving(Outgoing dto) {
+    public Response startApproving(ActionPayload<Outgoing, ?> action) {
         _Session ses = getSession();
         try {
             OutgoingDomain domain = new OutgoingDomain(ses);
-            Outgoing entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
+            Outgoing entity = domain.fillFromDto(action.getTarget(), new ValidationToStartApprove(), getWebFormData().getFormSesId());
             if (entity.getApprovalStatus() == ApprovalStatusType.REGISTERED) {
                 entity.setApprovalStatus(ApprovalStatusType.DRAFT);
                 entity.setApprovalSchema(ApprovalSchemaType.REJECT_IF_NO);
@@ -163,12 +161,13 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             domain.startApproving(entity);
             domain.superUpdate(entity);
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("approving_started");
             outcome.setMessage("approving_started");
             outcome.addPayload("result", "approving_started");
-            return Response.ok(outcome).build();
 
+            return Response.ok(outcome).build();
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException | ApprovalException e) {
@@ -178,21 +177,22 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(Outgoing dto) {
+    public Response acceptApprovalBlock(ActionPayload<Outgoing, ?> action) {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);
-            Outgoing entity = domain.getEntity(dto);
+            Outgoing entity = domain.getEntity(action.getTarget());
             domain.acceptApprovalBlock(entity, ses.getUser());
             domain.superUpdate(entity);
 
-            Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     new Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
                 }
             }
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+
+            Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("acceptApprovalBlock");
             outcome.setMessage("approval_block_accepted");
 
@@ -206,21 +206,22 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("action/declineApprovalBlock")
-    public Response declineApprovalBlock(DeclineApprovalBlockAction<Outgoing> actionDto) {
+    public Response declineApprovalBlock(ActionPayload<Outgoing, String> action) {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);
-            Outgoing entity = domain.getEntity(actionDto.getModel());
-            domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
+            Outgoing entity = domain.getEntity(action.getTarget());
+            domain.declineApprovalBlock(entity, ses.getUser(), action.getPayload());
             domain.superUpdate(entity);
 
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
                 }
             }
+
+            Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("declineApprovalBlock");
             outcome.setMessage("declineApprovalBlock");
 
@@ -241,17 +242,17 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("action/register")
-    public Response register(Outgoing dto) {
+    public Response register(ActionPayload<Outgoing, ?> action) {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);
-            Outgoing entity = domain.register(dto, new DefaultValidation());
+            Outgoing entity = domain.register(action.getTarget(), new DefaultValidation());
             domain.superUpdate(entity);
 
             //new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             Outcome outcome = domain.getOutcome(entity);
-            outcome.setTitle("outgoingRegsitered");
-            outcome.setMessage("outgoingRegsitered");
+            outcome.setTitle("outgoing_registered");
+            outcome.setMessage("outgoing_registered");
 
             return Response.ok(outcome).build();
         } catch (DTOException e) {
@@ -263,6 +264,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     private ActionBar getActionBar(_Session session, Outgoing entity, OutgoingDomain outDomain) throws DAOException {
         ActionBar actionBar = new ActionBar(session);
+        ActionFactory action = new ActionFactory();
         IUser user = session.getUser();
 
         actionBar.addAction(action.close);
@@ -270,10 +272,10 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalButtonSet(user, entity));
+        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/outgoings/action/"));
 
         if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
-            actionBar.addAction(action.registerOutgoing);
+            actionBar.addAction(action.registerOutgoing());
         }
 
         if (!entity.isNew() && entity.isEditable()) {
@@ -282,7 +284,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
         //
         if (entity.getApprovalStatus() == ApprovalStatusType.REGISTERED && session.getUser().getRoles().contains("can_sign_outgoing")) {
-            actionBar.addAction(new Action(ActionType.API_ACTION).id("sign").caption("eds_test"));
+            actionBar.addAction(new Action().id("sign").caption("eds_test"));
         }
 
         return actionBar;

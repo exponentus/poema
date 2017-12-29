@@ -136,7 +136,6 @@ public class RequestService extends RestProvider {
         }
     }
 
-    //
     @POST
     @Path("action/accept")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -204,75 +203,6 @@ public class RequestService extends RestProvider {
         }
     }
 
-    /*
-        @POST
-        @Path("{id}/action/accept")
-        @Consumes(MediaType.APPLICATION_JSON)
-        public Response doRequestAccept(@PathParam("id") String id, Request requestDTO) {
-            return doResolution(id, ResolutionType.ACCEPTED, requestDTO);
-        }
-
-        @POST
-        @Path("{id}/action/decline")
-        @Consumes(MediaType.APPLICATION_JSON)
-        public Response doRequestDecline(@PathParam("id") String id, Request requestDto) {
-            return doResolution(id, ResolutionType.DECLINED, requestDto);
-        }
-
-        private Response doResolution(String requestId, ResolutionType resolutionType, Request requestDto) {
-            try {
-                RequestDAO requestDAO = new RequestDAO(getSession());
-                Request request = requestDAO.findByIdentifier(requestId);
-
-                if (request == null || resolutionType == ResolutionType.UNKNOWN) {
-                    if (request == null) {
-                        return Response.status(Response.Status.NOT_FOUND).build();
-                    }
-                    return Response.status(Response.Status.NOT_FOUND).entity("ResolutionType.UNKNOWN").build();
-                }
-
-                TaskDomain taskDomain = new TaskDomain(getSession());
-                RequestDomain requestDomain = new RequestDomain(getSession());
-
-                if (resolutionType == ResolutionType.ACCEPTED) {
-                    switch (request.getRequestType().getName()) {
-                        case "implement":
-                            taskDomain.completeTask(request.getTask());
-                            break;
-                        case "prolong":
-                            // prolong new due date
-                            Date newDueDate = TimeUtil.stringToDateTime(getWebFormData().getValueSilently("dueDate"));
-                            if (newDueDate == null) {
-                                DTOException ve = new DTOException();
-                                ve.addError("dueDate", "date", "field_is_empty");
-                                return responseValidationError(ve);
-                            }
-                            taskDomain.prolongTask(request.getTask(), newDueDate);
-                            break;
-                        case "cancel":
-                            taskDomain.cancelTask(request.getTask(), "");
-                            break;
-                        default:
-                            throw new IllegalArgumentException(
-                                    "I don't know what you want. Unknown request type: " + request.getRequestType().getName());
-                    }
-                } else {
-                    taskDomain.returnToProcessing(request.getTask());
-                }
-
-                requestDomain.doResolution(request, (User) getSession().getUser(), resolutionType,
-                        getWebFormData().getValueSilently("comment"));
-
-                requestDAO.update(request, false);
-
-                new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
-
-                return Response.ok(new Outcome()).build();
-            } catch (SecureException | DAOException | DTOException e) {
-                return responseException(e);
-            }
-        }
-    */
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") String id) {

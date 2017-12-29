@@ -3,6 +3,7 @@ package workflow.services;
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.ApprovalResultType;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.embedded.Approver;
@@ -27,7 +28,6 @@ import staff.model.Employee;
 import workflow.dao.OfficeMemoDAO;
 import workflow.dao.filter.OfficeMemoFilter;
 import workflow.domain.OfficeMemoDomain;
-import workflow.dto.action.DeclineApprovalBlockAction;
 import workflow.init.ModuleConst;
 import workflow.model.OfficeMemo;
 import workflow.other.Messages;
@@ -42,13 +42,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
-
 @Path("office-memos")
 @Produces(MediaType.APPLICATION_JSON)
 public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDomain> {
-
-    private ActionFactory action = new ActionFactory();
 
     @GET
     public Response getViewPage() {
@@ -65,8 +61,9 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             vp.setViewPageOptions(viewOptions.getOfficeMemoOptions());
             vp.setFilter(viewOptions.getInternalFilter(session));
 
+            ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newOfficeMemo.caption("new"));
+            actionBar.addAction(action.newOfficeMemo());
             actionBar.addAction(action.refreshVew);
 
             Outcome outcome = new Outcome();
@@ -130,7 +127,6 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             }
 
             return Response.ok(outcome).build();
-
         } catch (DAOException | ApprovalException e) {
             return responseException(e);
         }
@@ -152,20 +148,20 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     @POST
     @Path("action/startApproving")
-    public Response startApproving(OfficeMemo dto) {
+    public Response startApproving(ActionPayload<OfficeMemo, ?> action) {
         _Session ses = getSession();
         try {
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);
-            OfficeMemo entity = domain.fillFromDto(dto, new ValidationToStartApprove(), getWebFormData().getFormSesId());
+            OfficeMemo entity = domain.fillFromDto(action.getTarget(), new ValidationToStartApprove(), getWebFormData().getFormSesId());
             domain.startApproving(entity);
             domain.superUpdate(entity);
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+
             Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("approving_started");
             outcome.setMessage("approving_started");
-            outcome.addPayload("result", "approving_started");
-            return Response.ok(outcome).build();
 
+            return Response.ok(outcome).build();
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException | ApprovalException e) {
@@ -175,21 +171,22 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     @POST
     @Path("action/acceptApprovalBlock")
-    public Response acceptApprovalBlock(OfficeMemo dto) {
+    public Response acceptApprovalBlock(ActionPayload<OfficeMemo, ?> action) {
         try {
             _Session ses = getSession();
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);
-            OfficeMemo entity = domain.getEntity(dto);
+            OfficeMemo entity = domain.getEntity(action.getTarget());
             domain.acceptApprovalBlock(entity, ses.getUser());
             domain.superUpdate(entity);
 
-            Outcome outcome = domain.getOutcome(entity);
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     new Messages(getAppEnv()).notifyOfAccepting(entity, entity.getTitle());
                 }
             }
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
+
+            Outcome outcome = domain.getOutcome(entity);
             outcome.setTitle("acceptApprovalBlock");
             outcome.setMessage("approval_block_accepted");
 
@@ -203,23 +200,21 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     @POST
     @Path("action/declineApprovalBlock")
-    public Response declineApprovalBlock(DeclineApprovalBlockAction<OfficeMemo> actionDto) {
+    public Response declineApprovalBlock(ActionPayload<OfficeMemo, String> action) {
         try {
             _Session ses = getSession();
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);
-            OfficeMemo entity = domain.getEntity(actionDto.getModel());
-            domain.declineApprovalBlock(entity, ses.getUser(), actionDto.getComment());
+            OfficeMemo entity = domain.getEntity(action.getTarget());
+            domain.declineApprovalBlock(entity, ses.getUser(), action.getPayload());
             domain.superUpdate(entity);
 
             new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            Outcome outcome = domain.getOutcome(entity);
+
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).notifyOfRejecting(entity, entity.getTitle());
                 }
             }
-            outcome.setTitle("declineApprovalBlock");
-            outcome.setMessage("declineApprovalBlock");
 
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                 if (entity.isVersionsSupport()) {
@@ -227,6 +222,10 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
                     domain.superUpdate(entity);
                 }
             }
+
+            Outcome outcome = domain.getOutcome(entity);
+            outcome.setTitle("declineApprovalBlock");
+            outcome.setMessage("approval_block_declined");
 
             return Response.ok(outcome).build();
         } catch (DTOException e) {
@@ -238,6 +237,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     private ActionBar getActionBar(_Session session, OfficeMemo entity, OfficeMemoDomain omd) throws DAOException {
         ActionBar actionBar = new ActionBar(session);
+        ActionFactory action = new ActionFactory();
         IUser user = session.getUser();
 
         actionBar.addAction(action.close);
@@ -245,7 +245,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalButtonSet(user, entity));
+        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/office-memos/action/"));
 
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")
@@ -273,6 +273,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             if (om.getRecipient() == null) {
                 e.addError("recipient", "required", "field_is_empty");
             }
+
             if (e.hasError()) {
                 throw e;
             }
@@ -311,6 +312,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             if (om.getApprovalStatus() != ApprovalStatusType.DRAFT) {
                 e.addError("status", "required", "status_is_not_draft");
             }
+
             if (e.hasError()) {
                 throw e;
             }

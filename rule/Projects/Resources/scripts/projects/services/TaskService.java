@@ -91,7 +91,7 @@ public class TaskService extends RestProvider {
 
             ActionFactory action = new ActionFactory();
             ActionBar actionBar = new ActionBar(session);
-            actionBar.addAction(action.newTask);
+            actionBar.addAction(action.newTask());
             actionBar.addAction(action.refreshVew);
 
             EmployeeToBaseRefUserDtoConverter converter = new EmployeeToBaseRefUserDtoConverter();
@@ -513,8 +513,8 @@ public class TaskService extends RestProvider {
         }
         if (task.getBody() == null || task.getBody().isEmpty()) {
             ve.addError("body", "required", "field_is_empty");
-        } else if (task.getBody().length() > 10000) {
-            ve.addError("body", "maxlen_10000", "field_is_too_long");
+        } else if (task.getBody().length() > 5000) {
+            ve.addError("body", "maxlen:5000", "field_is_too_long");
         }
         if (task.getStatus() == null) {
             ve.addError("status", "required", "field_is_empty");
