@@ -79,7 +79,6 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         dto.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), fsid));
         calculateReadersEditors(entity);
         return entity;
-
     }
 
     @Override
@@ -126,8 +125,8 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         } else {
             outcome.setTitle(entityKind + " " + entity.getTitle());
         }
-        outcome.addPayload(entity);
-        outcome.addPayload("contentTitle", "outgoing_document");
+        outcome.setModel(entity);
+        outcome.setPayloadTitle("outgoing_document");
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));
             Block block = ApprovalLifecycle.getProcessingBlock(entity);

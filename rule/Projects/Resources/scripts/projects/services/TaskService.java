@@ -329,7 +329,7 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("action/acknowledged")
+    @Path("acknowledged")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskAcknowledged(ActionPayload<Task, ?> action) {
         try {
@@ -349,7 +349,7 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("action/complete")
+    @Path("complete")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskComplete(ActionPayload<Task, ?> action) {
         try {
@@ -369,7 +369,7 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("action/cancel")
+    @Path("cancel")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doTaskCancel(ActionPayload<Task, String> action) {
         try {
@@ -389,7 +389,7 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("action/acceptApprovalBlock")
+    @Path("acceptApprovalBlock")
     public Response acceptApprovalBlock(ActionPayload<Task, ?> action) {
         try {
             _Session ses = getSession();
@@ -420,7 +420,7 @@ public class TaskService extends RestProvider {
     }
 
     @POST
-    @Path("action/declineApprovalBlock")
+    @Path("declineApprovalBlock")
     public Response declineApprovalBlock(ActionPayload<Task, String> action) {
         try {
             _Session ses = getSession();

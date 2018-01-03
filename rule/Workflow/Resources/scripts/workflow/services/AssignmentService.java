@@ -182,7 +182,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     }
 
     @POST
-    @Path("action/startImplementation")
+    @Path("startImplementation")
     public Response startImplementation(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
@@ -205,7 +205,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     }
 
     @POST
-    @Path("action/completeAssignee")
+    @Path("completeAssignee")
     public Response resetAssignee(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
@@ -228,7 +228,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
     }
 
     @POST
-    @Path("action/completeEntireAssignment")
+    @Path("completeEntireAssignment")
     public Response completeAssignee(ActionPayload<Assignment, ?> action) {
         try {
             _Session ses = getSession();
@@ -254,7 +254,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             actionBar.addAction(action.saveAndClose);
         }
         if (entity.getStatus() == ControlStatusType.DRAFT && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
-            actionBar.addAction(new Action().id("startImplementation").caption("start_impl").url(ModuleConst.BASE_URL + "api/assignments/action/startImplementation"));
+            actionBar.addAction(new Action().id("startImplementation").caption("start_impl").url(ModuleConst.BASE_URL + "api/assignments/startImplementation"));
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.DRAFT) {
@@ -268,7 +268,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
-            actionBar.addAction(new Action().caption("complete").withConfirm().url(ModuleConst.BASE_URL + "api/assignments/action/completeEntireAssignment"));
+            actionBar.addAction(new Action().caption("complete").withConfirm().url(ModuleConst.BASE_URL + "api/assignments/completeEntireAssignment"));
         }
 
         if (!entity.isNew() && entity.isEditable()) {

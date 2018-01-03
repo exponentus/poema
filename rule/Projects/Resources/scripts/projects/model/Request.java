@@ -10,7 +10,6 @@ import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.ModuleConst;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("request")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "prj__requests")

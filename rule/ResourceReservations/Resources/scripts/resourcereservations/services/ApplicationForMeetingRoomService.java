@@ -202,7 +202,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("action/startApproving")
+    @Path("startApproving")
     public Response startApproving(ActionPayload<ApplicationForMeetingRoom, ?> action) {
         try {
             ApplicationForMeetingRoom entity = save(action.getTarget());
@@ -230,7 +230,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("action/acceptApprovalBlock")
+    @Path("acceptApprovalBlock")
     public Response acceptApprovalBlock(ActionPayload<ApplicationForMeetingRoom, ?> action) {
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
@@ -253,7 +253,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     }
 
     @POST
-    @Path("action/declineApprovalBlock")
+    @Path("declineApprovalBlock")
     public Response declineApprovalBlock(ActionPayload<ApplicationForMeetingRoom, String> action) {
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());

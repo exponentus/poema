@@ -110,7 +110,7 @@ public class ProjectDomain extends CommonDomain<Project> {
             outcome.addPayload("contentTitle", "project");
         }
 
-        outcome.addPayload(project);
+        outcome.setModel(project);
         if (!project.isNew()) {
             outcome.addPayload(new ACL(project));
         }

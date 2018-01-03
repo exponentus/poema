@@ -3,6 +3,9 @@ package workflow.domain;
 import administrator.model.User;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.domain.exception.ApprovalException;
+import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Block;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
@@ -15,10 +18,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
 import workflow.dao.OfficeMemoDAO;
-import com.exponentus.common.domain.exception.ApprovalException;
 import workflow.model.OfficeMemo;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.embedded.Block;
 
 import java.util.*;
 
@@ -91,7 +91,6 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
         }
     }
 
-
     @Override
     public OfficeMemo save(OfficeMemo entity) throws SecureException, DAOException, DTOException {
         if (entity.isNew()) {
@@ -114,8 +113,8 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
         } else {
             outcome.setTitle(entityKind + " " + entity.getTitle());
         }
-        outcome.addPayload(entity.getEntityKind(), entity);
-        outcome.addPayload("contentTitle", "office_memo");
+        outcome.setModel(entity);
+        outcome.setPayloadTitle("office_memo");
         if (!entity.isNew()) {
             Block block = ApprovalLifecycle.getProcessingBlock(entity);
             if (block != null) {

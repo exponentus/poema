@@ -7,7 +7,6 @@ import com.exponentus.localization.constants.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.ModuleConst;
 import projects.model.constants.ProjectStatusType;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@JsonRootName("project")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "prj__projects")

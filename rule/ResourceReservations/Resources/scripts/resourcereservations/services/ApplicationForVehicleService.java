@@ -208,7 +208,7 @@ public class ApplicationForVehicleService extends RestProvider {
     }
 
     @POST
-    @Path("action/startApproving")
+    @Path("startApproving")
     public Response startApproving(ActionPayload<ApplicationForVehicle, ?> action) {
         try {
             ApplicationForVehicle entity = save(action.getTarget());
@@ -236,7 +236,7 @@ public class ApplicationForVehicleService extends RestProvider {
     }
 
     @POST
-    @Path("action/acceptApprovalBlock")
+    @Path("acceptApprovalBlock")
     public Response acceptApprovalBlock(ActionPayload<ApplicationForVehicle, ?> action) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
@@ -262,7 +262,7 @@ public class ApplicationForVehicleService extends RestProvider {
     }
 
     @POST
-    @Path("action/declineApprovalBlock")
+    @Path("declineApprovalBlock")
     public Response declineApprovalBlock(ActionPayload<ApplicationForVehicle, String> action) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());

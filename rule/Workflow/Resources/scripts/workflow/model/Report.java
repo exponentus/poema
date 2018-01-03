@@ -1,6 +1,5 @@
 package workflow.model;
 
-
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.constants.SolutionType;
@@ -13,7 +12,6 @@ import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -26,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("report")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__reports")
@@ -39,7 +36,6 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     @Column(name = "applied_reg_date")
     private Date appliedRegDate;
 
-   // @JsonBackReference(value = "assignment-report")
     @NotNull
     @ManyToOne
     @JoinColumn(updatable = false)
@@ -49,12 +45,10 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     @Column(columnDefinition = "TEXT")
     private String body;
 
-
     @Convert(converter = SolutionTypeConverter.class)
     private SolutionType solution;
 
-
-    @Column(length = 2048, name="solution_comment")
+    @Column(length = 2048, name = "solution_comment")
     private String solutionComment;
 
     @ElementCollection
@@ -110,7 +104,6 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
         this.solution = solution;
     }
 
-
     public String getSolutionComment() {
         return solutionComment;
     }
@@ -151,13 +144,13 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     public LifeCycleNode getNode(IUser user, UUID id) {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.REPORT);
-        if (user.isSuperUser() || getReaders().contains(user.getId())){
+        if (user.isSuperUser() || getReaders().contains(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(solution.name());
             lc.setUrl(getURL());
         }
-        if (id.equals(this.id)){
+        if (id.equals(this.id)) {
             lc.setCurrent(true);
         }
         return lc;

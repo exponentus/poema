@@ -147,7 +147,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
     }
 
     @POST
-    @Path("action/startApproving")
+    @Path("startApproving")
     public Response startApproving(ActionPayload<OfficeMemo, ?> action) {
         _Session ses = getSession();
         try {
@@ -170,7 +170,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
     }
 
     @POST
-    @Path("action/acceptApprovalBlock")
+    @Path("acceptApprovalBlock")
     public Response acceptApprovalBlock(ActionPayload<OfficeMemo, ?> action) {
         try {
             _Session ses = getSession();
@@ -199,7 +199,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
     }
 
     @POST
-    @Path("action/declineApprovalBlock")
+    @Path("declineApprovalBlock")
     public Response declineApprovalBlock(ActionPayload<OfficeMemo, String> action) {
         try {
             _Session ses = getSession();
@@ -245,7 +245,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/office-memos/action/"));
+        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/office-memos/"));
 
         if (omd.canCreateAssignment(entity, (User) session.getUser())) {
             actionBar.addAction(new Action(ActionType.LINK).caption("new_assignment")

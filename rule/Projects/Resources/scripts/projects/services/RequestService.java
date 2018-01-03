@@ -137,7 +137,7 @@ public class RequestService extends RestProvider {
     }
 
     @POST
-    @Path("action/accept")
+    @Path("accept")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doAcceptRequest(ActionPayload<Request, Date> action) {
         try {
@@ -181,7 +181,7 @@ public class RequestService extends RestProvider {
     }
 
     @POST
-    @Path("action/decline")
+    @Path("decline")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response doDeclineRequest(ActionPayload<Request, String> action) {
         try {

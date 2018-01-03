@@ -103,7 +103,7 @@ public class RequestDomain extends CommonDomain<Request> {
         } else {
             outcome.setTitle(request.getTitle());
         }
-        outcome.addPayload(request);
+        outcome.setModel(request);
         outcome.addPayload(request.getTask());
         outcome.addPayload("contentTitle", "task_request");
 

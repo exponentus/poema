@@ -25,31 +25,31 @@ public class ActionFactory extends ConventionalActionFactory {
 
     // Task actions
     public Action acknowledgedTask() {
-        return new Action().caption("acknowledged_task").url(ModuleConst.BASE_URL + "api/tasks/action/acknowledged");
+        return new Action().caption("acknowledged_task").url(ModuleConst.BASE_URL + "api/tasks/acknowledged");
     }
 
     public Action completeTask() {
-        return new Action().id("task_complete").caption("complete_task").icon("fa fa-check-square-o").withConfirm().url(ModuleConst.BASE_URL + "api/tasks/action/complete");
+        return new Action().id("task_complete").caption("complete_task").icon("fa fa-check-square-o").withConfirm().url(ModuleConst.BASE_URL + "api/tasks/complete");
     }
 
     public Action cancelTask() {
-        return new Action().id("task_cancel").caption("cancel_task").icon("fa fa-ban").url(ModuleConst.BASE_URL + "api/tasks/action/cancel");
+        return new Action().id("task_cancel").caption("cancel_task").icon("fa fa-ban").url(ModuleConst.BASE_URL + "api/tasks/cancel");
     }
 
     public Action acceptApprovalBlock() {
-        return new Action().id("acceptApprovalBlock").caption("accept").url(ModuleConst.BASE_URL + "api/tasks/action/acceptApprovalBlock");
+        return new Action().id("acceptApprovalBlock").caption("accept").url(ModuleConst.BASE_URL + "api/tasks/acceptApprovalBlock");
     }
 
     public Action declineApprovalBlock() {
-        return new Action().id("declineApprovalBlock").caption("decline").url(ModuleConst.BASE_URL + "api/tasks/action/declineApprovalBlock");
+        return new Action().id("declineApprovalBlock").caption("decline").url(ModuleConst.BASE_URL + "api/tasks/declineApprovalBlock");
     }
 
     // Request actions
     public Action acceptRequest() {
-        return new Action().id("accept").caption("accept").url(ModuleConst.BASE_URL + "api/requests/action/accept");
+        return new Action().id("accept").caption("accept").url(ModuleConst.BASE_URL + "api/requests/accept");
     }
 
     public Action declineRequest() {
-        return new Action().id("decline").caption("decline").url(ModuleConst.BASE_URL + "api/requests/action/decline");
+        return new Action().id("decline").caption("decline").url(ModuleConst.BASE_URL + "api/requests/decline");
     }
 }

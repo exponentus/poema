@@ -148,7 +148,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
     }
 
     @POST
-    @Path("action/startApproving")
+    @Path("startApproving")
     public Response startApproving(ActionPayload<Outgoing, ?> action) {
         _Session ses = getSession();
         try {
@@ -176,7 +176,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
     }
 
     @POST
-    @Path("action/acceptApprovalBlock")
+    @Path("acceptApprovalBlock")
     public Response acceptApprovalBlock(ActionPayload<Outgoing, ?> action) {
         try {
             _Session ses = getSession();
@@ -205,7 +205,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
     }
 
     @POST
-    @Path("action/declineApprovalBlock")
+    @Path("declineApprovalBlock")
     public Response declineApprovalBlock(ActionPayload<Outgoing, String> action) {
         try {
             _Session ses = getSession();
@@ -241,7 +241,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
     }
 
     @POST
-    @Path("action/register")
+    @Path("register")
     public Response register(ActionPayload<Outgoing, ?> action) {
         try {
             _Session ses = getSession();
@@ -272,7 +272,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
             actionBar.addAction(action.saveAndClose);
         }
 
-        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/outgoings/action/"));
+        actionBar.addAction(getApprovalButtonSet(user, entity, ModuleConst.BASE_URL + "api/outgoings/"));
 
         if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && user.getRoles().contains("chancellery")) {
             actionBar.addAction(action.registerOutgoing());

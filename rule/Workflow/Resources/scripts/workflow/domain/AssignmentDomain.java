@@ -39,9 +39,9 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         Assignment entity = new Assignment();
         entity.setAuthor(author.getUser());
         entity.setAppliedAuthor(author);
-           entity.setPrimary(ReflectionUtil.extractSimpleInstance(primary));
-                  entity.setParent(ReflectionUtil.extractSimpleInstance(parent));
-               entity.setStartDate(new Date());
+        entity.setPrimary(ReflectionUtil.extractSimpleInstance(primary));
+        entity.setParent(ReflectionUtil.extractSimpleInstance(parent));
+        entity.setStartDate(new Date());
         entity.setStatus(ControlStatusType.DRAFT);
         return entity;
     }
@@ -134,8 +134,8 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         if (parent != null) {
             entity.addReaders(entity.getParent().getReaders());
         }
-        ActionableDocument primary =  entity.getPrimary();
-        if(primary != null) {
+        ActionableDocument primary = entity.getPrimary();
+        if (primary != null) {
             entity.addReaders(entity.getPrimary().getReaders());
         }
     }
@@ -230,10 +230,9 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
             outcome.setTitle(entityKind + " " + entity.getTitle());
         }
 
-        outcome.addPayload(entity);
-      //  outcome.addPayload("primary", entity.getPrimary());
-        outcome.addPayload("contentTitle", "assignment");
-
+        outcome.setModel(entity);
+        //  outcome.addPayload("primary", entity.getPrimary());
+        outcome.setPayloadTitle("assignment");
 
         return outcome;
     }

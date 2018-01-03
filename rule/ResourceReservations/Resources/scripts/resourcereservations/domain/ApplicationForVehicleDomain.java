@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class ApplicationForVehicleDomain {
 
     public ApplicationForVehicle composeNew(Employee author) {
@@ -130,7 +129,7 @@ public class ApplicationForVehicleDomain {
         } else {
             outcome.setTitle(entity.getTitle());
         }
-        outcome.addPayload(entity.getEntityKind(), entity);
+        outcome.setModel(entity);
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));
             Block block = ApprovalLifecycle.getProcessingBlock(entity);

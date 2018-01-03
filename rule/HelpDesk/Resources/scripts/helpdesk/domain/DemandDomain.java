@@ -93,8 +93,8 @@ public class DemandDomain extends CommonDomain<Demand> {
         } else {
             outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + demand.getTitle());
         }
-        outcome.addPayload(demand);
-        outcome.addPayload("contentTitle", "demand");
+        outcome.setModel(demand);
+        outcome.setPayloadTitle("demand");
 
         if (!demand.isNew()) {
             outcome.addPayload(new ACL(demand));

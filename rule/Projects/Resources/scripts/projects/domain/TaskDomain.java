@@ -352,7 +352,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         outcome.setTitle(Environment.vocabulary.getWord(title, ses.getLang()) + " " + (task.getTitle() != null ? task.getTitle() : ""));
         outcome.addPayload("contentTitle", title);
 
-        outcome.addPayload(task);
+        outcome.setModel(task);
         outcome.addPayload("parentTask", task.getParent());
         if (!task.isNew()) {
             outcome.addPayload(new ACL(task));

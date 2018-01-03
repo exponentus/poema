@@ -124,7 +124,7 @@ public class ApplicationForMeetingRoomDomain {
         } else {
             outcome.setTitle(entity.getTitle());
         }
-        outcome.addPayload(entity.getEntityKind(), entity);
+        outcome.setModel(entity);
         if (!entity.isNew()) {
             outcome.addPayload(new ACL(entity));
             Block block = ApprovalLifecycle.getProcessingBlock(entity);

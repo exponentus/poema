@@ -1,12 +1,10 @@
 package resourcereservations.model;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import reference.model.MeetingRoom;
 import resourcereservations.init.ModuleConst;
 
 import javax.persistence.*;
 
-@JsonRootName("applicationForMeetingRoom")
 @Entity
 @Table(name = "rr__applications_for_meeting_room")
 @Inheritance(strategy = InheritanceType.JOINED)

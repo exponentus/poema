@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("assignment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "wf__assignments")
@@ -52,7 +51,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
     private Assignment parent;
 
     @JsonIgnore
-    @OneToMany(mappedBy="parent")
+    @OneToMany(mappedBy = "parent")
     private List<Assignment> assignments;
 
     @FTSearchable
@@ -235,14 +234,14 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
 
     @Override
     public LifeCycleNode getLifeCycle(IUser user, UUID id) {
-        return (((ILifeCycle)getPrimary(this)).getLifeCycle(user, id ));
+        return (((ILifeCycle) getPrimary(this)).getLifeCycle(user, id));
     }
 
-    private ActionableDocument getPrimary(Assignment entity){
+    private ActionableDocument getPrimary(Assignment entity) {
         ActionableDocument primary = entity.getPrimary();
-        if (primary != null){
+        if (primary != null) {
             return primary;
-        }else{
+        } else {
             Assignment assignment = entity.getParent();
             return getPrimary(assignment);
         }
@@ -253,7 +252,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.ASSIGNMENT);
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())){
+        if (user.isSuperUser() || getReaders().contains(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(status.name());
@@ -275,7 +274,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
             }
         }
 
-        if (id.equals(this.id)){
+        if (id.equals(this.id)) {
             lc.setCurrent(true);
         }
 

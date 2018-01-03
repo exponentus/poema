@@ -86,7 +86,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
     }
 
     @POST
-    @Path("action/acceptReport")
+    @Path("acceptReport")
     public Response acceptReport(ActionPayload<Report, ?> action) {
         try {
             _Session ses = getSession();
@@ -103,7 +103,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
     }
 
     @POST
-    @Path("action/declineReport")
+    @Path("declineReport")
     public Response declineReport(ActionPayload<Report, ?> action) {
         try {
             _Session ses = getSession();
@@ -128,8 +128,8 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         Assignment assignment = entity.getParent();
         if (entity.getId() != null && entity.getSolution() != null &&
                 (assignment.getAppliedAuthor().getUser().equals(session.getUser()) || assignment.getAuthor().equals(session.getUser()))) {
-            actionBar.addAction(new Action().caption("accept").url(ModuleConst.BASE_URL + "api/reports/action/acceptReport"));
-            actionBar.addAction(new Action().caption("decline").url(ModuleConst.BASE_URL + "api/reports/action/declineReport"));
+            actionBar.addAction(new Action().caption("accept").url(ModuleConst.BASE_URL + "api/reports/acceptReport"));
+            actionBar.addAction(new Action().caption("decline").url(ModuleConst.BASE_URL + "api/reports/declineReport"));
         }
 
         return actionBar;

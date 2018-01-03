@@ -4,7 +4,6 @@ import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
 import helpdesk.init.ModuleConst;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.constants.converter.DemandStatusConverter;
@@ -20,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@JsonRootName("demand")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "hd__demands")
