@@ -183,7 +183,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("startImplementation")
-    public Response startImplementation(ActionPayload<Assignment, ?> action) {
+    public Response startImplementation(ActionPayload<Assignment, Object> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
@@ -206,7 +206,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("completeAssignee")
-    public Response resetAssignee(ActionPayload<Assignment, ?> action) {
+    public Response resetAssignee(ActionPayload<Assignment, Object> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);
@@ -229,7 +229,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
     @POST
     @Path("completeEntireAssignment")
-    public Response completeAssignee(ActionPayload<Assignment, ?> action) {
+    public Response completeAssignee(ActionPayload<Assignment, Object> action) {
         try {
             _Session ses = getSession();
             AssignmentDomain domain = new AssignmentDomain(ses);

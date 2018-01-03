@@ -14,6 +14,7 @@ import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
+import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
@@ -39,6 +40,7 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
+import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 import projects.other.Messages;
@@ -275,7 +277,6 @@ public class TaskService extends RestProvider {
                 } else {
                     taskDomain.superUpdate(task);
                     new Messages(getAppEnv()).sendToAssignee(task);
-
                 }
             }
 
@@ -329,9 +330,48 @@ public class TaskService extends RestProvider {
     }
 
     @POST
+    @Path("saveAsDraft")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveAsDraft(ActionPayload<Task, Object> action) {
+        _Session session = getSession();
+        IUser user = session.getUser();
+        Task taskDto = action.getTarget();
+
+        try {
+            // validate(taskDto);
+
+            TaskDAO taskDAO = new TaskDAO(session);
+            Task task;
+
+            if (taskDto.isNew()) {
+                task = new Task();
+                taskDto.setAuthor(user);
+                if (taskDto.getParent() != null) {
+                    taskDto.setParent(taskDAO.findById(taskDto.getParent().getId()));
+                }
+            } else {
+                task = taskDAO.findById(taskDto.getId());
+            }
+            taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
+
+            TaskDomain taskDomain = new TaskDomain(session);
+            taskDomain.fillDraft(task, taskDto);
+            task = taskDAO.save(task);
+
+            return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
+        } catch (SecureException | DatabaseException | DAOException e) {
+            return responseException(e);
+//        } catch (DTOException e) {
+//            return responseValidationError(e);
+        } catch (Exception e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
     @Path("acknowledged")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskAcknowledged(ActionPayload<Task, ?> action) {
+    public Response doTaskAcknowledged(ActionPayload<Task, Object> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(action.getTarget().getId());
@@ -351,7 +391,7 @@ public class TaskService extends RestProvider {
     @POST
     @Path("complete")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskComplete(ActionPayload<Task, ?> action) {
+    public Response doTaskComplete(ActionPayload<Task, Object> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(action.getTarget().getId());
@@ -390,7 +430,7 @@ public class TaskService extends RestProvider {
 
     @POST
     @Path("acceptApprovalBlock")
-    public Response acceptApprovalBlock(ActionPayload<Task, ?> action) {
+    public Response acceptApprovalBlock(ActionPayload<Task, Object> action) {
         try {
             _Session ses = getSession();
             TaskDomain domain = new TaskDomain(ses);
@@ -463,6 +503,10 @@ public class TaskService extends RestProvider {
         actionBar.addAction(action.close);
         if (taskDomain.taskIsEditable(task)) {
             actionBar.addAction(action.saveAndClose);
+
+            if (task.getStatus() == StatusType.DRAFT) {
+                actionBar.addAction(new Action().caption("save_as_draft").url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft"));
+            }
         }
 
         if (task.getApprovalStatus() == ApprovalStatusType.PENDING) {

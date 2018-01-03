@@ -209,7 +209,7 @@ public class ApplicationForVehicleService extends RestProvider {
 
     @POST
     @Path("startApproving")
-    public Response startApproving(ActionPayload<ApplicationForVehicle, ?> action) {
+    public Response startApproving(ActionPayload<ApplicationForVehicle, Object> action) {
         try {
             ApplicationForVehicle entity = save(action.getTarget());
             if (entity != null) {
@@ -237,7 +237,7 @@ public class ApplicationForVehicleService extends RestProvider {
 
     @POST
     @Path("acceptApprovalBlock")
-    public Response acceptApprovalBlock(ActionPayload<ApplicationForVehicle, ?> action) {
+    public Response acceptApprovalBlock(ActionPayload<ApplicationForVehicle, Object> action) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
             ApplicationForVehicle entity = dao.findById(action.getTarget().getId());

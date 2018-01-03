@@ -149,7 +149,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("startApproving")
-    public Response startApproving(ActionPayload<Outgoing, ?> action) {
+    public Response startApproving(ActionPayload<Outgoing, Object> action) {
         _Session ses = getSession();
         try {
             OutgoingDomain domain = new OutgoingDomain(ses);
@@ -177,7 +177,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("acceptApprovalBlock")
-    public Response acceptApprovalBlock(ActionPayload<Outgoing, ?> action) {
+    public Response acceptApprovalBlock(ActionPayload<Outgoing, Object> action) {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);
@@ -242,7 +242,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
 
     @POST
     @Path("register")
-    public Response register(ActionPayload<Outgoing, ?> action) {
+    public Response register(ActionPayload<Outgoing, Object> action) {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);

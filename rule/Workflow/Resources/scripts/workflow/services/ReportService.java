@@ -87,7 +87,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 
     @POST
     @Path("acceptReport")
-    public Response acceptReport(ActionPayload<Report, ?> action) {
+    public Response acceptReport(ActionPayload<Report, Object> action) {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);
@@ -104,7 +104,7 @@ public class ReportService extends EntityService<Report, ReportDomain> {
 
     @POST
     @Path("declineReport")
-    public Response declineReport(ActionPayload<Report, ?> action) {
+    public Response declineReport(ActionPayload<Report, Object> action) {
         try {
             _Session ses = getSession();
             ReportDomain domain = new ReportDomain(ses);

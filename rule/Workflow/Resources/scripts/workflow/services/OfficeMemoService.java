@@ -148,7 +148,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     @POST
     @Path("startApproving")
-    public Response startApproving(ActionPayload<OfficeMemo, ?> action) {
+    public Response startApproving(ActionPayload<OfficeMemo, Object> action) {
         _Session ses = getSession();
         try {
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);
@@ -171,7 +171,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
 
     @POST
     @Path("acceptApprovalBlock")
-    public Response acceptApprovalBlock(ActionPayload<OfficeMemo, ?> action) {
+    public Response acceptApprovalBlock(ActionPayload<OfficeMemo, Object> action) {
         try {
             _Session ses = getSession();
             OfficeMemoDomain domain = new OfficeMemoDomain(ses);

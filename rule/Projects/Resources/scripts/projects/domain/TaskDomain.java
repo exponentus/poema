@@ -33,9 +33,7 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.ApprovalDomain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class TaskDomain extends ApprovalDomain<Task> {
 
@@ -143,6 +141,15 @@ public class TaskDomain extends ApprovalDomain<Task> {
         calculateReaders(task);
     }
 
+    public void fillDraft(Task task, Task dto) throws DAOException, RestServiceException {
+        dto.setStartDate(null);
+        dto.setStatus(StatusType.DRAFT);
+        fillFromDto(task, dto);
+        Set<Long> readers = new HashSet<>();
+        readers.add(task.getAuthor().getId());
+        task.setReaders(readers);
+    }
+
     public void changeStatus(Task task, StatusType status) {
         task.setStatus(status);
 
@@ -184,7 +191,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
     }
 
-
     public void changeAssignee(Task task, User newAssignee) {
         task.setAssignee(newAssignee.getId());
     }
@@ -199,8 +205,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         for (Long observer : task.getObservers()) {
             task.addReader(observer);
         }
-
-
     }
 
     public void acknowledgedTask(Task task, User user) throws DTOException {
