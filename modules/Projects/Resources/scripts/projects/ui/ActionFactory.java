@@ -29,7 +29,7 @@ public class ActionFactory extends ConventionalActionFactory {
     }
 
     public Action completeTask() {
-        return new Action().id("task_complete").caption("complete_task").icon("fa fa-check-square-o").withConfirm().url(ModuleConst.BASE_URL + "api/tasks/complete");
+        return new Action().id("task_complete").caption("complete_task").icon("fa fa-check-square-o").confirm().url(ModuleConst.BASE_URL + "api/tasks/complete");
     }
 
     public Action cancelTask() {

@@ -268,7 +268,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         }
 
         if (!entity.isNew() && entity.getStatus() != ControlStatusType.COMPLETED && entity.getAppliedAuthor().getUserID().equals(session.getUser().getId())) {
-            actionBar.addAction(new Action().caption("complete").withConfirm().url(ModuleConst.BASE_URL + "api/assignments/completeEntireAssignment"));
+            actionBar.addAction(new Action().caption("complete").confirm().url(ModuleConst.BASE_URL + "api/assignments/completeEntireAssignment"));
         }
 
         if (!entity.isNew() && entity.isEditable()) {
