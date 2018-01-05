@@ -23,9 +23,11 @@ public class TaskDtoConverter implements GenericConverter<Task, Task> {
         result.setStartDate(task.getStartDate());
         result.setDueDate(task.getDueDate());
 
-        Project project = new Project();
-        project.setName(task.getProject().getName());
-        result.setProject(project);
+        if (task.getProject() != null) {
+            Project project = new Project();
+            project.setName(task.getProject().getName());
+            result.setProject(project);
+        }
 
         result.setTags(task.getTags());
         result.setAttachments(task.getAttachments());

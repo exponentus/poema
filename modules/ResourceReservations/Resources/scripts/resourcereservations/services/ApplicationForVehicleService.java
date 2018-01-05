@@ -291,7 +291,7 @@ public class ApplicationForVehicleService extends RestProvider {
             throws DAOException {
         ActionFactory action = new ActionFactory();
         ActionBar actionBar = new ActionBar(session);
-        String actionUri = ModuleConst.BASE_URL + "api/applications-for-vehicle/action/";
+        String actionUri = ModuleConst.BASE_URL + "api/applications-for-vehicle/";
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {

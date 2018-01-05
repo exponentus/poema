@@ -279,7 +279,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
                                    ApplicationForMeetingRoomDomain domain) throws DAOException {
         ActionFactory action = new ActionFactory();
         ActionBar actionBar = new ActionBar(session);
-        String actionUri = ModuleConst.BASE_URL + "api/applications-for-meeting-room/action/";
+        String actionUri = ModuleConst.BASE_URL + "api/applications-for-meeting-room/";
 
         actionBar.addAction(action.close);
         if (entity.isEditable()) {
