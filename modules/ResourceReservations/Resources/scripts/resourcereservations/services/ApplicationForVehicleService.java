@@ -20,7 +20,7 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import resourcereservations.dao.ApplicationForVehicleDAO;
-import resourcereservations.dao.filter.ApplicationFilter;
+import resourcereservations.dao.filter.ApplicationForVehicleFilter;
 import resourcereservations.domain.ApplicationForVehicleDomain;
 import resourcereservations.init.ModuleConst;
 import resourcereservations.model.ApplicationForVehicle;
@@ -48,7 +48,7 @@ public class ApplicationForVehicleService extends RestProvider {
         WebFormData params = getWebFormData();
         int pageSize = session.getPageSize();
         SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
-        ApplicationFilter filter = new ApplicationFilter(params);
+        ApplicationForVehicleFilter filter = new ApplicationForVehicleFilter(params);
 
         try {
             ApplicationForVehicleDAO avDAO = new ApplicationForVehicleDAO(session);

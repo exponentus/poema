@@ -19,7 +19,7 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import resourcereservations.dao.ApplicationForMeetingRoomDAO;
-import resourcereservations.dao.filter.ApplicationFilter;
+import resourcereservations.dao.filter.ApplicationForMeetingRoomFilter;
 import resourcereservations.domain.ApplicationForMeetingRoomDomain;
 import resourcereservations.init.ModuleConst;
 import resourcereservations.model.ApplicationForMeetingRoom;
@@ -47,7 +47,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         WebFormData params = getWebFormData();
         int pageSize = session.getPageSize();
         SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
-        ApplicationFilter filter = new ApplicationFilter(params);
+        ApplicationForMeetingRoomFilter filter = new ApplicationForMeetingRoomFilter(params);
 
         try {
             ApplicationForMeetingRoomDAO avDAO = new ApplicationForMeetingRoomDAO(session);

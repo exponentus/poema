@@ -13,7 +13,7 @@ import com.exponentus.scripting._Session;
 import reference.model.Tag;
 import reference.model.Vehicle;
 import resourcereservations.dao.ApplicationForVehicleDAO;
-import resourcereservations.dao.filter.ApplicationFilter;
+import resourcereservations.dao.filter.ApplicationForVehicleFilter;
 import resourcereservations.ui.ActionFactory;
 import resourcereservations.ui.ViewOptions;
 
@@ -55,7 +55,7 @@ public class ApplicationService extends RestProvider {
         SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
 
         try {
-            ApplicationFilter filter = new ApplicationFilter();
+            ApplicationForVehicleFilter filter = new ApplicationForVehicleFilter();
 
             // setup filter
             String vehicleId = params.getValueSilently("vehicle");
