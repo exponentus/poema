@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf__assignments")
+@Table(name = ModuleConst.CODE + "__assignments")
 public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
 
     @JsonIgnore
