@@ -16,6 +16,7 @@ import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
+import com.exponentus.common.ui.actions.constants.ActionPayloadType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
@@ -332,10 +333,9 @@ public class TaskService extends RestProvider {
     @POST
     @Path("saveAsDraft")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response saveAsDraft(ActionPayload<Task, Object> action) {
+    public Response saveAsDraft(Task taskDto) {
         _Session session = getSession();
         IUser user = session.getUser();
-        Task taskDto = action.getTarget();
 
         try {
             // validate(taskDto);
@@ -505,7 +505,7 @@ public class TaskService extends RestProvider {
             actionBar.addAction(action.saveAndClose);
 
             if (task.getStatus() == StatusType.DRAFT) {
-                actionBar.addAction(new Action().caption("save_as_draft").url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft"));
+                actionBar.addAction(new Action().caption("save_as_draft").payloadType(ActionPayloadType.MODEL).url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft"));
             }
         }
 
