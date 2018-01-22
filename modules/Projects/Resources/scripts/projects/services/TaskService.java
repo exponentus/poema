@@ -520,7 +520,7 @@ public class TaskService extends RestProvider {
                     //actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
                 }
             }
-        } else {
+        } else if(task.getStatus() != StatusType.DRAFT) {
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
                 actionBar.addAction(action.newRequest(task));
             }
