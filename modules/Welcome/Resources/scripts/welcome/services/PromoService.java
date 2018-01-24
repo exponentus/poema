@@ -1,11 +1,11 @@
 package welcome.services;
 
 import com.exponentus.appenv.AppEnv;
-import com.exponentus.exception.MsgException;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.messaging.MessagingType;
 import com.exponentus.messaging.email.MailAgent;
 import com.exponentus.messaging.email.Memo;
+import com.exponentus.messaging.exception.MsgException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.services.Defended;
