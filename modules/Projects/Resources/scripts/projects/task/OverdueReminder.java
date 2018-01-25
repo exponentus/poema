@@ -23,7 +23,6 @@ import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 import reference.dao.TagDAO;
-import reference.init.DataConst;
 import reference.model.Tag;
 
 import java.util.ArrayList;
@@ -38,7 +37,7 @@ public class OverdueReminder extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			TagDAO tagDAO = new TagDAO(session);
-			tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
+			tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
 			List<Tag> tags = new ArrayList<>();
 			tags.add(tag);
 			if (tag != null) {

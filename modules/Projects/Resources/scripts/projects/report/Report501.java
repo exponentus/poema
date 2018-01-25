@@ -10,7 +10,6 @@ import projects.dao.TaskDAO;
 import projects.init.ModuleConst;
 import projects.model.Task;
 import reference.dao.TagDAO;
-import reference.init.DataConst;
 import reference.model.Tag;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -38,7 +37,7 @@ public class Report501 extends AbstractDataObtainer {
 
         try {
             TagDAO tagDAO = new TagDAO(session);
-            Tag tag = tagDAO.findByName(DataConst.EXPIRED_TAG_NAME);
+            Tag tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
             TaskDAO dao = new TaskDAO(session);
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
             for (Employee employee : employeeDAO.findAll().getResult()) {
