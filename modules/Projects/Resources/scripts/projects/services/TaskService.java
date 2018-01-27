@@ -2,6 +2,9 @@ package projects.services;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
+import calendar.dao.EventDAO;
+import calendar.dao.ReminderDAO;
+import calendar.model.Event;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.dto.ActionPayload;
@@ -434,20 +437,32 @@ public class TaskService extends RestProvider {
         try {
             _Session ses = getSession();
             TaskDomain domain = new TaskDomain(ses);
-            Task entity = domain.getEntity(action.getTarget().getId());
-            domain.acceptApprovalBlock(entity, ses.getUser());
-            domain.superUpdate(entity);
+            Task task = domain.getEntity(action.getTarget().getId());
+            domain.acceptApprovalBlock(task, ses.getUser());
+            domain.superUpdate(task);
 
-            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
-                if (entity.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                    entity.setStatus(StatusType.OPEN);
-                    if (entity.getStatus() == StatusType.OPEN) {
-                        new Messages(getAppEnv()).sendToAssignee(entity);
+            if (task.getApprovalStatus() == ApprovalStatusType.FINISHED) {
+                if (task.getApprovalResult() == ApprovalResultType.ACCEPTED) {
+                    task.setStatus(StatusType.OPEN);
+                    if (task.getStatus() == StatusType.OPEN) {
+                        new Messages(getAppEnv()).sendToAssignee(task);
+                        IUser assignee = new UserDAO().findById(task.getAssignee());
+                        _Session assigneeSes = new _Session(assignee);
+                        EventDAO eventDAO = new EventDAO(assigneeSes);
+                        Event event = new Event();
+                        event.setDescription(task.getBody());
+                        event.setEventTime(task.getDueDate());
+                        event.setTitle(task.getRegNumber() + " " + task.getTitle());
+                        event.setPriority(task.getPriority());
+                        event.setTags(task.getTags());
+                        event.setReminder(new ReminderDAO(assigneeSes).getDefault());
+                        event.setRelatedURL(task.getURL());
+                        eventDAO.add(event);
                     }
                 }
             }
             // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            Outcome outcome = domain.getOutcome(entity);
+            Outcome outcome = domain.getOutcome(task);
             outcome.setTitle("approval_block_accepted");
             outcome.setMessage("approval_block_accepted");
 
