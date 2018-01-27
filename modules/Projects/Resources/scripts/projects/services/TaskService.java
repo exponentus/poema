@@ -2,9 +2,6 @@ package projects.services;
 
 import administrator.dao.UserDAO;
 import administrator.model.User;
-import calendar.dao.EventDAO;
-import calendar.dao.ReminderDAO;
-import calendar.model.Event;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.dto.ActionPayload;
@@ -280,7 +277,8 @@ public class TaskService extends RestProvider {
                     new Messages(getAppEnv()).sendToModerate(task);
                 } else {
                     taskDomain.superUpdate(task);
-                    new Messages(getAppEnv()).sendToAssignee(task);
+                    //new Messages(getAppEnv()).sendToAssignee(task);
+                    taskDomain.postCalendarEvent(task);
                 }
             }
 
@@ -446,18 +444,7 @@ public class TaskService extends RestProvider {
                     task.setStatus(StatusType.OPEN);
                     if (task.getStatus() == StatusType.OPEN) {
                         new Messages(getAppEnv()).sendToAssignee(task);
-                        IUser assignee = new UserDAO().findById(task.getAssignee());
-                        _Session assigneeSes = new _Session(assignee);
-                        EventDAO eventDAO = new EventDAO(assigneeSes);
-                        Event event = new Event();
-                        event.setDescription(task.getBody());
-                        event.setEventTime(task.getDueDate());
-                        event.setTitle(task.getRegNumber() + " " + task.getTitle());
-                        event.setPriority(task.getPriority());
-                        event.setTags(task.getTags());
-                        event.setReminder(new ReminderDAO(assigneeSes).getDefault());
-                        event.setRelatedURL(task.getURL());
-                        eventDAO.add(event);
+                        domain.postCalendarEvent(task);
                     }
                 }
             }

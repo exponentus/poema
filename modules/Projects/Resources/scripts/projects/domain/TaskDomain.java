@@ -1,6 +1,10 @@
 package projects.domain;
 
+import administrator.dao.UserDAO;
 import administrator.model.User;
+import calendar.dao.EventDAO;
+import calendar.dao.ReminderDAO;
+import calendar.model.Event;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
@@ -12,6 +16,7 @@ import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
+import com.exponentus.exception.SecureException;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
@@ -316,6 +321,21 @@ public class TaskDomain extends ApprovalDomain<Task> {
             }
         }
         return false;
+    }
+
+    public void postCalendarEvent(Task task) throws DAOException, SecureException {
+        IUser assignee = new UserDAO().findById(task.getAssignee());
+        _Session assigneeSes = new _Session(assignee);
+        EventDAO eventDAO = new EventDAO(assigneeSes);
+        Event event = new Event();
+        event.setDescription(task.getBody());
+        event.setEventTime(task.getDueDate());
+        event.setTitle(task.getRegNumber() + " " + task.getTitle());
+        event.setPriority(task.getPriority());
+        event.setTags(task.getTags());
+        event.setReminder(new ReminderDAO(assigneeSes).getDefault());
+        event.setRelatedURL(task.getURL());
+        eventDAO.add(event);
     }
 
     private List<Block> getModeratorBlock(List<Employee> moderators) throws DAOException, RestServiceException {
