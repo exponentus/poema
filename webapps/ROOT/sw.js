@@ -3,11 +3,28 @@ importScripts('/SharedResources/vendor/workbox-sw/workbox-sw.prod.v2.1.2.js');
 const workboxSW = new WorkboxSW();
 const host = self.origin;
 
-const VERSION = "1";
+const VERSION = '0.0.2';
 const STATIC_CACHE = `STATIC-${VERSION}`;
 const NETWORK_CACHE = `NETWORK-${VERSION}`;
 const MODULE_API_CACHE = `MODULE_API-${VERSION}`;
 const CACHE_KEYS = [STATIC_CACHE, NETWORK_CACHE, MODULE_API_CACHE];
+const MODULE_API_REGEXP = new RegExp('^' + host + '/(\\w+)/api/*');
+const OFFLINE_API_FALLBACK = JSON.stringify({
+    id: 'OFFLINE',
+    offline: true,
+    title: 'internet_offline',
+    message: 'internet_offline',
+    payload: {
+        contentTitle: 'internet_offline',
+        viewpage: {
+            count: 0,
+            maxPage: 0,
+            pageNum: 0,
+            result: []
+        },
+        model: null
+    }
+});
 
 // strategies
 const cacheFirst = workboxSW.strategies.cacheFirst({
@@ -22,7 +39,9 @@ const networkFirst = workboxSW.strategies.networkFirst({
  * cacheFirst
  */
 const cacheFirstRoutes = [
-    new RegExp('^' + host + '/(.*?).js'),
+    '/Workspace/',
+    '/Workspace/manifest.json',
+    '/sw.js',
     new RegExp('^' + host + '/(\\w+)/img/*'),
     new RegExp('^' + host + '/SharedResources/*'),
     new RegExp('^' + host + '/Staff/api/employees/(.*?)/avatar\\?_thumbnail'),
@@ -36,8 +55,6 @@ cacheFirstRoutes.forEach(route => workboxSW.router.registerRoute(route, cacheFir
  *  networkFirst
  */
 const networkFirstRoutes = [
-    '/Workspace/',
-    '/Workspace/manifest.json',
     new RegExp('^' + host + '/(\\w+)/api/session'),
     new RegExp('^' + host + '/(\\w+)/i18n/(\\w+).json')
 ];
@@ -45,24 +62,14 @@ const networkFirstRoutes = [
 networkFirstRoutes.forEach(route => workboxSW.router.registerRoute(route, networkFirst));
 
 /**
- * StaleWhileRevalidate
- * + check online status
+ * MODULE API networkFirst with fallback
  */
-const moduleApiRegexp = new RegExp('^' + host + '/(\\w+)/api/*');
-// const OFFLINE_API_FALLBACK = {
-//     id: 'OFFLINE',
-//     title: 'internet_offline',
-//     message: 'internet_offline',
-//     payload: {}
-// };
-
-// handle fetch
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.open(MODULE_API_CACHE).then(cache => {
             return cache.match(event.request).then(cacheResponse => {
                 const fetchPromise = fetch(event.request).then(networkResponse => {
-                    if (event.request.method === 'GET' && moduleApiRegexp.test(event.request.url)) {
+                    if (event.request.method === 'GET' && MODULE_API_REGEXP.test(event.request.url)) {
                         cache.put(event.request, networkResponse.clone());
                     }
                     return networkResponse;
@@ -72,14 +79,7 @@ self.addEventListener('fetch', event => {
                     return fetchPromise;
                 }
                 return cacheResponse || fetchPromise;
-                //
-                // if (cacheResponse) {
-                //     return cacheResponse;
-                // } else if (self.navigator.onLine) {
-                //     return fetchPromise;
-                // }
-                // return Promise.resolve(OFFLINE_API_JSON);
-            });
+            }).catch(error => apiFallback(OFFLINE_API_FALLBACK));
         })
     );
 });
@@ -98,5 +98,14 @@ self.addEventListener('activate', (event) => {
             })
         })
     );
-    return self.clients.claim();
+    event.waitUntil(self.clients.claim());
 });
+
+//
+function apiFallback(fallback) {
+    return Promise.resolve(new Response(fallback, {
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    }));
+}
