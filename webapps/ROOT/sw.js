@@ -1,14 +1,7 @@
-importScripts('/SharedResources/vendor/workbox-sw/workbox-sw.prod.v2.1.2.js');
+'use strict';
 
-const workboxSW = new WorkboxSW();
-const host = self.origin;
-
-const VERSION = '0.0.2';
-const STATIC_CACHE = `STATIC-${VERSION}`;
-const NETWORK_CACHE = `NETWORK-${VERSION}`;
-const MODULE_API_CACHE = `MODULE_API-${VERSION}`;
-const CACHE_KEYS = [STATIC_CACHE, NETWORK_CACHE, MODULE_API_CACHE];
-const MODULE_API_REGEXP = new RegExp('^' + host + '/(\\w+)/api/*');
+const VERSION = '20180202';
+const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
     offline: true,
@@ -25,54 +18,101 @@ const OFFLINE_API_FALLBACK = JSON.stringify({
         model: null
     }
 });
-
-// strategies
-const cacheFirst = workboxSW.strategies.cacheFirst({
-    cacheName: STATIC_CACHE
-});
-
-const networkFirst = workboxSW.strategies.networkFirst({
-    cacheName: NETWORK_CACHE
-});
-
-/**
- * cacheFirst
- */
-const cacheFirstRoutes = [
-    '/Workspace/',
+const STATIC_ROUTES = [
+    '/Workspace/?skip-auth-error',
     '/Workspace/manifest.json',
-    '/sw.js',
-    new RegExp('^' + host + '/(\\w+)/img/*'),
-    new RegExp('^' + host + '/SharedResources/*'),
-    new RegExp('^' + host + '/Staff/api/employees/(.*?)/avatar\\?_thumbnail'),
-    // external source
-    new RegExp('^https://fonts.googleapis.com/*')
+    '/sw.js'
 ];
 
-cacheFirstRoutes.forEach(route => workboxSW.router.registerRoute(route, cacheFirst));
-
 /**
- *  networkFirst
+ * CACHE_ROUTE Options
+ *
+ * { path:string, regExp: RegExp, cacheOnly: boolean, ignoreSearch: boolean, fallback: 'API'|'IMAGE' }
  */
-const networkFirstRoutes = [
-    new RegExp('^' + host + '/(\\w+)/api/session'),
-    new RegExp('^' + host + '/(\\w+)/i18n/(\\w+).json')
+const CACHE_ROUTES = [
+    { path: self.origin + '/Workspace/', cacheOnly: true, ignoreSearch: true },
+    { path: self.origin + '/Workspace/manifest.json', cacheOnly: true },
+    { path: self.origin + '/sw.js', ignoreSearch: true },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'), fallback: 'API' },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'), cacheOnly: true },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'), cacheOnly: true },
+    { regExp: new RegExp('^' + self.origin + '/SharedResources/*'), cacheOnly: true },
+    { regExp: new RegExp('^' + self.origin + '/Staff/api/employees/(.*?)/avatar\\?_thumbnail') },
+    // google fonts
+    { regExp: new RegExp('^https://fonts.googleapis.com/*') }
 ];
 
-networkFirstRoutes.forEach(route => workboxSW.router.registerRoute(route, networkFirst));
+function apiFallback() {
+    return Promise.resolve(new Response(OFFLINE_API_FALLBACK, {
+        headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    }));
+}
+
+function getFallback(fallbackType) {
+    if (fallbackType === 'API') {
+        return apiFallback();
+    }
+
+    return Promise.resolve(new Response('', {
+        headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    }));
+}
 
 /**
- * MODULE API networkFirst with fallback
+ * getRouteOption
+ *
+ * @param {string} url
+ */
+function getRouteOption(url) {
+    for (let route of CACHE_ROUTES) {
+        if (route.path) {
+            if (route.ignoreSearch) {
+                if (route.path === url.split('?')[0]) {
+                    return route;
+                }
+            } else {
+                if (route.path === url) {
+                    return route;
+                }
+            }
+        } else if (route.regExp.test(url)) {
+            return route;
+        }
+    }
+    return null;
+}
+
+/**
+ * fetch
  */
 self.addEventListener('fetch', event => {
     event.respondWith(
-        caches.open(MODULE_API_CACHE).then(cache => {
-            return cache.match(event.request).then(cacheResponse => {
+        caches.open(CACHE_KEY).then(cache => {
+            if (event.request.method !== 'GET') {
+                return fetch(event.request);
+            }
+
+            let route = getRouteOption(event.request.url.split('#')[0]);
+            if (!route) {
+                return fetch(event.request);
+            }
+
+            return cache.match(event.request, { ignoreSearch: (route.ignoreSearch || false) }).then(cacheResponse => {
+                if (route.cacheOnly && cacheResponse) {
+                    return cacheResponse;
+                }
+
                 const fetchPromise = fetch(event.request).then(networkResponse => {
-                    if (event.request.method === 'GET' && MODULE_API_REGEXP.test(event.request.url)) {
-                        cache.put(event.request, networkResponse.clone());
-                    }
+                    cache.put(event.request, networkResponse.clone());
                     return networkResponse;
+                }).catch(error => {
+                    let errorWhileFetch = error.stack === 'TypeError: Failed to fetch';
+                    if (errorWhileFetch && cacheResponse) {
+                        return cacheResponse;
+                    } else if (route.fallback) {
+                        return getFallback(route.fallback);
+                    }
+                    return error;
                 });
 
                 if (self.navigator.onLine) {
@@ -85,14 +125,17 @@ self.addEventListener('fetch', event => {
 });
 
 self.addEventListener('install', (event) => {
-    event.waitUntil(self.skipWaiting());
+    event.waitUntil(
+        caches.open(CACHE_KEY)
+        .then(cache => cache.addAll(STATIC_ROUTES))
+        .then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then(keys => {
             keys.forEach(key => {
-                if (CACHE_KEYS.indexOf(key) === -1) {
+                if (CACHE_KEY !== key) {
                     caches.delete(key);
                 }
             })
@@ -101,11 +144,36 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(self.clients.claim());
 });
 
-//
-function apiFallback(fallback) {
-    return Promise.resolve(new Response(fallback, {
-        headers: {
-            'Content-Type': 'application/json; charset=utf-8'
-        }
-    }));
-}
+
+/**
+ * Push
+ */
+self.addEventListener('push', (event) => {
+    if (!(self.Notification && self.Notification.permission === 'granted')) {
+        return;
+    }
+
+    var data = {};
+    if (event.data) {
+        data = event.data;
+    }
+    const title = data.title || 'demo';
+    const message = data.message || 'message';
+    const iconUrl = 'img/logo.png';
+
+    const options = {
+        body: message,
+        tag: 'NB',
+        icon: iconUrl,
+        badge: iconUrl
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow(host)
+    );
+});
