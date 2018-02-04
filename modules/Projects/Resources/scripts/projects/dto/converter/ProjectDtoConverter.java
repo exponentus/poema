@@ -1,6 +1,6 @@
 package projects.dto.converter;
 
-import com.exponentus.common.converter.GenericConverter;
+import com.exponentus.common.dto.converter.GenericConverter;
 import projects.model.Project;
 import staff.model.Organization;
 

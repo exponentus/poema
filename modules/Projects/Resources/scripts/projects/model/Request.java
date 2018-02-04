@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "prj__requests")
+@Table(name = ModuleConst.CODE + "__requests")
 public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
 
     @NotNull
@@ -53,7 +53,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "prj__request_attachments",
+    @JoinTable(name = ModuleConst.CODE + "__request_attachments",
             joinColumns = {@JoinColumn(name = "request_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "request_id, attachment_id")},
@@ -123,7 +123,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
 
     @Override
     public String getURL() {
-        return ModuleConst.BASE_URL + "requests/" + getIdentifier();
+        return ModuleConst.BASE_URL + "requests/" + getId();
     }
 
     @Override

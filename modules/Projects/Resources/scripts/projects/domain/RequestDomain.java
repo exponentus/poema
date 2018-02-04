@@ -42,11 +42,11 @@ public class RequestDomain extends CommonDomain<Request> {
 
     public void fillFromDto(Request request, Request dto) {
         request.setAuthor(dto.getAuthor());
-        request.setLastModifier(dto.getAuthor().getId());
+        request.setLastModifier(dto.getAuthor());
         request.setRequestType(dto.getRequestType());
         request.setComment(dto.getComment());
         request.setAttachments(dto.getAttachments());
-
+        request.setTitle(dto.getRequestType().getTitle() + " " + dto.getComment());
         if (request.isNew()) {
             request.setTask(dto.getTask());
             request.resetReadersEditors();

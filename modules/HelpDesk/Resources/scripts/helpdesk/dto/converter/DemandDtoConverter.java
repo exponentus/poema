@@ -1,6 +1,7 @@
 package helpdesk.dto.converter;
 
-import com.exponentus.common.converter.GenericConverter;
+
+import com.exponentus.common.dto.converter.GenericConverter;
 import helpdesk.model.Demand;
 import staff.model.Organization;
 
