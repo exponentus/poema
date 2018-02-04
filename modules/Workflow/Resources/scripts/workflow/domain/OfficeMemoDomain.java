@@ -95,7 +95,7 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
     public OfficeMemo save(OfficeMemo entity) throws SecureException, DAOException, DTOException {
         if (entity.isNew()) {
             RegNum rn = new RegNum();
-            entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getDefaultFormName())));
+            entity.setRegNumber(Integer.toString(rn.getRegNumber(entity.getEntityKind())));
             entity = dao.add(entity, rn);
         } else {
             entity = dao.update(entity);
