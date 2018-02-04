@@ -48,8 +48,8 @@ public class ViewOptions {
         list.add(cg4);
 
         result.setRoot(list);
-        result.add("assignment", getAssignmentColGroup());
-        result.add("report", getReportColGroup());
+        result.add("Assignment", getAssignmentColGroup());
+        result.add("Report", getReportColGroup());
         return result;
     }
 
@@ -83,8 +83,8 @@ public class ViewOptions {
         list.add(cg4);
 
         result.setRoot(list);
-        result.add("assignment", getAssignmentColGroup());
-        result.add("report", getReportColGroup());
+        result.add("Assignment", getAssignmentColGroup());
+        result.add("Report", getReportColGroup());
         return result;
     }
 
@@ -117,8 +117,8 @@ public class ViewOptions {
         list.add(cg4);
 
         result.setRoot(list);
-        result.add("assignment", getAssignmentColGroup());
-        result.add("report", getReportColGroup());
+        result.add("Assignment", getAssignmentColGroup());
+        result.add("Report", getReportColGroup());
         return result;
     }
 
@@ -175,8 +175,8 @@ public class ViewOptions {
         list.add(cg3);
 
         result.setRoot(list);
-        result.add("assignment", getAssignmentColGroup());
-        result.add("report", getReportColGroup());
+        result.add("Assignment", getAssignmentColGroup());
+        result.add("Report", getReportColGroup());
         return result;
     }
 

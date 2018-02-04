@@ -105,7 +105,7 @@ public class ViewOptions {
         request.add(rcg1);
 
         result.setRoot(taskCols);
-        result.add("request", request);
+        result.add("Request", request);
         return result;
     }
 
