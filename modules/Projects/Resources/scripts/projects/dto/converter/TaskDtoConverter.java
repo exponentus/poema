@@ -1,10 +1,15 @@
 package projects.dto.converter;
 
-import com.exponentus.common.dto.converter.GenericConverter;
+import com.exponentus.common.dto.converter.ExtConverter;
+import com.exponentus.user.IUser;
 import projects.model.Project;
 import projects.model.Task;
 
-public class TaskDtoConverter implements GenericConverter<Task, Task> {
+public class TaskDtoConverter extends ExtConverter<Task, Task> {
+
+    public TaskDtoConverter(IUser user){
+        super(user);
+    }
 
     @Override
     public Task apply(Task task) {
@@ -22,6 +27,7 @@ public class TaskDtoConverter implements GenericConverter<Task, Task> {
         result.setAssignee(task.getAssignee());
         result.setStartDate(task.getStartDate());
         result.setDueDate(task.getDueDate());
+        result.setWasRead(checkReadindState(task.getReaders()));
 
         if (task.getProject() != null) {
             Project project = new Project();
@@ -34,4 +40,6 @@ public class TaskDtoConverter implements GenericConverter<Task, Task> {
 
         return result;
     }
+
+
 }

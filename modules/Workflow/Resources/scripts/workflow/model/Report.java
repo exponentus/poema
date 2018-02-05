@@ -26,7 +26,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf__reports")
+@Table(name = ModuleConst.CODE + "__reports")
 public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCycle {
 
     @JoinColumn(name = "applied_author", nullable = false)
@@ -52,11 +52,11 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     private String solutionComment;
 
     @ElementCollection
-    @CollectionTable(name = "wf__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+    @CollectionTable(name = ModuleConst.CODE + "__report_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
     private List<Observer> observers = new ArrayList<Observer>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "wf__report_attachments", joinColumns = {@JoinColumn(name = "report_id")}, inverseJoinColumns = {
+    @JoinTable(name = ModuleConst.CODE + "__report_attachments", joinColumns = {@JoinColumn(name = "report_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attachment_id")}, indexes = {
             @Index(columnList = "report_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {"report_id",
             "attachment_id"}))
@@ -144,7 +144,7 @@ public class Report extends EmbeddedSecureHierarchicalEntity implements ILifeCyc
     public LifeCycleNode getNode(IUser user, UUID id) {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.REPORT);
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(solution.name());

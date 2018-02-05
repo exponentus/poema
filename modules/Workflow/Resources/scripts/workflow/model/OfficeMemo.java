@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "wf__office_memos")
+@Table(name = ModuleConst.CODE + "__office_memos")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class OfficeMemo extends ActionableDocument implements ILifeCycle {
 
@@ -40,7 +40,7 @@ public class OfficeMemo extends ActionableDocument implements ILifeCycle {
     private Employee recipient;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "wf__office_memo_attachments", joinColumns = {@JoinColumn(name = "office_memo_id")}, inverseJoinColumns = {
+    @JoinTable(name = ModuleConst.CODE + "__office_memo_attachments", joinColumns = {@JoinColumn(name = "office_memo_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attachment_id")}, indexes = {
             @Index(columnList = "office_memo_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
             "office_memo_id", "attachment_id"}))
@@ -48,11 +48,11 @@ public class OfficeMemo extends ActionableDocument implements ILifeCycle {
     private List<Attachment> attachments = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "wf__office_memo_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
+    @CollectionTable(name = ModuleConst.CODE + "__office_memo_observers", joinColumns = @JoinColumn(referencedColumnName = "id"))
     private List<Observer> observers = new ArrayList<Observer>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "wf__office_memo_tags")
+    @JoinTable(name = ModuleConst.CODE + "__office_memo_tags")
     private List<Tag> tags;
 
     public String getRegNumber() {
@@ -143,7 +143,7 @@ public class OfficeMemo extends ActionableDocument implements ILifeCycle {
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.DISCUSSED_AND_ACTIONABLE);
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(getApprovalStatus().name());

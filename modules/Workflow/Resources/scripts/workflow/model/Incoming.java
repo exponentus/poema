@@ -216,7 +216,7 @@ public class Incoming extends ActionableDocument implements ILifeCycle {
             lc.setCurrent(true);
         }
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(getApprovalStatus().name());

@@ -7,10 +7,12 @@ import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.exception.DAOExceptionType;
 import com.exponentus.dataengine.jpa.IAppEntity;
+import com.exponentus.dataengine.jpa.ISecureAppEntity;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.scripting.SortParams;
@@ -19,6 +21,7 @@ import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import com.exponentus.user.SuperUser;
 import com.exponentus.util.TimeUtil;
+import org.apache.poi.ss.formula.functions.T;
 import org.eclipse.persistence.config.HintValues;
 import org.eclipse.persistence.config.QueryHints;
 import projects.dao.filter.TaskFilter;
@@ -34,8 +37,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class TaskDAO extends DAO<Task, UUID> {
-
-    private TaskDtoConverter dtoConverter = new TaskDtoConverter();
 
     public TaskDAO(_Session session) throws DAOException {
         super(Task.class, session);
@@ -154,9 +155,9 @@ public class TaskDAO extends DAO<Task, UUID> {
             //
 
             if (!user.isSuperUser()) {
-                Path<Set<Long>> readers = taskRoot.join("readers", JoinType.LEFT);
+                MapJoin<T, Long, Reader> readers = taskRoot.joinMap("readers", JoinType.LEFT);
                 Path<Set<Long>> observers = taskRoot.join("observers", JoinType.LEFT);
-                Predicate readCondition = cb.or(readers.in(user.getId()), observers.in(user.getId()));
+                Predicate readCondition = cb.or(readers.key().in(user.getId()), observers.in(user.getId()));
                 if (condition == null) {
                     condition = readCondition;
                 } else {
@@ -183,6 +184,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             long count = (long) query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
+            TaskDtoConverter dtoConverter = new TaskDtoConverter(user);
             List<Task> result = dtoConverter.convert(typedQuery.getResultList());
 
             return new ViewPage<>(result, count, maxPage, pageNum);
@@ -256,6 +258,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         cqt.orderBy(cbt.desc(taskRoot.get("regDate")));
 
         TypedQuery<Task> typedQueryT = em.createQuery(cqt);
+        TaskDtoConverter dtoConverter = new TaskDtoConverter(user);
         tasks = dtoConverter.convert(typedQueryT.getResultList());
 
         // Request
@@ -304,51 +307,6 @@ public class TaskDAO extends DAO<Task, UUID> {
 
         return result;
     }
-
-    /*public ViewPage<TaskViewEntry> findCreatedByUser(IUser user, int pageNum, int pageSize) {
-        EntityManager em = getEntityManagerFactory().createEntityManager();
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        try {
-            CriteriaQuery<TaskViewEntry> cq = cb.createQuery(TaskViewEntry.class);
-            CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
-            Root<Task> root = cq.from(Task.class);
-
-            Predicate condition = cb.equal(root.get("author"), user);
-//            condition = cb.and(
-//                    cb.or(cb.equal(root.get("status"), StatusType.PROCESSING), cb.equal(root.get("status"), StatusType.OPEN)),
-//                    condition);
-
-            cq.select(cb.construct(TaskViewEntry.class, root.get("id"), root.get("regNumber"), root.get("taskType"), root.get("status"),
-                    root.get("priority"), root.get("startDate"), root.get("dueDate"), root.get("tags")))
-                    .orderBy(cb.asc(root.get("priority")));
-
-            countCq.select(cb.count(root));
-            cq.where(condition);
-            countCq.where(condition);
-
-            TypedQuery<TaskViewEntry> typedQuery = em.createQuery(cq);
-            Query query = em.createQuery(countCq);
-            long count = (long) query.getSingleResult();
-            int maxPage = 1;
-
-            if (pageNum != 0 || pageSize != 0) {
-                maxPage = RuntimeObjUtil.countMaxPage(count, pageSize);
-                if (pageNum == 0) {
-                    pageNum = maxPage;
-                }
-                int firstRec = RuntimeObjUtil.calcStartEntry(pageNum, pageSize);
-                typedQuery.setFirstResult(firstRec);
-                if (pageSize > 0) {
-                    typedQuery.setMaxResults(pageSize);
-                }
-            }
-
-            List<TaskViewEntry> result = typedQuery.getResultList();
-            return new ViewPage<>(result, count, maxPage, pageNum);
-        } finally {
-            em.close();
-        }
-    }*/
 
     public ViewPage<Task> findAssignedToUser(Date startDate, Date endDate, IUser user, int pageNum, int pageSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
@@ -457,7 +415,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             if (!user.isSuperUser()) {
                 boolean isEditor = false;
                 if (SecureAppEntity.class.isAssignableFrom(getEntityClass())) {
-                    SecureAppEntity<UUID> se = (SecureAppEntity<UUID>) entity;
+                    ISecureAppEntity<UUID> se = (ISecureAppEntity<UUID>) entity;
                     Iterator<Long> it = se.getEditors().iterator();
                     while (it.hasNext()) {
                         if (it.next().longValue() == user.getId().longValue()) {

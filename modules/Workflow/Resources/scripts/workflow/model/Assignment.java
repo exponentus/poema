@@ -251,7 +251,7 @@ public class Assignment extends EmbeddedSecureHierarchicalEntity implements ILif
         LifeCycleNode lc = new LifeCycleNode();
         lc.setType(LifeCycleNodeType.ASSIGNMENT);
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(status.name());

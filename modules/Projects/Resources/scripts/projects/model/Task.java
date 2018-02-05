@@ -371,6 +371,8 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return ModuleConst.BASE_URL + "tasks/" + getId();
     }
 
+
+
     @Override
     public List<Block> getBlocks() {
         return blocks;
@@ -507,7 +509,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             lc.setCurrent(true);
         }
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(getApprovalStatus().name());

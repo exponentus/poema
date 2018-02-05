@@ -184,7 +184,7 @@ public class TaskService extends RestProvider {
 
                 task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 5);
             } else {
-                task = taskDAO.findByIdentifier(id);
+                task = taskDAO.findById(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
@@ -197,7 +197,6 @@ public class TaskService extends RestProvider {
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
             outcome.addPayload("employees", emps);
-            // outcome.addPayload( new Milestones(session, task.getTimeLine()));
             outcome.addPayload(new Milestones(session, task.getStages()));
             outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));

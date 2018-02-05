@@ -145,7 +145,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
             lc.setCurrent(true);
         }
 
-        if (user.isSuperUser() || getReaders().contains(user.getId())) {
+        if (user.isSuperUser() || getReaders().containsKey(user.getId())) {
             lc.setAvailable(true);
             lc.setTitle(getTitle());
             lc.setStatus(resolution.name());

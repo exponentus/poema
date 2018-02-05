@@ -113,7 +113,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
             if (dto.getParent() != null) {
                 task.setParent(dto.getParent());
                 //	dto.setProject(dto.getParent().getProject());
-                //	task.addReaders(dto.getParent().getReaders());
+                //	task.addReaders(dto.getParent().getReader());
             }
         }
 
