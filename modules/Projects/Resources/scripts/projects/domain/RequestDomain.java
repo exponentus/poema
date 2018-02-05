@@ -51,7 +51,7 @@ public class RequestDomain extends CommonDomain<Request> {
             request.setTask(dto.getTask());
             request.resetReadersEditors();
             request.addReaderEditor(request.getAuthor());
-            request.addEditors(dto.getTask().getEditors());
+            request.addReadersList(dto.getTask().getEditors());
         }
     }
 
