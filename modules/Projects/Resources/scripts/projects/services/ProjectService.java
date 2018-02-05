@@ -8,6 +8,7 @@ import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
@@ -108,6 +109,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            Environment.database.markAsRead(getAppEnv(), session.getUser(), project);
 
             Outcome outcome = projectDomain.getOutcome(project);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());

@@ -19,6 +19,7 @@ import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionPayloadType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.log.Lg;
 import com.exponentus.rest.RestProvider;
@@ -188,6 +189,9 @@ public class TaskService extends RestProvider {
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
+
+                Environment.database.markAsRead(getAppEnv(), session.getUser(), task);
+
             }
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()

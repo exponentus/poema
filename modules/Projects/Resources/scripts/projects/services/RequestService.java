@@ -7,6 +7,7 @@ import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -62,6 +63,7 @@ public class RequestService extends RestProvider {
 
             Map<Long, BaseReferenceModel> emps = new HashMap<>();
             emps.put(request.getAuthor().getId(), new EmployeeToBaseRefUserDtoConverter().convert(empDao.findByUser(request.getAuthor())));
+            Environment.database.markAsRead(getAppEnv(), session.getUser(), request);
 
             Outcome outcome = requestDomain.getOutcome(request);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
