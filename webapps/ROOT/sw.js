@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180202';
+const VERSION = '20180205';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
