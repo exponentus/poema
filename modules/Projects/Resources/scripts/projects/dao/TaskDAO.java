@@ -251,7 +251,9 @@ public class TaskDAO extends DAO<Task, UUID> {
         Predicate conditionA = cbt.equal(taskRoot.get("parent"), task);
 
         if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
-            conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+            MapJoin<T, Long, Reader> mapJoin = taskRoot.joinMap("readers");
+            conditionA = cbt.and(cbt.equal(mapJoin.key(), user.getId()), conditionA);
+           // conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
         }
 
         cqt.where(conditionA);
