@@ -825,6 +825,7 @@
   "security" : "Segurança",
   "request_time" : "Data do pedido",
   "value_exists" : "value_exists",
+  "not_was_read" : "Não foi lido",
   "primary_organization" : null,
   "change_saved" : "Alterar guardado",
   "replicate_document" : "replicate_document",

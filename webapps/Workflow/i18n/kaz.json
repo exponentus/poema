@@ -825,6 +825,7 @@
   "security" : "Қауіпсіздік",
   "request_time" : null,
   "value_exists" : "value_exists",
+  "not_was_read" : "Оқылмаған",
   "primary_organization" : "Алғашқы ұйымдастыру",
   "change_saved" : "Өзгерту Сақталған",
   "replicate_document" : "Қайталау",

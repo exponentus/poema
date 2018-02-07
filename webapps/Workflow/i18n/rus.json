@@ -825,6 +825,7 @@
   "security" : "Безопасность",
   "request_time" : "Дата запроса",
   "value_exists" : "Запись с таким значением уже существует",
+  "not_was_read" : "Не прочитано",
   "primary_organization" : "Первичная организация",
   "change_saved" : "Изменения сохранены",
   "replicate_document" : "Реплицировать",

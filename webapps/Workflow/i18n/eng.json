@@ -825,6 +825,7 @@
   "security" : "Security",
   "request_time" : "Request date",
   "value_exists" : "The value is exists",
+  "not_was_read" : "Not was read",
   "primary_organization" : "Primary organization",
   "change_saved" : "Change has been saved",
   "replicate_document" : "Replicate",
