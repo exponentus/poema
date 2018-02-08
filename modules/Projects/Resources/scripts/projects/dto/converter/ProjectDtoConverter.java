@@ -21,7 +21,7 @@ public class ProjectDtoConverter implements GenericConverter<Project, Project> {
         dto.setProgrammer(prj.getProgrammer());
         dto.setTester(prj.getTester());
         dto.setFinishDate(prj.getFinishDate());
-        dto.setAttachments(prj.getAttachments());
+        dto.setHasAttachments(prj.getHasAttachments());
 
         return dto;
     }

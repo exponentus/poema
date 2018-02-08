@@ -1,6 +1,5 @@
 package helpdesk.dto.converter;
 
-
 import com.exponentus.common.dto.converter.GenericConverter;
 import helpdesk.model.Demand;
 import staff.model.Organization;
@@ -23,7 +22,7 @@ public class DemandDtoConverter implements GenericConverter<Demand, Demand> {
             dto.setCustomer(customer);
         }
         dto.setTags(demand.getTags());
-        dto.setAttachments(demand.getAttachments());
+        dto.setHasAttachments(demand.getHasAttachments());
 
         return dto;
     }

@@ -7,7 +7,7 @@ import projects.model.Task;
 
 public class TaskDtoConverter extends ExtConverter<Task, Task> {
 
-    public TaskDtoConverter(IUser user){
+    public TaskDtoConverter(IUser user) {
         super(user);
     }
 
@@ -36,10 +36,8 @@ public class TaskDtoConverter extends ExtConverter<Task, Task> {
         }
 
         result.setTags(task.getTags());
-        result.setAttachments(task.getAttachments());
+        result.setHasAttachments(task.getHasAttachments());
 
         return result;
     }
-
-
 }
