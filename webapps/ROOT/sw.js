@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180208';
+const VERSION = '20180209';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
@@ -103,7 +103,10 @@ self.addEventListener('fetch', event => {
                 }
 
                 const fetchPromise = fetch(event.request).then(networkResponse => {
-                    cache.put(event.request, networkResponse.clone());
+                    // response status ok
+                    if (networkResponse.status > 0 && networkResponse.status <= 200) {
+                        cache.put(event.request, networkResponse.clone());
+                    }
                     return networkResponse;
                 }).catch(error => {
                     let errorWhileFetch = error.stack === 'TypeError: Failed to fetch';
