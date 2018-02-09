@@ -32,6 +32,7 @@ import projects.model.Task;
 
 import javax.persistence.*;
 import javax.persistence.criteria.*;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -253,7 +254,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         if (!user.isSuperUser() && SecureAppEntity.class.isAssignableFrom(Task.class)) {
             MapJoin<T, Long, Reader> mapJoin = taskRoot.joinMap("readers");
             conditionA = cbt.and(cbt.equal(mapJoin.key(), user.getId()), conditionA);
-           // conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
+            // conditionA = cbt.and(taskRoot.get("readers").in(user.getId()), conditionA);
         }
 
         cqt.where(conditionA);
@@ -350,7 +351,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Object[]> getCountByStatus(Date from, Date to, String periodType, String userType, List<IUser> users, StatusType... statusTypes) {
+    public List<CountStat<Timestamp>> getCountByStatus(Date from, Date to, String periodType, String userType, List<IUser> users, StatusType... statusTypes) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         StringJoiner userChunk = new StringJoiner(" OR ");
         for (IUser u : users) {
@@ -372,7 +373,14 @@ public class TaskDAO extends DAO<Task, UUID> {
                     .append(userChunk.toString())
                     .append(")) GROUP BY 1 ORDER BY 1;").toString();
             Query q = em.createNativeQuery(sql);
-            return q.getResultList();
+
+            List<CountStat<Timestamp>> result = new ArrayList<>();
+            List<Object[]> objs = q.getResultList();
+            for (Object[] obj : objs) {
+                result.add(new CountStat((Timestamp) obj[0], (long) obj[1]));
+            }
+
+            return result;
         } finally {
             em.close();
         }
@@ -391,12 +399,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 condition = cb.and(root.get("readers").in(user.getId()));
             }
 
-            cq.select(cb.construct(
-                    CountStat.class,
-                    root.get("status"),
-                    cb.count(root.get("status")))
-            )
-                    .groupBy(root.get("status"));
+            cq.select(cb.construct(CountStat.class, root.get("status"), cb.count(root.get("status")))).groupBy(root.get("status"));
 
             if (condition != null) {
                 cq.where(condition);

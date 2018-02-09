@@ -39,24 +39,25 @@ public class DashboardService extends RestProvider {
             outcome.setTitle("dashboard");
 
             Date tillDate = new Date();
-            TimeChart chart = new TimeChart();
             List<IUser> allUsers = new ArrayList<>();
 
             UserDAO userDAO = new UserDAO();
             //allUsers.addAll(userDAO.findAll());
             allUsers.add(session.getUser());
             Date fromDate = TimeUtil.convertTextToDate("01.01.2017");
-            StatusType[] stats = {StatusType.PROCESSING,StatusType.OPEN};
+            StatusType[] stats = {StatusType.PROCESSING, StatusType.OPEN};
             String periodType = "week"; //could be "day","week", "year" as well
-            List<Object[]> result = new TaskDAO(session).getCountByStatus(fromDate,tillDate, periodType, "assignee" ,allUsers,stats);
+            List<CountStat<Timestamp>> result = new TaskDAO(session).getCountByStatus(fromDate, tillDate, periodType, "assignee", allUsers, stats);
             long total = 0;
-            Map vals = new  LinkedHashMap();
-            for (Object[] r : result) {
-                total += (long)r[1];
-                vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
+            Map vals = new LinkedHashMap();
+            for (CountStat r : result) {
+                total += r.count; // (long) r[1];
+                vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r.title).getTime())), r.count);
             }
 
             String statusesAsText = Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(","));
+
+            TimeChart chart = new TimeChart();
             chart.setValues(vals);
             if (total > 0) {
                 long average = total / vals.size();
@@ -68,13 +69,13 @@ public class DashboardService extends RestProvider {
             outcome.addPayload("statAssigneeStateProcessing", chart);
 
             TimeChart chart1 = new TimeChart();
-            StatusType[] stats1 = {StatusType.PENDING,StatusType.COMPLETED};
-            List<Object[]> result1 = new TaskDAO(session).getCountByStatus(fromDate,tillDate,periodType,"assignee",allUsers,stats1);
+            StatusType[] stats1 = {StatusType.PENDING, StatusType.COMPLETED};
+            List<CountStat<Timestamp>> result1 = new TaskDAO(session).getCountByStatus(fromDate, tillDate, periodType, "assignee", allUsers, stats1);
             long total1 = 0;
-            Map vals1 = new  LinkedHashMap();
-            for (Object[] r : result1) {
-                total1 += (long)r[1];
-                vals1.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r[0]).getTime())), r[1]);
+            Map vals1 = new LinkedHashMap();
+            for (CountStat r : result1) {
+                total1 += r.count;
+                vals1.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r.title).getTime())), r.count);
             }
 
             chart1.setStatus(Arrays.stream(stats1).map(s -> s.name()).collect(Collectors.joining(",")));
@@ -83,7 +84,6 @@ public class DashboardService extends RestProvider {
 
             // author_state
             outcome.addPayload("statAuthorStateProcessing", new TimeChart());
-
             outcome.addPayload("statAuthorStateCompleted", new TimeChart());
 
             TaskDAO taskDAO = new TaskDAO(session);
