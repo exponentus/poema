@@ -55,7 +55,7 @@ public class DashboardService extends RestProvider {
                 vals.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r.title).getTime())), r.count);
             }
 
-            String statusesAsText = Arrays.stream(stats).map(s -> s.name()).collect(Collectors.joining(","));
+            String statusesAsText = Arrays.stream(stats).map(Enum::name).collect(Collectors.joining(","));
 
             TimeChart chart = new TimeChart();
             chart.setValues(vals);
@@ -78,13 +78,9 @@ public class DashboardService extends RestProvider {
                 vals1.put(new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r.title).getTime())), r.count);
             }
 
-            chart1.setStatus(Arrays.stream(stats1).map(s -> s.name()).collect(Collectors.joining(",")));
+            chart1.setStatus(Arrays.stream(stats1).map(Enum::name).collect(Collectors.joining(",")));
             chart1.setValues(vals1);
             outcome.addPayload("statAssigneeStateCompleted", chart1);
-
-            // author_state
-            outcome.addPayload("statAuthorStateProcessing", new TimeChart());
-            outcome.addPayload("statAuthorStateCompleted", new TimeChart());
 
             TaskDAO taskDAO = new TaskDAO(session);
 
