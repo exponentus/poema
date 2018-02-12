@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180209';
+const VERSION = '20180212';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
@@ -30,14 +30,15 @@ const STATIC_ROUTES = [
  * { path:string, regExp: RegExp, cacheOnly: boolean, ignoreSearch: boolean, fallback: 'API'|'IMAGE' }
  */
 const CACHE_ROUTES = [
-    { path: self.origin + '/Workspace/', cacheOnly: true, ignoreSearch: true },
-    { path: self.origin + '/Workspace/manifest.json', cacheOnly: true },
-    { path: self.origin + '/sw.js', ignoreSearch: true },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'), fallback: 'API' },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/employees/(.*?)/avatar\\?_thumbnail') },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'), fallback: 'API', contentType: 'application/json' },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'), cacheOnly: true },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'), cacheOnly: true },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/$'), cacheOnly: true, ignoreSearch: true, contentType: 'text/html' },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest\\.json$'), cacheOnly: true, ignoreSearch: true },
+    { path: self.origin + '/sw.js', ignoreSearch: true },
+    { regExp: new RegExp('^' + self.origin + '/.*?\\.(js|json|gz|css)\\?cache$'), cacheOnly: true },
     { regExp: new RegExp('^' + self.origin + '/SharedResources/*'), cacheOnly: true },
-    { regExp: new RegExp('^' + self.origin + '/Staff/api/employees/(.*?)/avatar\\?_thumbnail') },
     // google fonts
     { regExp: new RegExp('^https://fonts.googleapis.com/*') }
 ];
@@ -103,8 +104,14 @@ self.addEventListener('fetch', event => {
                 }
 
                 const fetchPromise = fetch(event.request).then(networkResponse => {
+                    let _cache = true;
+                    // check content type
+                    if (route.contentType) {
+                        _cache = networkResponse.headers.get('content-type') === route.contentType;
+                    }
+
                     // response status ok
-                    if (networkResponse.status > 0 && networkResponse.status <= 200) {
+                    if (_cache && networkResponse.status === 200) {
                         cache.put(event.request, networkResponse.clone());
                     }
                     return networkResponse;
