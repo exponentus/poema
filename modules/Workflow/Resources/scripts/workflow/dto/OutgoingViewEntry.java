@@ -13,7 +13,7 @@ import java.util.UUID;
 public class OutgoingViewEntry {
 
     public UUID id;
-    public String kind = "outgoing";
+    public String kind = "Outgoing";
 
     public ApprovalStatusType status = ApprovalStatusType.DRAFT;
     public ApprovalResultType result = ApprovalResultType.PROJECT;

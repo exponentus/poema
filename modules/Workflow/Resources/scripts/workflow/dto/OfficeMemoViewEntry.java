@@ -11,7 +11,7 @@ import java.util.UUID;
 public class OfficeMemoViewEntry {
 
     public UUID id;
-    public String kind = "officeMemo";
+    public String kind = "OfficeMemo";
 
     public ApprovalStatusType status = ApprovalStatusType.DRAFT;
     public ApprovalResultType result = ApprovalResultType.PROJECT;

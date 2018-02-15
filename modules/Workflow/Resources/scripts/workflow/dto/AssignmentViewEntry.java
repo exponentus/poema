@@ -10,7 +10,7 @@ import java.util.*;
 public class AssignmentViewEntry implements IDTO {
 
     public UUID id;
-    public String kind = "assignment";
+    public String kind = "Assignment";
 
     public String appliedAuthor;
     public String title;
@@ -37,7 +37,7 @@ public class AssignmentViewEntry implements IDTO {
         this.status = status;
     }
 
-    public AssignmentViewEntry(UUID id,  String title, String body, Map<LanguageCode, String> controlType,
+    public AssignmentViewEntry(UUID id, String title, String body, Map<LanguageCode, String> controlType,
                                Date startDate, Date dueDate, ControlStatusType status, Object ae) {
         this.id = id;
         this.appliedAuthor = appliedAuthor;
@@ -50,12 +50,12 @@ public class AssignmentViewEntry implements IDTO {
 
         if (ae != null) {
             System.out.println(id + " " + ae.toString());
-          //  this.assigneeEntriesText = ae;
-           // assigneeEntries = ae;
+            //  this.assigneeEntriesText = ae;
+            // assigneeEntries = ae;
         }
     }
 
-    public AssignmentViewEntry(UUID id,  String title, String body, Map<LanguageCode, String> controlType,
+    public AssignmentViewEntry(UUID id, String title, String body, Map<LanguageCode, String> controlType,
                                Date startDate, Date dueDate, ControlStatusType status) {
         this.id = id;
         this.appliedAuthor = appliedAuthor;

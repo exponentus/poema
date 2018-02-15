@@ -11,7 +11,7 @@ import java.util.UUID;
 public class IncomingViewEntry implements IDTO {
 
     public UUID id;
-    public String kind = "incoming";
+    public String kind = "Incoming";
 
     public String title;
     public String regNumber;
