@@ -190,7 +190,7 @@ public class TaskService extends RestProvider {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }
 
-                Environment.database.markAsRead(getAppEnv(), session.getUser(), task);
+                Environment.database.markAsRead(session.getUser(), task);
 
             }
 

@@ -63,7 +63,7 @@ public class RequestService extends RestProvider {
 
             Map<Long, BaseReferenceModel> emps = new HashMap<>();
             emps.put(request.getAuthor().getId(), new EmployeeToBaseRefUserDtoConverter().convert(empDao.findByUser(request.getAuthor())));
-            Environment.database.markAsRead(getAppEnv(), session.getUser(), request);
+            Environment.database.markAsRead(session.getUser(), request);
 
             Outcome outcome = requestDomain.getOutcome(request);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());

@@ -109,7 +109,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
-            Environment.database.markAsRead(getAppEnv(), session.getUser(), project);
+            Environment.database.markAsRead(session.getUser(), project);
 
             Outcome outcome = projectDomain.getOutcome(project);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
