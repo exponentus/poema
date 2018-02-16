@@ -27,7 +27,7 @@
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
         <class>com.exponentus.common.model.BigFile</class>
-        <class>monitoring.model.UserActivity</class>   
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
     </persistence-unit>
@@ -80,8 +80,8 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.Position</class>
         <class>reference.model.OrgCategory</class>
-         <!-- Monitoring module entities --> 
-        <class>monitoring.model.UserActivity</class>     
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <!-- Because of it suppose importing from Domino -->
@@ -134,8 +134,8 @@
         <class>reference.model.RequestType</class>
         <!-- Specific Reference module entities for HelpDesk module-->
         <class>reference.model.DemandType</class>
-         <!-- Monitoring module entities -->
-        <class>monitoring.model.UserActivity</class>      
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <!-- Because of it suppose importing from Domino -->
@@ -143,7 +143,7 @@
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
     </persistence-unit>
 
- 	 <persistence-unit name="Monitoring" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="Monitoring" transaction-type="RESOURCE_LOCAL">
         <!-- Obligatory the application module entities -->
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>administrator.model.Language</class>
@@ -160,31 +160,31 @@
         <class>staff.model.Role</class>
         <class>staff.model.OrganizationLabel</class>
         <!-- Common Reference module entities -->
-         <class>reference.model.RegionType</class>
-         <class>reference.model.LocalityType</class>
-         <class>reference.model.Country</class>
-         <class>reference.model.Region</class>
-         <class>reference.model.District</class>
-         <class>reference.model.Locality</class>
-         <class>reference.model.CityDistrict</class>
-         <class>reference.model.Street</class>
-         <class>reference.model.DepartmentType</class>
-         <class>reference.model.Position</class>
-         <class>reference.model.DocumentLanguage</class>
-         <class>reference.model.DocumentType</class>
-         <class>reference.model.ControlType</class>
-         <class>reference.model.Tag</class>
-         <class>reference.model.OrgCategory</class>
-         <class>reference.model.DocumentSubject</class>
-         <class>reference.model.TextTemplate</class>
-         <class>reference.model.DocumentTypeCategory</class>
-         <class>reference.model.Vehicle</class>
-         <class>reference.model.ApprovalRoute</class>
-         <class>reference.model.embedded.RouteBlock</class>
-         <class>reference.model.WorkType</class>
-         <class>reference.model.MeetingRoom</class>
+        <class>reference.model.RegionType</class>
+        <class>reference.model.LocalityType</class>
+        <class>reference.model.Country</class>
+        <class>reference.model.Region</class>
+        <class>reference.model.District</class>
+        <class>reference.model.Locality</class>
+        <class>reference.model.CityDistrict</class>
+        <class>reference.model.Street</class>
+        <class>reference.model.DepartmentType</class>
+        <class>reference.model.Position</class>
+        <class>reference.model.DocumentLanguage</class>
+        <class>reference.model.DocumentType</class>
+        <class>reference.model.ControlType</class>
+        <class>reference.model.Tag</class>
+        <class>reference.model.OrgCategory</class>
+        <class>reference.model.DocumentSubject</class>
+        <class>reference.model.TextTemplate</class>
+        <class>reference.model.DocumentTypeCategory</class>
+        <class>reference.model.Vehicle</class>
+        <class>reference.model.ApprovalRoute</class>
+        <class>reference.model.embedded.RouteBlock</class>
+        <class>reference.model.WorkType</class>
+        <class>reference.model.MeetingRoom</class>
         <!-- Monitoring module entities -->
-       	<class>monitoring.model.UserActivity</class>      
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -200,7 +200,6 @@
         <class>administrator.model.embedded.UserApplication</class>
         <class>administrator.model.Subscription</class>
         <class>administrator.model.embedded.UserSubscription</class>
-
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
@@ -241,8 +240,8 @@
         <class>reference.model.DepartmentType</class>
         <class>reference.model.OrgCategory</class>
         <!-- Monitoring module entities -->
-        <class>monitoring.model.UserActivity</class>      
-        <class>monitoring.model.DocumentActivity</class>        
+        <class>monitoring.model.UserActivity</class>
+        <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
@@ -287,8 +286,8 @@
         <class>projects.model.Comment</class>
         <!-- Workflow module entities -->
         <class>com.exponentus.common.model.embedded.Block</class>
-         <!-- Monitoring module entities --> 
-         <class>monitoring.model.UserActivity</class>     
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -334,8 +333,8 @@
         <class>helpdesk.model.Demand</class>
         <!-- Workflow module entities -->
         <class>com.exponentus.common.model.embedded.Block</class>
-         <!-- Monitoring module entities -->
-         <class>monitoring.model.UserActivity</class>      
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -371,8 +370,8 @@
         <!-- Specific Discussing module entities -->
         <class>discussing.model.Topic</class>
         <class>discussing.model.Comment</class>
-         <!-- Monitoring module entities -->
-        <class>monitoring.model.UserActivity</class>     
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
@@ -382,7 +381,7 @@
         <!-- Obligatory the application module entities -->
         <class>com.exponentus.common.model.embedded.CrossLink</class>
         <class>com.exponentus.common.model.SecureHierarchicalEntity</class>
-        <class>com.exponentus.common.model.BigFile</class>        
+        <class>com.exponentus.common.model.BigFile</class>
         <class>administrator.model.User</class>
         <class>administrator.model.Application</class>
         <class>administrator.model.Language</class>
@@ -433,8 +432,8 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-         <!-- Monitoring module entities -->
-        <class>monitoring.model.UserActivity</class>      
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <!-- Because of suppose importing data from Domino -->
@@ -477,19 +476,16 @@
         <!-- Common module entities -->
         <class>com.exponentus.common.model.Attachment</class>
         <class>com.exponentus.common.model.AttachmentThumbnail</class>
-         <!-- Monitoring module entities -->
-        <class>monitoring.model.UserActivity</class>       
+        <!-- Monitoring module entities -->
+        <class>monitoring.model.UserActivity</class>
         <class>monitoring.model.DocumentActivity</class>
         <class>monitoring.model.Statistic</class>
         <shared-cache-mode>NONE</shared-cache-mode>
     </persistence-unit>
 
-
-    
     <persistence-unit name="Welcome" transaction-type="RESOURCE_LOCAL">
         <class>administrator.model.Language</class>
         <!-- Monitoring module entities -->
-             
         <class>monitoring.model.DocumentActivity</class>
     </persistence-unit>
 </persistence>
