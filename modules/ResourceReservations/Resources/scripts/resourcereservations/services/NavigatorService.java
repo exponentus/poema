@@ -4,7 +4,6 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
-import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import resourcereservations.init.ModuleConst;
 
 import javax.ws.rs.GET;
@@ -21,7 +20,7 @@ public class NavigatorService extends RestProvider {
 
     @GET
     public Response getNav() {
-        Collection<IOutcomeObject> list = new LinkedList<>();
+        Collection<Outline> list = new LinkedList<>();
 
         Outline o = new Outline("", "common");
         o.addEntry(new OutlineEntry("all_applications", "", "fa fa-tasks", "applications", ModuleConst.BASE_URL + "applications"));

@@ -5,7 +5,6 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
-import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import projects.init.ModuleConst;
 
 import javax.ws.rs.GET;
@@ -23,7 +22,7 @@ public class NavigatorService extends RestProvider {
     @GET
     public Response getNav() {
         _Session ses = getSession();
-        Collection<IOutcomeObject> list = new LinkedList<>();
+        Collection<Outline> list = new LinkedList<>();
 
         Outline dbo = new Outline("", "dashboard");
         dbo.addEntry(new OutlineEntry("dashboard", "", "fa fa-dashboard", "dashboard", ModuleConst.BASE_URL + "dashboard"));

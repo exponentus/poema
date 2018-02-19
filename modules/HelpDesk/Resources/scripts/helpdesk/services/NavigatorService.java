@@ -7,7 +7,6 @@ import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
-import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import helpdesk.init.ModuleConst;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
@@ -27,7 +26,7 @@ public class NavigatorService extends RestProvider {
 
     @GET
     public Response getNav() {
-        Collection<IOutcomeObject> list = new LinkedList<>();
+        Collection<Outline> list = new LinkedList<>();
 
         Outline co = new Outline("", "common");
         co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", ModuleConst.BASE_URL + "demands/s/my"));

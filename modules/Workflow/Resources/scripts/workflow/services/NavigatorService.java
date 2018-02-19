@@ -4,7 +4,6 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.outline.Outline;
 import com.exponentus.scripting.outline.OutlineEntry;
-import com.exponentus.scriptprocessor.page.IOutcomeObject;
 import workflow.init.ModuleConst;
 
 import javax.ws.rs.GET;
@@ -21,7 +20,7 @@ public class NavigatorService extends RestProvider {
 
     @GET
     public Response getNav() {
-        Collection<IOutcomeObject> list = new LinkedList<>();
+        Collection<Outline> list = new LinkedList<>();
 
         Outline t = new Outline("", "wf_assignment");
         t.addEntry(new OutlineEntry("assignments_all", "", "fa fa-tasks", "assignments_all", ModuleConst.BASE_URL + "assignments"));
