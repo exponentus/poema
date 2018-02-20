@@ -10,9 +10,9 @@ import com.exponentus.common.model.constants.converter.ApprovalStatusTypeConvert
 import com.exponentus.common.model.converter.ListOfStringConverter;
 import com.exponentus.common.model.converter.TimeLineConverter;
 import com.exponentus.common.model.embedded.*;
-import com.exponentus.common.ui.ILifeCycle;
-import com.exponentus.common.ui.constants.LifeCycleNodeType;
-import com.exponentus.common.ui.embedded.LifeCycleNode;
+import com.exponentus.common.ui.lifecycle.ILifeCycle;
+import com.exponentus.common.ui.lifecycle.LifeCycleNode;
+import com.exponentus.common.ui.lifecycle.LifeCycleNodeType;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
@@ -370,7 +370,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public String getURL() {
         return ModuleConst.BASE_URL + "tasks/" + getId();
     }
-
 
 
     @Override
