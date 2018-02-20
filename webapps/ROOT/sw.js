@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180220';
+const VERSION = '20180220-22';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
@@ -34,6 +34,7 @@ const CACHE_ROUTES = [
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'), fallback: 'API', contentType: 'application/json' },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'), cacheOnly: true },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'), cacheOnly: true },
+    { regExp: new RegExp('^' + self.origin + '/(\\w+)/\\?pwa$'), cacheOnly: true, ignoreSearch: true, contentType: 'text/html' },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/$'), cacheOnly: true, ignoreSearch: true, contentType: 'text/html' },
     { regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest\\.json$'), cacheOnly: true, ignoreSearch: true },
     { path: self.origin + '/sw.js', ignoreSearch: true },
