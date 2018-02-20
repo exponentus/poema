@@ -8,7 +8,7 @@ import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
-import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.common.ui.view.ViewOption;
 import com.exponentus.env.Environment;
 import com.exponentus.scripting._Session;
 import workflow.model.constants.ControlStatusType;
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class ViewOptions {
 
-    public ViewPageOptions getIncomingOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getIncomingOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30");
@@ -53,8 +53,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getOutgoingOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getOutgoingOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-35");
@@ -88,8 +88,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getOfficeMemoOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getOfficeMemoOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-35");
@@ -122,8 +122,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getAssignmentViewOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getAssignmentViewOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30");
@@ -153,8 +153,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getActionableDocumentViewOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getActionableDocumentViewOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-20");

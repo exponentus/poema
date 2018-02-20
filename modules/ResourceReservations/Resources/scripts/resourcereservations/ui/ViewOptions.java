@@ -6,15 +6,15 @@ import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
-import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.common.ui.view.ViewOption;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewOptions {
 
-    public ViewPageOptions getApplicationOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getApplicationOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30");
@@ -46,8 +46,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getApplicationForVehicleOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getApplicationForVehicleOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30");
@@ -84,8 +84,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getApplicationForMeetingRoomOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getApplicationForMeetingRoomOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30");

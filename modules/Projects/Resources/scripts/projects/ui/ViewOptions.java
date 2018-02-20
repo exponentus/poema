@@ -8,7 +8,7 @@ import com.exponentus.common.ui.filter.FilterItem;
 import com.exponentus.common.ui.view.ViewColumn;
 import com.exponentus.common.ui.view.ViewColumnGroup;
 import com.exponentus.common.ui.view.ViewColumnType;
-import com.exponentus.common.ui.view.ViewPageOptions;
+import com.exponentus.common.ui.view.ViewOption;
 import com.exponentus.env.Environment;
 import com.exponentus.scripting._Session;
 import projects.model.constants.ProjectStatusType;
@@ -19,8 +19,8 @@ import java.util.List;
 
 public class ViewOptions {
 
-    public ViewPageOptions getProjectOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getProjectOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
         cg1.setClassName("vw-30 vw-md-50");
@@ -52,8 +52,8 @@ public class ViewOptions {
         return result;
     }
 
-    public ViewPageOptions getTaskViewOptions() {
-        ViewPageOptions result = new ViewPageOptions();
+    public ViewOption getTaskViewOptions() {
+        ViewOption result = new ViewOption();
 
         ViewColumnGroup tcg1 = new ViewColumnGroup();
         tcg1.setClassName("vw-35 vw-md-70");
