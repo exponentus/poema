@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180220-22';
+const VERSION = '20180221';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
@@ -29,20 +29,39 @@ const STATIC_ROUTES = [
  *
  * { path:string, regExp: RegExp, cacheOnly: boolean, ignoreSearch: boolean, fallback: 'API'|'IMAGE' }
  */
-const CACHE_ROUTES = [
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/employees/(.*?)/avatar\\?_thumbnail') },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'), fallback: 'API', contentType: 'application/json' },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'), cacheOnly: true },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'), cacheOnly: true },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/\\?pwa$'), cacheOnly: true, ignoreSearch: true, contentType: 'text/html' },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/$'), cacheOnly: true, ignoreSearch: true, contentType: 'text/html' },
-    { regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest\\.json$'), cacheOnly: true, ignoreSearch: true },
-    { path: self.origin + '/sw.js', ignoreSearch: true },
-    { regExp: new RegExp('^' + self.origin + '/.*?\\.(js|json|gz|css)\\?cache$'), cacheOnly: true },
-    { regExp: new RegExp('^' + self.origin + '/SharedResources/*'), cacheOnly: true },
-    // google fonts
-    { regExp: new RegExp('^https://fonts.googleapis.com/*') }
-];
+const CACHE_ROUTES = [{
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/api/employees/(.*?)/avatar\\?_thumbnail')
+}, {
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/api/*'),
+    fallback: 'API',
+    contentType: 'application/json'
+}, {
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'),
+    cacheOnly: true
+}, {
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'),
+    cacheOnly: true
+}, {
+    // html /Module(/|?|)$
+    regExp: new RegExp('^' + self.origin + '/(\\w+)(/\\?\\?|/|/?\\?lang=[A-Z]{3}|/\\?pwa|$)$'),
+    ignoreSearch: true,
+    contentType: 'text/html'
+}, {
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest\\.json$'),
+    cacheOnly: true,
+    ignoreSearch: true
+}, {
+    path: self.origin + '/sw.js',
+    ignoreSearch: true
+}, {
+    regExp: new RegExp('^' + self.origin + '/.*?\\.(js|json|gz|css)\\?cache$'),
+    cacheOnly: true
+}, {
+    regExp: new RegExp('^' + self.origin + '/SharedResources/*'),
+    cacheOnly: true
+}, {
+    regExp: new RegExp('^https://fonts.googleapis.com/*')
+}];
 
 function apiFallback() {
     return Promise.resolve(new Response(OFFLINE_API_FALLBACK, {
