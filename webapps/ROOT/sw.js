@@ -37,17 +37,18 @@ const CACHE_ROUTES = [{
     contentType: 'application/json'
 }, {
     regExp: new RegExp('^' + self.origin + '/(\\w+)/i18n/(\\w+).json'),
-    cacheOnly: true
+    cacheOnly: true,
+    ignoreSearch: true
 }, {
     regExp: new RegExp('^' + self.origin + '/(\\w+)/img/*'),
     cacheOnly: true
 }, {
-    // html /Module(/|?|)$
+    // html /Module(/|?|?pwa|?lang=)$
     regExp: new RegExp('^' + self.origin + '/(\\w+)(/\\?\\?|/|/?\\?lang=[A-Z]{3}|/\\?pwa|$)$'),
     ignoreSearch: true,
     contentType: 'text/html'
 }, {
-    regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest\\.json$'),
+    regExp: new RegExp('^' + self.origin + '/(\\w+)/manifest.json'),
     cacheOnly: true,
     ignoreSearch: true
 }, {
