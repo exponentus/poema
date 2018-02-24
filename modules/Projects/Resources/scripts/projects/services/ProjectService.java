@@ -295,7 +295,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             ve.addError("finishDate", "date", "field_is_empty");
         }
         if (project.getComment() != null && project.getComment().length() > 2048) {
-            ve.addError("comment", "maxlen_2048", "field_is_too_long");
+            ve.addError("comment", "maxlen:2048", "field_is_too_long");
         }
 
         if (ve.hasError()) {
