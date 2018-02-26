@@ -62,6 +62,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends RestProvider {
@@ -73,7 +75,7 @@ public class TaskService extends RestProvider {
             WebFormData params = getWebFormData();
 
             String[] expandedIds = params.getListOfValuesSilently("expandedIds");
-            List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(Collectors.toList());
+            List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(toList());
             int pageSize = session.getPageSize();
             int pageNum = params.getPage();
             String slug = params.getValueSilently("slug");
@@ -200,10 +202,11 @@ public class TaskService extends RestProvider {
             Outcome outcome = taskDomain.getOutcome(task);
             outcome.setId(id);
             outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
-            outcome.addPayload("employees", emps);
-            outcome.addPayload(new Milestones(session, task.getStages()));
-            outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload(getActionBar(session, taskDomain, task));
+            outcome.addPayload(new Milestones(session, task.getStages()));
+            outcome.addPayload("employees", emps);
+            outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
+            outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
 
             return Response.ok(outcome).build();
         } catch (DAOException | RestServiceException e) {
@@ -525,7 +528,7 @@ public class TaskService extends RestProvider {
                     //actionBar.addAction(new Action(ActionType.CUSTOM_ACTION).id("task_cancel").caption("cancel_task").icon("fa fa-ban"));
                 }
             }
-        } else if(task.getStatus() != StatusType.DRAFT) {
+        } else if (task.getStatus() != StatusType.DRAFT) {
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
                 actionBar.addAction(action.newRequest(task));
             }

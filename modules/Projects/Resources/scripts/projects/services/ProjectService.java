@@ -7,7 +7,6 @@ import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -112,9 +111,10 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             Environment.database.markAsRead(session.getUser(), project);
 
             Outcome outcome = projectDomain.getOutcome(project);
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
-            outcome.addPayload("employees", emps);
+            outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(session, project, projectDomain));
+            outcome.addPayload("employees", emps);
+            outcome.addPayload("projectStatusTypes", ProjectStatusType.getActualValues());
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {

@@ -13,7 +13,6 @@ import com.exponentus.env.Environment;
 import com.exponentus.scripting._Session;
 import projects.model.constants.ProjectStatusType;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,20 +110,7 @@ public class ViewOptions {
 
     public FilterForm getProjectFilter(_Session session) {
         List<FilterItem.Item> items = new ArrayList<>();
-        for (ProjectStatusType type : ProjectStatusType.values()) {
-            if (type == ProjectStatusType.UNKNOWN) {
-                continue;
-            }
-
-            try {
-                Field field = ProjectStatusType.class.getField(type.name());
-                if (field.isAnnotationPresent(Deprecated.class)) {
-                    continue;
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-
+        for (ProjectStatusType type : ProjectStatusType.getActualValues()) {
             String name = Environment.vocabulary.getWord(type.name().toLowerCase(), session.getLang());
             items.add(new FilterItem.Item(type.name(), name, "status-" + type.name().toLowerCase()));
         }
