@@ -2,6 +2,7 @@ package projects.dao;
 
 import administrator.dao.CollationDAO;
 import com.exponentus.common.dao.DAO;
+import com.exponentus.common.dto.converter.ExtConverter;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.common.model.constants.ApprovalStatusType;
 import com.exponentus.common.model.constants.PriorityType;
@@ -222,6 +223,7 @@ public class TaskDAO extends DAO<Task, UUID> {
     public ViewPage<Task> findTaskExecution(Task task) {
         List<Task> list = new ArrayList<>();
         list.add(task);
+        task.setWasRead(ExtConverter.checkReadindState(user,task.getReaders()));
         ViewPage<Task> vp = new ViewPage(list, 1, 1, 1);
 
         EntityManager em = getEntityManagerFactory().createEntityManager();
