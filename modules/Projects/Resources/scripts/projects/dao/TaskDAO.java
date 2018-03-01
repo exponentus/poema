@@ -398,7 +398,8 @@ public class TaskDAO extends DAO<Task, UUID> {
             Predicate condition = null;
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> readers = root.joinMap("readers", JoinType.LEFT);
+                condition = readers.key().in(user.getId());
             }
 
             cq.select(cb.construct(CountStat.class, root.get("status"), cb.count(root.get("status")))).groupBy(root.get("status"));
