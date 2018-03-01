@@ -16,11 +16,9 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
-import com.exponentus.user.IUser;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.ModuleConst;
-import projects.model.Project;
 import projects.model.Task;
 
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ import java.util.List;
 
 //run task prj_all_tasks_reminder
 @Command(name = ModuleConst.CODE + "_all_tasks_reminder", trigger = Trigger.EVERY_NIGHT)
-public class AllTaskReminder extends Do {
+public class AllTasksReminder extends Do {
     private TaskDAO tDao;
 
     @Override
@@ -89,52 +87,4 @@ public class AllTaskReminder extends Do {
         }
 
     }
-
-    public class TaskString {
-        private String title;
-        private String url;
-        private String author;
-        private String regNumber;
-        private Project project;
-        private String assignee;
-
-        public TaskString(Task task, _Session session) throws DAOException {
-            UserDAO userDAO = new UserDAO(session);
-            IUser assigneeUser = userDAO.findById(task.getAssignee());
-            this.title = task.getTitle();
-            this.regNumber = task.getRegNumber();
-            this.url = task.getURL();
-            IUser user = task.getAuthor();
-            if (user != null) {
-                this.author = task.getAuthor().getUserName();
-            }
-            this.assignee = assigneeUser.getUserName();
-            this.project = task.getProject();
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getAuthor() {
-            return author;
-        }
-
-        public String getRegNumber() {
-            return regNumber;
-        }
-
-        public String getAssignee() {
-            return assignee;
-        }
-
-        public Project getProject() {
-            return project;
-        }
-    }
-
 }

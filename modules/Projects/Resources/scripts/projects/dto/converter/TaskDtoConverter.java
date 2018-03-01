@@ -17,6 +17,7 @@ public class TaskDtoConverter extends ExtConverter<Task, Task> {
         Task result = new Task();
 
         result.setId(task.getId());
+        result.setAuthor(task.getAuthor());
         result.setTitle(task.getTitle());
         result.setRegNumber(task.getRegNumber());
         result.setRegDate(task.getRegDate());
