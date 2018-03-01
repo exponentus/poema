@@ -26,6 +26,7 @@ import projects.model.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+//run task prj_all_tasks_reminder
 @Command(name = ModuleConst.CODE + "_all_tasks_reminder", trigger = Trigger.EVERY_NIGHT)
 public class AllTaskReminder extends Do {
     private TaskDAO tDao;
@@ -59,27 +60,26 @@ public class AllTaskReminder extends Do {
                 List<User> allUsers = userDAO.findAll();
                 for (User user : allUsers) {
                     Memo memo = new Memo();
-                    List<TaskString> tasks_ftu = new ArrayList<>();
-                    int tasks_count = 0;
+                    List<TaskString> tasksFtu = new ArrayList<>();
+                    int tasksCount = 0;
                     for (Task task : tasks) {
                         if (user.getId().equals(task.getAssignee())) {
-                            tasks_ftu.add(new TaskString(task, session));
-                            tasks_count++;
+                            tasksFtu.add(new TaskString(task, session));
+                            tasksCount++;
                         }
                     }
-                    if (tasks_count > 0) {
-                        memo.addVar("tasks", tasks_ftu);
+                    if (tasksCount > 0) {
+                        memo.addVar("tasks", tasksFtu);
                         memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
-                        IUser i_user = userDAO.findById(user.getId());
-                        LanguageCode user_lang = i_user.getDefaultLang();
-                        memo.addVar("lang", "&lang=" + user_lang);
+                        LanguageCode userLang = userDAO.findById(user.getId()).getDefaultLang();
+                        memo.addVar("lang", "&lang=" + userLang);
                         memo.addVar("user", user.getUserName());
 
-                        String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_all", user_lang);
+                        String body = getCurrentAppEnv().templates.getTemplate(MessagingType.EMAIL, "task_all", userLang);
                         List<String> recipients = new ArrayList<>();
                         recipients.add(user.getEmail());
                         MailAgent ma = new MailAgent("task_all");
-                        ma.sendMessage(recipients, getCurrentAppEnv().getVocabulary().getWord("notify_about_tasks", user_lang),
+                        ma.sendMessage(recipients, getCurrentAppEnv().getVocabulary().getWord("notify_about_tasks", userLang),
                                 memo.getBody(body));
                     }
                 }
@@ -104,7 +104,10 @@ public class AllTaskReminder extends Do {
             this.title = task.getTitle();
             this.regNumber = task.getRegNumber();
             this.url = task.getURL();
-            this.author = task.getAuthor().getUserName();
+            IUser user = task.getAuthor();
+            if (user != null) {
+                this.author = task.getAuthor().getUserName();
+            }
             this.assignee = assigneeUser.getUserName();
             this.project = task.getProject();
         }
