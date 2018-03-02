@@ -516,4 +516,8 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         lc.setUrl(getURL());
         return lc;
     }
+
+    public boolean isWasRead() {
+        return wasRead;
+    }
 }

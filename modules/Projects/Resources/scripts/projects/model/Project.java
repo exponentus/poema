@@ -19,7 +19,7 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "prj__projects")
+@Table(name = ModuleConst.CODE + "__projects")
 public class Project extends EmbeddedSecureHierarchicalEntity {
 
     @JsonIgnore
@@ -70,7 +70,7 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
     }
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "prj__project_attachments",
+    @JoinTable(name = ModuleConst.CODE + "__project_attachments",
             joinColumns = {@JoinColumn(name = "project_id")},
             inverseJoinColumns = {@JoinColumn(name = "attachment_id")},
             indexes = {@Index(columnList = "project_id, attachment_id")},
@@ -189,8 +189,8 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
         return ModuleConst.BASE_URL + "projects/" + getId();
     }
 
-    @Override
-    public String getTitle() {
-        return name;
+
+    public boolean isWasRead() {
+        return wasRead;
     }
 }

@@ -223,7 +223,7 @@ public class TaskDAO extends DAO<Task, UUID> {
     public ViewPage<Task> findTaskExecution(Task task) {
         List<Task> list = new ArrayList<>();
         list.add(task);
-        task.setWasRead(ExtConverter.checkReadindState(user,task.getReaders()));
+        task.setWasRead(ExtConverter.checkReadingState(user,task.getReaders()));
         ViewPage<Task> vp = new ViewPage(list, 1, 1, 1);
 
         EntityManager em = getEntityManagerFactory().createEntityManager();

@@ -28,7 +28,7 @@ public class TaskDtoConverter extends ExtConverter<Task, Task> {
         result.setAssignee(task.getAssignee());
         result.setStartDate(task.getStartDate());
         result.setDueDate(task.getDueDate());
-        result.setWasRead(checkReadindState(task.getReaders()));
+        result.setWasRead(checkReadingState(task.getReaders()));
 
         if (task.getProject() != null) {
             Project project = new Project();
