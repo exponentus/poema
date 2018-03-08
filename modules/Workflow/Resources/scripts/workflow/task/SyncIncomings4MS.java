@@ -8,7 +8,7 @@ import com.exponentus.dataengine.IDBConnectionPool;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.dataengine.jdbc.DatabaseUtil;
 import com.exponentus.legacy.ConvertorEnvConst;
-import com.exponentus.legacy.forms.Import4MS;
+import com.exponentus.legacy.forms.ImportNB2;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.stream.TempFile;
 import com.exponentus.scheduler.tasks.TempFileCleaner;
@@ -41,7 +41,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 @Command(name = "import_in_4ms")
-public class SyncIncomings4MS extends Import4MS {
+public class SyncIncomings4MS extends ImportNB2 {
 	private static final String TMP_FIELD_NAME = "incoming_tmp_file";
 
 	@Override
