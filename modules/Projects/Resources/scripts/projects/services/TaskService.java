@@ -283,7 +283,7 @@ public class TaskService extends RestProvider {
                     new Messages(getAppEnv()).sendToModerate(task);
                 } else {
                     taskDomain.superUpdate(task);
-                    //new Messages(getAppEnv()).sendToAssignee(task);
+                    new Messages(getAppEnv()).sendToAssignee(task);
                     taskDomain.postCalendarEvent(task);
                 }
             }
