@@ -453,7 +453,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 t.begin();
                 entity = em.merge(entity);
                 em.remove(entity);
-                if (Environment.integrationEnable) {
+                if (Environment.integrationHubEnable) {
                     CollationDAO collationDAO = new CollationDAO(ses);
                     try {
                         collationDAO.delete(entity.getId());

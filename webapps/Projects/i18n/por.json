@@ -98,6 +98,7 @@
   "income" : null,
   "outgoing" : "outgoing",
   "add_approver" : "add_approver",
+  "address_reference_data" : "Diretórios de localização",
   "route_classification" : "route_classification",
   "percent_ifo_vrp" : null,
   "roles" : null,

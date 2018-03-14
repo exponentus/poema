@@ -98,6 +98,7 @@
   "income" : "Доход",
   "outgoing" : "Исходящий",
   "add_approver" : "Добавить согласователя",
+  "address_reference_data" : "Справочники  местоположения",
   "route_classification" : "Классификация маршрута",
   "percent_ifo_vrp" : "ИФО ВРП в %",
   "roles" : "Роли",
