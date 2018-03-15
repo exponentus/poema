@@ -1,0 +1,117 @@
+<form class="form" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
+    <header class="content-header">
+        <div class="doc-head">
+            <div class="doc-head__row">
+                <div class="doc-head__row_item">
+                    <div class="doc-head__title">{{'office_memo' | translate}}</div>
+                </div>
+                <div class="doc-head__row_item">
+                    <div class="doc-head__reg-number" *ngIf="model.regNumber">{{model.regNumber}}</div>
+                    <div class="status-{{model.status | lowercase}}">{{model.status | lowercase | translate}}</div>
+                </div>
+                <div class="doc-head__row_item" *ngIf="model.appliedRegDate">
+                    <div class="doc-head__reg-date">{{model.appliedRegDate}}</div>
+                </div>
+                <div class="doc-head__row_item right">
+                    <div class="doc-version">
+                        <span class="doc-version-label">{{'version' | translate}}</span>
+                        <span class="doc-version-text">{{model.version}}</span>
+                    </div>
+                    <div class="doc-result">{{model.result | lowercase | translate}}</div>
+                </div>
+            </div>
+            <div class="doc-head__row">
+                <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.title"
+                    autocomplete="off" required name="title" maxlength="140" placeholder="{{'title' | translate}}"
+                    [(ngModel)]="model.title">
+                <div *ngIf="!isEditable" class="doc-head__input">{{model.title}}</div>
+            </div>
+        </div>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'applied_author' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.appliedAuthor">
+                            <nb-select class="span8" name="appliedAuthor" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.appliedAuthor"></nb-select>
+                            <error-message [error]="errors.appliedAuthor"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'recipient' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.recipient">
+                            <nb-select class="span8" name="recipient" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.recipient"></nb-select>
+                            <error-message [error]="errors.recipient"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md" [class.has-error]="errors.body">
+                        <div class="control-label">
+                            {{'content' | translate}}
+                        </div>
+                        <div class="controls">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.body = $event"></markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
+                            <nb-text-translate [text]="model.body"></nb-text-translate>
+                            <!-- <wf-approval-body-diff [model]="model"></wf-approval-body-diff> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="fieldset">
+                    <div class="legend">
+                        {{'approvals' | translate}}
+                    </div>
+                    <div class="form-group">
+                        <div class="controls">
+                            <wf-approval [approval]="model" [editable]="isEditable && model.status !== 'FINISHED'"></wf-approval>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab tabTitle="{{'attachments' | translate}}" icon="fa fa-paperclip">
+                <nb-attachments [model]="model" [calcHash]="true" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+            </tab>
+            <tab tabTitle="{{'related_assignments' | translate}}" icon="fa fa-align-left" *ngIf="!isNew">
+                <wf-document-hierarchy [model]="model" [disabledIds]="[model.id]"></wf-document-hierarchy>
+            </tab>
+            <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-observers-input [model]="model" [disabled]="!isEditable"></nb-observers-input>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="acl">
+                <nb-acl [acl]="acl"></nb-acl>
+            </tab>
+            <tab tabTitle="{{'digital_signature' | translate}}" *ngIf="model.signature">
+                <p class="signature-container">{{model.signature}}</p>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="model.author">
+            <span>{{'author' | translate}}</span>
+            <span>{{model.author.name}}</span>
+            <span>{{model.regDate}}</span>
+        </div>
+    </footer>
+</form>

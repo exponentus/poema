@@ -1,0 +1,28 @@
+.form .content-footer {
+    background: #f5f5f5;
+    margin-top: 1em;
+}
+
+.record-author {
+    color: #666;
+    font-size: .9em;
+    padding: 8px;
+}
+
+.record-author .employee-input,
+.record-author .input {
+    border: 0;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+.signature-container {
+    padding: 6px;
+    border: 1px solid #ddd;
+    margin: 16px;
+    white-space: normal;
+    word-break: break-all;
+    background-color: #fbfbfb;
+}

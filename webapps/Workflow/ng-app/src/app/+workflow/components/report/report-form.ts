@@ -1,0 +1,47 @@
+import { Component } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+
+import { NotificationService } from '@nb/core';
+import { NbModalService } from '@nb/core';
+import { IApiOutcome, IAction } from '@nb/core';
+import { AppService, ActionService } from '@nb/core';
+import { AbstractFormPage } from '@nb/core';
+import { STAFF_URL } from '@nb/core';
+import { ReportService } from '../../services';
+import { Report, Employee } from '../../models';
+import { WF_URL } from '../../constants';
+
+@Component({
+    selector: 'report-form',
+    templateUrl: './report-form.html',
+    host: {
+        '[class.component]': 'true',
+        '[class.load]': 'loading'
+    },
+    providers: [ReportService]
+})
+export class ReportFormComponent extends AbstractFormPage<Report> {
+
+    STAFF_URL = STAFF_URL;
+    WF_URL = WF_URL;
+
+    constructor(
+        public route: ActivatedRoute,
+        public router: Router,
+        public ngxTranslate: TranslateService,
+        public notifyService: NotificationService,
+        public nbModalService: NbModalService,
+        public appService: AppService,
+        public actionService: ActionService,
+        public entityService: ReportService
+    ) {
+        super(route, router, ngxTranslate, notifyService, nbModalService, appService, actionService, entityService);
+    }
+
+    // @Override
+    loadDataSuccess(data: IApiOutcome) {
+        super.loadDataSuccess(data);
+        this.model.author = data.payload.employees[this.model.authorId];
+    }
+}
