@@ -5,15 +5,15 @@
   "license": "LOF",
   "description": "nb front-end",
   "scripts": {
-    "clean:js": "rimraf ../webapps/SharedResources/ng-app",
+    "clean:js": "rimraf ../assets/dist",
     "clean:aot": "rimraf compiled",
     "build": "npm run clean:js && webpack --config config/webpack.config.js",
     "build:p": "npm run clean:js && webpack --config config/webpack.config.js --progress --profile --colors --display-error-details --display-cached",
     "build:w": "npm run clean:js && webpack --config config/webpack.config.js --watch --progress --profile --colors --display-error-details --display-cached",
     "build:aot:p": "npm run clean:js && npm run clean:aot && webpack --config config/webpack.config.js",
     "lint": "tslint ./src/**/*.ts{,x}",
-    "explorer": "source-map-explorer ../webapps/SharedResources/ng-app/app.js ../webapps/SharedResources/ng-app/app.js.map",
-    "explorer:vendor": "source-map-explorer ../webapps/SharedResources/ng-app/vendor.js ../webapps/SharedResources/ng-app/vendor.js.map"
+    "explorer": "source-map-explorer ../assets/dist/app.js ../assets/dist/app.js.map",
+    "explorer:vendor": "source-map-explorer ../assets/dist/vendor.js ../assets/dist/vendor.js.map"
   },
   "dependencies": {
     "@angular/animations": "^5.2.9",
@@ -25,8 +25,8 @@
     "@angular/platform-browser": "^5.2.9",
     "@angular/platform-browser-dynamic": "^5.2.9",
     "@angular/router": "^5.2.9",
-    "@ngx-translate/core": "^9.1.1",
     "@nb/core": "git+ssh://git@git.semantyca.com:22373/b2b/nb-ng.git",
+    "@ngx-translate/core": "^9.1.1",
     "angular-calendar": "^0.23.6",
     "chart.js": "^2.7.2",
     "core-js": "^2.5.3",
