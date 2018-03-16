@@ -1,0 +1,92 @@
+<div class="content-header">
+    <h1 class="header-title">
+        <span>{{'dashboard' | translate}}</span>
+    </h1>
+</div>
+<div class="content-actions">
+    <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+</div>
+<div class="content-body">
+    <div class="count-status">
+        <div class="count-status-item status-{{st.title | lowercase}}" *ngFor="let st of data.taskStatusStat">
+            <h1>{{st.title | lowercase | translate}}</h1>
+            <div>{{st.count}}</div>
+        </div>
+    </div>
+    <div class="flex-horizontal" *ngIf="data.statAssigneeState || data.statAuthorState">
+        <div class="card stat-panel" *ngIf="data.statAssigneeState">
+            <div class="card-header stat-header">{{'label_prj_dashboard_stat_assignee_state' | translate}}</div>
+            <div class="card-body stat-chart">
+                <nb-chart style="margin:0 auto;min-height:300px;" [config]="data.statAssigneeState"></nb-chart>
+            </div>
+        </div>
+        <div class="card stat-panel" *ngIf="data.statAuthorState">
+            <div class="card-header stat-header">{{'label_prj_dashboard_stat_author_state' | translate}}</div>
+            <div class="card-body stat-chart">
+                <nb-chart style="margin:0 auto;min-height:300px;" [config]="data.statAuthorState"></nb-chart>
+            </div>
+        </div>
+    </div>
+    <report-wizard *ngIf="showReportModal" (cancel)="showReportModal = false"></report-wizard>
+</div>
+<!--
+<div class="content-header">
+    <h1 class="header-title">
+        <span>{{'dashboard' | translate}}</span>
+    </h1>
+</div>
+<div class="content-body">
+    <tabs>
+        <tab tabTitle="{{'charts' | translate}}">
+            <div class="count-status">
+                <div class="count-status-item status-{{st.title | lowercase}}" *ngFor="let st of data.taskStatusStat">
+                    <h1>{{st.title | lowercase | translate}}</h1>
+                    <small>{{st.count}}</small>
+                </div>
+            </div>
+            <div class="flex-horizontal" *ngIf="data.statAssigneeState || data.statAuthorState">
+                <div class="card stat-panel" *ngIf="data.statAssigneeState">
+                    <div class="card-header stat-header">{{'label_prj_dashboard_stat_assignee_state' | translate}}</div>
+                    <div class="card-body stat-chart">
+                        <nb-chart style="margin:0 auto;min-height:300px;" [config]="data.statAssigneeState"></nb-chart>
+                    </div>
+                </div>
+                <div class="card stat-panel" *ngIf="data.statAuthorState">
+                    <div class="card-header stat-header">{{'label_prj_dashboard_stat_author_state' | translate}}</div>
+                    <div class="card-body stat-chart">
+                        <nb-chart style="margin:0 auto;min-height:300px;" [config]="data.statAuthorState"></nb-chart>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-horizontal">
+                <div class="task-list-wrap">
+                    <div *ngIf="data.tasksDueToday && data.tasksDueToday.count">
+                        <div class="list-header today">
+                            <span>{{'tasks_due_today' | translate}}</span>
+                            <span>({{data.tasksDueToday.count}})</span>
+                        </div>
+                        <task-list [tasks]="data.tasksDueToday.result"></task-list>
+                    </div>
+                    <div *ngIf="data.tasksExpired && data.tasksExpired.count">
+                        <div class="list-header expired">
+                            <span>{{'tasks_expired' | translate}}</span>
+                            <span>({{data.tasksExpired.count}})</span>
+                        </div>
+                        <task-list [tasks]="data.tasksExpired.result"></task-list>
+                    </div>
+                    <div *ngIf="data.tasksIn7Day && data.tasksIn7Day.count">
+                        <div class="list-header">
+                            <span>{{'tasks_in_7day' | translate}}</span>
+                            <span>({{data.tasksIn7Day.count}})</span>
+                        </div>
+                        <task-list [tasks]="data.tasksIn7Day.result"></task-list>
+                    </div>
+                </div>
+            </div>
+        </tab>
+        <tab tabTitle="{{'reports' | translate}}">
+            <report-wizard></report-wizard>
+        </tab>
+    </tabs>
+</div>
+-->

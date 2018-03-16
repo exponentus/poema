@@ -1,0 +1,145 @@
+<form class="form" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
+    <header class="content-header">
+        <div class="task-head">
+            <ul class="task-head-inner">
+                <li>
+                    <div class="task-head-item content-title">{{title | translate}}</div>
+                </li>
+            </ul>
+        </div>
+        <div class="title-input-wrapper">
+            <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.name" autocomplete="off"
+                required name="name" maxlength="140" placeholder="{{'name' | translate}}"
+                [(ngModel)]="model.name">
+            <div *ngIf="!isEditable" class="doc-head__input">{{model.name}}</div>
+        </div>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'customer' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.customer">
+                            <nb-select class="span8" name="customer" [disabled]="!isEditable" [searchable]="true"
+                                [url]="STAFF_URL.API_ORGANIZATIONS" [(ngModel)]="model.customer">
+                            </nb-select>
+                            <error-message [error]="errors.customer"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'representatives' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.representatives">
+                            <nb-select class="span8" name="representatives" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [allowClear]="true" [searchable]="true" [multiple]="true"
+                                [(ngModel)]="model.representatives">
+                            </nb-select>
+                            <error-message [error]="errors.representatives"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'manager' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.manager">
+                            <nb-select class="span8" name="manager" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.manager">
+                            </nb-select>
+                            <error-message [error]="errors.manager"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'programmer' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.programmer">
+                            <nb-select class="span8" name="programmer" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.programmer">
+                            </nb-select>
+                            <error-message [error]="errors.programmer"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tester' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.tester">
+                            <nb-select class="span8" name="tester" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.tester">
+                            </nb-select>
+                            <error-message [error]="errors.tester"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-select class="span8" name="observers" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [allowClear]="true" [searchable]="true" [multiple]="true"
+                                [(ngModel)]="model.observers">
+                            </nb-select>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'status' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.status">
+                            <nb-select class="span3" name="status" classKey="сls" targetValue="id" [items]="projectStatusTypes"
+                                [(ngModel)]="model.status" [disabled]="!isEditable"></nb-select>
+                            <error-message [error]="errors.status"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'finish_date' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.finishDate">
+                            <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="finishDate"
+                                [(ngModel)]="model.finishDate">
+                            <div [ngSwitch]="finishDateDurationFromNow" class="input-placeholder">
+                                <span *ngSwitchCase="'today'">{{ 'today' | translate }}</span>
+                                <span *ngSwitchCase="'tomorrow'">{{ 'tomorrow' | translate }}</span>
+                                <span *ngSwitchDefault>{{ finishDateDurationFromNow | nbI18nPlural:'count_days' | translate:{count: finishDateDurationFromNow} }}</span>
+                            </div>
+                            <error-message [error]="errors.finishDate"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md">
+                        <div class="control-label">
+                            {{'comment' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.comment">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.comment" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.comment = $event;">
+                            </markdown-editor>
+                            <error-message [error]="errors.comment"></error-message>
+                            <nb-text-translate [text]="model.comment"></nb-text-translate>
+                        </div>
+                    </div>
+                </div>
+                <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+            </tab>
+            <tab tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="acl">
+                <nb-acl [acl]="acl"></nb-acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="model.author">
+            <span>{{'author' | translate}}</span>
+            <span>{{model.author.name}}</span>
+            <span>{{model.regDate}}</span>
+        </div>
+    </footer>
+</form>

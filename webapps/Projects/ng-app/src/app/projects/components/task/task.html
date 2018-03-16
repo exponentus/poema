@@ -1,0 +1,228 @@
+<form class="form" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
+    <header class="content-header">
+        <div class="task-head">
+            <ul class="task-head-inner">
+                <li>
+                    <div class="task-head-item content-title">{{title | translate}}</div>
+                </li>
+                <li *ngIf="model.regNumber">
+                    <div class="task-head-item">
+                        <label class="task-head-item-label">№</label>
+                        <div class="doc-head__reg-number">{{model.regNumber}}</div>
+                    </div>
+                </li>
+                <li>
+                    <div class="task-head-item">
+                        <label class="task-head-item-label">{{'status' | translate}}</label>
+                        <div class="status-{{model.status | lowercase}}">
+                            {{model.status | lowercase | translate}}
+                        </div>
+                    </div>
+                </li>
+                <li *ngIf="model.approvalStatus === 'PENDING'">
+                    <div class="task-head-item">
+                        <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
+                    </div>
+                </li>
+            </ul>
+            <time-line *ngIf="milestones" [timeLines]="milestones.stages"></time-line>
+        </div>
+        <a [routerLink]="[model.parent.url]" class="parent-task-url" *ngIf="model.parent">{{model.parent.title}}</a>
+        <div class="title-input-wrapper">
+            <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.title"
+                autocomplete="off" required name="title" maxlength="140" placeholder="{{'task_title' | translate}}"
+                [(ngModel)]="model.title">
+            <div *ngIf="!isEditable" class="doc-head__input">{{model.title}}</div>
+        </div>
+    </header>
+    <section class="content-body">
+        <section class="task-cancel-info" *ngIf="model.status == 'CANCELLED' && model.cancellationComment">
+            <span>{{'cancel_reason' | translate}}:&nbsp;</span>
+            <span>{{model.cancellationComment}}</span>
+        </section>
+        <section class="task-cancel-info" *ngIf="model.approvalResult === 'REJECTED'">
+            <span>{{'rejected_by_moderator' | translate}}:&nbsp;</span>
+            <span *ngIf="model.blocks && model.blocks.length && model.blocks[0].approvers">
+                {{model.blocks[0].approvers[0].decisionComment}}
+            </span>
+        </section>
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'project' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.project">
+                            <nb-select class="span8" name="project" [disabled]="!isEditable || isSubtask || isInitiativeTask"
+                                [searchable]="true" [url]="PROJECTS_URL.API_PROJECTS"
+                                [(ngModel)]="model.project">
+                            </nb-select>
+                            <error-message [error]="errors.project"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.initiative">
+                        <div class="control-label">
+                            {{'demand' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.demand">
+                            <nb-select class="span8" name="demand" textKey="title" [disabled]="true" [searchable]="true"
+                                [url]="PROJECTS_URL.API_DEMANDS" [(ngModel)]="model.demand">
+                            </nb-select>
+                            <error-message [error]="errors.demand"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!isSubtask">
+                        <div class="control-label">
+                            {{'task_type' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.taskType">
+                            <nb-select class="span8" name="taskType" [disabled]="!isEditable" [searchable]="true"
+                                [url]="REFERENCE_URL.API_TASK_TYPES" [(ngModel)]="model.taskType">
+                            </nb-select>
+                            <error-message [error]="errors.taskType"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'priority' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.priority">
+                            <nb-select class="span3" name="priority" classKey="сls" targetValue="id" [items]="priorityTypes"
+                                [(ngModel)]="model.priority" [disabled]="!isEditable"></nb-select>
+                            <error-message [error]="errors.priority"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!model.initiative">
+                        <div class="control-label">
+                            {{'assignee_user' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.assignee">
+                            <nb-select class="employee-input span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES"
+                                [disabled]="!isEditable" [searchable]="true" [(ngModel)]="model.assignee">
+                            </nb-select>
+                            <error-message [error]="errors.assignee"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'start_date' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.startDate">
+                            <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="startDate"
+                                [(ngModel)]="model.startDate">
+                            <error-message [error]="errors.startDate"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'due_date' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.dueDate">
+                            <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="dueDate"
+                                [(ngModel)]="model.dueDate">
+                            <div class="input-placeholder" *ngIf="model.startDate && model.dueDate">
+                                {{ startDueDateDuration | nbI18nPlural:'count_days' | translate:{count:startDueDateDuration}
+                                }}
+                            </div>
+                            <!-- <div [ngSwitch]="startDueDateDuration" class="input-placeholder">
+                                <span *ngSwitchCase="'today'">{{ 'today' | translate }}</span>
+                                <span *ngSwitchCase="'tomorrow'">{{ 'tomorrow' | translate }}</span>
+                                <span *ngSwitchDefault>{{ startDueDateDuration | nbI18nPlural:'in_days' | translate:{count: startDueDateDuration} }}</span>
+                            </div> -->
+                            <error-message [error]="errors.dueDate"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tags' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.tags">
+                            <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
+                                [allowClear]="true" [multiple]="true" classKey="tag"
+                                [styler]="tagStylerFn" [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_task'"
+                                [(ngModel)]="model.tags">
+                            </nb-select>
+                            <error-message [error]="errors.tags"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label"></div>
+                        <div class="controls">
+                            <label class="input" [class.disabled]="!isEditable">
+                                <input type="checkbox" name="customerObservation" value="1" [disabled]="!isEditable"
+                                    [(ngModel)]="model.customerObservation">
+                                <span>{{'publish_to_customer' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.body">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.body = $event">
+                            </markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
+                            <nb-text-translate [text]="model.body"></nb-text-translate>
+                        </div>
+                    </div>
+                </div>
+                <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+            </tab>
+            <tab *ngIf="!model.isNew" tabTitle="{{'related_documents' | translate}}" icon="fa fa-align-left">
+                <nb-page-view [embedded]="true" [url]="getEmbeddedViewUrl()"></nb-page-view>
+            </tab>
+            <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
+                <div class="fieldset">
+                    <div class="form-group vertical-md">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-select class="span8 span-sm-full" name="observers" [url]="STAFF_URL.API_EMPLOYEES"
+                                [disabled]="!isEditable" [allowClear]="true" [searchable]="true"
+                                [multiple]="true" [(ngModel)]="model.observers">
+                            </nb-select>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab *ngIf="!model.isNew && model.blocks" tabTitle="{{'moderation' | translate}}"
+                icon="fa fa-legal">
+                <div class="fieldset">
+                    <div class="controls">
+                        <task-approval [blocks]="model.blocks"></task-approval>
+                    </div>
+                </div>
+            </tab>
+            <tab *ngIf="!model.isNew" tabTitle="{{'additional_info' | translate}}">
+                <div *ngIf="acl" class="fieldset">
+                    <div class="legend">{{'acl_tab_title' | translate}}</div>
+                    <div class="controls">
+                        <nb-acl [acl]="acl"></nb-acl>
+                    </div>
+                </div>
+                <div *ngIf="activity" class="fieldset">
+                    <div class="legend">{{'activity' | translate}}</div>
+                    <div class="controls">
+                        <nb-activity [activities]="activity"></nb-activity>
+                    </div>
+                </div>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer">
+        <div class="record-author" *ngIf="model.author">
+            <span>{{'author' | translate}}</span>
+            <span>{{model.author.name}}</span>
+            <span>{{model.regDate}}</span>
+        </div>
+    </footer>
+</form>

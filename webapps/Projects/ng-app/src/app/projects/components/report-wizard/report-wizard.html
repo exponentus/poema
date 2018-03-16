@@ -1,0 +1,60 @@
+<div class="nb-modal-container">
+    <div class="nb-modal nb-modal-md">
+        <div class="nb-modal__header">{{'report' | translate}}</div>
+        <button class="nb-modal__dismiss_button" (click)="cancel.emit()">×</button>
+        <div class="nb-modal__body">
+            <div class="fieldset">
+                <div class="form-group vertical-md">
+                    <div class="control-label">
+                        {{'report_type' | translate}}
+                    </div>
+                    <div class="controls">
+                        <nb-select name="reportProfile" [url]="DATA_EXPORT_URL.API_REPORT_PROFILES" [allowClear]="true" [searchable]="true" [(ngModel)]="model.reportProfile">
+                        </nb-select>
+                        <div class="form-text text-muted" *ngIf="(model.reportProfile ? model.reportProfile.localizedDescr : null) | objectHasKeys">
+                            {{model.reportProfile | localizedName:'localizedDescr'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group vertical-md">
+                    <div class="control-label">
+                        {{'output_format' | translate}}
+                    </div>
+                    <div class="controls">
+                        <nb-select name="outputFormat" targetValue="id" [items]="data.exportFormatTypes" [(ngModel)]="model.outputFormat"></nb-select>
+                    </div>
+                </div>
+                <div class="form-group vertical-md">
+                    <div class="control-label">
+                        {{'start_from' | translate}}
+                    </div>
+                    <div class="controls">
+                        <input datepicker class="span2 span-sm-full" name="startFrom" [(ngModel)]="model.startFrom">
+                    </div>
+                </div>
+                <div class="form-group vertical-md">
+                    <div class="control-label">
+                        {{'end_until' | translate}}
+                    </div>
+                    <div class="controls">
+                        <input datepicker class="span2 span-sm-full" name="endUntil" [(ngModel)]="model.endUntil">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nb-modal__footer">
+            <div class="nb-modal__buttons">
+                <div class="nb-modal__buttons_group left">
+                    <button type="button" class="btn nb-modal__button" (click)="cancel.emit()">
+                        <span class="btn-text">{{'cancel' | translate}}</span>
+                    </button>
+                </div>
+                <div class="nb-modal__buttons_group right">
+                    <button type="button" class="btn nb-modal__button btn-primary" [disabled]="!isValid" (click)="generateReport()">
+                        <span class="btn-text">{{'to_form' | translate}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

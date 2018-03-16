@@ -1,0 +1,36 @@
+.approval {
+    /*padding: 8px;*/
+}
+
+.approval__actions {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.approval__block.is-new {
+    border-left: 1px solid blue;
+    margin-left: -1px;
+}
+
+.approval__block.is-current {
+    background: #fefefe;
+}
+
+.approval__block.is-rejected {
+    /*pointer-events: none;*/
+    cursor: not-allowed;
+    opacity: .7;
+    text-decoration: line-through;
+}
+
+.approval__block-approver {
+    display: inline-block;
+}
+
+.approval__block-approver.is-current {
+    font-weight: bold;
+}
+
+.b-toolbar__btn {
+    margin: 0;
+}

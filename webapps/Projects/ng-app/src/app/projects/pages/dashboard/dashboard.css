@@ -1,0 +1,93 @@
+.flex-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 1% 1%;
+}
+
+.stat-panel {
+    margin: 16px;
+    max-width: 100%;
+    width: 100%;
+}
+
+/* @media ( min-width: 1024px) {
+    .stat-panel {
+        width: calc(50% - 32px);
+    }
+} */
+
+.stat-header {}
+
+.stat-chart {}
+
+.task-list-wrap {
+    margin: 1%;
+    width: 100%;
+}
+
+.list-header {
+    background-color: #e5e5e5;
+    font-size: 16px;
+    padding: 6px 8px;
+}
+
+.list-header.today {
+    background-color: #FF9800;
+    color: white;
+}
+
+.list-header.expired {
+    background-color: rgb(232, 58, 58);
+    color: white;
+}
+
+:host /deep/ .task-list {
+    border: 1px solid #ddd;
+    border-top: 0;
+    font-size: 16px;
+}
+
+:host /deep/ .task-list li {
+    border-bottom: 1px solid #f3f3f3;
+    padding: 12px;
+}
+
+:host /deep/ .task-list .task-reg-number {
+    border: 1px solid #e5e5e5;
+    margin: 0;
+}
+
+:host /deep/ .task-list .priority {
+    border: 1px solid transparent;
+    padding: 0px 3px;
+}
+
+:host /deep/ .task-list a {
+    margin: 0 3px;
+}
+
+.count-status {
+    overflow: auto;
+    padding: 1% 2%;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.count-status-item {
+    border-radius: .25rem;
+    margin: 10px 1%;
+    padding: 10px 2%;
+    text-align: center;
+}
+
+.count-status-item h1 {
+    font-size: 1.2em;
+    line-height: 1;
+    margin: 0 0 4px;
+    padding: 0;
+}
+
+.count-status-item div {
+    font-size: 2.2em;
+    order: -1;
+}

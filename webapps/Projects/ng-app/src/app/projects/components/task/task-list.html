@@ -1,0 +1,7 @@
+<ul class="list task-list">
+    <li *ngFor="let task of tasks">
+        <span class="task-reg-number">{{task.regNumber}}</span>
+        <a [routerLink]="[task.url]">{{task.title}}</a>
+        <span class="priority priority-{{task.priority | lowercase}}">{{task.priority | lowercase | translate}}</span>
+    </li>
+</ul>

@@ -1,0 +1,9 @@
+:host-context() {
+    display: block;
+    width: 100%;
+}
+
+:host-context() /deep/ .form-group.vertical > .control-label {
+    background: transparent;
+    padding: 6px 0;
+}

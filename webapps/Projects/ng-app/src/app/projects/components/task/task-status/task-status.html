@@ -1,0 +1,10 @@
+<div dropdown>
+    <div dropdown-toggle class="no-arrow">
+        <div class="status-{{status | lowercase}}">
+            {{status | lowercase | translate}}
+        </div>
+    </div>
+    <div dropdown-menu>
+        <time-line [timeLines]="history"></time-line>
+    </div>
+</div>
