@@ -4,8 +4,7 @@ import { RouterModule } from '@angular/router';
 import {
     NbCommonModule,
     ApprovalModule,
-    LifeCycleModule,
-    TextDiffModule
+    LifeCycleModule
 } from '@nb/core';
 
 import { WORKFLOW_ROUTES } from './workflow.routes';
@@ -41,8 +40,7 @@ import { ValueObjectService } from './services';
         NbCommonModule,
         RouterModule.forChild(WORKFLOW_ROUTES),
         ApprovalModule,
-        LifeCycleModule,
-        TextDiffModule
+        LifeCycleModule
     ],
     providers: [
         ValueObjectService

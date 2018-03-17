@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { NbCommonModule, TimeLineModule } from '@nb/core';
+import { NbCommonModule, TimeLineModule, NBChartModule } from '@nb/core';
 
 import { PROJECTS_ROUTES } from './projects.routes';
 import {
@@ -39,7 +39,8 @@ import {
     imports: [
         NbCommonModule,
         RouterModule.forChild(PROJECTS_ROUTES),
-        TimeLineModule
+        TimeLineModule,
+        NBChartModule
     ],
     providers: [
         DashboardService,
