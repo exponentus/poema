@@ -25,7 +25,68 @@
         </div>
     </header>
     <section class="content-body">
-        <schema-form [fsId]="fsId" [(model)]="model" [errors]="errors" [schema]="formSchema"></schema-form>
+        <div class="fieldset">
+            <div class="form-group">
+                <div class="control-label">
+                    {{'demand_type' | translate}}
+                </div>
+                <div class="controls" [class.has-error]="errors.demandType">
+                    <nb-select class="span8" name="demandType" [disabled]="!isEditable" [url]="REFERENCE_URL.API_DEMAND_TYPES"
+                        [(ngModel)]="model.demandType">
+                    </nb-select>
+                    <error-message [error]="errors.demandType"></error-message>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    {{'customer' | translate}}
+                </div>
+                <div class="controls" [class.has-error]="errors.customer">
+                    <nb-select class="span8" name="customer" [url]="STAFF_URL.API_ORGANIZATIONS" [disabled]="!isEditable"
+                        [allowClear]="true" [searchable]="true" [(ngModel)]="model.customer">
+                    </nb-select>
+                    <error-message [error]="errors.customer"></error-message>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    {{'project' | translate}}
+                </div>
+                <div class="controls" [class.has-error]="errors.project">
+                    <nb-select class="span8" name="project" [url]="HELP_DESK_URL.API_PROJECTS" [disabled]="!isEditable"
+                        [allowClear]="true" [searchable]="true" [(ngModel)]="model.project">
+                    </nb-select>
+                    <error-message [error]="errors.project"></error-message>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="control-label">
+                    {{'tags' | translate}}
+                </div>
+                <div class="controls" [class.has-error]="errors.tags">
+                    <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
+                        [allowClear]="true" [multiple]="true" classKey="tag" [styler]="tagStylerFn"
+                        [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_demand'"
+                        [(ngModel)]="model.tags">
+                    </nb-select>
+                    <error-message [error]="errors.tags"></error-message>
+                </div>
+            </div>
+            <div class="form-group vertical-md">
+                <div class="control-label">
+                    {{'body' | translate}}
+                </div>
+                <div class="controls" [class.has-error]="errors.body">
+                    <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                        [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                        (update)="model.body = $event">
+                    </markdown-editor>
+                    <error-message [error]="errors.body"></error-message>
+                    <nb-text-translate [text]="model.body"></nb-text-translate>
+                </div>
+            </div>
+        </div>
+        <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
     </section>
     <footer class="content-footer">
         <div class="record-author" *ngIf="model.author">

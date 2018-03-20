@@ -6,10 +6,10 @@ import { NbCommonModule, TimeLineModule, NBChartModule } from '@nb/core';
 import { PROJECTS_ROUTES } from './projects.routes';
 import {
     DashboardService, ProjectService,
-    DemandService, TaskService, RequestService
+    TaskService, RequestService
 } from './services';
 
-import { DashboardComponent, DemandComponent } from './pages';
+import { DashboardComponent } from './pages';
 import {
     ProjectsContainerComponent,
     ReportWizardComponent,
@@ -28,7 +28,6 @@ import {
         DashboardComponent,
         ReportWizardComponent,
         ProjectComponent,
-        DemandComponent,
         TaskComponent,
         TaskListComponent,
         ApprovalComponent,
@@ -45,7 +44,6 @@ import {
     providers: [
         DashboardService,
         ProjectService,
-        DemandService,
         TaskService,
         RequestService
     ]
