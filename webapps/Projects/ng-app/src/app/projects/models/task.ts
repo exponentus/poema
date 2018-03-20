@@ -1,5 +1,5 @@
 import { IEntity, Attachment } from '@nb/core';
-import { DATE_TIME_FORMAT, PriorityType } from '@nb/core';
+import { DATE_TIME_FORMAT } from '@nb/core';
 import { mdFormat } from '@nb/core';
 import { BaseModel } from './base-model';
 import { Project, Demand, Request, Tag } from './index';
@@ -10,7 +10,7 @@ export class Task extends BaseModel {
     parent: Task;
     taskType: IEntity;
     status: string = 'DRAFT';
-    priority: PriorityType = 'NORMAL';
+    priority: 'UNKNOWN' | 'URGENT' | 'HIGH' | 'MEDIUM' | 'NORMAL' | 'LOW' = 'NORMAL';
     approvalStatus: string;
     regNumber: string;
     title: string;

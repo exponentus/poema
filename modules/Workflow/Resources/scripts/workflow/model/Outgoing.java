@@ -65,7 +65,6 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
     @Column(columnDefinition = "TEXT")
     private String signature;
 
-    @Override
     @PrePersist
     protected void prePersist() {
         regDate = new Date();
