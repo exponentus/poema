@@ -218,7 +218,7 @@ public class TaskService extends RestProvider {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(Task dto) {
         dto.setId(null);
-        return save(dto);
+        return save(dto);/***/
     }
 
     @PUT
