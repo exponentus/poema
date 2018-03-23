@@ -211,7 +211,7 @@ public class TaskService extends RestProvider {
             return Response.ok(outcome).build();
         } catch (DAOException | RestServiceException e) {
             return responseException(e);
-        }/****/
+        }
     }
 
     @POST
