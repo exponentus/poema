@@ -2,13 +2,14 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { NotificationService } from '@nb/core';
-import { NbModalService } from '@nb/core';
-import { AppService, ActionService } from '@nb/core';
-import { AbstractFormPage, tagStylerFn } from '@nb/core';
+import {
+    AppService, ActionService,
+    NotificationService, NbModalService,
+    AbstractFormPage, tagStylerFn,
+    REFERENCE_URL, STAFF_URL
+} from '@nb/core';
 import { DemandService } from '../../services/demand.service';
-import { Demand } from '../../models';
-import { REFERENCE_URL, STAFF_URL } from '@nb/core';
+import { Demand } from '../../models/demand';
 import { HELP_DESK_URL } from '../../constants';
 
 @Component({

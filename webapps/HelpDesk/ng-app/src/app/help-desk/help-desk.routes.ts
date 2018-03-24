@@ -1,11 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
-
-import {
-    HelpDeskContainerComponent,
-    DemandComponent
-} from './components';
+import { HelpDeskContainerComponent, DemandComponent } from './components';
 
 export const HELPDESK_ROUTES: Routes = [{
     path: 'HelpDesk', component: HelpDeskContainerComponent,

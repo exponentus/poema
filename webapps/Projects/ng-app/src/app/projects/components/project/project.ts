@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { NotificationService } from '@nb/core';
-import { NbModalService } from '@nb/core';
-import { IApiOutcome } from '@nb/core';
-import { AppService, ActionService } from '@nb/core';
-import { AbstractFormPage } from '@nb/core';
-import { dateDuration } from '@nb/core';
-import { STAFF_URL } from '@nb/core';
-import { ProjectService } from '../../services';
+import {
+    IApiOutcome,
+    AppService, ActionService,
+    NotificationService, NbModalService,
+    AbstractFormPage, dateDuration, STAFF_URL
+} from '@nb/core';
+
+import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models';
 
 @Component({

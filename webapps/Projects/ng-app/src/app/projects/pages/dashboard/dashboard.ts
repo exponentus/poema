@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { IAction } from '@nb/core';
-import { AppService } from '@nb/core';
-import { DashboardService } from '../../services';
+import { IAction, AppService } from '@nb/core';
+
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
     selector: 'prj-dashboard',

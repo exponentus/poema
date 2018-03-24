@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { IDto, IEntityService } from '@nb/core';
-import { DataService } from '@nb/core';
-import { createApiUrl } from '@nb/core';
+import { IDto, IEntityService, DataService, createApiUrl } from '@nb/core';
+
 import { Report } from '../models';
 
 @Injectable()

@@ -2,15 +2,14 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { NotificationService } from '@nb/core';
-import { NbModalService } from '@nb/core';
-import { IApiOutcome, IAction, IFormSchema } from '@nb/core';
-import { AppService, ActionService, SignService } from '@nb/core';
-import { AbstractFormPage } from '@nb/core';
-import { tagStylerFn } from '@nb/core';
-import { STAFF_URL } from '@nb/core';
-import { REFERENCE_URL } from '@nb/core';
-import { ApplicationForMeetingRoomService } from '../../services';
+import {
+    IApiOutcome, IAction, IFormSchema,
+    AppService, ActionService, NotificationService, NbModalService,
+    AbstractFormPage, tagStylerFn,
+    STAFF_URL, REFERENCE_URL
+} from '@nb/core';
+
+import { ApplicationForMeetingRoomService } from '../../services/application-for-meeting-room.service';
 import { RR_URL } from '../../constants';
 import { ApplicationForMeetingRoom } from '../../models';
 

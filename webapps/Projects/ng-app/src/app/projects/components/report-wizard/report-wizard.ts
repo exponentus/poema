@@ -3,13 +3,13 @@ import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
 import { saveAs } from 'file-saver';
 
-import { NotificationService } from '@nb/core';
-import { IAction } from '@nb/core';
-import { AppService, DataService } from '@nb/core';
-import { DATE_TIME_FORMAT } from '@nb/core';
-import { mdFormat } from '@nb/core';
+import {
+    IAction, AppService, DataService, NotificationService,
+    DATE_TIME_FORMAT, mdFormat
+} from '@nb/core';
+
 import { DATA_EXPORT_URL } from '../../constants';
-import { DashboardService } from '../../services';
+import { DashboardService } from '../../services/dashboard.service';
 
 interface ReportModel {
     reportProfile: any;

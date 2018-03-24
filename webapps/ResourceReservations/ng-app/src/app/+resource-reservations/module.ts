@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { NbCommonModule, ApprovalModule } from '@nb/core';
+import { NbCommonModule, ApprovalModule, NbAclModule } from '@nb/core';
 
 import { RR_ROUTES } from './routes';
 import { RRContainerComponent } from './components/container';
@@ -9,11 +9,9 @@ import { ApplicationFormComponent } from './components/application/application-f
 import { ApplicationForVehicleFormComponent } from './components/application-for-vehicle/application-for-vehicle-form';
 import { ApplicationForMeetingRoomFormComponent } from './components/application-for-meeting-room/application-for-meeting-room-form';
 
-import {
-    ApplicationForVehicleService,
-    ApplicationForMeetingRoomService,
-    ValueObjectService
-} from './services';
+import { ApplicationForVehicleService } from './services/application-for-vehicle.service';
+import { ApplicationForMeetingRoomService } from './services/application-for-meeting-room.service';
+import { ValueObjectService } from './services/value-object.service';
 
 @NgModule({
     declarations: [
@@ -25,6 +23,7 @@ import {
     imports: [
         NbCommonModule,
         ApprovalModule,
+        NbAclModule,
         RouterModule.forChild(RR_ROUTES)
     ],
     providers: [

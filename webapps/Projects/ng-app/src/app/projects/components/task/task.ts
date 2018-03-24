@@ -2,19 +2,15 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { NotificationService } from '@nb/core';
-import { NbModalService } from '@nb/core';
-import { ITimeLine } from '@nb/core';
-import { AppService, ActionService } from '@nb/core';
-import { IApiOutcome, IAction, IFormSchema } from '@nb/core';
-import { getLocName, dateDuration } from '@nb/core';
-import { tagStylerFn } from '@nb/core';
-import { AbstractFormPage } from '@nb/core';
+import {
+    IApiOutcome, IAction, ITimeLine,
+    AppService, ActionService, NotificationService, NbModalService,
+    AbstractFormPage, getLocName, dateDuration, tagStylerFn,
+    STAFF_URL, REFERENCE_URL
+} from '@nb/core';
 
-import { STAFF_URL } from '@nb/core';
-import { REFERENCE_URL } from '@nb/core';
 import { PROJECTS_URL } from '../../constants';
-import { TaskService } from '../../services';
+import { TaskService } from '../../services/task.service';
 import { Task, Tag, Request } from '../../models';
 
 @Component({

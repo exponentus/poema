@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AppService, WindowRef, ErrorPage } from '@nb/core';
-
 import { HelpDeskModule } from './help-desk/help-desk.module';
 
 const routes: Routes = [
