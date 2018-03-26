@@ -11,6 +11,7 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
@@ -46,7 +47,8 @@ public class RequestDomain extends CommonDomain<Request> {
         request.setRequestType(dto.getRequestType());
         request.setComment(dto.getComment());
         request.setAttachments(dto.getAttachments());
-        request.setTitle(dto.getRequestType().getTitle() + " " + dto.getComment());
+        String title =  StringUtils.abbreviate(dto.getRequestType().getTitle() + " " + dto.getComment(), 140);
+        request.setTitle(title);
         if (request.isNew()) {
             request.setTask(dto.getTask());
             request.resetReadersEditors();

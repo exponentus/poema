@@ -49,7 +49,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
     @Column(length = 2048)
     private String decisionComment;
 
-    @Column(length = 2048)
+    @Column(columnDefinition = "TEXT")
     private String comment;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
