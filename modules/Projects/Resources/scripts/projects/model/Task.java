@@ -16,8 +16,7 @@ import com.exponentus.common.ui.lifecycle.LifeCycleNodeType;
 import com.exponentus.dataengine.jpa.IAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.exponentus.env.Environment;
-import com.exponentus.extconnect.IExtUser;
-import com.exponentus.extconnect.IOfficeFrame;
+import com.exponentus.modulebinding.IOfficeFrame;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -399,9 +398,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Override
     @JsonIgnore
-    public List<IExtUser> getRecipientsAfterApproval() {
+    public List<Employee> getRecipientsAfterApproval() {
         IOfficeFrame dao = Environment.getOfficeFrame();
-        List<IExtUser> recipients = new ArrayList<IExtUser>();
+        List<Employee> recipients = new ArrayList<Employee>();
         recipients.add((Employee) dao.getEmployee(assignee));
         for (Long userId : getObservers()) {
             recipients.add((Employee) dao.getEmployee(userId));
@@ -450,7 +449,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     @Deprecated
-    public boolean userCanDoDecision(IExtUser emp) {
+    public boolean userCanDoDecision(Employee emp) {
         if (getApprovalStatus() == ApprovalStatusType.PENDING) {
             Block block = ApprovalLifecycle.getProcessingBlock(this);
             if (block != null) {

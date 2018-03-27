@@ -11,7 +11,6 @@ import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.model.embedded.IApproval;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.extconnect.IExtUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import staff.model.Employee;
 import workflow.model.embedded.IControlled;
@@ -189,7 +188,7 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
     }
 
     @Override
-    public List<IExtUser> getRecipientsAfterApproval() {
+    public List<Employee> getRecipientsAfterApproval() {
         return null;
     }
 }
