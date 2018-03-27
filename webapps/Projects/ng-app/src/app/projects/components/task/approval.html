@@ -1,26 +1,22 @@
-<nb-grid *ngIf="blocks.length">
-    <nb-grid-head>
-        <nb-grid-cols>
-            <nb-grid-col class="span2">{{'status' | translate}}</nb-grid-col>
-            <nb-grid-col class="vw-70">{{'moderator' | translate}}</nb-grid-col>
-        </nb-grid-cols>
-    </nb-grid-head>
-    <nb-grid-row class="approval__block" [class.is-current]="block.status === 'PENDING'" [class.is-rejected]="block.status === 'REJECTED'"
+<table class="table" *ngIf="blocks.length">
+    <tr>
+        <th class="span2">{{'status' | translate}}</th>
+        <th>{{'moderator' | translate}}</th>
+    </tr>
+    <tr class="approval__block" [class.is-current]="block.status === 'PENDING'" [class.is-rejected]="block.status === 'REJECTED'"
         [class.disabled]="block.status === 'REJECTED'" *ngFor="let block of blocks">
-        <nb-grid-cols>
-            <nb-grid-col class="span2">{{block.status | lowercase | translate}}</nb-grid-col>
-            <nb-grid-col class="vw-70">
-                <div class="approval__block-approvers">
-                    <div class="approval__block-approver comma-separated" *ngFor="let approver of block.approvers">
-                        <div class="inline" [title]="'approver_decision_' + approver.decisionType | lowercase | translate">
-                            <approver-decision-icon [approver]="approver"></approver-decision-icon>
-                            <span>{{approver.employee.name}}</span>
-                            <span>{{approver.decisionComment}}</span>
-                            <time class="approver-decision-time text-muted">{{approver.decisionTime}}</time>
-                        </div>
+        <td>{{block.status | lowercase | translate}}</td>
+        <td>
+            <div class="approval__block-approvers">
+                <div class="approval__block-approver comma-separated" *ngFor="let approver of block.approvers">
+                    <div class="inline" [title]="'approver_decision_' + approver.decisionType | lowercase | translate">
+                        <approver-decision-icon [approver]="approver"></approver-decision-icon>
+                        <span>{{approver.employee.name}}</span>
+                        <span>{{approver.decisionComment}}</span>
+                        <time class="approver-decision-time text-muted">{{approver.decisionTime}}</time>
                     </div>
                 </div>
-            </nb-grid-col>
-        </nb-grid-cols>
-    </nb-grid-row>
-</nb-grid>
+            </div>
+        </td>
+    </tr>
+</table>
