@@ -1,6 +1,6 @@
 'use strict';
 
-const VERSION = '20180301';
+const VERSION = '20180327';
 const CACHE_KEY = `NB-v${VERSION}`;
 const OFFLINE_API_FALLBACK = JSON.stringify({
     id: 'OFFLINE',
@@ -24,9 +24,9 @@ const STATIC_ROUTES = [
     '/sw.js'
 ];
 
-/**
+/** 
  * CACHE_ROUTE Options
- *
+ * 
  * { path:string, regExp: RegExp, cacheOnly: boolean, ignoreSearch: boolean, fallback: 'API'|'IMAGE' }
  */
 const CACHE_ROUTES = [{
@@ -82,8 +82,8 @@ function getFallback(fallbackType) {
 
 /**
  * getRouteOption
- *
- * @param {string} url
+ * 
+ * @param {string} url 
  */
 function getRouteOption(url) {
     for (let route of CACHE_ROUTES) {
@@ -155,12 +155,12 @@ self.addEventListener('fetch', event => {
     );
 });
 
-self.addEventListener('install', (event) => {
-    event.waitUntil(
-        caches.open(CACHE_KEY)
-        .then(cache => cache.addAll(STATIC_ROUTES))
-        .then(() => self.skipWaiting()));
-});
+// self.addEventListener('install', (event) => {
+//     event.waitUntil(
+//         caches.open(CACHE_KEY)
+//         .then(cache => cache.addAll(STATIC_ROUTES))
+//         .then(() => self.skipWaiting()));
+// });
 
 self.addEventListener('activate', (event) => {
     event.waitUntil(
