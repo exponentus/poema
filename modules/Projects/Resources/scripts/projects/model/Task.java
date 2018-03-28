@@ -42,7 +42,7 @@ import java.util.UUID;
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)

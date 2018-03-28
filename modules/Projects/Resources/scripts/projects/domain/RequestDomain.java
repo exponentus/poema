@@ -107,7 +107,7 @@ public class RequestDomain extends CommonDomain<Request> {
         }
         outcome.setModel(request);
         outcome.addPayload(request.getTask());
-        outcome.addPayload("contentTitle", "task_request");
+        outcome.setPayloadTitle("task_request");
 
         if (!request.isNew()) {
             outcome.addPayload(new ACL(request));

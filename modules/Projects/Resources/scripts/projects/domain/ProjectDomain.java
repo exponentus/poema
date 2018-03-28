@@ -104,10 +104,10 @@ public class ProjectDomain extends CommonDomain<Project> {
 
         if (project.isNew()) {
             outcome.setTitle(Environment.vocabulary.getWord("new_project", ses.getLang()));
-            outcome.addPayload("contentTitle", "new_project");
+            outcome.setPayloadTitle("new_project");
         } else {
             outcome.setTitle(Environment.vocabulary.getWord("project", ses.getLang()) + " " + project.getTitle());
-            outcome.addPayload("contentTitle", "project");
+            outcome.setPayloadTitle("project");
         }
 
         outcome.setModel(project);
