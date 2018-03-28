@@ -47,6 +47,7 @@
                 </app-root>
                 <script src="assets/dist/vendor.js.gz"></script>
                 <script src="assets/dist/app.js.gz"></script>
+                <script src="/SharedResources/knca/sjcl.js"></script>
             </body>
         </html>
     </xsl:template>
