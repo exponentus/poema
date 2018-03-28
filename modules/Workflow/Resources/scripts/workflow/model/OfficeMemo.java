@@ -5,7 +5,6 @@ import com.exponentus.common.model.embedded.TimeLine;
 import com.exponentus.common.ui.lifecycle.ILifeCycle;
 import com.exponentus.common.ui.lifecycle.LifeCycleNode;
 import com.exponentus.common.ui.lifecycle.LifeCycleNodeType;
-import com.exponentus.extconnect.IExtUser;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
@@ -104,8 +103,8 @@ public class OfficeMemo extends ActionableDocument implements ILifeCycle {
     }
 
     @Override
-    public List<IExtUser> getRecipientsAfterApproval() {
-        List<IExtUser> recipients = new ArrayList<IExtUser>();
+    public List<Employee> getRecipientsAfterApproval() {
+        List<Employee> recipients = new ArrayList<Employee>();
         recipients.add(recipient);
         return recipients;
     }

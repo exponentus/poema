@@ -1,7 +1,6 @@
 package resourcereservations.model;
 
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
-import com.exponentus.extconnect.IExtUser;
 import reference.model.Tag;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -122,8 +121,8 @@ public class Reservation extends ActionableDocument {
     }
 
     @Override
-    public List<IExtUser> getRecipientsAfterApproval() {
-        List<IExtUser> recipients = new ArrayList<IExtUser>();
+    public List<Employee> getRecipientsAfterApproval() {
+        List<Employee> recipients = new ArrayList<Employee>();
         recipients.add(recipient);
         return recipients;
     }
