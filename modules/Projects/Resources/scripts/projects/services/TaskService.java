@@ -201,7 +201,7 @@ public class TaskService extends RestProvider {
 
             Outcome outcome = taskDomain.getOutcome(task);
             outcome.setId(id);
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, fsId);
+            outcome.setFSID(fsId);
             outcome.addPayload(getActionBar(session, taskDomain, task));
             outcome.addPayload(new Milestones(session, task.getStages()));
             outcome.addPayload("employees", emps);

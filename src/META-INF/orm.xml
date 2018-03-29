@@ -31,6 +31,10 @@
     <converter class="com.exponentus.common.model.constants.converter.DecisionTypeConverter"/>
     <converter class="com.exponentus.common.model.constants.converter.ApprovalResultTypeConverter"/>
     
-    <converter class="helpdesk.model.constants.converter.DemandStatusConverter"/> 
+    <converter class="helpdesk.model.constants.converter.DemandStatusConverter"/>
 
+
+    stas_chaikovskiy
+
+    stas_chaikovskiy
 </entity-mappings>
