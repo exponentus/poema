@@ -101,10 +101,13 @@
                             {{'assignee_user' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.assignee">
-                            <nb-select class="employee-input span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES"
-                                [disabled]="!isEditable" [searchable]="true" [(ngModel)]="model.assignee">
+                            <nb-select class="span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.assignee">
                             </nb-select>
                             <error-message [error]="errors.assignee"></error-message>
+                            <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
+                                <a href="#" (click)="assignYourself($event)">{{'assign_yourself' | translate}}</a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">

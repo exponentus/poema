@@ -66,6 +66,16 @@ export class TaskComponent extends AbstractFormPage<Task> {
         return '/Projects/api/tasks?parentTaskId=' + this.model.id + '&execution=true&isTreeMode=true&expandedIds=' + this.model.id;
     }
 
+    assignYourself($event: Event) {
+        $event.preventDefault();
+        if (this.data.employees) {
+            let emp = this.data.employees[this.appService.employee.userID];
+            if (emp) {
+                (<Task>this.model).assignee = emp;
+            }
+        }
+    }
+
     onAction(action: IAction) {
         switch (action.customID) {
             case 'declineApprovalBlock':

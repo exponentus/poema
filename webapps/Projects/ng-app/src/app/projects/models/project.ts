@@ -1,7 +1,7 @@
-import { IEntity, Attachment } from '@nb/core';
-import { DATE_TIME_FORMAT } from '@nb/core';
-import { mdFormat } from '@nb/core';
-import { BaseModel } from './base-model';
+import {
+    IEntity, Attachment, BaseModel,
+    DATE_TIME_FORMAT, mdFormat
+} from '@nb/core';
 
 export class Project extends BaseModel {
     name: string;
