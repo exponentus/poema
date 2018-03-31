@@ -1,14 +1,14 @@
-<form class="form" *ngIf="isReady">
+<form class="form" autocomplete="off" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
     <header class="content-header">
-        <div class="content-actions">
-            <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
-        </div>
         <div class="doc-head">
-            <div class="doc-head__row">
-                <div class="doc-head__row_item">
+            <div class="doc-head__inner">
+                <div class="doc-head__item border-0">
                     <div class="doc-head__title">{{title | translate}}</div>
                 </div>
-                <div class="doc-head__row_item">
+                <div class="doc-head__item border-0">
                     <span class="request-resolution {{model.resolution | lowercase}}" *ngIf="model.resolution == 'ACCEPTED'">
                         <i class="fa fa-check"></i>
                         {{'accepted' | translate}}

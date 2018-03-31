@@ -1,20 +1,20 @@
-<form class="form" *ngIf="isReady">
+<form class="form" autocomplete="off" *ngIf="isReady">
     <div class="content-actions">
         <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
     </div>
     <header class="content-header">
-        <div class="task-head">
-            <ul class="task-head-inner">
-                <li>
-                    <div class="task-head-item content-title">{{title | translate}}</div>
-                </li>
-            </ul>
+        <div class="doc-head">
+            <div class="doc-head__inner">
+                <div class="doc-head__item">
+                    <div class="doc-head__title">{{title | translate}}</div>
+                </div>
+            </div>
         </div>
         <div class="title-input-wrapper">
-            <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.name" autocomplete="off"
-                required name="name" maxlength="140" placeholder="{{'name' | translate}}"
-                [(ngModel)]="model.name">
-            <div *ngIf="!isEditable" class="doc-head__input">{{model.name}}</div>
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+                required name="title" maxlength="140" placeholder="{{'title' | translate}}"
+                [(ngModel)]="model.title">
+            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
     <section class="content-body">

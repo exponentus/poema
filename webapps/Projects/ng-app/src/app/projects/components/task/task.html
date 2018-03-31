@@ -1,41 +1,42 @@
-<form class="form" *ngIf="isReady">
+<form class="form" autocomplete="off" *ngIf="isReady">
     <div class="content-actions">
         <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
     </div>
     <header class="content-header">
-        <div class="task-head">
-            <ul class="task-head-inner">
-                <li>
-                    <div class="task-head-item content-title">{{title | translate}}</div>
-                </li>
-                <li *ngIf="model.regNumber">
-                    <div class="task-head-item">
-                        <label class="task-head-item-label">№</label>
-                        <div class="doc-head__reg-number">{{model.regNumber}}</div>
-                    </div>
-                </li>
-                <li>
-                    <div class="task-head-item">
-                        <label class="task-head-item-label">{{'status' | translate}}</label>
+        <div class="doc-head">
+            <div class="doc-head__inner">
+                <div class="doc-head__item">
+                    <div class="doc-head__title">{{title | translate}}</div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.regNumber">
+                    <label class="doc-head__item_label">№</label>
+                    <div class="doc-head__item_value"><b>{{model.regNumber}}</b></div>
+                </div>
+                <div class="doc-head__item">
+                    <label class="doc-head__item_label">{{'status' | translate}}</label>
+                    <div class="doc-head__item_value">
                         <div class="status-{{model.status | lowercase}}">
-                            {{model.status | lowercase | translate}}
+                            <span>{{model.status | lowercase | translate}}</span>
                         </div>
                     </div>
-                </li>
-                <li *ngIf="model.approvalStatus === 'PENDING'">
-                    <div class="task-head-item">
-                        <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.approvalStatus === 'PENDING'">
+                    <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.parent">
+                    <div class="doc-head__item_value">
+                        <i class="fa fa-reply"></i>
+                        <a [routerLink]="[model.parent.url]">{{model.parent.title}}</a>
                     </div>
-                </li>
-            </ul>
-            <time-line *ngIf="milestones" [timeLines]="milestones.stages"></time-line>
+                </div>
+            </div>
         </div>
-        <a [routerLink]="[model.parent.url]" class="parent-task-url" *ngIf="model.parent">{{model.parent.title}}</a>
+        <time-line *ngIf="milestones" [timeLines]="milestones.stages"></time-line>
         <div class="title-input-wrapper">
-            <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.title"
-                autocomplete="off" required name="title" maxlength="140" placeholder="{{'task_title' | translate}}"
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+                required name="title" maxlength="140" placeholder="{{'task_title' | translate}}"
                 [(ngModel)]="model.title">
-            <div *ngIf="!isEditable" class="doc-head__input">{{model.title}}</div>
+            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
     <section class="content-body">

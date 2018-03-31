@@ -7,7 +7,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
     `,
     styleUrls: [
         '../styles/request.css',
-        '../styles/style.css',
         '../styles/task.css'
     ],
     host: {

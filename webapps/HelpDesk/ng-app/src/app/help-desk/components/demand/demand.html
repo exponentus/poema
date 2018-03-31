@@ -1,27 +1,32 @@
-<form class="form" *ngIf="isReady">
+<form class="form" autocomplete="off" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
     <header class="content-header">
-        <div class="content-actions">
-            <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
-        </div>
         <div class="doc-head">
-            <div class="doc-head__row">
-                <div class="doc-head__row_item">
+            <div class="doc-head__inner">
+                <div class="doc-head__item">
                     <div class="doc-head__title">{{title | translate}}</div>
                 </div>
-                <div class="doc-head__row_item">
-                    <div class="doc-head__reg-number" *ngIf="model.regNumber">{{model.regNumber}}</div>
-                    <div class="status-{{model.status | lowercase}}">
-                        <span>{{model.status | lowercase | translate}}</span>
-                        <span class="text-muted">{{model.statusDate | dateFmt:'DD.MM.YYYY'}}</span>
+                <div class="doc-head__item" *ngIf="model.regNumber">
+                    <label class="doc-head__item_label">№</label>
+                    <div class="doc-head__item_value"><b>{{model.regNumber}}</b></div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.status">
+                    <label class="doc-head__item_label">{{'status' | translate}}</label>
+                    <div class="doc-head__item_value">
+                        <div class="status-{{model.status | lowercase}}">
+                            <span>{{model.status | lowercase | translate}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="doc-head__row">
-                <input *ngIf="isEditable" class="doc-head__input" [class.invalid]="errors.title"
-                    autocomplete="off" required name="title" maxlength="140" placeholder="{{'title' | translate}}"
-                    [(ngModel)]="model.title">
-                <div *ngIf="!isEditable" class="doc-head__input">{{model.title}}</div>
-            </div>
+        </div>
+        <div class="title-input-wrapper">
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+                required name="title" maxlength="140" placeholder="{{'title' | translate}}"
+                [(ngModel)]="model.title">
+            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
     <section class="content-body">

@@ -4,9 +4,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
     selector: 'workflow-container',
     template: `<router-outlet></router-outlet>`,
     styleUrls: [
-        '../styles/form.css',
-        '../styles/header.css',
-        '../styles/style.css'
+        '../styles/form.css'
     ],
     host: {
         '[class.module-container]': 'true'
