@@ -1,0 +1,12 @@
+.wf-control {
+    display: block;
+}
+
+.nb-toolbar {
+    margin: 4px 0;
+}
+
+.label-assignee-is-coordinator {
+    color: #666;
+    margin: 0 3px;
+}

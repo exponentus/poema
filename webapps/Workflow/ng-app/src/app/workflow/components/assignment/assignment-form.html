@@ -1,0 +1,114 @@
+<form class="form" autocomplete="off" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
+    <header class="content-header">
+        <div class="doc-head">
+            <div class="doc-head__inner">
+                <div class="doc-head__item">
+                    <div class="doc-head__title">{{'assignment' | translate}}</div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.regNumber">
+                    <label class="doc-head__item_label">№</label>
+                    <div class="doc-head__item_value"><b>{{model.regNumber}}</b></div>
+                </div>
+                <div class="doc-head__item">
+                    <label class="doc-head__item_label">{{'status' | translate}}</label>
+                    <div class="doc-head__item_value">
+                        <div class="status-{{model.status | lowercase}}">
+                            <span>{{model.status | lowercase | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="title-input-wrapper">
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+                required name="title" maxlength="140" placeholder="{{'title' | translate}}"
+                [(ngModel)]="model.title">
+            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
+        </div>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}" [active]="true">
+                <div class="fieldset">
+                    <div class="form-group" *ngIf="model.primary">
+                        <div class="control-label">
+                            {{model.primary.kind | translate}}
+                        </div>
+                        <div class="controls">
+                            <a class="input-placeholder" [routerLink]="[model.primary.url]">
+                                <span>{{model.primary.regNumber}}</span> - <span>{{model.primary.title}}</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.parent">
+                        <div class="control-label">
+                            {{'parent_assignment' | translate}}
+                        </div>
+                        <div class="controls">
+                            <a class="input-placeholder" [routerLink]="[model.parent.url]">
+                                {{model.parent.title}}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'applied_author' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.appliedAuthor">
+                            <nb-select class="span8" name="appliedAuthor" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.appliedAuthor"></nb-select>
+                            <error-message [error]="errors.appliedAuthor"></error-message>
+                        </div>
+                    </div>
+                    <wf-control [model]="model" [permissions]="data.permissions" [errors]="errors" [isNew]="model.isNew"
+                        [editable]="isEditable" (change)="handleControlEvent($event)"></wf-control>
+                    <div class="form-group vertical-md" [class.has-error]="errors.body">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.body = $event"></markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
+                            <nb-text-translate [text]="model.body"></nb-text-translate>
+                        </div>
+                    </div>
+                </div>
+                <!-- <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments> -->
+            </tab>
+            <tab tabTitle="life cycle" icon="fa fa-sitemap map-signs">
+                <nb-life-cycle *ngIf="data.lifecycle" [node]="data.lifecycle.node"></nb-life-cycle>
+            </tab>
+            <tab tabTitle="{{'related_assignments' | translate}}" icon="fa fa-align-left" *ngIf="!isNew && model.primary">
+                <wf-document-hierarchy [model]="model.primary"></wf-document-hierarchy>
+            </tab>
+            <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-observers-input [model]="model" [disabled]="!isEditable"></nb-observers-input>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="acl">
+                <nb-acl [acl]="acl"></nb-acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer form-footer">
+        <div class="record-author" *ngIf="model.author">
+            <span>{{'author' | translate}}</span>
+            <span>{{model.author.name}}</span>
+            <span>{{model.regDate}}</span>
+        </div>
+    </footer>
+</form>

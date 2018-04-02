@@ -1,0 +1,159 @@
+<form class="form" autocomplete="off" *ngIf="isReady">
+    <div class="content-actions">
+        <nb-toolbar [actions]="actions" (action)="onAction($event)"></nb-toolbar>
+    </div>
+    <header class="content-header">
+        <div class="doc-head">
+            <div class="doc-head__inner">
+                <div class="doc-head__item">
+                    <div class="doc-head__title">{{'application' | translate}}</div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.regNumber">
+                    <label class="doc-head__item_label">№</label>
+                    <div class="doc-head__item_value"><b>{{model.regNumber}}</b></div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.status">
+                    <label class="doc-head__item_label">{{'status' | translate}}</label>
+                    <div class="doc-head__item_value">
+                        <div class="status-{{model.status | lowercase}}">
+                            <span>{{model.status | lowercase | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="doc-head__item" *ngIf="model.version">
+                    <label class="doc-head__item_label">{{'version' | translate}}</label>
+                    <div class="doc-head__item_value">{{model.version}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="title-input-wrapper">
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+                required name="title" maxlength="140" placeholder="{{'placeholder_application_title' | translate}}"
+                [(ngModel)]="model.title">
+            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
+        </div>
+    </header>
+    <section class="content-body">
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'applied_author' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.appliedAuthor">
+                            <nb-select class="span8" name="appliedAuthor" [ngModel]="model.appliedAuthor" [disabled]="true"></nb-select>
+                            <error-message [error]="errors.appliedAuthor"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'recipient' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.recipient">
+                            <nb-select class="span8" name="recipient" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
+                                [searchable]="true" [(ngModel)]="model.recipient"></nb-select>
+                            <error-message [error]="errors.recipient"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'use_from' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.useFrom">
+                            <div class="span2" *ngIf="!isEditable">
+                                <span class="input">{{model.useFrom}}</span>
+                            </div>
+                            <div class="span2" *ngIf="isEditable">
+                                <input datepicker class="span2" name="useFrom" [(ngModel)]="model.useFrom" />
+                            </div>
+                            <error-message [error]="errors.useFrom"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'use_to' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.useTo">
+                            <div class="span2" *ngIf="!isEditable">
+                                <span class="input">{{model.useTo}}</span>
+                            </div>
+                            <div class="span2" *ngIf="isEditable">
+                                <input datepicker class="span2" name="useTo" [(ngModel)]="model.useTo" />
+                            </div>
+                            <error-message [error]="errors.useTo"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group">
+                            <div class="control-label">
+                                {{'meeting_room' | translate}}
+                            </div>
+                            <div class="controls" [class.has-error]="errors.room">
+                                <nb-select class="span8" name="room" [url]="REFERENCE_URL.API_MEETING_ROOMS" [disabled]="!isEditable"
+                                    [searchable]="true" [(ngModel)]="model.room"></nb-select>
+                                <error-message [error]="errors.room"></error-message>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tags' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.tags">
+                            <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
+                                [allowClear]="true" [multiple]="true" classKey="tag"
+                                [styler]="tagStylerFn" [url]="REFERENCE_URL.API_TAGS + '?hidden=false'"
+                                [(ngModel)]="model.tags"></nb-select>
+                            <error-message [error]="errors.tags"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md">
+                        <div class="control-label">
+                            {{'approvals' | translate}}
+                        </div>
+                        <div class="controls">
+                            <wf-approval [approval]="model" [editable]="isEditable && model.status !== 'FINISHED'"
+                                [disableApprovalType]="true" [disableDelete]="true" [maxBlockCount]="1"></wf-approval>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md" [class.has-error]="errors.body">
+                        <div class="control-label">
+                            {{'comment' | translate}}
+                        </div>
+                        <div class="controls">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.body = $event"></markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
+                            <nb-text-translate [text]="model.body"></nb-text-translate>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-observers-input [model]="model" [disabled]="!isEditable"></nb-observers-input>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab tabTitle="{{'acl_tab_title' | translate}}" icon="fa fa-share-alt" *ngIf="acl">
+                <nb-acl [acl]="acl"></nb-acl>
+            </tab>
+        </tabs>
+    </section>
+    <footer class="content-footer form-footer">
+        <div class="record-author" *ngIf="model.author">
+            <span>{{'author' | translate}}</span>
+            <span>{{model.author.name}}</span>
+            <span>{{model.regDate}}</span>
+        </div>
+    </footer>
+</form>
