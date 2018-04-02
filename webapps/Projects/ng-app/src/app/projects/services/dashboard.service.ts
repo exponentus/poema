@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IViewPage } from '@nb/core';
-import { DataService } from '@nb/core';
+import { IViewPage, DataService } from '@nb/core';
 
 import { PROJECTS_URL } from '../constants';
 import { Task } from '../models';

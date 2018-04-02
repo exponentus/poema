@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppService, WindowRef, ErrorPage } from '@nb/core';
 
-import { WorkflowModule } from './+workflow/workflow.module';
+import { WorkflowModule } from './workflow/workflow.module';
 
 const routes: Routes = [
     { path: '', redirectTo: '/Workflow', pathMatch: 'full' },

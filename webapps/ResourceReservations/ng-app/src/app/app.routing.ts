@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppService, WindowRef, ErrorPage } from '@nb/core';
 
-import { ResourceReservationsModule } from './+resource-reservations/module';
+import { ResourceReservationsModule } from './resource-reservations/module';
 
 const routes: Routes = [
     { path: '', redirectTo: '/ResourceReservations', pathMatch: 'full' },
