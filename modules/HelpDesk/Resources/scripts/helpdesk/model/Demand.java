@@ -11,6 +11,7 @@ import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.model.Project;
 import reference.model.DemandType;
 import reference.model.Tag;
+import reference.model.WayOfInteraction;
 import staff.model.Organization;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = "hd__demands")
+@Table(name = ModuleConst.CODE + "__demands")
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
@@ -47,17 +48,19 @@ public class Demand extends SecureAppEntity<UUID> {
 
     private Organization customer;
 
+    private WayOfInteraction wayOfInteraction;
+
     @FTSearchable
     @Column(columnDefinition = "TEXT")
     private String body;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "hd__tags")
+    @JoinTable(name = ModuleConst.CODE + "__tags")
     private List<Tag> tags;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
-    @JoinTable(name = "hd__attachments", joinColumns = {@JoinColumn(name = "demand_id")}, inverseJoinColumns = {
+    @JoinTable(name = ModuleConst.CODE + "__attachments", joinColumns = {@JoinColumn(name = "demand_id")}, inverseJoinColumns = {
             @JoinColumn(name = "attachment_id")}, indexes = {
             @Index(columnList = "demand_id, attachment_id")}, uniqueConstraints = @UniqueConstraint(columnNames = {
             "demand_id", "attachment_id"}))
@@ -119,6 +122,15 @@ public class Demand extends SecureAppEntity<UUID> {
     public void setCustomer(Organization customer) {
         this.customer = customer;
     }
+
+    public WayOfInteraction getWayOfInteraction() {
+        return wayOfInteraction;
+    }
+
+    public void setWayOfInteraction(WayOfInteraction wayOfInteraction) {
+        this.wayOfInteraction = wayOfInteraction;
+    }
+
 
     public String getBody() {
         return body;

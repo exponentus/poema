@@ -129,6 +129,8 @@
         <class>reference.model.embedded.RouteBlock</class>
         <class>reference.model.WorkType</class>
         <class>reference.model.MeetingRoom</class>
+        <class>reference.model.WayOfInteraction</class>
+
         <!-- Specific Reference module entities -->
         <class>reference.model.TaskType</class>
         <class>reference.model.RequestType</class>
@@ -277,6 +279,9 @@
         <class>reference.model.Tag</class>
         <class>reference.model.RequestType</class>
         <class>reference.model.DemandType</class>
+        <class>reference.model.WayOfInteraction</class>
+
+
         <!-- HelpDesk module entities -->
         <class>helpdesk.model.Demand</class>
         <!-- Projects module entities -->
@@ -324,6 +329,7 @@
         <class>reference.model.Tag</class>
         <class>reference.model.RequestType</class>
         <class>reference.model.DemandType</class>
+        <class>reference.model.WayOfInteraction</class>
         <!-- Projects module entities -->
         <class>projects.model.Project</class>
         <class>projects.model.Task</class>
@@ -413,6 +419,7 @@
         <class>reference.model.TextTemplate</class>
         <class>reference.model.DemandType</class>
         <class>reference.model.Vehicle</class>
+        <class>reference.model.WayOfInteraction</class>
         <!-- The application module entities -->
         <class>workflow.model.ActionableDocument</class>
         <class>workflow.model.OfficeMemo</class>

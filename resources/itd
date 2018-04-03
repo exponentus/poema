@@ -27,6 +27,7 @@ stini projects.init.FillTaskTypesSofwareDev
 stini projects.init.FillRequestTypes
 run task fill_demand_types
 run task fill_control_types
+run task ref_fill_wayofinteractions
 
 run task gen_test_orgs_xls
 run task gen_test_emps
