@@ -7,7 +7,6 @@ import {
 } from '@nb/core';
 
 import { PROJECTS_ROUTES } from './projects.routes';
-import { DashboardService } from './services/dashboard.service';
 import { ProjectService } from './services/project.service';
 import { TaskService } from './services/task.service';
 import { RequestService } from './services/request.service';
@@ -47,7 +46,6 @@ import {
         NbActivityModule
     ],
     providers: [
-        DashboardService,
         ProjectService,
         TaskService,
         RequestService

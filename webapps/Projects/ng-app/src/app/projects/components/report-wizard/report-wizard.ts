@@ -52,7 +52,7 @@ export class ReportWizardComponent {
     }
 
     ngOnInit() {
-        this.dashboardService.fetchData().subscribe(response => {
+        this.dashboardService.fetchData({}).subscribe(response => {
             // this.data = response.data;
             this.data.exportFormatTypes = response.data.exportFormatType.filter(it => it !== 'UNKNOWN').map(it => {
                 return {

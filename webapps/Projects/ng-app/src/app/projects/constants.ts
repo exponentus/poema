@@ -1,6 +1,5 @@
 export const PROJECTS_URL = {
     API: '/Projects/api',
-    API_DASHBOARD: '/Projects/api/dashboard',
     API_PROJECTS: '/Projects/api/projects',
     API_TASKS: '/Projects/api/tasks',
     API_DEMANDS: '/HelpDesk/api/demands',

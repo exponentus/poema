@@ -1,25 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { IAction, AppService } from '@nb/core';
+import { IAction, AppService, mdFormat, DATE_FORMAT, STAFF_URL } from '@nb/core';
 
 import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
     selector: 'prj-dashboard',
+    providers: [DashboardService],
     templateUrl: './dashboard.html',
     styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent {
 
-    intervalTimeout: number = 60 * 1000;
+    STAFF_URL = STAFF_URL;
+    intervalTimeout: number = 5 * 60 * 1000;
     data: any = {};
     interval: any;
     showReportModal: boolean = false;
-    actions: IAction[] = [{
-        caption: 'reports',
-        customID: 'reports'
-    }];
+    filter: any = {
+        periodType: 'week'
+    };
 
     constructor(
         private router: Router,
@@ -38,13 +39,14 @@ export class DashboardComponent {
         this.interval && clearInterval(this.interval);
     }
 
-    onAction(action: IAction) {
-        this.showReportModal = true;
-    }
-
     load() {
         this.appService.showLoadSpinner();
-        this.dashboardService.fetchData().finally(() => {
+        this.dashboardService.fetchData({
+            assignee: this.filter.assignee ? this.filter.assignee.userID : null,
+            periodType: this.filter.periodType || 'week',
+            fromDate: mdFormat(this.filter.fromDate, DATE_FORMAT),
+            toDate: mdFormat(this.filter.toDate, DATE_FORMAT)
+        }).finally(() => {
             this.appService.hideLoadSpinner();
         }).subscribe(response => {
             this.data = response.data;

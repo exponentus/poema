@@ -1,10 +1,22 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IViewPage, DataService } from '@nb/core';
+import { IViewPage, DataService, stringToRGB } from '@nb/core';
 
-import { PROJECTS_URL } from '../constants';
-import { Task } from '../models';
+const statusColors = {
+    PROCESSING: '#ffeb3b',
+    OPEN: '#dfe0ff',
+    PENDING: '#ff9800',
+    COMPLETED: '#b6de88'
+};
+
+interface IChartDataset {
+    labels: string[];
+    datasets: [{
+        id: string, label: string, data: number[]
+    }];
+}
+
 
 @Injectable()
 export class DashboardService {
@@ -14,21 +26,16 @@ export class DashboardService {
         private dataService: DataService
     ) { }
 
-    fetchData() {
-        return this.dataService.apiGet(PROJECTS_URL.API_DASHBOARD).map(data => {
+    fetchData(filter: any) {
+        return this.dataService.apiGet('/Projects/api/dashboard', filter).map(data => {
             return {
                 id: data.id,
                 title: data.title,
                 data: {
-                    // statAssigneeState: this.createTimeChartConfig(data.payload.statistic1),
-                    // statAuthorState: this.createTimeChartConfig(data.payload.statistic2),
-                    statAssigneeState: this.createTimeChartConfig2(data.payload.statAssigneeStateProcessing, data.payload.statAssigneeStateCompleted),
-                    // statAuthorState: this.createTimeChartConfig2(data.payload.statAuthorStateProcessing, data.payload.statAuthorStateCompleted),
-                    // tasksDueToday: data.payload.tasksDueToday as IViewPage,
-                    // tasksExpired: data.payload.tasksExpired as IViewPage,
-                    // tasksIn7Day: data.payload.tasksIn7Day as IViewPage,
-                    taskStatusStat: data.payload.taskStatusStat,
-                    exportFormatType: data.payload.exportFormatType
+                    chart: this.convertChartPayloadData(data.payload.chart),
+                    taskStatusStats: data.payload.taskStatusStats,
+                    exportFormatType: data.payload.exportFormatType,
+                    isProjectSupervisor: data.payload.isProjectSupervisor
                 }
             };
         });
@@ -104,93 +111,70 @@ export class DashboardService {
                 hover: { mode: 'nearest', intersect: true },
                 scales: {
                     yAxes: [{
-                        ticks: { min: minValue, stepSize: 1 }
+                        ticks: { min: minValue }
                     }]
                 }
             }
         };
     }
 
-    private createTimeChartConfig(stat: { title: string, status: string, count: number, values: { [key: string]: number } }) {
+    convertChartPayloadData(data: IChartDataset) {
+        let minValue: number = Number.MAX_VALUE;
+        let datasets: any[] = data.datasets.map(it => {
+            for (let _value of it.data) {
+                if (minValue > _value) {
+                    minValue = +_value;
+                }
+            }
 
-        let labels: string[] = [],
-            datasets = {
-                label: stat.status || '',
-                data: [],
+            return {
+                id: it.id,
+                label: it.label,
+                data: it.data,
                 fill: false,
                 lineTension: 0,
-                borderColor: 'rgba(8,137,229,1)',
-                backgroundColor: 'rgba(8,137,229,1)',
-                pointBorderColor: 'rgba(8,137,229,1)',
-                pointBackgroundColor: 'rgba(8,137,229,1)'
-            },
-            minValue: number = Number.MAX_VALUE;
+                borderWidth: 1,
+                borderColor: statusColors[it.id],
+                backgroundColor: statusColors[it.id],
+                pointBorderColor: statusColors[it.id],
+                pointBackgroundColor: statusColors[it.id]
+            };
+        });
 
-        for (let key of Object.keys(stat.values)) {
-            labels.push(key);
-            datasets.data.push(stat.values[key]);
-            if (minValue > stat.values[key]) {
-                minValue = +stat.values[key];
-            }
-        }
-        if (!labels.length) {
+        if (!datasets.length) {
             minValue = 0;
         } else {
             minValue--;
         }
 
-        return {
-            type: 'line',
+        let config = {
+            type: 'bar',
             data: {
-                labels: labels,
-                datasets: [datasets]
+                labels: data.labels,
+                datasets: datasets
             },
             options: {
                 legend: { display: true, labels: { fontColor: 'black' } },
                 responsive: true,
                 maintainAspectRatio: false,
                 spanGaps: false,
-                elements: { line: { tension: 0 } },
                 tooltips: { mode: 'index', intersect: false },
                 hover: { mode: 'nearest', intersect: true },
                 scales: {
+                    xAxes: [{
+                        // stacked: true,
+                        barPercentage: 0.5,
+                        // barThickness : 73
+                    }],
                     yAxes: [{
-                        ticks: { min: minValue, stepSize: 1 }
+                        // stacked: true
+                        ticks: { min: minValue }
                     }]
                 }
-            }
-        };
-    }
-
-    private createChartConfig(list: { title: string, count: number }[]) {
-
-        let labels: string[] = [],
-            datasets = {
-                label: '',
-                data: [],
-                fill: false,
-                lineTension: 0
-            };
-
-        list.forEach(it => {
-            labels.push(this.ngxTranslate.instant(it.title.toLowerCase()));
-            datasets.data.push(+it.count);
-        });
-
-        return {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [datasets]
             },
-            options: {
-                legend: { display: true, labels: { fontColor: 'black' } },
-                responsive: true,
-                maintainAspectRatio: false,
-                tooltips: { mode: 'index', intersect: false },
-                hover: { mode: 'nearest', intersect: true },
-                scales: { 'yAxes': [{ 'ticks': { 'beginAtZero': true } }] }
-            }
+            minValue: minValue
         };
+
+        return config;
     }
 }
