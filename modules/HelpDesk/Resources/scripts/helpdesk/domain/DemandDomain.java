@@ -51,6 +51,7 @@ public class DemandDomain extends CommonDomain<Demand> {
         demand.setDemandType(dto.getDemandType());
         demand.setCustomer(dto.getCustomer());
         demand.setProject(dto.getProject());
+        demand.setWayOfInteraction(dto.getWayOfInteraction());
         demand.setAttachments(dto.getAttachments());
 
         if (demand.isNew()) {

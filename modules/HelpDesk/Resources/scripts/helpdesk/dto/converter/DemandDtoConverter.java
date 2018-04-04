@@ -15,6 +15,7 @@ public class DemandDtoConverter implements GenericConverter<Demand, Demand> {
         dto.setTitle(demand.getTitle());
         dto.setStatus(demand.getStatus());
         dto.setDemandType(demand.getDemandType());
+        dto.setWayOfInteraction(demand.getWayOfInteraction());
         if (demand.getCustomer() != null) {
             Organization customer = new Organization();
             customer.setName(demand.getCustomer().getName());

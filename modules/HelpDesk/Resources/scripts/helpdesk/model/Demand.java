@@ -131,7 +131,6 @@ public class Demand extends SecureAppEntity<UUID> {
         this.wayOfInteraction = wayOfInteraction;
     }
 
-
     public String getBody() {
         return body;
     }
