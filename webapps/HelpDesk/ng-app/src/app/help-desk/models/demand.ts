@@ -11,6 +11,7 @@ export class Demand {
     statusDate: Date;
     demandType: IEntity; // DemandType
     customer: IEntity; // Organization
+    wayOfInteraction: IEntity;
     body: string;
     tags: IEntity[];
     attachments: Attachment[];
@@ -24,6 +25,7 @@ export class Demand {
             project: m.project ? { id: m.project.id } : null,
             demandType: m.demandType ? { id: m.demandType.id } : null,
             customer: m.customer ? { id: m.customer.id } : null,
+            wayOfInteraction: m.wayOfInteraction ? { id: m.wayOfInteraction.id } : null,
             body: m.body || null,
             tags: m.tags ? m.tags.map(it => { return { id: it.id }; }) : [],
             attachments: Attachment.convertToDtoList(m.attachments)
