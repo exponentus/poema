@@ -16,7 +16,7 @@
             <div class="stat-chart-filter-inner">
                 <div class="fieldset fieldset-grid flex-nowrap">
                     <div class="legend">
-                        {{data.isProjectSupervisor ? 'filter' : 'label_prj_dashboard_stat_assignee_state'
+                        {{(data.isProjectSupervisor ? 'filter' : 'label_prj_dashboard_stat_assignee_state')
                         | translate}}
                     </div>
                     <ng-container *ngIf="data.isProjectSupervisor">
