@@ -4,6 +4,7 @@ import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
+import com.exponentus.log.Lg;
 import com.exponentus.scheduler.PeriodicalServices;
 import com.exponentus.scripting._Session;
 import com.exponentus.scripting.event.Do;
@@ -56,6 +57,7 @@ public class ExpiredTracking extends Do {
 						tDao.update(task);
 						logger.info("The task \"" + task.getRegNumber() + "\" was marked as \"" + tag.getName() + "\"");
 					} catch (SecureException | DAOException e) {
+						Lg.error(task.getClass().getSimpleName() + "=" + task.getId());
 						setError(e);
 					}
 				}
@@ -68,6 +70,7 @@ public class ExpiredTracking extends Do {
 						tDao.update(task);
 						logger.info("The task \"" + task.getRegNumber() + "\" was unmarked as \"" + tag.getName() + "\"");
 					} catch (SecureException | DAOException e) {
+						Lg.error(task.getClass().getSimpleName() + "=" + task.getId());
 						setError(e);
 					}
 				}

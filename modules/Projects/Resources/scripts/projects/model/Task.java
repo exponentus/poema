@@ -41,7 +41,6 @@ import java.util.UUID;
 @Table(name = ModuleConst.CODE + "__tasks")
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
-    @NotNull
     @ManyToOne
     private Project project;
 
