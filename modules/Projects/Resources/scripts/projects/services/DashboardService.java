@@ -26,9 +26,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Path("dashboard")
 @Produces(MediaType.APPLICATION_JSON)
@@ -39,16 +37,15 @@ public class DashboardService extends RestProvider {
         try {
             _Session session = getSession();
             LanguageCode lang = session.getLang();
-            UserDAO userDAO = new UserDAO();
             WebFormData params = getWebFormData();
 
-            // Params
+            // Chart params
             List<IUser> allUsers = new ArrayList<>();
             boolean isProjectSupervisor = session.getUser().getRoles().contains("prj_supervisor");
             if (isProjectSupervisor) {
                 String assigneeUserId = params.getValueSilently("assignee");
                 if (assigneeUserId.isEmpty()) {
-                    allUsers.addAll(userDAO.findAll());
+                    allUsers.addAll(new UserDAO().findAll());
                 } else {
                     IUser user = new User();
                     user.setId(Long.valueOf(assigneeUserId));
@@ -66,36 +63,46 @@ public class DashboardService extends RestProvider {
             if (toDate == null) {
                 toDate = new Date();
             }
-            String periodType = params.getStringValueSilently("periodType", "week"); //could be "day","week", "year" as well
+            String periodType = params.getStringValueSilently("periodType", "week"); // day, week, year
             if (!"day".equals(periodType) && !"week".equals(periodType) && !"year".equals(periodType)) {
                 periodType = "week";
             }
             StatusType[] statusTypes = {StatusType.PROCESSING, StatusType.OPEN, StatusType.PENDING, StatusType.COMPLETED};
 
             //
-
-//            for (StatusType st : statusTypes) {
-//                List<CountStat<Timestamp>> result2 = new TaskDAO(session).getCountByStatus(fromDate, toDate, periodType, "assignee", allUsers, st);
-//
-//            }
-
-
-            // Chart data
             Chart chart = new Chart(ChartType.BAR);
+            // Готовим данные для графика
+            // Нужно создать список всех дат в сортированном виде.
+            // Сделать мапу {дата: количество}
+            // Затем перебирая все даты: если есть дата взять значение из мапы {дата: количество}, если нет 0
+            List<Date> dates = new LinkedList<>(); // unique dates
+            Map<StatusType, Map<Date, Double>> stMap = new HashMap<>();
             for (StatusType st : statusTypes) {
-                List<CountStat<Timestamp>> result = new TaskDAO(session).getCountByStatus(fromDate, toDate, periodType, "assignee", allUsers, st);
-                if (result.size() > 0) {
-                    ChartDataset<Double> ds = new ChartDataset<>(Voc.get(st.name().toLowerCase(), lang));
-                    ds.setId(st.name());
-                    chart.addDataset(ds);
+                List<CountStat<Timestamp>> res = new TaskDAO(session).getCountByStatus(fromDate, toDate, periodType, "assignee", allUsers, st);
+                Map<Date, Double> _map = new HashMap<>();
+                stMap.put(st, _map);
+                for (CountStat<Timestamp> r : res) {
+                    Date date = new Date((r.title).getTime());
+                    if (!dates.contains(date)) {
+                        dates.add(date);
 
-                    for (CountStat r : result) {
-                        String label = new SimpleDateFormat("dd.MM.yyyy").format(new Date(((Timestamp) r.title).getTime()));
-                        if (!chart.getLabels().contains(label)) {
-                            chart.addLabel(label);
-                        }
-                        ds.add((double) r.count);
+                        String label = new SimpleDateFormat("dd.MM.yyyy").format(date);
+                        chart.addLabel(label);
                     }
+                    _map.put(date, (double) r.count);
+                }
+            }
+            dates.sort(Date::compareTo);
+
+            // Chart
+            for (Map.Entry<StatusType, Map<Date, Double>> entry : stMap.entrySet()) {
+                String stName = entry.getKey().name();
+                ChartDataset<Double> ds = new ChartDataset<>(Voc.get(stName.toLowerCase(), lang));
+                ds.setId(stName);
+                chart.addDataset(ds);
+
+                for (Date d : dates) {
+                    ds.add(entry.getValue().getOrDefault(d, 0d));
                 }
             }
 

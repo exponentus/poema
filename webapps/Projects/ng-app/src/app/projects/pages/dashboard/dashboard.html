@@ -29,39 +29,39 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group flex-grow-0 ml-auto">
-                            <div class="controls">
-                                <select [(ngModel)]="filter.periodType" (ngModelChange)="load()">
-                                    <option value="day">{{'day' | translate}}</option>
-                                    <option value="week">{{'week' | translate}}</option>
-                                    <option value="year">{{'year' | translate}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group flex-grow-0">
-                            <div class="controls">
-                                <div class="span2 position-relative">
-                                    <input datepicker name="fromDate" [placeholder]="'from_date' | translate" [(ngModel)]="filter.fromDate"
-                                        (ngModelChange)="load()">
-                                    <button *ngIf="filter.fromDate" type="button" class="btn-clear-input" (click)="filter.fromDate = null;load()">&times;</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group flex-grow-0">
-                            <div class="controls">
-                                <div class="span2 position-relative">
-                                    <input datepicker name="toDate" [placeholder]="'to_date' | translate" [(ngModel)]="filter.toDate"
-                                        (ngModelChange)="load()">
-                                    <button *ngIf="filter.toDate" type="button" class="btn-clear-input" (click)="filter.toDate = null;load()">&times;</button>
-                                </div>
-                            </div>
-                        </div>
                     </ng-container>
+                    <div class="form-group flex-grow-0 ml-auto">
+                        <div class="controls">
+                            <select [(ngModel)]="filter.periodType" (ngModelChange)="load()">
+                                <option value="day">{{'day' | translate}}</option>
+                                <option value="week">{{'week' | translate}}</option>
+                                <option value="year">{{'year' | translate}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group flex-grow-0">
+                        <div class="controls">
+                            <div class="span2 position-relative">
+                                <input datepicker name="fromDate" [placeholder]="'from_date' | translate" [(ngModel)]="filter.fromDate"
+                                    (ngModelChange)="load()">
+                                <button *ngIf="filter.fromDate" type="button" class="btn-clear-input" (click)="filter.fromDate = null;load()">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group flex-grow-0">
+                        <div class="controls">
+                            <div class="span2 position-relative">
+                                <input datepicker name="toDate" [placeholder]="'to_date' | translate" [(ngModel)]="filter.toDate"
+                                    (ngModelChange)="load()">
+                                <button *ngIf="filter.toDate" type="button" class="btn-clear-input" (click)="filter.toDate = null;load()">&times;</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <div style="overflow:auto">
-            <nb-chart style="margin:0 auto;min-height:360px;" [style.minWidth.px]="data.chart.data.labels.length * 100"
+            <nb-chart style="margin:0 auto;min-height:360px;" [style.minWidth.px]="data.chart.data.labels.length * 80"
                 [config]="data.chart"></nb-chart>
         </div>
     </div>

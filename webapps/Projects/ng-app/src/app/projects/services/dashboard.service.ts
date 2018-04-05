@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
-import { IViewPage, DataService, stringToRGB } from '@nb/core';
+import { DataService } from '@nb/core';
 
 const statusColors = {
     PROCESSING: '#ffeb3b',
@@ -16,7 +16,6 @@ interface IChartDataset {
         id: string, label: string, data: number[]
     }];
 }
-
 
 @Injectable()
 export class DashboardService {
@@ -141,7 +140,7 @@ export class DashboardService {
             };
         });
 
-        if (!datasets.length) {
+        if (!datasets.length || minValue < 1) {
             minValue = 0;
         } else {
             minValue--;
@@ -161,11 +160,11 @@ export class DashboardService {
                 tooltips: { mode: 'index', intersect: false },
                 hover: { mode: 'nearest', intersect: true },
                 scales: {
-                    xAxes: [{
-                        // stacked: true,
-                        barPercentage: 0.5,
-                        // barThickness : 73
-                    }],
+                    // xAxes: [{
+                    //     // stacked: true,
+                    //     barPercentage: 0.5,
+                    //     // barThickness : 73
+                    // }],
                     yAxes: [{
                         // stacked: true
                         ticks: { min: minValue }
