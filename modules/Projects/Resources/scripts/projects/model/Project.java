@@ -191,6 +191,6 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
 
 
     public boolean isWasRead() {
-        return wasRead;
+        return true;
     }
 }
