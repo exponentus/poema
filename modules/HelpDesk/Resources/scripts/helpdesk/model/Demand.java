@@ -12,7 +12,6 @@ import projects.model.Project;
 import reference.model.DemandType;
 import reference.model.Tag;
 import reference.model.WayOfInteraction;
-import staff.model.Organization;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -45,8 +44,6 @@ public class Demand extends SecureAppEntity<UUID> {
     @ManyToOne(optional = false)
     @JoinColumn(name = "demand_type")
     private DemandType demandType;
-
-    private Organization customer;
 
     private WayOfInteraction wayOfInteraction;
 
@@ -113,14 +110,6 @@ public class Demand extends SecureAppEntity<UUID> {
 
     public void setDemandType(DemandType demandType) {
         this.demandType = demandType;
-    }
-
-    public Organization getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Organization customer) {
-        this.customer = customer;
     }
 
     public WayOfInteraction getWayOfInteraction() {

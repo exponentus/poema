@@ -7,7 +7,6 @@ import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -144,16 +143,15 @@ public class DemandService extends RestProvider {
                 } catch (DAOException e) {
                     Server.logger.exception(e);
                 }
-
                 entity = demandDomain.composeNew((User) session.getUser(), demandType);
             } else {
                 DemandDAO dao = new DemandDAO(session);
-                entity = dao.findByIdentifier(id);
+                entity = dao.findById(id);
             }
 
             Outcome outcome = demandDomain.getOutcome(entity);
             outcome.addPayload(getActionBar(session, entity));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.setFSID(getWebFormData().getFormSesId());
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -252,6 +250,7 @@ public class DemandService extends RestProvider {
         return getAttachment(id, attachId);
     }
 
+
     private ActionBar getActionBar(_Session session, Demand entity) {
         ActionBar actionBar = new ActionBar(session);
         ConventionalActionFactory actionFactory = new ConventionalActionFactory();
@@ -262,7 +261,7 @@ public class DemandService extends RestProvider {
             actionBar.addAction(actionFactory.saveAndClose.caption(actLabel).cls("btn-primary"));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new Action(ActionType.LINK).caption("create_task").url(""));
+            actionBar.addAction(new Action().caption("create_task").url(ModuleConst.BASE_URL + "api/demands/createTask"));
         }
         if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(actionFactory.deleteDocument);

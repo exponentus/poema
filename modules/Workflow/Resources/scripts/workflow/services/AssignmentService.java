@@ -127,11 +127,11 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
                 Assignment parent = null;
 
                 if (!incomingId.isEmpty()) {
-                    primary = (new IncomingDAO(ses)).findByIdentifier(incomingId);
+                    primary = (new IncomingDAO(ses)).findById(incomingId);
                 } else if (!officeMemoId.isEmpty()) {
-                    primary = new OfficeMemoDAO(ses).findByIdentifier(officeMemoId);
+                    primary = new OfficeMemoDAO(ses).findById(officeMemoId);
                 } else if (!assignmentId.isEmpty()) {
-                    parent = assignmentDAO.findByIdentifier(assignmentId);
+                    parent = assignmentDAO.findById(assignmentId);
                     // primary = parent.getPrimary();
                 } else {
                     throw new IllegalArgumentException("No parent document");
@@ -139,7 +139,7 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
 
                 entity = ad.composeNew(currentUserEmployee, primary, parent);
             } else {
-                entity = assignmentDAO.findByIdentifier(id);
+                entity = assignmentDAO.findById(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
