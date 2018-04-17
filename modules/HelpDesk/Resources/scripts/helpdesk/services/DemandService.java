@@ -28,7 +28,6 @@ import projects.model.Project;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 import reference.model.Tag;
-import staff.model.Organization;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -52,7 +51,6 @@ public class DemandService extends RestProvider {
             String statusName = params.getValueSilently("status");
             String demandTypeId = params.getValueSilently("demandType");
             String projectId = params.getValueSilently("project");
-            String customerId = params.getValueSilently("customer");
 
             SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             DemandFilter filter = new DemandFilter();
@@ -78,11 +76,6 @@ public class DemandService extends RestProvider {
                 Project project = new Project();
                 project.setId(UUID.fromString(projectId));
                 filter.setProject(project);
-            }
-            if (!customerId.isEmpty()) {
-                Organization org = new Organization();
-                org.setId(UUID.fromString(customerId));
-                filter.setCustomer(org);
             }
             if (params.containsField("tags")) {
                 List<Tag> tags = new ArrayList<>();

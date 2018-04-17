@@ -20,29 +20,24 @@ public class ViewOptions {
         ViewOption result = new ViewOption();
 
         ViewColumnGroup cg1 = new ViewColumnGroup();
-        cg1.setClassName("vw-40");
+        cg1.setClassName("vw-50");
         cg1.add(new ViewColumn("regNumber").name("reg_number").sortDesc().className("vw-40"));
         cg1.add(new ViewColumn("title").sortBoth());
         cg1.add(new ViewColumn("hasAttachment").type(ViewColumnType.attachment));
 
         ViewColumnGroup cg2 = new ViewColumnGroup();
-        cg2.setClassName("vw-25");
+        cg2.setClassName("vw-30");
         cg2.add(new ViewColumn("demandType").name("demand_type").type(ViewColumnType.localizedName).className("vw-60"));
         cg2.add(new ViewColumn("status").type(ViewColumnType.translate).className("vw-40").valueAsClass("status-"));
 
         ViewColumnGroup cg3 = new ViewColumnGroup();
         cg3.setClassName("vw-20");
-        cg3.add(new ViewColumn("customer").type(ViewColumnType.localizedName));
-
-        ViewColumnGroup cg4 = new ViewColumnGroup();
-        cg4.setClassName("vw-15");
-        cg4.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color:it.color }"));
+        cg3.add(new ViewColumn("tags").type(ViewColumnType.localizedName).style("return { color:it.color }"));
 
         List<ViewColumnGroup> list = new ArrayList<>();
         list.add(cg1);
         list.add(cg2);
         list.add(cg3);
-        list.add(cg4);
 
         result.setRoot(list);
         return result;
@@ -60,7 +55,6 @@ public class ViewOptions {
         FilterForm filterForm = new FilterForm();
         FilterGroup filterGroup = new FilterGroup();
         filterGroup.addItem(new FilterItem("status").items(items));
-        filterGroup.addItem(new FilterItem("customer").url("/Staff/api/organizations"));
         filterGroup.addItem(new FilterItem("project").url("/Projects/api/projects"));
         filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_demand").style("return {color:it.color}"));
 

@@ -6,7 +6,6 @@ import helpdesk.model.constants.DemandStatusType;
 import projects.model.Project;
 import reference.model.DemandType;
 import reference.model.Tag;
-import staff.model.Organization;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
@@ -18,7 +17,6 @@ public class DemandFilter implements IFilter<Demand> {
     private DemandStatusType status = DemandStatusType.UNKNOWN;
     private DemandType demandType;
     private Project project;
-    private Organization customer;
     private List<Tag> tags;
 
     public DemandStatusType getStatus() {
@@ -45,14 +43,6 @@ public class DemandFilter implements IFilter<Demand> {
         this.project = project;
     }
 
-    public Organization getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Organization customer) {
-        this.customer = customer;
-    }
-
     public List<Tag> getTags() {
         return tags;
     }
@@ -76,14 +66,6 @@ public class DemandFilter implements IFilter<Demand> {
                 condition = cb.and(cb.equal(root.get("demandType"), demandType));
             } else {
                 condition = cb.and(cb.equal(root.get("demandType"), demandType), condition);
-            }
-        }
-
-        if (customer != null) {
-            if (condition == null) {
-                condition = cb.and(cb.equal(root.get("customer"), customer));
-            } else {
-                condition = cb.and(cb.equal(root.get("customer"), customer), condition);
             }
         }
 
