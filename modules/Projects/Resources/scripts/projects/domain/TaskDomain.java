@@ -330,7 +330,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         Event event = new Event();
         event.setDescription(task.getBody());
         event.setEventTime(task.getDueDate());
-        String title =  StringUtils.abbreviate(task.getRegNumber() + " " + task.getTitle(), 140);
+        String title = StringUtils.abbreviate(task.getRegNumber() + " " + task.getTitle(), 140);
         event.setTitle(title);
         event.setPriority(task.getPriority());
         event.setTags(task.getTags());
