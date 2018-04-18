@@ -8,18 +8,22 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
+import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
+import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
 import java.util.Date;
 
 public class DemandDomain extends CommonDomain<Demand> {
 
-    public DemandDomain(_Session ses) {
+    public DemandDomain(_Session ses) throws DAOException {
         super(ses);
+        dao = new DemandDAO(ses);
     }
 
     public Demand composeNew(User user, DemandType demandType) {
@@ -36,27 +40,41 @@ public class DemandDomain extends CommonDomain<Demand> {
 
     @Override
     public Demand fillFromDto(Demand dto, IValidation<Demand> validation, String formSesId) throws DTOException, DAOException {
-        return null;
-    }
+        validation.check(dto);
 
-    public void fillFromDto(Demand demand, Demand dto, User user) throws DTOException {
-        validate(dto);
+        Demand entity;
+        DemandTypeDAO demandTypeDAO = new DemandTypeDAO(ses);
 
-        demand.setStatus(dto.getStatus());
-        demand.setStatusDate(dto.getStatusDate());
-        demand.setTitle(dto.getTitle());
-        demand.setBody(dto.getBody());
-        demand.setTags(dto.getTags());
-        demand.setAttachments(dto.getAttachments());
-        demand.setDemandType(dto.getDemandType());
-        demand.setProject(dto.getProject());
-        demand.setWayOfInteraction(dto.getWayOfInteraction());
-        demand.setAttachments(dto.getAttachments());
-
-        if (demand.isNew()) {
-            demand.setAuthor(user);
-            demand.addReaderEditor(demand.getAuthor());
+        if (dto.isNew()) {
+            entity = new Demand();
+        } else {
+            entity = dao.findById(dto.getId());
         }
+
+        DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
+        entity.setDemandType(demandType);
+        entity.setStatus(dto.getStatus());
+        entity.setStatusDate(dto.getStatusDate());
+        entity.setTitle(dto.getTitle());
+        entity.setBody(dto.getBody());
+        entity.setTags(dto.getTags());
+        entity.setProject(dto.getProject());
+        entity.setWayOfInteraction(dto.getWayOfInteraction());
+        entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
+
+        if (entity.isNew()) {
+            RegNum rn = new RegNum();
+            entity.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
+
+            entity.setAuthor(ses.getUser());
+            entity.addReaderEditor(entity.getAuthor());
+        }
+
+        if (entity.getTask() == null && dto.getTask() != null) {
+            entity.setTask(dto.getTask());
+        }
+
+        return entity;
     }
 
     public void changeStatus(Demand demand, DemandStatusType status) {
@@ -68,21 +86,6 @@ public class DemandDomain extends CommonDomain<Demand> {
 
     public void registerTask(Demand demand) {
 
-    }
-
-    private void validate(Demand demand) throws DTOException {
-        DTOException ve = new DTOException();
-
-        if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
-            ve.addError("title", "required", "field_is_empty");
-        }
-        if (demand.getDemandType() == null) {
-            ve.addError("demandType", "required", "field_is_empty");
-        }
-
-        if (ve.hasError()) {
-            throw ve;
-        }
     }
 
     public Outcome getOutcome(Demand demand) {

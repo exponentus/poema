@@ -9,6 +9,7 @@ import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.constants.converter.DemandStatusConverter;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.model.Project;
+import projects.model.Task;
 import reference.model.DemandType;
 import reference.model.Tag;
 import reference.model.WayOfInteraction;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
+    private Task task;
 
     @FTSearchable(ignoreLang = true)
     @Column(name = "reg_number", unique = true, length = 64)
@@ -70,6 +72,14 @@ public class Demand extends SecureAppEntity<UUID> {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     public DemandStatusType getStatus() {

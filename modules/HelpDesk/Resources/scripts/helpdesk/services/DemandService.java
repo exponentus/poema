@@ -1,6 +1,8 @@
 package helpdesk.services;
 
 import administrator.model.User;
+import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
@@ -8,10 +10,8 @@ import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
@@ -29,7 +29,10 @@ import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 import reference.model.Tag;
 
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ import java.util.UUID;
 
 @Path("demands")
 @Produces(MediaType.APPLICATION_JSON)
-public class DemandService extends RestProvider {
+public class DemandService extends EntityService<Demand, DemandDomain> {
 
     @GET
     public Response getViewPage() {
@@ -116,10 +119,10 @@ public class DemandService extends RestProvider {
     @GET
     @Path("{id}")
     public Response getById(@PathParam("id") String id) {
-        _Session session = getSession();
-        Demand entity;
-        DemandDomain demandDomain = new DemandDomain(session);
         try {
+            _Session session = getSession();
+            Demand entity;
+            DemandDomain demandDomain = new DemandDomain(session);
             boolean isNew = "new".equals(id);
 
             if (isNew) {
@@ -152,97 +155,19 @@ public class DemandService extends RestProvider {
         }
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(Demand dto) {
-        dto.setId(null);
-        return save(dto);
-    }
-
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, Demand dto) {
-        dto.setId(UUID.fromString(id));
-        return save(dto);
-    }
-
-    public Response save(Demand dto) {
-        _Session session = getSession();
-        Demand demand;
-        DemandDomain demandDomain = new DemandDomain(session);
-
+    @Override
+    public Response saveForm(Demand dto) {
         try {
-            DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
-            DemandDAO demandDAO = new DemandDAO(session);
-
-            if (dto.isNew()) {
-                demand = new Demand();
-            } else {
-                demand = demandDAO.findById(dto.getId());
-            }
-
-            DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
-            dto.setDemandType(demandType);
-            dto.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
-
-            demandDomain.fillFromDto(demand, dto, (User) session.getUser());
-
-            if (dto.isNew()) {
-                RegNum rn = new RegNum();
-                demand.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
-                demand = demandDAO.add(demand);
-            } else {
-                demand = demandDAO.update(demand);
-            }
-
-            Outcome outcome = demandDomain.getOutcome(demand);
-
-            return Response.ok(outcome).build();
-        } catch (SecureException | DAOException e) {
-            return responseException(e);
+            DemandDomain domain = new DemandDomain(getSession());
+            Demand entity = domain.fillFromDto(dto, new DemandService.Validation(), getWebFormData().getFormSesId());
+            domain.save(entity);
+            return Response.ok(domain.getOutcome(entity)).build();
         } catch (DTOException e) {
             return responseValidationError(e);
-        }
-    }
-
-    @DELETE
-    @Path("{id}")
-    public Response delete(@PathParam("id") String id) {
-        _Session ses = getSession();
-        try {
-            DemandDAO dao = new DemandDAO(ses);
-            Demand entity = dao.findByIdentifier(id);
-            if (entity != null) {
-                dao.delete(entity);
-            }
-            return Response.noContent().build();
-        } catch (SecureException | DAOException e) {
+        } catch (DAOException | SecureException e) {
             return responseException(e);
         }
     }
-
-    @GET
-    @Path("{id}/attachments/{attachId}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        try {
-            DemandDAO demandDAO = new DemandDAO(getSession());
-            Demand demand = demandDAO.findByIdentifier(id);
-
-            return getAttachment(demand, attachId);
-        } catch (DAOException e) {
-            return responseException(e);
-        }
-    }
-
-    @GET
-    @Path("{id}/attachments/{attachId}/{fileName}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        return getAttachment(id, attachId);
-    }
-
 
     private ActionBar getActionBar(_Session session, Demand entity) {
         ActionBar actionBar = new ActionBar(session);
@@ -254,12 +179,28 @@ public class DemandService extends RestProvider {
             actionBar.addAction(actionFactory.saveAndClose.caption(actLabel).cls("btn-primary"));
         }
         if (!entity.isNew() && entity.isEditable()) {
-            actionBar.addAction(new Action().caption("create_task").url(ModuleConst.BASE_URL + "api/demands/createTask"));
-        }
-        if (!entity.isNew() && entity.isEditable()) {
             actionBar.addAction(actionFactory.deleteDocument);
         }
 
         return actionBar;
+    }
+
+    private class Validation implements IValidation<Demand> {
+
+        @Override
+        public void check(Demand demand) throws DTOException {
+            DTOException ve = new DTOException();
+
+            if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
+                ve.addError("title", "required", "field_is_empty");
+            }
+            if (demand.getDemandType() == null) {
+                ve.addError("demandType", "required", "field_is_empty");
+            }
+
+            if (ve.hasError()) {
+                throw ve;
+            }
+        }
     }
 }
