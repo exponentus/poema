@@ -11,10 +11,10 @@
             </div>
         </div>
         <div class="title-input-wrapper">
-            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
+            <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.name" autocomplete="off"
                 required name="title" maxlength="140" placeholder="{{'title' | translate}}"
-                [(ngModel)]="model.title">
-            <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
+                [(ngModel)]="model.name">
+            <div *ngIf="!isEditable" class="doc-title">{{model.name}}</div>
         </div>
     </header>
     <section class="content-body">
