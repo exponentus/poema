@@ -369,7 +369,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return ModuleConst.BASE_URL + "tasks/" + getId();
     }
 
-
     @Override
     public List<Block> getBlocks() {
         return blocks;
@@ -468,7 +467,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return false;
     }
 
-
     @Override
     public EmbeddedSecureHierarchicalEntity getParentEntity(_Session ses) {
         if (parent != null) {
@@ -481,7 +479,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     public LifeCycleNode getLifeCycle(IUser user, UUID id) {
         LifeCycleNode lc = getNode(user, id);
-
 
         if (subtasks != null) {
             for (Task a : subtasks) {
@@ -513,9 +510,5 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         }
         lc.setUrl(getURL());
         return lc;
-    }
-
-    public boolean isWasRead() {
-        return wasRead;
     }
 }

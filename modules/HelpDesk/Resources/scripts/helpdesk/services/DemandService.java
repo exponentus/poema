@@ -2,6 +2,7 @@ package helpdesk.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
@@ -36,8 +37,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Path("demands")
 @Produces(MediaType.APPLICATION_JSON)
@@ -148,6 +152,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             Outcome outcome = demandDomain.getOutcome(entity);
             outcome.addPayload(getActionBar(session, entity));
             outcome.setFSID(getWebFormData().getFormSesId());
+            outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {
@@ -159,9 +164,21 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
     public Response saveForm(Demand dto) {
         try {
             DemandDomain domain = new DemandDomain(getSession());
-            Demand entity = domain.fillFromDto(dto, new DemandService.Validation(), getWebFormData().getFormSesId());
-            domain.save(entity);
-            return Response.ok(domain.getOutcome(entity)).build();
+            Demand demand = domain.fillFromDto(dto, new DemandService.Validation(), getWebFormData().getFormSesId());
+//            if (demand.getTask() != null) {
+//                TaskDAO taskDAO = new TaskDAO(getSession());
+//                TaskDomain taskDomain = new TaskDomain(getSession());
+//                Task task = taskDomain.fillFromDto(demand.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+//
+//                domain.save(demand);
+//                taskDAO.save(task);
+//            } else {
+//                domain.save(demand);
+//            }
+
+            domain.save(demand);
+
+            return Response.ok(domain.getOutcome(demand)).build();
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException e) {

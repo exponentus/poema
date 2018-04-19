@@ -12,6 +12,7 @@ import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+import projects.dao.RequestDAO;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
@@ -23,8 +24,9 @@ import static projects.model.constants.ResolutionType.DECLINED;
 
 public class RequestDomain extends CommonDomain<Request> {
 
-    public RequestDomain(_Session ses) {
+    public RequestDomain(_Session ses) throws DAOException {
         super(ses);
+        dao = new RequestDAO(ses);
     }
 
     public Request composeNew(User author, Task task) {
@@ -47,7 +49,7 @@ public class RequestDomain extends CommonDomain<Request> {
         request.setRequestType(dto.getRequestType());
         request.setComment(dto.getComment());
         request.setAttachments(dto.getAttachments());
-        String title =  StringUtils.abbreviate(dto.getRequestType().getTitle() + " " + dto.getComment(), 140);
+        String title = StringUtils.abbreviate(dto.getRequestType().getTitle() + " " + dto.getComment(), 140);
         request.setTitle(title);
         if (request.isNew()) {
             request.setTask(dto.getTask());
@@ -67,16 +69,6 @@ public class RequestDomain extends CommonDomain<Request> {
 
         return (rt != ACCEPTED && rt != DECLINED) && taskAuthorId == user.getId();
     }
-
-//    public void doResolution(Request request, User user, ResolutionType resolutionType, String decisionComment) throws DTOException {
-//        if (!userCanDoResolution(request, user)) {
-//            throw new DTOException(DTOExceptionType.IMPROPER_CONDITION, "User " + user.getLogin() + " can not do resolution or request already resolved. Current resolution: " + request.getResolution());
-//        }
-//
-//        request.setResolution(resolutionType);
-//        request.setResolutionTime(new Date());
-//        request.setDecisionComment(decisionComment);
-//    }
 
     public void doAcceptRequest(Request request) throws DTOException {
         if (!userCanDoResolution(request, (User) ses.getUser())) {

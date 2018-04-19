@@ -12,6 +12,7 @@ import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import projects.dao.ProjectDAO;
 import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.constants.ProjectStatusType;
@@ -29,8 +30,9 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public class ProjectDomain extends CommonDomain<Project> {
 
-    public ProjectDomain(_Session ses) {
+    public ProjectDomain(_Session ses) throws DAOException {
         super(ses);
+        dao = new ProjectDAO(ses);
     }
 
     public Project composeNew(User author) {
@@ -46,13 +48,17 @@ public class ProjectDomain extends CommonDomain<Project> {
 
     @Override
     public Project fillFromDto(Project dto, IValidation<Project> validation, String formSesId) throws DTOException, DAOException {
-        return null;
-    }
+        validation.check(dto);
 
-    public void fillFromDto(Project project, Project dto, User author) throws DAOException {
-        if (project.isNew()) {
-            project.setAuthor(author);
+        Project project;
+
+        if (dto.isNew()) {
+            project = new Project();
+            project.setAuthor(ses.getUser());
+        } else {
+            project = dao.findById(dto.getId());
         }
+
         project.setName(dto.getName());
         project.setTitle(dto.getName());
         project.setCustomer(dto.getCustomer());
@@ -63,10 +69,12 @@ public class ProjectDomain extends CommonDomain<Project> {
         project.setComment(dto.getComment());
         project.setStatus(dto.getStatus());
         project.setFinishDate(dto.getFinishDate());
-        project.setAttachments(dto.getAttachments());
+        project.setAttachments(getActualAttachments(project.getAttachments(), dto.getAttachments(), formSesId));
         project.setPrimaryLanguage(EnvConst.getDefaultLang());
         project.setObservers(dto.getObservers() != null ? dto.getObservers() : new ArrayList<>());
         calculateReaders(project);
+
+        return project;
     }
 
     public void calculateReaders(Project project) throws DAOException {
@@ -85,7 +93,6 @@ public class ProjectDomain extends CommonDomain<Project> {
             readers.addAll(project.getObservers());
         }
 
-
         EmployeeDAO employeeDAO = new EmployeeDAO(ses);
         ViewPage<Employee> supervisors = employeeDAO.findByRole(ModuleConst.CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME);
         for (Employee sv : supervisors.getResult()) {
@@ -95,8 +102,9 @@ public class ProjectDomain extends CommonDomain<Project> {
         project.setReaders(readers);
     }
 
-    public boolean projectCanBeDeleted(Project project) {
-        return !project.isNew() && project.isEditable() && (project.getTasks() == null || project.getTasks().size() == 0);
+    @Override
+    public boolean documentCanBeDeleted(Project project) {
+        return super.documentCanBeDeleted(project) && (project.getTasks() == null || project.getTasks().size() == 0);
     }
 
     public Outcome getOutcome(Project project) {

@@ -3,6 +3,7 @@ package projects.services;
 import administrator.dao.UserDAO;
 import administrator.model.User;
 import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.dto.ActionPayload;
 import com.exponentus.common.model.constants.ApprovalResultType;
@@ -11,6 +12,7 @@ import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.Milestones;
 import com.exponentus.common.ui.ViewPage;
@@ -22,7 +24,6 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.log.Lg;
-import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.services.Defended;
@@ -66,7 +67,7 @@ import static java.util.stream.Collectors.toList;
 
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
-public class TaskService extends RestProvider {
+public class TaskService extends EntityService<Task, TaskDomain> {
 
     @GET
     public Response getViewPage() {
@@ -193,7 +194,6 @@ public class TaskService extends RestProvider {
                 }
 
                 Environment.database.markAsRead(session.getUser(), task);
-
             }
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
@@ -214,58 +214,23 @@ public class TaskService extends RestProvider {
         }
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(Task dto) {
-        dto.setId(null);
-        return save(dto);/***/
-    }
-
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("id") String id, Task dto) {
-        dto.setId(UUID.fromString(id));
-        return save(dto);
-    }
-
-    public Response save(Task taskDto) {
+    @Override
+    public Response saveForm(Task taskDto) {
         _Session session = getSession();
-        IUser user = session.getUser();
 
         try {
-            validate(taskDto);
-
-            DemandDAO demandDAO = new DemandDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
-            Task task;
-            TaskType taskType;
-
-            if (taskDto.isNew()) {
-                task = new Task();
-                taskDto.setAuthor(user);
-
-                if (taskDto.getParent() != null) {
-                    taskDto.setParent(taskDAO.findById(taskDto.getParent().getId()));
-                }
-            } else {
-                task = taskDAO.findById(taskDto.getId());
-            }
-
-            if (taskDto.getDemand() != null) {
-                taskDto.setDemand(demandDAO.findById(taskDto.getDemand().getId()));
-            }
-            taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
-
             TaskDomain taskDomain = new TaskDomain(session);
-            taskDomain.fillFromDto(task, taskDto);
+            taskDomain.setAppEnv(getAppEnv());
+            Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
             // IMonitoringDAO mDao = Environment.getActivityRecorder();
+            // taskDomain.saveTask(task);
 
             if (taskDto.isNew()) {
                 RegNum rn = new RegNum();
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
-                taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
-                task.setRegNumber(taskType.getPrefix() + rn.getRegNumber(taskType.getPrefix()));
+                // taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
+                task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
                 task = taskDAO.add(task, rn);
                 //	mDao.postEmailSending(user, task, "task_was_registered");
             } else {
@@ -315,61 +280,20 @@ public class TaskService extends RestProvider {
         }
     }
 
-    @Override
-    @GET
-    @Path("{id}/attachments/{attachId}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        try {
-            TaskDAO dao = new TaskDAO(getSession());
-            Task entity = dao.findById(id);
-
-            return getAttachment(entity, attachId);
-        } catch (Exception e) {
-            return responseException(e);
-        }
-    }
-
-    @GET
-    @Path("{id}/attachments/{attachId}/{fileName}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getAttachmentFN(@PathParam("id") String id, @PathParam("attachId") String attachId) {
-        return getAttachment(id, attachId);
-    }
-
     @POST
     @Path("saveAsDraft")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveAsDraft(Task taskDto) {
         _Session session = getSession();
-        IUser user = session.getUser();
 
         try {
-            // validate(taskDto);
-
             TaskDAO taskDAO = new TaskDAO(session);
-            Task task;
-
-            if (taskDto.isNew()) {
-                task = new Task();
-                taskDto.setAuthor(user);
-                if (taskDto.getParent() != null) {
-                    taskDto.setParent(taskDAO.findById(taskDto.getParent().getId()));
-                }
-            } else {
-                task = taskDAO.findById(taskDto.getId());
-            }
-            taskDto.setAttachments(getActualAttachments(task.getAttachments(), taskDto.getAttachments()));
 
             TaskDomain taskDomain = new TaskDomain(session);
-            taskDomain.fillDraft(task, taskDto);
+            Task task = taskDomain.fillDraft(taskDto, new DefaultValidation(), getWebFormData().getFormSesId());
             task = taskDAO.save(task);
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
-        } catch (SecureException | DatabaseException | DAOException e) {
-            return responseException(e);
-//        } catch (DTOException e) {
-//            return responseValidationError(e);
         } catch (Exception e) {
             return responseException(e);
         }
@@ -553,51 +477,61 @@ public class TaskService extends RestProvider {
         return actionBar;
     }
 
-    private void validate(Task task) throws DTOException {
-        DTOException ve = new DTOException();
-        UserDAO userDAO = new UserDAO(getSession());
+    public static class Validation implements IValidation<Task> {
 
-        if (task.getParent() == null && task.getProject() == null) {
-            ve.addError("project", "required", "field_is_empty");
-        }
-        if (task.getParent() == null && task.getTaskType() == null) {
-            ve.addError("taskType", "required", "field_is_empty");
-        }
-        if (task.getBody() == null || task.getBody().isEmpty()) {
-            ve.addError("body", "required", "field_is_empty");
-        } else if (task.getBody().length() > 5000) {
-            ve.addError("body", "maxlen:5000", "field_is_too_long");
-        }
-        if (task.getStatus() == null) {
-            ve.addError("status", "required", "field_is_empty");
-        }
-        if (task.getPriority() == null) {
-            ve.addError("priority", "required", "field_is_empty");
-        }
-        if (task.getStartDate() == null) {
-            ve.addError("startDate", "date", "field_is_empty");
-        }
-        if (task.getDueDate() == null) {
-            ve.addError("dueDate", "date", "field_is_empty");
+        private _Session session;
+
+        public Validation(_Session session) {
+            this.session = session;
         }
 
-        if (!task.isInitiative() && (task.getAssignee() == null || task.getAssignee() <= 0)) {
-            ve.addError("assignee", "required", "field_is_empty");
-        } else if (userDAO.findById(task.getAssignee()) == null) {
-            ve.addError("assignee", "required", "user_not_found");
-        }
+        @Override
+        public void check(Task task) throws DTOException {
+            DTOException ve = new DTOException();
+            UserDAO userDAO = new UserDAO(session);
 
-        if (task.getObservers() != null && task.getObservers().size() > 0) {
-            for (long uid : task.getObservers()) {
-                IUser ou = userDAO.findById(uid);
-                if (ou == null) {
-                    ve.addError("observers", "required", "observer user not found: id=" + uid);
+            if (task.getParent() == null && task.getProject() == null) {
+                ve.addError("project", "required", "field_is_empty");
+            }
+            if (task.getParent() == null && task.getTaskType() == null) {
+                ve.addError("taskType", "required", "field_is_empty");
+            }
+            if (task.getBody() == null || task.getBody().isEmpty()) {
+                ve.addError("body", "required", "field_is_empty");
+            } else if (task.getBody().length() > 5000) {
+                ve.addError("body", "maxlen:5000", "field_is_too_long");
+            }
+            if (task.getStatus() == null) {
+                ve.addError("status", "required", "field_is_empty");
+            }
+            if (task.getPriority() == null) {
+                ve.addError("priority", "required", "field_is_empty");
+            }
+            if (task.getStartDate() == null) {
+                ve.addError("startDate", "date", "field_is_empty");
+            }
+            if (task.getDueDate() == null) {
+                ve.addError("dueDate", "date", "field_is_empty");
+            }
+
+            if (!task.isInitiative() && (task.getAssignee() == null || task.getAssignee() <= 0)) {
+                ve.addError("assignee", "required", "field_is_empty");
+            } else if (userDAO.findById(task.getAssignee()) == null) {
+                ve.addError("assignee", "required", "user_not_found");
+            }
+
+            if (task.getObservers() != null && task.getObservers().size() > 0) {
+                for (long uid : task.getObservers()) {
+                    IUser ou = userDAO.findById(uid);
+                    if (ou == null) {
+                        ve.addError("observers", "required", "observer user not found: id=" + uid);
+                    }
                 }
             }
-        }
 
-        if (ve.hasError()) {
-            throw ve;
+            if (ve.hasError()) {
+                throw ve;
+            }
         }
     }
 

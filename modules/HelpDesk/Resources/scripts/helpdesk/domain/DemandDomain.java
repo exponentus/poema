@@ -72,6 +72,8 @@ public class DemandDomain extends CommonDomain<Demand> {
 
         if (entity.getTask() == null && dto.getTask() != null) {
             entity.setTask(dto.getTask());
+            entity.getTask().setDemand(entity);
+            entity.getTask().setProject(entity.getProject());
         }
 
         return entity;

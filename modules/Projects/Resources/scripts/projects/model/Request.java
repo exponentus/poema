@@ -158,8 +158,4 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
     public TimeLine getTimeLine() {
         return null;
     }
-
-    public boolean isWasRead() {
-        return wasRead;
-    }
 }

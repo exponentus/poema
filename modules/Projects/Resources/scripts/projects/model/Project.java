@@ -188,9 +188,4 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
     public String getURL() {
         return ModuleConst.BASE_URL + "projects/" + getId();
     }
-
-
-    public boolean isWasRead() {
-        return true;
-    }
 }
