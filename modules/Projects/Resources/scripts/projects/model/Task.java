@@ -44,6 +44,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @ManyToOne
     private Project project;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private Demand demand;
 

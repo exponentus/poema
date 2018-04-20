@@ -425,7 +425,8 @@ public class TaskDomain extends ApprovalDomain<Task> {
         if (task.getDemand() != null) {
             Demand demand = new Demand();
             demand.setId(task.getDemand().getId());
-            demand.setTitle(task.getTitle());
+            demand.setTitle(task.getDemand().getTitle());
+            demand.setStatus(task.getDemand().getStatus());
             task.setDemand(demand);
         }
 

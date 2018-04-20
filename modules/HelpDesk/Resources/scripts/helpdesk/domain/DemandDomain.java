@@ -104,8 +104,9 @@ public class DemandDomain extends CommonDomain<Demand> {
         if (demand.getTask() != null) {
             Task task = new Task();
             task.setId(demand.getTask().getId());
-            task.setTitle(demand.getTitle());
-            task.setRegNumber(demand.getRegNumber());
+            task.setTitle(demand.getTask().getTitle());
+            task.setRegNumber(demand.getTask().getRegNumber());
+            task.setStatus(demand.getTask().getStatus());
             demand.setTask(task);
         }
 

@@ -106,8 +106,8 @@
                 <div class="controls">
                     <div class="input-placeholder">
                         <b>№{{model.task.regNumber}}</b>
-                        <span class="ml-1 mr-1 status-{{model.status | lowercase}}">
-                            {{model.status | lowercase | translate}}
+                        <span class="ml-1 mr-1 status-{{model.task.status | lowercase}}">
+                            {{model.task.status | lowercase | translate}}
                         </span>
                         <span>{{model.task.title}}</span>
                     </div>

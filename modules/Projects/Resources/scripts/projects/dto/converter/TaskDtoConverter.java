@@ -2,6 +2,7 @@ package projects.dto.converter;
 
 import com.exponentus.common.dto.converter.ExtConverter;
 import com.exponentus.user.IUser;
+import helpdesk.model.Demand;
 import projects.model.Project;
 import projects.model.Task;
 
@@ -32,8 +33,17 @@ public class TaskDtoConverter extends ExtConverter<Task, Task> {
 
         if (task.getProject() != null) {
             Project project = new Project();
+            project.setId(task.getProject().getId());
             project.setName(task.getProject().getName());
             result.setProject(project);
+        }
+
+        if (task.getDemand() != null) {
+            Demand demand = new Demand();
+            demand.setId(task.getDemand().getId());
+            demand.setTitle(task.getDemand().getTitle());
+            demand.setStatus(task.getDemand().getStatus());
+            task.setDemand(demand);
         }
 
         result.setTags(task.getTags());
