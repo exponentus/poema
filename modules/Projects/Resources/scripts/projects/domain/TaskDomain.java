@@ -22,10 +22,10 @@ import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.rest.validation.exception.DTOExceptionType;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
-import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
@@ -35,6 +35,7 @@ import projects.model.Project;
 import projects.model.Request;
 import projects.model.Task;
 import projects.model.constants.ResolutionType;
+import projects.other.Messages;
 import reference.dao.TaskTypeDAO;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
@@ -120,10 +121,10 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 //	dto.setProject(dto.getParent().getProject());
                 //	task.addReaders(dto.getParent().getReader());
             }
-            if (dto.getDemand() != null) {
-                DemandDAO demandDAO = new DemandDAO(ses);
-                dto.setDemand(demandDAO.findById(dto.getDemand().getId()));
-            }
+//            if (dto.getDemand() != null) {
+//                DemandDAO demandDAO = new DemandDAO(ses);
+//                dto.setDemand(demandDAO.findById(dto.getDemand().getId()));
+//            }
         } else {
             task = dao.findById(dto.getId());
         }
@@ -167,32 +168,32 @@ public class TaskDomain extends ApprovalDomain<Task> {
         return task;
     }
 
-//    public void saveTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException {
-//        if (task.isNew()) {
-//            RegNum rn = new RegNum();
-//            task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
-//            task = dao.add(task, rn);
-//            //	mDao.postEmailSending(user, task, "task_was_registered");
-//        } else {
-//            task = dao.update(task);
-//            //	mDao.postEmailSending(user, task, "task_was_updated");
-//        }
-//
-//        if (task.getStatus() == StatusType.OPEN) {
-//            ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
-//            lifecycle.start();
-//            if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
-//                task.getTimeLine().addStage(new Date(), StatusType.MODERATION.name());
-//                task.addReaderEditor(task.getAuthorId()); //dev1292
-//                superUpdate(task);
-//                new Messages(getAppEnv()).sendToModerate(task);
-//            } else {
-//                superUpdate(task);
-//                new Messages(getAppEnv()).sendToAssignee(task);
-//                postCalendarEvent(task);
-//            }
-//        }
-//    }
+    public void registerTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException {
+        if (task.isNew()) {
+            RegNum rn = new RegNum();
+            task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
+            task = dao.add(task, rn);
+            //	mDao.postEmailSending(user, task, "task_was_registered");
+        } else {
+            task = dao.update(task);
+            //	mDao.postEmailSending(user, task, "task_was_updated");
+        }
+
+        if (task.getStatus() == StatusType.OPEN) {
+            ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
+            lifecycle.start();
+            if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
+                task.getTimeLine().addStage(new Date(), StatusType.MODERATION.name());
+                task.addReaderEditor(task.getAuthorId()); //dev1292
+                superUpdate(task);
+                new Messages(getAppEnv()).sendToModerate(task);
+            } else {
+                superUpdate(task);
+                new Messages(getAppEnv()).sendToAssignee(task);
+                postCalendarEvent(task);
+            }
+        }
+    }
 
     public void changeStatus(Task task, StatusType status) {
         task.setStatus(status);
@@ -419,6 +420,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
         outcome.addPayload("parentTask", task.getParent());
         if (!task.isNew()) {
             outcome.addPayload(new ACL(task));
+        }
+
+        if (task.getDemand() != null) {
+            Demand demand = new Demand();
+            demand.setId(task.getDemand().getId());
+            demand.setTitle(task.getTitle());
+            task.setDemand(demand);
         }
 
         if (task.getRequests() != null && !task.getRequests().isEmpty()) {

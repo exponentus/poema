@@ -26,6 +26,8 @@ import java.util.UUID;
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
+
+    // @OneToOne(optional = false, cascade = CascadeType.PERSIST)
     private Task task;
 
     @FTSearchable(ignoreLang = true)

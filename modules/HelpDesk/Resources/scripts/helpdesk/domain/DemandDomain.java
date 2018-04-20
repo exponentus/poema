@@ -8,12 +8,12 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.Environment;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
+import projects.model.Task;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -47,6 +47,8 @@ public class DemandDomain extends CommonDomain<Demand> {
 
         if (dto.isNew()) {
             entity = new Demand();
+            entity.setAuthor(ses.getUser());
+            entity.addReaderEditor(entity.getAuthor());
         } else {
             entity = dao.findById(dto.getId());
         }
@@ -63,17 +65,15 @@ public class DemandDomain extends CommonDomain<Demand> {
         entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
 
         if (entity.isNew()) {
-            RegNum rn = new RegNum();
-            entity.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
+//            RegNum rn = new RegNum();
+//            entity.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
 
-            entity.setAuthor(ses.getUser());
-            entity.addReaderEditor(entity.getAuthor());
-        }
 
-        if (entity.getTask() == null && dto.getTask() != null) {
-            entity.setTask(dto.getTask());
-            entity.getTask().setDemand(entity);
-            entity.getTask().setProject(entity.getProject());
+//            if (entity.getTask() == null && dto.getTask() != null) {
+//                entity.setTask(dto.getTask());
+//                // entity.getTask().setDemand(entity);
+//                entity.getTask().setProject(entity.getProject());
+//            }
         }
 
         return entity;
@@ -100,6 +100,14 @@ public class DemandDomain extends CommonDomain<Demand> {
         }
         outcome.setModel(demand);
         outcome.setPayloadTitle("demand");
+
+        if (demand.getTask() != null) {
+            Task task = new Task();
+            task.setId(demand.getTask().getId());
+            task.setTitle(demand.getTitle());
+            task.setRegNumber(demand.getRegNumber());
+            demand.setTask(task);
+        }
 
         if (!demand.isNew()) {
             outcome.addPayload(new ACL(demand));

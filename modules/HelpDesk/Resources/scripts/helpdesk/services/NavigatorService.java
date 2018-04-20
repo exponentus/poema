@@ -29,6 +29,7 @@ public class NavigatorService extends RestProvider {
         Collection<Outline> list = new LinkedList<>();
 
         Outline co = new Outline("", "common");
+        co.addEntry(new OutlineEntry("demands", "", "fa fa-book", "demands", ModuleConst.BASE_URL + "demands"));
         co.addEntry(new OutlineEntry("demands_my", "", "fa fa-user-o", "demands/s/my", ModuleConst.BASE_URL + "demands/s/my"));
 
         try {

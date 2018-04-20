@@ -2,6 +2,7 @@ package helpdesk.services;
 
 import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
+import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ConventionalActionFactory;
@@ -11,8 +12,10 @@ import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
+import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
@@ -25,21 +28,22 @@ import helpdesk.init.ModuleConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.ui.ViewOptions;
+import projects.domain.TaskDomain;
 import projects.model.Project;
+import projects.model.Task;
+import projects.services.TaskService;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 import reference.model.Tag;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -51,7 +55,6 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
     public Response getViewPage() {
         _Session session = getSession();
         WebFormData params = getWebFormData();
-        int pageSize = session.getPageSize();
 
         try {
             String slug = params.getValueSilently("slug");
@@ -59,7 +62,6 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             String demandTypeId = params.getValueSilently("demandType");
             String projectId = params.getValueSilently("project");
 
-            SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
             DemandFilter filter = new DemandFilter();
 
             if (!statusName.isEmpty()) {
@@ -67,9 +69,8 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 filter.setStatus(status);
             }
             if (!demandTypeId.isEmpty()) {
-                DemandType demandType = new DemandType();
-                demandType.setId(UUID.fromString(demandTypeId));
-                filter.setDemandType(demandType);
+                DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
+                filter.setDemandType(demandTypeDAO.findById(demandTypeId));
             } else if (!slug.isEmpty()) {
                 try {
                     DemandTypeDAO demandTypeDAO = new DemandTypeDAO(session);
@@ -95,29 +96,42 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 filter.setTags(tags);
             }
 
-            DemandDAO dao = new DemandDAO(session);
-            ViewPage<Demand> vp = dao.findViewPage(filter, new DemandDtoConverter(), sortParams, params.getPage(), pageSize);
-
-            ViewOptions viewOptions = new ViewOptions();
-            vp.setViewPageOptions(viewOptions.getDemandOptions());
-            vp.setFilter(viewOptions.getDemandFilter(session));
-
-            ActionBar actionBar = new ActionBar(session);
-            Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
-                    .url(ModuleConst.BASE_URL + "demands/new?type=" + slug);
-            actionBar.addAction(newDocAction);
-            actionBar.addAction(new ConventionalActionFactory().refreshVew);
-
-            Outcome outcome = new Outcome();
-            outcome.setId("demands");
-            outcome.setTitle("demands");
-            outcome.addPayload(actionBar);
-            outcome.addPayload(vp);
-
-            return Response.ok(outcome).build();
+            return getViewPage(filter);
         } catch (DAOException e) {
             return responseException(e);
         }
+    }
+
+    @POST
+    public Response getViewPage(DemandFilter filter) throws DAOException {
+        _Session session = getSession();
+        LanguageCode lang = session.getLang();
+        WebFormData params = getWebFormData();
+        SortParams sortParams = params.getSortParams(SortParams.desc("regDate"));
+        int pageSize = session.getPageSize();
+        DemandType demandType = filter.getDemandType();
+
+        DemandDAO dao = new DemandDAO(session);
+        ViewPage<Demand> vp = dao.findViewPage(filter, new DemandDtoConverter(), sortParams, params.getPage(), pageSize);
+
+        ViewOptions viewOptions = new ViewOptions();
+        vp.setViewPageOptions(viewOptions.getDemandOptions());
+        vp.setFilter(viewOptions.getDemandFilter(session));
+
+        ActionBar actionBar = new ActionBar(session);
+        Action newDocAction = new Action(ActionType.LINK).caption("add_demand")
+                .url(ModuleConst.BASE_URL + "demands/new?type=" + (demandType == null ? "" : demandType.getName()));
+        actionBar.addAction(newDocAction);
+        actionBar.addAction(new ConventionalActionFactory().refreshVew);
+
+        Outcome outcome = new Outcome();
+        outcome.setId("demands");
+        outcome.setTitle("demands");
+        outcome.setPayloadTitle(demandType == null ? "demands" : demandType.getLocName(lang));
+        outcome.addPayload(actionBar);
+        outcome.addPayload(vp);
+
+        return Response.ok(outcome).build();
     }
 
     @GET
@@ -149,9 +163,14 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 entity = dao.findById(id);
             }
 
+            Map<Long, Employee> emps = new EmployeeDAO(session).findAll(false).getResult().stream()
+                    .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+
             Outcome outcome = demandDomain.getOutcome(entity);
             outcome.addPayload(getActionBar(session, entity));
             outcome.setFSID(getWebFormData().getFormSesId());
+            // include
+            outcome.addPayload("employees", emps);
             outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
 
             return Response.ok(outcome).build();
@@ -163,25 +182,41 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
     @Override
     public Response saveForm(Demand dto) {
         try {
+            DemandDAO demandDAO = new DemandDAO(getSession());
             DemandDomain domain = new DemandDomain(getSession());
             Demand demand = domain.fillFromDto(dto, new DemandService.Validation(), getWebFormData().getFormSesId());
-//            if (demand.getTask() != null) {
-//                TaskDAO taskDAO = new TaskDAO(getSession());
-//                TaskDomain taskDomain = new TaskDomain(getSession());
-//                Task task = taskDomain.fillFromDto(demand.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
-//
-//                domain.save(demand);
-//                taskDAO.save(task);
-//            } else {
-//                domain.save(demand);
-//            }
 
-            domain.save(demand);
+            if (demand.isNew() && dto.getTask() != null) {
+                // Каша
+                // TaskDAO taskDAO = new TaskDAO(getSession());
+                TaskDomain taskDomain = new TaskDomain(getSession());
+                taskDomain.setAppEnv(getAppEnv());
+                dto.getTask().setProject(demand.getProject());
+                Task task = taskDomain.fillFromDto(dto.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+
+                RegNum rn = new RegNum();
+                demand.setRegNumber(demand.getDemandType().getPrefix() + rn.getRegNumber(demand.getDemandType().getPrefix()));
+
+                demandDAO.add(demand, rn);
+
+                demand.setTask(task);
+                task.setDemand(demand);
+                // task.setProject(demand.getProject());
+
+                taskDomain.registerTask(task);
+                domain.save(demand);
+            } else if (demand.isNew()) {
+                RegNum rn = new RegNum();
+                demand.setRegNumber(demand.getDemandType().getPrefix() + rn.getRegNumber(demand.getDemandType().getPrefix()));
+                demandDAO.add(demand, rn);
+            } else {
+                domain.save(demand);
+            }
 
             return Response.ok(domain.getOutcome(demand)).build();
         } catch (DTOException e) {
             return responseValidationError(e);
-        } catch (DAOException | SecureException e) {
+        } catch (DAOException | SecureException | ApprovalException e) {
             return responseException(e);
         }
     }
