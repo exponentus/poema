@@ -6,12 +6,17 @@ import { NbCommonModule } from '@nb/core';
 import { HELPDESK_ROUTES } from './help-desk.routes';
 import { DemandService } from './services/demand.service';
 
-import { HelpDeskContainerComponent, DemandComponent } from './components';
+import {
+    HelpDeskContainerComponent,
+    DemandComponent,
+    DemandTaskEditComponent
+} from './components';
 
 @NgModule({
     declarations: [
         HelpDeskContainerComponent,
-        DemandComponent
+        DemandComponent,
+        DemandTaskEditComponent
     ],
     imports: [
         NbCommonModule,

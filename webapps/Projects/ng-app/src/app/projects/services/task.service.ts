@@ -20,7 +20,7 @@ export class TaskService implements IEntityService<IEntity> {
         return this.ngxTranslate.get(enums.map(t => t.toLowerCase())).map(ts => {
             let result: any[] = [];
             for (let t in ts) {
-                result.push({ id: t.toUpperCase(), title: t, сls: 'priority-' + t });
+                result.push({ id: t.toUpperCase(), title: ts[t], сls: 'priority-' + t });
             }
             return result;
         });

@@ -1,16 +1,16 @@
-import { IEntity, Attachment } from '@nb/core';
-import { DATE_TIME_FORMAT } from '@nb/core';
-import { mdFormat } from '@nb/core';
+import { DATE_TIME_FORMAT, mdFormat, IEntity, Attachment } from '@nb/core';
+
+import { Task } from './task';
 
 export class Demand {
     id: string;
     project: IEntity;
+    task: Task;
     title: string;
     regNumber: string;
     status: string = 'DRAFT'; // enum DemandStatusType
     statusDate: Date;
-    demandType: IEntity; // DemandType
-    customer: IEntity; // Organization
+    demandType: IEntity;
     wayOfInteraction: IEntity;
     body: string;
     tags: IEntity[];
@@ -23,8 +23,8 @@ export class Demand {
             status: m.status || null,
             statusDate: mdFormat(m.statusDate, DATE_TIME_FORMAT),
             project: m.project ? { id: m.project.id } : null,
+            task: m.task ? Task.convertToDto(m.task) : null,
             demandType: m.demandType ? { id: m.demandType.id } : null,
-            customer: m.customer ? { id: m.customer.id } : null,
             wayOfInteraction: m.wayOfInteraction ? { id: m.wayOfInteraction.id } : null,
             body: m.body || null,
             tags: m.tags ? m.tags.map(it => { return { id: it.id }; }) : [],

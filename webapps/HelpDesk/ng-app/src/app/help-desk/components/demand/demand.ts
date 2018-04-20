@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-    AppService, ActionService,
+    IApiOutcome, IAction, AppService, ActionService,
     NotificationService, NbModalService,
     AbstractFormPage, tagStylerFn,
     REFERENCE_URL, STAFF_URL
@@ -27,6 +27,9 @@ export class DemandComponent extends AbstractFormPage<Demand> {
     HELP_DESK_URL = HELP_DESK_URL;
     tagStylerFn = tagStylerFn;
 
+    createTask = false;
+    priorityTypes: any;
+
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -38,5 +41,45 @@ export class DemandComponent extends AbstractFormPage<Demand> {
         public entityService: DemandService
     ) {
         super(route, router, ngxTranslate, notifyService, nbModalService, appService, actionService, entityService);
+    }
+
+    // @Override
+    loadDataSuccess(data: IApiOutcome) {
+        super.loadDataSuccess(data);
+
+        let emps = data.payload.employees;
+        if (this.model.task && this.model.task.authorId) {
+            this.model.task.author = emps[this.model.task.authorId];
+        }
+        if (this.model.task && this.model.task.assigneeUserId) {
+            this.model.task.assignee = emps[this.model.task.assigneeUserId];
+        }
+
+        this.ngxTranslate.get(data.payload.priorityTypes.map(t => t.toLowerCase())).map(ts => {
+            let result: any[] = [];
+            for (let t in ts) {
+                result.push({ id: t.toUpperCase(), title: ts[t], сls: 'priority-' + t });
+            }
+            return result;
+        }).subscribe(res => this.priorityTypes = res);
+    }
+
+    handleChangeCreateTask() {
+        this.createTask = !this.createTask;
+        if (!this.model.task) {
+            this.model.task = {};
+        } else {
+            if (Object.keys(this.model.task).length === 0) {
+                this.model.task = null;
+            }
+        }
+    }
+
+    // @Override
+    save(action?: IAction) {
+        if (this.model.isNew && !this.createTask) {
+            this.model.task = null;
+        }
+        super.save(action);
     }
 }

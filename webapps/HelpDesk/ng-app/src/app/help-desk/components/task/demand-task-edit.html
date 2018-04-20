@@ -1,0 +1,76 @@
+<div class="fieldset" style="box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);">
+    <div class="legend">{{'task' | translate}}</div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'task_type' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.taskType">
+            <nb-select class="span8" name="taskType" [url]="REFERENCE_URL.API_TASK_TYPES" [(ngModel)]="model.taskType">
+            </nb-select>
+            <error-message [error]="errors.taskType"></error-message>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'priority' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.priority">
+            <nb-select class="span3" name="priority" classKey="сls" targetValue="id" [items]="priorityTypes"
+                [(ngModel)]="model.priority"></nb-select>
+            <error-message [error]="errors.priority"></error-message>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'assignee_user' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.assignee">
+            <nb-select class="span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES" [searchable]="true"
+                [(ngModel)]="model.assignee">
+            </nb-select>
+            <error-message [error]="errors.assignee"></error-message>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'start_date' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.startDate">
+            <input class="span2 span-sm-full" datepicker name="startDate" [(ngModel)]="model.startDate">
+            <error-message [error]="errors.startDate"></error-message>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'due_date' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.dueDate">
+            <input class="span2 span-sm-full" datepicker name="dueDate" [(ngModel)]="model.dueDate">
+            <error-message [error]="errors.dueDate"></error-message>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="control-label">
+            {{'tags' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.tags">
+            <nb-select class="span8 tags-input" name="tags" [searchable]="true" [allowClear]="true"
+                [multiple]="true" classKey="tag" [styler]="tagStylerFn" [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_task'"
+                [(ngModel)]="model.tags">
+            </nb-select>
+            <error-message [error]="errors.tags"></error-message>
+        </div>
+    </div>
+    <div class="form-group vertical-md">
+        <div class="control-label">
+            {{'body' | translate}}
+        </div>
+        <div class="controls" [class.has-error]="errors.body">
+            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                [markdown]="model.body" [editable]="true" [updateTimeout]="300" (update)="model.body = $event">
+            </markdown-editor>
+            <error-message [error]="errors.body"></error-message>
+            <nb-text-translate [text]="model.body"></nb-text-translate>
+        </div>
+    </div>
+</div>

@@ -44,17 +44,6 @@
             </div>
             <div class="form-group">
                 <div class="control-label">
-                    {{'customer' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.customer">
-                    <nb-select class="span8" name="customer" [url]="STAFF_URL.API_ORGANIZATIONS" [disabled]="!isEditable"
-                        [allowClear]="true" [searchable]="true" [(ngModel)]="model.customer">
-                    </nb-select>
-                    <error-message [error]="errors.customer"></error-message>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
                     {{'project' | translate}}
                 </div>
                 <div class="controls" [class.has-error]="errors.project">
@@ -70,8 +59,7 @@
                 </div>
                 <div class="controls" [class.has-error]="errors.wayOfInteraction">
                     <nb-select class="span8" name="wayOfInteraction" [url]="HELP_DESK_URL.API_WAY_OF_INTERACTION"
-                        [disabled]="!isEditable" [allowClear]="true" [searchable]="true"
-                        [(ngModel)]="model.wayOfInteraction">
+                        [disabled]="!isEditable" [allowClear]="true" [(ngModel)]="model.wayOfInteraction">
                     </nb-select>
                     <error-message [error]="errors.wayOfInteraction"></error-message>
                 </div>
@@ -102,7 +90,32 @@
                     <nb-text-translate [text]="model.body"></nb-text-translate>
                 </div>
             </div>
+            <div class="form-group" *ngIf="model.isNew">
+                <div class="control-label"></div>
+                <div class="controls">
+                    <label class="input">
+                        <input type="checkbox" name="createTask" value="true" (change)="handleChangeCreateTask()">
+                        <span>{{'create_task' | translate}}</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group" *ngIf="!model.isNew && model.task">
+                <div class="control-label">
+                    {{'task' | translate}}
+                </div>
+                <div class="controls">
+                    <div class="input-placeholder">
+                        <b>№{{model.task.regNumber}}</b>
+                        <span class="ml-1 mr-1 status-{{model.status | lowercase}}">
+                            {{model.status | lowercase | translate}}
+                        </span>
+                        <span>{{model.task.title}}</span>
+                    </div>
+                </div>
+            </div>
         </div>
+        <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.task" [payload]="data"
+            [errors]="errors"></demand-task-edit>
         <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
     </section>
     <footer class="content-footer form-footer">

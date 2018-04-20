@@ -45,9 +45,8 @@
                         </div>
                         <div class="controls">
                             <div class="span8">
-                                <nb-select class="span8" name="requestType" [disabled]="!isEditable" [searchable]="true"
-                                    [placeholder]="'request_type' | translate" [url]="REFERENCE_URL.API_REQUEST_TYPES"
-                                    [(ngModel)]="model.requestType">
+                                <nb-select class="span8" name="requestType" [disabled]="!isEditable" [placeholder]="'request_type' | translate"
+                                    [url]="REFERENCE_URL.API_REQUEST_TYPES" [(ngModel)]="model.requestType">
                                 </nb-select>
                             </div>
                         </div>
