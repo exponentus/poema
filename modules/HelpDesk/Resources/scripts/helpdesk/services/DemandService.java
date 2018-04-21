@@ -13,6 +13,7 @@ import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.constants.LanguageCode;
+import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
@@ -217,6 +218,8 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException | ApprovalException e) {
+            return responseException(e);
+        } catch (RestServiceException e) {
             return responseException(e);
         }
     }
