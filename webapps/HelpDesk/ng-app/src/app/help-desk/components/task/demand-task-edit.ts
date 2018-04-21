@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-    IApiOutcome, IAction, tagStylerFn, REFERENCE_URL, STAFF_URL
+    IApiOutcome, IAction, tagStylerFn, validateModel,
+    REFERENCE_URL, STAFF_URL
 } from '@nb/core';
 import { Task } from '../../models/task';
 import { HELP_DESK_URL } from '../../constants';
@@ -24,7 +25,7 @@ export class DemandTaskEditComponent {
     priorityTypes: any[];
 
     constructor(
-        public ngxTranslate: TranslateService,
+        public ngxTranslate: TranslateService
     ) { }
 
     ngOnInit() {
@@ -35,5 +36,9 @@ export class DemandTaskEditComponent {
             }
             return result;
         }).subscribe(res => this.priorityTypes = res);
+    }
+
+    ngDoCheck() {
+        validateModel(this.model, this.errors);
     }
 }

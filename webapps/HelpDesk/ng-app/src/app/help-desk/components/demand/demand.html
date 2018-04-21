@@ -115,7 +115,7 @@
             </div>
         </div>
         <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.task" [payload]="data"
-            [errors]="errors"></demand-task-edit>
+            [(errors)]="errors"></demand-task-edit>
         <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
     </section>
     <footer class="content-footer form-footer">
