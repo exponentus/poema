@@ -113,7 +113,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task = new Task();
             task.setAuthor(ses.getUser());
             changeStatus(task, StatusType.DRAFT);
-            task.setInitiative(dto.isInitiative());
+            task.setInitiative(true);
 
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
@@ -168,12 +168,21 @@ public class TaskDomain extends ApprovalDomain<Task> {
         return task;
     }
 
-    public void registerTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException {
+    public void registerTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
         if (task.isNew()) {
+            task.setInitiative(false);
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            ViewPage<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME);
+            if (moderators.getCount() > 0) {
+                task.setBlocks(getModeratorBlock(moderators.getResult()));
+            } else {
+                throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
+            }
             RegNum rn = new RegNum();
             task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
             task = dao.add(task, rn);
             //	mDao.postEmailSending(user, task, "task_was_registered");
+
         } else {
             task = dao.update(task);
             //	mDao.postEmailSending(user, task, "task_was_updated");
