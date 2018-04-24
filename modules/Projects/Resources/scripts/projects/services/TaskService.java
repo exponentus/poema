@@ -14,11 +14,11 @@ import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.BaseReferenceModel;
-import com.exponentus.common.ui.timeline.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionPayloadType;
+import com.exponentus.common.ui.timeline.Milestones;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
@@ -28,7 +28,6 @@ import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.services.Defended;
 import com.exponentus.rest.validation.exception.DTOException;
-import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
@@ -224,11 +223,12 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             taskDomain.setAppEnv(getAppEnv());
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
             // IMonitoringDAO mDao = Environment.getActivityRecorder();
-            // taskDomain.saveTask(task);
 
-            if (taskDto.isNew()) {
+            taskDomain.saveTask(task);
+
+            /*if (taskDto.isNew()) {
                 RegNum rn = new RegNum();
-                TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
+                // TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 // taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
                 task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
                 task = taskDAO.add(task, rn);
@@ -251,7 +251,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                     new Messages(getAppEnv()).sendToAssignee(task);
                     taskDomain.postCalendarEvent(task);
                 }
-            }
+            }*/
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
@@ -291,7 +291,8 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillDraft(taskDto, new DefaultValidation(), getWebFormData().getFormSesId());
-            task = taskDAO.save(task);
+            // task = taskDAO.save(task);
+            taskDomain.saveTask(task);
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (Exception e) {
@@ -437,7 +438,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             actionBar.addAction(action.saveAndClose);
 
             if (task.getStatus() == StatusType.DRAFT) {
-                actionBar.addAction(new Action().caption("save_as_draft").payloadType(ActionPayloadType.MODEL).url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft"));
+                actionBar.addAction(new Action().id("SAVE_AS_DRAFT").caption("save_as_draft").payloadType(ActionPayloadType.MODEL).url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft").hidden());
             }
         }
 

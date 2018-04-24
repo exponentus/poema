@@ -58,7 +58,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         Task task = new Task();
 
         task.setAuthor(user);
-        task.setInitiative(initiative);
+        // task.setInitiative(initiative);
         task.setTaskType(taskType);
         task.setStatus(StatusType.DRAFT);
         task.setProject(project);
@@ -113,7 +113,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task = new Task();
             task.setAuthor(ses.getUser());
             changeStatus(task, StatusType.DRAFT);
-            task.setInitiative(true);
+            // task.setInitiative(true);
 
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
@@ -168,7 +168,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         return task;
     }
 
-    public void registerTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
+    public void saveTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
         if (task.isNew()) {
             task.setInitiative(false);
             EmployeeDAO empDao = new EmployeeDAO(ses);

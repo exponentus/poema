@@ -307,7 +307,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     public void setInitiative(boolean initiative) {
-        this.initiative = initiative;
+        // this.initiative = initiative;
     }
 
     public List<Tag> getTags() {

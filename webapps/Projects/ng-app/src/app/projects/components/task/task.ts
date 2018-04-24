@@ -3,15 +3,17 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-    IApiOutcome, IAction, ITimeLine,
+    IApiOutcome, IAction, ITimeLine, ICanDeactivate,
     AppService, ActionService, NotificationService, NbModalService,
     AbstractFormPage, getLocName, dateDuration, tagStylerFn,
+    hashCode,
     STAFF_URL, REFERENCE_URL
 } from '@nb/core';
 
 import { PROJECTS_URL } from '../../constants';
 import { TaskService } from '../../services/task.service';
 import { Task, Tag, Request } from '../../models';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'task',
@@ -21,7 +23,7 @@ import { Task, Tag, Request } from '../../models';
         '[class.load]': 'loading'
     }
 })
-export class TaskComponent extends AbstractFormPage<Task> {
+export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactivate {
 
     REFERENCE_URL = REFERENCE_URL;
     STAFF_URL = STAFF_URL;
@@ -31,6 +33,8 @@ export class TaskComponent extends AbstractFormPage<Task> {
 
     isSubtask = false;
     isInitiativeTask = false;
+
+    saveAsDraftAction: IAction;
 
     milestones: ITimeLine[];
     activity: any;
@@ -66,6 +70,10 @@ export class TaskComponent extends AbstractFormPage<Task> {
         return '/Projects/api/tasks?parentTaskId=' + this.model.id + '&execution=true&isTreeMode=true&expandedIds=' + this.model.id;
     }
 
+    canDeactivate(): Observable<boolean> {
+        return Observable.of(true);
+    }
+
     assignYourself($event: Event) {
         $event.preventDefault();
         if (this.data.employees) {
@@ -93,6 +101,20 @@ export class TaskComponent extends AbstractFormPage<Task> {
     loadDataSuccess(data: IApiOutcome) {
         super.loadDataSuccess(data);
 
+        this.saveAsDraftAction = this.actions.find(it => it.customID === 'SAVE_AS_DRAFT');
+        if (this.saveAsDraftAction) {
+            this.saveAsDraftAction.onSuccess = {
+                customID: 'saveAsDraftActionSuccessFn',
+                type: 'CUSTOM_ACTION',
+                payloadType: 'MODEL',
+                fn: (response: IApiOutcome) => {
+                    if (this.model.isNew) {
+                        this.router.navigate([response.payload.model.url]);
+                    }
+                }
+            } as IAction;
+        }
+
         this.entityService.getPriorityTypes(data.payload.priorityTypes).subscribe(tpt => this.priorityTypes = tpt);
         this.activity = data.payload.activity;
         this.milestones = data.payload.milestones;
@@ -117,6 +139,19 @@ export class TaskComponent extends AbstractFormPage<Task> {
                 }
             }
         }
+
+        this.calcModelHash();
+    }
+
+    saveAsDraft() {
+        this.onAction(this.saveAsDraftAction);
+    }
+
+    handleModelChange($event: any) {
+        if (!this.saveAsDraftAction || !this.modelHasChanges()) {
+            return;
+        }
+        this.saveAsDraft();
     }
 
     openTaskCancellationDialog(action: IAction) {

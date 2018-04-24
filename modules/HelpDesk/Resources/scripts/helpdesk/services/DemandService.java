@@ -204,7 +204,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 task.setDemand(demand);
                 // task.setProject(demand.getProject());
 
-                taskDomain.registerTask(task);
+                taskDomain.saveTask(task);
                 domain.save(demand);
             } else if (demand.isNew()) {
                 RegNum rn = new RegNum();

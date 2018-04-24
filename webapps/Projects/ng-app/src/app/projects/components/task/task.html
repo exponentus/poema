@@ -21,7 +21,9 @@
                     </div>
                 </div>
                 <div class="doc-head__item" *ngIf="model.approvalStatus === 'PENDING'">
-                    <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
+                    <div class="doc-head__item_value">
+                        <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
+                    </div>
                 </div>
                 <div class="doc-head__item" *ngIf="model.parent">
                     <div class="doc-head__item_value">
@@ -35,7 +37,7 @@
         <div class="title-input-wrapper">
             <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
                 required name="title" maxlength="140" placeholder="{{'task_title' | translate}}"
-                [(ngModel)]="model.title">
+                [(ngModel)]="model.title" (blur)="handleModelChange($event)">
             <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
@@ -60,7 +62,7 @@
                         <div class="controls" [class.has-error]="errors.project">
                             <nb-select class="span8" name="project" [disabled]="!isEditable || isSubtask || isInitiativeTask"
                                 [searchable]="true" [url]="PROJECTS_URL.API_PROJECTS"
-                                [(ngModel)]="model.project">
+                                [(ngModel)]="model.project" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.project"></error-message>
                         </div>
@@ -81,7 +83,7 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.taskType">
                             <nb-select class="span8" name="taskType" [disabled]="!isEditable" [url]="REFERENCE_URL.API_TASK_TYPES"
-                                [(ngModel)]="model.taskType">
+                                [(ngModel)]="model.taskType" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.taskType"></error-message>
                         </div>
@@ -91,8 +93,9 @@
                             {{'priority' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.priority">
-                            <nb-select class="span3" name="priority" classKey="сls" targetValue="id" [items]="priorityTypes"
-                                [(ngModel)]="model.priority" [disabled]="!isEditable"></nb-select>
+                            <nb-select class="span3" name="priority" [disabled]="!isEditable" classKey="сls"
+                                targetValue="id" [items]="priorityTypes" [(ngModel)]="model.priority"
+                                (ngModelChange)="handleModelChange($event)"></nb-select>
                             <error-message [error]="errors.priority"></error-message>
                         </div>
                     </div>
@@ -102,11 +105,11 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.assignee">
                             <nb-select class="span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
-                                [searchable]="true" [(ngModel)]="model.assignee">
+                                [searchable]="true" [(ngModel)]="model.assignee" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.assignee"></error-message>
                             <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
-                                <a href="#" style="margin:.6em;" (click)="assignYourself($event)">{{'assign_yourself' | translate}}</a>
+                                <a href="#" style="margin:.6em;" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
                             </div>
                         </div>
                     </div>
@@ -126,7 +129,7 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.dueDate">
                             <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="dueDate"
-                                [(ngModel)]="model.dueDate">
+                                [(ngModel)]="model.dueDate" (ngModelChange)="handleModelChange($event)">
                             <div class="input-placeholder" *ngIf="model.startDate && model.dueDate">
                                 {{ startDueDateDuration | nbI18nPlural:'count_days' | translate:{count:startDueDateDuration}
                                 }}
@@ -147,7 +150,7 @@
                             <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
                                 [allowClear]="true" [multiple]="true" classKey="tag"
                                 [styler]="tagStylerFn" [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_task'"
-                                [(ngModel)]="model.tags">
+                                [(ngModel)]="model.tags" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.tags"></error-message>
                         </div>
@@ -157,7 +160,7 @@
                         <div class="controls">
                             <label class="input" [class.disabled]="!isEditable">
                                 <input type="checkbox" name="customerObservation" value="1" [disabled]="!isEditable"
-                                    [(ngModel)]="model.customerObservation">
+                                    [(ngModel)]="model.customerObservation" (ngModelChange)="handleModelChange($event)">
                                 <span>{{'publish_to_customer' | translate}}</span>
                             </label>
                         </div>
@@ -169,14 +172,14 @@
                         <div class="controls" [class.has-error]="errors.body">
                             <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
                                 [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
-                                (update)="model.body = $event">
+                                (update)="model.body = $event; handleModelChange($event)">
                             </markdown-editor>
                             <error-message [error]="errors.body"></error-message>
                             <nb-text-translate [text]="model.body"></nb-text-translate>
                         </div>
                     </div>
                 </div>
-                <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+                <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable" (add)="handleModelChange($event)"></nb-attachments>
             </tab>
             <tab *ngIf="!model.isNew" tabTitle="{{'related_documents' | translate}}" icon="fa fa-align-left">
                 <nb-page-view [embedded]="true" [url]="getEmbeddedViewUrl()"></nb-page-view>
@@ -190,7 +193,7 @@
                         <div class="controls" [class.has-error]="errors.observers">
                             <nb-select class="span8 span-sm-full" name="observers" [url]="STAFF_URL.API_EMPLOYEES"
                                 [disabled]="!isEditable" [allowClear]="true" [searchable]="true"
-                                [multiple]="true" [(ngModel)]="model.observers">
+                                [multiple]="true" [(ngModel)]="model.observers" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.observers"></error-message>
                         </div>

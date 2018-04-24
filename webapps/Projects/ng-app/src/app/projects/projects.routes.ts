@@ -1,6 +1,9 @@
 import { Routes } from '@angular/router';
 
-import { ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
+import {
+    ViewPage, UserProfileComponent,
+    OfflinePage, CanDeactivateGuard
+} from '@nb/core';
 
 import { DashboardComponent } from './pages';
 import {
@@ -28,7 +31,7 @@ export const PROJECTS_ROUTES: Routes = [{
                 settings: { treeMode: true }
             }
         },
-        { path: 'tasks/:id', component: TaskComponent },
+        { path: 'tasks/:id', component: TaskComponent, canDeactivate: [CanDeactivateGuard] },
         {
             path: 'tasks', component: ViewPage, data: {
                 filterId: 'projects_tasks',
