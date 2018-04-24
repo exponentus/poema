@@ -14,7 +14,7 @@ import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.BaseReferenceModel;
-import com.exponentus.common.ui.Milestones;
+import com.exponentus.common.ui.timeline.Milestones;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
