@@ -45,9 +45,9 @@ public class TestIncomingRegisterWithAttachment extends Do {
 
 		try {
 			OrganizationDAO oDao = new OrganizationDAO(ses);
-			Organization org = (Organization) ListUtil.getRndListElement(oDao.findAll().getResult());
+			Organization org = (Organization) ListUtil.getRndListElement(oDao.findAll());
 			EmployeeDAO eDao = new EmployeeDAO(ses);
-			Employee emp = (Employee) ListUtil.getRndListElement(eDao.findAll().getResult());
+			Employee emp = (Employee) ListUtil.getRndListElement(eDao.findAll());
 			Outcome outcome = (Outcome) resp.getEntity();
 			Map<String, Object> payload = outcome.getPayload();
 			Incoming inc = (Incoming) payload.get(Incoming.class.getSimpleName().toLowerCase());

@@ -21,7 +21,7 @@ public class RestoreReqAccess extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			requestDao = new RequestDAO(session);
-			List<Request> vp = requestDao.findAll().getResult();
+			List<Request> vp = requestDao.findAll();
 			process(vp, session);
 		} catch (DAOException e) {
 			logError(e);

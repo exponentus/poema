@@ -36,7 +36,7 @@ public class NavigatorService extends RestProvider {
             _Session session = getSession();
             LanguageCode lang = session.getLang();
             DemandTypeDAO dtDAO = new DemandTypeDAO(session);
-            List<DemandType> dts = dtDAO.findAll().getResult();
+            List<DemandType> dts = dtDAO.findAll();
             for (DemandType dt : dts) {
                 String icon;
                 switch (dt.getName()) {

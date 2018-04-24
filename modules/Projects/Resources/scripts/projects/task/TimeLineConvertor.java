@@ -25,7 +25,7 @@ public class TimeLineConvertor extends Do {
     public void doTask(AppEnv appEnv, _Session session) {
         try {
               tDao = new TaskDAO(session);
-            List<Task> tl = tDao.findAll().getResult();
+            List<Task> tl = tDao.findAll();
             for (Task task : tl) {
                 TimeLine timeLine = task.getTimeLine();
                 if (timeLine != null) {

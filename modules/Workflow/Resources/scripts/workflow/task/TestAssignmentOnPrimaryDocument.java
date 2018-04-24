@@ -52,7 +52,7 @@ public class TestAssignmentOnPrimaryDocument extends Do {
 				ae.add(aEntry);
 				//Control control = assignment.getControl();
 				ControlTypeDAO cDao = new ControlTypeDAO(ses);
-				assignment.setControlType(cDao.findAll().getResult().get(0));
+				assignment.setControlType(cDao.findAll().get(0));
 				assignment.setAssigneeEntries(ae);
 
 				Response postResp = service.add(assignment);
@@ -71,7 +71,7 @@ public class TestAssignmentOnPrimaryDocument extends Do {
 			}
 
 			AssignmentDAO aDao = new AssignmentDAO(ses);
-			for (Assignment entry : aDao.findAll().getResult()) {
+			for (Assignment entry : aDao.findAll()) {
 				System.out.println(entry);
 			}
 		} catch (DAOException e) {

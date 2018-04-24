@@ -40,7 +40,7 @@ public class Report501 extends AbstractDataObtainer {
             Tag tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
             TaskDAO dao = new TaskDAO(session);
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
-            for (Employee employee : employeeDAO.findAll().getResult()) {
+            for (Employee employee : employeeDAO.findAll()) {
                 ConsolidatedReportPOJO report = new ConsolidatedReportPOJO();
                 report.user = employee.getName();
                 ViewPage<Task> res = dao.findAssignedToUser(from, until, employee.getUser(), 0, 0);
