@@ -295,6 +295,10 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             taskDomain.saveTask(task);
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
+        } catch (SecureException | DatabaseException | DAOException e) {
+            return responseException(e);
+        } catch (DTOException e) {
+            return responseValidationError(e);
         } catch (Exception e) {
             return responseException(e);
         }
