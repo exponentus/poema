@@ -44,8 +44,8 @@ export class IncomingFormComponent extends AbstractFormPage<Incoming> {
     }
 
     // @Override
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
         this.model.author = data.payload.employees[this.model.authorId];
     }
 }

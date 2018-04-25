@@ -42,8 +42,8 @@ export class ApplicationFormComponent extends AbstractFormPage<ApplicationForVeh
     }
 
     // @Override
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
         this.flag = data.payload.flag;
         this.model.author = data.payload.employees[this.model.authorId];
         if (this.model.blocks) {

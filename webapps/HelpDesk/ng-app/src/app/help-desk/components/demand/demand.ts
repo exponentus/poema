@@ -44,8 +44,8 @@ export class DemandComponent extends AbstractFormPage<Demand> {
     }
 
     // @Override
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
 
         let emps = data.payload.employees;
         if (this.model.task && this.model.task.authorId) {

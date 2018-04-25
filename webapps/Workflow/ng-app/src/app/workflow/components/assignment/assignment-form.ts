@@ -50,8 +50,8 @@ export class AssignmentFormComponent extends AbstractFormPage<Assignment> {
     }
 
     // @Override
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
         this.permissions = data.payload.permissions;
         this.model.author = data.payload.employees[this.model.authorId];
         if (this.model.observers) {
