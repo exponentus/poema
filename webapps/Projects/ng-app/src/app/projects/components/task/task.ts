@@ -76,7 +76,9 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     canDeactivate(): boolean {
         if (this.saveAsDraftRequestIncomplete) {
             clearTimeout(this.timeout);
-            this.saveAsDraft();
+            if (this.modelHasChanges()) {
+                this.saveAsDraft();
+            }
         }
         return this._canDeactivate;
     }
@@ -174,7 +176,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     }
 
     handleModelChange($event: any) {
-        if (!this.saveAsDraftAction || !this.modelHasChanges()) {
+        if (!this.saveAsDraftAction) {
             return;
         }
 
@@ -182,9 +184,12 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
         this._canDeactivate = true;
         clearTimeout(this.timeout);
         this.timeout = setTimeout(() => {
+            if (!this.modelHasChanges()) {
+                return;
+            }
             this.saveAsDraftRequestIncomplete = false;
             this.saveAsDraft();
-        }, 3000);
+        }, 4000);
     }
 
     openTaskCancellationDialog(action: IAction) {
