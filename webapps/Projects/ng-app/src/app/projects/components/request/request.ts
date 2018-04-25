@@ -42,8 +42,8 @@ export class RequestComponent extends AbstractFormPage<Request> {
         return this.actions.filter(it => (it.customID === 'accept')).length;
     }
 
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
 
         let emps = data.payload.employees;
         if (this.model.authorId) {

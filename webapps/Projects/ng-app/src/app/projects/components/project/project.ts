@@ -53,8 +53,8 @@ export class ProjectComponent extends AbstractFormPage<Project> {
     }
 
     // @Override
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
         //
         this.entityService.getProjectStatusTypes(data.payload.projectStatusTypes).subscribe(pst => this.projectStatusTypes = pst);
 

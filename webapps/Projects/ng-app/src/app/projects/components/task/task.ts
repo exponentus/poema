@@ -13,7 +13,6 @@ import {
 import { PROJECTS_URL } from '../../constants';
 import { TaskService } from '../../services/task.service';
 import { Task, Tag, Request } from '../../models';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'task',
@@ -39,6 +38,10 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     milestones: ITimeLine[];
     activity: any;
     priorityTypes: any;
+
+    saveAsDraftRequestIncomplete: boolean = false;
+    _canDeactivate: boolean = true;
+    timeout: any;
 
     constructor(
         public route: ActivatedRoute,
@@ -70,8 +73,12 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
         return '/Projects/api/tasks?parentTaskId=' + this.model.id + '&execution=true&isTreeMode=true&expandedIds=' + this.model.id;
     }
 
-    canDeactivate(): Observable<boolean> {
-        return Observable.of(true);
+    canDeactivate(): boolean {
+        if (this.saveAsDraftRequestIncomplete) {
+            clearTimeout(this.timeout);
+            this.saveAsDraft();
+        }
+        return this._canDeactivate;
     }
 
     assignYourself($event: Event) {
@@ -93,13 +100,16 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                 this.openTaskCancellationDialog(action);
                 break;
             default:
+                if (action.customID === 'save_and_close') {
+                    clearTimeout(this.timeout);
+                }
                 super.onAction(action);
                 break;
         }
     }
 
-    loadDataSuccess(data: IApiOutcome) {
-        super.loadDataSuccess(data);
+    onLoadDataSuccess(data: IApiOutcome) {
+        super.onLoadDataSuccess(data);
 
         this.saveAsDraftAction = this.actions.find(it => it.customID === 'SAVE_AS_DRAFT');
         if (this.saveAsDraftAction) {
@@ -108,9 +118,25 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                 type: 'CUSTOM_ACTION',
                 payloadType: 'MODEL',
                 fn: (response: IApiOutcome) => {
+                    this._canDeactivate = true;
+                    this.notifyService
+                        .toast(this.ngxTranslate.instant('changes_saved'))
+                        .show().remove(500);
                     if (this.model.isNew) {
                         this.router.navigate([response.payload.model.url]);
                     }
+                }
+            } as IAction;
+            this.saveAsDraftAction.onError = {
+                customID: 'saveAsDraftActionErrorFn',
+                type: 'CUSTOM_ACTION',
+                payloadType: 'MODEL',
+                fn: (response: IApiOutcome) => {
+                    this._canDeactivate = false;
+                    this.notifyService.error(this.ngxTranslate.instant('request_error')).show().remove(1000);
+                    setTimeout(() => {
+                        this._canDeactivate = true;
+                    }, 100);
                 }
             } as IAction;
         }
@@ -151,7 +177,14 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
         if (!this.saveAsDraftAction || !this.modelHasChanges()) {
             return;
         }
-        this.saveAsDraft();
+
+        this.saveAsDraftRequestIncomplete = true;
+        this._canDeactivate = true;
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(() => {
+            this.saveAsDraftRequestIncomplete = false;
+            this.saveAsDraft();
+        }, 3000);
     }
 
     openTaskCancellationDialog(action: IAction) {

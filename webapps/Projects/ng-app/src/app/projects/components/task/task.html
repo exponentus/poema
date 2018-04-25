@@ -37,7 +37,7 @@
         <div class="title-input-wrapper">
             <input *ngIf="isEditable" class="doc-title" [class.invalid]="errors.title" autocomplete="off"
                 required name="title" maxlength="140" placeholder="{{'task_title' | translate}}"
-                [(ngModel)]="model.title" (blur)="handleModelChange($event)">
+                [(ngModel)]="model.title" (ngModelChange)="handleModelChange($event)">
             <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
