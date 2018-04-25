@@ -75,7 +75,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @FTSearchable
     @Column(columnDefinition = "TEXT")
-    private String body;
+    private String body = "";
 
     @Convert(converter = ListOfStringConverter.class)
     @Column(name = "obsolete_body", columnDefinition = "jsonb")
