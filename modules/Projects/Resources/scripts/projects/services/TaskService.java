@@ -223,7 +223,9 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             taskDomain.setAppEnv(getAppEnv());
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
             // IMonitoringDAO mDao = Environment.getActivityRecorder();
-
+            if (task.getStatus() == StatusType.DRAFT){
+                task.setStatus(StatusType.OPEN);
+            }
             taskDomain.saveTask(task);
 
             /*if (taskDto.isNew()) {
@@ -292,6 +294,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillDraft(taskDto, new DefaultValidation(), getWebFormData().getFormSesId());
             // task = taskDAO.save(task);
+            task.setStatus(StatusType.DRAFT);
             taskDomain.saveTask(task);
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();

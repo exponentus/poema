@@ -116,7 +116,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
             // task.setInitiative(true);
 
 
-
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
                 task.setParent(dto.getParent());
@@ -218,32 +217,28 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public void calculateStatus(Task task) throws DAOException {
-        if (task.getStartDate() == null) {
-            changeStatus(task, StatusType.DRAFT);
-        } else {
-            if (task.getStatus() == StatusType.DRAFT || task.getStatus() == StatusType.OPEN
-                    || task.getStatus() == StatusType.WAITING) {
-                if (new Date().before(task.getStartDate())) {
-                    changeStatus(task, StatusType.WAITING);
-                } else {
-                    EmployeeDAO empDao = new EmployeeDAO(ses);
-                    List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
-                    if (moderators.size() > 0) {
-                        List<Block> block = getModeratorBlock(moderators);
-                        task.setBlocks(block);
-                        if (moderators.contains(task.getAuthor())) {
-                            task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
-                        } else {
-                            task.setApprovalSchema(ApprovalSchemaType.IN_ANY_CASE_DECIDE_PARALLEL_APPROVER);
-                        }
-                        task.setApprovalStatus(ApprovalStatusType.DRAFT);
-                        task.setResult(ApprovalResultType.UNKNOWN);
+        if (task.getStatus() == StatusType.OPEN
+                || task.getStatus() == StatusType.WAITING) {
+            if (new Date().before(task.getStartDate())) {
+                changeStatus(task, StatusType.WAITING);
+            } else {
+                EmployeeDAO empDao = new EmployeeDAO(ses);
+                List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
+                if (moderators.size() > 0) {
+                    List<Block> block = getModeratorBlock(moderators);
+                    task.setBlocks(block);
+                    if (moderators.contains(task.getAuthor())) {
+                        task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
                     } else {
-                        throw new DAOException(DAOExceptionType.ENTITY_NOT_FOUND, "There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
+                        task.setApprovalSchema(ApprovalSchemaType.IN_ANY_CASE_DECIDE_PARALLEL_APPROVER);
                     }
+                    task.setApprovalStatus(ApprovalStatusType.DRAFT);
+                    task.setResult(ApprovalResultType.UNKNOWN);
+                } else {
+                    throw new DAOException(DAOExceptionType.ENTITY_NOT_FOUND, "There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
                 }
-                changeStatus(task, StatusType.OPEN);
             }
+            changeStatus(task, StatusType.OPEN);
         }
     }
 
