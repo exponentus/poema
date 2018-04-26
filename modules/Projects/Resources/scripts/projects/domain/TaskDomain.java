@@ -160,7 +160,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public Task fillDraft(Task dto, IValidation<Task> validation, String formSesId) throws DAOException, DTOException {
-        dto.setStartDate(null);
+        dto.setStartDate(dto.getStartDate());
         dto.setStatus(StatusType.DRAFT);
         Task task = fillFromDto(dto, validation, formSesId);
         Set<Long> readers = new HashSet<>();
