@@ -105,11 +105,14 @@ public class TaskDAO extends DAO<Task, UUID> {
             typedQuery.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
             query.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
 
+           // System.out.println(getSQL(em, typedQuery));
+
             long count = (long) query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
 
             TaskDtoConverter dtoConverter = new TaskDtoConverter(user);
             List<Task> result = dtoConverter.convert(typedQuery.getResultList());
+
 
             return new ViewPage<>(result, count, maxPage, pageNum);
         } finally {
@@ -398,7 +401,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    private Predicate getCondition(TaskFilter filter, CriteriaBuilder cb, Root<Task> taskRoot){
+    private Predicate getCondition(TaskFilter filter, CriteriaBuilder cb, Root<Task> taskRoot) {
 
         Predicate condition = null;
 
