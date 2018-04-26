@@ -46,7 +46,7 @@ import java.util.*;
 
 public class TaskDomain extends ApprovalDomain<Task> {
 
-    private static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
+    public static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
 
     public TaskDomain(_Session ses) throws DAOException {
         super(ses);
@@ -114,6 +114,8 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task.setAuthor(ses.getUser());
             changeStatus(task, StatusType.DRAFT);
             // task.setInitiative(true);
+
+
 
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
@@ -387,7 +389,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         eventDAO.add(event);
     }
 
-    private List<Block> getModeratorBlock(List<Employee> moderators) {
+    public static List<Block> getModeratorBlock(List<Employee> moderators) {
         ArrayList<Block> blocks = new ArrayList<Block>();
         Block block = new Block();
         block.setType(ApprovalType.PARALLEL);

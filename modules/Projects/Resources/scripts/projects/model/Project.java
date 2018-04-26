@@ -19,7 +19,7 @@ import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name = ModuleConst.CODE + "__projects")
+@Table(name = ModuleConst.CODE + "__projects", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 public class Project extends EmbeddedSecureHierarchicalEntity {
 
     @JsonIgnore
