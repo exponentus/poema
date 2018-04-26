@@ -24,6 +24,10 @@ public class ActionFactory extends ConventionalActionFactory {
     }
 
     // Task actions
+    public Action sendForExecution() {
+        return new Action(ActionType.SAVE_AND_CLOSE).caption("send_for_execution").cls("btn-primary");
+    }
+
     public Action acknowledgedTask() {
         return new Action().caption("acknowledged_task").url(ModuleConst.BASE_URL + "api/tasks/acknowledged");
     }

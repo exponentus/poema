@@ -439,7 +439,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
         actionBar.addAction(action.close);
         if (taskDomain.taskIsEditable(task)) {
-            actionBar.addAction(action.saveAndClose);
+            actionBar.addAction(action.sendForExecution());
 
             if (task.getStatus() == StatusType.DRAFT) {
                 actionBar.addAction(new Action().id("SAVE_AS_DRAFT").caption("save_as_draft").payloadType(ActionPayloadType.MODEL).url(ModuleConst.BASE_URL + "api/tasks/saveAsDraft").hidden());
