@@ -4,10 +4,7 @@ import administrator.dao.CollationDAO;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.dto.converter.ExtConverter;
 import com.exponentus.common.model.SecureAppEntity;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -105,7 +102,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             typedQuery.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
             query.setHint(QueryHints.READ_ONLY, HintValues.TRUE);
 
-           // System.out.println(getSQL(em, typedQuery));
+            // System.out.println(getSQL(em, typedQuery));
 
             long count = (long) query.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
@@ -403,8 +400,9 @@ public class TaskDAO extends DAO<Task, UUID> {
 
     private Predicate getCondition(TaskFilter filter, CriteriaBuilder cb, Root<Task> taskRoot) {
 
-        Predicate condition = null;
+        Predicate condition = filter.collectPredicate(taskRoot, cb, null);
 
+        /*
         if (filter.getProject() != null) {
             condition = cb.equal(taskRoot.get("project"), filter.getProject());
         }
@@ -496,7 +494,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             } else {
                 condition = cb.and(cb.isEmpty(taskRoot.get("parent")), condition);
             }
-        }
+        }*/
         //
 
         if (!user.isSuperUser()) {
@@ -509,6 +507,7 @@ public class TaskDAO extends DAO<Task, UUID> {
                 condition = cb.and(condition, readCondition);
             }
         }
+
         return condition;
     }
 }
