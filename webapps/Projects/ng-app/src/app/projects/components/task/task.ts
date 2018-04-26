@@ -103,6 +103,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                 break;
             default:
                 if (action.customID === 'save_and_close') {
+                    this.saveAsDraftRequestIncomplete = false;
                     clearTimeout(this.timeout);
                 }
                 super.onAction(action);

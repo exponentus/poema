@@ -154,7 +154,7 @@ public class ViewOptions {
         FilterGroup filterGroup = new FilterGroup();
         filterGroup.addItem(new FilterItem("status").items(statusTypeItems));
         filterGroup.addItem(new FilterItem("priority").items(priorityTypeItems));
-        filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types"));
+        filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types").searchable(false));
         if (!"inbox".equals(slug)) {
             filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
         }
