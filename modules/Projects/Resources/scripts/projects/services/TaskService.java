@@ -221,7 +221,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDAO taskDAO = new TaskDAO(session);
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
-            if (task.getStatus() == StatusType.DRAFT){
+            if (task.getStatus() == StatusType.DRAFT) {
                 task.setStatus(StatusType.OPEN);
             }
             taskDomain.saveTask(task);
@@ -348,7 +348,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             if (task.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (task.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                    task.setStatus(StatusType.OPEN);
                     if (task.getStatus() == StatusType.OPEN) {
                         new Messages(getAppEnv()).sendToAssignee(task);
                         domain.postCalendarEvent(task);
