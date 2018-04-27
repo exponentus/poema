@@ -528,6 +528,7 @@
   "meat_industry" : null,
   "app_sort_hint" : "app_sort_hint",
   "last_modified" : "Last modified",
+  "send_for_execution" : "Send to implementation",
   "parent_assignment" : "Parent assignment",
   "public_health" : null,
   "sign_up" : "Sign up",

@@ -237,10 +237,11 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     }
 
     openDeclineApprovalBlockDialog(action: IAction) {
-        let modal = {
+        const model = { editable: true, comment: '' };
+        const modal = {
             type: 'dialog',
             title: 'confirm_action',
-            model: { editable: true, comment: '' },
+            model: model,
             formSchema: [{
                 tabTitle: 'properties',
                 active: true,
@@ -263,6 +264,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
             }, {
                 label: 'decline',
                 className: 'btn-primary',
+                disabled: () => { return !model.comment; },
                 click: (modal: any, event: any) => {
                     if (modal.model.comment && modal.model.comment.trim()) {
                         super.onAction(action, {
