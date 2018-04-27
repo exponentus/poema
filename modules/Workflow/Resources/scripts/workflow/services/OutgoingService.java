@@ -246,7 +246,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
         try {
             _Session ses = getSession();
             OutgoingDomain domain = new OutgoingDomain(ses);
-            Outgoing entity = domain.register(action.getTarget(), new DefaultValidation());
+            Outgoing entity = domain.register(action.getTarget(), new EmptyValidation());
             domain.superUpdate(entity);
 
             //new Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());

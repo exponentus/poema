@@ -220,41 +220,11 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         try {
             TaskDAO taskDAO = new TaskDAO(session);
             TaskDomain taskDomain = new TaskDomain(session);
-            taskDomain.setAppEnv(getAppEnv());
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
-            // IMonitoringDAO mDao = Environment.getActivityRecorder();
             if (task.getStatus() == StatusType.DRAFT){
                 task.setStatus(StatusType.OPEN);
             }
             taskDomain.saveTask(task);
-
-            /*if (taskDto.isNew()) {
-                RegNum rn = new RegNum();
-                // TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
-                // taskType = taskTypeDAO.findById(taskDto.getTaskType().getId());
-                task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
-                task = taskDAO.add(task, rn);
-                //	mDao.postEmailSending(user, task, "task_was_registered");
-            } else {
-                task = taskDAO.update(task);
-                //	mDao.postEmailSending(user, task, "task_was_updated");
-            }
-
-            if (task.getStatus() == StatusType.OPEN) {
-                ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
-                lifecycle.start();
-                if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
-                    task.getTimeLine().addStage(new Date(), StatusType.MODERATION.name());
-                    task.addReaderEditor(task.getAuthorId()); //dev1292
-                    taskDomain.superUpdate(task);
-                    new Messages(getAppEnv()).sendToModerate(task);
-                } else {
-                    taskDomain.superUpdate(task);
-                    new Messages(getAppEnv()).sendToAssignee(task);
-                    taskDomain.postCalendarEvent(task);
-                }
-            }*/
-
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
@@ -292,8 +262,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDAO taskDAO = new TaskDAO(session);
 
             TaskDomain taskDomain = new TaskDomain(session);
-            Task task = taskDomain.fillDraft(taskDto, new DefaultValidation(), getWebFormData().getFormSesId());
-            // task = taskDAO.save(task);
+            Task task = taskDomain.fillDraft(taskDto, new EmptyValidation(), getWebFormData().getFormSesId());
             task.setStatus(StatusType.DRAFT);
             taskDomain.saveTask(task);
 

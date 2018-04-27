@@ -182,11 +182,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
             RegNum rn = new RegNum();
             task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
             task = dao.add(task, rn);
-            //	mDao.postEmailSending(user, task, "task_was_registered");
-
+            Environment.database.markAsRead(ses.getUser(), task);
         } else {
             task = dao.update(task);
-            //	mDao.postEmailSending(user, task, "task_was_updated");
         }
 
         if (task.getStatus() == StatusType.OPEN) {
