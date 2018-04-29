@@ -109,7 +109,7 @@
                             </nb-select>
                             <error-message [error]="errors.assignee"></error-message>
                             <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
-                                <a href="#" style="margin:.6em;" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
+                                <a class="action-link" href="#" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
                             </div>
                         </div>
                     </div>
