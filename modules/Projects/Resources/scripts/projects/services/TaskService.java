@@ -263,7 +263,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillDraft(taskDto, new EmptyValidation(), getWebFormData().getFormSesId());
-            task.setStatus(StatusType.DRAFT);
             taskDomain.saveTask(task);
 
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();

@@ -25,7 +25,6 @@ import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
-import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
@@ -113,29 +112,15 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task = new Task();
             task.setAuthor(ses.getUser());
             changeStatus(task, StatusType.DRAFT);
-            // task.setInitiative(true);
-
-
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
                 task.setParent(dto.getParent());
-                //	dto.setProject(dto.getParent().getProject());
-                //	task.addReaders(dto.getParent().getReader());
             }
-//            if (dto.getDemand() != null) {
-//                DemandDAO demandDAO = new DemandDAO(ses);
-//                dto.setDemand(demandDAO.findById(dto.getDemand().getId()));
-//            }
         } else {
             task = dao.findById(dto.getId());
         }
 
-        String title = dto.getTitle();
-        if (title == null || title.isEmpty()) {
-            // TODO here it needed to vanish from markdown symbols
-            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
-        }
-        task.setTitle(title);
+        task.setTitle(dto.getTitle());
         task.setProject(dto.getProject());
         task.setTaskType(new TaskTypeDAO(ses).findById(dto.getTaskType().getId()));
         task.setPriority(dto.getPriority());
