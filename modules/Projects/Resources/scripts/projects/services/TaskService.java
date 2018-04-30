@@ -348,10 +348,10 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             if (task.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (task.getApprovalResult() == ApprovalResultType.ACCEPTED) {
-                    if (task.getStatus() == StatusType.OPEN) {
-                        new Messages(getAppEnv()).sendToAssignee(task);
-                        domain.postCalendarEvent(task);
-                    }
+                    task.setStatus(StatusType.OPEN);
+                    new Messages(getAppEnv()).sendToAssignee(task);
+                    domain.postCalendarEvent(task);
+
                 }
             }
             // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
