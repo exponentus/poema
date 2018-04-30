@@ -25,6 +25,7 @@ import com.exponentus.rest.validation.exception.DTOExceptionType;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
+import com.exponentus.util.StringUtil;
 import helpdesk.model.Demand;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
@@ -120,7 +121,11 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task = dao.findById(dto.getId());
         }
 
-        task.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        task.setTitle(title);
         task.setProject(dto.getProject());
         task.setTaskType(new TaskTypeDAO(ses).findById(dto.getTaskType().getId()));
         task.setPriority(dto.getPriority());
@@ -173,6 +178,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
 
         if (task.getStatus() == StatusType.OPEN) {
+
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
             lifecycle.start();
             if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
