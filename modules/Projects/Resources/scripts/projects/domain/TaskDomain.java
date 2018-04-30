@@ -56,9 +56,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public Task composeNew(User user, Project project, Task parentTask, Demand demand, TaskType taskType, boolean initiative,
                            int dueDateRange) throws DAOException, RestServiceException {
         Task task = new Task();
-
         task.setAuthor(user);
-        // task.setInitiative(initiative);
         task.setTaskType(taskType);
         task.setStatus(StatusType.DRAFT);
         task.setProject(project);

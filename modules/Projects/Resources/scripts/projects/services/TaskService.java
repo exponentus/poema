@@ -345,18 +345,16 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             domain.acceptApprovalBlock(task, ses.getUser());
             domain.superUpdate(task);
 
+            Outcome outcome = domain.getOutcome(task);
             if (task.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (task.getApprovalResult() == ApprovalResultType.ACCEPTED) {
                     task.setStatus(StatusType.OPEN);
                     new Messages(getAppEnv()).sendToAssignee(task);
                     domain.postCalendarEvent(task);
-
+                    outcome.setTitle("approval_block_accepted");
+                    outcome.setMessage("approval_block_accepted");
                 }
             }
-            // new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
-            Outcome outcome = domain.getOutcome(task);
-            outcome.setTitle("approval_block_accepted");
-            outcome.setMessage("approval_block_accepted");
 
             return Response.ok(outcome).build();
         } catch (DTOException e) {
