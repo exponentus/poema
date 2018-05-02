@@ -266,12 +266,14 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public void acceptApprovalBlock(Task task, IUser user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.accept(user);
+        task.setApprovalStatus(ApprovalStatusType.FINISHED);
         changeStatus(task, StatusType.OPEN);
     }
 
     public void declineApprovalBlock(Task task, IUser user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.decline(user, decisionComment);
+        task.setApprovalStatus(ApprovalStatusType.FINISHED);
         changeStatus(task, StatusType.DRAFT);
     }
 

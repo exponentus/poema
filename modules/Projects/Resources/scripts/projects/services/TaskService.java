@@ -257,14 +257,11 @@ public class TaskService extends EntityService<Task, TaskDomain> {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveAsDraft(Task taskDto) {
         _Session session = getSession();
-
         try {
             TaskDAO taskDAO = new TaskDAO(session);
-
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillDraft(taskDto, new EmptyValidation(), getWebFormData().getFormSesId());
             taskDomain.saveTask(task);
-
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
@@ -284,11 +281,8 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.acknowledgedTask(task, (User) getSession().getUser());
-
             dao.update(task, false);
-
             new Messages(getAppEnv()).sendOfNewAcknowledging(task);
-
             return Response.ok(taskDomain.getOutcome(task)).build();
         } catch (SecureException | DAOException | DTOException e) {
             return responseException(e);
@@ -304,11 +298,8 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.completeTask(task);
-
             dao.update(task, false);
-
             new Messages(getAppEnv()).sendOfTaskCompleted(task);
-
             return Response.ok(taskDomain.getOutcome(task)).build();
         } catch (SecureException | DAOException | DatabaseException | DTOException e) {
             return responseException(e);
@@ -324,9 +315,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
             taskDomain.cancelTask(task, action.getPayload());
-
             dao.update(task, false);
-
             new Messages(getAppEnv()).sendOfTaskCancelled(task);
 
             return Response.ok(taskDomain.getOutcome(task)).build();
@@ -373,7 +362,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             domain.declineApprovalBlock(entity, ses.getUser(), action.getPayload());
             domain.superUpdate(entity);
 
-            //new workflow.other.Messages(getAppEnv()).notifyApprovers(entity, entity.getTitle());
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).sendModeratorRejection(entity);
