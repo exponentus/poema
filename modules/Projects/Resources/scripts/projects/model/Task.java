@@ -307,7 +307,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     public void setInitiative(boolean initiative) {
-        // this.initiative = initiative;
+        this.initiative = initiative;
     }
 
     public List<Tag> getTags() {
@@ -381,6 +381,11 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     }
 
     @Override
+    public void setResult(ApprovalResultType result) {
+        this.result = result;
+    }
+
+    @Override
     public ApprovalResultType getApprovalResult() {
         return result;
     }
@@ -426,10 +431,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.blocks = blocks;
     }
 
-    @Override
-    public void setResult(ApprovalResultType result) {
-        this.result = result;
-    }
+
 
     @Override
     public void setApprovalSchema(ApprovalSchemaType schema) {

@@ -73,18 +73,15 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         try {
             _Session session = getSession();
             WebFormData params = getWebFormData();
-
             String[] expandedIds = params.getListOfValuesSilently("expandedIds");
             List<UUID> expandedIdList = Arrays.stream(expandedIds).map(UUID::fromString).collect(toList());
             int pageSize = session.getPageSize();
             int pageNum = params.getPage();
             String slug = params.getValueSilently("slug");
-
             TaskDAO taskDAO = new TaskDAO(session);
             TaskFilter taskFilter = setUpTaskFilter(session, params, new TaskFilter());
             SortParams sortParams = SortParams.valueOf(params.getStringValueSilently("sort", "-regDate"));
             ViewPage<Task> vp;
-
             if (params.getBoolSilently("execution")) {
                 Task parentTask = taskDAO.findById(taskFilter.getParentTask().getId());
                 vp = taskDAO.findTaskExecution(parentTask);
@@ -221,9 +218,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDAO taskDAO = new TaskDAO(session);
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
-            if (task.getStatus() == StatusType.DRAFT) {
-                task.setStatus(StatusType.OPEN);
-            }
             taskDomain.saveTask(task);
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
@@ -260,7 +254,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         try {
             TaskDAO taskDAO = new TaskDAO(session);
             TaskDomain taskDomain = new TaskDomain(session);
-            Task task = taskDomain.fillDraft(taskDto, new EmptyValidation(), getWebFormData().getFormSesId());
+            Task task = taskDomain.fillFromDto(taskDto, new EmptyValidation(), getWebFormData().getFormSesId());
             taskDomain.saveTask(task);
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {

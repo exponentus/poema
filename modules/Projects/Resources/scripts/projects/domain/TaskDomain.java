@@ -12,6 +12,7 @@ import com.exponentus.common.init.DefaultDataConst;
 import com.exponentus.common.model.constants.*;
 import com.exponentus.common.model.embedded.Approver;
 import com.exponentus.common.model.embedded.Block;
+import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -42,10 +43,11 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.ApprovalDomain;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class TaskDomain extends ApprovalDomain<Task> {
-
     public static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
 
     public TaskDomain(_Session ses) throws DAOException {
@@ -62,8 +64,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setProject(project);
         if (demand != null) {
             task.setDemand(demand);
-        } else if (task.getParent() != null) {
-            // task.setDemand(task.getParent().getDemand());
         }
 
         if (project == null && demand != null) {
@@ -110,7 +110,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         if (dto.isNew()) {
             task = new Task();
             task.setAuthor(ses.getUser());
-            changeStatus(task, StatusType.DRAFT);
             if (dto.getParent() != null) {
                 dto.setParent(dao.findById(dto.getParent().getId()));
                 task.setParent(dto.getParent());
@@ -120,8 +119,27 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
 
         String title = dto.getTitle();
-        if (title == null || title.isEmpty()) {
-            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        Date startDate = dto.getStartDate();
+
+        if (validation instanceof EntityService.EmptyValidation) {
+            task.setStatus(StatusType.DRAFT);
+        } else {
+            if (title == null || title.isEmpty()) {
+                title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+            }
+            if (task.getStatus() == StatusType.DRAFT || task.getStatus() == StatusType.UNKNOWN) {
+                if (startDate == null) {
+                    startDate = new Date();
+                    task.setStatus(StatusType.OPEN);
+                } else {
+                    if (new Date().before(startDate)) {
+                        task.setStatus(StatusType.WAITING);
+                    } else {
+                        task.setStatus(StatusType.OPEN);
+                    }
+                }
+                settingUpRevision(task);
+            }
         }
         task.setTitle(title);
         task.setProject(dto.getProject());
@@ -129,54 +147,31 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setPriority(dto.getPriority());
         task.setBody(dto.getBody());
         task.setTags(dto.getTags());
-        task.setStartDate(dto.getStartDate());
+        task.setStartDate(startDate);
         task.setDueDate(dto.getDueDate());
-        calculateStatus(task);
-
+        if (task.getDemand() != null) {
+            task.setInitiative(true);
+        }
         User user = new User();
         user.setId(dto.getAssignee());
         changeAssignee(task, user);
-
         task.setCustomerObservation(dto.isCustomerObservation());
         task.setAttachments(getActualAttachments(task.getAttachments(), dto.getAttachments(), formSesId));
         task.setObservers(dto.getObservers() != null ? dto.getObservers() : new ArrayList<>());
-
         calculateReaders(task);
-
-        return task;
-    }
-
-    public Task fillDraft(Task dto, IValidation<Task> validation, String formSesId) throws DAOException, DTOException {
-        dto.setStartDate(dto.getStartDate());
-        dto.setStatus(StatusType.DRAFT);
-        Task task = fillFromDto(dto, validation, formSesId);
-        Set<Long> readers = new HashSet<>();
-        readers.add(task.getAuthor().getId());
-        task.setReaders(readers);
-
         return task;
     }
 
     public void saveTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
         if (task.isNew()) {
-            task.setInitiative(false);
-            EmployeeDAO empDao = new EmployeeDAO(ses);
-            ViewPage<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME);
-            if (moderators.getCount() > 0) {
-                task.setBlocks(getModeratorBlock(moderators.getResult()));
-            } else {
-                throw new RestServiceException("There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
-            }
             RegNum rn = new RegNum();
             task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
             task = dao.add(task, rn);
-            Environment.database.markAsRead(ses.getUser(), task);
         } else {
             task = dao.update(task);
         }
 
-        if (task.getStatus() == StatusType.OPEN) {
-
+        if (task.getStatus() == StatusType.OPEN && task.getApprovalStatus() == ApprovalStatusType.DRAFT) {
             ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
             lifecycle.start();
             if (task.getApprovalStatus() != ApprovalStatusType.FINISHED) {
@@ -203,29 +198,22 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
     }
 
-    public void calculateStatus(Task task) throws DAOException {
-        if (task.getStatus() == StatusType.OPEN
-                || task.getStatus() == StatusType.WAITING) {
-            if (new Date().before(task.getStartDate())) {
-                changeStatus(task, StatusType.WAITING);
-            } else {
-                EmployeeDAO empDao = new EmployeeDAO(ses);
-                List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
-                if (moderators.size() > 0) {
-                    List<Block> block = getModeratorBlock(moderators);
-                    task.setBlocks(block);
-                    if (moderators.contains(task.getAuthor())) {
-                        task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
-                    } else {
-                        task.setApprovalSchema(ApprovalSchemaType.IN_ANY_CASE_DECIDE_PARALLEL_APPROVER);
-                    }
-                    task.setApprovalStatus(ApprovalStatusType.DRAFT);
-                    task.setResult(ApprovalResultType.UNKNOWN);
+    public void settingUpRevision(Task task) throws DAOException {
+        if (task.getApprovalStatus() == ApprovalStatusType.DRAFT) {
+            EmployeeDAO empDao = new EmployeeDAO(ses);
+            List<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME).getResult();
+            if (moderators.size() > 0) {
+                List<Block> block = getModeratorBlock(moderators);
+                task.setBlocks(block);
+                if (moderators.contains(task.getAuthor())) {
+                    task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
                 } else {
-                    throw new DAOException(DAOExceptionType.ENTITY_NOT_FOUND, "There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
+                    task.setApprovalSchema(ApprovalSchemaType.REJECT_IF_NO);
                 }
+                task.setResult(ApprovalResultType.UNKNOWN);
+            } else {
+                throw new DAOException(DAOExceptionType.ENTITY_NOT_FOUND, "There is no user assigned to the \"" + MODERATOR_ROLE_NAME + "\" role");
             }
-            changeStatus(task, StatusType.OPEN);
         }
     }
 
@@ -266,14 +254,12 @@ public class TaskDomain extends ApprovalDomain<Task> {
     public void acceptApprovalBlock(Task task, IUser user) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.accept(user);
-        task.setApprovalStatus(ApprovalStatusType.FINISHED);
         changeStatus(task, StatusType.OPEN);
     }
 
     public void declineApprovalBlock(Task task, IUser user, String decisionComment) throws ApprovalException {
         ApprovalLifecycle lifecycle = new ApprovalLifecycle(task);
         lifecycle.decline(user, decisionComment);
-        task.setApprovalStatus(ApprovalStatusType.FINISHED);
         changeStatus(task, StatusType.DRAFT);
     }
 

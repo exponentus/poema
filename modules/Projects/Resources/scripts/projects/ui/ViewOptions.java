@@ -125,7 +125,6 @@ public class ViewOptions {
     }
 
     public FilterForm getTaskFilter(_Session session, String slug) {
-
         StatusType[] statusTypes = {
                 StatusType.OPEN,
                 StatusType.PROCESSING,
