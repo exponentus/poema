@@ -208,7 +208,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 if (moderators.contains(task.getAuthor())) {
                     task.setApprovalSchema(ApprovalSchemaType.WITHOUT_APPROVAL);
                 } else {
-                    task.setApprovalSchema(ApprovalSchemaType.REJECT_IF_NO);
+                    task.setApprovalSchema(ApprovalSchemaType.REJECT_IF_NO_ACCEPT_IF_ANY_YES);
                 }
                 task.setResult(ApprovalResultType.UNKNOWN);
             } else {
