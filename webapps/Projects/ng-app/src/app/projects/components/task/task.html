@@ -64,6 +64,9 @@
                                 [searchable]="true" [url]="PROJECTS_URL.API_PROJECTS"
                                 [(ngModel)]="model.project" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
+                            <div *ngIf="model.project" class="mt-1">
+                                <a [routerLink]="[model.project.url]">{{'to_open' | translate}}</a>
+                            </div>
                             <error-message [error]="errors.project"></error-message>
                         </div>
                     </div>
@@ -218,7 +221,7 @@
                 <div *ngIf="activity" class="fieldset">
                     <div class="legend">{{'activity' | translate}}</div>
                     <div class="controls">
-                        <nb-activity [activities]="activity"></nb-activity>
+                        <nb-activity [activity]="activity"></nb-activity>
                     </div>
                 </div>
             </tab>
