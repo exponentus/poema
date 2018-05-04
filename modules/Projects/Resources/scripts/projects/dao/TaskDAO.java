@@ -4,10 +4,7 @@ import administrator.dao.CollationDAO;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.dto.converter.ExtConverter;
 import com.exponentus.common.model.SecureAppEntity;
-import com.exponentus.common.model.constants.ApprovalStatusType;
-import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.common.model.embedded.Block;
 import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
@@ -403,101 +400,8 @@ public class TaskDAO extends DAO<Task, UUID> {
 
     private Predicate getCondition(TaskFilter filter, CriteriaBuilder cb, Root<Task> taskRoot) {
 
+        // see collectPredicate
         Predicate condition = filter.collectPredicate(taskRoot, cb, null);
-
-
-        if (filter.getProject() != null) {
-            condition = cb.equal(taskRoot.get("project"), filter.getProject());
-        }
-
-        if (filter.getAuthor() != null) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("author"), filter.getAuthor());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("author"), filter.getAuthor()), condition);
-            }
-        }
-
-        if (filter.getStatus() != StatusType.UNKNOWN) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("status"), filter.getStatus());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("status"), filter.getStatus()), condition);
-            }
-        }
-
-        if (filter.getPriority() != PriorityType.UNKNOWN) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("priority"), filter.getPriority());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("priority"), filter.getPriority()), condition);
-            }
-        }
-
-        if (filter.getTaskType() != null) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("taskType"), filter.getTaskType());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("taskType"), filter.getTaskType()), condition);
-            }
-        }
-
-        if (filter.getAssigneeUserId() != null) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("assignee"), filter.getAssigneeUserId());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("assignee"), filter.getAssigneeUserId()), condition);
-            }
-        }
-
-        if (filter.isInitiative() != null) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("initiative"), filter.isInitiative());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("initiative"), filter.isInitiative()), condition);
-            }
-        }
-
-        if (filter.getTags() != null) {
-            if (condition == null) {
-                condition = cb.and(taskRoot.get("tags").in(filter.getTags()));
-            } else {
-                condition = cb.and(taskRoot.get("tags").in(filter.getTags()), condition);
-            }
-        }
-
-        if (filter.isModerate()) {
-            Expression<ApprovalStatusType> status = taskRoot.<Collection<Block>>get("blocks").<ApprovalStatusType>get("status");
-            Predicate predicate = cb.equal(status, ApprovalStatusType.PENDING);
-            if (condition == null) {
-                condition = cb.and(predicate);
-            } else {
-                condition = cb.and(predicate, condition);
-            }
-        }
-
-        if (filter.hasSearch()) {
-            if (condition == null) {
-                condition = cb.like(cb.lower(taskRoot.get("title")), "%" + filter.getSearch() + "%");
-            } else {
-                condition = cb.and(cb.like(cb.lower(taskRoot.get("title")), "%" + filter.getSearch() + "%"), condition);
-            }
-        }
-
-        //
-        if (filter.getParentTask() != null) {
-            if (condition == null) {
-                condition = cb.equal(taskRoot.get("parent"), filter.getParentTask());
-            } else {
-                condition = cb.and(cb.equal(taskRoot.get("parent"), filter.getParentTask()), condition);
-            }
-        } else if (filter.isTreeMode() || filter.isParentOnly()) {
-            if (condition == null) {
-                condition = cb.isEmpty(taskRoot.get("parent"));
-            } else {
-                condition = cb.and(cb.isEmpty(taskRoot.get("parent")), condition);
-            }
-        }
 
         if (!user.isSuperUser()) {
             MapJoin<T, Long, Reader> readers = taskRoot.joinMap("readers", JoinType.LEFT);
