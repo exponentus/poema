@@ -128,16 +128,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
             }
             if (task.getStatus() == StatusType.DRAFT || task.getStatus() == StatusType.UNKNOWN) {
-                if (startDate == null) {
-                    startDate = new Date();
-                    task.setStatus(StatusType.OPEN);
+
+                if (new Date().before(startDate)) {
+                    task.setStatus(StatusType.WAITING);
                 } else {
-                    if (new Date().before(startDate)) {
-                        task.setStatus(StatusType.WAITING);
-                    } else {
-                        task.setStatus(StatusType.OPEN);
-                    }
+                    task.setStatus(StatusType.OPEN);
                 }
+
                 settingUpRevision(task);
             }
         }

@@ -31,10 +31,7 @@ import staff.model.Employee;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
@@ -377,6 +374,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @JsonIgnore
     public List<Stage> getStages() {
+        Collections.sort(stages, (a, b) -> a.getStageTime().compareTo(b.getStageTime()));
         return stages;
     }
 
@@ -430,7 +428,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     public void setBlocks(List<Block> blocks) {
         this.blocks = blocks;
     }
-
 
 
     @Override
