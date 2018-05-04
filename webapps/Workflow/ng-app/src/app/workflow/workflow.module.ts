@@ -5,7 +5,8 @@ import {
     NbCommonModule,
     ApprovalModule,
     LifeCycleModule,
-    NbAclModule
+    NbAclModule,
+    NBEntityCreationDetailsModule
 } from '@nb/core';
 
 import { WORKFLOW_ROUTES } from './workflow.routes';
@@ -42,7 +43,8 @@ import { ValueObjectService } from './services';
         RouterModule.forChild(WORKFLOW_ROUTES),
         ApprovalModule,
         LifeCycleModule,
-        NbAclModule
+        NbAclModule,
+        NBEntityCreationDetailsModule
     ],
     providers: [
         ValueObjectService

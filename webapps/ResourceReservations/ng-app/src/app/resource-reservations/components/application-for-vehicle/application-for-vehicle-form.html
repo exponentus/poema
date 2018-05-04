@@ -162,10 +162,6 @@
         </tabs>
     </section>
     <footer class="content-footer form-footer">
-        <div class="record-author" *ngIf="model.author">
-            <span>{{'author' | translate}}</span>
-            <span>{{model.author.name}}</span>
-            <span>{{model.regDate}}</span>
-        </div>
+        <nb-model-creation-details [model]="model"></nb-model-creation-details>
     </footer>
 </form>

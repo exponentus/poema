@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import {
     NbCommonModule, TimeLineModule, NBChartModule,
-    NbAclModule, NbActivityModule
+    NbAclModule, NbActivityModule, NBEntityCreationDetailsModule
 } from '@nb/core';
 
 import { PROJECTS_ROUTES } from './projects.routes';
@@ -43,7 +43,8 @@ import {
         TimeLineModule,
         NBChartModule,
         NbAclModule,
-        NbActivityModule
+        NbActivityModule,
+        NBEntityCreationDetailsModule
     ],
     providers: [
         ProjectService,
