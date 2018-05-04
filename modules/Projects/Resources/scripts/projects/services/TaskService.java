@@ -359,13 +359,10 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED) {
                 if (entity.getApprovalResult() == ApprovalResultType.REJECTED) {
                     new Messages(getAppEnv()).sendModeratorRejection(entity);
-                }
-            }
-
-            if (entity.getApprovalStatus() == ApprovalStatusType.FINISHED && entity.getApprovalResult() == ApprovalResultType.REJECTED) {
-                if (entity.isVersionsSupport()) {
-                    entity = domain.backToRevise(entity);
-                    domain.superUpdate(entity);
+                    if (entity.isVersionsSupport()) {
+                        entity = domain.backToRevise(entity);
+                        domain.superUpdate(entity);
+                    }
                 }
             }
 
