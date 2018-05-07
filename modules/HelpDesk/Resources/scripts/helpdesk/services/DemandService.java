@@ -120,7 +120,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
         DemandType demandType = filter.getDemandType();
 
         DemandDAO dao = new DemandDAO(session);
-        ViewPage<Demand> vp = dao.findViewPage(filter, new DemandDtoConverter(), sortParams, params.getPage(), pageSize);
+        ViewPage<Demand> vp = dao.findViewPage(filter, new DemandDtoConverter(session.getUser()), sortParams, params.getPage(), pageSize);
 
         ViewOptions viewOptions = new ViewOptions();
         vp.setViewPageOptions(viewOptions.getDemandOptions());
@@ -147,8 +147,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
     public Response getById(@PathParam("id") String id) {
         try {
             _Session session = getSession();
-            Demand entity;
-            DemandDomain demandDomain = new DemandDomain(session);
+            Demand demand;
             boolean isNew = "new".equals(id);
 
             if (isNew) {
@@ -167,7 +166,10 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 }
 
                 User user = (User) session.getUser();
-                entity = demandDomain.composeNew(user, demandType);
+                demand = new Demand();
+                demand.setAuthor(user);
+                demand.setStatus(DemandStatusType.DRAFT);
+                demand.setDemandType(demandType);
 
                 Task task = new Task();
                 task.setAuthor(user);
@@ -181,10 +183,10 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 task.setStatus(StatusType.DRAFT);
                 task.setStartDate(new Date());
                 task.setDueDate(new LocalDate(task.getStartDate()).plusDays(projects.init.ModuleConst.DEFAULT_DUE_DATE_RANGE).toDate());
-                entity.setTasks(Collections.singletonList(task));
+                demand.setTasks(Collections.singletonList(task));
             } else {
                 DemandDAO dao = new DemandDAO(session);
-                entity = dao.findById(id);
+                demand = dao.findById(id);
             }
 
             Map<Long, Employee> emps = new EmployeeDAO(session).findAll(false).getResult().stream()
@@ -192,14 +194,14 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
 
             Outcome outcome = new Outcome();
             outcome.setTitle(Environment.vocabulary.getWord("demand", session.getLang()));
-            outcome.setModel(entity);
+            outcome.setModel(demand);
             outcome.setPayloadTitle("demand");
 
-            if (!entity.isNew()) {
-                outcome.addPayload(new ACL(entity));
+            if (!demand.isNew()) {
+                outcome.addPayload(new ACL(demand));
             }
 
-            outcome.addPayload(getActionBar(session, entity));
+            outcome.addPayload(getActionBar(session, demand));
             outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload("employees", emps);
             outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
@@ -240,12 +242,13 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             entity.setProject(project);
             entity.setWayOfInteraction(dto.getWayOfInteraction());
             entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+            entity.setStatus(DemandStatusType.OPEN);
 
             if (entity.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(entity.getDemandType().getPrefix() + rn.getRegNumber(entity.getDemandType().getPrefix()));
                 entity = demandDAO.add(entity, rn);
-                if (entity != null && dto.getTasks() != null) {
+                if (entity != null && dto.getTasks().size() > 0) {
                     TaskDomain taskDomain = new TaskDomain(getSession());
                     Task taskDto = dto.getTasks().get(0);
                     taskDto.setProject(project);
