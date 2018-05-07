@@ -64,17 +64,6 @@ public class DemandDomain extends CommonDomain<Demand> {
         entity.setWayOfInteraction(dto.getWayOfInteraction());
         entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
 
-        if (entity.isNew()) {
-//            RegNum rn = new RegNum();
-//            entity.setRegNumber(demandType.getPrefix() + rn.getRegNumber(demandType.getPrefix()));
-
-
-//            if (entity.getTask() == null && dto.getTask() != null) {
-//                entity.setTask(dto.getTask());
-//                // entity.getTask().setDemand(entity);
-//                entity.getTask().setProject(entity.getProject());
-//            }
-        }
 
         return entity;
     }
@@ -86,9 +75,6 @@ public class DemandDomain extends CommonDomain<Demand> {
         demand.setStatusDate(new Date());
     }
 
-    public void registerTask(Demand demand) {
-
-    }
 
     public Outcome getOutcome(Demand demand) {
         Outcome outcome = new Outcome();

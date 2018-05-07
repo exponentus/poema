@@ -5,12 +5,14 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.service.EntityService;
+import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.dataengine.exception.DAOException;
+import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.rest.exception.RestServiceException;
@@ -183,38 +185,57 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
     @Override
     public Response saveForm(Demand dto) {
         try {
-            DemandDAO demandDAO = new DemandDAO(getSession());
-            DemandDomain domain = new DemandDomain(getSession());
-            Demand demand = domain.fillFromDto(dto, new DemandService.Validation(), getWebFormData().getFormSesId());
+            new Validation().check(dto);
+            _Session ses = getSession();
+            DemandDAO demandDAO = new DemandDAO(ses);
+            DemandTypeDAO demandTypeDAO = new DemandTypeDAO(ses);
 
-            if (demand.isNew() && dto.getTask() != null) {
-                // Каша
-                // TaskDAO taskDAO = new TaskDAO(getSession());
-                TaskDomain taskDomain = new TaskDomain(getSession());
-                taskDomain.setAppEnv(getAppEnv());
-                dto.getTask().setProject(demand.getProject());
-                Task task = taskDomain.fillFromDto(dto.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+            Demand entity;
 
-                RegNum rn = new RegNum();
-                demand.setRegNumber(demand.getDemandType().getPrefix() + rn.getRegNumber(demand.getDemandType().getPrefix()));
-
-                demandDAO.add(demand, rn);
-
-                demand.setTask(task);
-                task.setDemand(demand);
-                // task.setProject(demand.getProject());
-
-                taskDomain.saveTask(task);
-                domain.save(demand);
-            } else if (demand.isNew()) {
-                RegNum rn = new RegNum();
-                demand.setRegNumber(demand.getDemandType().getPrefix() + rn.getRegNumber(demand.getDemandType().getPrefix()));
-                demandDAO.add(demand, rn);
+            if (dto.isNew()) {
+                entity = new Demand();
+                entity.setAuthor(ses.getUser());
             } else {
-                domain.save(demand);
+                entity = demandDAO.findById(dto.getId());
             }
 
-            return Response.ok(domain.getOutcome(demand)).build();
+            DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
+            entity.setDemandType(demandType);
+            entity.setStatus(dto.getStatus());
+            entity.setStatusDate(dto.getStatusDate());
+            entity.setTitle(dto.getTitle());
+            entity.setBody(dto.getBody());
+            entity.setTags(dto.getTags());
+            entity.setProject(dto.getProject());
+            entity.setWayOfInteraction(dto.getWayOfInteraction());
+            entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+
+            if (entity.isNew()) {
+                RegNum rn = new RegNum();
+                entity.setRegNumber(entity.getDemandType().getPrefix() + rn.getRegNumber(entity.getDemandType().getPrefix()));
+                demandDAO.add(entity, rn);
+            } else {
+                demandDAO.update(entity);
+            }
+
+            if (dto.getTask() != null) {
+                TaskDomain taskDomain = new TaskDomain(getSession());
+                Task task = taskDomain.fillFromDto(dto.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+                entity.setTask(task);
+                task.setDemand(entity);
+                taskDomain.saveTask(task);
+                demandDAO.update(entity);
+            }
+
+            Outcome outcome = new Outcome();
+            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + entity.getTitle());
+            outcome.setModel(entity);
+            outcome.setPayloadTitle("demand");
+            if (!entity.isNew()) {
+                outcome.addPayload(new ACL(entity));
+            }
+            return Response.ok(outcome).build();
         } catch (DTOException e) {
             return responseValidationError(e);
         } catch (DAOException | SecureException | ApprovalException e) {
