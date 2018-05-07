@@ -410,6 +410,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         } else if (task.getStatus() != StatusType.DRAFT) {
             if (taskDomain.userCanDoRequest(task, (User) session.getUser())) {
                 actionBar.addAction(action.newRequest(task));
+                actionBar.addAction(action.sendImplementRequest());
             }
             if (taskDomain.userCanDoAcknowledged(task, (User) session.getUser())) {
                 actionBar.addAction(action.acknowledgedTask());

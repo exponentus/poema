@@ -48,6 +48,10 @@ public class ActionFactory extends ConventionalActionFactory {
         return new Action().id("declineApprovalBlock").caption("decline").url(ModuleConst.BASE_URL + "api/tasks/declineApprovalBlock");
     }
 
+    public Action sendImplementRequest() {
+        return new Action().id("implementRequest").caption("send_implement_request").url(ModuleConst.BASE_URL + "api/requests/implementRequest");
+    }
+
     // Request actions
     public Action acceptRequest() {
         return new Action().id("accept").caption("accept").url(ModuleConst.BASE_URL + "api/requests/accept");

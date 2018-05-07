@@ -6,7 +6,6 @@ import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.ui.BaseReferenceModel;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
@@ -22,6 +21,7 @@ import projects.model.Task;
 import projects.other.Messages;
 import projects.ui.ActionFactory;
 import reference.dao.RequestTypeDAO;
+import reference.model.RequestType;
 import staff.dao.EmployeeDAO;
 import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 
@@ -66,7 +66,7 @@ public class RequestService extends RestProvider {
             Environment.database.markAsRead(session.getUser(), request);
 
             Outcome outcome = requestDomain.getOutcome(request);
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(session, request, requestDomain));
             outcome.addPayload("employees", emps);
 
@@ -134,6 +134,24 @@ public class RequestService extends RestProvider {
 
             return Response.ok(requestDomain.getOutcome(request)).build();
         } catch (SecureException | DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("implementRequest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createImplementRequest(ActionPayload<Task, Object> action) {
+        try {
+            RequestTypeDAO requestTypeDAO = new RequestTypeDAO(getSession());
+            RequestType requestType = requestTypeDAO.findByName("implement");
+
+            Request request = new Request();
+            request.setTask(action.getTarget());
+            request.setRequestType(requestType);
+
+            return add(request);
+        } catch (DAOException e) {
             return responseException(e);
         }
     }
