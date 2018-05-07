@@ -23,8 +23,8 @@ run task fill_tags
 run task fill_positions
 run task ref_fill_unit_types
 
-stini projects.init.FillTaskTypesSofwareDev
-stini projects.init.FillRequestTypes
+run task prj_fill_task_types_software_dev
+run task prj_fill_request_types
 run task fill_demand_types
 run task fill_control_types
 run task ref_fill_wayofinteractions

@@ -177,12 +177,12 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
                 TaskType taskType = null;
                 try {
-                    taskType = taskTypeDAO.findByName("Programming");
+                    taskType = taskTypeDAO.findByName(ModuleConst.DEFAULT_TASK_TYPE);
                 } catch (DAOException e) {
                     Server.logger.exception(e);
                 }
 
-                task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, 5);
+                task = taskDomain.composeNew((User) user, project, parentTask, demand, taskType, initiative, ModuleConst.DEFAULT_DUE_DATE_RANGE);
             } else {
                 task = taskDAO.findById(id);
                 if (task == null) {
@@ -471,11 +471,11 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             }
 
             if (task.getStartDate().compareTo(new Date()) == -1) {
-                ve.addError("startDate", "date", "field_date_is_incorrect");
+     //           ve.addError("startDate", "date", "field_date_is_incorrect");
             }
 
             if (task.getDueDate().compareTo(task.getStartDate()) == -1) {
-                ve.addError("dueDate", "date", "field_date_is_incorrect");
+     //           ve.addError("dueDate", "date", "field_date_is_incorrect");
             }
 
             if (!task.isInitiative() && (task.getAssignee() == null || task.getAssignee() <= 0)) {

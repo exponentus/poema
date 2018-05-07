@@ -146,6 +146,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         task.setTags(dto.getTags());
         task.setStartDate(startDate);
         task.setDueDate(dto.getDueDate());
+        task.setDemand(dto.getDemand());
         if (task.getDemand() != null) {
             task.setInitiative(true);
         }
@@ -398,14 +399,6 @@ public class TaskDomain extends ApprovalDomain<Task> {
         outcome.addPayload("parentTask", task.getParent());
         if (!task.isNew()) {
             outcome.addPayload(new ACL(task));
-        }
-
-        if (task.getDemand() != null) {
-            Demand demand = new Demand();
-            demand.setId(task.getDemand().getId());
-            demand.setTitle(task.getDemand().getTitle());
-            demand.setStatus(task.getDemand().getStatus());
-            task.setDemand(demand);
         }
 
         if (task.getRequests() != null && !task.getRequests().isEmpty()) {

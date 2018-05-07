@@ -3,21 +3,14 @@ package helpdesk.domain;
 import administrator.model.User;
 import com.exponentus.common.domain.CommonDomain;
 import com.exponentus.common.domain.IValidation;
-import com.exponentus.common.ui.ACL;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.Environment;
-import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
-import com.exponentus.util.StringUtil;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
-import projects.model.Task;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
-
-import java.util.Date;
 
 public class DemandDomain extends CommonDomain<Demand> {
 
@@ -68,38 +61,5 @@ public class DemandDomain extends CommonDomain<Demand> {
         return entity;
     }
 
-    public void changeStatus(Demand demand, DemandStatusType status) {
-        // DRAFT(566), PROCESSING(567), COMPLETED(568), CANCELLED(569),
-        // OPEN(570);
-        demand.setStatus(status);
-        demand.setStatusDate(new Date());
-    }
 
-
-    public Outcome getOutcome(Demand demand) {
-        Outcome outcome = new Outcome();
-
-        if (StringUtil.isEmpty(demand.getTitle())) {
-            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()));
-        } else {
-            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + demand.getTitle());
-        }
-        outcome.setModel(demand);
-        outcome.setPayloadTitle("demand");
-
-        if (demand.getTask() != null) {
-            Task task = new Task();
-            task.setId(demand.getTask().getId());
-            task.setTitle(demand.getTask().getTitle());
-            task.setRegNumber(demand.getTask().getRegNumber());
-            task.setStatus(demand.getTask().getStatus());
-            demand.setTask(task);
-        }
-
-        if (!demand.isNew()) {
-            outcome.addPayload(new ACL(demand));
-        }
-
-        return outcome;
-    }
 }

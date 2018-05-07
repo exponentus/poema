@@ -3,7 +3,9 @@ package helpdesk.model;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import helpdesk.init.ModuleConst;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.model.constants.converter.DemandStatusConverter;
@@ -23,9 +25,12 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = ModuleConst.CODE + "__demands")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
+
+   // @JsonManagedReference
     private Task task;
 
     @FTSearchable(ignoreLang = true)

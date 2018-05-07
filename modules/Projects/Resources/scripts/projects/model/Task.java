@@ -19,9 +19,7 @@ import com.exponentus.env.Environment;
 import com.exponentus.modulebinding.IOfficeFrame;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
 import projects.init.ModuleConst;
@@ -35,14 +33,15 @@ import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = ModuleConst.CODE + "__tasks")
 public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
 
     @ManyToOne
     private Project project;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    //@JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private Demand demand;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -170,7 +169,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     public void setDemand(Demand demand) {
         this.demand = demand;
-        setProject(demand.getProject());
     }
 
     public String getRegNumber() {

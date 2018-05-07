@@ -4,6 +4,7 @@ import administrator.model.User;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.PriorityType;
+import com.exponentus.common.model.constants.StatusType;
 import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ConventionalActionFactory;
@@ -31,13 +32,17 @@ import helpdesk.init.ModuleConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.ui.ViewOptions;
+import org.joda.time.LocalDate;
+import projects.dao.ProjectDAO;
 import projects.domain.TaskDomain;
 import projects.model.Project;
 import projects.model.Task;
 import projects.services.TaskService;
 import reference.dao.DemandTypeDAO;
+import reference.dao.TaskTypeDAO;
 import reference.model.DemandType;
 import reference.model.Tag;
+import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
@@ -160,7 +165,23 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 } catch (DAOException e) {
                     Server.logger.exception(e);
                 }
-                entity = demandDomain.composeNew((User) session.getUser(), demandType);
+
+                User user = (User) session.getUser();
+                entity = demandDomain.composeNew(user, demandType);
+
+                Task task = new Task();
+                task.setAuthor(user);
+                try {
+                    TaskTypeDAO taskTypeDAO = new TaskTypeDAO(session);
+                    TaskType taskType = taskTypeDAO.findByName(projects.init.ModuleConst.DEFAULT_TASK_TYPE);
+                    task.setTaskType(taskType);
+                } catch (DAOException e) {
+                    Server.logger.exception(e);
+                }
+                task.setStatus(StatusType.DRAFT);
+                task.setStartDate(new Date());
+                task.setDueDate(new LocalDate(task.getStartDate()).plusDays(projects.init.ModuleConst.DEFAULT_DUE_DATE_RANGE).toDate());
+                entity.setTask(task);
             } else {
                 DemandDAO dao = new DemandDAO(session);
                 entity = dao.findById(id);
@@ -169,10 +190,17 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             Map<Long, Employee> emps = new EmployeeDAO(session).findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
-            Outcome outcome = demandDomain.getOutcome(entity);
+            Outcome outcome = new Outcome();
+            outcome.setTitle(Environment.vocabulary.getWord("demand", session.getLang()));
+            outcome.setModel(entity);
+            outcome.setPayloadTitle("demand");
+
+            if (!entity.isNew()) {
+                outcome.addPayload(new ACL(entity));
+            }
+
             outcome.addPayload(getActionBar(session, entity));
             outcome.setFSID(getWebFormData().getFormSesId());
-            // include
             outcome.addPayload("employees", emps);
             outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
 
@@ -199,6 +227,9 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 entity = demandDAO.findById(dto.getId());
             }
 
+            ProjectDAO projectDAO = new ProjectDAO(ses);
+            Project project = projectDAO.findById(dto.getProject().getId());
+
             DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
             entity.setDemandType(demandType);
             entity.setStatus(dto.getStatus());
@@ -206,25 +237,26 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             entity.setTitle(dto.getTitle());
             entity.setBody(dto.getBody());
             entity.setTags(dto.getTags());
-            entity.setProject(dto.getProject());
+            entity.setProject(project);
             entity.setWayOfInteraction(dto.getWayOfInteraction());
             entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-
 
             if (entity.isNew()) {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(entity.getDemandType().getPrefix() + rn.getRegNumber(entity.getDemandType().getPrefix()));
-                demandDAO.add(entity, rn);
+                entity = demandDAO.add(entity, rn);
+                if (entity != null && dto.getTask() != null) {
+                    TaskDomain taskDomain = new TaskDomain(getSession());
+                    Task taskDto = dto.getTask();
+                    taskDto.setProject(project);
+                    taskDto.setDemand(entity);
+                    taskDto.setTitle(entity.getTitle());
+                    Task task = taskDomain.fillFromDto(taskDto, new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+                    taskDomain.saveTask(task);
+                    entity.setTask(task);
+                    demandDAO.update(entity);
+                }
             } else {
-                demandDAO.update(entity);
-            }
-
-            if (dto.getTask() != null) {
-                TaskDomain taskDomain = new TaskDomain(getSession());
-                Task task = taskDomain.fillFromDto(dto.getTask(), new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
-                entity.setTask(task);
-                task.setDemand(entity);
-                taskDomain.saveTask(task);
                 demandDAO.update(entity);
             }
 
@@ -266,6 +298,10 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
         @Override
         public void check(Demand demand) throws DTOException {
             DTOException ve = new DTOException();
+
+            if (demand.getProject() == null) {
+                ve.addError("project", "required", "field_is_empty");
+            }
 
             if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
                 ve.addError("title", "required", "field_is_empty");

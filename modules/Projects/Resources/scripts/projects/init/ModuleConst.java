@@ -16,4 +16,7 @@ public class ModuleConst extends DefaultAppConst {
     public static String[] ROLES = {CODE + "_task_moderator", CODE + "_reporter",CODE + DefaultDataConst.SUPERVISOR_ROLE_NAME};
     public static final InterfaceType AVAILABLE_MODE[] = {InterfaceType.SPA};
     public static boolean FORCE_DEPLOYING = true;
+
+    public static String DEFAULT_TASK_TYPE = "Programming";
+    public static int DEFAULT_DUE_DATE_RANGE = 5;
 }
