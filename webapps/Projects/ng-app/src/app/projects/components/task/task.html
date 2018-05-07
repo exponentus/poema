@@ -60,12 +60,14 @@
                             {{'project' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.project">
-                            <nb-select class="span8" name="project" [disabled]="!isEditable || isSubtask || isInitiativeTask"
-                                [searchable]="true" [url]="PROJECTS_URL.API_PROJECTS"
-                                [(ngModel)]="model.project" (ngModelChange)="handleModelChange($event)">
-                            </nb-select>
-                            <div *ngIf="model.project" class="mt-1">
-                                <a [routerLink]="[model.project.url]">{{'to_open' | translate}}</a>
+                            <div class="input-group flex-nowrap">
+                                <nb-select class="span8" name="project" [disabled]="!isEditable || isSubtask || isInitiativeTask"
+                                    [searchable]="true" [url]="PROJECTS_URL.API_PROJECTS"
+                                    [(ngModel)]="model.project" (ngModelChange)="handleModelChange($event)">
+                                </nb-select>
+                                <a *ngIf="model.project" class="input-placeholder" [routerLink]="[model.project.url]">
+                                    <i class="fa fa-external-link"></i>
+                                </a>
                             </div>
                             <error-message [error]="errors.project"></error-message>
                         </div>
