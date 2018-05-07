@@ -5,7 +5,7 @@ import { Task } from './task';
 export class Demand {
     id: string;
     project: IEntity;
-    task: Task;
+    tasks: Task[];
     title: string;
     regNumber: string;
     status: string = 'DRAFT'; // enum DemandStatusType
@@ -23,7 +23,7 @@ export class Demand {
             status: m.status || null,
             statusDate: mdFormat(m.statusDate, DATE_TIME_FORMAT),
             project: m.project ? { id: m.project.id } : null,
-            task: m.task ? Task.convertToDto(m.task) : null,
+            tasks: Task.convertToDtoList(m.tasks),
             demandType: m.demandType ? { id: m.demandType.id } : null,
             wayOfInteraction: m.wayOfInteraction ? { id: m.wayOfInteraction.id } : null,
             body: m.body || null,

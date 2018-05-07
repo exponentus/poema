@@ -45,4 +45,8 @@ export class Task extends BaseModel {
             attachments: Attachment.convertToDtoList(m.attachments)
         };
     }
+
+    static convertToDtoList(list: Task[]): any[] {
+        return list ? list.map(task => { return Task.convertToDto(task); }) : [];
+    }
 }

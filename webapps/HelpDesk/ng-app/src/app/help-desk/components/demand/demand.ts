@@ -8,9 +8,10 @@ import {
     AbstractFormPage, tagStylerFn,
     REFERENCE_URL, STAFF_URL
 } from '@nb/core';
+import { HELP_DESK_URL } from '../../constants';
 import { DemandService } from '../../services/demand.service';
 import { Demand } from '../../models/demand';
-import { HELP_DESK_URL } from '../../constants';
+import { Task } from '../../models/task';
 
 @Component({
     selector: 'demand',
@@ -48,11 +49,15 @@ export class DemandComponent extends AbstractFormPage<Demand> {
         super.onLoadDataSuccess(data);
 
         let emps = data.payload.employees;
-        if (this.model.task && this.model.task.authorId) {
-            this.model.task.author = emps[this.model.task.authorId];
-        }
-        if (this.model.task && this.model.task.assigneeUserId) {
-            this.model.task.assignee = emps[this.model.task.assigneeUserId];
+        if (this.model.tasks) {
+            for (let task of this.model.tasks) {
+                if (task.authorId) {
+                    task.author = emps[task.authorId];
+                }
+                if (task.assigneeUserId) {
+                    task.assignee = emps[task.assigneeUserId];
+                }
+            }
         }
 
         this.ngxTranslate.get(data.payload.priorityTypes.map(t => t.toLowerCase())).map(ts => {
@@ -66,11 +71,11 @@ export class DemandComponent extends AbstractFormPage<Demand> {
 
     handleChangeCreateTask() {
         this.createTask = !this.createTask;
-        if (!this.model.task) {
-            this.model.task = {};
-        } else {
-            if (Object.keys(this.model.task).length === 0) {
-                this.model.task = null;
+        if (!this.model.tasks) {
+            this.model.tasks = [new Task()];
+        } else if (this.model.tasks.length) {
+            if (Object.keys(this.model.tasks[0]).length === 0) {
+                this.model.tasks = [];
             }
         }
     }
@@ -78,7 +83,7 @@ export class DemandComponent extends AbstractFormPage<Demand> {
     // @Override
     save(action?: IAction) {
         if (this.model.isNew && !this.createTask) {
-            this.model.task = null;
+            this.model.tasks = [];
         }
         super.save(action);
     }
