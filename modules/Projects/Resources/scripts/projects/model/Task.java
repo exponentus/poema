@@ -170,6 +170,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     public void setDemand(Demand demand) {
         this.demand = demand;
+        setProject(demand.getProject());
     }
 
     public String getRegNumber() {

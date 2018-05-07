@@ -470,6 +470,14 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 ve.addError("dueDate", "date", "field_is_empty");
             }
 
+            if (task.getStartDate().compareTo(new Date()) == -1) {
+                ve.addError("startDate", "date", "field_date_is_incorrect");
+            }
+
+            if (task.getDueDate().compareTo(task.getStartDate()) == -1) {
+                ve.addError("dueDate", "date", "field_date_is_incorrect");
+            }
+
             if (!task.isInitiative() && (task.getAssignee() == null || task.getAssignee() <= 0)) {
                 ve.addError("assignee", "required", "field_is_empty");
             } else if (userDAO.findById(task.getAssignee()) == null) {
