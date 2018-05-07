@@ -24,7 +24,7 @@
         </div>
     </header>
     <section class="content-body">
-        <section class="task-cancel-info" *ngIf="model.resolution == 'DECLINED' && model.decisionComment">
+        <section class="tasks-cancel-info" *ngIf="model.resolution == 'DECLINED' && model.decisionComment">
             <span>{{'decline_reason' | translate}}:&nbsp;</span>
             <span>{{model.decisionComment}}</span>
         </section>
@@ -33,10 +33,10 @@
                 <fieldset class="fieldset">
                     <div class="form-group">
                         <div class="control-label">
-                            {{'task' | translate}}
+                            {{'tasks' | translate}}
                         </div>
                         <div class="controls">
-                            <a class="input-placeholder" [routerLink]="[model.task.url]">{{model.task.title}}</a>
+                            <a class="input-placeholder" [routerLink]="[model.tasks.url]">{{model.tasks.title}}</a>
                         </div>
                     </div>
                     <div class="form-group">

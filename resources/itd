@@ -1,38 +1,38 @@
 echo ***********************************************************
 echo *          Generate test data for Semantyca               *
 echo ***********************************************************
-run task gen_test_users
-run task ref_fill_region_types
-run task ref_fill_locality_types
-run task fill_countries
-run task fill_regions
-run task ref_fill_districts
-run task fill_localities
-run task fill_city_districts
-run task ref_fill_streets
-run task fill_department_types
-run task fill_doc_langs
-run task fill_org_categories
-run task fill_document_types
-run task fill_document_subjs
-run task ref_fill_vehicles
-run task fill_organization_labels
-run task staff_fill_roles
-run task fill_individual_labels
-run task fill_tags
-run task fill_positions
-run task ref_fill_unit_types
+run tasks gen_test_users
+run tasks ref_fill_region_types
+run tasks ref_fill_locality_types
+run tasks fill_countries
+run tasks fill_regions
+run tasks ref_fill_districts
+run tasks fill_localities
+run tasks fill_city_districts
+run tasks ref_fill_streets
+run tasks fill_department_types
+run tasks fill_doc_langs
+run tasks fill_org_categories
+run tasks fill_document_types
+run tasks fill_document_subjs
+run tasks ref_fill_vehicles
+run tasks fill_organization_labels
+run tasks staff_fill_roles
+run tasks fill_individual_labels
+run tasks fill_tags
+run tasks fill_positions
+run tasks ref_fill_unit_types
 
-run task prj_fill_task_types_software_dev
-run task prj_fill_request_types
-run task fill_demand_types
-run task fill_control_types
-run task ref_fill_wayofinteractions
+run tasks prj_fill_task_types_software_dev
+run tasks prj_fill_request_types
+run tasks fill_demand_types
+run tasks fill_control_types
+run tasks ref_fill_wayofinteractions
 
-run task gen_test_orgs_xls
-run task gen_test_emps
-run task de_gen_default_reports
-run task prj_fill_roles
+run tasks gen_test_orgs_xls
+run tasks gen_test_emps
+run tasks de_gen_default_reports
+run tasks prj_fill_roles
 echo ***********************************************************
 echo *                     Finished                            *
 echo ***********************************************************

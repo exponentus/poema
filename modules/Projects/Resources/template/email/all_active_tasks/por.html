@@ -39,27 +39,27 @@
             <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Projeto</b></td>
             <td style = 'border:1px solid #cdcdcd; width:180px;'><b>Título</b></td>
         </tr>
-        $tasks:{ task |
+        $tasks:{ tasks |
         <tr style="text-align: center">
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                $task.regNumber$
+                $tasks.regNumber$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                <div class='$task.status$' style="padding: 3px 10%; width:80%">
-                    $task.status$
+                <div class='$tasks.status$' style="padding: 3px 10%; width:80%">
+                    $tasks.status$
                 </div>
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                $task.author$
+                $tasks.author$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                $task.assignee$
+                $tasks.assignee$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                $task.project.title$
+                $tasks.project.title$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
-                <a href="$url$$task.url$$lang$">$task.title$</a>
+                <a href="$url$$tasks.url$$lang$">$tasks.title$</a>
             </td>
         </tr>
         }$

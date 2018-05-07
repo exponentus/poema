@@ -1,4 +1,4 @@
-package projects.task
+package projects.tasks
 
 import com.exponentus.appenv.AppEnv
 import com.exponentus.scripting._Session
@@ -7,7 +7,7 @@ import com.exponentus.scriptprocessor.tasks.Command
 import projects.init.ModuleConst
 
 
-//run task prj_scala_test
+//run tasks prj_scala_test
 @Command(name = ModuleConst.CODE + "_scala_test")
 object Main extends ScalaAbstractServerTask {
 

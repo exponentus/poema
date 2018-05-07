@@ -8,19 +8,19 @@
             <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Проект</b></td>
             <td style = 'border:1px solid #cdcdcd; width:180px;'><b>Содержание</b></td>
         </tr>
-        $tasks:{ task |
+        $tasks:{ tasks |
         <tr style="text-align: center">
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
-                $task.regNumber$
+                $tasks.regNumber$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
-                $task.assignee$
+                $tasks.assignee$
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
-                <a href="$url$$task.project.URL$$lang$">$task.project.title$</a>
+                <a href="$url$$tasks.project.URL$$lang$">$tasks.project.title$</a>
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
-                <a href="$url$$task.url$$lang$">$task.title$</a>
+                <a href="$url$$tasks.url$$lang$">$tasks.title$</a>
             </td>
         </tr>
         }$

@@ -181,7 +181,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 task.setStatus(StatusType.DRAFT);
                 task.setStartDate(new Date());
                 task.setDueDate(new LocalDate(task.getStartDate()).plusDays(projects.init.ModuleConst.DEFAULT_DUE_DATE_RANGE).toDate());
-                entity.setTask(task);
+                entity.setTasks(Collections.singletonList(task));
             } else {
                 DemandDAO dao = new DemandDAO(session);
                 entity = dao.findById(id);
@@ -245,15 +245,15 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 RegNum rn = new RegNum();
                 entity.setRegNumber(entity.getDemandType().getPrefix() + rn.getRegNumber(entity.getDemandType().getPrefix()));
                 entity = demandDAO.add(entity, rn);
-                if (entity != null && dto.getTask() != null) {
+                if (entity != null && dto.getTasks() != null) {
                     TaskDomain taskDomain = new TaskDomain(getSession());
-                    Task taskDto = dto.getTask();
+                    Task taskDto = dto.getTasks().get(0);
                     taskDto.setProject(project);
                     taskDto.setDemand(entity);
                     taskDto.setTitle(entity.getTitle());
                     Task task = taskDomain.fillFromDto(taskDto, new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
                     taskDomain.saveTask(task);
-                    entity.setTask(task);
+                    entity.setTasks(Collections.singletonList(task));
                     demandDAO.update(entity);
                 }
             } else {

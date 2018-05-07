@@ -30,8 +30,7 @@ public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
 
-   // @JsonManagedReference
-    private Task task;
+    private List<Task> tasks;
 
     @FTSearchable(ignoreLang = true)
     @Column(name = "reg_number", unique = true, length = 64)
@@ -79,12 +78,12 @@ public class Demand extends SecureAppEntity<UUID> {
         this.project = project;
     }
 
-    public Task getTask() {
-        return task;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTask(Task task) {
-        this.task = task;
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public DemandStatusType getStatus() {
