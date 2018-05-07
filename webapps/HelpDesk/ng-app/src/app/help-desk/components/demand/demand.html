@@ -99,23 +99,23 @@
                     </label>
                 </div>
             </div>
-            <div class="form-group" *ngIf="!model.isNew && model.tasks">
+            <div class="form-group" *ngIf="!model.isNew && model.task">
                 <div class="control-label">
                     {{'tasks' | translate}}
                 </div>
                 <div class="controls">
                     <div class="input-placeholder">
-                        <b>№{{model.tasks.regNumber}}</b>
-                        <span class="ml-1 mr-1 status-{{model.tasks.status | lowercase}}">
-                            {{model.tasks.status | lowercase | translate}}
+                        <b>№{{model.task.regNumber}}</b>
+                        <span class="ml-1 mr-1 status-{{model.task.status | lowercase}}">
+                            {{model.task.status | lowercase | translate}}
                         </span>
-                        <span>{{model.tasks.title}}</span>
+                        <span>{{model.task.title}}</span>
                     </div>
                 </div>
             </div>
         </div>
-        <demand-tasks-edit *ngIf="model.isNew && createTask" [model]="model.tasks" [payload]="data"
-            [(errors)]="errors"></demand-tasks-edit>
+        <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.task" [payload]="data"
+            [(errors)]="errors"></demand-task-edit>
         <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
     </section>
     <footer class="content-footer form-footer">

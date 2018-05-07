@@ -22,7 +22,7 @@
                 </div>
                 <div class="doc-head__item" *ngIf="model.approvalStatus === 'PENDING'">
                     <div class="doc-head__item_value">
-                        <div class="tasks-status-moderation">{{'status_moderation' | translate}}</div>
+                        <div class="task-status-moderation">{{'status_moderation' | translate}}</div>
                     </div>
                 </div>
                 <div class="doc-head__item" *ngIf="model.parent">
@@ -42,11 +42,11 @@
         </div>
     </header>
     <section class="content-body">
-        <section class="tasks-cancel-info" *ngIf="model.status == 'CANCELLED' && model.cancellationComment">
+        <section class="task-cancel-info" *ngIf="model.status == 'CANCELLED' && model.cancellationComment">
             <span>{{'cancel_reason' | translate}}:&nbsp;</span>
             <span>{{model.cancellationComment}}</span>
         </section>
-        <section class="tasks-cancel-info" *ngIf="model.approvalResult === 'REJECTED'">
+        <section class="task-cancel-info" *ngIf="model.approvalResult === 'REJECTED'">
             <span>{{'rejected_by_moderator' | translate}}:&nbsp;</span>
             <span *ngIf="model.blocks && model.blocks.length && model.blocks[0].approvers">
                 {{model.blocks[0].approvers[0].decisionComment}}
@@ -209,7 +209,7 @@
                 icon="fa fa-legal">
                 <div class="fieldset">
                     <div class="controls">
-                        <tasks-approval [blocks]="model.blocks"></tasks-approval>
+                        <task-approval [blocks]="model.blocks"></task-approval>
                     </div>
                 </div>
             </tab>
