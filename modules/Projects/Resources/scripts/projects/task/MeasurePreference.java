@@ -14,7 +14,7 @@ import staff.model.Employee;
 import javax.persistence.Tuple;
 import java.util.List;
 
-@Command(name = ModuleConst.CODE + "_9")
+@Command(name = ModuleConst.CODE + "_measure_preference")
 public class MeasurePreference extends Do {
 
     @Override
