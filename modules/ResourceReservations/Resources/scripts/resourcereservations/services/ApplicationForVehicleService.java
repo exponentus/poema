@@ -9,7 +9,6 @@ import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
@@ -96,9 +95,9 @@ public class ApplicationForVehicleService extends RestProvider {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = domain.getOutcome(entity);
-            outcome.addPayload("employees", emps);
+            outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(ses, entity, domain));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
         } catch (DAOException e) {

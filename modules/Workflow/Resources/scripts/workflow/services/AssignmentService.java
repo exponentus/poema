@@ -9,7 +9,6 @@ import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.actions.constants.ActionType;
 import com.exponentus.common.ui.lifecycle.LifeCycle;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
@@ -153,10 +152,10 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
             }
 
             Outcome outcome = ad.getOutcome(entity);
+            outcome.setFSID(getWebFormData().getFormSesId());
+            outcome.addPayload(getActionBar(ses, entity));
             outcome.addPayload("employees", emps);
             outcome.addPayload("permissions", permissions);
-            outcome.addPayload(getActionBar(ses, entity));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
             if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));
             }

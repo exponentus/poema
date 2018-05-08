@@ -15,7 +15,6 @@ import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.common.ui.lifecycle.LifeCycle;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
@@ -118,9 +117,9 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = outDomain.getOutcome(entity);
-            outcome.addPayload("employees", emps);
+            outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(ses, entity, outDomain));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.addPayload("employees", emps);
 
             if (!isNew) {
                 outcome.addPayload(new LifeCycle(user, entity));

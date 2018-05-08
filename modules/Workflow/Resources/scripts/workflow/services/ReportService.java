@@ -6,7 +6,6 @@ import com.exponentus.common.service.EntityService;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.ActionBar;
 import com.exponentus.dataengine.exception.DAOException;
-import com.exponentus.env.EnvConst;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.validation.exception.DTOException;
@@ -58,9 +57,9 @@ public class ReportService extends EntityService<Report, ReportDomain> {
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
 
             Outcome outcome = reportDomain.getOutcome(entity);
-            outcome.addPayload("employees", emps);
+            outcome.setFSID(getWebFormData().getFormSesId());
             outcome.addPayload(getActionBar(ses, entity));
-            outcome.addPayload(EnvConst.FSID_FIELD_NAME, getWebFormData().getFormSesId());
+            outcome.addPayload("employees", emps);
 
             return Response.ok(outcome).build();
         } catch (Exception e) {
