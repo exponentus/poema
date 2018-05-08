@@ -220,55 +220,57 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             DemandDAO demandDAO = new DemandDAO(ses);
             DemandTypeDAO demandTypeDAO = new DemandTypeDAO(ses);
 
-            Demand entity;
+            Demand demand;
 
             if (dto.isNew()) {
-                entity = new Demand();
-                entity.setAuthor(ses.getUser());
+                demand = new Demand();
+                demand.setAuthor(ses.getUser());
             } else {
-                entity = demandDAO.findById(dto.getId());
+                demand = demandDAO.findById(dto.getId());
             }
 
             ProjectDAO projectDAO = new ProjectDAO(ses);
             Project project = projectDAO.findById(dto.getProject().getId());
 
             DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
-            entity.setDemandType(demandType);
-            entity.setStatus(dto.getStatus());
-            entity.setStatusDate(dto.getStatusDate());
-            entity.setTitle(dto.getTitle());
-            entity.setBody(dto.getBody());
-            entity.setTags(dto.getTags());
-            entity.setProject(project);
-            entity.setWayOfInteraction(dto.getWayOfInteraction());
-            entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
-            entity.setStatus(DemandStatusType.OPEN);
+            demand.setDemandType(demandType);
+            demand.setStatus(dto.getStatus());
+            demand.setStatusDate(dto.getStatusDate());
+            demand.setTitle(dto.getTitle());
+            demand.setBody(dto.getBody());
+            demand.setTags(dto.getTags());
+            demand.setProject(project);
+            demand.setWayOfInteraction(dto.getWayOfInteraction());
+            demand.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
+            demand.setStatus(DemandStatusType.OPEN);
 
-            if (entity.isNew()) {
+            if (demand.isNew()) {
                 RegNum rn = new RegNum();
-                entity.setRegNumber(entity.getDemandType().getPrefix() + rn.getRegNumber(entity.getDemandType().getPrefix()));
-                entity = demandDAO.add(entity, rn);
-                if (entity != null && dto.getTasks().size() > 0) {
+                demand.setRegNumber(demand.getDemandType().getPrefix() + rn.getRegNumber(demand.getDemandType().getPrefix()));
+                demand = demandDAO.add(demand, rn);
+                if (demand != null && dto.getTasks().size() > 0) {
                     TaskDomain taskDomain = new TaskDomain(getSession());
                     Task taskDto = dto.getTasks().get(0);
                     taskDto.setProject(project);
-                    taskDto.setDemand(entity);
-                    taskDto.setTitle(entity.getTitle());
+                    taskDto.setDemand(demand);
+                    taskDto.setTitle(demand.getTitle());
                     Task task = taskDomain.fillFromDto(taskDto, new TaskService.Validation(getSession()), getWebFormData().getFormSesId());
+                    task.addReaders(demand.getReaders());
                     taskDomain.saveTask(task);
-                    entity.setTasks(Collections.singletonList(task));
-                    demandDAO.update(entity);
+                    demand.setTasks(Collections.singletonList(task));
+                    demand.addReaders(task.getReaders());
+                    demandDAO.update(demand);
                 }
             } else {
-                demandDAO.update(entity);
+                demandDAO.update(demand);
             }
 
             Outcome outcome = new Outcome();
-            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + entity.getTitle());
-            outcome.setModel(entity);
+            outcome.setTitle(Environment.vocabulary.getWord("demand", ses.getLang()) + " " + demand.getTitle());
+            outcome.setModel(demand);
             outcome.setPayloadTitle("demand");
-            if (!entity.isNew()) {
-                outcome.addPayload(new ACL(entity));
+            if (!demand.isNew()) {
+                outcome.addPayload(new ACL(demand));
             }
             return Response.ok(outcome).build();
         } catch (DTOException e) {

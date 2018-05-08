@@ -189,7 +189,6 @@ public class RequestService extends RestProvider {
             }
 
             requestDomain.doAcceptRequest(request);
-
             requestDAO.update(request, false);
 
             new Messages(getAppEnv()).sendMessageOfRequestDecision(request);
