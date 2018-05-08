@@ -24,8 +24,8 @@ public class FillRequestTypes extends Do {
     public void doTask(AppEnv appEnv, _Session ses) {
         List<RequestType> entities = new ArrayList<RequestType>();
         String[] data = {"prolong", "cancel", "implement"};
-        String[] dataEng = {"To order to prolong", "To order to cancel", "To order to mark as Implemented"};
-        String[] dataRus = {"Чтобы продлить", "Чтобы отменить", "Чтобы отметить как выполненный"};
+        String[] dataEng = {"To prolong", "To cancel", "To mark as Implemented"};
+        String[] dataRus = {"Продлить", "Отменить", "Отметить как выполненный"};
         String[] dataKaz = {"Ұзарту", "Болдырмау үшін", "Аяқталған ретінде белгілеу"};
 
         for (int i = 0; i < data.length; i++) {

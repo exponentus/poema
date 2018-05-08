@@ -74,21 +74,22 @@ public class TaskDomain extends ApprovalDomain<Task> {
             task.setAssignee(task.getProject().getProgrammer());
         }
 
+        List<Long> allObservers = new ArrayList<>();
+
         if (parentTask != null) {
             task.setParent(parentTask);
             task.setTitle(parentTask.getTitle());
             task.setPriority(parentTask.getPriority());
-            task.setStartDate(parentTask.getStartDate());
-            task.setDueDate(parentTask.getDueDate());
             task.setTags(parentTask.getTags());
-            task.setObservers(parentTask.getObservers());
-        } else {
-            task.setStartDate(new Date());
-            task.setDueDate(new LocalDate(task.getStartDate()).plusDays(dueDateRange).toDate());
-            if (task.getProject() != null) {
-                task.setObservers(task.getProject().getObservers());
-            }
+            allObservers.addAll(parentTask.getObservers());
         }
+
+        task.setStartDate(new Date());
+        task.setDueDate(new LocalDate(task.getStartDate()).plusDays(dueDateRange).toDate());
+        if (task.getProject() != null) {
+            allObservers.addAll(task.getProject().getObservers());
+        }
+        task.setObservers(allObservers);
 
         EmployeeDAO empDao = new EmployeeDAO(ses);
         ViewPage<Employee> moderators = empDao.findByRole(MODERATOR_ROLE_NAME);
