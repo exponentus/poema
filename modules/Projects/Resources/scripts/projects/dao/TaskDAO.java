@@ -72,6 +72,23 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
+    public List<Tuple> findAllAssigneeByPreference(String author) {
+        EntityManager em = getEntityManagerFactory().createEntityManager();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        try {
+            CriteriaQuery<Tuple> criteriaQuery = cb.createTupleQuery();
+            Root<Task> root = criteriaQuery.from(Task.class);
+            Predicate condition = cb.equal(root.get("author").get("login"), author);
+            criteriaQuery.multiselect(cb.count(root), root.get("assignee"));
+            criteriaQuery.groupBy(root.get("assignee"));
+            criteriaQuery.where(condition);
+            TypedQuery<Tuple> typedQuery = em.createQuery(criteriaQuery);
+            return typedQuery.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
     public ViewPage<Task> findViewPage(TaskFilter filter, SortParams sortParams, int pageNum, int pageSize) {
         if (filter == null) {
             throw new IllegalArgumentException("filter is null");
