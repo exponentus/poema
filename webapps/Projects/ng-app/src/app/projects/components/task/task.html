@@ -78,7 +78,11 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.demand">
                             <a class="input-placeholder" [href]="'/HelpDesk/#' + model.demand.url">
-                                {{model.demand.title}}
+                                <b>№{{model.demand.regNumber}}</b>
+                                <span class="align-middle ml-2 mr-2 status-{{model.demand.status | lowercase}}">
+                                    {{model.demand.status | lowercase | translate}}
+                                </span>
+                                <span>{{model.demand.title}}</span>
                             </a>
                         </div>
                     </div>

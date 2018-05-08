@@ -106,11 +106,11 @@
                             {{'tasks' | translate}}
                         </div>
                         <div class="controls">
-                            <div class="input-placeholder d-flex align-items-center">
+                            <div class="input-placeholder">
                                 <b>№{{model.tasks[0].regNumber}}</b>
-                                <span class="ml-1 mr-1 status-{{model.tasks[0].status | lowercase}}">
-                            {{model.tasks[0].status | lowercase | translate}}
-                        </span>
+                                <span class="align-middle ml-2 mr-2 status-{{model.tasks[0].status | lowercase}}">
+                                    {{model.tasks[0].status | lowercase | translate}}
+                                </span>
                                 <span>{{model.tasks[0].title}}</span>
                             </div>
                         </div>
