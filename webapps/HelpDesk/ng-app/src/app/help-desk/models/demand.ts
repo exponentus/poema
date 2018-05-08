@@ -1,4 +1,4 @@
-import { DATE_TIME_FORMAT, mdFormat, IEntity, Attachment } from '@nb/core';
+import { DATE_TIME_FORMAT, mdFormat, IEntity, Attachment, Observer } from '@nb/core';
 
 import { Task } from './task';
 
@@ -13,6 +13,7 @@ export class Demand {
     demandType: IEntity;
     wayOfInteraction: IEntity;
     body: string;
+    observers: Observer[];
     tags: IEntity[];
     attachments: Attachment[];
 
@@ -27,6 +28,7 @@ export class Demand {
             demandType: m.demandType ? { id: m.demandType.id } : null,
             wayOfInteraction: m.wayOfInteraction ? { id: m.wayOfInteraction.id } : null,
             body: m.body || null,
+            observers: Observer.convertToDtoList(m.observers || []),
             tags: m.tags ? m.tags.map(it => { return { id: it.id }; }) : [],
             attachments: Attachment.convertToDtoList(m.attachments)
         };

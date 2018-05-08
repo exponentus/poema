@@ -30,93 +30,124 @@
         </div>
     </header>
     <section class="content-body">
-        <div class="fieldset">
-            <div class="form-group">
-                <div class="control-label">
-                    {{'demand_type' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.demandType">
-                    <nb-select class="span8" name="demandType" [disabled]="!isEditable" [url]="REFERENCE_URL.API_DEMAND_TYPES"
-                        [(ngModel)]="model.demandType">
-                    </nb-select>
-                    <error-message [error]="errors.demandType"></error-message>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'project' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.project">
-                    <nb-select class="span8" name="project" [url]="HELP_DESK_URL.API_PROJECTS" [disabled]="!isEditable"
-                        [allowClear]="true" [searchable]="true" [(ngModel)]="model.project">
-                    </nb-select>
-                    <error-message [error]="errors.project"></error-message>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'way_of_interaction' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.wayOfInteraction">
-                    <nb-select class="span8" name="wayOfInteraction" [url]="HELP_DESK_URL.API_WAY_OF_INTERACTION"
-                        [disabled]="!isEditable" [allowClear]="true" [(ngModel)]="model.wayOfInteraction">
-                    </nb-select>
-                    <error-message [error]="errors.wayOfInteraction"></error-message>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="control-label">
-                    {{'tags' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.tags">
-                    <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
-                        [allowClear]="true" [multiple]="true" classKey="tag" [styler]="tagStylerFn"
-                        [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_demand'"
-                        [(ngModel)]="model.tags">
-                    </nb-select>
-                    <error-message [error]="errors.tags"></error-message>
-                </div>
-            </div>
-            <div class="form-group vertical-md">
-                <div class="control-label">
-                    {{'body' | translate}}
-                </div>
-                <div class="controls" [class.has-error]="errors.body">
-                    <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
-                        [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
-                        (update)="model.body = $event">
-                    </markdown-editor>
-                    <error-message [error]="errors.body"></error-message>
-                    <nb-text-translate [text]="model.body"></nb-text-translate>
-                </div>
-            </div>
-            <div class="form-group" *ngIf="model.isNew">
-                <div class="control-label"></div>
-                <div class="controls">
-                    <label class="input">
-                        <input type="checkbox" name="createTask" value="true" (change)="handleChangeCreateTask()">
-                        <span>{{'create_task' | translate}}</span>
-                    </label>
-                </div>
-            </div>
-            <div class="form-group" *ngIf="!model.isNew && model.tasks && model.tasks.length">
-                <div class="control-label">
-                    {{'tasks' | translate}}
-                </div>
-                <div class="controls">
-                    <div class="input-placeholder d-flex align-items-center">
-                        <b>№{{model.tasks[0].regNumber}}</b>
-                        <span class="ml-1 mr-1 status-{{model.tasks[0].status | lowercase}}">
+        <tabs>
+            <tab tabTitle="{{'properties' | translate}}">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'demand_type' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.demandType">
+                            <nb-select class="span8" name="demandType" [disabled]="!isEditable" [url]="REFERENCE_URL.API_DEMAND_TYPES"
+                                [(ngModel)]="model.demandType">
+                            </nb-select>
+                            <error-message [error]="errors.demandType"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'project' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.project">
+                            <nb-select class="span8" name="project" [url]="HELP_DESK_URL.API_PROJECTS" [disabled]="!isEditable"
+                                [allowClear]="true" [searchable]="true" [(ngModel)]="model.project">
+                            </nb-select>
+                            <error-message [error]="errors.project"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'way_of_interaction' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.wayOfInteraction">
+                            <nb-select class="span8" name="wayOfInteraction" [url]="HELP_DESK_URL.API_WAY_OF_INTERACTION"
+                                [disabled]="!isEditable" [allowClear]="true" [(ngModel)]="model.wayOfInteraction">
+                            </nb-select>
+                            <error-message [error]="errors.wayOfInteraction"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'tags' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.tags">
+                            <nb-select class="span8 tags-input" name="tags" [disabled]="!isEditable" [searchable]="true"
+                                [allowClear]="true" [multiple]="true" classKey="tag"
+                                [styler]="tagStylerFn" [url]="REFERENCE_URL.API_TAGS + '?hidden=false&category=software_developing_demand'"
+                                [(ngModel)]="model.tags">
+                            </nb-select>
+                            <error-message [error]="errors.tags"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group vertical-md">
+                        <div class="control-label">
+                            {{'body' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.body">
+                            <markdown-editor writeLabel="{{'markdown_write' | translate}}" previewLabel="{{'markdown_preview' | translate}}"
+                                [markdown]="model.body" [editable]="isEditable" [updateTimeout]="300"
+                                (update)="model.body = $event">
+                            </markdown-editor>
+                            <error-message [error]="errors.body"></error-message>
+                            <nb-text-translate [text]="model.body"></nb-text-translate>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.isNew">
+                        <div class="control-label"></div>
+                        <div class="controls">
+                            <label class="input">
+                                <input type="checkbox" name="createTask" value="true" (change)="handleChangeCreateTask()">
+                                <span>{{'create_task' | translate}}</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!model.isNew && model.tasks && model.tasks.length">
+                        <div class="control-label">
+                            {{'tasks' | translate}}
+                        </div>
+                        <div class="controls">
+                            <div class="input-placeholder d-flex align-items-center">
+                                <b>№{{model.tasks[0].regNumber}}</b>
+                                <span class="ml-1 mr-1 status-{{model.tasks[0].status | lowercase}}">
                             {{model.tasks[0].status | lowercase | translate}}
                         </span>
-                        <span>{{model.tasks[0].title}}</span>
+                                <span>{{model.tasks[0].title}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.tasks[0]" [payload]="data"
-            [(errors)]="errors"></demand-task-edit>
-        <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+                <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.tasks[0]" [payload]="data"
+                    [(errors)]="errors"></demand-task-edit>
+                <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+            </tab>
+            <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="control-label">
+                            {{'observers' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.observers">
+                            <nb-observers-input [model]="model" [disabled]="!isEditable"></nb-observers-input>
+                            <error-message [error]="errors.observers"></error-message>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab *ngIf="!model.isNew" tabTitle="{{'additional_info' | translate}}">
+                <div *ngIf="acl" class="fieldset">
+                    <div class="legend">{{'acl_tab_title' | translate}}</div>
+                    <div class="controls">
+                        <nb-acl [acl]="acl"></nb-acl>
+                    </div>
+                </div>
+                <div *ngIf="data.activity" class="fieldset">
+                    <div class="legend">{{'activity' | translate}}</div>
+                    <div class="controls">
+                        <nb-activity [activity]="data.activity"></nb-activity>
+                    </div>
+                </div>
+            </tab>
+        </tabs>
     </section>
     <footer class="content-footer form-footer">
         <nb-model-creation-details [model]="model"></nb-model-creation-details>

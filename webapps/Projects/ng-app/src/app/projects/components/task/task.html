@@ -77,9 +77,9 @@
                             {{'demand' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.demand">
-                            <nb-select class="span8" name="demand" textKey="title" [disabled]="true" [(ngModel)]="model.demand">
-                            </nb-select>
-                            <error-message [error]="errors.demand"></error-message>
+                            <a class="input-placeholder" [href]="'/HelpDesk/#' + model.demand.url">
+                                {{model.demand.title}}
+                            </a>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!isSubtask">
