@@ -42,8 +42,8 @@
                     <div class="form-group flex-grow-0">
                         <div class="controls">
                             <div class="span2 position-relative">
-                                <input datepicker name="fromDate" [placeholder]="'from_date' | translate" [(ngModel)]="filter.fromDate"
-                                    (ngModelChange)="load()">
+                                <input datepicker name="fromDate" [placeholder]="'from_date' | translate" [maxDate]="filter.toDate"
+                                    [(ngModel)]="filter.fromDate" (ngModelChange)="load()">
                                 <button *ngIf="filter.fromDate" type="button" class="btn-clear-input" (click)="filter.fromDate = null;load()">&times;</button>
                             </div>
                         </div>
@@ -51,8 +51,8 @@
                     <div class="form-group flex-grow-0">
                         <div class="controls">
                             <div class="span2 position-relative">
-                                <input datepicker name="toDate" [placeholder]="'to_date' | translate" [(ngModel)]="filter.toDate"
-                                    (ngModelChange)="load()">
+                                <input datepicker name="toDate" [placeholder]="'to_date' | translate" [minDate]="filter.fromDate"
+                                    [(ngModel)]="filter.toDate" (ngModelChange)="load()">
                                 <button *ngIf="filter.toDate" type="button" class="btn-clear-input" (click)="filter.toDate = null;load()">&times;</button>
                             </div>
                         </div>

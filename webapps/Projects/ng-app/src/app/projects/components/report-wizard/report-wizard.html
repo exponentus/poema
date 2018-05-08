@@ -3,13 +3,14 @@
         <div class="nb-modal__header">{{'report' | translate}}</div>
         <button class="nb-modal__dismiss_button" (click)="cancel.emit()">×</button>
         <div class="nb-modal__body">
-            <div class="fieldset">
+            <div>
                 <div class="form-group vertical-md">
                     <div class="control-label">
                         {{'report_type' | translate}}
                     </div>
                     <div class="controls">
-                        <nb-select name="reportProfile" [url]="DATA_EXPORT_URL.API_REPORT_PROFILES" [allowClear]="true" [searchable]="true" [(ngModel)]="model.reportProfile">
+                        <nb-select name="reportProfile" [url]="DATA_EXPORT_URL.API_REPORT_PROFILES" [allowClear]="true"
+                            [searchable]="true" [(ngModel)]="model.reportProfile">
                         </nb-select>
                         <div class="form-text text-muted" *ngIf="(model.reportProfile ? model.reportProfile.localizedDescr : null) | objectHasKeys">
                             {{model.reportProfile | localizedName:'localizedDescr'}}
@@ -21,7 +22,8 @@
                         {{'output_format' | translate}}
                     </div>
                     <div class="controls">
-                        <nb-select name="outputFormat" targetValue="id" [items]="data.exportFormatTypes" [(ngModel)]="model.outputFormat"></nb-select>
+                        <nb-select name="outputFormat" targetValue="id" [items]="data.exportFormatTypes"
+                            [(ngModel)]="model.outputFormat"></nb-select>
                     </div>
                 </div>
                 <div class="form-group vertical-md">
@@ -29,7 +31,8 @@
                         {{'start_from' | translate}}
                     </div>
                     <div class="controls">
-                        <input datepicker class="span2 span-sm-full" name="startFrom" [(ngModel)]="model.startFrom">
+                        <input datepicker class="span2 span-sm-full" name="startFrom" [maxDate]="model.endUntil"
+                            [(ngModel)]="model.startFrom">
                     </div>
                 </div>
                 <div class="form-group vertical-md">
@@ -37,7 +40,8 @@
                         {{'end_until' | translate}}
                     </div>
                     <div class="controls">
-                        <input datepicker class="span2 span-sm-full" name="endUntil" [(ngModel)]="model.endUntil">
+                        <input datepicker class="span2 span-sm-full" name="endUntil" [minDate]="model.startFrom"
+                            [(ngModel)]="model.endUntil">
                     </div>
                 </div>
             </div>
@@ -50,7 +54,8 @@
                     </button>
                 </div>
                 <div class="nb-modal__buttons_group right">
-                    <button type="button" class="btn nb-modal__button btn-primary" [disabled]="!isValid" (click)="generateReport()">
+                    <button type="button" class="btn nb-modal__button btn-primary" [disabled]="!isValid"
+                        (click)="generateReport()">
                         <span class="btn-text">{{'to_form' | translate}}</span>
                     </button>
                 </div>

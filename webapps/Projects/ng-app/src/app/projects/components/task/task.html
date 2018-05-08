@@ -128,7 +128,8 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.startDate">
                             <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="startDate"
-                                [(ngModel)]="model.startDate">
+                                [maxDate]="model.dueDate" [(ngModel)]="model.startDate"
+                                (ngModelChange)="handleModelChange($event)">
                             <error-message [error]="errors.startDate"></error-message>
                         </div>
                     </div>
@@ -138,7 +139,8 @@
                         </div>
                         <div class="controls" [class.has-error]="errors.dueDate">
                             <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="dueDate"
-                                [(ngModel)]="model.dueDate" (ngModelChange)="handleModelChange($event)">
+                                [minDate]="model.startDate" [(ngModel)]="model.dueDate"
+                                (ngModelChange)="handleModelChange($event)">
                             <div class="input-placeholder" *ngIf="model.startDate && model.dueDate">
                                 {{ startDueDateDuration | nbI18nPlural:'count_days' | translate:{count:startDueDateDuration}
                                 }}

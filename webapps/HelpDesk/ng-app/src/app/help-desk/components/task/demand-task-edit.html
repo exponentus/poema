@@ -36,7 +36,8 @@
             {{'start_date' | translate}}
         </div>
         <div class="controls" [class.has-error]="errors.startDate">
-            <input class="span2 span-sm-full" datepicker name="startDate" [(ngModel)]="model.startDate">
+            <input class="span2 span-sm-full" datepicker name="startDate" [maxDate]="model.dueDate"
+                [(ngModel)]="model.startDate">
             <error-message [error]="errors.startDate"></error-message>
         </div>
     </div>
@@ -45,7 +46,8 @@
             {{'due_date' | translate}}
         </div>
         <div class="controls" [class.has-error]="errors.dueDate">
-            <input class="span2 span-sm-full" datepicker name="dueDate" [(ngModel)]="model.dueDate">
+            <input class="span2 span-sm-full" datepicker name="dueDate" [minDate]="model.startDate"
+                [(ngModel)]="model.dueDate">
             <error-message [error]="errors.dueDate"></error-message>
         </div>
     </div>

@@ -65,7 +65,7 @@
                                 <span class="input">{{model.useFrom}}</span>
                             </div>
                             <div class="span2" *ngIf="isEditable">
-                                <input datepicker class="span2" name="useFrom" [(ngModel)]="model.useFrom" />
+                                <input datepicker class="span2" name="useFrom" [maxDate]="model.useTo" [(ngModel)]="model.useFrom">
                             </div>
                             <error-message [error]="errors.useFrom"></error-message>
                         </div>
@@ -79,7 +79,7 @@
                                 <span class="input">{{model.useTo}}</span>
                             </div>
                             <div class="span2" *ngIf="isEditable">
-                                <input datepicker class="span2" name="useTo" [(ngModel)]="model.useTo" />
+                                <input datepicker class="span2" name="useTo" [minDate]="model.useFrom" [(ngModel)]="model.useTo">
                             </div>
                             <error-message [error]="errors.useTo"></error-message>
                         </div>
