@@ -26,7 +26,12 @@ public class MeasurePreference extends Do {
                 TaskDAO taskDAO = new TaskDAO(ses);
                 List<Tuple> tasks = taskDAO.findAllAssigneeByPreference(user.getLogin());
                 for (Tuple tuple : tasks) {
-                    System.out.println(tuple.get(0) + " " + tuple.get(1) + " " + employeeDAO.findByUserId((long) tuple.get(1)).getName());
+                    Employee employee = employeeDAO.findByUserId((long) tuple.get(1));
+                    if (employee != null) {
+                        System.out.println(tuple.get(0) + " " + tuple.get(1) + " " + employee.getName());
+                    } else {
+                        System.out.println(tuple.get(0) + " " + tuple.get(1));
+                    }
                 }
             }
 

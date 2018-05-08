@@ -79,7 +79,8 @@ public class TaskDAO extends DAO<Task, UUID> {
             CriteriaQuery<Tuple> criteriaQuery = cb.createTupleQuery();
             Root<Task> root = criteriaQuery.from(Task.class);
             Predicate condition = cb.equal(root.get("author").get("login"), author);
-            criteriaQuery.multiselect(cb.count(root), root.get("assignee"));
+            Expression count = cb.count(root);
+            criteriaQuery.multiselect(count, root.get("assignee")).orderBy(cb.asc(count));
             criteriaQuery.groupBy(root.get("assignee"));
             criteriaQuery.where(condition);
             TypedQuery<Tuple> typedQuery = em.createQuery(criteriaQuery);
