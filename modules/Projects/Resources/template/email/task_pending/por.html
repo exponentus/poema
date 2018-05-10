@@ -1,9 +1,40 @@
 <div style="border: 1px solid #f1f1f1; margin: 0; max-width: 900px; padding: 8px; width: 100%;">
+    <style>
+        .Open{
+            background: #dfe0ff;
+            color: #00f;
+        }
+
+        .Pending{
+            background: #ff9800;
+            border-color: #cc7900;
+            color: #fff;
+        }
+
+        .Canceled{
+            background: #ffe9e9;
+            color: #ff0018;
+        }
+
+        .Processing{
+            background: #ffeb3b;
+            border-color: #f1d800;
+            color: #444;
+        }
+
+        .Completed{
+            background: #b6de88;
+            color: #135804;
+        }
+    </style>
     <h2 style="background-color: #f8f8f8; padding: 8px; margin: 0;">$orgname$</h2>
+    <p>Date: <b>$currentDate$</b></p>
+    <p>Total tasks : $tasksCount$</p>
     <p>Caro $user$ as tarefas preparadas para verificação</p>
     <table style='border-collapse:collapse; margin:1px 0; width:100%' cellpadding = 10px>
         <tr style="text-align: center">
             <td style = 'border:1px solid #cdcdcd; width:60px;'><b>Number</b></td>
+            <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Status</b></td>
             <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Assignee</b></td>
             <td style = 'border:1px solid #cdcdcd; width:120px;'><b>Project</b></td>
             <td style = 'border:1px solid #cdcdcd; width:180px;'><b>Title</b></td>
@@ -12,6 +43,11 @@
         <tr style="text-align: center">
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
                 $tasks.regNumber$
+            </td>
+            <td style = 'border:1px solid #cdcdcd;  padding: 3px; line-height:100%'>
+                <div class='$tasks.status$' style="padding: 3px 10%; width:80%">
+                    $tasks.status$
+                </div>
             </td>
             <td style = 'border:1px solid #cdcdcd;  padding: 10px;'>
                 $tasks.assignee$

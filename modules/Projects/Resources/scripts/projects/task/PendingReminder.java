@@ -16,6 +16,7 @@ import com.exponentus.scripting.event.Do;
 import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.ModuleConst;
@@ -23,6 +24,7 @@ import projects.model.Project;
 import projects.model.Task;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Command(name = ModuleConst.CODE + "_pending_reminder", trigger = Trigger.EVERY_NIGHT)
@@ -66,6 +68,8 @@ public class PendingReminder extends Do {
 					}
 					if (tasksCount > 0) {
 						memo.addVar("tasks", tasksFtu);
+						memo.addVar("currentDate", TimeUtil.dateToStringSilently(new Date()));
+						memo.addVar("tasksCount", tasksCount);
 						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
 						IUser u = userDAO.findById(user.getId());
 						LanguageCode userLang = u.getDefaultLang();

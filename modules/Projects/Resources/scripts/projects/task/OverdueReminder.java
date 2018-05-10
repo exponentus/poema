@@ -17,6 +17,7 @@ import com.exponentus.scriptprocessor.constants.Trigger;
 import com.exponentus.scriptprocessor.tasks.Command;
 import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
+import com.exponentus.util.TimeUtil;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.init.ModuleConst;
@@ -26,6 +27,7 @@ import reference.dao.TagDAO;
 import reference.model.Tag;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Command(name = ModuleConst.CODE + "_overdue_reminder", trigger = Trigger.DISABLE)
@@ -78,6 +80,8 @@ public class OverdueReminder extends Do {
 					}
 					if (tasks_count > 0) {
 						memo.addVar("tasks", tasks_ftu);
+						memo.addVar("currentDate", TimeUtil.dateToStringSilently(new Date()));
+						memo.addVar("tasksCount", tasks_count);
 						memo.addVar("url", Environment.getFullHostName() + "/" + EnvConst.WORKSPACE_MODULE_NAME + "/#");
 						IUser i_user = userDAO.findById(user.getId());
 						LanguageCode user_lang = i_user.getDefaultLang();
