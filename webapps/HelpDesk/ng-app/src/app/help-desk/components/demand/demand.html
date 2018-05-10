@@ -101,7 +101,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="!model.isNew && model.tasks && model.tasks.length">
+                    <!-- <div class="form-group" *ngIf="!model.isNew && model.tasks && model.tasks.length">
                         <div class="control-label">
                             {{'tasks' | translate}}
                         </div>
@@ -114,11 +114,28 @@
                                 <span>{{model.tasks[0].title}}</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.tasks[0]" [payload]="data"
                     [(errors)]="errors"></demand-task-edit>
                 <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable"></nb-attachments>
+            </tab>
+            <tab tabTitle="{{'tasks' | translate}}" *ngIf="!model.isNew && model.tasks">
+                <div class="fieldset">
+                    <div class="form-group">
+                        <div class="controls">
+                            <div *ngFor="let _task of model.tasks">
+                                <div class="input-placeholder">
+                                    <b>№{{_task.regNumber}}</b>
+                                    <span class="align-middle ml-2 mr-2 status-{{_task.status | lowercase}}">
+                                        {{_task.status | lowercase | translate}}
+                                    </span>
+                                    <span>{{_task.title}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </tab>
             <tab tabTitle="{{'observers' | translate}}" icon="fa fa-eye">
                 <div class="fieldset">
