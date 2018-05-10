@@ -72,18 +72,30 @@
                             <error-message [error]="errors.project"></error-message>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="model.demand">
+                    <div class="form-group">
                         <div class="control-label">
                             {{'demand' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.demand">
-                            <a class="input-placeholder" [href]="'/HelpDesk/#' + model.demand.url">
-                                <b>№{{model.demand.regNumber}}</b>
-                                <span class="align-middle ml-2 mr-2 status-{{model.demand.status | lowercase}}">
-                                    {{model.demand.status | lowercase | translate}}
-                                </span>
-                                <span>{{model.demand.title}}</span>
-                            </a>
+                            <ng-template #demandSelectTextTemplate let-model="model">
+                                <div class="select__selected-text">
+                                    <b>№{{model.regNumber}}</b>
+                                    <span class="align-middle ml-2 mr-2 status-{{model.status | lowercase}}">
+                                        {{model.status | lowercase | translate}}
+                                    </span>
+                                    <span>{{model.title}}</span>
+                                </div>
+                            </ng-template>
+                            <div class="input-group flex-nowrap">
+                                <nb-select class="span8" name="demand" [textTemplate]="demandSelectTextTemplate"
+                                    [allowClear]="true" [disabled]="!isEditable" [searchable]="true"
+                                    [url]="PROJECTS_URL.API_DEMANDS" [(ngModel)]="model.demand"
+                                    (ngModelChange)="handleModelChange($event)">
+                                </nb-select>
+                                <a *ngIf="model.demand" class="input-placeholder" [href]="'/HelpDesk/#' + model.demand.url">
+                                    <i class="fa fa-external-link"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!isSubtask">
