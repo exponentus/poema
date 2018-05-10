@@ -177,6 +177,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     }
 
     handleModelChange($event: any) {
+        $event && $event.preventDefault && $event.preventDefault();
         if (!this.saveAsDraftAction) {
             return;
         }

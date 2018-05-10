@@ -52,9 +52,11 @@ import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
+import staff.dto.converter.EmployeeDtoConverter;
 import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 import staff.model.Employee;
 
+import javax.persistence.Tuple;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -203,6 +205,18 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             outcome.addPayload("employees", emps);
             outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
+
+            //
+            EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
+            List<Employee> preferredAssignees = new ArrayList<>();
+            List<Tuple> tasks = taskDAO.findAllAssigneeByPreference(user.getLogin());
+            for (Tuple tuple : tasks) {
+                Employee employee = empDao.findByUserId((long) tuple.get(1));
+                if (employee != null) {
+                    preferredAssignees.add(employee);
+                }
+            }
+            outcome.addPayload("preferredAssignees", employeeDtoConverter.convert(preferredAssignees));
 
             return Response.ok(outcome).build();
         } catch (DAOException | RestServiceException e) {

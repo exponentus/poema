@@ -129,9 +129,15 @@
                                 [searchable]="true" [(ngModel)]="model.assignee" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.assignee"></error-message>
-                            <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
-                                <a class="action-link" href="#" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
+                            <div *ngIf="isEditable && data.preferredAssignees">
+                                <a class="action-link mt-1 mr-3" href="#" (click)="model.assignee = _assignee; handleModelChange($event)"
+                                    *ngFor="let _assignee of data.preferredAssignees">
+                                    {{_assignee.name}}
+                                </a>
                             </div>
+                            <!-- <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
+                                <a class="action-link" href="#" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
+                            </div> -->
                         </div>
                     </div>
                     <div class="form-group">
