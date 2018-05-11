@@ -124,7 +124,7 @@
                 <div class="fieldset">
                     <div class="form-group">
                         <div class="controls">
-                            <div *ngFor="let _task of model.tasks">
+                            <div class="border-bottom" *ngFor="let _task of model.tasks">
                                 <div class="input-placeholder">
                                     <b>№{{_task.regNumber}}</b>
                                     <span class="align-middle ml-2 mr-2 status-{{_task.status | lowercase}}">
