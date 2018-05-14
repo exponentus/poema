@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
+import { AuthGuard, ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
 
 import {
     WorkflowContainerComponent, IncomingFormComponent,
@@ -9,7 +9,7 @@ import {
 } from './components';
 
 export const WORKFLOW_ROUTES: Routes = [{
-    path: 'Workflow', component: WorkflowContainerComponent,
+    path: 'Workflow', component: WorkflowContainerComponent, canActivate: [AuthGuard],
     children: [
         { path: '', redirectTo: 'incomings', pathMatch: 'full' },
         { path: 'index', redirectTo: 'incomings', pathMatch: 'full' },

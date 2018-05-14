@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
+import { AuthGuard, ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
 import { HelpDeskContainerComponent, DemandComponent } from './components';
 
 export const HELPDESK_ROUTES: Routes = [{
-    path: 'HelpDesk', component: HelpDeskContainerComponent,
+    path: 'HelpDesk', component: HelpDeskContainerComponent, canActivate: [AuthGuard],
     children: [
         { path: '', redirectTo: 'demands', pathMatch: 'full' },
         { path: 'index', redirectTo: 'demands', pathMatch: 'full' },

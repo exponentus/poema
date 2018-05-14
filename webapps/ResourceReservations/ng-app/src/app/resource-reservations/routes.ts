@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
+import { AuthGuard, ViewPage, UserProfileComponent, OfflinePage } from '@nb/core';
 
 import { RRContainerComponent } from './components/container';
 import { ApplicationFormComponent } from './components/application/application-form';
@@ -8,7 +8,7 @@ import { ApplicationForVehicleFormComponent } from './components/application-for
 import { ApplicationForMeetingRoomFormComponent } from './components/application-for-meeting-room/application-for-meeting-room-form';
 
 export const RR_ROUTES: Routes = [{
-    path: 'ResourceReservations', component: RRContainerComponent,
+    path: 'ResourceReservations', component: RRContainerComponent, canActivate: [AuthGuard],
     children: [
         { path: '', redirectTo: 'applications', pathMatch: 'full' },
         { path: 'index', redirectTo: 'applications', pathMatch: 'full' },

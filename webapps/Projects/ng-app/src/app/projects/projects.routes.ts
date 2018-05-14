@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
 
 import {
+    AuthGuard, CanDeactivateGuard,
     ViewPage, UserProfileComponent,
-    OfflinePage, CanDeactivateGuard
+    OfflinePage
 } from '@nb/core';
 
 import { DashboardComponent } from './pages';
@@ -14,7 +15,7 @@ import {
 } from './components';
 
 export const PROJECTS_ROUTES: Routes = [{
-    path: 'Projects', component: ProjectsContainerComponent,
+    path: 'Projects', component: ProjectsContainerComponent, canActivate: [AuthGuard],
     children: [
         { path: '', redirectTo: 'tasks/s/my', pathMatch: 'full' },
         { path: 'index', redirectTo: 'tasks/s/my', pathMatch: 'full' },
