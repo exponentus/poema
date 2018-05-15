@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
@@ -60,13 +61,13 @@ export class DemandComponent extends AbstractFormPage<Demand> {
             }
         }
 
-        this.ngxTranslate.get(data.payload.priorityTypes.map(t => t.toLowerCase())).map(ts => {
+        this.ngxTranslate.get(data.payload.priorityTypes.map(t => t.toLowerCase())).pipe(map(ts => {
             let result: any[] = [];
             for (let t in ts) {
                 result.push({ id: t.toUpperCase(), title: ts[t], сls: 'priority-' + t });
             }
             return result;
-        }).subscribe(res => this.priorityTypes = res);
+        })).subscribe(res => this.priorityTypes = res);
     }
 
     handleChangeCreateTask() {

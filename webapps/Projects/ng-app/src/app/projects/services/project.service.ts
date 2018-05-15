@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
@@ -17,13 +18,13 @@ export class ProjectService implements IEntityService<IEntity> {
     ) { }
 
     getProjectStatusTypes(enums: string[]) {
-        return this.ngxTranslate.get(enums.map(t => t.toLowerCase())).map(ts => {
+        return this.ngxTranslate.get(enums.map(t => t.toLowerCase())).pipe(map(ts => {
             let result: any[] = [];
             for (let t in ts) {
                 result.push({ id: t.toUpperCase(), title: t, сls: 'status-' + t });
             }
             return result;
-        });
+        }));
     }
 
     fetchUrl(url: string, params: any) {

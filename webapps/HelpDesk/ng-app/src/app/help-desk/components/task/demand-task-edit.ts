@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
@@ -29,13 +30,13 @@ export class DemandTaskEditComponent {
     ) { }
 
     ngOnInit() {
-        this.ngxTranslate.get(this.payload.priorityTypes.map(t => t.toLowerCase())).map(ts => {
+        this.ngxTranslate.get(this.payload.priorityTypes.map(t => t.toLowerCase())).pipe(map(ts => {
             let result: any[] = [];
             for (let t in ts) {
                 result.push({ id: t.toUpperCase(), title: ts[t], сls: 'priority-' + t });
             }
             return result;
-        }).subscribe(res => this.priorityTypes = res);
+        })).subscribe(res => this.priorityTypes = res);
     }
 
     ngDoCheck() {

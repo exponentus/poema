@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 
 import {
@@ -107,11 +108,11 @@ export class ReportWizardComponent {
                 });
 
                 return fileAsTextObservable
-                    .switchMap(errMsgJsonAsText => {
+                    .pipe(switchMap(errMsgJsonAsText => {
                         let _err = JSON.parse(errMsgJsonAsText);
                         this.handleRequestError(_err, 3000);
                         return Observable.throw(_err);
-                    });
+                    }));
             })
             .finally(() => noty.remove())
             .subscribe();

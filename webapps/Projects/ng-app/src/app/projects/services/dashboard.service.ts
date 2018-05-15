@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
 
 import { DataService } from '@nb/core';
@@ -26,7 +27,7 @@ export class DashboardService {
     ) { }
 
     fetchData(filter: any) {
-        return this.dataService.apiGet('/Projects/api/dashboard', filter).map(data => {
+        return this.dataService.apiGet('/Projects/api/dashboard', filter).pipe(map(data => {
             return {
                 id: data.id,
                 title: data.title,
@@ -37,7 +38,7 @@ export class DashboardService {
                     isProjectSupervisor: data.payload.isProjectSupervisor
                 }
             };
-        });
+        }));
     }
 
     private createTimeChartConfig2(

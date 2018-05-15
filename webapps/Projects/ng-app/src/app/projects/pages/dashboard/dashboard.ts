@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 
 import { IAction, AppService, mdFormat, DATE_FORMAT, STAFF_URL } from '@nb/core';
 
@@ -46,9 +47,9 @@ export class DashboardComponent {
             periodType: this.filter.periodType || 'week',
             fromDate: mdFormat(this.filter.fromDate, DATE_FORMAT),
             toDate: mdFormat(this.filter.toDate, DATE_FORMAT)
-        }).finally(() => {
+        }).pipe(finalize(() => {
             this.appService.hideLoadSpinner();
-        }).subscribe(response => {
+        })).subscribe(response => {
             this.data = response.data;
         });
     }
