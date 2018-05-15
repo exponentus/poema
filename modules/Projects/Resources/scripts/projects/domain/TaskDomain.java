@@ -43,9 +43,12 @@ import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import workflow.domain.ApprovalDomain;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 public class TaskDomain extends ApprovalDomain<Task> {
     public static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
@@ -117,6 +120,13 @@ public class TaskDomain extends ApprovalDomain<Task> {
             }
         } else {
             task = dao.findById(dto.getId());
+            java.time.LocalDate previousStartDate = task.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            java.time.LocalDate startDate = dto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long daysBetweenStartAndPreviousStartDate = DAYS.between(previousStartDate, startDate);
+
+            if (daysBetweenStartAndPreviousStartDate < 0) {
+                throw new DTOException().addError("startDate", "date_gt:" + new Date().getTime(), "field_date_is_incorrect");
+            }
         }
 
         String title = dto.getTitle();

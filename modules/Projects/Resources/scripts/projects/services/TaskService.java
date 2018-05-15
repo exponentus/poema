@@ -60,10 +60,13 @@ import javax.persistence.Tuple;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.stream.Collectors.toList;
 
 @Path("tasks")
@@ -448,7 +451,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
     }
 
     public static class Validation implements IValidation<Task> {
-
         private _Session session;
 
         public Validation(_Session session) {
@@ -456,49 +458,57 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         }
 
         @Override
-        public void check(Task task) throws DTOException {
+        public void check(Task taskDto) throws DTOException {
             DTOException ve = new DTOException();
             UserDAO userDAO = new UserDAO(session);
 
-            if (task.getParent() == null && task.getProject() == null) {
+            if (taskDto.getParent() == null && taskDto.getProject() == null) {
                 ve.addError("project", "required", "field_is_empty");
             }
-            if (task.getParent() == null && task.getTaskType() == null) {
+            if (taskDto.getParent() == null && taskDto.getTaskType() == null) {
                 ve.addError("taskType", "required", "field_is_empty");
             }
-            if (task.getBody() == null || task.getBody().isEmpty()) {
+            if (taskDto.getBody() == null || taskDto.getBody().isEmpty()) {
                 ve.addError("body", "required", "field_is_empty");
-            } else if (task.getBody().length() > 5000) {
+            } else if (taskDto.getBody().length() > 5000) {
                 ve.addError("body", "maxlen:5000", "field_is_too_long");
             }
-            if (task.getStatus() == null) {
+            if (taskDto.getStatus() == null) {
                 ve.addError("status", "required", "field_is_empty");
             }
-            if (task.getPriority() == null) {
+            if (taskDto.getPriority() == null) {
                 ve.addError("priority", "required", "field_is_empty");
             }
-            if (task.getStartDate() == null) {
+            if (taskDto.getStartDate() == null) {
                 ve.addError("startDate", "date", "field_is_empty");
             }
-            if (task.getDueDate() == null) {
+            if (taskDto.getDueDate() == null) {
                 ve.addError("dueDate", "date", "field_is_empty");
             }
 
-            if (task.isNew() && task.getStartDate().compareTo(new Date()) == -1) {
+            LocalDate today = LocalDate.now();
+            LocalDate startDate = taskDto.getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long daysBetweenStartAndToday = DAYS.between(today, startDate);
+
+            if (taskDto.isNew() && daysBetweenStartAndToday < 0) {
                 ve.addError("startDate", "date_gt:" + new Date().getTime(), "field_date_is_incorrect");
             }
-            if (task.getDueDate().compareTo(task.getStartDate()) == -1) {
-                ve.addError("dueDate", "date_gt:" + task.getStartDate().getTime(), "field_date_is_incorrect");
+
+            LocalDate dueDate = taskDto.getDueDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            long daysBetweenStarAndDeadline = DAYS.between(startDate, dueDate);
+
+            if (daysBetweenStarAndDeadline < 0) {
+                ve.addError("dueDate", "date_gt:" + taskDto.getStartDate().getTime(), "field_date_is_incorrect");
             }
 
-            if (!task.isInitiative() && (task.getAssignee() == null || task.getAssignee() <= 0)) {
+            if (!taskDto.isInitiative() && (taskDto.getAssignee() == null || taskDto.getAssignee() <= 0)) {
                 ve.addError("assignee", "required", "field_is_empty");
-            } else if (userDAO.findById(task.getAssignee()) == null) {
+            } else if (userDAO.findById(taskDto.getAssignee()) == null) {
                 ve.addError("assignee", "required", "user_not_found");
             }
 
-            if (task.getObservers() != null && task.getObservers().size() > 0) {
-                for (long uid : task.getObservers()) {
+            if (taskDto.getObservers() != null && taskDto.getObservers().size() > 0) {
+                for (long uid : taskDto.getObservers()) {
                     IUser ou = userDAO.findById(uid);
                     if (ou == null) {
                         ve.addError("observers", "required", "observer user not found: id=" + uid);
