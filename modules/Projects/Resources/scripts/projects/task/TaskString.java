@@ -19,6 +19,7 @@ public class TaskString {
     private String regNumber;
     private Project project;
     private String assignee;
+    private String taskStatus;
     private String status;
 
     public TaskString(Task task, _Session session) throws DAOException {
@@ -26,6 +27,7 @@ public class TaskString {
         IUser assigneeUser = userDAO.findById(task.getAssignee());
         this.title = task.getTitle();
         status = Environment.vocabulary.getWord(task.getStatus().name().toLowerCase(), EnvConst.getDefaultLang());
+        this.taskStatus = task.getStatus().name().toLowerCase();
         this.regNumber = task.getRegNumber();
         this.url = task.getURL();
         IUser user = task.getAuthor();
@@ -73,6 +75,14 @@ public class TaskString {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(String taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
 }
