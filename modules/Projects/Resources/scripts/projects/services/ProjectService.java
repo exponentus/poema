@@ -103,7 +103,7 @@ public class ProjectService extends EntityService<Project, ProjectDomain> {
             if (isNew) {
                 project = projectDomain.composeNew((User) session.getUser());
             } else {
-                project = dao.findByIdentifier(id);
+                project = dao.findById(id);
                 if (project == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
                 }

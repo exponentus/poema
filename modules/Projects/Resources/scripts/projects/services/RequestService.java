@@ -227,7 +227,7 @@ public class RequestService extends RestProvider {
     public Response delete(@PathParam("id") String id) {
         try {
             RequestDAO dao = new RequestDAO(getSession());
-            Request entity = dao.findByIdentifier(id);
+            Request entity = dao.findById(id);
             if (entity != null) {
                 entity.setAttachments(null); // if no on delete cascade
                 dao.delete(entity);
@@ -244,7 +244,7 @@ public class RequestService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             RequestDAO dao = new RequestDAO(getSession());
-            Request entity = dao.findByIdentifier(id);
+            Request entity = dao.findById(id);
 
             return getAttachment(entity, attachId);
         } catch (Exception e) {

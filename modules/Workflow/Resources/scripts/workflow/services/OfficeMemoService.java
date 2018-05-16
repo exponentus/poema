@@ -83,7 +83,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
         _Session ses = getSession();
         try {
             OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-            ViewPage vp = dao.findResponsesViewPage(dao.findByIdentifier(id));
+            ViewPage vp = dao.findResponsesViewPage(dao.findById(id));
             vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
 
             Outcome outcome = new Outcome();
@@ -109,7 +109,7 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
                 entity = omd.composeNew((User) ses.getUser(), employeeDAO.findByUser(user));
             } else {
                 OfficeMemoDAO officeMemoDAO = new OfficeMemoDAO(ses);
-                entity = officeMemoDAO.findByIdentifier(id);
+                entity = officeMemoDAO.findById(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);

@@ -86,7 +86,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
                 entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
             } else {
                 ApplicationForMeetingRoomDAO incomingDAO = new ApplicationForMeetingRoomDAO(ses);
-                entity = incomingDAO.findByIdentifier(id);
+                entity = incomingDAO.findById(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
@@ -169,7 +169,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
         _Session ses = getSession();
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(ses);
-            ApplicationForMeetingRoom entity = dao.findByIdentifier(id);
+            ApplicationForMeetingRoom entity = dao.findById(id);
             if (entity != null) {
                 dao.delete(entity);
             }
@@ -185,7 +185,7 @@ public class ApplicationForMeetingRoomService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             ApplicationForMeetingRoomDAO dao = new ApplicationForMeetingRoomDAO(getSession());
-            ApplicationForMeetingRoom entity = dao.findByIdentifier(id);
+            ApplicationForMeetingRoom entity = dao.findById(id);
 
             return getAttachment(entity, attachId);
         } catch (DAOException e) {

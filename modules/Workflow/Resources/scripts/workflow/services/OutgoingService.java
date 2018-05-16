@@ -84,7 +84,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
         _Session ses = getSession();
         try {
             OutgoingDAO dao = new OutgoingDAO(ses);
-            ViewPage vp = dao.findResponsesViewPage(dao.findByIdentifier(id));
+            ViewPage vp = dao.findResponsesViewPage(dao.findById(id));
             vp.setViewPageOptions(new ViewOptions().getOutgoingOptions());
 
             Outcome outcome = new Outcome();
@@ -109,7 +109,7 @@ public class OutgoingService extends ApprovalService<Outgoing, OutgoingDomain> {
                 entity = outDomain.composeNew((User) user);
             } else {
                 OutgoingDAO outgoingDAO = new OutgoingDAO(ses);
-                entity = outgoingDAO.findByIdentifier(id);
+                entity = outgoingDAO.findById(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);

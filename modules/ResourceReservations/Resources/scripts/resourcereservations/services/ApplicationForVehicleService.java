@@ -87,7 +87,7 @@ public class ApplicationForVehicleService extends RestProvider {
                 entity = domain.composeNew(employeeDAO.findByUser(ses.getUser()));
             } else {
                 ApplicationForVehicleDAO incomingDAO = new ApplicationForVehicleDAO(ses);
-                entity = incomingDAO.findByIdentifier(id);
+                entity = incomingDAO.findById(id);
             }
 
             EmployeeDAO empDao = new EmployeeDAO(ses);
@@ -171,7 +171,7 @@ public class ApplicationForVehicleService extends RestProvider {
         _Session ses = getSession();
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(ses);
-            ApplicationForVehicle entity = dao.findByIdentifier(id);
+            ApplicationForVehicle entity = dao.findById(id);
             if (entity.getApprovalStatus() == ApprovalStatusType.DRAFT) {
                 if (entity != null) {
                     dao.delete(entity);
@@ -191,7 +191,7 @@ public class ApplicationForVehicleService extends RestProvider {
     public Response getAttachment(@PathParam("id") String id, @PathParam("attachId") String attachId) {
         try {
             ApplicationForVehicleDAO dao = new ApplicationForVehicleDAO(getSession());
-            ApplicationForVehicle entity = dao.findByIdentifier(id);
+            ApplicationForVehicle entity = dao.findById(id);
 
             return getAttachment(entity, attachId);
         } catch (DAOException e) {
