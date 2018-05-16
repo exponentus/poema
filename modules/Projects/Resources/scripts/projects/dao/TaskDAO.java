@@ -72,13 +72,13 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Tuple> find5AssigneeByPreference(String author) {
+    public List<Tuple> find5AssigneeByPreference(Long authorId) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
             CriteriaQuery<Tuple> criteriaQuery = cb.createTupleQuery();
             Root<Task> root = criteriaQuery.from(Task.class);
-            Predicate condition = cb.equal(root.get("author").get("login"), author);
+            Predicate condition = cb.equal(root.get("author").get("id"), authorId);
             Expression count = cb.count(root);
             criteriaQuery.multiselect(count, root.get("assignee")).orderBy(cb.desc(count));
             criteriaQuery.groupBy(root.get("assignee"));
