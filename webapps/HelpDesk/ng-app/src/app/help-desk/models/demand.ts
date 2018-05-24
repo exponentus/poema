@@ -1,10 +1,11 @@
-import { DATE_TIME_FORMAT, mdFormat, IEntity, Attachment, Observer } from '@nb/core';
+import { DATE_TIME_FORMAT, mdFormat, IEntity, Attachment, Observer, User } from '@nb/core';
 
 import { Task } from './task';
 
 export class Demand {
     id: string;
     project: IEntity;
+    originator: User;
     tasks: Task[];
     title: string;
     regNumber: string;
@@ -24,6 +25,7 @@ export class Demand {
             status: m.status || null,
             statusDate: mdFormat(m.statusDate, DATE_TIME_FORMAT),
             project: m.project ? { id: m.project.id } : null,
+            originator: m.originator ? { id: m.originator.userID } : null,
             tasks: Task.convertToDtoList(m.tasks),
             demandType: m.demandType ? { id: m.demandType.id } : null,
             wayOfInteraction: m.wayOfInteraction ? { id: m.wayOfInteraction.id } : null,

@@ -49,10 +49,26 @@
                             {{'project' | translate}}
                         </div>
                         <div class="controls" [class.has-error]="errors.project">
-                            <nb-select class="span8" name="project" [url]="HELP_DESK_URL.API_PROJECTS" [disabled]="!isEditable"
-                                [allowClear]="true" [searchable]="true" [(ngModel)]="model.project">
-                            </nb-select>
+                            <div class="input-group flex-nowrap">
+                                <nb-select class="span8" name="project" [url]="HELP_DESK_URL.API_PROJECTS" [disabled]="!isEditable"
+                                    [allowClear]="true" [searchable]="true" [(ngModel)]="model.project">
+                                </nb-select>
+                                <a *ngIf="model.project" class="input-placeholder" [href]="'/Projects/#' + model.project.url">
+                                    <i class="fa fa-external-link"></i>
+                                </a>
+                            </div>
                             <error-message [error]="errors.project"></error-message>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.project && model.project.representativesUserIds">
+                        <div class="control-label">
+                            {{'originator' | translate}}
+                        </div>
+                        <div class="controls" [class.has-error]="errors.originator">
+                            <nb-select class="span8" name="originator" [url]="originatorFetchUrl" [disabled]="!model.editable"
+                                [allowClear]="true" [searchable]="false" [(ngModel)]="model.originator">
+                            </nb-select>
+                            <error-message [error]="errors.originator"></error-message>
                         </div>
                     </div>
                     <div class="form-group">
@@ -101,20 +117,6 @@
                             </label>
                         </div>
                     </div>
-                    <!-- <div class="form-group" *ngIf="!model.isNew && model.tasks && model.tasks.length">
-                        <div class="control-label">
-                            {{'tasks' | translate}}
-                        </div>
-                        <div class="controls">
-                            <div class="input-placeholder">
-                                <b>№{{model.tasks[0].regNumber}}</b>
-                                <span class="align-middle ml-2 mr-2 status-{{model.tasks[0].status | lowercase}}">
-                                    {{model.tasks[0].status | lowercase | translate}}
-                                </span>
-                                <span>{{model.tasks[0].title}}</span>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <demand-task-edit *ngIf="model.isNew && createTask" [model]="model.tasks[0]" [payload]="data"
                     [(errors)]="errors"></demand-task-edit>

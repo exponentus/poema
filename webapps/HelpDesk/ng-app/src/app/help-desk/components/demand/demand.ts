@@ -45,6 +45,14 @@ export class DemandComponent extends AbstractFormPage<Demand> {
         super(route, router, ngxTranslate, notifyService, nbModalService, appService, actionService, entityService);
     }
 
+    get originatorFetchUrl(): string {
+        let userParams = [];
+        for (let s of this.model.project.representativesUserIds) {
+            userParams.push('user=' + s);
+        }
+        return STAFF_URL.API_EMPLOYEES + '?' + userParams.join('&');
+    }
+
     // @Override
     onLoadDataSuccess(data: IApiOutcome) {
         super.onLoadDataSuccess(data);
@@ -59,6 +67,9 @@ export class DemandComponent extends AbstractFormPage<Demand> {
                     task.assignee = emps[task.assigneeUserId];
                 }
             }
+        }
+        if (this.model.originator) {
+            this.model.originator = emps[this.model.originator.id];
         }
 
         this.ngxTranslate.get(data.payload.priorityTypes.map(t => t.toLowerCase())).pipe(map(ts => {
