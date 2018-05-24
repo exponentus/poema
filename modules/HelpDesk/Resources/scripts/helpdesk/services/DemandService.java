@@ -240,6 +240,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             demand.setBody(dto.getBody());
             demand.setTags(dto.getTags());
             demand.setProject(project);
+            demand.setOriginator(dto.getOriginator());
             demand.setWayOfInteraction(dto.getWayOfInteraction());
             demand.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
             demand.setStatus(DemandStatusType.OPEN);

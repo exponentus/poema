@@ -17,6 +17,7 @@ public class ProjectDtoConverter implements GenericConverter<Project, Project> {
         Organization customer = new Organization();
         customer.setName(prj.getCustomer().getName());
         dto.setCustomer(customer);
+        dto.setRepresentatives(prj.getRepresentatives());
         dto.setManager(prj.getManager());
         dto.setProgrammer(prj.getProgrammer());
         dto.setTester(prj.getTester());

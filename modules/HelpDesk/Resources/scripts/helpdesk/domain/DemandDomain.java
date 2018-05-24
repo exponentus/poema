@@ -40,12 +40,10 @@ public class DemandDomain extends CommonDomain<Demand> {
         entity.setBody(dto.getBody());
         entity.setTags(dto.getTags());
         entity.setProject(dto.getProject());
+        entity.setOriginator(dto.getOriginator());
         entity.setWayOfInteraction(dto.getWayOfInteraction());
         entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments(), formSesId));
 
-
         return entity;
     }
-
-
 }

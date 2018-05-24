@@ -1,5 +1,6 @@
 package helpdesk.model;
 
+import administrator.model.User;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.SecureAppEntity;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
@@ -25,12 +26,12 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = ModuleConst.CODE + "__demands")
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
 
-    private Long originator;
+    private User originator;
 
     private List<Task> tasks;
 
@@ -77,11 +78,11 @@ public class Demand extends SecureAppEntity<UUID> {
     }
 
 
-    public Long getOriginator() {
+    public User getOriginator() {
         return originator;
     }
 
-    public void setOriginator(Long originator) {
+    public void setOriginator(User originator) {
         this.originator = originator;
     }
 
