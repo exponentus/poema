@@ -30,6 +30,8 @@ public class Demand extends SecureAppEntity<UUID> {
 
     private Project project;
 
+    private Long originator;
+
     private List<Task> tasks;
 
     @FTSearchable(ignoreLang = true)
@@ -72,6 +74,15 @@ public class Demand extends SecureAppEntity<UUID> {
 
     public Project getProject() {
         return project;
+    }
+
+
+    public Long getOriginator() {
+        return originator;
+    }
+
+    public void setOriginator(Long originator) {
+        this.originator = originator;
     }
 
     public void setProject(Project project) {
