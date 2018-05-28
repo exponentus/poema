@@ -257,7 +257,8 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
+            MapJoin<T, Long, Reader> mapJoin = rootA.joinMap("readers");
+            conditionA = cba.and(cba.equal(mapJoin.key(), user.getId()), conditionA);
         }
 
         cqa.select(cba.construct(
@@ -290,7 +291,9 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
+            //conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
+            MapJoin<T, Long, Reader> mapJoin = rootR.joinMap("readers");
+            conditionR = cbr.and(cbr.equal(mapJoin.key(), user.getId()), conditionA);
         }
 
         cqr.select(cbr.construct(

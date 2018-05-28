@@ -143,6 +143,8 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
 
             if (!user.isSuperUser()) {
                 condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
             }
 
             cq.select(cb.construct(
@@ -249,7 +251,8 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
         Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
+            MapJoin<T, Long, Reader> mapJoin = rootA.joinMap("readers");
+            conditionA = cba.and(cba.equal(mapJoin.key(), user.getId()), conditionA);
         }
 
         cqa.select(cba.construct(
@@ -282,7 +285,8 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
+            MapJoin<T, Long, Reader> mapJoin = rootR.joinMap("readers");
+            conditionR = cbr.and(cbr.equal(mapJoin.key(), user.getId()), conditionR);
         }
 
         cqr.select(cbr.construct(
