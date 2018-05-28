@@ -78,13 +78,13 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
     public Response getIncomingResponsesViewPage(@PathParam("id") String id) {
         _Session ses = getSession();
         try {
-            IncomingDAO incomingDAO = new IncomingDAO(ses);
-            ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findById(id));
-            vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
-
             Outcome outcome = new Outcome();
-            outcome.addPayload(vp);
-
+            if (id != null && !"null".equals(id)) {
+                IncomingDAO incomingDAO = new IncomingDAO(ses);
+                ViewPage vp = incomingDAO.findIncomingResponsesViewPage(incomingDAO.findById(id));
+                vp.setViewPageOptions(new ViewOptions().getIncomingOptions());
+                outcome.addPayload(vp);
+            }
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);

@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class IncomingDomain extends CommonDomain<Incoming> {
 
     public IncomingDomain(_Session ses) throws DAOException {

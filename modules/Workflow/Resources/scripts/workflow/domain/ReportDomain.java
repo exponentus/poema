@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class ReportDomain extends CommonDomain<Report> {
 
     public ReportDomain(_Session ses) throws DAOException {

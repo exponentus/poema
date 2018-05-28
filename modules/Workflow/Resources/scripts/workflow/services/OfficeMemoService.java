@@ -82,13 +82,13 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
     public Response getIncomingResponsesViewPage(@PathParam("id") String id) {
         _Session ses = getSession();
         try {
-            OfficeMemoDAO dao = new OfficeMemoDAO(ses);
-            ViewPage vp = dao.findResponsesViewPage(dao.findById(id));
-            vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
-
             Outcome outcome = new Outcome();
-            outcome.addPayload(vp);
-
+            if (id != null && !"null".equals(id)) {
+                OfficeMemoDAO dao = new OfficeMemoDAO(ses);
+                ViewPage vp = dao.findResponsesViewPage(dao.findById(id));
+                vp.setViewPageOptions(new ViewOptions().getOfficeMemoOptions());
+                outcome.addPayload(vp);
+            }
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);

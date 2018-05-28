@@ -24,6 +24,7 @@ import workflow.model.Outgoing;
 
 import java.util.*;
 
+@Deprecated
 public class OutgoingDomain extends ApprovalDomain<Outgoing> {
 
     public OutgoingDomain(_Session session) throws DAOException {

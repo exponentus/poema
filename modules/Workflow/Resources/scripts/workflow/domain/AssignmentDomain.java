@@ -28,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+@Deprecated
 public class AssignmentDomain extends CommonDomain<Assignment> {
 
     public AssignmentDomain(_Session session) throws DAOException {

@@ -22,6 +22,7 @@ import workflow.model.OfficeMemo;
 
 import java.util.*;
 
+@Deprecated
 public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
 
     public OfficeMemoDomain(_Session ses) throws DAOException {
