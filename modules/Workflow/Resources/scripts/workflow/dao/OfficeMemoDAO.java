@@ -1,10 +1,12 @@
 package workflow.dao;
 
 import com.exponentus.common.dao.DAO;
+import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import org.apache.poi.ss.formula.functions.T;
 import workflow.dao.filter.OfficeMemoFilter;
 import workflow.dto.AssignmentViewEntry;
 import workflow.dto.IDTO;
@@ -41,7 +43,8 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
             Predicate condition = null;
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()));
             }
 
             if (filter.getApprovalStatus() != null) {
@@ -200,7 +203,8 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
         condition = cb.and(cb.isNull(root.get("parent")), condition);
 
         if (!user.isSuperUser()) {
-            condition = cb.and(root.get("readers").in(user.getId()), condition);
+            MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+            condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
         }
 
         cq.select(cb.construct(

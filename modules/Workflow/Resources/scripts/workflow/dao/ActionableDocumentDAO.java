@@ -3,22 +3,21 @@ package workflow.dao;
 import com.exponentus.appenv.AppEnv;
 import com.exponentus.common.dao.DAO;
 import com.exponentus.common.model.constants.ApprovalStatusType;
+import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.RuntimeObjUtil;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.log.Lg;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import org.apache.poi.ss.formula.functions.T;
 import staff.model.Employee;
 import workflow.model.ActionableDocument;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Set;
 import java.util.UUID;
 
@@ -45,7 +44,8 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
             Predicate condition = cb.equal(root.get("author"), author.getUser());
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()), condition);
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
             }
 
             countRootCq.select(cb.countDistinct(root));

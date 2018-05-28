@@ -1,10 +1,12 @@
 package workflow.dao;
 
 import com.exponentus.common.dao.DAO;
+import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import org.apache.poi.ss.formula.functions.T;
 import workflow.dao.filter.OutgoingFilter;
 import workflow.dto.AssignmentViewEntry;
 import workflow.dto.IDTO;
@@ -40,7 +42,8 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
             Predicate condition = null;
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()));
             }
 
             if (filter.getApprovalStatus() != null) {

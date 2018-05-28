@@ -1,10 +1,12 @@
 package workflow.dao;
 
 import com.exponentus.common.dao.DAO;
+import com.exponentus.common.model.embedded.Reader;
 import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting._Session;
+import org.apache.poi.ss.formula.functions.T;
 import staff.model.Employee;
 import workflow.dao.filter.AssignmentFilter;
 import workflow.dto.AssignmentViewEntry;
@@ -53,7 +55,8 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
             Predicate condition = null;
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()));
             }
 
             if (filter.getControlStatusType() != null) {
@@ -90,13 +93,13 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                 }
             }
 
-            if (showAssigneeList){
+            if (showAssigneeList) {
                 //TODO this is temporary solution
                 cq = cb.createQuery(Assignment.class);
                 cq.select(root)
-                       // .groupBy(root,root.get("controlType").get("locName"))
+                        // .groupBy(root,root.get("controlType").get("locName"))
                         .orderBy(collectSortOrder(cb, root, sortParams));
-            }else{
+            } else {
                 cq.select(cb.construct(
                         AssignmentViewEntry.class,
                         root.get("id"),
@@ -108,7 +111,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
                         root.get("dueDate"),
                         root.get("status")
                 ))
-                      //  .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
+                        //  .groupBy(root, root.get("appliedAuthor").get("name"), root.get("controlType").get("locName"))
                         .orderBy(collectSortOrder(cb, root, sortParams));
             }
 
@@ -125,7 +128,7 @@ public class AssignmentDAO extends DAO<Assignment, UUID> {
 
             long count = countQuery.getSingleResult();
             int maxPage = pageable(typedQuery, count, pageNum, pageSize);
-            String sql = getSQL(em,typedQuery);
+            String sql = getSQL(em, typedQuery);
             return new ViewPage<>(typedQuery.getResultList(), count, maxPage, pageNum);
         } finally {
             em.close();
