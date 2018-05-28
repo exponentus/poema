@@ -142,7 +142,6 @@ public class OfficeMemoDAO extends DAO<OfficeMemo, UUID> {
             Predicate condition = cb.equal(root, officeMemo);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
                 MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
                 condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
             }

@@ -13,6 +13,7 @@ import staff.dao.EmployeeDAO;
 
 import java.util.List;
 
+@Deprecated
 public abstract class ApprovalDomain<T extends IApproval> extends CommonDomain<T> {
 
     protected ApprovalDomain(_Session ses) {

@@ -13,6 +13,7 @@ import com.exponentus.common.model.embedded.IApproval;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import staff.model.Employee;
+import workflow.init.ModuleConst;
 import workflow.model.embedded.IControlled;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "wf__actionable_documents")
+@Table(name = ModuleConst.CODE + "__actionable_documents")
 public class ActionableDocument extends EmbeddedSecureHierarchicalEntity implements IApproval, IControlled {
 
     @Convert(converter = ApprovalStatusTypeConverter.class)
@@ -184,7 +185,7 @@ public class ActionableDocument extends EmbeddedSecureHierarchicalEntity impleme
     @Override
     public void backupContent() {
         obsoleteBody.add(body);
-        body = "";
+        //body = "";
     }
 
     @Override

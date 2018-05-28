@@ -151,7 +151,8 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
             Predicate condition = cb.equal(root, outgoing);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(root.get("readers").in(user.getId()));
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
             }
 
             cq.select(cb.construct(
@@ -214,7 +215,8 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
         condition = cb.and(cb.isNull(root.get("parent")), condition);
 
         if (!user.isSuperUser()) {
-            condition = cb.and(root.get("readers").in(user.getId()), condition);
+            MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+            condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
         }
 
         cq.select(cb.construct(
@@ -259,7 +261,8 @@ public class OutgoingDAO extends DAO<Outgoing, UUID> {
         Predicate conditionA = cba.equal(rootA.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            conditionA = cba.and(rootA.get("readers").in(user.getId()), conditionA);
+            MapJoin<T, Long, Reader> mapJoin = rootA.joinMap("readers");
+            conditionA = cba.and(cba.equal(mapJoin.key(), user.getId()), conditionA);
         }
 
         cqa.select(cba.construct(

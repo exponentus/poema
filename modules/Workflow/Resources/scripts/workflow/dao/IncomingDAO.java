@@ -291,7 +291,6 @@ public class IncomingDAO extends DAO<Incoming, UUID> {
         Predicate conditionR = cbr.equal(rootR.get("parent"), assignment);
 
         if (!user.isSuperUser()) {
-            //conditionR = cbr.and(rootR.get("readers").in(user.getId()), conditionR);
             MapJoin<T, Long, Reader> mapJoin = rootR.joinMap("readers");
             conditionR = cbr.and(cbr.equal(mapJoin.key(), user.getId()), conditionA);
         }

@@ -127,7 +127,8 @@ public class ActionableDocumentDAO extends DAO<ActionableDocument, UUID> {
             condition = cb.and(cb.equal(root.get("blocks").get("status"), ApprovalStatusType.PENDING), condition);
 
             if (!user.isSuperUser()) {
-                condition = cb.and(cb.and(root.get("readers").in(user.getId())), condition);
+                MapJoin<T, Long, Reader> mapJoin = root.joinMap("readers");
+                condition = cb.and(cb.equal(mapJoin.key(), user.getId()), condition);
             }
 
             countRootCq.select(cb.countDistinct(root));
