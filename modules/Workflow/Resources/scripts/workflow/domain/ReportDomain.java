@@ -7,6 +7,8 @@ import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.exception.SecureException;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -77,7 +79,11 @@ public class ReportDomain extends CommonDomain<Report> {
             throw new DTOException("assignment", "required", "field_is_empty");
         }
 
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setBody(dto.getBody());
         entity.setAppliedAuthor(dto.getAppliedAuthor());
         entity.setAppliedRegDate(dto.getAppliedRegDate());

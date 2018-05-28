@@ -14,6 +14,7 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -47,7 +48,11 @@ public class OfficeMemoDomain extends ApprovalDomain<OfficeMemo> {
         EmployeeDAO eDao = new EmployeeDAO(ses);
         entity.setAppliedAuthor(eDao.findById(dto.getAppliedAuthor().getId()));
         entity.setAppliedRegDate(dto.getAppliedRegDate());
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setBody(dto.getBody());
         entity.setRecipient(dto.getRecipient());
         entity.setBlocks(normalizeBlocks(eDao, dto.getBlocks()));

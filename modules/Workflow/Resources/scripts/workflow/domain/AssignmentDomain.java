@@ -11,6 +11,7 @@ import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
 import com.exponentus.util.ReflectionUtil;
 import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 import staff.model.embedded.Observer;
@@ -66,7 +67,11 @@ public class AssignmentDomain extends CommonDomain<Assignment> {
         }
         entity.setAppliedAuthor(appliedAuthor);
         entity.setAppliedRegDate(dto.getAppliedRegDate());
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setBody(dto.getBody());
 
         if (entity.isNew()) {

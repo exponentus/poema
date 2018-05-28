@@ -168,9 +168,12 @@ public class IncomingService extends EntityService<Incoming, IncomingDomain> {
         public void check(Incoming dto) throws DTOException {
             DTOException ve = new DTOException();
 
-            if (dto.getTitle() == null || dto.getTitle().isEmpty()) {
-                ve.addError("title", "required", "field_is_empty");
+            if (dto.getBody() == null || dto.getBody().isEmpty()) {
+                ve.addError("body", "required", "field_is_empty");
+            } else if (dto.getBody().length() > 5000) {
+                ve.addError("body", "maxlen:5000", "field_is_too_long");
             }
+
             if (dto.getSender() == null) {
                 ve.addError("sender", "required", "field_is_empty");
             }

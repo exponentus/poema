@@ -263,9 +263,12 @@ public class OfficeMemoService extends ApprovalService<OfficeMemo, OfficeMemoDom
         public void check(OfficeMemo om) throws DTOException {
             DTOException e = new DTOException();
 
-            if (om.getTitle() == null || om.getTitle().isEmpty()) {
-                e.addError("title", "required", "field_is_empty");
+            if (om.getBody() == null || om.getBody().isEmpty()) {
+                e.addError("body", "required", "field_is_empty");
+            } else if (om.getBody().length() > 5000) {
+                e.addError("body", "maxlen:5000", "field_is_too_long");
             }
+
             if (om.getAppliedAuthor() == null) {
                 e.addError("appliedAuthor", "required", "field_is_empty");
             }

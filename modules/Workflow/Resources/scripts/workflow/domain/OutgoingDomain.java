@@ -17,6 +17,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import staff.dao.EmployeeDAO;
 import staff.model.embedded.Observer;
 import workflow.dao.OutgoingDAO;
@@ -45,7 +46,11 @@ public class OutgoingDomain extends ApprovalDomain<Outgoing> {
         Outgoing entity = getEntity(dto);
         EmployeeDAO eDao = new EmployeeDAO(ses);
         entity.setAppliedRegDate(dto.getAppliedRegDate());
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setDocSubject(dto.getDocSubject());
         entity.setDocLanguage(dto.getDocLanguage());
         entity.setDocType(dto.getDocType());

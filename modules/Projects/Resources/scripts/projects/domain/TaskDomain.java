@@ -147,6 +147,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 }
 
                 settingUpRevision(task);
+            }else if(task.getStatus() == StatusType.OPEN && new Date().before(startDate)){
+                task.setStatus(StatusType.WAITING);
+
             }
         }
         task.setTitle(title);

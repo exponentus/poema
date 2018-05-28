@@ -301,9 +301,12 @@ public class AssignmentService extends EntityService<Assignment, AssignmentDomai
         public void check(Assignment assignment) throws DTOException {
             DTOException ve = new DTOException();
 
-            if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
-                ve.addError("title", "required", "field_is_empty");
+            if (assignment.getBody() == null || assignment.getBody().isEmpty()) {
+                ve.addError("body", "required", "field_is_empty");
+            } else if (assignment.getBody().length() > 5000) {
+                ve.addError("body", "maxlen:5000", "field_is_too_long");
             }
+
             if (assignment.getControlType() == null) {
                 ve.addError("controlType", "required", "field_is_empty");
             }

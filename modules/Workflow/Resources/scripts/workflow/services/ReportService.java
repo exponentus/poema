@@ -140,8 +140,10 @@ public class ReportService extends EntityService<Report, ReportDomain> {
         public void check(Report assignment) throws DTOException {
             DTOException ve = new DTOException();
 
-            if (assignment.getTitle() == null || assignment.getTitle().isEmpty()) {
-                ve.addError("title", "required", "field_is_empty");
+            if (assignment.getBody() == null || assignment.getBody().isEmpty()) {
+                ve.addError("body", "required", "field_is_empty");
+            } else if (assignment.getBody().length() > 5000) {
+                ve.addError("body", "maxlen:5000", "field_is_too_long");
             }
 
             if (ve.hasError()) {

@@ -13,6 +13,7 @@ import com.exponentus.runtimeobj.RegNum;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.exponentus.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import reference.dao.DocumentTypeDAO;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -54,7 +55,11 @@ public class IncomingDomain extends CommonDomain<Incoming> {
             entity = dao.findById(dto.getId());
         }
 
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setAppliedRegDate(new Date());
         entity.setDocLanguage(dto.getDocLanguage());
         entity.setDocType(dto.getDocType());
