@@ -212,7 +212,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             //
             EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
             List<Employee> preferredAssignees = new ArrayList<>();
-            List<Tuple> tasks = taskDAO.find5AssigneeByPreference(user.getId());
+            List<Tuple> tasks = taskDAO.findAssigneeByPreference(user.getId(), 5);
             for (Tuple tuple : tasks) {
                 Employee employee = empDao.findByUserId((long) tuple.get(1));
                 if (employee != null) {

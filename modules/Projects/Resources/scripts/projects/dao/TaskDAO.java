@@ -72,7 +72,7 @@ public class TaskDAO extends DAO<Task, UUID> {
         }
     }
 
-    public List<Tuple> find5AssigneeByPreference(Long authorId) {
+    public List<Tuple> findAssigneeByPreference(Long authorId, int listSize) {
         EntityManager em = getEntityManagerFactory().createEntityManager();
         CriteriaBuilder cb = em.getCriteriaBuilder();
         try {
@@ -84,7 +84,7 @@ public class TaskDAO extends DAO<Task, UUID> {
             criteriaQuery.groupBy(root.get("assignee"));
             criteriaQuery.where(condition);
             TypedQuery<Tuple> typedQuery = em.createQuery(criteriaQuery);
-            typedQuery.setMaxResults(5);
+            typedQuery.setMaxResults(listSize);
             return typedQuery.getResultList();
         } finally {
             em.close();
