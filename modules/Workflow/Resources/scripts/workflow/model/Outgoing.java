@@ -67,10 +67,9 @@ public class Outgoing extends ActionableDocument implements ILifeCycle {
 
     @PrePersist
     protected void prePersist() {
-        regDate = new Date();
-        lastModifiedDate = new Date();
+        super.setRegDate(new Date());
         if (appliedRegDate == null) {
-            appliedRegDate = regDate;
+            appliedRegDate = super.getRegDate();
         }
     }
 
