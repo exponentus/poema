@@ -42,6 +42,7 @@ import projects.dao.ProjectDAO;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
 import projects.domain.TaskDomain;
+import projects.dto.converter.ProjectDtoConverter;
 import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
@@ -151,6 +152,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
         try {
             EmployeeDAO empDao = new EmployeeDAO(session);
+            ProjectDAO prjDao = new ProjectDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
             IUser user = session.getUser();
             Task task;
@@ -220,6 +222,17 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 }
             }
             outcome.addPayload("preferredAssignees", employeeDtoConverter.convert(preferredAssignees));
+
+            ProjectDtoConverter projectDtoConverter = new ProjectDtoConverter();
+            List<Project> preferredProjects = new ArrayList<>();
+            List<Tuple> projects = prjDao.findProjectByPreference(user.getId(), 5);
+            for (Tuple tuple : projects) {
+                Project project = (Project) tuple.get(1);
+                if (project != null) {
+                    preferredProjects.add(project);
+                }
+            }
+            outcome.addPayload("preferredProjects", projectDtoConverter.convert(preferredProjects));
 
             return Response.ok(outcome).build();
         } catch (DAOException | RestServiceException e) {
