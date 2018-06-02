@@ -72,7 +72,7 @@
                             <error-message [error]="errors.project"></error-message>
                             <div *ngIf="isEditable && data.preferredProjects">
                                 <a class="action-link mt-1 mr-3" href="#" (click)="model.project = _project; handleModelChange($event)"
-                                   *ngFor="let _project of data.preferredProjects">
+                                    *ngFor="let _project of data.preferredProjects">
                                     {{_project.name}}
                                 </a>
                             </div>
@@ -214,6 +214,7 @@
                         </div>
                     </div>
                 </div>
+                <hr>
                 <nb-attachments [model]="model" [fsId]="fsId" [editable]="isEditable" (add)="handleModelChange($event)"></nb-attachments>
             </tab>
             <tab *ngIf="!model.isNew" tabTitle="{{'related_documents' | translate}}" icon="fa fa-align-left">
