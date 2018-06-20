@@ -5,8 +5,10 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.rest.validation.exception.DTOException;
 import com.exponentus.scripting._Session;
+import com.exponentus.util.StringUtil;
 import helpdesk.dao.DemandDAO;
 import helpdesk.model.Demand;
+import org.apache.commons.lang3.StringUtils;
 import reference.dao.DemandTypeDAO;
 import reference.model.DemandType;
 
@@ -36,7 +38,11 @@ public class DemandDomain extends CommonDomain<Demand> {
         entity.setDemandType(demandType);
         entity.setStatus(dto.getStatus());
         entity.setStatusDate(dto.getStatusDate());
-        entity.setTitle(dto.getTitle());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
         entity.setBody(dto.getBody());
         entity.setTags(dto.getTags());
         entity.setProject(dto.getProject());

@@ -241,6 +241,7 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
             demand.setTags(dto.getTags());
             demand.setProject(project);
             demand.setOriginator(dto.getOriginator());
+            demand.addReader(dto.getOriginator());
             demand.setWayOfInteraction(dto.getWayOfInteraction());
             demand.setAttachments(getActualAttachments(demand.getAttachments(), dto.getAttachments()));
             demand.setStatus(DemandStatusType.OPEN);
@@ -309,9 +310,12 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
                 ve.addError("project", "required", "field_is_empty");
             }
 
-            if (demand.getTitle() == null || demand.getTitle().isEmpty()) {
-                ve.addError("title", "required", "field_is_empty");
+            if (demand.getBody() == null || demand.getBody().isEmpty()) {
+                ve.addError("body", "required", "field_is_empty");
+            } else if (demand.getBody().length() > 5000) {
+                ve.addError("body", "maxlen:5000", "field_is_too_long");
             }
+
             if (demand.getDemandType() == null) {
                 ve.addError("demandType", "required", "field_is_empty");
             }

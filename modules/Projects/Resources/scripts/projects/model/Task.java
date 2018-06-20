@@ -79,6 +79,9 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     private Long assignee;
 
+    @Column(name = "estimate_hours")
+    private float estimateInHours;
+
     @JsonIgnore
     @Convert(converter = TimeLineConverter.class)
     @Column(name = "time_line", columnDefinition = "jsonb")
@@ -89,10 +92,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dueDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "alt_due_date")
-    private Date alternateDueDate;
 
     private boolean initiative;
 
@@ -274,6 +273,15 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.assignee = assignee;
     }
 
+    public float getEstimateInHours() {
+        return estimateInHours;
+    }
+
+    public void setEstimateInHours(float estimateInHours) {
+        this.estimateInHours = estimateInHours;
+    }
+
+
     public Date getStartDate() {
         return startDate;
     }
@@ -288,14 +296,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public Date getAlternateDueDate() {
-        return alternateDueDate;
-    }
-
-    public void setAlternateDueDate(Date alternateDueDate) {
-        this.alternateDueDate = alternateDueDate;
     }
 
     public boolean isInitiative() {
