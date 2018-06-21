@@ -75,6 +75,34 @@ import static java.util.stream.Collectors.toList;
 public class TaskService extends EntityService<Task, TaskDomain> {
 
     @GET
+    @Path("preferredAssignees")
+    public Response getPreferredAssignees() {
+        try {
+            TaskDAO taskDAO = new TaskDAO(getSession());
+            EmployeeDAO empDao = new EmployeeDAO(getSession());
+            ViewPage<Employee> vp = new ViewPage<>();
+
+            EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
+            List<Employee> preferredAssignees = new ArrayList<>();
+            List<Tuple> tasks = taskDAO.findAssigneeByPreference(getSession().getUser().getId(), 100);
+            for (Tuple tuple : tasks) {
+                Employee employee = empDao.findByUserId((long) tuple.get(1));
+                if (employee != null) {
+                    preferredAssignees.add(employee);
+                }
+            }
+            vp.setResult(employeeDtoConverter.convert(preferredAssignees));
+
+            Outcome outcome = new Outcome();
+            outcome.addPayload(vp);
+
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @GET
     public Response getViewPage() {
         try {
             _Session session = getSession();
