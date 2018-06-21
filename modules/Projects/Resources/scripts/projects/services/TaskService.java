@@ -24,6 +24,10 @@ import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
 import com.exponentus.exception.SecureException;
 import com.exponentus.log.Lg;
+import com.exponentus.messaging.MessagingHelper;
+import com.exponentus.messaging.MessagingType;
+import com.exponentus.messaging.email.Memo;
+import com.exponentus.messaging.exception.MsgException;
 import com.exponentus.rest.exception.RestServiceException;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.rest.services.Defended;
@@ -629,6 +633,52 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
         return filter;
     }
+
+    @GET
+    @Path("action/reminder")
+    public Response getDefaultReminderText(ActionPayload<Task, String> action) {
+        try {
+            _Session ses = getSession();
+            TaskDomain domain = new TaskDomain(ses);
+            Task entity = domain.getEntity(action.getTarget());
+            Outcome outcome = domain.getOutcome(entity);
+            if(entity.getStatus() == StatusType.OPEN || entity.getStatus() == StatusType.PROCESSING) {
+                Memo memo = new Memo();
+                memo.addVar("regNumber", entity.getRegNumber());
+                memo.addVar("title", entity.getTitle());
+                memo.addVar("author", entity.getAuthor().getUserName());
+                String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, "task_reminder_template", ses.getLang()));                     outcome.addPayload("text", reminderText);
+            }else{
+                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
+            }
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("action/reminder")
+    public Response sendReminder(ActionPayload<Task, String> action) {
+        try {
+            _Session ses = getSession();
+            TaskDomain domain = new TaskDomain(ses);
+            Task entity = domain.getEntity(action.getTarget());
+            Outcome outcome = domain.getOutcome(entity);
+            if(entity.getStatus() == StatusType.OPEN || entity.getStatus() == StatusType.PROCESSING) {
+                String subject = Environment.vocabulary.getWord("reminder",ses.getLang());
+                MessagingHelper.sendInAnyWay((User)ses.getUser(), action.getPayload(), entity, subject);
+            }else{
+                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
+            }
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        } catch (MsgException e) {
+            return responseException(e);
+        }
+    }
+
 
     @POST
     @Path("action/im/slack/{command}")

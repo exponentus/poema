@@ -289,4 +289,30 @@ public class Messages {
 			}
 		}
 	}
+
+	public void sendReminder(Task task) {
+		if (task.getAssignee() != task.getAuthor().getId()) {
+			try {
+				String msgTemplate = "task_cancelled";
+				UserDAO userDAO = new UserDAO();
+
+				Memo memo = new Memo();
+				memo.addVar("regNumber", task.getRegNumber());
+				memo.addVar("title", task.getTitle());
+				IUser assigneeUser = userDAO.findById(task.getAssignee());
+				memo.addVar("assignee", assigneeUser.getUserName());
+				memo.addVar("author", task.getAuthor().getUserName());
+
+				try {
+					User user = (User) assigneeUser;
+					MessagingHelper.sendInAnyWay(appEnv, user, memo, msgTemplate, task, "notify_about_cancel_task");
+				} catch (ClassCastException e) {
+
+				}
+
+			} catch (Exception e) {
+				logger.exception(e);
+			}
+		}
+	}
 }
