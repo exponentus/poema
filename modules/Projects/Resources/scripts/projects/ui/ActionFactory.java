@@ -29,7 +29,7 @@ public class ActionFactory extends ConventionalActionFactory {
     }
 
     public Action acknowledgedTask() {
-        return new Action().caption("acknowledged_task").url(ModuleConst.BASE_URL + "api/tasks/acknowledged");
+        return new Action().id("acknowledged").caption("acknowledged_task").url(ModuleConst.BASE_URL + "api/tasks/acknowledged");
     }
 
     public Action completeTask() {

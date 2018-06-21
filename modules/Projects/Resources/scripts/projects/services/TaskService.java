@@ -327,11 +327,13 @@ public class TaskService extends EntityService<Task, TaskDomain> {
     @POST
     @Path("acknowledged")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response doTaskAcknowledged(ActionPayload<Task, Object> action) {
+    public Response doTaskAcknowledged(ActionPayload<Task, Long> action) {
         try {
             TaskDAO dao = new TaskDAO(getSession());
             Task task = dao.findById(action.getTarget().getId());
             TaskDomain taskDomain = new TaskDomain(getSession());
+
+            task.setEstimateInHours(action.getPayload());
             taskDomain.acknowledgedTask(task, (User) getSession().getUser());
             dao.update(task, false);
             new Messages(getAppEnv()).sendOfNewAcknowledging(task);

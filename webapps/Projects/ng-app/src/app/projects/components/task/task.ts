@@ -101,6 +101,9 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
             case 'task_cancel':
                 this.openTaskCancellationDialog(action);
                 break;
+            case 'acknowledged':
+                this.openAcknowledgedDialog(action);
+                break;
             default:
                 if (action.customID === 'save_and_close') {
                     this.saveAsDraftRequestIncomplete = false;
@@ -192,6 +195,51 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
             this.saveAsDraftRequestIncomplete = false;
             this.saveAsDraft();
         }, 4000);
+    }
+
+    openAcknowledgedDialog(action: IAction) {
+        let modal = {
+            type: 'dialog',
+            title: 'estimate_in_hours',
+            model: {
+                editable: true,
+                estimateInHours: null
+            },
+            formSchema: [{
+                tabTitle: 'properties',
+                active: true,
+                fieldsets: [{
+                    fields: [{
+                        type: 'number',
+                        hideLabel: true,
+                        name: 'estimateInHours',
+                        placeHolder: 'estimate_in_hours',
+                        required: true
+                    }]
+                }]
+            }],
+            buttons: [{
+                label: 'cancel',
+                click: (modal: any, event: any) => {
+                    modal.close();
+                }
+            }, {
+                label: action.caption,
+                className: 'btn-primary',
+                disabled: () => { return !modal.model.estimateInHours || modal.model.estimateInHours <= 0; },
+                click: (modal: any, event: any) => {
+                    if (modal.model.estimateInHours && modal.model.estimateInHours > 0) {
+                        super.onAction(action, {
+                            target: <Task>{ id: this.model.id },
+                            payload: modal.model.estimateInHours ? modal.model.estimateInHours.trim() : 0
+                        });
+                        modal.close();
+                    }
+                }
+            }]
+        };
+
+        this.nbModalService.create(modal).show();
     }
 
     openTaskCancellationDialog(action: IAction) {
