@@ -588,6 +588,12 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         if (assigneeUserId > 0) {
             filter.setAssigneeUserId(assigneeUserId);
         }
+        long authorUserId = (long) formData.getNumberDoubleValueSilently("author", 0);
+        if (authorUserId > 0) {
+            User author = new User();
+            author.setId(authorUserId);
+            filter.setAuthor(author);
+        }
 
         String slug = formData.getValueSilently("slug");
         switch (slug) {
