@@ -5,7 +5,7 @@ import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
 import com.exponentus.common.model.constants.PriorityType;
 import com.exponentus.common.model.constants.StatusType;
-import com.exponentus.common.service.EntityService;
+import com.exponentus.common.service.AbstractService;
 import com.exponentus.common.ui.ACL;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.ViewPage;
@@ -24,14 +24,15 @@ import com.exponentus.scripting.SortParams;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
 import com.exponentus.server.Server;
+import com.exponentus.util.StringUtil;
 import helpdesk.dao.DemandDAO;
 import helpdesk.dao.filter.DemandFilter;
-import helpdesk.domain.DemandDomain;
 import helpdesk.dto.converter.DemandDtoConverter;
 import helpdesk.init.ModuleConst;
 import helpdesk.model.Demand;
 import helpdesk.model.constants.DemandStatusType;
 import helpdesk.ui.ViewOptions;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import projects.dao.ProjectDAO;
 import projects.domain.TaskDomain;
@@ -57,7 +58,7 @@ import static java.util.stream.Collectors.toList;
 
 @Path("demands")
 @Produces(MediaType.APPLICATION_JSON)
-public class DemandService extends EntityService<Demand, DemandDomain> {
+public class DemandService extends AbstractService<Demand> {
 
     @GET
     public Response getViewPage() {
@@ -298,6 +299,39 @@ public class DemandService extends EntityService<Demand, DemandDomain> {
         }
 
         return actionBar;
+    }
+
+    public Demand fillFromDto(Demand dto, IValidation<Demand> validation, String formSesId) throws DTOException, DAOException {
+        validation.check(dto);
+
+        Demand entity;
+        DemandTypeDAO demandTypeDAO = new DemandTypeDAO(getSession());
+
+        if (dto.isNew()) {
+            entity = new Demand();
+            entity.setAuthor(getSession().getUser());
+            entity.addReaderEditor(entity.getAuthor());
+        } else {
+            entity = dao.findById(dto.getId());
+        }
+
+        DemandType demandType = demandTypeDAO.findById(dto.getDemandType().getId());
+        entity.setDemandType(demandType);
+        entity.setStatus(dto.getStatus());
+        entity.setStatusDate(dto.getStatusDate());
+        String title = dto.getTitle();
+        if (title == null || title.isEmpty()) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
+        }
+        entity.setTitle(title);
+        entity.setBody(dto.getBody());
+        entity.setTags(dto.getTags());
+        entity.setProject(dto.getProject());
+        entity.setOriginator(dto.getOriginator());
+        entity.setWayOfInteraction(dto.getWayOfInteraction());
+        entity.setAttachments(getActualAttachments(entity.getAttachments(), dto.getAttachments()));
+
+        return entity;
     }
 
     private class Validation implements IValidation<Demand> {
