@@ -154,7 +154,9 @@ public class ViewOptions {
         filterGroup.addItem(new FilterItem("status").items(statusTypeItems));
         filterGroup.addItem(new FilterItem("priority").items(priorityTypeItems));
         filterGroup.addItem(new FilterItem("taskType", "task_type").url("/Reference/api/task-types").searchable(false));
-        filterGroup.addItem(new FilterItem("author", "author").targetValue("userID").url("/Staff/api/employees"));
+        if (!"my".equals(slug)) {
+            filterGroup.addItem(new FilterItem("author", "author").targetValue("userID").url("/Staff/api/employees"));
+        }
         if (!"inbox".equals(slug)) {
             // filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
             filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Projects/api/tasks/preferredAssignees"));
