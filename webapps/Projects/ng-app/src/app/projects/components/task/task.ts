@@ -214,7 +214,8 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         hideLabel: true,
                         name: 'estimateInHours',
                         placeHolder: 'estimate_in_hours',
-                        required: true
+                        required: true,
+                        autofocus: true
                     }]
                 }]
             }],
@@ -260,7 +261,8 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         name: 'comment',
                         placeHolder: 'cancel_reason',
                         className: 'span7',
-                        required: true
+                        required: true,
+                        autofocus: true
                     }]
                 }]
             }],
