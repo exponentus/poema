@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, finalize, switchMap, map } from 'rxjs/operators';
 import { saveAs } from 'file-saver';
 
 import {
@@ -74,7 +74,7 @@ export class ReportWizardComponent {
             startFrom: mdFormat(this.model.startFrom, DATE_TIME_FORMAT),
             endUntil: mdFormat(this.model.endUntil, DATE_TIME_FORMAT)
         })
-            .map(response => {
+            .pipe(map((response: any) => {
                 this.cancel.emit();
 
                 let disposition = response.headers.get('content-disposition');
@@ -95,26 +95,26 @@ export class ReportWizardComponent {
                 saveAs(blob, filename);
                 return response;
             })
-            .catch(err => {
-                let fileAsTextObservable = new Observable<string>(observer => {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        let responseText = (<any>e.target).result;
+                , catchError(err => {
+                    let fileAsTextObservable = new Observable<string>(observer => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            let responseText = (<any>e.target).result;
 
-                        observer.next(responseText);
-                        observer.complete();
-                    };
-                    const errMsg = reader.readAsText(err.error, 'utf-8');
-                });
+                            observer.next(responseText);
+                            observer.complete();
+                        };
+                        const errMsg = reader.readAsText(err.error, 'utf-8');
+                    });
 
-                return fileAsTextObservable
-                    .pipe(switchMap(errMsgJsonAsText => {
-                        let _err = JSON.parse(errMsgJsonAsText);
-                        this.handleRequestError(_err, 3000);
-                        return Observable.throw(_err);
-                    }));
-            })
-            .finally(() => noty.remove())
+                    return fileAsTextObservable
+                        .pipe(switchMap(errMsgJsonAsText => {
+                            let _err = errMsgJsonAsText ? JSON.parse(errMsgJsonAsText) : { message: ['Error'] };
+                            this.handleRequestError(_err, 3000);
+                            return throwError(_err);
+                        }));
+                })
+                , finalize(() => noty.remove()))
             .subscribe();
     }
 

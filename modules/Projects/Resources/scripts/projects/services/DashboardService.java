@@ -13,6 +13,7 @@ import com.exponentus.rest.RestProvider;
 import com.exponentus.rest.outgoingdto.Outcome;
 import com.exponentus.scripting.WebFormData;
 import com.exponentus.scripting._Session;
+import com.exponentus.server.Server;
 import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
 import dataexport.model.constants.ExportFormatType;
@@ -38,6 +39,7 @@ public class DashboardService extends RestProvider {
             _Session session = getSession();
             LanguageCode lang = session.getLang();
             WebFormData params = getWebFormData();
+            Outcome outcome = new Outcome();
 
             // Chart params
             List<IUser> allUsers = new ArrayList<>();
@@ -69,47 +71,51 @@ public class DashboardService extends RestProvider {
             }
             StatusType[] statusTypes = {StatusType.PROCESSING, StatusType.OPEN, StatusType.PENDING, StatusType.COMPLETED};
 
-            //
-            Chart chart = new Chart(ChartType.BAR);
-            // Готовим данные для графика
-            // Нужно создать список всех дат в сортированном виде.
-            // Сделать мапу {дата: количество}
-            // Затем перебирая все даты: если есть дата взять значение из мапы {дата: количество}, если нет 0
-            List<Date> dates = new LinkedList<>(); // unique dates
-            Map<StatusType, Map<Date, Double>> stMap = new HashMap<>();
-            for (StatusType st : statusTypes) {
-                List<CountStat<Timestamp>> res = new TaskDAO(session).getCountByStatus(fromDate, toDate, periodType, "assignee", allUsers, st);
-                Map<Date, Double> _map = new HashMap<>();
-                stMap.put(st, _map);
-                for (CountStat<Timestamp> r : res) {
-                    Date date = new Date((r.title).getTime());
-                    if (!dates.contains(date)) {
-                        dates.add(date);
+            try {
+                //
+                Chart chart = new Chart(ChartType.BAR);
+                // Готовим данные для графика
+                // Нужно создать список всех дат в сортированном виде.
+                // Сделать мапу {дата: количество}
+                // Затем перебирая все даты: если есть дата взять значение из мапы {дата: количество}, если нет 0
+                List<Date> dates = new LinkedList<>(); // unique dates
+                Map<StatusType, Map<Date, Double>> stMap = new HashMap<>();
+                for (StatusType st : statusTypes) {
+                    List<CountStat<Timestamp>> res = new TaskDAO(session).getCountByStatus(fromDate, toDate, periodType, "assignee", allUsers, st);
+                    Map<Date, Double> _map = new HashMap<>();
+                    stMap.put(st, _map);
+                    for (CountStat<Timestamp> r : res) {
+                        Date date = new Date((r.title).getTime());
+                        if (!dates.contains(date)) {
+                            dates.add(date);
 
-                        String label = new SimpleDateFormat("dd.MM.yyyy").format(date);
-                        chart.addLabel(label);
+                            String label = new SimpleDateFormat("dd.MM.yyyy").format(date);
+                            chart.addLabel(label);
+                        }
+                        _map.put(date, (double) r.count);
                     }
-                    _map.put(date, (double) r.count);
                 }
-            }
-            dates.sort(Date::compareTo);
+                dates.sort(Date::compareTo);
 
-            // Chart
-            for (Map.Entry<StatusType, Map<Date, Double>> entry : stMap.entrySet()) {
-                String stName = entry.getKey().name();
-                ChartDataset<Double> ds = new ChartDataset<>(Voc.get(stName.toLowerCase(), lang));
-                ds.setId(stName);
-                chart.addDataset(ds);
+                // Chart
+                for (Map.Entry<StatusType, Map<Date, Double>> entry : stMap.entrySet()) {
+                    String stName = entry.getKey().name();
+                    ChartDataset<Double> ds = new ChartDataset<>(Voc.get(stName.toLowerCase(), lang));
+                    ds.setId(stName);
+                    chart.addDataset(ds);
 
-                for (Date d : dates) {
-                    ds.add(entry.getValue().getOrDefault(d, 0d));
+                    for (Date d : dates) {
+                        ds.add(entry.getValue().getOrDefault(d, 0d));
+                    }
                 }
+
+                outcome.addPayload("chart", chart);
+            } catch (Exception e) {
+                Server.logger.exception(e);
             }
 
-            Outcome outcome = new Outcome();
             outcome.setId("dashboard");
             outcome.setTitle("dashboard");
-            outcome.addPayload("chart", chart);
             outcome.addPayload("isProjectSupervisor", isProjectSupervisor);
             outcome.addPayload("taskStatusStats", new TaskDAO(session).getTaskStatusStats());
             outcome.addPayload("exportFormatType", ExportFormatType.values());

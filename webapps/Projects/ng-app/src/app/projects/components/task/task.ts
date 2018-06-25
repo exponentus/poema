@@ -5,14 +5,13 @@ import { TranslateService } from '@ngx-translate/core';
 import {
     IApiOutcome, IAction, ITimeLine, ICanDeactivate,
     AppService, ActionService, NotificationService, NbModalService,
-    AbstractFormPage, getLocName, dateDuration, tagStylerFn,
-    hashCode,
+    AbstractFormPage, dateDuration, tagStylerFn,
     STAFF_URL, REFERENCE_URL
 } from '@nb/core';
 
 import { PROJECTS_URL } from '../../constants';
 import { TaskService } from '../../services/task.service';
-import { Task, Tag, Request } from '../../models';
+import { Task } from '../../models';
 
 @Component({
     selector: 'task',

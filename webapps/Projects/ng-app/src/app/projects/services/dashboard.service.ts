@@ -32,7 +32,7 @@ export class DashboardService {
                 id: data.id,
                 title: data.title,
                 data: {
-                    chart: this.convertChartPayloadData(data.payload.chart),
+                    chart: data.payload.chart ? this.convertChartPayloadData(data.payload.chart) : null,
                     taskStatusStats: data.payload.taskStatusStats,
                     exportFormatType: data.payload.exportFormatType,
                     isProjectSupervisor: data.payload.isProjectSupervisor

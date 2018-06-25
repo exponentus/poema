@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
 import {
-    IApiOutcome, IAction, IActionPayload, IFormSchema,
+    IApiOutcome, IAction, IActionPayload,
     AppService, ActionService, NotificationService,
     NbModalService, NbModal, AbstractFormPage,
     DATE_TIME_FORMAT, mdFormat, REFERENCE_URL

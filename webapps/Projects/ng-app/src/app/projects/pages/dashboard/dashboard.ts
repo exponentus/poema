@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 
-import { IAction, AppService, mdFormat, DATE_FORMAT, STAFF_URL } from '@nb/core';
+import { AppService, mdFormat, DATE_FORMAT, STAFF_URL } from '@nb/core';
 
 import { DashboardService } from '../../services/dashboard.service';
 
