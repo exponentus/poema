@@ -129,15 +129,11 @@ public class TaskDomain extends ApprovalDomain<Task> {
             }
         }
 
-        String title = dto.getTitle();
         Date startDate = dto.getStartDate();
 
         if (validation instanceof EntityService.EmptyValidation) {
             task.setStatus(StatusType.DRAFT);
         } else {
-            if (title == null || title.isEmpty()) {
-                title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
-            }
             if (task.getStatus() == StatusType.DRAFT || task.getStatus() == StatusType.UNKNOWN) {
 
                 if (new Date().before(startDate)) {
@@ -151,6 +147,11 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 task.setStatus(StatusType.WAITING);
 
             }
+        }
+
+        String title = dto.getTitle();
+        if (StringUtils.isBlank(title)) {
+            title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
         }
         task.setTitle(title);
         task.setProject(dto.getProject());
