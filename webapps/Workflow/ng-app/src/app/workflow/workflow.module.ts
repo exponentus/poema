@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 
 import {
     NbCommonModule,
-    ApprovalModule,
-    LifeCycleModule,
+    NbApprovalModule,
+    NbLifeCycleModule,
     NbAclModule,
-    NBEntityCreationDetailsModule
+    NbEntityCreationDetailsModule
 } from '@nb/core';
 
 import { WORKFLOW_ROUTES } from './workflow.routes';
@@ -41,10 +41,10 @@ import { ValueObjectService } from './services';
     imports: [
         NbCommonModule,
         RouterModule.forChild(WORKFLOW_ROUTES),
-        ApprovalModule,
-        LifeCycleModule,
+        NbApprovalModule,
+        NbLifeCycleModule,
         NbAclModule,
-        NBEntityCreationDetailsModule
+        NbEntityCreationDetailsModule
     ],
     providers: [
         ValueObjectService

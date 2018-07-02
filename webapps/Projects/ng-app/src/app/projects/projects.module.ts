@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import {
-    NbCommonModule, TimeLineModule, NBChartModule,
-    NbAclModule, NbActivityModule, NBEntityCreationDetailsModule
+    NbCommonModule, NbTimeLineModule, NbChartModule,
+    NbAclModule, NbActivityModule, NbEntityCreationDetailsModule
 } from '@nb/core';
 
 import { PROJECTS_ROUTES } from './projects.routes';
@@ -40,11 +40,11 @@ import {
     imports: [
         NbCommonModule,
         RouterModule.forChild(PROJECTS_ROUTES),
-        TimeLineModule,
-        NBChartModule,
+        NbTimeLineModule,
+        NbChartModule,
         NbAclModule,
         NbActivityModule,
-        NBEntityCreationDetailsModule
+        NbEntityCreationDetailsModule
     ],
     providers: [
         ProjectService,

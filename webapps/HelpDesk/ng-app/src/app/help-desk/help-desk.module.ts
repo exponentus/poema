@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import {
     NbCommonModule,
     NbAclModule, NbActivityModule,
-    NBEntityCreationDetailsModule
+    NbEntityCreationDetailsModule
 } from '@nb/core';
 
 import { HELPDESK_ROUTES } from './help-desk.routes';
@@ -26,7 +26,7 @@ import {
         NbCommonModule,
         NbAclModule,
         NbActivityModule,
-        NBEntityCreationDetailsModule,
+        NbEntityCreationDetailsModule,
         RouterModule.forChild(HELPDESK_ROUTES)
     ],
     providers: [

@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import {
-    NbCommonModule, ApprovalModule, NbAclModule,
-    NBEntityCreationDetailsModule
+    NbCommonModule, NbApprovalModule, NbAclModule,
+    NbEntityCreationDetailsModule
 } from '@nb/core';
 
 import { RR_ROUTES } from './routes';
@@ -25,9 +25,9 @@ import { ValueObjectService } from './services/value-object.service';
     ],
     imports: [
         NbCommonModule,
-        ApprovalModule,
+        NbApprovalModule,
         NbAclModule,
-        NBEntityCreationDetailsModule,
+        NbEntityCreationDetailsModule,
         RouterModule.forChild(RR_ROUTES)
     ],
     providers: [
