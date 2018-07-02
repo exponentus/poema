@@ -70,7 +70,7 @@ public class Messages {
 
 			lang = project.getPrimaryLanguage();
 
-			memo.addVar("url", appEnv.getURL() + "/#" + project.getURL() + "&lang=" + lang);
+			memo.addVar("url", appEnv.getURL() + "/#" + project.getURL() + "?lang=" + lang);
 			MailAgent ma = new MailAgent(msgTemplate);
 			// ma.description = "notify about new project";
 			ma.sendMessage(mailRecipients, appEnv.getVocabulary().getWord("notify_about_new_project_short", lang),

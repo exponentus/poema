@@ -214,7 +214,8 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         name: 'estimateInHours',
                         placeHolder: 'estimate_in_hours',
                         required: true,
-                        autofocus: true
+                        autofocus: true,
+                        datalist: [6, 12, 24, 48, 72]
                     }]
                 }]
             }],

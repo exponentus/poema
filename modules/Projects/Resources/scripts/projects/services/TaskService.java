@@ -442,6 +442,54 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         }
     }
 
+    @GET
+    @Path("reminder/{taskId}")
+    public Response getDefaultReminderText(@PathParam("taskId") String taskId) {
+        try {
+            _Session ses = getSession();
+            TaskDAO taskDAO = new TaskDAO(ses);
+            Task task = taskDAO.findById(taskId);
+
+            Outcome outcome = new Outcome();
+            if (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.PROCESSING) {
+                Memo memo = new Memo();
+                memo.addVar("regNumber", task.getRegNumber());
+                memo.addVar("title", task.getTitle());
+                memo.addVar("author", task.getAuthor().getUserName());
+                String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, "task_reminder_template", ses.getLang()));
+                outcome.addPayload("text", reminderText);
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
+            }
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        }
+    }
+
+    @POST
+    @Path("reminder")
+    public Response sendReminder(ActionPayload<Task, String> action) {
+        try {
+            _Session ses = getSession();
+            TaskDAO taskDAO = new TaskDAO(ses);
+            Task task = taskDAO.findById(action.getTarget().getId());
+
+            Outcome outcome = new Outcome();
+            if (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.PROCESSING) {
+                String subject = Environment.vocabulary.getWord("reminder", ses.getLang());
+                MessagingHelper.sendInAnyWay((User) ses.getUser(), action.getPayload(), task, subject);
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
+            }
+            return Response.ok(outcome).build();
+        } catch (DAOException e) {
+            return responseException(e);
+        } catch (MsgException e) {
+            return responseException(e);
+        }
+    }
+
     //
     private ActionBar getActionBar(_Session session, TaskDomain taskDomain, Task task) {
         ActionBar actionBar = new ActionBar(session);
@@ -488,6 +536,10 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             if (taskDomain.userCanAddSubTask(task, (User) session.getUser())) {
                 actionBar.addAction(action.newSubTask(task));
             }
+        }
+
+        if ((task.getStatus() != StatusType.DRAFT || task.getStatus() != StatusType.PROCESSING) && session.getUser().getId().equals(task.getAuthor().getId())) {
+            // actionBar.addAction(action.sendReminder());
         }
 
         if (taskDomain.taskCanBeDeleted(task)) {
@@ -633,52 +685,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
         return filter;
     }
-
-    @GET
-    @Path("action/reminder")
-    public Response getDefaultReminderText(ActionPayload<Task, String> action) {
-        try {
-            _Session ses = getSession();
-            TaskDomain domain = new TaskDomain(ses);
-            Task entity = domain.getEntity(action.getTarget());
-            Outcome outcome = domain.getOutcome(entity);
-            if(entity.getStatus() == StatusType.OPEN || entity.getStatus() == StatusType.PROCESSING) {
-                Memo memo = new Memo();
-                memo.addVar("regNumber", entity.getRegNumber());
-                memo.addVar("title", entity.getTitle());
-                memo.addVar("author", entity.getAuthor().getUserName());
-                String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, "task_reminder_template", ses.getLang()));                     outcome.addPayload("text", reminderText);
-            }else{
-                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
-            }
-            return Response.ok(outcome).build();
-        } catch (DAOException e) {
-            return responseException(e);
-        }
-    }
-
-    @POST
-    @Path("action/reminder")
-    public Response sendReminder(ActionPayload<Task, String> action) {
-        try {
-            _Session ses = getSession();
-            TaskDomain domain = new TaskDomain(ses);
-            Task entity = domain.getEntity(action.getTarget());
-            Outcome outcome = domain.getOutcome(entity);
-            if(entity.getStatus() == StatusType.OPEN || entity.getStatus() == StatusType.PROCESSING) {
-                String subject = Environment.vocabulary.getWord("reminder",ses.getLang());
-                MessagingHelper.sendInAnyWay((User)ses.getUser(), action.getPayload(), entity, subject);
-            }else{
-                return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
-            }
-            return Response.ok(outcome).build();
-        } catch (DAOException e) {
-            return responseException(e);
-        } catch (MsgException e) {
-            return responseException(e);
-        }
-    }
-
 
     @POST
     @Path("action/im/slack/{command}")

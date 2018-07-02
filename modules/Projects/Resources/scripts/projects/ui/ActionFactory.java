@@ -6,6 +6,8 @@ import com.exponentus.common.ui.actions.constants.ActionType;
 import projects.init.ModuleConst;
 import projects.model.Task;
 
+import javax.ws.rs.HttpMethod;
+
 public class ActionFactory extends ConventionalActionFactory {
     public Action newProject() {
         return new Action(ActionType.LINK).caption("new_project").url(ModuleConst.BASE_URL + "projects/new");
@@ -50,6 +52,10 @@ public class ActionFactory extends ConventionalActionFactory {
 
     public Action sendImplementRequest() {
         return new Action().id("implementRequest").caption("send_implement_request").url(ModuleConst.BASE_URL + "api/requests/implementRequest");
+    }
+
+    public Action sendReminder() {
+        return new Action().id("sendReminder").caption("send_reminder").method(HttpMethod.POST).url(ModuleConst.BASE_URL + "api/tasks/reminder");
     }
 
     // Request actions
