@@ -281,6 +281,11 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
             taskDomain.saveTask(task);
+            if (task.getParent() != null){
+                Task parent = taskDAO.findById(task.getParent().getId());
+                parent.addReader(task.getAssignee());
+                taskDAO.update(parent);
+            }
             return Response.ok(taskDomain.getOutcome(taskDAO.findById(task.getId()))).build();
         } catch (SecureException | DatabaseException | DAOException e) {
             return responseException(e);
