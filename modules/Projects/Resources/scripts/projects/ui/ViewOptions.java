@@ -16,6 +16,8 @@ import projects.model.constants.ProjectStatusType;
 import java.util.ArrayList;
 import java.util.List;
 
+import static projects.init.ModuleConst.ROLE_PRJ_TASK_MODERATOR;
+
 public class ViewOptions {
 
     public ViewOption getProjectOptions() {
@@ -158,8 +160,11 @@ public class ViewOptions {
             filterGroup.addItem(new FilterItem("author", "author").targetValue("userID").url("/Staff/api/employees"));
         }
         if (!"inbox".equals(slug)) {
-            // filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
-            filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Projects/api/tasks/preferredAssignees"));
+            if (session.getUser().getRoles().contains(ROLE_PRJ_TASK_MODERATOR)) {
+                filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Staff/api/employees"));
+            } else {
+                filterGroup.addItem(new FilterItem("assigneeUser", "assignee_user").targetValue("userID").url("/Projects/api/tasks/preferredAssignees"));
+            }
         }
         filterGroup.addItem(new FilterItem("project").url("/Projects/api/projects"));
         filterGroup.addItem(new FilterItem("tags").multiple().url("/Reference/api/tags?hidden=true&category=software_developing_task").style("return {color:it.color}"));
