@@ -5,6 +5,7 @@ import administrator.model.User;
 import calendar.dao.EventDAO;
 import calendar.dao.ReminderDAO;
 import calendar.model.Event;
+import calendar.model.embedded.TimeRange;
 import com.exponentus.common.domain.ApprovalLifecycle;
 import com.exponentus.common.domain.IValidation;
 import com.exponentus.common.domain.exception.ApprovalException;
@@ -363,6 +364,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
         Event event = new Event();
         event.setDescription(task.getBody());
         event.setEventTime(task.getDueDate());
+        TimeRange range = new TimeRange();
+        range.setStartTime(task.getDueDate());
+        //range.setEndTime(new LocalDate(range.getStartTime()).plus(task.getEstimateInHours()).toDate());
         String title = StringUtils.abbreviate(task.getRegNumber() + " " + task.getTitle(), 140);
         event.setTitle(title);
         event.setPriority(task.getPriority());
