@@ -281,7 +281,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             TaskDomain taskDomain = new TaskDomain(session);
             Task task = taskDomain.fillFromDto(taskDto, new Validation(getSession()), getWebFormData().getFormSesId());
             taskDomain.saveTask(task);
-            if (task.getParent() != null){
+            if (task.getParent() != null) {
                 Task parent = taskDAO.findById(task.getParent().getId());
                 parent.addReader(task.getAssignee());
                 taskDAO.update(parent);
@@ -487,6 +487,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             } else {
                 return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
             }
+            outcome.setMessage("ok");
             return Response.ok(outcome).build();
         } catch (DAOException e) {
             return responseException(e);
@@ -544,7 +545,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         }
 
         if ((task.getStatus() != StatusType.DRAFT || task.getStatus() != StatusType.PROCESSING) && session.getUser().getId().equals(task.getAuthor().getId())) {
-            // actionBar.addAction(action.sendReminder());
+            actionBar.addAction(action.sendReminder());
         }
 
         if (taskDomain.taskCanBeDeleted(task)) {

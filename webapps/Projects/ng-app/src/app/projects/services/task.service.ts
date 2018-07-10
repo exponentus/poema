@@ -27,6 +27,10 @@ export class TaskService implements IEntityService<IEntity> {
         }));
     }
 
+    fetch(url: string, params: any) {
+        return this.dataService.apiGet(url, params);
+    }
+
     fetchUrl(url: string, params: any) {
         return this.dataService.apiGet(createApiUrl(url), params);
     }

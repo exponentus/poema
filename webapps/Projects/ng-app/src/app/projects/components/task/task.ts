@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { map } from 'rxjs/operators';
 
 import {
     IApiOutcome, IAction, ITimeLine, ICanDeactivate,
@@ -102,6 +103,9 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                 break;
             case 'acknowledged':
                 this.openAcknowledgedDialog(action);
+                break;
+            case 'sendReminder':
+                this.handleReminderAction(action);
                 break;
             default:
                 if (action.customID === 'save_and_close') {
@@ -324,6 +328,58 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         });
                         modal.close();
                     }
+                }
+            }]
+        };
+
+        this.nbModalService.create(modal).show();
+    }
+
+    handleReminderAction(action: IAction) {
+        this.entityService.fetch(`${action.url}/${this.model.id}`, {})
+            .pipe(map(response => {
+                this.openReminderDialog(action, response.payload.text);
+            })).subscribe();
+    }
+
+    openReminderDialog(action: IAction, reminderText: string) {
+        let modal = {
+            type: 'dialog',
+            title: 'reminder',
+            className: 'nb-modal-lg',
+            model: {
+                editable: true,
+                comment: reminderText || ''
+            },
+            formSchema: [{
+                tabTitle: 'properties',
+                active: true,
+                fieldsets: [{
+                    fields: [{
+                        type: 'markdown',
+                        hideLabel: true,
+                        name: 'comment',
+                        placeHolder: 'comment',
+                        required: true,
+                        autofocus: true
+                    }]
+                }]
+            }],
+            buttons: [{
+                label: 'cancel',
+                click: (modal: any, event: any) => {
+                    modal.close();
+                }
+            }, {
+                label: action.caption,
+                className: 'btn-primary',
+                disabled: () => { return !modal.model.comment || !modal.model.comment.trim(); },
+                click: (modal: any, event: any) => {
+                    super.onAction(action, {
+                        target: <Task>{ id: this.model.id },
+                        payload: modal.model.comment.trim()
+                    });
+                    modal.close();
                 }
             }]
         };

@@ -3,6 +3,8 @@ package projects.ui;
 import com.exponentus.common.ui.ConventionalActionFactory;
 import com.exponentus.common.ui.actions.Action;
 import com.exponentus.common.ui.actions.constants.ActionType;
+import com.exponentus.common.ui.popup.PopUp;
+import com.exponentus.common.ui.popup.PopUpType;
 import projects.init.ModuleConst;
 import projects.model.Task;
 
@@ -55,7 +57,7 @@ public class ActionFactory extends ConventionalActionFactory {
     }
 
     public Action sendReminder() {
-        return new Action().id("sendReminder").caption("send_reminder").method(HttpMethod.POST).url(ModuleConst.BASE_URL + "api/tasks/reminder");
+        return new Action().id("sendReminder").caption("send_reminder").method(HttpMethod.POST).url(ModuleConst.BASE_URL + "api/tasks/reminder").notify(new PopUp(PopUpType.SUCCESS, "")).onSuccess(new Action(ActionType.CUSTOM_ACTION));
     }
 
     // Request actions
