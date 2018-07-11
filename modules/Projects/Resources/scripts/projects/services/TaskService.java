@@ -82,17 +82,22 @@ public class TaskService extends EntityService<Task, TaskDomain> {
     @Path("preferredAssignees")
     public Response getPreferredAssignees() {
         try {
-            TaskDAO taskDAO = new TaskDAO(getSession());
-            EmployeeDAO empDao = new EmployeeDAO(getSession());
+            _Session ses = getSession();
+            TaskDAO taskDAO = new TaskDAO(ses);
+            EmployeeDAO empDao = new EmployeeDAO(ses);
             ViewPage<Employee> vp = new ViewPage<>();
 
             EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
             List<Employee> preferredAssignees = new ArrayList<>();
-            List<Tuple> tasks = taskDAO.findAssigneeByPreference(getSession().getUser().getId(), 100);
-            for (Tuple tuple : tasks) {
-                Employee employee = empDao.findByUserId((long) tuple.get(1));
-                if (employee != null) {
-                    preferredAssignees.add(employee);
+            if (ses.getEmployee().hasRole(TaskDomain.MODERATOR_ROLE_NAME)){
+                preferredAssignees.addAll(empDao.findAll());
+            }else{
+                List<Tuple> tasks = taskDAO.findAssigneeByPreference(getSession().getUser().getId(), 100);
+                for (Tuple tuple : tasks) {
+                    Employee employee = empDao.findByUserId((long) tuple.get(1));
+                    if (employee != null) {
+                        preferredAssignees.add(employee);
+                    }
                 }
             }
             vp.setResult(employeeDtoConverter.convert(preferredAssignees));
