@@ -89,7 +89,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
             List<Employee> preferredAssignees = new ArrayList<>();
-            if (ses.getEmployee().hasRole(TaskDomain.MODERATOR_ROLE_NAME)){
+            if (ses.getEmployee().hasRole(ModuleConst.ROLES[2])){
                 preferredAssignees.addAll(empDao.findAll());
             }else{
                 List<Tuple> tasks = taskDAO.findAssigneeByPreference(getSession().getUser().getId(), 100);
