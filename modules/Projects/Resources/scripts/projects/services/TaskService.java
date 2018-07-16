@@ -77,6 +77,8 @@ import static java.util.stream.Collectors.toList;
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends EntityService<Task, TaskDomain> {
+    private static final String REMINDER_MSG_TEMPLATE = "task_reminder_template";
+
 
     @GET
     @Path("preferredAssignees")
@@ -466,7 +468,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 memo.addVar("regNumber", task.getRegNumber());
                 memo.addVar("title", task.getTitle());
                 memo.addVar("author", task.getAuthor().getUserName());
-                String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, "task_reminder_template", ses.getLang()));
+                String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, REMINDER_MSG_TEMPLATE, ses.getLang()));
                 outcome.addPayload("text", reminderText);
             } else {
                 return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
@@ -488,7 +490,8 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             Outcome outcome = new Outcome();
             if (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.PROCESSING) {
                 String subject = Environment.vocabulary.getWord("reminder", ses.getLang());
-                MessagingHelper.sendInAnyWay((User) ses.getUser(), action.getPayload(), task, subject);
+                UserDAO userDAO = new UserDAO();
+                MessagingHelper.sendInAnyWay((User)userDAO.findById(task.getAssignee()), REMINDER_MSG_TEMPLATE, action.getPayload(), task, subject);
             } else {
                 return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
             }
