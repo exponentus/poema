@@ -552,7 +552,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             }
         }
 
-        boolean canReminderStatus = (task.getStatus() != StatusType.DRAFT || task.getStatus() != StatusType.PROCESSING);
+        boolean canReminderStatus = (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.PROCESSING);
         boolean isCurrentUserTaskAuthor = session.getUser().getId().equals(task.getAuthor().getId());
         boolean isAuthorNotAssignee = !task.getAuthor().getId().equals(task.getAssignee());
         if (canReminderStatus && isCurrentUserTaskAuthor && isAuthorNotAssignee) {
