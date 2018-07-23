@@ -459,6 +459,7 @@
   "law_branch" : "law_branch",
   "label_prj_dashboard_stat_assignee_state" : "Tasks created by you",
   "weather_humidity" : null,
+  "statistic_type" : "Statistical type",
   "add_new_organization" : "Add new organization",
   "art_entertainment" : null,
   "statistic_indicator_type" : "Type of statistical indicator",
