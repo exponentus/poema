@@ -77,7 +77,7 @@ import static java.util.stream.Collectors.toList;
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends EntityService<Task, TaskDomain> {
-    private static final String REMINDER_MSG_TEMPLATE = "task_reminder_template";
+    private static final String REMINDER_MSG_TEMPLATE = "task_reminder";
 
 
     @GET
@@ -467,6 +467,8 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 Memo memo = new Memo();
                 memo.addVar("regNumber", task.getRegNumber());
                 memo.addVar("title", task.getTitle());
+                IUser assigneeUser = new UserDAO().findById(task.getAssignee());
+                memo.addVar("assignee", assigneeUser.getUserName());
                 memo.addVar("author", task.getAuthor().getUserName());
                 String reminderText = memo.getPlainBody(getAppEnv().templates.getTemplate(MessagingType.SITE, REMINDER_MSG_TEMPLATE, ses.getLang()));
                 outcome.addPayload("text", reminderText);
