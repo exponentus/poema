@@ -102,7 +102,7 @@ export class ApplicationForMeetingRoomFormComponent extends AbstractFormPage<App
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         className: 'span7',
                         required: true
                     }]

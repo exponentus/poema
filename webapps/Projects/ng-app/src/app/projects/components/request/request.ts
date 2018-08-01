@@ -148,7 +148,7 @@ export class RequestComponent extends AbstractFormPage<Request> {
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'decline_reason',
+                        placeholder: 'decline_reason',
                         className: 'span7',
                         required: true
                     }]

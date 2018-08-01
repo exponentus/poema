@@ -128,7 +128,7 @@ export class OfficeMemoFormComponent extends AbstractFormPage<OfficeMemo> {
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         className: 'span7',
                         required: true
                     }]

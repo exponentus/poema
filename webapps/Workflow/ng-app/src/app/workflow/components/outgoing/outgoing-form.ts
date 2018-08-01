@@ -103,7 +103,7 @@ export class OutgoingFormComponent extends AbstractFormPage<Outgoing> {
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         className: 'span7',
                         required: true
                     }]

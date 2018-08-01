@@ -102,7 +102,7 @@ export class ApplicationForVehicleFormComponent extends AbstractFormPage<Applica
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         className: 'span7',
                         required: true
                     }]

@@ -216,7 +216,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         type: 'number',
                         hideLabel: true,
                         name: 'estimateInHours',
-                        placeHolder: 'estimate_in_hours',
+                        placeholder: 'estimate_in_hours',
                         required: true,
                         autofocus: true,
                         datalist: [6, 12, 24, 48, 72]
@@ -263,7 +263,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'cancel_reason',
+                        placeholder: 'cancel_reason',
                         className: 'span7',
                         required: true,
                         autofocus: true
@@ -305,7 +305,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         type: 'textarea',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         className: 'span7',
                         required: true
                     }]
@@ -359,7 +359,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         type: 'markdown',
                         hideLabel: true,
                         name: 'comment',
-                        placeHolder: 'comment',
+                        placeholder: 'comment',
                         required: true,
                         autofocus: true
                     }]
