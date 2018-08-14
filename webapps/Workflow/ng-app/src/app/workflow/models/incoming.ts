@@ -2,7 +2,8 @@ import { DATE_TIME_FORMAT } from '@nb/core';
 import { Attachment, Observer } from '@nb/core';
 import { mdFormat } from '@nb/core';
 import { BaseModel } from './base-model';
-import { Employee, Outgoing } from './index';
+import { Employee } from './employee';
+import { Outgoing } from './outgoing';
 
 export class Incoming extends BaseModel {
     regNumber: string;

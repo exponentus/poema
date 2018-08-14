@@ -3,7 +3,7 @@ import { Attachment, Observer } from '@nb/core';
 import { mdFormat } from '@nb/core';
 import { ApprovalStatusType, ApprovalSchemaType, ApprovalResultType } from './constants';
 import { BaseModel } from './base-model';
-import { Employee, Approval } from './index';
+import { Approval } from './approval';
 import { Block } from './block';
 
 export class Outgoing extends BaseModel {

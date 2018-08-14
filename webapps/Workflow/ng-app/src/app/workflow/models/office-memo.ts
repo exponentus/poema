@@ -3,7 +3,8 @@ import { Attachment, Observer } from '@nb/core';
 import { mdFormat } from '@nb/core';
 import { ApprovalStatusType, ApprovalSchemaType, ApprovalResultType } from './constants';
 import { BaseModel } from './base-model';
-import { Approval, Employee } from './index';
+import { Approval } from './approval';
+import { Employee } from './employee';
 import { Block } from './block';
 
 export class OfficeMemo extends BaseModel {

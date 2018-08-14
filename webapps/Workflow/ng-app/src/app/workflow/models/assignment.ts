@@ -5,7 +5,8 @@ import { mdFormat } from '@nb/core';
 
 import { ControlStatusType } from './constants';
 import { AssigneeEntry } from './assignee-entry';
-import { BaseModel, Employee, Incoming } from './index';
+import { BaseModel } from './base-model';
+import { Employee } from './employee';
 
 export class Assignment extends BaseModel {
     primary: IEntity;

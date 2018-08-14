@@ -3,7 +3,8 @@ import {
     DATE_TIME_FORMAT, mdFormat
 } from '@nb/core';
 
-import { Project, Tag } from './index';
+import { Project } from './project';
+import { Tag } from './tag';
 
 export class Demand extends BaseModel {
     project: Project;

@@ -1,5 +1,5 @@
 import { IEntity, Attachment, BaseModel } from '@nb/core';
-import { Task } from './index';
+import { Task } from './task';
 
 export class Request extends BaseModel {
     task: Task;

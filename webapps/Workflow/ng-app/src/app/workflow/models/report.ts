@@ -2,7 +2,8 @@ import { DATE_TIME_FORMAT } from '@nb/core';
 import { Attachment, Observer } from '@nb/core';
 import { mdFormat } from '@nb/core';
 import { BaseModel } from './base-model';
-import { Assignment, Employee } from './index';
+import { Assignment } from './assignment';
+import { Employee } from './employee';
 
 export class Report extends BaseModel {
     title: string;
