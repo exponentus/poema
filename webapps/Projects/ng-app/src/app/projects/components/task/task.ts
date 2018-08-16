@@ -4,11 +4,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { map } from 'rxjs/operators';
 
 import {
-    IApiOutcome, IAction, ITimeLine, ICanDeactivate,
+    IApiOutcome, IAction, ICanDeactivate,
     AppService, ActionService, NotificationService, NbModalService,
     AbstractFormPage, dateDuration, tagStylerFn,
     STAFF_URL, REFERENCE_URL
 } from '@nb/core';
+import { ITimeLine } from '@nb/components';
 
 import { PROJECTS_URL } from '../../constants';
 import { TaskService } from '../../services/task.service';

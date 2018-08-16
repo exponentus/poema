@@ -7,9 +7,10 @@ import {
     IApiOutcome, IAction, IPermissions,
     AppService, ActionService,
     NotificationService, NbModalService,
-    AbstractFormPage, LifeCycleNode, tagStylerFn,
+    AbstractFormPage, tagStylerFn,
     STAFF_URL, REFERENCE_URL
 } from '@nb/core';
+import { LifeCycleNode } from '@nb/components';
 
 import { AssignmentService } from '../../services';
 import { Assignment } from '../../models';

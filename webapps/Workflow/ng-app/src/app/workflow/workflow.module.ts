@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NbCommonModule } from '@nb/core';
 import {
-    NbCommonModule,
     NbApprovalModule,
     NbLifeCycleModule,
     NbAclModule,
     NbEntityCreationDetailsModule
-} from '@nb/core';
+} from '@nb/components';
 
 import { WORKFLOW_ROUTES } from './workflow.routes';
 import {

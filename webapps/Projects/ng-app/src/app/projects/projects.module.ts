@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NbCommonModule } from '@nb/core';
 import {
-    NbCommonModule, NbTimeLineModule, NbChartModule,
-    NbAclModule, NbActivityModule, NbEntityCreationDetailsModule
-} from '@nb/core';
+    NbTimeLineModule,
+    NbChartModule,
+    NbAclModule,
+    NbActivityModule,
+    NbEntityCreationDetailsModule
+} from '@nb/components';
 
 import { PROJECTS_ROUTES } from './projects.routes';
 import { ProjectService } from './services/project.service';

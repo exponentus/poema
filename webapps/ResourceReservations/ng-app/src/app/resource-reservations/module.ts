@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NbCommonModule } from '@nb/core';
 import {
-    NbCommonModule, NbApprovalModule, NbAclModule,
+    NbApprovalModule,
+    NbAclModule,
     NbEntityCreationDetailsModule
-} from '@nb/core';
+} from '@nb/components';
 
 import { RR_ROUTES } from './routes';
 import { RRContainerComponent } from './components/container';

@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NbCommonModule } from '@nb/core';
 import {
-    NbCommonModule,
-    NbAclModule, NbActivityModule,
+    NbAclModule,
+    NbActivityModule,
     NbEntityCreationDetailsModule
-} from '@nb/core';
+} from '@nb/components';
 
 import { HELPDESK_ROUTES } from './help-desk.routes';
 import { DemandService } from './services/demand.service';
