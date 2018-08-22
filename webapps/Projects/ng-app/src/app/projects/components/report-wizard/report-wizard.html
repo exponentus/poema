@@ -12,7 +12,7 @@
                         <nb-select name="reportProfile" [url]="DATA_EXPORT_URL.API_REPORT_PROFILES" [allowClear]="true"
                             [searchable]="true" [(ngModel)]="model.reportProfile">
                         </nb-select>
-                        <div class="form-text text-muted" *ngIf="(model.reportProfile ? model.reportProfile.localizedDescr : null) | objectHasKeys">
+                        <div class="form-text text-muted" *ngIf="(model.reportProfile ? model.reportProfile.localizedDescr : null) | keyvalue">
                             {{model.reportProfile | localizedName:'localizedDescr'}}
                         </div>
                     </div>
