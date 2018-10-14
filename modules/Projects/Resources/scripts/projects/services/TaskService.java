@@ -245,7 +245,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             outcome.setId(id);
             outcome.setFSID(fsId);
             outcome.addPayload(getActionBar(session, taskDomain, task));
-            outcome.addPayload(new Milestones(session, task.getStages()));
+            outcome.addPayload(new Milestones(session, task.getStages(), task.getEstimateInHours()));
             outcome.addPayload("employees", emps);
             outcome.addPayload("activity", new DocumentActivityDAO(session).findByEntityIdSilently(task.getId()).getDetails());
             outcome.addPayload("priorityTypes", Arrays.stream(PriorityType.values()).filter(it -> it != PriorityType.UNKNOWN).collect(toList()));
