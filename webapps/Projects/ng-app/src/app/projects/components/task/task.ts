@@ -9,7 +9,7 @@ import {
     AbstractFormPage, dateDuration, tagStylerFn,
     STAFF_URL, REFERENCE_URL
 } from '@nb/core';
-import { ITimeLine } from '@nb/components';
+import { IMilestones } from '@nb/components';
 
 import { PROJECTS_URL } from '../../constants';
 import { TaskService } from '../../services/task.service';
@@ -36,7 +36,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
 
     saveAsDraftAction: IAction;
 
-    milestones: ITimeLine[];
+    milestones: IMilestones;
     activity: any;
     priorityTypes: any;
 
