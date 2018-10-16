@@ -15,9 +15,9 @@
                 <div class="doc-head__item">
                     <label class="doc-head__item_label">{{'status' | translate}}</label>
                     <div class="doc-head__item_value">
-                        <div class="time_line__trend" *ngIf="milestones?.result?.trend">
+                        <!-- <div class="time_line__trend" *ngIf="milestones?.result?.trend">
                             <time-line-trend-icon class="mr-2" [model]="milestones?.result"></time-line-trend-icon>
-                        </div>
+                        </div> -->
                         <div class="status-{{model.status | lowercase}}">
                             <span>{{model.status | lowercase | translate}}</span>
                         </div>
@@ -144,40 +144,38 @@
                                     {{_assignee.name}}
                                 </a>
                             </div>
-                            <!-- <div *ngIf="isEditable && appService.employee?.userID != model.assignee?.userID">
-                                <a class="action-link" href="#" (click)="assignYourself($event);handleModelChange($event)">{{'assign_yourself' | translate}}</a>
-                            </div> -->
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="control-label">
-                            {{'start_date' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="errors.startDate">
-                            <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="startDate"
-                                [maxDate]="model.dueDate" [(ngModel)]="model.startDate"
-                                (ngModelChange)="handleModelChange($event)">
-                            <error-message [error]="errors.startDate"></error-message>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="control-label">
-                            {{'due_date' | translate}}
-                        </div>
-                        <div class="controls" [class.has-error]="errors.dueDate">
-                            <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="dueDate"
-                                [minDate]="model.startDate" [(ngModel)]="model.dueDate"
-                                (ngModelChange)="handleModelChange($event)">
-                            <div class="input-placeholder" *ngIf="model.startDate && model.dueDate">
-                                {{ startDueDateDuration | nbI18nPlural:'count_days' | translate:{count:startDueDateDuration}
-                                }}
+                        <div class="vw-sm-100">
+                            <div class="form-group">
+                                <div class="control-label">
+                                    {{'start_date' | translate}}
+                                </div>
+                                <div class="controls" [class.has-error]="errors.startDate">
+                                    <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="startDate"
+                                        [maxDate]="model.dueDate" [(ngModel)]="model.startDate"
+                                        (ngModelChange)="handleModelChange($event)">
+                                    <error-message [error]="errors.startDate"></error-message>
+                                </div>
                             </div>
-                            <!-- <div [ngSwitch]="startDueDateDuration" class="input-placeholder">
-                                <span *ngSwitchCase="'today'">{{ 'today' | translate }}</span>
-                                <span *ngSwitchCase="'tomorrow'">{{ 'tomorrow' | translate }}</span>
-                                <span *ngSwitchDefault>{{ startDueDateDuration | nbI18nPlural:'in_days' | translate:{count: startDueDateDuration} }}</span>
-                            </div> -->
-                            <error-message [error]="errors.dueDate"></error-message>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    {{'due_date' | translate}}
+                                </div>
+                                <div class="controls" [class.has-error]="errors.dueDate">
+                                    <input class="span2 span-sm-full" datepicker [readonly]="!isEditable" name="dueDate"
+                                        [minDate]="model.startDate" [(ngModel)]="model.dueDate"
+                                        (ngModelChange)="handleModelChange($event)">
+                                    <!-- <div class="input-placeholder" *ngIf="model.startDate && model.dueDate">
+                                        {{ startDueDateDuration | nbI18nPlural:'count_days' | translate:{count:startDueDateDuration} }}
+                                    </div> -->
+                                    <error-message [error]="errors.dueDate"></error-message>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="b-fg-milestones-result vw-sm-100 px-4 ml-md-3" *ngIf="milestones?.result?.trend">
+                            <time-line-result [model]="milestones.result"></time-line-result>
                         </div>
                     </div>
                     <div class="form-group">

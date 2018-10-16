@@ -18,6 +18,7 @@ import { Task } from '../../models';
 @Component({
     selector: 'task',
     templateUrl: './task.html',
+    styleUrls: ['./task.css'],
     host: {
         '[class.component]': 'true',
         '[class.load]': 'loading'
