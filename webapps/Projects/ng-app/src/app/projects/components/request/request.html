@@ -9,16 +9,18 @@
                     <div class="doc-head__title">{{title | translate}}</div>
                 </div>
                 <div class="doc-head__item border-0">
-                    <span class="request-resolution {{model.resolution | lowercase}}" *ngIf="model.resolution == 'ACCEPTED'">
-                        <i class="fa fa-check"></i>
-                        {{'accepted' | translate}}
-                        <span class="request__resolution_time">{{model.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
-                    </span>
-                    <span class="request-resolution {{model.resolution | lowercase}}" *ngIf="model.resolution == 'DECLINED'">
-                        <i class="fa fa-times"></i>
-                        {{'declined' | translate}}
-                        <span class="request__resolution_time">{{model.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
-                    </span>
+                    <div class="doc-head__item_value">
+                        <span class="request-resolution {{model.resolution | lowercase}}" *ngIf="model.resolution == 'ACCEPTED'">
+                            <i class="fa fa-check"></i>
+                            {{'accepted' | translate}}
+                            <span class="request__resolution_time">{{model.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
+                        </span>
+                        <span class="request-resolution {{model.resolution | lowercase}}" *ngIf="model.resolution == 'DECLINED'">
+                            <i class="fa fa-times"></i>
+                            {{'declined' | translate}}
+                            <span class="request__resolution_time">{{model.resolutionTime | dateFmt:'DD.MM.YYYY'}}</span>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
