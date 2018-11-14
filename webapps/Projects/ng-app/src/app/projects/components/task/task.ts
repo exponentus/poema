@@ -119,6 +119,22 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
         }
     }
 
+    loadData() {
+        this.isReady = 'draft' === this.route.snapshot.fragment;
+        this.loading = true;
+
+        this.entityService.fetchUrl(this.router.url, {}).subscribe(
+            data => {
+                this.onLoadDataSuccess(data);
+                this.loading = false;
+            },
+            error => {
+                this.onLoadDataError(error);
+                this.loading = false;
+            }
+        );
+    }
+
     onLoadDataSuccess(data: IApiOutcome) {
         super.onLoadDataSuccess(data);
 
@@ -134,7 +150,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         .toast(this.ngxTranslate.instant('changes_saved'))
                         .show().remove(500);
                     if (this.model.isNew) {
-                        this.router.navigate([response.payload.model.url]);
+                        this.router.navigate([response.payload.model.url], { fragment: 'draft' });
                     }
                 }
             } as IAction;
