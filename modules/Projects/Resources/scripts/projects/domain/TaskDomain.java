@@ -151,7 +151,7 @@ public class TaskDomain extends ApprovalDomain<Task> {
         }
 
         String title = dto.getTitle();
-        if (StringUtils.isBlank(title)) {
+        if (task.getStatus() != StatusType.DRAFT && StringUtils.isBlank(title)) {
             title = StringUtils.abbreviate(StringUtil.cleanFromMarkdown(dto.getBody()), 140);
         }
         task.setTitle(title);
@@ -177,12 +177,16 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public void saveTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
-        if (task.isNew()) {
-            RegNum rn = new RegNum();
-            task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
-            task = dao.add(task, rn);
-        } else {
-            task = dao.update(task);
+        if (task.getStatus() == StatusType.DRAFT){
+            task = dao.save(task);
+        }else {
+            if (task.getRegNumber() == null) {
+                RegNum rn = new RegNum();
+                task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));
+                task = dao.save(task, rn);
+            } else {
+                task = dao.save(task);
+            }
         }
 
         if (task.getStatus() == StatusType.OPEN && task.getApprovalStatus() == ApprovalStatusType.DRAFT) {
