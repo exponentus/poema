@@ -1,26 +1,38 @@
 package projects.model;
 
+import com.exponentus.common.dao.AppEntityListener;
+import com.exponentus.common.dao.DAOFactory;
+import com.exponentus.common.dto.ESPayload;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
+import com.exponentus.dataengine.jpa.IESSHandled;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.env.EnvConst;
 import com.exponentus.localization.constants.LanguageCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import projects.init.ModuleConst;
 import projects.model.constants.ProjectStatusType;
+import staff.dao.EmployeeDAO;
+import staff.model.Employee;
 import staff.model.Organization;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
+@EntityListeners(AppEntityListener.class)
 @Table(name = ModuleConst.CODE + "__projects", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
-public class Project extends EmbeddedSecureHierarchicalEntity {
+public class Project extends EmbeddedSecureHierarchicalEntity implements IESSHandled {
 
     @JsonIgnore
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
@@ -187,5 +199,46 @@ public class Project extends EmbeddedSecureHierarchicalEntity {
     @Override
     public String getURL() {
         return ModuleConst.BASE_URL + "projects/" + getId();
+    }
+
+    @Override
+    @JsonIgnore
+    public ESPayload getESSDocument() throws IOException {
+        EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.get( Employee.class);
+
+        XContentBuilder document = XContentFactory.jsonBuilder();
+        document.startObject();
+        document.field("type", getEntityKind().toLowerCase());
+        document.field("title", getTitle());
+        document.field("primaryLanguage", primaryLanguage);
+        document.field("regDate", getRegDate());
+        Employee authorEmp = employeeDAO.findByUser(getAuthor());
+        if (authorEmp != null){
+            document.field("author", authorEmp.getName());
+        }
+        document.field("authorId", getAuthorId());
+        document.field("projectName", getName());
+        document.field("projectStatus", getStatus());
+        document.field("projectCustomer", getCustomer().getName());
+        for(LanguageCode code: EnvConst.getDefaultLangs()) {
+              document.field("projectCustomer" + code, getCustomer().getLocName(code));
+          }
+        document.field("status", getStatus());
+        document.field("manager", employeeDAO.getEmployeeNameSilently(manager));
+        document.field("programmer", employeeDAO.getEmployeeNameSilently(programmer));
+        document.field("tester", employeeDAO.getEmployeeNameSilently(tester));
+       /* Employee employee = employeeDAO.findByUserId(getAssignee());
+        if (employee != null) {
+            document.field("representatives",employee.getName());
+        }
+        document.field("observers", getStartDate());*/
+        document.field("startDate", startDate);
+        document.field("finishDate", finishDate);
+        document.field("comment", comment);
+        //	document.field("stages", task.getStages().toString());
+
+        document.endObject();
+        return new ESPayload(getEntityKind(), id.toString(), getReaders().keySet().stream().map(v -> Long.toString(v)).collect(Collectors.toList()),document);
+
     }
 }

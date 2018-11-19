@@ -1,6 +1,9 @@
 package projects.model;
 
+import com.exponentus.common.dao.AppEntityListener;
+import com.exponentus.common.dao.DAOFactory;
 import com.exponentus.common.domain.ApprovalLifecycle;
+import com.exponentus.common.dto.ESPayload;
 import com.exponentus.common.model.Attachment;
 import com.exponentus.common.model.EmbeddedSecureHierarchicalEntity;
 import com.exponentus.common.model.constants.*;
@@ -14,28 +17,37 @@ import com.exponentus.common.ui.lifecycle.ILifeCycle;
 import com.exponentus.common.ui.lifecycle.LifeCycleNode;
 import com.exponentus.common.ui.lifecycle.LifeCycleNodeType;
 import com.exponentus.dataengine.jpa.IAppEntity;
+import com.exponentus.dataengine.jpa.IESSHandled;
 import com.exponentus.dataengine.jpadatabase.ftengine.FTSearchable;
+import com.exponentus.env.EnvConst;
 import com.exponentus.env.Environment;
+import com.exponentus.localization.constants.LanguageCode;
 import com.exponentus.modulebinding.IOfficeFrame;
 import com.exponentus.scripting._Session;
 import com.exponentus.user.IUser;
 import com.fasterxml.jackson.annotation.*;
 import helpdesk.model.Demand;
 import org.eclipse.persistence.annotations.CascadeOnDelete;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import projects.init.ModuleConst;
 import reference.model.Tag;
 import reference.model.TaskType;
+import staff.dao.EmployeeDAO;
 import staff.model.Employee;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
+@EntityListeners(AppEntityListener.class)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Table(name = ModuleConst.CODE + "__tasks")
-public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle {
+public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval, ILifeCycle, IESSHandled {
 
     @ManyToOne
     private Project project;
@@ -509,5 +521,53 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         }
         lc.setUrl(getURL());
         return lc;
+    }
+
+    @Override
+    @JsonIgnore
+    public ESPayload getESSDocument() throws IOException {
+        EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.get( Employee.class);
+
+        XContentBuilder document = XContentFactory.jsonBuilder();
+        document.startObject();
+        document.field("type", getEntityKind().toLowerCase());
+        document.field("title", getTitle());
+        if (regNumber != null) {
+            document.field("regNumber", regNumber);
+            document.field("regNumberDigit", Integer.parseInt(regNumber.replaceAll("\\D+", "")));
+        }
+        document.field("regDate", getRegDate());
+        Employee authorEmp = employeeDAO.findByUser(getAuthor());
+        if (authorEmp != null){
+            document.field("author", authorEmp.getName());
+        }
+        document.field("authorId", getAuthorId());
+        Project project = getProject();
+        if (project != null) {
+            document.field("projectName", project.getName());
+            document.field("projectStatus", project.getStatus());
+            document.field("projectCustomer", project.getCustomer().getName());
+            for(LanguageCode code: EnvConst.getDefaultLangs()) {
+                document.field("projectCustomer" + code, project.getCustomer().getLocName(code));
+            }
+            document.field("projectFinishDate", project.getFinishDate());
+        }
+        document.field("status", getStatus());
+        document.field("priority", getPriority());
+        document.field("body", getBody());
+        document.field("estimateInHours", getEstimateInHours());
+        Employee employee = employeeDAO.findByUserId(getAssignee());
+        if (employee != null) {
+            document.field("assignee",employee.getName());
+        }
+        document.field("startDate", getStartDate());
+        document.field("dueDate", getDueDate());
+        document.field("taskType", getTaskType().getName());
+        document.field("cancellationComment", getCancellationComment());
+        //	document.field("stages", task.getStages().toString());
+
+        document.endObject();
+        return new ESPayload(getEntityKind(), id.toString(), getReaders().keySet().stream().map(v -> Long.toString(v)).collect(Collectors.toList()),document);
+
     }
 }
