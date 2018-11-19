@@ -29,7 +29,7 @@ import java.util.UUID;
 //run task prj_fill_es
 @Command(name = ModuleConst.CODE + "_fill_es")
 public class FillOutES extends Do {
-    private String[] entities = {"project","task"};
+    private String[] entities = {"project","task", "request"};
     private RestHighLevelClient client;
 
     @Override
