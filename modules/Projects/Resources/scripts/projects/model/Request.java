@@ -1,5 +1,6 @@
 package projects.model;
 
+import com.exponentus.common.dao.AppEntityListener;
 import com.exponentus.common.dao.DAOFactory;
 import com.exponentus.common.dto.ESPayload;
 import com.exponentus.common.model.Attachment;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
+@EntityListeners(AppEntityListener.class)
 @Table(name = ModuleConst.CODE + "__requests")
 public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCycle, IESSHandled {
 
