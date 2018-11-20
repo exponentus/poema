@@ -537,10 +537,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             document.field("regNumberDigit", Integer.parseInt(regNumber.replaceAll("\\D+", "")));
         }
         document.field("regDate", getRegDate());
-        Employee authorEmp = employeeDAO.findByUser(getAuthor());
-        if (authorEmp != null){
-            document.field("author", authorEmp.getName());
-        }
+        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor().getId()));
         document.field("authorId", getAuthorId());
         Project project = getProject();
         if (project != null) {
@@ -556,10 +553,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         document.field("priority", getPriority());
         document.field("body", getBody());
         document.field("estimateInHours", getEstimateInHours());
-        Employee employee = employeeDAO.findByUserId(getAssignee());
-        if (employee != null) {
-            document.field("assignee",employee.getName());
-        }
+        document.field("assignee", employeeDAO.getEmployeeNameSilently(getAssignee()));
         document.field("startDate", getStartDate());
         document.field("dueDate", getDueDate());
         document.field("taskType", getTaskType().getName());
