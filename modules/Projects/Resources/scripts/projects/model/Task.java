@@ -537,7 +537,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             document.field("regNumberDigit", Integer.parseInt(regNumber.replaceAll("\\D+", "")));
         }
         document.field("regDate", getRegDate());
-        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor().getId()));
+        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor()));
         document.field("authorId", getAuthorId());
         Project project = getProject();
         if (project != null) {

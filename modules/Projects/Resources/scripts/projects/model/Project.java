@@ -212,7 +212,7 @@ public class Project extends EmbeddedSecureHierarchicalEntity implements IESSHan
         document.field("title", getTitle());
         document.field("primaryLanguage", primaryLanguage);
         document.field("regDate", getRegDate());
-        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor().getId()));
+        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor()));
         document.field("authorId", getAuthorId());
         document.field("projectName", getName());
         document.field("projectStatus", getStatus());

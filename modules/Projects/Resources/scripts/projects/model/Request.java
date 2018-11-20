@@ -183,7 +183,7 @@ public class Request extends EmbeddedSecureHierarchicalEntity implements ILifeCy
             document.field("task", task.getTitle());
         }
         document.field("regDate", getRegDate());
-        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor().getId()));
+        document.field("author", employeeDAO.getEmployeeNameSilently(getAuthor()));
         document.field("authorId", getAuthorId());
         document.field("requestType", requestType.toString());
         document.field("resolution", resolution.toString());
