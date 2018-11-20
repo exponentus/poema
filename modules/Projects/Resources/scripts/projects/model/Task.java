@@ -556,7 +556,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         document.field("assignee", employeeDAO.getEmployeeNameSilently(getAssignee()));
         document.field("startDate", getStartDate());
         document.field("dueDate", getDueDate());
-        document.field("taskType", getTaskType().getName());
+        document.field("taskType", taskType != null ? taskType.getName() : "");
         document.field("cancellationComment", getCancellationComment());
         //	document.field("stages", task.getStages().toString());
 
