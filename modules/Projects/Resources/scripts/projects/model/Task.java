@@ -39,6 +39,9 @@ import staff.model.Employee;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -285,8 +288,15 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         this.assignee = assignee;
     }
 
+    @JsonGetter
     public float getEstimateInHours() {
         return estimateInHours;
+    }
+
+    public float getPlannedTimeInHours() {
+        LocalDateTime tempDateTime1 = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
+        LocalDateTime tempDateTime2 = LocalDateTime.ofInstant(dueDate.toInstant(), ZoneId.systemDefault());
+        return tempDateTime1.until(tempDateTime2, ChronoUnit.HOURS);
     }
 
     public void setEstimateInHours(float estimateInHours) {
