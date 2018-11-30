@@ -22,6 +22,7 @@ export class Task extends BaseModel {
     assigneeUserId: string;
     startDate: Date;
     dueDate: Date;
+    plannedTimeInHours: number;
     initiative: boolean;
     tags: Tag[];
     observers: IEntity[];
