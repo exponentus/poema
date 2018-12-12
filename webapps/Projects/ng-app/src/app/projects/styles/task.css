@@ -12,9 +12,13 @@
 .task-cancel-info {
     background: #ffdbd9;
     border-color: #ebccd1;
-    border-radius: 2px;
     color: #a94442;
     font-size: 1.2em;
-    margin: 1px;
-    padding: 6px 20px;
+    padding: 6px 10px;
+}
+
+@media (min-width: 768px) {
+    .task-cancel-info {
+        padding: 6px 24px;
+    }
 }

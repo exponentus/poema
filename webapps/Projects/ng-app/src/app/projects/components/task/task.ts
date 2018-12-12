@@ -106,6 +106,9 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
             case 'acknowledged':
                 this.openAcknowledgedDialog(action);
                 break;
+            case 'implementRequest':
+                this.openImplementRequestDialog(action);
+                break;
             case 'sendReminder':
                 this.handleReminderAction(action);
                 break;
@@ -255,6 +258,52 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         super.onAction(action, {
                             target: <Task>{ id: this.model.id },
                             payload: modal.model.estimateInHours ? modal.model.estimateInHours.trim() : 0
+                        });
+                        modal.close();
+                    }
+                }
+            }]
+        };
+
+        this.nbModalService.create(modal).show();
+    }
+
+    openImplementRequestDialog(action: IAction) {
+        let modal = {
+            type: 'dialog',
+            title: 'actual_exec_time_in_hours',
+            model: {
+                editable: true,
+                actualExecTimeInHours: null
+            },
+            formSchema: [{
+                tabTitle: 'properties',
+                active: true,
+                fieldsets: [{
+                    fields: [{
+                        type: 'number',
+                        hideLabel: true,
+                        name: 'actualExecTimeInHours',
+                        placeholder: 'actual_exec_time_in_hours',
+                        required: true,
+                        autofocus: true,
+                        datalist: [6, 12, 24, 48, 72]
+                    }]
+                }]
+            }],
+            buttons: [{
+                label: 'cancel',
+                click: (modal: any, event: any) => {
+                    modal.close();
+                }
+            }, {
+                label: action.caption,
+                className: 'btn-primary',
+                disabled: () => { return !modal.model.actualExecTimeInHours || modal.model.actualExecTimeInHours <= 0; },
+                click: (modal: any, event: any) => {
+                    if (modal.model.actualExecTimeInHours && modal.model.actualExecTimeInHours > 0) {
+                        super.onAction(action, {
+                            target: <Task>{ id: this.model.id, actualExecTimeInHours: modal.model.actualExecTimeInHours }
                         });
                         modal.close();
                     }

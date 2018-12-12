@@ -44,17 +44,17 @@
             <div *ngIf="!isEditable" class="doc-title">{{model.title}}</div>
         </div>
     </header>
+    <section class="task-cancel-info" *ngIf="model.status == 'CANCELLED' && model.cancellationComment">
+        <span>{{'cancel_reason' | translate}}:&nbsp;</span>
+        <span>{{model.cancellationComment}}</span>
+    </section>
+    <section class="task-cancel-info" *ngIf="model.approvalResult === 'REJECTED'">
+        <span>{{'rejected_by_moderator' | translate}}:&nbsp;</span>
+        <span *ngIf="model.blocks && model.blocks.length && model.blocks[0].approvers">
+            {{model.blocks[0].approvers[0].decisionComment}}
+        </span>
+    </section>
     <section class="content-body">
-        <section class="task-cancel-info" *ngIf="model.status == 'CANCELLED' && model.cancellationComment">
-            <span>{{'cancel_reason' | translate}}:&nbsp;</span>
-            <span>{{model.cancellationComment}}</span>
-        </section>
-        <section class="task-cancel-info" *ngIf="model.approvalResult === 'REJECTED'">
-            <span>{{'rejected_by_moderator' | translate}}:&nbsp;</span>
-            <span *ngIf="model.blocks && model.blocks.length && model.blocks[0].approvers">
-                {{model.blocks[0].approvers[0].decisionComment}}
-            </span>
-        </section>
         <tabs>
             <tab [tabTitle]="'properties' | translate">
                 <div class="fieldset">
@@ -185,6 +185,16 @@
                         <div class="controls">
                             <div class="input-placeholder">
                                 {{model.plannedTimeInHours}} {{'hours' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.actualExecTimeInHours">
+                        <div class="control-label">
+                            {{'actual_exec_time_in_hours' | translate}}
+                        </div>
+                        <div class="controls">
+                            <div class="input-placeholder">
+                                {{model.actualExecTimeInHours}} {{'hours' | translate}}
                             </div>
                         </div>
                     </div>

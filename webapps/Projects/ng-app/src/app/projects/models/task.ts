@@ -23,6 +23,8 @@ export class Task extends BaseModel {
     startDate: Date;
     dueDate: Date;
     plannedTimeInHours: number;
+    estimateInHours: number;
+    actualExecTimeInHours: number;
     initiative: boolean;
     tags: Tag[];
     observers: IEntity[];
@@ -47,6 +49,7 @@ export class Task extends BaseModel {
             assigneeUserId: m.assignee ? m.assignee.userID : 0,
             startDate: mdFormat(m.startDate, DATE_TIME_FORMAT),
             dueDate: mdFormat(m.dueDate, DATE_TIME_FORMAT),
+            actualExecTimeInHours: m.actualExecTimeInHours || 0,
             initiative: m.initiative,
             tags: Tag.convertToDtoList(m.tags),
             observerUserIds: m.observers ? m.observers.map(it => it.userID) : [],

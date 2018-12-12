@@ -25,11 +25,11 @@
             </div>
         </div>
     </header>
+    <section class="task-cancel-info" *ngIf="model.resolution == 'DECLINED' && model.decisionComment">
+        <span>{{'decline_reason' | translate}}:&nbsp;</span>
+        <span>{{model.decisionComment}}</span>
+    </section>
     <section class="content-body">
-        <section class="task-cancel-info" *ngIf="model.resolution == 'DECLINED' && model.decisionComment">
-            <span>{{'decline_reason' | translate}}:&nbsp;</span>
-            <span>{{model.decisionComment}}</span>
-        </section>
         <tabs>
             <tab tabTitle="{{'properties' | translate}}">
                 <fieldset class="fieldset">
@@ -61,6 +61,14 @@
                             <div class="span8">
                                 <textarea name="comment" autosize [readonly]="!isEditable" [(ngModel)]="model.comment"></textarea>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="model.isNew">
+                        <div class="control-label">
+                            {{'actual_exec_time_in_hours' | translate}}
+                        </div>
+                        <div class="controls">
+                            <input class="span2" type="number" name="actualExecTimeInHours" [(ngModel)]="model.task.actualExecTimeInHours">
                         </div>
                     </div>
                 </fieldset>

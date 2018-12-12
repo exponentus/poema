@@ -14,7 +14,7 @@ export class Request extends BaseModel {
     static convertToDto(m: Request): any {
         return {
             id: m.id || null,
-            task: m.task ? { id: m.task.id } : null,
+            task: m.task ? { id: m.task.id, actualExecTimeInHours: m.task.actualExecTimeInHours } : null,
             requestType: m.requestType ? { id: m.requestType.id } : null,
             resolution: m.resolution,
             comment: m.comment,
