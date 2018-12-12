@@ -52,6 +52,7 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class TaskDomain extends ApprovalDomain<Task> {
+
     public static String MODERATOR_ROLE_NAME = ModuleConst.ROLES[0];
 
     public TaskDomain(_Session ses) throws DAOException {
@@ -144,9 +145,8 @@ public class TaskDomain extends ApprovalDomain<Task> {
                 }
 
                 settingUpRevision(task);
-            }else if(task.getStatus() == StatusType.OPEN && new Date().before(startDate)){
+            } else if (task.getStatus() == StatusType.OPEN && new Date().before(startDate)) {
                 task.setStatus(StatusType.WAITING);
-
             }
         }
 
@@ -177,9 +177,9 @@ public class TaskDomain extends ApprovalDomain<Task> {
     }
 
     public void saveTask(Task task) throws SecureException, DAOException, DTOException, ApprovalException, RestServiceException {
-        if (task.getStatus() == StatusType.DRAFT){
+        if (task.getStatus() == StatusType.DRAFT) {
             task = dao.save(task);
-        }else {
+        } else {
             if (task.getRegNumber() == null) {
                 RegNum rn = new RegNum();
                 task.setRegNumber(task.getTaskType().getPrefix() + rn.getRegNumber(task.getTaskType().getPrefix()));

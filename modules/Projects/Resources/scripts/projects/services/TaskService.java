@@ -73,12 +73,13 @@ import java.util.stream.Collectors;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.util.stream.Collectors.toList;
+import static projects.domain.TaskDomain.MODERATOR_ROLE_NAME;
 
 @Path("tasks")
 @Produces(MediaType.APPLICATION_JSON)
 public class TaskService extends EntityService<Task, TaskDomain> {
-    private static final String REMINDER_MSG_TEMPLATE = "task_reminder";
 
+    private static final String REMINDER_MSG_TEMPLATE = "task_reminder";
 
     @GET
     @Path("preferredAssignees")
@@ -91,9 +92,9 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
             EmployeeDtoConverter employeeDtoConverter = new EmployeeDtoConverter();
             List<Employee> preferredAssignees = new ArrayList<>();
-            if (ses.getEmployee().hasRole(ModuleConst.ROLES[2])){
+            if (ses.getEmployee().hasRole(ModuleConst.ROLES[2])) {
                 preferredAssignees.addAll(empDao.findAll());
-            }else{
+            } else {
                 List<Tuple> tasks = taskDAO.findAssigneeByPreference(getSession().getUser().getId(), 100);
                 for (Tuple tuple : tasks) {
                     Employee employee = empDao.findByUserId((long) tuple.get(1));
@@ -233,6 +234,12 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 task = taskDAO.findById(id);
                 if (task == null) {
                     return Response.status(Response.Status.NOT_FOUND).build();
+                }
+
+                if (!user.getRoles().contains(MODERATOR_ROLE_NAME)) {
+                    task.setActualExecTimeInHours(0);
+                } else {
+                    task.calcPlannedTimeInHours();
                 }
 
                 Environment.database.markAsRead(session.getUser(), task);
@@ -493,7 +500,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             if (task.getStatus() == StatusType.OPEN || task.getStatus() == StatusType.PROCESSING) {
                 String subject = Environment.vocabulary.getWord("reminder", ses.getLang());
                 UserDAO userDAO = new UserDAO();
-                MessagingHelper.sendInAnyWay((User)userDAO.findById(task.getAssignee()), action.getPayload(), task, subject);
+                MessagingHelper.sendInAnyWay((User) userDAO.findById(task.getAssignee()), action.getPayload(), task, subject);
             } else {
                 return Response.status(Response.Status.BAD_REQUEST).entity(outcome.setError("WRONG_STATUS")).type(MediaType.APPLICATION_JSON).build();
             }

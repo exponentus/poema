@@ -115,6 +115,7 @@ public class RequestService extends RestProvider {
 
             Request request = new Request();
 
+            task.setActualExecTimeInHours(requestDto.getTask().getActualExecTimeInHours());
             requestDto.setAuthor(session.getUser());
             requestDto.setTask(task);
             requestDto.setRequestType(requestTypeDAO.findById(requestDto.getRequestType().getId()));

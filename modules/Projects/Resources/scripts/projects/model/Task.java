@@ -94,8 +94,14 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
 
     private Long assignee;
 
+    @Transient
+    private Long plannedTimeInHours;
+
     @Column(name = "estimate_hours")
     private float estimateInHours;
+
+    @Column(name = "actual_exec_time_in_hours")
+    private float actualExecTimeInHours;
 
     @JsonIgnore
     @Convert(converter = TimeLineConverter.class)
@@ -138,6 +144,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             "attachment_id"}))
     @CascadeOnDelete
     private List<Attachment> attachments = new ArrayList<>();
+
     @Transient
     private List<IAppEntity<UUID>> responses;
 
@@ -293,16 +300,27 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return estimateInHours;
     }
 
-    public float getPlannedTimeInHours() {
-        LocalDateTime tempDateTime1 = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
-        LocalDateTime tempDateTime2 = LocalDateTime.ofInstant(dueDate.toInstant(), ZoneId.systemDefault());
-        return tempDateTime1.until(tempDateTime2, ChronoUnit.HOURS);
-    }
-
     public void setEstimateInHours(float estimateInHours) {
         this.estimateInHours = estimateInHours;
     }
 
+    public void calcPlannedTimeInHours() {
+        LocalDateTime tempDateTime1 = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
+        LocalDateTime tempDateTime2 = LocalDateTime.ofInstant(dueDate.toInstant(), ZoneId.systemDefault());
+        plannedTimeInHours = tempDateTime1.until(tempDateTime2, ChronoUnit.HOURS);
+    }
+
+    public Long getPlannedTimeInHours() {
+        return plannedTimeInHours;
+    }
+
+    public float getActualExecTimeInHours() {
+        return actualExecTimeInHours;
+    }
+
+    public void setActualExecTimeInHours(float actualExecTimeInHours) {
+        this.actualExecTimeInHours = actualExecTimeInHours;
+    }
 
     public Date getStartDate() {
         return startDate;
@@ -536,7 +554,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
     @Override
     @JsonIgnore
     public ESPayload getESSDocument() throws IOException {
-        EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.get( Employee.class);
+        EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.get(Employee.class);
 
         XContentBuilder document = XContentFactory.jsonBuilder();
         document.startObject();
@@ -554,7 +572,7 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
             document.field("projectName", project.getName());
             document.field("projectStatus", project.getStatus());
             document.field("projectCustomer", project.getCustomer().getName());
-            for(LanguageCode code: EnvConst.getDefaultLangs()) {
+            for (LanguageCode code : EnvConst.getDefaultLangs()) {
                 document.field("projectCustomer" + code, project.getCustomer().getLocName(code));
             }
             document.field("projectFinishDate", project.getFinishDate());
@@ -571,7 +589,6 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         //	document.field("stages", task.getStages().toString());
 
         document.endObject();
-        return new ESPayload(getEntityKind(), id.toString(), getReaders().keySet().stream().map(v -> Long.toString(v)).collect(Collectors.toList()),document);
-
+        return new ESPayload(getEntityKind(), id.toString(), getReaders().keySet().stream().map(v -> Long.toString(v)).collect(Collectors.toList()), document);
     }
 }
