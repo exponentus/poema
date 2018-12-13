@@ -269,9 +269,13 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
     }
 
     openImplementRequestDialog(action: IAction) {
+        const actualExecTimeLabel = this.ngxTranslate.instant('actual_exec_time'),
+            hoursLabel = this.ngxTranslate.instant('hours'),
+            dialogTitle = `${actualExecTimeLabel} (${hoursLabel})`;
+
         let modal = {
             type: 'dialog',
-            title: 'actual_exec_time_in_hours',
+            title: dialogTitle,
             model: {
                 editable: true,
                 actualExecTimeInHours: null
@@ -284,7 +288,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
                         type: 'number',
                         hideLabel: true,
                         name: 'actualExecTimeInHours',
-                        placeholder: 'actual_exec_time_in_hours',
+                        placeholder: dialogTitle,
                         required: true,
                         autofocus: true,
                         datalist: [6, 12, 24, 48, 72]
