@@ -65,10 +65,11 @@
                     </div>
                     <div class="form-group" *ngIf="model.isNew">
                         <div class="control-label">
-                            {{'actual_exec_time_in_hours' | translate}}
+                            {{'actual_exec_time' | translate}}
                         </div>
                         <div class="controls">
                             <input class="span2" type="number" name="actualExecTimeInHours" [(ngModel)]="model.task.actualExecTimeInHours">
+                            <div class="input-placeholder">{{'hours' | translate}}</div>
                         </div>
                     </div>
                 </fieldset>
