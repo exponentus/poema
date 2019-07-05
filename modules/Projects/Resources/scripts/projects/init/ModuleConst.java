@@ -5,6 +5,7 @@ import com.exponentus.common.init.DefaultAppConst;
 import com.exponentus.common.init.DefaultDataConst;
 
 public class ModuleConst extends DefaultAppConst {
+
     public static final String CODE = "prj";
     public static final String NAME = "Projects";
     public static String NAME_ENG = "Projects";

@@ -25,6 +25,7 @@ public class FillRequestTypes extends Do {
         List<RequestType> entities = new ArrayList<RequestType>();
         String[] data = {"prolong", "cancel", "implement"};
         String[] dataEng = {"To prolong", "To cancel", "To mark as Implemented"};
+
         String[] dataRus = {"Продлить", "Отменить", "Отметить как выполненный"};
         String[] dataKaz = {"Ұзарту", "Болдырмау үшін", "Аяқталған ретінде белгілеу"};
 
