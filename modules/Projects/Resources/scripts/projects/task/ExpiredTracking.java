@@ -13,15 +13,15 @@ import com.exponentus.scriptprocessor.tasks.Command;
 import org.apache.commons.lang3.time.DateUtils;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.ModuleConst;
 import projects.model.Task;
 import reference.dao.TagDAO;
+import reference.init.ModuleConst;
 import reference.model.Tag;
 
 import java.util.Date;
 import java.util.List;
 
-@Command(name = ModuleConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
+@Command(name = projects.init.ModuleConst.CODE + "_expired_tracking", trigger = Trigger.EVERY_NIGHT)
 public class ExpiredTracking extends Do {
 	private Date current = new Date();
 	private Tag tag;
@@ -32,13 +32,13 @@ public class ExpiredTracking extends Do {
 		PeriodicalServices.logger("expired_tracking is going to check documents");
 		try {
 			TagDAO tagDAO = new TagDAO(session);
-			tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
+			tag = tagDAO.findByName(ModuleConst.EXPIRED_TAG_NAME);
 			if (tag != null) {
 				tDao = new TaskDAO(session);
 				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.PROCESSING)), session);
 				processTask(appEnv, tDao.findAllByTaskFilter(new TaskFilter().setStatus(StatusType.OPEN)), session);
 			} else {
-				logger.warning("The tag \"" + reference.init.ModuleConst.EXPIRED_TAG_NAME + "\" did not find in Reference");
+				logger.warning("The tag \"" + ModuleConst.EXPIRED_TAG_NAME + "\" did not find in Reference");
 			}
 		} catch (DAOException e) {
 			logger.exception(e);

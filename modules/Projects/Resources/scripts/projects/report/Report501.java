@@ -7,9 +7,9 @@ import com.exponentus.common.ui.ViewPage;
 import com.exponentus.dataengine.exception.DAOException;
 import com.exponentus.log.Lg;
 import projects.dao.TaskDAO;
-import projects.init.ModuleConst;
 import projects.model.Task;
 import reference.dao.TagDAO;
+import reference.init.ModuleConst;
 import reference.model.Tag;
 import staff.dao.EmployeeDAO;
 import staff.model.Employee;
@@ -28,7 +28,7 @@ public class Report501 extends AbstractDataObtainer {
 
     @Override
     public String getAppCode() {
-        return ModuleConst.CODE;
+        return projects.init.ModuleConst.CODE;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Report501 extends AbstractDataObtainer {
 
         try {
             TagDAO tagDAO = new TagDAO(session);
-            Tag tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
+            Tag tag = tagDAO.findByName(ModuleConst.EXPIRED_TAG_NAME);
             TaskDAO dao = new TaskDAO(session);
             EmployeeDAO employeeDAO = new EmployeeDAO(session);
             for (Employee employee : employeeDAO.findAll()) {

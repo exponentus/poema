@@ -34,7 +34,4 @@
     <converter class="helpdesk.model.constants.converter.DemandStatusConverter"/>
 
 
-    stas_chaikovskiy
-
-    stas_chaikovskiy
 </entity-mappings>

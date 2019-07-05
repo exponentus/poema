@@ -20,17 +20,17 @@ import com.exponentus.user.IUser;
 import com.exponentus.util.TimeUtil;
 import projects.dao.TaskDAO;
 import projects.dao.filter.TaskFilter;
-import projects.init.ModuleConst;
 import projects.model.Project;
 import projects.model.Task;
 import reference.dao.TagDAO;
+import reference.init.ModuleConst;
 import reference.model.Tag;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Command(name = ModuleConst.CODE + "_overdue_reminder", trigger = Trigger.DISABLE)
+@Command(name = projects.init.ModuleConst.CODE + "_overdue_reminder", trigger = Trigger.DISABLE)
 public class OverdueReminder extends Do {
 	private Tag tag;
 	private TaskDAO tDao;
@@ -39,7 +39,7 @@ public class OverdueReminder extends Do {
 	public void doTask(AppEnv appEnv, _Session session) {
 		try {
 			TagDAO tagDAO = new TagDAO(session);
-			tag = tagDAO.findByName(reference.init.ModuleConst.EXPIRED_TAG_NAME);
+			tag = tagDAO.findByName(ModuleConst.EXPIRED_TAG_NAME);
 			List<Tag> tags = new ArrayList<>();
 			tags.add(tag);
 			if (tag != null) {

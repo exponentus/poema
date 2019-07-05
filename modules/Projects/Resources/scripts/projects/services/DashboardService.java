@@ -74,10 +74,7 @@ public class DashboardService extends RestProvider {
             try {
                 //
                 Chart chart = new Chart(ChartType.BAR);
-                // Готовим данные для графика
-                // Нужно создать список всех дат в сортированном виде.
-                // Сделать мапу {дата: количество}
-                // Затем перебирая все даты: если есть дата взять значение из мапы {дата: количество}, если нет 0
+
                 List<Date> dates = new LinkedList<>(); // unique dates
                 Map<StatusType, Map<Date, Double>> stMap = new HashMap<>();
                 for (StatusType st : statusTypes) {
