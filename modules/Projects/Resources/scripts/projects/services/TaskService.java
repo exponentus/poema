@@ -57,9 +57,11 @@ import reference.dao.TaskTypeDAO;
 import reference.model.Tag;
 import reference.model.TaskType;
 import staff.dao.EmployeeDAO;
+import staff.dao.RoleDAO;
 import staff.dto.converter.EmployeeDtoConverter;
 import staff.dto.converter.EmployeeToBaseRefUserDtoConverter;
 import staff.model.Employee;
+import staff.model.Role;
 
 import javax.persistence.Tuple;
 import javax.ws.rs.*;
@@ -182,7 +184,6 @@ public class TaskService extends EntityService<Task, TaskDomain> {
     public Response getById(@PathParam("id") String id) {
         _Session session = getSession();
         WebFormData params = getWebFormData();
-
         String fsId = params.getFormSesId();
         String projectId = params.getValueSilently("projectId");
         String parentTaskId = params.getValueSilently("parentTaskId");
@@ -191,6 +192,7 @@ public class TaskService extends EntityService<Task, TaskDomain> {
         boolean isNew = "new".equals(id);
 
         try {
+            RoleDAO roleDAO = new RoleDAO(session);
             EmployeeDAO empDao = new EmployeeDAO(session);
             ProjectDAO prjDao = new ProjectDAO(session);
             TaskDAO taskDAO = new TaskDAO(session);
@@ -244,9 +246,14 @@ public class TaskService extends EntityService<Task, TaskDomain> {
 
                 Environment.database.markAsRead(session.getUser(), task);
             }
+            boolean isTarazEmployee = session.getUser().getRoles().contains("prj_taraz_emp");
 
             Map<Long, Employee> emps = empDao.findAll(false).getResult().stream()
                     .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+           /* if(isTarazEmployee) {
+               emps = empDao.findByRole("prj_taraz_emp").getResult().stream()
+                        .collect(Collectors.toMap(Employee::getUserID, Function.identity(), (e1, e2) -> e1));
+            }*/
 
             Outcome outcome = taskDomain.getOutcome(task);
             outcome.setId(id);
@@ -268,6 +275,19 @@ public class TaskService extends EntityService<Task, TaskDomain> {
                 }
             }
             outcome.addPayload("preferredAssignees", employeeDtoConverter.convert(preferredAssignees));
+            outcome.addPayload("isTarazEmp", isTarazEmployee);
+            if(isTarazEmployee){
+                Role role = roleDAO.findByName("prj_taraz_emp");
+                if(role != null) {
+                    outcome.addPayload("taraz_role", role.getId());
+                }
+                Role roled = roleDAO.findByName("prj_taraz_empd");
+                if(roled != null){
+                    outcome.addPayload("taraz_roled", roled.getId());
+                }
+
+                System.out.println(role.getId());
+            }
 
             ProjectDtoConverter projectDtoConverter = new ProjectDtoConverter();
             List<Project> preferredProjects = new ArrayList<>();
@@ -609,6 +629,16 @@ public class TaskService extends EntityService<Task, TaskDomain> {
             }
             if (taskDto.getDueDate() == null) {
                 ve.addError("dueDate", "date", "field_is_empty");
+            }
+            /*System.out.println(userDAO.findById(session.getUser().getId()));
+            System.out.println(session.getEmployee().getRoles());
+            System.out.println(session.getEmployee());*/
+            boolean isTarazEmployee = session.getUser().getRoles().contains("prj_taraz_emp");
+           /* System.out.println(session.getEmployee().getRoles().indexOf("prj_taraz_emp"));
+            System.out.println(session.getEmployee().getRoles().equals("prj_taraz_emp"));
+            System.out.println(isTarazEmployee);*/
+            if(taskDto.getAttachments().size() == 0 && isTarazEmployee) {
+                ve.addError("attachments", "required", "field_is_empty");
             }
 
             LocalDate today = LocalDate.now();

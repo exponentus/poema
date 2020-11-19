@@ -39,6 +39,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
 
     milestones: IMilestones;
     activity: any;
+    tarazRole:any;
     priorityTypes: any;
 
     saveAsDraftRequestIncomplete: boolean = false;
@@ -173,6 +174,7 @@ export class TaskComponent extends AbstractFormPage<Task> implements ICanDeactiv
 
         this.entityService.getPriorityTypes(data.payload.priorityTypes).subscribe(tpt => this.priorityTypes = tpt);
         this.activity = data.payload.activity;
+        this.tarazRole = data.payload.taraz_role;
         this.milestones = data.payload.milestones;
         if (data.payload.parentTask) {
             this.model.parent = data.payload.parentTask;

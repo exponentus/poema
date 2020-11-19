@@ -314,6 +314,13 @@ public class Task extends EmbeddedSecureHierarchicalEntity implements IApproval,
         return plannedTimeInHours;
     }
 
+    public Long getPlannedTimeInHoursForReport() {
+        LocalDateTime tempDateTime1 = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault());
+        LocalDateTime tempDateTime2 = LocalDateTime.ofInstant(dueDate.toInstant(), ZoneId.systemDefault());
+        plannedTimeInHours = tempDateTime1.until(tempDateTime2, ChronoUnit.HOURS);
+        return plannedTimeInHours;
+    }
+
     public float getActualExecTimeInHours() {
         return actualExecTimeInHours;
     }

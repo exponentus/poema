@@ -16,6 +16,8 @@ public class ConsolidatedReportPOJO {
     public int expired;
     public int hours;
 
+    public int execHours;
+
     public int moderation;
 
     public int getDraft() {
@@ -112,6 +114,14 @@ public class ConsolidatedReportPOJO {
 
     public void setHours(int hours) {
         this.hours = hours;
+    }
+
+    public int getExecHours() {
+        return execHours;
+    }
+
+    public void setExecHours(int exechours) {
+        this.execHours = execHours;
     }
 
 
