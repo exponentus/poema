@@ -131,11 +131,11 @@
                     </div>
                     <div class="form-group">
                         <div class="control-label">
-                            {{'assignee_user' | translate}}
+                            {{'assignee_user' | translate}} test
                         </div>
                         <div class="controls" [class.has-error]="errors.assignee">
                             <nb-select class="span8" name="assignee" [url]="STAFF_URL.API_EMPLOYEES" [disabled]="!isEditable"
-                                [searchable]="true" [(ngModel)]="model.assignee" (ngModelChange)="handleModelChange($event)">
+                                [searchable]="true" [multiple]="true" [(ngModel)]="model.assignee" (ngModelChange)="handleModelChange($event)">
                             </nb-select>
                             <error-message [error]="errors.assignee"></error-message>
                             <div *ngIf="isEditable && data.preferredAssignees">
